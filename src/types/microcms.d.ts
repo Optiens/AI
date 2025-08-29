@@ -62,3 +62,14 @@ export type MicroCMSObjectContent<T> = T & {
   publishedAt: string;
   revisedAt: string;
 };
+
+// MicroCMSのAPIリクエストに含めるクエリパラメータの型定義
+export type MicroCMSQueries = {
+  orders?: string;
+  fields?: string;
+  limit?: number;
+  offset?: number;
+  q?: string;
+  ids?: string;
+  filters?: string;
+};

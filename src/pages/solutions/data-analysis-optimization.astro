@@ -1,0 +1,123 @@
+---
+import Layout from '../../layouts/Layout.astro';
+export const solutionData = {
+  title: '【開発中】環境データ分析＆最適化サービス',
+  overview: '既存の栽培環境に簡単に導入できるデータ分析サービスです。AIが収集したデータを詳細に解析し、生産性の向上、コスト削減、そして持続可能性を最大化するための具体的な改善策を提案します。',
+  image: '/images/data-analysis-optimization.png',
+};
+---
+<Layout title={`${solutionData.title} | Optiens`}>
+  <main>
+    <section class="solution-detail-container">
+      <div class="container">
+        <article class="solution-article">
+          <h1 class="solution-title">{solutionData.title}</h1>
+          <p class="solution-date">{solutionData.overview}</p>
+          <img src={solutionData.image} alt={solutionData.title} class="solution-thumbnail" />
+          <div class="solution-body">
+            <h2>✅データに基づく課題の可視化</h2>
+            <p>栽培環境から収集した膨大なデータをAIが解析し、ボトルネックを特定します。<br>これまで見過ごされてきた非効率なプロセスや無駄を明確にし、具体的な改善提案を行います。</p>
+            <h2>✅持続可能な経営への転換</h2>
+            <p>AIによる精密な分析は、水や肥料の無駄をなくし、資源効率を飛躍的に向上させます。<br>これにより、環境負荷を低減しながら収益を最大化し、後継者不足に悩む農家の方々が安心して続けられる、新しい農業の形を提案します。</p>
+            <h2>✅AIのサポート</h2>
+            <p>データ収集や制御、解析結果の出力まで自動化し、お客様の成長を力強く支援します。</p>
+            <h2>✅コンサルティング</h2>
+            <p>独自の栽培ノウハウを体系化し、お客様の課題解決と事業成功を支援します。<br>経験や勘に頼りがちだった栽培技術をデータに基づいたノウハウとして可視化し、安定した生産性を実現します。</p>
+          </div>
+          <div class="back-link">
+            <a href="/solutions" class="btn-back">一覧に戻る</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</Layout>
+<style>
+  .solution-detail-container {
+    padding: 120px 20px 60px;
+  }
+  .solution-article {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--background-color-light);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  .solution-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+  }
+  .solution-date {
+    font-size: 0.9rem;
+    color: var(--text-color-light);
+    margin-bottom: 2rem;
+    display: block;
+    line-height: 1.6;
+  }
+  .solution-thumbnail {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  .solution-body :global(h2),
+  .solution-body :global(h3),
+  .solution-body :global(p),
+  .solution-body :global(ul),
+  .solution-body :global(ol) {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  .solution-body :global(h2) {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-top: 3rem;
+  }
+  .solution-body :global(h3) {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-top: 2rem;
+  }
+  .solution-body :global(p) {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+  .solution-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+  }
+  .back-link {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  .btn-back {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .btn-back:hover {
+    background-color: var(--primary-color);
+  }
+  @media (max-width: 768px) {
+    .solution-title {
+      font-size: 2rem;
+    }
+    .solution-body :global(h2) {
+      font-size: 1.5rem;
+    }
+  }
+</style>

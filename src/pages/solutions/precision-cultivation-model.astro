@@ -1,0 +1,112 @@
+---
+import Layout from '../../layouts/Layout.astro';
+export const solutionData = {
+  title: '【開発中】AI駆動型 水耕栽培キットの提供',
+  overview: 'AI駆動型の次世代型栽培キットを提供いたします。植物の成長に必要なあらゆる環境データをAIがリアルタイムで監視・制御し、安定した収穫と品質を可能にします。',
+  image: '/images/precision-cultivation-model.png',
+};
+---
+<Layout title={`${solutionData.title} | Optiens`}>
+  <main>
+    <section class="solution-detail-container">
+      <div class="container">
+        <article class="solution-article">
+          <h1 class="solution-title">{solutionData.title}</h1>
+          <p class="solution-date">{solutionData.overview}</p>
+          <img src={solutionData.image} alt={solutionData.title} class="solution-thumbnail" />
+          <div class="solution-body">
+            <h2>✅AIによる制御</h2>
+            <p>光、温度、湿度、CO2、養液成分など、植物の生育に不可欠な要素をAIがリアルタイムで制御します。<br>成長段階に合わせた最適な環境を自動で構築し、植物のポテンシャルを最大限に引き出します。<br>直感的な操作とAIによるサポートにより次のアクションに迷いません。</p>
+            <h2>✅無農薬で安全・安心・美味しい</h2>
+            <p>閉鎖空間で栽培するため、虫害の心配がなく、農薬を一切必要としません。<br>また、虫が嫌がる苦み成分が出ないため子供たちの食育に最適です。<br>AIが溶液を監視し衛生的な環境を保つことが可能です。</p>
+            <h2>✅設置場所を選ばない汎用性</h2>
+            <p>環境に左右されない設計のため、都市部のオフィスビルや学校、さらには地下空間など、あらゆる場所での設置が可能です。<br>食糧生産の場を身近にすることで、フードマイレージの削減にも貢献します。</p>
+            <h2>✅AIモデルのライセンス供与</h2>
+            <p>当社の独自AIモデルの利用権をご提供します。<br>継続的なアップデートにより、常に最新かつ最適な栽培ロジックをご活用いただけます。</p>
+            <h2>✅導入支援</h2>
+            <p>キットの設置から初期設定、運用指導まで、専門スタッフが丁寧にサポートいたします。<br>初めて水耕栽培に取り組むお客様も安心してご利用いただけます。</p>
+          </div>
+          <div class="back-link">
+            <a href="/solutions" class="btn-primary">一覧に戻る</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</Layout>
+<style>
+  .solution-detail-container {
+    padding: 120px 20px 60px;
+  }
+  .solution-article {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--background-color-light);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  .solution-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+  }
+  .solution-date {
+    font-size: 0.9rem;
+    color: var(--text-color-light);
+    margin-bottom: 2rem;
+    display: block;
+    line-height: 1.6;
+  }
+  .solution-thumbnail {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  .solution-body :global(h2),
+  .solution-body :global(h3),
+  .solution-body :global(p),
+  .solution-body :global(ul),
+  .solution-body :global(ol) {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  .solution-body :global(h2) {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-top: 3rem;
+  }
+  .solution-body :global(h3) {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-top: 2rem;
+  }
+  .solution-body :global(p) {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+  .solution-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+  }
+  .back-link {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  @media (max-width: 768px) {
+    .solution-title {
+      font-size: 2rem;
+    }
+    .solution-body :global(h2) {
+      font-size: 1.5rem;
+    }
+  }
+</style>

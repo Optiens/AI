@@ -1,48 +1,46 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { createClient } from 'microcms-js-sdk';
-import type { Solutions, MicroCMSListResponse } from '../../types/microcms.d.ts';
 
-const client = createClient({
-  serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.MICROCMS_API_KEY,
-});
+// 各ソリューション詳細ページからデータをインポート
+import { solutionData as precisionCultivationModel } from './precision-cultivation-model.astro';
+import { solutionData as dataAnalysisOptimization } from './data-analysis-optimization.astro';
 
-// ★修正★: 型定義を追加
-const { contents: solutions } = await client.get<MicroCMSListResponse<Solutions>>({
-  endpoint: 'solutions',
-  queries: { orders: '-publishedAt' } // 新しい順に並び替え
-});
+// データを配列にまとめます
+const solutions = [
+  { slug: 'precision-cultivation-model', data: precisionCultivationModel },
+  { slug: 'data-analysis-optimization', data: dataAnalysisOptimization },
+];
 ---
-<Layout title="ソリューション | オプティエンス">
+<Layout title="ソリューション | Optiens">
   <main>
     <section class="solutions-hero-section">
       <div class="container text-center">
         <h1>ソリューション</h1>
-        <p>オプティエンスが提供するサービス一覧です。</p>
       </div>
     </section>
 
     <section class="solutions-list-section">
       <div class="container">
-        {solutions && solutions.length > 0 ? (
-          <div class="solutions-grid">
-            {solutions.map((solution) => (
-              <article class="solution-item">
-                {solution.image && <img src={solution.image.url} alt={solution.solutionName} class="solution-thumbnail" />}
-                <div class="solution-content">
-                  <h2><a href={`/solutions/${solution.slug}`}>{solution.solutionName}</a></h2>
+        <div class="solutions-grid">
+          {solutions.map((solution) => (
+            <a href={`/solutions/${solution.slug}`} class="solutions-item-link">
+              <article class="solutions-item">
+                <div class="solutions-thumbnail-wrapper">
+                  <img src={solution.data.image} alt={solution.data.title} class="solutions-thumbnail" />
+                </div>
+                <div class="solutions-content">
+                  <h2 class="solutions-title">{solution.data.title}</h2>
                   <div class="overview-text">
-                    <div set:html={solution.overview} />
+                    <p>{solution.data.overview}</p>
                   </div>
-                  <a href={`/solutions/${solution.slug}`} class="btn-secondary">詳細を見る</a>
+                </div>
+                <div class="card-icon-container">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </div>
               </article>
-            ))}
-          </div>
-        ) : (
-          <p class="text-center">現在、ソリューションは準備中です。</p>
-        )}
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   </main>
@@ -50,82 +48,136 @@ const { contents: solutions } = await client.get<MicroCMSListResponse<Solutions>
 
 <style>
   .solutions-hero-section {
-    background-color: #e6f7ff;
+    background: url('/images/ai-nature-city.webp') no-repeat center center / cover, var(--primary-color);
     padding: 60px 0;
     text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    position: relative;
+  }
+  .solutions-hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+  }
+  .solutions-hero-section .container {
+    position: relative;
+    z-index: 1; 
   }
   .solutions-hero-section h1 {
     font-size: 2.2em;
-    color: #2c3e50;
+    color: var(--background-color-light);
     margin-bottom: 10px;
-  }
-  .solutions-hero-section p {
-    font-size: 1.1em;
-    color: #555;
   }
   .solutions-list-section {
     padding: 60px 0;
   }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
   .solutions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
-  }
-  .solution-item {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
     display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
   }
-  .solution-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  }
-  .solution-thumbnail {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-  }
-  .solution-content {
-    padding: 25px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .solution-content h2 {
-    font-size: 1.5em;
-    color: #34495e;
-    margin-bottom: 15px;
-  }
-  .solution-content h2 a {
+  .solutions-item-link {
     text-decoration: none;
     color: inherit;
+    width: calc(33.333% - 20px);
+    max-width: 350px;
   }
-  .solution-content h2 a:hover {
-    color: #007bff;
+  .solutions-item {
+    background-color: var(--background-color-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
   }
-  /* ★修正★: overview-text内のpタグに影響するスタイルを調整 */
-  .overview-text :global(p) {
-    font-size: 0.95em;
-    line-height: 1.6;
-    color: #555;
+  .solutions-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+  .solutions-thumbnail-wrapper {
+    height: 200px;
     margin-bottom: 20px;
+  }
+  .solutions-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .solutions-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .solutions-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  .solutions-title a {
+    color: var(--heading-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .solutions-title a:hover {
+    color: var(--heading-color);
+  }
+  .overview-text {
     flex-grow: 1;
   }
-  .btn-secondary {
-    display: inline-block;
-    background-color: #6c757d;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    margin-top: auto;
+  .overview-text :global(p) {
+    font-size: 0.95em;
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-top: 0;
+    margin-bottom: 0;
   }
-  .btn-secondary:hover {
-    background-color: #5a6268;
+  .no-solutions-message {
+    font-size: 1.1em;
+    color: var(--text-color);
+    padding: 30px;
+    background-color: var(--background-color-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    text-align: center;
+    width: 100%;
+  }
+  .card-icon-container {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 1.2rem;
+    color: #4285f4;
+    transition: transform 0.3s ease;
+  }
+  .solutions-item:hover .card-icon-container {
+    transform: scale(1.1);
+  }
+  @media (max-width: 992px) {
+    .solutions-item-link {
+      width: calc(50% - 15px);
+    }
+  }
+  @media (max-width: 768px) {
+    .solutions-item-link {
+      width: 100%;
+      max-width: 600px;
+    }
   }
 </style>

@@ -6,7 +6,6 @@ import type { News, MicroCMSListResponse } from '../../types/microcms.d.ts';
 
 const { slug } = Astro.params;
 
-// ページのレンダリング部分で使用するためのclient
 const client = createClient({
   serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
   apiKey: import.meta.env.MICROCMS_API_KEY,
@@ -14,10 +13,9 @@ const client = createClient({
 
 let newsArticle;
 try {
-  // ★重要★ ここを修正
   const response = await client.get<MicroCMSListResponse<News>>({
     endpoint: 'news',
-    queries: { filters: `slug[equals]${slug}` } // スラッグでフィルタリング
+    queries: { filters: `slug[equals]${slug}` }
   });
   newsArticle = response.contents[0];
 } catch (error) {
@@ -49,20 +47,14 @@ export async function getStaticPaths() {
   }));
 }
 ---
-<Layout title={`${newsArticle.title} | オプティエンス`}>
+<Layout title={`${newsArticle.title} | Optiens`}>
   <main>
     <section class="news-detail-container">
       <div class="container">
         <article class="news-article">
           <h1 class="news-title">{newsArticle.title}</h1>
           <p class="news-date">{format(new Date(newsArticle.publishedAt), 'yyyy.MM.dd')}</p>
-          {newsArticle.thumbnail && (
-            <img src={newsArticle.thumbnail.url} alt={newsArticle.title} class="news-thumbnail" />
-          )}
           <div class="news-body" set:html={newsArticle.body} />
-          <div class="back-link">
-            <a href="/news" class="btn-back">最新情報一覧に戻る</a>
-          </div>
         </article>
       </div>
     </section>
@@ -71,7 +63,8 @@ export async function getStaticPaths() {
 
 <style>
   .news-detail-container {
-    padding: 60px 20px;
+    /* ここを修正しました */
+    padding: 120px 20px 60px; /* 上部を120pxに設定し、下部を60pxに維持 */
   }
   .news-article {
     max-width: 800px;
@@ -82,7 +75,7 @@ export async function getStaticPaths() {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
   .news-title {
-    font-size: 2.5rem;
+    font-size: 1.0rem;
     font-weight: bold;
     color: var(--heading-color);
     margin-bottom: 0.5rem;
@@ -92,14 +85,6 @@ export async function getStaticPaths() {
     color: var(--text-color-light);
     margin-bottom: 2rem;
     display: block;
-  }
-  .news-thumbnail {
-    width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 2rem;
   }
   .news-body :global(h2),
   .news-body :global(h3),
@@ -111,46 +96,3 @@ export async function getStaticPaths() {
   }
   .news-body :global(h2) {
     font-size: 2rem;
-    font-weight: bold;
-    color: var(--heading-color);
-    margin-top: 3rem;
-  }
-  .news-body :global(h3) {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--heading-color);
-    margin-top: 2rem;
-  }
-  .news-body :global(p) {
-    font-size: 1rem;
-    color: var(--text-color);
-  }
-  .news-body :global(img) {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 2rem 0;
-  }
-  .back-link {
-    text-align: center;
-    margin-top: 3rem;
-  }
-  .btn-back {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: var(--secondary-color);
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  .btn-back:hover {
-    background-color: var(--primary-color);
-  }
-  @media (max-width: 768px) {
-    .news-title {
-      font-size: 2rem;
-    }
-  }
-</style>

@@ -1,19 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { createClient } from 'microcms-js-sdk';
-import type { MicroCMSListResponse, PageContent } from '../types/microcms.d.ts';
-
-const client = createClient({
-  serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.MICROCMS_API_KEY,
-});
-
-const pageResponse = await client.get<MicroCMSListResponse<PageContent>>({
-  endpoint: 'pages',
-  queries: { filters: 'slug[equals]home' }
-});
-const homePageContent: PageContent | null = pageResponse.contents[0] || null;
-
 ---
 
 <Layout title="Optiens | 人と地球が共に豊かになる未来を追求" description="テクノロジーと自然の調和を通じて、人々と地球が共に豊かになる未来を追求するOptiensの公式ウェブサイトです。">
@@ -36,7 +22,7 @@ const homePageContent: PageContent | null = pageResponse.contents[0] || null;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url('/images/ai-nature-city.webp');
+  background: url('/images/ai-nature-city.webp') no-repeat center center / cover, var(--primary-color);
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -76,15 +62,12 @@ const homePageContent: PageContent | null = pageResponse.contents[0] || null;
 .hero-cta {
   display: inline-block;
   padding: 12px 30px;
-  background-color: var(--primary-color);
+  background: var(--primary-color);
   color: white;
   text-decoration: none;
   font-weight: bold;
   border-radius: 5px;
   transition: background-color 0.3s ease;
-}
-.hero-cta:hover {
-  background-color: var(--secondary-color);
 }
 @media (max-width: 768px) {
   .hero-title {
@@ -93,25 +76,5 @@ const homePageContent: PageContent | null = pageResponse.contents[0] || null;
   .hero-lead {
     font-size: 1.1em;
   }
-}
-.btn-primary {
-  display: inline-block;
-  padding: 12px 30px;
-  background-color: var(--primary-color);
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-.btn-primary:hover {
-  background-color: var(--primary-color-darker);
-  color: var(--accent-color);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-:root {
-  --primary-color-darker: color-mix(in srgb, var(--primary-color) 80%, black);
-  --accent-color: #aaffd6;
 }
 </style>

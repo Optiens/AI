@@ -1,23 +1,43 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { createClient } from 'microcms-js-sdk';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
+import { ja } from 'date-fns/locale';
 import { stripHtmlTags } from '../../utils/string';
-import type { News, MicroCMSListResponse } from '../../types/microcms.d.ts';
+import type { News, MicroCMSQueries, MicroCMSListResponse } from '../../types/microcms.d.ts';
 
-// microCMSクライアントの初期化
 const client = createClient({
   serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
   apiKey: import.meta.env.MICROCMS_API_KEY,
 });
 
-// `microcms-js-sdk`からのレスポンスに型を付与
-const { contents: newsList } = await client.get<MicroCMSListResponse<News>>({
+// 1ページあたりの記事数
+const limit = 5;
+
+// URLから現在のページ番号を取得。存在しない場合は1とする
+const currentPage = Astro.url.searchParams.get('page') ? Number(Astro.url.searchParams.get('page')) : 1;
+const offset = (currentPage - 1) * limit;
+
+// MicroCMSから記事を取得するクエリ
+const queries: MicroCMSQueries = {
+  orders: '-publishedAt',
+  limit: limit,
+  offset: offset,
+};
+
+// APIから記事データを取得
+const { contents: news, totalCount } = await client.get<MicroCMSListResponse<News>>({
   endpoint: 'news',
-  queries: { orders: '-publishedAt' }
+  queries: queries,
 });
+
+// 総ページ数を計算
+const totalPages = Math.ceil(totalCount / limit);
+const hasPrev = currentPage > 1;
+const hasNext = currentPage > totalPages; // 修正: 次のページが存在するかどうかの条件を修正
 ---
-<Layout title="最新情報 | Optiens">
+
+<Layout title="ニュース | Optiens">
   <main>
     <section class="news-list-hero-section">
       <div class="container text-center">
@@ -26,119 +46,214 @@ const { contents: newsList } = await client.get<MicroCMSListResponse<News>>({
     </section>
 
     <section class="news-articles-section">
-      <div class="container">
-        {newsList && newsList.length > 0 ? (
-          <div class="news-list-container">
-            {newsList.map((news) => (
+      <div class="container news-list-container">
+        {totalCount > 0 ? (
+          news.map((item) => (
+            <a href={`/news/${item.slug}`} class="news-item-long-link">
               <article class="news-item-long">
-                {news.thumbnail && (
-                  <a href={`/news/${news.slug}`} class="news-thumbnail-link">
-                    <img src={news.thumbnail.url} alt={news.title} class="news-thumbnail-long" />
-                  </a>
-                )}
+                {/* サムネイル画像表示部分を削除 */}
                 <div class="news-content-long">
-                  <p class="news-date">{format(new Date(news.publishedAt), 'yyyy.MM.dd')}</p>
-                  <h2 class="news-title-long"><a href={`/news/${news.slug}`}>{news.title}</a></h2>
-                  <p class="news-body-long">{stripHtmlTags(news.body).slice(0, 100)}...</p>
+                  <p class="news-date">{format(new Date(item.publishedAt), 'yyyy.MM.dd')}</p>
+                  <h2 class="news-title-long">{item.title}</h2>
+                  <p class="news-body-long">{stripHtmlTags(item.body).slice(0, 100)}...</p>
+                </div>
+                {/* ここにアイコンを追加します */}
+                <div class="card-icon-container">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </div>
               </article>
-            ))}
-          </div>
+            </a>
+          ))
         ) : (
-          <p class="text-center">現在、お知らせはありません。</p>
+          <p class="text-center">現在、ニュースはありません。</p>
         )}
       </div>
     </section>
+
+    {totalPages > 1 && (
+      <nav class="pagination-container">
+        <ul class="pagination">
+          {hasPrev ? (
+            <li class="pagination-item">
+              <a href={`?page=${currentPage - 1}`} class="pagination-link">前へ</a>
+            </li>
+          ) : (
+            <li class="pagination-item disabled">
+              <span class="pagination-link">前へ</span>
+            </li>
+          )}
+          <li class="pagination-item current">
+            <span class="pagination-link">{currentPage} / {totalPages}</span>
+          </li>
+          {hasNext ? (
+            <li class="pagination-item">
+              <a href={`?page=${currentPage + 1}`} class="pagination-link">次へ</a>
+            </li>
+          ) : (
+            <li class="pagination-item disabled">
+              <span class="pagination-link">次へ</span>
+            </li>
+          )}
+        </ul>
+      </nav>
+    )}
   </main>
 </Layout>
 
 <style>
   .news-list-hero-section {
-    background-color: #f0f0f0;
+    background: url('/images/ai-nature-city.webp') no-repeat center center / cover, var(--primary-color);
     padding: 60px 0;
     text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    position: relative;
   }
+
+  .news-list-hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+  }
+
+  .news-list-hero-section .container {
+    position: relative;
+    z-index: 1; 
+  }
+
   .news-list-hero-section h1 {
     font-size: 2.2em;
-    color: #2c3e50;
+    color: var(--background-color-light);
     margin-bottom: 10px;
   }
-  .news-list-hero-section p {
-    font-size: 1.1em;
-    color: #555;
-  }
+
   .news-articles-section {
     padding: 60px 0;
   }
+
   .news-list-container {
     display: flex;
     flex-direction: column;
     gap: 30px;
   }
+
+  /* カード全体をリンクにするためのスタイル */
+  .news-item-long-link {
+    display: block; /* リンクをブロック要素にする */
+    text-decoration: none;
+    color: inherit;
+  }
+
   .news-item-long {
     display: flex;
-    background-color: white;
+    background-color: var(--background-color-light);
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* 子要素の絶対配置の基準となります */
   }
+
   .news-item-long:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
-  .news-thumbnail-link {
-    flex-shrink: 0;
-    width: 250px;
-    height: 150px;
-    display: block;
-  }
-  .news-thumbnail-long {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+
   .news-content-long {
-    padding: 20px;
+    padding: 15px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
+
   .news-date {
     font-size: 0.9em;
     color: #7f8c8d;
     margin-bottom: 5px;
   }
+
   .news-title-long {
     font-size: 1.5em;
     font-weight: bold;
     margin-top: 0;
     margin-bottom: 10px;
   }
-  .news-title-long a {
-    color: var(--heading-color);
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  .news-title-long a:hover {
-    color: var(--primary-color);
-  }
+
   .news-body-long {
     font-size: 1em;
     color: var(--text-color);
     line-height: 1.6;
   }
 
-  /* レスポンシブ対応 */
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+  }
+
+  .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .pagination-item {
+    padding: 0;
+    margin: 0;
+  }
+
+  .pagination-link {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: background-color 0.2s;
+    font-weight: bold;
+  }
+
+  .pagination-link:hover {
+    background-color: #f0f0f0;
+  }
+
+  .pagination-item.disabled .pagination-link {
+    color: #ccc;
+    cursor: not-allowed;
+    background-color: transparent;
+  }
+
+  .pagination-item.current .pagination-link {
+    background: var(--primary-color);
+    color: #fff;
+  }
+
+  /* 追加したCSS: アイコンの配置とスタイル */
+  .card-icon-container {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 1.2rem;
+    color: #4285f4;
+    transition: transform 0.3s ease;
+  }
+
+  .news-item-long:hover .card-icon-container {
+    transform: scale(1.1);
+  }
+
   @media (max-width: 768px) {
     .news-item-long {
       flex-direction: column;
     }
-    .news-thumbnail-link {
-      width: 100%;
-      height: 200px;
-    }
+
     .news-content-long {
       padding: 15px;
     }
