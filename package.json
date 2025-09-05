@@ -14,7 +14,8 @@
     "@sendgrid/mail": "^8.1.5",
     "astro": "^5.13.3",
     "date-fns": "^3.6.0",
-    "microcms-js-sdk": "^2.7.0"
+    "microcms-js-sdk": "^2.7.0",
+    "sharp": "^0.34.3"
   },
   "engines": {
     "node": "20.x"

@@ -47,6 +47,7 @@ export async function getStaticPaths() {
   }));
 }
 ---
+
 <Layout title={`${newsArticle.title} | Optiens`}>
   <main>
     <section class="news-detail-container">
@@ -54,45 +55,9 @@ export async function getStaticPaths() {
         <article class="news-article">
           <h1 class="news-title">{newsArticle.title}</h1>
           <p class="news-date">{format(new Date(newsArticle.publishedAt), 'yyyy.MM.dd')}</p>
-          <div class="news-body" set:html={newsArticle.body} />
+          <div class="news-body prose" set:html={newsArticle.body} />
         </article>
       </div>
     </section>
   </main>
 </Layout>
-
-<style>
-  .news-detail-container {
-    /* ここを修正しました */
-    padding: 120px 20px 60px; /* 上部を120pxに設定し、下部を60pxに維持 */
-  }
-  .news-article {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: var(--background-color-light);
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-  .news-title {
-    font-size: 1.0rem;
-    font-weight: bold;
-    color: var(--heading-color);
-    margin-bottom: 0.5rem;
-  }
-  .news-date {
-    font-size: 0.9rem;
-    color: var(--text-color-light);
-    margin-bottom: 2rem;
-    display: block;
-  }
-  .news-body :global(h2),
-  .news-body :global(h3),
-  .news-body :global(p),
-  .news-body :global(ul),
-  .news-body :global(ol) {
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-  }
-  .news-body :global(h2) {
-    font-size: 2rem;

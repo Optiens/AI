@@ -1,268 +1,204 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import poster from '../assets/about-poster.jpg?url';
 ---
 
 <Layout title="会社情報 | Optiens">
   <main>
-    <section class="about-hero-section">
-      <video src="/videos/about.mp4" autoplay loop muted playsinline></video>
+    <!-- ===== Hero（動画） ===== -->
+    <section
+      class="about-hero-section"
+      style={`--hero-poster: url(${poster});`}
+    >
+      <video
+        autoplay muted loop playsinline preload="metadata"
+        poster={poster} aria-hidden="true"
+      >
+        <source src="/videos/about_compressed.webm" type="video/webm" />
+        <source src="/videos/about_compressed.mp4" type="video/mp4" />
+        お使いのブラウザは動画タグをサポートしていません。
+      </video>
+
       <div class="hero-content">
         <div class="container text-center">
-          <h1>会社情報</h1>
+          <h1>ABOUT</h1>
           <p>持続可能な循環社会へ</p>
         </div>
       </div>
     </section>
 
+    <!-- ===== Content ===== -->
     <section class="about-content-section">
       <div class="container">
-        <div class="philosophy-grid">
 
-          <div class="grid-item">
-            <h2>持続可能な<span class="text-future">未来</span>のために</h2>
-            <p>"円相" の哲学を基盤に、最先端のテクノロジーを融合させ、あらゆる空間で、人と自然が調和し最適化された状態を創造していきます。</p>
+        <!-- ミニ・ヒーロー（About専用の軽量版） -->
+        <section class="hero-container hero-container--inline">
+          <div class="hero-block">
+            <div class="hero-title">
+              <p class="eyebrow">GRAND VISION</p>
+              <h2 class="hero-lead hero-lead--xl">
+                DESIGNING A FUTURE WHERE PEOPLE<br/>
+                AND THE PLANET THRIVE TOGETHER.
+              </h2>
+            </div>
+            <p class="hero-lead hero-lead--sm">
+              人と地球が共に豊かになる未来をデザインする。
+            </p>
           </div>
-        </div>
+        </section>
 
-        <div class="values-section">
-          <div class="values-grid">
-            <div class="value-item value-item-harmony">
-              <div class="value-icon-wrapper">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4ZM12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8Z" fill="currentColor"/><path d="M12 18V22M12 2V6M18 12H22M2 12H6" stroke="#ea4335" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              <h3>調和</h3>
-              <p>人、自然、テクノロジーの調和を追求します。</p>
-              <p>近年のように技術に偏ることなく、すべての要素がバランスよく共存する社会を築きます。</p>
-            </div>
-            <div class="value-item value-item-optimization">
-              <div class="value-icon-wrapper">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="#4285f4"/><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2C6.47715 2 2 6.47715 2 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 6V18M18 12H6" stroke="#ea4335" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              <h3>最適化</h3>
-              <p>今まで正しいと思ってきた概念を見直し、本来あるべき姿を追求します。</p>
-              <p>新たな可能性を引き出すため進化を続けます。</p>
-            </div>
-            <div class="value-item value-item-cycle">
-              <div class="value-icon-wrapper">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4Z" fill="currentColor"/><path d="M12 18V22M12 2V6M18 12H22M2 12H6" stroke="#ea4335" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12L16 16M12 12L8 16M12 12L16 8M12 12L8 8" stroke="#ea4335" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              <h3>循環</h3>
-              <p>生命と地球資源のサイクルを尊重し、未来へと繋ぐこと。</p>
-              <p>物質主義、消費社会から脱却し、すべてが循環する社会を目指します。</p>
-            </div>
-          </div>
-        </div>
+        <!-- 1) Optiensの由来 -->
+        <section class="about-origin">
+          <h2>Optiensについて</h2></p>
+            <p>Optiens（オプティエンス） は <strong>Optimization（最適化）</strong> と <strong>Ensō（円相）</strong>を重ねた造語です。</p>
+            <p>円は平面ではなく、<strong>新しい情報を取り入れて上昇し続ける立体の螺旋</strong>として捉えています。</p>
+            <p>それは閉じて完結する形ではなく、<strong>次の世代へ繋ぐための象徴</strong>として考えています。</p>
+            <p>既成概念を見直し、<strong>社会や暮らしの仕組みを最適化していく</strong>ことが私たちのミッションです。</p>
+        </section>
+
+        <!-- 2) 代表メッセージ -->
+        <section class="founder-letter">
+          <h2>代表メッセージ</h2>
+          <p class="lede">クローズドループ農業で、宇宙と地上の食料自給を日常に。</p>
+
+          <p>
+            Optiensは、土壌・気候・水に強く依存する従来モデルを越え、低電力設計 × AI制御 × 運用SaaS を核にした閉鎖循環型の水耕モジュールを開発しています。<br/>
+            エネルギー・水・栄養・CO₂・廃熱の循環を一体で設計し、どこでも再現性高く食料を生み出す――それが私たちの解く課題です。<br/>
+            この技術は単なる栽培設備ではなく、孤立環境で人が生きるためのインフラです。<br/>
+            病院や防災拠点、離島・船舶、砂漠地域から宇宙まで、同じアーキテクチャで拡張できるデュアルユースを前提にしています。
+          </p>
+          <p>
+            私たちは、①低電力・高効率、②衛生性と冗長性、③モジュール化と保守性、④開かれたインターフェース、⑤LCAに基づく透明な評価を設計原則とし、現場を止めない遠隔監視と予防保全で運用を支えます。
+          </p>
+          <p>
+            まずは地上MVPで電力・水・LCAを実証し、医療・防災・教育など公共性の高い領域から実装。<br/>
+            その先に、軌道上の小型実験、月周回・月面での展開を段階的に進めます。各ステップでデータを公開し、検証と改善を積み重ねます。
+          </p>
+          <p>
+            10年先、100年先も「安心して食べられる環境」を残すために。<br/>
+            Optiensは、農業を環境に左右される営みから設計・運用できる社会的インフラへアップデートします。ともに実装を進めていきましょう。
+          </p>
+        </section>
       </div>
     </section>
   </main>
 </Layout>
 
 <style>
-  /* 共通スタイルは Layout.astro の is:global で管理されています */
-  .text-future {
-    color: #ea4335;
-  }
+/* =========================================================
+   About 上部の動画ヒーロー（既存の見た目を維持）
+   ========================================================= */
+.about-hero-section{
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(480px, 66svh, 80svh);
+  display: flex; align-items: center; justify-content: center;
+  background-image: var(--hero-poster),
+                    var(--brand-gradient, linear-gradient(135deg,#2e574c,#5ea89a));
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+  color: var(--on-hero, #fff);
+}
+.about-hero-section::before{ content:''; position:absolute; inset:0; background: rgba(0,0,0,.45); z-index:1; }
+.about-hero-section video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; pointer-events:none; }
+.about-hero-section .hero-content{ position:relative; z-index:2; padding: clamp(56px, 8vw, 112px) 20px; width:100%; text-align:center; }
+.about-hero-section .hero-content h1{ font-size: clamp(28px, 6vw, 56px); line-height:1.15; margin:0 0 12px; color:#fff; }
+.about-hero-section .hero-content p{ font-size: clamp(14px, 2vw, 18px); line-height:1.7; max-width: 900px; margin:0 auto; color:#fff; }
 
-  /* ここはaboutページ独自のスタイルを記述します */
-  .about-hero-section {
-    position: relative;
-    overflow: hidden;
-    height: auto;
-    min-height: 400px;
-    color: var(--background-color-light);
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    /* 動画が読み込まれない場合の代替背景色 */
-    background: var(--primary-color); 
-    /* z-indexを追加して、動画よりも手前に来ないようにする */
-    z-index: 0; /* または auto */
-  }
+/* =========================================================
+   About 本文
+   ========================================================= */
+.about-content-section{ padding: 64px 20px; background: var(--surface, #fff); line-height:1.8; }
+.about-content-section .container{ width: min(1000px, 100% - 2rem); margin-inline: auto; }
 
-  .about-hero-section video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    transform: translateX(-50%) translateY(-50%);
-    /* z-indexを-2に設定し、about-hero-sectionの背景よりも奥に配置 */
-    z-index: -2; 
-    object-fit: cover;
-  }
+/* =========================================================
+   ミニ・ヒーロー（カード）
+   “列（--col-w）”を全要素で共有して左起点を完全一致
+   ========================================================= */
+.about-content-section .hero-container--inline{
+  position: relative;
+  /* コンテナ化：子孫で cqw を使って実寸参照できるようにする */
+  container-type: inline-size;
 
-  .hero-content {
-    position: relative;
-    padding: 80px 20px;
-    text-align: center;
-    width: 100%;
-    /* 動画の上に重ねる半透明のオーバーレイ */
-    background-color: rgba(0, 0, 0, 0.5);
-    /* z-indexを-1に設定し、動画の少し手前、テキストの奥に配置 */
-    z-index: -1; 
-  }
+  --pad-x: clamp(24px, 4vw, 40px);
+  padding: var(--pad-x);
 
-  /* hero-content内のコンテンツがhero-contentの背景より手前に来るように */
-  .hero-content .container {
-      position: relative; /* z-indexを機能させるために必要 */
-      z-index: 1; /* hero-contentの背景より手前に表示 */
+  margin-bottom: 48px;
+  background: var(--surface, #fff);
+  border: 1px solid color-mix(in srgb, var(--brand-2, #5ea89a) 22%, transparent);
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  color: #111; text-shadow: none;
+
+  /* 列幅（常に内側幅以下） */
+  --inner-w: calc(100% - (var(--pad-x) * 2));
+  --col-w: min(56rem, var(--inner-w));
+}
+.about-content-section .hero-container--inline::before{ display:none; }
+
+.about-content-section .hero-container--inline .hero-block{ display:grid; gap:.75rem; box-sizing:border-box; }
+.about-content-section .hero-container--inline .hero-title{ width: var(--col-w); max-width: 100%; margin-inline: auto; }
+.about-content-section .hero-container--inline .eyebrow{
+  margin:0 0 .75rem; text-align:left; font-size: clamp(11px, 1vw, 13px);
+  letter-spacing:.18em; text-transform:uppercase; color:#76b2a8; opacity:.95;
+}
+.about-content-section .hero-container--inline .hero-lead{ margin:0 0 1em; line-height:1.2; letter-spacing:.02em; }
+.about-content-section .hero-container--inline .hero-lead--xl{ text-align:left; font-size: clamp(28px, 3.6vw, 44px); text-wrap: balance; }
+
+/* 日本語サブコピー：PC は右寄せ */
+.about-content-section .hero-container--inline .hero-lead--sm{
+  width: var(--col-w); max-width: 100%; margin-inline: auto;
+  text-align: right; font-size: clamp(14px, 1.8vw, 18px);
+  color:#666; font-weight:600;
+}
+
+/* =========================================================
+   モバイル（<=640px）
+   - 実寸（100cqw）からフォントサイズを算出
+   - 1 行固定だが overflow: hidden は使わない（切れ防止）
+   - GRAND VISION と左起点を揃える
+   ========================================================= */
+@media (max-width: 640px){
+  .about-content-section .hero-container--inline{
+    /* 列幅は内側幅に厳密フィット */
+    --col-w: calc(100% - (var(--pad-x) * 2));
   }
+  .about-content-section .hero-container--inline .hero-lead--xl{
+    font-size: clamp(18px, 5.2vw, 26px);
+  }
+  .about-content-section .hero-container--inline .hero-lead--sm{
+    width: var(--col-w); margin-inline:auto;
+    text-align: left;            /* ← eyebrow と同じ左起点 */
+    white-space: nowrap;         /* 常に 1 行 */
+
+    /* ★ポイント：コンテナ実寸 100cqw から左右パディングを引いて割る
+       末尾切れを避けるため安全マージンを多めに（+ 32px） */
+    font-size: min(16px, calc((100cqw - (var(--pad-x) * 2) - 32px) / 18));
+    line-height: 1.35;
+    letter-spacing: 0;
+    overflow: visible;           /* 隠さない（サイズで必ず収める） */
+  }
+}
+
+/* =========================================================
+   その他セクション
+   ========================================================= */
+.about-origin{ margin-bottom: 64px; }
+.about-origin h2{ font-size: clamp(24px, 3.2vw, 32px); margin: 0 0 12px; color: var(--heading, #111); }
+.about-origin p{ margin: 0 0 12px; }
+
+.founder-letter{
+  max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem;
+  background: var(--surface-2, #f9f9f9); border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.06);
+}
+.founder-letter h2{ font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; text-align: center; margin-bottom: 2rem; color:#111; }
+.founder-letter .lede{ font-size: 1.2rem; font-weight: 600; text-align: center; color: var(--brand, #2e574c); margin-bottom: 2.5rem; }
+.founder-letter p{ margin-bottom: 1.5rem; line-height: 1.8; color: var(--text, #1a1a1a); }
+
+/* a11y: 動画を無効化 */
+@media (prefers-reduced-motion: reduce){
+  .about-hero-section video{ display:none; }
+}
 
 
-  .hero-content h1 {
-    font-size: 3em;
-    margin-bottom: 15px;
-    color: var(--background-color-light);
-  }
-
-  .hero-content p {
-    font-size: 1.2em;
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  .about-content-section {
-    padding: 60px 20px;
-    background-color: var(--background-color-light);
-    line-height: 1.8;
-  }
-
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
-  .philosophy-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
-    margin-bottom: 60px;
-  }
-  
-  .grid-item h2 {
-    font-size: 2.2em;
-    color: var(--heading-color);
-    margin-bottom: 20px;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 10px;
-  }
-  
-  .grid-item p {
-    margin-bottom: 0;
-  }
-
-  .values-section h2 {
-    font-size: 2.2em;
-    color: var(--heading-color);
-    text-align: center;
-    margin-bottom: 40px;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 10px;
-  }
-
-  .values-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-  }
-
-  .value-item {
-    background-color: var(--background-color-light);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .value-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  }
-
-  /* 各アイコンの背景色を個別に設定 */
-  .value-item-harmony .value-icon-wrapper {
-    background-color: #fbbc04;
-    width: 60px;
-    height: 60px;
-    margin-bottom: 20px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--background-color-light); /* アイコンの色は白 */
-  }
-
-  .value-item-optimization .value-icon-wrapper {
-    background-color: #4285f4;
-    width: 60px;
-    height: 60px;
-    margin-bottom: 20px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--background-color-light); /* アイコンの色は白 */
-  }
-
-  .value-item-cycle .value-icon-wrapper {
-    background-color: #5bb974; /* 明るい青緑色 */
-    width: 60px;
-    height: 60px;
-    margin-bottom: 20px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--background-color-light); /* アイコンの色は白 */
-  }
-
-  .value-icon-wrapper svg {
-    width: 30px;
-    height: 30px;
-  }
-
-  .value-item h3 {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: var(--text-color);
-    margin-bottom: 10px;
-    border: none;
-    padding: 0;
-  }
-  
-  .value-item p {
-    font-size: 1em;
-    margin-bottom: 0;
-    text-align: left;
-  }
-  
-  /* レスポンシブ対応 */
-  @media (max-width: 768px) {
-    .about-hero-section {
-      padding: 60px 20px;
-    }
-    .hero-content {
-      padding: 60px 20px;
-    }
-    .hero-content h1 {
-      font-size: 2.2em;
-    }
-    .hero-content p {
-      font-size: 1em;
-    }
-    .about-content-section h2 {
-      font-size: 1.8em;
-    }
-    .about-content-section h3 {
-      font-size: 1.4em;
-    }
-  }
 </style>
+

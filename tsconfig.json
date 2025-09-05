@@ -4,6 +4,21 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
-    }
-  }
+    },
+    "module": "ESNext",
+    "target": "ES2022",
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": ["astro/client"],
+    "plugins": [
+      { "name": "@astrojs/ts-plugin" }
+    ]
+  },
+  "include": ["src", "types", "astro.config.*", "env.d.ts"],
+  "exclude": ["dist", "node_modules", ".astro"]
 }
