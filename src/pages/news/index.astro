@@ -1,66 +1,60 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { createClient } from 'microcms-js-sdk';
-import { format, parseISO } from 'date-fns';
-import { ja } from 'date-fns/locale';
+import { format } from 'date-fns';
 import { stripHtmlTags } from '../../utils/string';
 import type { News, MicroCMSQueries, MicroCMSListResponse } from '../../types/microcms.d.ts';
+
+// ヒーロー背景画像（assetsからimport）
+import bgUrl from '~/assets/ai-nature-city.webp?url';
 
 const client = createClient({
   serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
   apiKey: import.meta.env.MICROCMS_API_KEY,
 });
 
-// 1ページあたりの記事数
 const limit = 5;
-
-// URLから現在のページ番号を取得。存在しない場合は1とする
-const currentPage = Astro.url.searchParams.get('page') ? Number(Astro.url.searchParams.get('page')) : 1;
+const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
 const offset = (currentPage - 1) * limit;
 
-// MicroCMSから記事を取得するクエリ
-const queries: MicroCMSQueries = {
-  orders: '-publishedAt',
-  limit: limit,
-  offset: offset,
-};
+const queries: MicroCMSQueries = { orders: '-publishedAt', limit, offset };
 
-// APIから記事データを取得
 const { contents: news, totalCount } = await client.get<MicroCMSListResponse<News>>({
   endpoint: 'news',
-  queries: queries,
+  queries,
 });
 
-// 総ページ数を計算
 const totalPages = Math.ceil(totalCount / limit);
 const hasPrev = currentPage > 1;
-const hasNext = currentPage > totalPages; // 修正: 次のページが存在するかどうかの条件を修正
+const hasNext = currentPage < totalPages;
 ---
 
 <Layout title="ニュース | Optiens">
   <main>
-    <section class="news-list-hero-section">
+    <!-- 共通 Hero セクション -->
+    <section class="hero-section news-list-hero-section" style={`--hero-bg: url(${bgUrl});`}>
       <div class="container text-center">
         <h1>ニュース</h1>
       </div>
     </section>
 
+    <!-- ニュース記事一覧 -->
     <section class="news-articles-section">
       <div class="container news-list-container">
         {totalCount > 0 ? (
           news.map((item) => (
-            <a href={`/news/${item.slug}`} class="news-item-long-link">
-              <article class="news-item-long">
-                {/* サムネイル画像表示部分を削除 */}
-                <div class="news-content-long">
-                  <p class="news-date">{format(new Date(item.publishedAt), 'yyyy.MM.dd')}</p>
-                  <h2 class="news-title-long">{item.title}</h2>
-                  <p class="news-body-long">{stripHtmlTags(item.body).slice(0, 100)}...</p>
+            <a href={`/news/${item.slug}`} class="news-item-long-link" aria-label={`${item.title} の詳細`}>
+              <article class="card news-item-long">
+                <div class="card-content news-content-long">
+                  <p class="news-date">
+                    {item.publishedAt ? format(new Date(item.publishedAt), 'yyyy.MM.dd') : ''}
+                  </p>
+                  <h2 class="card-title">{item.title}</h2>
+                  <p class="card-text">{stripHtmlTags(item.body).slice(0, 100)}…</p>
                 </div>
-                {/* ここにアイコンを追加します */}
-                <div class="card-icon-container">
+                <span class="card-icon-container" aria-hidden="true">
                   <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </div>
+                </span>
               </article>
             </a>
           ))
@@ -71,7 +65,7 @@ const hasNext = currentPage > totalPages; // 修正: 次のページが存在す
     </section>
 
     {totalPages > 1 && (
-      <nav class="pagination-container">
+      <nav class="pagination-container" aria-label="ニュースページネーション">
         <ul class="pagination">
           {hasPrev ? (
             <li class="pagination-item">
@@ -101,102 +95,69 @@ const hasNext = currentPage > totalPages; // 修正: 次のページが存在す
 </Layout>
 
 <style>
-  .news-list-hero-section {
-    background: url('/images/ai-nature-city.webp') no-repeat center center / cover, var(--primary-color);
-    padding: 60px 0;
+  /* ========== Hero Section（ソリューションと統一） ========== */
+  .hero-section {
+    background-image: var(--hero-bg), var(--brand-gradient, linear-gradient(135deg,#2e574c,#5ea89a));
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: clamp(40px, 7vw, 80px) 0;
     text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    overflow: hidden;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0,0,0,.35);
     position: relative;
+    overflow: hidden;
   }
-
-  .news-list-hero-section::before {
+  .hero-section::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    inset: 0;
+    background: rgba(0,0,0,0.45);
     z-index: 0;
   }
-
-  .news-list-hero-section .container {
+  .hero-section .container {
     position: relative;
-    z-index: 1; 
+    z-index: 1;
+  }
+  .hero-section h1 {
+    font-size: clamp(26px, 4vw, 36px);
+    margin: 0;
   }
 
-  .news-list-hero-section h1 {
-    font-size: 2.2em;
-    color: var(--background-color-light);
-    margin-bottom: 10px;
-  }
-
+  /* ========== News List ========== */
   .news-articles-section {
-    padding: 60px 0;
+    padding: clamp(32px, 6vw, 60px) 0;
   }
-
   .news-list-container {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 28px;
   }
-
-  /* カード全体をリンクにするためのスタイル */
   .news-item-long-link {
-    display: block; /* リンクをブロック要素にする */
+    display: block;
     text-decoration: none;
     color: inherit;
   }
-
   .news-item-long {
     display: flex;
-    background-color: var(--background-color-light);
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative; /* 子要素の絶対配置の基準となります */
-  }
-
-  .news-item-long:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  }
-
-  .news-content-long {
-    padding: 15px;
-    flex-grow: 1;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
   }
-
+  .news-content-long {
+    /* 共通カードに上書きする調整用 */
+    gap: 8px;
+  }
   .news-date {
-    font-size: 0.9em;
-    color: #7f8c8d;
-    margin-bottom: 5px;
+    font-size: .9em;
+    color: var(--muted);
+    margin: 0;
   }
 
-  .news-title-long {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-
-  .news-body-long {
-    font-size: 1em;
-    color: var(--text-color);
-    line-height: 1.6;
-  }
-
+  /* ========== Pagination ========== */
   .pagination-container {
     display: flex;
     justify-content: center;
     padding: 30px 0;
   }
-
   .pagination {
     display: flex;
     list-style: none;
@@ -205,60 +166,24 @@ const hasNext = currentPage > totalPages; // 修正: 次のページが存在す
     border: 1px solid #ddd;
     border-radius: 5px;
   }
-
-  .pagination-item {
-    padding: 0;
-    margin: 0;
-  }
-
   .pagination-link {
     display: block;
     padding: 10px 15px;
     text-decoration: none;
-    color: var(--text-color);
-    transition: background-color 0.2s;
+    color: var(--text);
+    transition: background-color .2s;
     font-weight: bold;
   }
-
   .pagination-link:hover {
-    background-color: #f0f0f0;
+    background-color: var(--surface-2);
   }
-
   .pagination-item.disabled .pagination-link {
     color: #ccc;
     cursor: not-allowed;
-    background-color: transparent;
+    background: transparent;
   }
-
   .pagination-item.current .pagination-link {
-    background: var(--primary-color);
+    background: var(--brand);
     color: #fff;
-  }
-
-  /* 追加したCSS: アイコンの配置とスタイル */
-  .card-icon-container {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    font-size: 1.2rem;
-    color: #4285f4;
-    transition: transform 0.3s ease;
-  }
-
-  .news-item-long:hover .card-icon-container {
-    transform: scale(1.1);
-  }
-
-  @media (max-width: 768px) {
-    .news-item-long {
-      flex-direction: column;
-    }
-
-    .news-content-long {
-      padding: 15px;
-    }
-    .news-title-long {
-      font-size: 1.2em;
-    }
   }
 </style>

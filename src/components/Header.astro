@@ -1,8 +1,6 @@
 ---
-// このページは `src/layouts/Layout.astro` の `<header>` セクションのコードを置き換えることを想定しています。
-// フロントマター（JavaScript）のコードがあればそのままにします。
+ // このページは `src/layouts/Layout.astro` の `<header>` セクションのコードを置き換えることを想定しています。
 ---
-
 <header class="main-header">
   <a href="/" class="header-logo-link">
     <!-- <img src="/images/optiens-logo.svg" alt="OptiensLogo" class="header-logo" /> -->
@@ -10,11 +8,12 @@
   </a>
   <nav class="desktop-nav">
     <ul>
-      <li><a href="/">ホーム</a></li>
-      <li><a href="/about">会社情報</a></li>
-      <li><a href="/solutions">ソリューション</a></li>
-      <li><a href="/news">ニュース</a></li>
-      <li><a href="/contact">お問い合わせ</a></li>
+      <li><a href="/">HOME</a></li>
+      <li><a href="/about">ABOUT</a></li>
+      <li><a href="/solutions">SOLUTIONS</a></li>
+      <li><a href="/investors">INVESTORS</a></li>
+      <li><a href="/news">NEWS</a></li>
+      <li><a href="/contact">CONTACT</a></li>
     </ul>
   </nav>
     
@@ -26,11 +25,12 @@
 
   <nav id="sidebar-menu" class="sidebar-menu">
     <ul>
-      <li><a href="/">ホーム</a></li>
-      <li><a href="/about">会社情報</a></li>
-      <li><a href="/solutions">ソリューション</a></li>
-      <li><a href="/news">ニュース</a></li>
-      <li><a href="/contact">お問い合わせ</a></li>
+      <li><a href="/">HOME</a></li>
+      <li><a href="/about">ABOUT</a></li>
+      <li><a href="/solutions">SOLUTIONS</a></li>
+      <li><a href="/investors">INVESTORS</a></li>
+      <li><a href="/news">NEWS</a></li>
+      <li><a href="/contact">CONTACT</a></li>
     </ul>
   </nav>
 </header>
@@ -62,8 +62,8 @@
   /* ヘッダーの共通スタイル */
   .main-header {
     width: 100%;
-    background: var(--background-color-light);
-    color: var(--text-color: #2baf78);
+    background: var(--surface); /* ← 修正: 白を保証 */
+    color: var(--text);
     padding: 20px 40px;
     position: fixed;
     top: 0;
@@ -90,9 +90,6 @@
       top: 50%;
       transform: translateY(-50%);
     }
-    .desktop-nav {
-      /* ナビゲーションは中央に配置される */
-    }
     .desktop-nav ul {
       list-style: none;
       margin: 0;
@@ -101,7 +98,7 @@
       gap: 30px;
     }
     .desktop-nav a {
-      color: var(--text-color);
+      color: var(--text);
       text-decoration: none;
       font-size: 1.1em;
       font-family: 'Lato', sans-serif;
@@ -109,8 +106,8 @@
       transition: color 0.3s ease;
     }
     .desktop-nav a:hover {
-      color: var(--text-color);
-      text-decoration: underline; /* 下線を追加 */
+      color: var(--brand);
+      text-decoration: underline;
     }
     .menu-button, .sidebar-menu {
       display: none;
@@ -126,12 +123,10 @@
       padding: 8px;
     }
     .header-logo-link {
-      /* モバイルではflexboxで配置するためpositionをリセット */
       position: static;
       display: block;
     }
     .menu-button {
-      /* モバイルではflexboxで配置するためpositionをリセット */
       position: static;
       z-index: 1001;
       width: 40px;
@@ -148,7 +143,7 @@
       display: block;
       width: 100%;
       height: 3px;
-      background: var(--heading-color);
+      background: var(--heading);
       transition: all 0.3s ease-in-out;
       border-radius: 2px;
     }
@@ -167,8 +162,7 @@
       right: -100%;
       width: 250px;
       height: 100%;
-      /* background-color: rgba(46, 87, 76, 0.9); */
-      background: var(--primary-color);
+      background: var(--brand);
       transition: right 0.3s ease-out;
       z-index: 1000;
       padding-top: 80px;
@@ -188,7 +182,7 @@
     .sidebar-menu a {
       display: block;
       padding: 15px 20px;
-      color: var(--background-color-light);
+      color: var(--surface);
       font-size: 1.1em;
       transition: background-color 0.3s ease;
       text-decoration: none;
@@ -196,7 +190,7 @@
     .sidebar-menu a:hover,
     .sidebar-menu a:active {
       background-color: rgba(255, 255, 255, 0.1);
-      color: var(--background-color-light);
+      color: var(--surface);
     }
     .desktop-nav {
       display: none;

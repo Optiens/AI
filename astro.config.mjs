@@ -1,7 +1,12 @@
+// astro.config.mjs
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel/serverless';
 
 export default defineConfig({
-  output: 'server',
-  adapter: vercel(),
+  site: 'https://optiens.com',
+  output: 'server', // ← SSR/エンドポイントあり
+  adapter: vercel({
+    regions: ['hnd1'], // 東京リージョン（日本ユーザー向け）
+    memory: 1024,      // 関数メモリ増量（安定性）
+  }),
 });
