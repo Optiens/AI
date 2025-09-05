@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import poster from '../assets/about-poster.jpg?url';
+import founderPhoto from '../assets/founder.jpg?url';
+const fbLink = 'https://www.facebook.com/profile.php?id=61564033651814';
 ---
 
 <Layout title="会社情報 | Optiens">
@@ -58,26 +60,60 @@ import poster from '../assets/about-poster.jpg?url';
 
         <!-- 2) 代表メッセージ -->
         <section class="founder-letter">
-          <h2>代表メッセージ</h2>
-          <p class="lede">クローズドループ農業で、宇宙と地上の食料自給を日常に。</p>
+          <div class="founder-layout">
+            <!-- <a class="founder-photo-link" href={fbLink} target="_blank" rel="noopener">
+              <img
+                src={founderPhoto}
+                alt="代表者の写真"
+                loading="lazy"
+                decoding="async"
+                width="640"
+                height="640"
+              />
+            </a> -->
 
-          <p>
-            Optiensは、土壌・気候・水に強く依存する従来モデルを越え、低電力設計 × AI制御 × 運用SaaS を核にした閉鎖循環型の水耕モジュールを開発しています。<br/>
-            エネルギー・水・栄養・CO₂・廃熱の循環を一体で設計し、どこでも再現性高く食料を生み出す――それが私たちの解く課題です。<br/>
-            この技術は単なる栽培設備ではなく、孤立環境で人が生きるためのインフラです。<br/>
-            病院や防災拠点、離島・船舶、砂漠地域から宇宙まで、同じアーキテクチャで拡張できるデュアルユースを前提にしています。
-          </p>
-          <p>
-            私たちは、①低電力・高効率、②衛生性と冗長性、③モジュール化と保守性、④開かれたインターフェース、⑤LCAに基づく透明な評価を設計原則とし、現場を止めない遠隔監視と予防保全で運用を支えます。
-          </p>
-          <p>
-            まずは地上MVPで電力・水・LCAを実証し、医療・防災・教育など公共性の高い領域から実装。<br/>
-            その先に、軌道上の小型実験、月周回・月面での展開を段階的に進めます。各ステップでデータを公開し、検証と改善を積み重ねます。
-          </p>
-          <p>
-            10年先、100年先も「安心して食べられる環境」を残すために。<br/>
-            Optiensは、農業を環境に左右される営みから設計・運用できる社会的インフラへアップデートします。ともに実装を進めていきましょう。
-          </p>
+            <!-- 新： -->
+            <div class="founder-photo">
+              <img
+                src={founderPhoto}
+                alt="代表者の写真"
+                loading="lazy"
+                decoding="async"
+                width="640"
+                height="640"
+              />
+              <a class="founder-badge fb" href={fbLink} target="_blank" rel="noopener" aria-label="Facebook">
+                <!-- Facebook “f” マーク（SVG）-->
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor"
+                    d="M22 12a10 10 0 1 0-11.5 9.9v-7H8.6v-3h1.9V9.6c0-1.9 1.2-3.2 3.1-3.2.9 0 1.8.1 1.8.1v2h-1.1c-1.0 0-1.3.6-1.3 1.2V12h2.4l-.4 3h-2v7A10 10 0 0 0 22 12z"/>
+                </svg>
+              </a>
+            </div>
+
+
+            <div class="founder-body">
+              <h2>代表メッセージ</h2>
+              <p class="lede">クローズドループ農業で、宇宙と地上の食料自給を日常に。</p>
+              <p>
+                Optiensは、土壌・気候・水に強く依存する従来モデルを越え、低電力設計 × AI制御 × 運用SaaS を核にした閉鎖循環型の水耕モジュールを開発しています。<br/>
+                エネルギー・水・栄養・CO₂・廃熱の循環を一体で設計し、どこでも再現性高く食料を生み出す――それが私たちの解く課題です。<br/>
+                この技術は単なる栽培設備ではなく、孤立環境で人が生きるためのインフラです。<br/>
+                病院や防災拠点、離島・船舶、砂漠地域から宇宙まで、同じアーキテクチャで拡張できるデュアルユースを前提にしています。
+              </p>
+              <p>
+                私たちは、①低電力・高効率、②衛生性と冗長性、③モジュール化と保守性、④開かれたインターフェース、⑤LCAに基づく透明な評価を設計原則とし、現場を止めない遠隔監視と予防保全で運用を支えます。
+              </p>
+              <p>
+                まずは地上MVPで電力・水・LCAを実証し、医療・防災・教育など公共性の高い領域から実装。<br/>
+                その先に、軌道上の小型実験、月周回・月面での展開を段階的に進めます。各ステップでデータを公開し、検証と改善を積み重ねます。
+              </p>
+              <p>
+                10年先、100年先も「安心して食べられる環境」を残すために。<br/>
+                Optiensは、農業を環境に左右される営みから設計・運用できる社会的インフラへアップデートします。ともに実装を進めていきましょう。
+              </p>
+            </div>
+          </div>
         </section>
       </div>
     </section>
@@ -116,25 +152,19 @@ import poster from '../assets/about-poster.jpg?url';
    ========================================================= */
 .about-content-section .hero-container--inline{
   position: relative;
-  /* コンテナ化：子孫で cqw を使って実寸参照できるようにする */
   container-type: inline-size;
-
   --pad-x: clamp(24px, 4vw, 40px);
   padding: var(--pad-x);
-
   margin-bottom: 48px;
   background: var(--surface, #fff);
   border: 1px solid color-mix(in srgb, var(--brand-2, #5ea89a) 22%, transparent);
   border-radius: 10px;
   box-shadow: 0 8px 30px rgba(0,0,0,.06);
   color: #111; text-shadow: none;
-
-  /* 列幅（常に内側幅以下） */
   --inner-w: calc(100% - (var(--pad-x) * 2));
   --col-w: min(56rem, var(--inner-w));
 }
 .about-content-section .hero-container--inline::before{ display:none; }
-
 .about-content-section .hero-container--inline .hero-block{ display:grid; gap:.75rem; box-sizing:border-box; }
 .about-content-section .hero-container--inline .hero-title{ width: var(--col-w); max-width: 100%; margin-inline: auto; }
 .about-content-section .hero-container--inline .eyebrow{
@@ -144,61 +174,119 @@ import poster from '../assets/about-poster.jpg?url';
 .about-content-section .hero-container--inline .hero-lead{ margin:0 0 1em; line-height:1.2; letter-spacing:.02em; }
 .about-content-section .hero-container--inline .hero-lead--xl{ text-align:left; font-size: clamp(28px, 3.6vw, 44px); text-wrap: balance; }
 
-/* 日本語サブコピー：PC は右寄せ */
+/* 日本語サブコピー：PC は右寄せ、SP は1行フィット */
 .about-content-section .hero-container--inline .hero-lead--sm{
   width: var(--col-w); max-width: 100%; margin-inline: auto;
   text-align: right; font-size: clamp(14px, 1.8vw, 18px);
   color:#666; font-weight:600;
 }
-
-/* =========================================================
-   モバイル（<=640px）
-   - 実寸（100cqw）からフォントサイズを算出
-   - 1 行固定だが overflow: hidden は使わない（切れ防止）
-   - GRAND VISION と左起点を揃える
-   ========================================================= */
 @media (max-width: 640px){
-  .about-content-section .hero-container--inline{
-    /* 列幅は内側幅に厳密フィット */
-    --col-w: calc(100% - (var(--pad-x) * 2));
-  }
-  .about-content-section .hero-container--inline .hero-lead--xl{
-    font-size: clamp(18px, 5.2vw, 26px);
-  }
+  .about-content-section .hero-container--inline{ --col-w: calc(100% - (var(--pad-x) * 2)); }
+  .about-content-section .hero-container--inline .hero-lead--xl{ font-size: clamp(18px, 5.2vw, 26px); }
   .about-content-section .hero-container--inline .hero-lead--sm{
     width: var(--col-w); margin-inline:auto;
-    text-align: left;            /* ← eyebrow と同じ左起点 */
-    white-space: nowrap;         /* 常に 1 行 */
-
-    /* ★ポイント：コンテナ実寸 100cqw から左右パディングを引いて割る
-       末尾切れを避けるため安全マージンを多めに（+ 32px） */
-    font-size: min(16px, calc((100cqw - (var(--pad-x) * 2) - 32px) / 18));
-    line-height: 1.35;
-    letter-spacing: 0;
-    overflow: visible;           /* 隠さない（サイズで必ず収める） */
+    text-align: left;
+    white-space: nowrap;
+    font-size: min(16px, calc((100cqw - (var(--pad-x) * 2) - 36px) / 22));
+    line-height: 1.35; letter-spacing: 0;
+  }
+}
+@supports not (width: 1cqw){
+  @media (max-width: 640px){
+    .about-content-section .hero-container--inline .hero-lead--sm{
+      font-size: clamp(12px, 3.6vw, 16px);
+      white-space: nowrap;
+    }
   }
 }
 
 /* =========================================================
-   その他セクション
+   代表メッセージ（写真は見出し＋リードの段にだけ表示）
+   本文はその下でカード全幅を使用
    ========================================================= */
-.about-origin{ margin-bottom: 64px; }
-.about-origin h2{ font-size: clamp(24px, 3.2vw, 32px); margin: 0 0 12px; color: var(--heading, #111); }
-.about-origin p{ margin: 0 0 12px; }
-
 .founder-letter{
-  max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem;
-  background: var(--surface-2, #f9f9f9); border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem;
+  background: var(--surface-2, #f9f9f9); border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.06);
 }
-.founder-letter h2{ font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; text-align: center; margin-bottom: 2rem; color:#111; }
-.founder-letter .lede{ font-size: 1.2rem; font-weight: 600; text-align: center; color: var(--brand, #2e574c); margin-bottom: 2.5rem; }
-.founder-letter p{ margin-bottom: 1.5rem; line-height: 1.8; color: var(--text, #1a1a1a); }
+
+/* 上段だけ 2 カラム（写真 + タイトル/リード）、下段以降は全幅 */
+.founder-layout{
+  --photo-size: 110px;                /* デスクトップの写真サイズ */
+  --badge-size: 32px;                 /* FBロゴボタンのサイズ */
+  display: grid;
+  grid-template-columns: var(--photo-size) 1fr;
+  column-gap: 24px;
+  align-items: start;
+}
+
+/* 写真（上段2行を占有） */
+.founder-photo{
+  grid-column: 1; grid-row: 1 / 3;
+  width: var(--photo-size); max-width: var(--photo-size);
+  position: relative;
+  border-radius:12px; overflow:hidden; line-height:0;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+.founder-photo img{
+  width: 100%; height: 100%;
+  aspect-ratio: 1 / 1; object-fit: cover; display:block;
+}
+
+/* Facebookロゴボタン（写真の近くに表示） */
+.founder-badge{
+  position: absolute;
+  left: 8px; bottom: -10px;           /* 写真の近く（少し外側にかかる位置） */
+  width: var(--badge-size); height: var(--badge-size);
+  display: grid; place-items: center;
+  border-radius: 9999px;
+  background: #1877F2; color: #fff;
+  box-shadow: 0 6px 14px rgba(24,119,242,.35);
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.founder-badge svg{ width: 60%; height: 60%; display:block; }
+.founder-badge:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+.founder-badge:focus-visible{
+  outline: 0;
+  box-shadow: 0 0 0 4px color-mix(in srgb, #1877F2 35%, white);
+}
+
+/* 見出しとリードは写真の右隣（上段2行） */
+.founder-body{ display: contents; }
+.founder-body h2{
+  grid-column: 2; grid-row: 1;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800; margin: 0 0 0.35rem; color:#111; text-align: left;
+}
+.founder-body .lede{
+  grid-column: 2; grid-row: 2;
+  font-size: clamp(16px, 2.2vw, 20px);
+  font-weight: 700; color: var(--brand, #2e574c);
+  margin: 0 0 1rem; text-align: left;
+}
+
+/* 以降の本文は新しい行で “全幅（1~2列）” を占有 */
+.founder-body p:not(.lede),
+.founder-body ul, .founder-body ol{
+  grid-column: 1 / -1;
+  margin: 0 0 1rem;
+  color: var(--text, #1a1a1a); line-height: 1.8;
+}
+
+/* モバイル：写真/バッジサイズ縮小。段組は維持、本文は全幅 */
+@media (max-width: 800px){
+  .founder-layout{ --photo-size: 88px; --badge-size: 28px; column-gap: 16px; }
+  .founder-badge{ bottom: -8px; left: 6px; }
+}
+@media (max-width: 520px){
+  .founder-layout{ --photo-size: 78px; --badge-size: 24px; column-gap: 14px; }
+  .founder-badge{ bottom: -6px; left: 6px; }
+}
 
 /* a11y: 動画を無効化 */
 @media (prefers-reduced-motion: reduce){
   .about-hero-section video{ display:none; }
 }
 
-
 </style>
-
