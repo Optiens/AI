@@ -22,7 +22,7 @@
 }
 
 /* Dark mode tokens */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --surface: #0b1320;
     --surface-2: #131d2f;
@@ -32,7 +32,7 @@
     --shadow-sm: 0 2px 6px rgba(0,0,0,.4);
     --shadow-md: 0 4px 12px rgba(0,0,0,.45);
   }
-}
+} */
 
 /* ========== Minimal Reset ========== */
 *, *::before, *::after { box-sizing: border-box; }
