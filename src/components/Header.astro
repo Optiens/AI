@@ -6,6 +6,7 @@
     <!-- <img src="/images/optiens-logo.svg" alt="OptiensLogo" class="header-logo" /> -->
     <video src="/videos/optiens-logo-wave.mp4" autoplay muted playsinline class="header-logo"></video>
   </a>
+
   <nav class="desktop-nav">
     <ul>
       <li><a href="/">HOME</a></li>
@@ -16,14 +17,13 @@
       <li><a href="/contact">CONTACT</a></li>
     </ul>
   </nav>
-    
-  <button id="menu-toggle" class="menu-button">
-    <span></span>
-    <span></span>
-    <span></span>
+
+  <button id="menu-toggle" class="menu-button" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
   </button>
 
-  <nav id="sidebar-menu" class="sidebar-menu">
+  <!-- 右から出る固定パネル -->
+  <nav id="sidebar-menu" class="sidebar-menu" aria-label="Mobile navigation">
     <ul>
       <li><a href="/">HOME</a></li>
       <li><a href="/about">ABOUT</a></li>
@@ -36,19 +36,19 @@
 </header>
 
 <script is:inline>
-  // メニューの開閉を制御するJavaScript
-  const menuToggle = document.getElementById('menu-toggle');
+  // メニューの開閉
+  const menuToggle  = document.getElementById('menu-toggle');
   const sidebarMenu = document.getElementById('sidebar-menu');
 
   if (menuToggle && sidebarMenu) {
     menuToggle.addEventListener('click', () => {
       sidebarMenu.classList.toggle('is-open');
-      menuToggle.classList.toggle('is-active'); // ハンバーガーアイコンのアニメーション用
+      menuToggle.classList.toggle('is-active');
     });
 
-    // メニュー内のリンクをクリックしたらメニューを閉じる
-    sidebarMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
+    // メニュー内リンクで閉じる
+    sidebarMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
         sidebarMenu.classList.remove('is-open');
         menuToggle.classList.remove('is-active');
       });
@@ -57,143 +57,109 @@
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 
-  /* ヘッダーの共通スタイル */
-  .main-header {
-    width: 100%;
-    background: var(--surface); /* ← 修正: 白を保証 */
-    color: var(--text);
-    padding: 20px 40px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  .header-logo {
-    height: 60px;
-    max-width: none;
-  }
+/* =========================
+   ヘッダー共通
+   ========================= */
+.main-header{
+  width:100%;
+  background:var(--surface, #fff);
+  color:var(--text, #111);
+  padding:20px 40px;
+  position:fixed; top:0; left:0;
+  z-index: 9900;                 /* メニューより下、ページより上 */
+  box-shadow:0 2px 4px rgba(0,0,0,.1);
+}
+.header-logo{ height:60px; max-width:none; display:block; }
 
-  /* --- PC/タブレット用スタイル (769px以上) --- */
-  @media (min-width: 769px) {
-    .main-header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .header-logo-link {
-      display: block;
-      position: absolute;
-      left: 40px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .desktop-nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      gap: 30px;
-    }
-    .desktop-nav a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 1.1em;
-      font-family: 'Lato', sans-serif;
-      font-weight: 700;
-      transition: color 0.3s ease;
-    }
-    .desktop-nav a:hover {
-      color: var(--brand);
-      text-decoration: underline;
-    }
-    .menu-button, .sidebar-menu {
-      display: none;
-    }
+/* =========================
+   PC/タブレット ≥769px
+   ========================= */
+@media (min-width:769px){
+  .main-header{ display:flex; justify-content:center; align-items:center; }
+  .header-logo-link{ display:block; position:absolute; left:40px; top:50%; transform:translateY(-50%); }
+  .desktop-nav ul{ list-style:none; margin:0; padding:0; display:flex; gap:30px; }
+  .desktop-nav a{
+    color:var(--text, #111); text-decoration:none; font-size:1.1em;
+    font-family:'Lato',sans-serif; font-weight:700; transition:color .3s ease;
   }
+  .desktop-nav a:hover{ color:var(--brand, #2e574c); text-decoration:underline; }
+  .menu-button, .sidebar-menu{ display:none; }
+}
 
-  /* --- モバイル用スタイル (768px以下) --- */
-  @media (max-width: 768px) {
-    .main-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px;
-    }
-    .header-logo-link {
-      position: static;
-      display: block;
-    }
-    .menu-button {
-      position: static;
-      z-index: 1001;
-      width: 40px;
-      height: 30px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      padding: 0;
-    }
-    .menu-button span {
-      display: block;
-      width: 100%;
-      height: 3px;
-      background: var(--heading);
-      transition: all 0.3s ease-in-out;
-      border-radius: 2px;
-    }
-    .menu-button.is-active span:nth-child(1) {
-      transform: translateY(13px) rotate(45deg);
-    }
-    .menu-button.is-active span:nth-child(2) {
-      opacity: 0;
-    }
-    .menu-button.is-active span:nth-child(3) {
-      transform: translateY(-13px) rotate(-45deg);
-    }
-    .sidebar-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 250px;
-      height: 100%;
-      background: var(--brand);
-      transition: right 0.3s ease-out;
-      z-index: 1000;
-      padding-top: 80px;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.5);
-    }
-    .sidebar-menu.is-open {
-      right: 0;
-    }
-    .sidebar-menu ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .sidebar-menu li {
-      margin-bottom: 10px;
-    }
-    .sidebar-menu a {
-      display: block;
-      padding: 15px 20px;
-      color: var(--surface);
-      font-size: 1.1em;
-      transition: background-color 0.3s ease;
-      text-decoration: none;
-    }
-    .sidebar-menu a:hover,
-    .sidebar-menu a:active {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: var(--surface);
-    }
-    .desktop-nav {
-      display: none;
-    }
+/* =========================
+   モバイル ≤768px
+   ========================= */
+@media (max-width:768px){
+  .main-header{ display:flex; justify-content:space-between; align-items:center; padding:8px; }
+  .header-logo-link{ position:static; display:block; }
+
+  .menu-button{
+    position:static; z-index:10001; width:40px; height:30px; background:none; border:none;
+    cursor:pointer; display:flex; flex-direction:column; justify-content:space-around; padding:0;
   }
+  .menu-button span{
+    display:block; width:100%; height:3px; background:var(--heading, #0b2a4a);
+    transition:all .3s ease-in-out; border-radius:2px;
+  }
+  .menu-button.is-active span:nth-child(1){ transform:translateY(13px) rotate(45deg); }
+  .menu-button.is-active span:nth-child(2){ opacity:0; }
+  .menu-button.is-active span:nth-child(3){ transform:translateY(-13px) rotate(-45deg); }
+
+  /* ===== 右固定のスライドパネル（背景はグローバルのグラデ＋少し透過） ===== */
+  .sidebar-menu{
+    position:fixed; top:0; right:-280px;
+    width:280px; height:100vh;
+    /* 本体は透明。背景用のレイヤーは ::before で描画し、文字は不透明に保つ */
+    background: transparent;
+    color:#fff;
+    transition:right .3s ease-out;
+    z-index:10000;                       /* ヘッダーより上 */
+    padding-top:80px;
+    box-shadow:-2px 0 5px rgba(0,0,0,.5);
+    overflow-y:auto;
+    isolation:isolate;                   /* ::before のレイヤー管理を安定化 */
+  }
+  .sidebar-menu.is-open{ right:0; }
+
+  /* 背景だけに透過をかける（テキストは影響なし） */
+  .sidebar-menu::before{
+    content:"";
+    position:absolute; inset:0;
+    background: var(--brand-gradient, linear-gradient(135deg,#2e574c,#5ea89a));
+    opacity: .90;                        /* ← “少し透過” の度合い */
+    pointer-events:none;
+    z-index:0;
+  }
+  /* コンテンツは背景レイヤーの上に */
+  .sidebar-menu > *{ position:relative; z-index:1; }
+
+  .sidebar-menu ul{ list-style:none; padding:0; margin:0; }
+  .sidebar-menu li{ margin-bottom:10px; }
+  .sidebar-menu a{
+    display:block; padding:15px 20px; color:#fff; font-size:1.1em;
+    text-decoration:none; transition:background-color .3s ease;
+  }
+  .sidebar-menu a:hover,
+  .sidebar-menu a:active{ background-color:rgba(255,255,255,.1); color:#fff; }
+  .desktop-nav{ display:none; }
+}
+
+/* =========================
+   ロゴ上の細い線 再発防止
+   ========================= */
+#nprogress, #nprogress .bar,
+.pace, .pace .pace-progress,
+.top-loader, .top-progress, .router-progress-bar,
+progress[role="progressbar"]{ display:none !important; }
+
+/* ヘッダー最上部を塗って“線”を覆う。メニューより下の層に。 */
+.main-header::before{
+  content:""; position:fixed; top:0; left:0; width:100vw; height:3px;
+  background:var(--surface, #fff);
+  pointer-events:none; z-index:9800;   /* メニュー(10000)より下 */
+}
+.main-header, .main-header::before{ transform:translateZ(0); -webkit-font-smoothing:antialiased; }
+html, body{ margin:0; border:0; }
 </style>

@@ -38,7 +38,6 @@ import roadmapImg from '~/assets/roadmap.png';
       </ul>
     </section>
 
-
     <!-- ===== 既存農業リスク整理 ===== -->
     <section class="section-risk-now container prose">
       <h2>なぜ今、既存の土壌農業はリスクに晒されているのか</h2>
@@ -88,7 +87,7 @@ import roadmapImg from '~/assets/roadmap.png';
 
     <!-- ===== ロードマップ ===== -->
     <section class="roadmap container prose">
-      <h2>実行ロードマップ（0.5人月体制 / 24か月）</h2>
+      <h2>実行ロードマップ（24か月）</h2>
       <ol class="steps">
         <li>
           <strong>Phase 0：設計固定・パートナー確保（0–3か月）</strong><br>
@@ -149,7 +148,7 @@ import roadmapImg from '~/assets/roadmap.png';
       </ul>
       <p>
         <u>想定ラウンド（プレシード目安）：1,500–3,000万円</u>。<br>
-        使途は上記に限定し、人件費は極小（代表0.5人月）。必要に応じて
+        使途は上記に限定し、人件費は極小（代表1人月）。必要に応じて
         6–12か月後に<strong>契約人材（電気/機械 各0.2–0.5人月）</strong>をスポット投入します。
       </p>
     </section>
@@ -160,12 +159,11 @@ import roadmapImg from '~/assets/roadmap.png';
       <ul class="bullets">
         <li><strong>電力コスト/効率：</strong> 低電力BOMの固定、動的制御（点灯/給液/空調）でピーク抑制。PPA/DR/蓄電をPoC先で併用。</li>
         <li><strong>衛生・汚染：</strong> 密閉・洗浄性設計、SOP/監査、部材標準化。実証でATP/微生物指標を公開。</li>
-        <li><strong>スケジュール：</strong> 0.5人月前提のためスコープ凍結・段階納品・外部委託で遅延リスクを分散。</li>
+        <li><strong>スケジュール：</strong> 1人月前提のためスコープ凍結・段階納品・外部委託で遅延リスクを分散。</li>
         <li><strong>調達：</strong> COTS優先・代替BOMを事前定義。長納期品は早期発注。</li>
         <li><strong>事業性：</strong> まず有償評価の獲得とARR化（SaaS）を先行。単体採算・SLAで価値を定量。</li>
       </ul>
     </section>
-
 
     <!-- ===== チーム ===== -->
     <section class="team container prose">
@@ -212,12 +210,29 @@ import roadmapImg from '~/assets/roadmap.png';
   --muted: #666;
   --bg: #fff;
   --shadow-sm: 0 8px 24px rgba(0,0,0,.06);
+
+  /* 固定ヘッダーの想定高さ（ページ内だけで上書き） */
+  --header-offset-mobile: 84px;   /* モバイル */
+  --header-offset-desktop: 104px; /* デスクトップ */
 }
 .container{ width: min(var(--maxw), 100% - 2rem); margin-inline:auto; }
 section{ padding: clamp(48px, 8vw, 80px) 0; }
 
+/* ====== ページ先頭の安全オフセット ====== */
+main{
+  /* ノッチ分 + 固定ヘッダー分を確保して本文の開始位置を下げる */
+  padding-top: calc(env(safe-area-inset-top, 0px) + var(--header-offset-desktop));
+}
+@media (max-width: 768px){
+  main{ padding-top: calc(env(safe-area-inset-top, 0px) + var(--header-offset-mobile)); }
+}
+
 /* ========== Hero ========== */
-.hero{ text-align:center; padding-top: clamp(32px, 6vw, 64px); }
+.hero{
+  text-align:center;
+  /* 上は控えめ。開始位置は上の main のオフセットで確保済み */
+  padding-top: clamp(8px, 2vw, 20px);
+}
 .hero h1{
   font-size: clamp(24px, 3.6vw, 36px);
   line-height: 1.25;
@@ -237,6 +252,10 @@ section{ padding: clamp(48px, 8vw, 80px) 0; }
   font-size: clamp(22px, 2.8vw, 32px);
   margin: 0 0 1rem;
   color: var(--ink);
+  scroll-margin-top: 96px; /* アンカー時もヘッダーに隠れない */
+}
+@media (max-width:768px){
+  .prose h2{ scroll-margin-top: 80px; }
 }
 .prose h3{
   font-size: clamp(18px, 2.2vw, 24px);
@@ -246,9 +265,7 @@ section{ padding: clamp(48px, 8vw, 80px) 0; }
 .prose p{ margin: .75rem 0; }
 .bullets{ padding-left: 1.25rem; }
 .bullets li{ margin: .6rem 0; }
-.ticks{
-  list-style: none; padding-left: 0;
-}
+.ticks{ list-style: none; padding-left: 0; }
 .ticks li{
   position: relative; padding-left: 1.5rem; margin: .5rem 0;
 }
@@ -260,7 +277,7 @@ section{ padding: clamp(48px, 8vw, 80px) 0; }
 .figure img{ max-width: 100%; height: auto; border-radius: 8px; box-shadow: var(--shadow-sm); }
 .figure figcaption{ color: var(--muted); font-size: .95rem; margin-top: .5rem; }
 
-/* ========== Buttons ========== */
+/* ========== Buttons (共通) ========== */
 .btn{
   display: inline-block;
   padding: .85rem 1.4rem;
@@ -275,7 +292,20 @@ section{ padding: clamp(48px, 8vw, 80px) 0; }
   box-shadow: 0 6px 16px rgba(46,87,76,.25);
 }
 .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(46,87,76,.25); }
-.cta{ margin-top: 1.25rem; display:flex; gap: .9rem; flex-wrap: wrap; justify-content: center; }
+
+/* ========== CTA（左寄せ＋同幅） ========== */
+.cta{
+  margin-top: 1.25rem;
+  display:flex;
+  gap: .9rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.cta .btn{
+  width: clamp(220px, 32vw, 340px);
+  text-align: center;
+  white-space: nowrap;
+}
 
 /* ========== Notes ========== */
 .small{ color: var(--muted); font-size: .92rem; text-align: center; }
@@ -285,8 +315,13 @@ section{ padding: clamp(48px, 8vw, 80px) 0; }
   .hero h1{ font-size: clamp(22px, 6vw, 28px); }
   .hero .sub{ font-size: clamp(14px, 3.8vw, 16px); }
 
-  /* 長文リストの可読性を確保 */
   .prose{ line-height: 1.85; }
   .ticks li, .bullets li{ margin: .55rem 0; }
+
+  .cta{ flex-direction: column; align-items: stretch; }
+  .cta .btn{
+    width: 100%;
+    white-space: normal;
+  }
 }
 </style>
