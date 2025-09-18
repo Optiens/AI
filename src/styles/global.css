@@ -18,7 +18,7 @@
   --radius: 10px;
   --shadow-sm: 0 2px 6px rgba(0,0,0,.08);
   --shadow-md: 0 4px 12px rgba(0,0,0,.12);
-  color-scheme: light dark; /* hint for UA */
+  /* color-scheme: light dark; */
 }
 
 /* Dark mode tokens */
