@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import roadmapImg from '~/assets/roadmap.png';
+
 ---
 
 <Layout title="投資家情報 | Optiens">
@@ -8,10 +8,10 @@ import roadmapImg from '~/assets/roadmap.png';
 
     <!-- ===== Hero ===== -->
     <section class="hero container">
-      <h1>宇宙と地上のためのクローズドループ農業への投資</h1>
+      <h1>クローズドループ水耕栽培への投資</h1>
       <p class="sub">
-        2035年までに、低電力・自律運転の水耕モジュール＋運用SaaSで、
-        宇宙と地上の食料・資源の安定供給を実現します。
+        低電力・自律運転の水耕モジュール＋運用SaaSで、
+        医療・防災・孤立環境における食料の安定供給を実現します。
       </p>
     </section>
 
@@ -21,15 +21,15 @@ import roadmapImg from '~/assets/roadmap.png';
       <ul class="bullets">
         <li>
           <strong>問題の定義：</strong>
-          連年の高温・極端気象と水ストレス、エネルギー/物流の高コスト化により、天候依存の露地/一般施設栽培は「収量・品質・コスト・安全」の再現性が揺らいでいます。宇宙環境はさらに厳しく、閉鎖循環・低電力・自律運用が必須です。
+          連年の高温・極端気象と水ストレス、エネルギー/物流の高コスト化により、天候依存の露地/一般施設栽培は「収量・品質・コスト・安全」の再現性が揺らいでいます。閉鎖循環・低電力・自律運用が不可欠です。
         </li>
         <li>
           <strong>解決アプローチ：</strong>
-          低電力設計 × 自律制御 × 運用SaaSで、**小型・閉鎖循環モジュール**を地上で実証 → 規制/衛生要件を満たす「シングルベイMVP」を確立 → 医療/防災/孤立環境から段階的に展開します。
+          低電力設計 × 自律制御 × 運用SaaSで、小型・閉鎖循環モジュールを実証 → 規制/衛生要件を満たす「シングルベイMVP」を確立 → 医療/防災/孤立環境から段階的に展開します。
         </li>
         <li>
           <strong>収益モデル：</strong>
-          ハード最小構成＋保守契約に、**運用SaaS（月額）**を組み合わせたARRモデル。作物販売に依存せず、稼働率と運用データで価値を可視化します。
+          ハード最小構成＋保守契約に、<strong>運用SaaS（月額）</strong>を組み合わせたARRモデル。SaaSにはリモート監視・運転最適化・コンサルティングサポートを含み、作物販売に依存せず稼働率と運用データで価値を可視化します。
         </li>
         <li>
           <strong>体制と前提：</strong>
@@ -43,7 +43,7 @@ import roadmapImg from '~/assets/roadmap.png';
       <h2>なぜ今、既存の土壌農業はリスクに晒されているのか</h2>
       <p>
         記録的な高温・極端気象、水資源の逼迫、エネルギーと物流コストの上昇などが同時多発的に進行し、
-        従来の“露地×気象順応”モデルでは安定供給を維持しづらい環境になっています。ここでは、
+        従来の"露地×気象順応"モデルでは安定供給を維持しづらい環境になっています。ここでは、
         <strong>直近のリスク要因</strong>と<strong>時間軸ごとの影響像</strong>を簡潔に整理します。
       </p>
 
@@ -68,7 +68,7 @@ import roadmapImg from '~/assets/roadmap.png';
 
       <h3>補足</h3>
       <p>
-        気象や水の構造的な不確実性が高まるほど、従来型の“天候依存”から
+        気象や水の構造的な不確実性が高まるほど、従来型の"天候依存"から
         <strong>環境制御・水循環・リスク分散</strong>への移行が重要。サプライ側の
         <strong>安定性・再現性・効率</strong>向上は、サプライチェーン全体の持続可能性へ波及します。
       </p>
@@ -82,64 +82,70 @@ import roadmapImg from '~/assets/roadmap.png';
         <li>電力収支の概算モデルと熱設計の前提条件を確定</li>
         <li>運用SaaS基盤の雛形（遠隔モニタ/アラート）を試作</li>
         <li>医療/防災領域でのニーズヒアリングとPoC候補先リスト化（LOI打診準備）</li>
+        <li>一般社団法人 Optiens 設立準備開始（2026年3月）</li>
       </ul>
     </section>
 
     <!-- ===== ロードマップ ===== -->
     <section class="roadmap container prose">
-      <h2>実行ロードマップ（24か月）</h2>
+      <h2>実行ロードマップ</h2>
       <ol class="steps">
         <li>
-          <strong>Phase 0：設計固定・パートナー確保（0–3か月）</strong><br>
+          <strong>Phase 0：法人設立・基盤構築（～2026年6月）</strong><br>
+          一般社団法人 Optiens 設立・登記／
           主要要件確定（低電力/衛生/冗長/遠隔運用）／BOM確定（極力COTS採用）／
           小規模ラック＋電力計・温湿度・EC/pHの計測系を準備／
-          連携候補（大学/病院/自治体/防災）とPoC覚書の素案作成
+          連携候補（大学/病院/自治体/防災）とPoC覚書の素案作成／
+          補助金申請準備（農水省スマート農業補助金等）
         </li>
         <li>
-          <strong>Phase 1：卓上プロトタイプ（3–9か月）</strong><br>
+          <strong>Phase 1：プロトタイプ・小規模実証（2026年7月～2027年3月）</strong><br>
           20–40L級の閉鎖循環ミニループを製作／
           LED・ポンプ・制御の電力ベンチ／
-          2–3作期の小規模栽培実験（葉物）／
+          2–3作期の小規模栽培実験（葉物・高付加価値ハーブ）／
           SaaSに遠隔監視・しきい値アラート実装／
+          デモンストレーション農場の設置・運用開始／
           <u>目標：平均消費電力&lt;80W、循環率&gt;95%</u>
         </li>
         <li>
-          <strong>Phase 2：短期実証（9–15か月）</strong><br>
+          <strong>Phase 2：短期実証・システムv1.0（2027年4月～2028年3月）</strong><br>
           パートナー設備内で4–6週間の連続運転／
           SOP（洗浄・補給・障害時手順）と安全チェックリスト整備／
           LCAベースライン取得／
+          コンサルティング初号顧客3社の獲得／
           <u>目標：稼働率&gt;98%、葉物エネルギー効率 8–12 kWh/kg</u>
         </li>
         <li>
-          <strong>Phase 3：有償パイロット（15–24か月）</strong><br>
+          <strong>Phase 3：有償パイロット・商業化（2028年4月～2029年3月）</strong><br>
           「シングルベイMVP（~0.5㎡級）」を設置・遠隔運用／
           最低1拠点で<em>有償</em>評価（病院/防災拠点など）／
           SLA試案（稼働率、MTTR）と月額SaaSの算定式を提示／
+          コンサルティング顧客10社以上へ拡大／
           <u>目標：エネルギー効率 6–10 kWh/kg、MTTR&lt;24h、衛生指標クリア</u>
         </li>
       </ol>
 
       <p class="small">
-        ※ 宇宙向け実証（ISS/Gateway）は「次段」。24か月内は地上での再現性・衛生・低電力の立証と
-        運用SaaSの有償化に集中します。
+        ※ Phase 1以降は地上での再現性・衛生・低電力の立証と運用SaaSの有償化に集中します。
       </p>
     </section>
 
     <section class="kpis container prose">
-      <h2>主要指標と目標（24か月の到達ライン）</h2>
+      <h2>主要指標と目標</h2>
       <ul class="ticks">
-        <li><strong>エネルギー効率：</strong> 葉物 6–10 kWh/kg（MVP時）</li>
+        <li><strong>エネルギー効率：</strong> 葉物 6–10 kWh/kg（MVP時）／エネルギーコスト比率 20%未満</li>
         <li><strong>稼働率/SLA：</strong> 稼働率&gt;98%、MTTR&lt;24h</li>
         <li><strong>水循環率：</strong> &gt;95%、廃液管理SOPを文書化</li>
         <li><strong>衛生・洗浄性：</strong> ATP/微生物指標のしきい値合格、洗浄時間の標準化</li>
-        <li><strong>SaaS：</strong> 監視・アラート・運転最適化（基本機能）提供、月額の算定式提示</li>
-        <li><strong>事業面：</strong> 有償パイロット≧1拠点、次段導入のLOI/覚書≧2件</li>
+        <li><strong>SaaS：</strong> 監視・アラート・運転最適化・コンサルサポート提供、貢献利益率 80%以上</li>
+        <li><strong>事業面：</strong> 有償パイロット≧1拠点、コンサル顧客 1年目3社・2年目10社、LOI/覚書≧2件</li>
+        <li><strong>補助金：</strong> 採択率 60%以上（複数スキームを並行申請）</li>
       </ul>
     </section>
 
     <!-- ===== 資金用途 ===== -->
     <section class="use-of-funds container prose">
-      <h2>資金用途とリソース（リーン計画）</h2>
+      <h2>資金用途とリソース</h2>
       <ul class="ticks">
         <li><strong>部材/COTS・治具：</strong> LED・ポンプ・計測、筐体・洗浄性治具（最小構成）</li>
         <li><strong>試験費：</strong> 電力・環境・衛生の外部測定、短期実証の設置/撤去費</li>
@@ -147,9 +153,11 @@ import roadmapImg from '~/assets/roadmap.png';
         <li><strong>諸費用：</strong> 保険/運搬/認証事前調査・ドキュメント整備</li>
       </ul>
       <p>
-        <u>想定ラウンド（プレシード目安）：1,500–3,000万円</u>。<br>
-        使途は上記に限定し、人件費は極小（代表1人月）。必要に応じて
-        6–12か月後に<strong>契約人材（電気/機械 各0.2–0.5人月）</strong>をスポット投入します。
+        <u>資金調達計画：</u><br>
+        クラウドファンディング 300–500万円 ／ 農水省スマート農業補助金 500–2,000万円 ／
+        設立社員拠出 100–300万円 ／ エンジェル投資家（プレシード） 1,000–5,000万円。<br>
+        人件費は極小（代表1人月）。必要に応じて
+        <strong>契約人材（電気/機械 各0.2–0.5人月）</strong>をスポット投入します。
       </p>
     </section>
 
@@ -161,6 +169,7 @@ import roadmapImg from '~/assets/roadmap.png';
         <li><strong>衛生・汚染：</strong> 密閉・洗浄性設計、SOP/監査、部材標準化。実証でATP/微生物指標を公開。</li>
         <li><strong>スケジュール：</strong> 1人月前提のためスコープ凍結・段階納品・外部委託で遅延リスクを分散。</li>
         <li><strong>調達：</strong> COTS優先・代替BOMを事前定義。長納期品は早期発注。</li>
+        <li><strong>補助金不採択：</strong> 複数スキームを並行申請。クラウドファンディングをバッファとして確保。</li>
         <li><strong>事業性：</strong> まず有償評価の獲得とARR化（SaaS）を先行。単体採算・SLAで価値を定量。</li>
       </ul>
     </section>
@@ -181,12 +190,12 @@ import roadmapImg from '~/assets/roadmap.png';
       <p>投資や協業に関するご相談は、資料と併せて下記からご連絡ください。</p>
       <div class="cta">
         <a
-          href="/optiens-investor-deck.pdf"
+          href="/一般社団法人_水耕栽培自動化_事業計画書.pdf"
           class="btn btn-primary"
+          download="一般社団法人_水耕栽培自動化_事業計画書.pdf"
           target="_blank"
           rel="noopener"
-          download
-        >投資家向け資料（PDF）を表示</a>
+        >事業計画書をダウンロード</a>
         <a href="/contact" class="btn btn-primary">お問い合わせページを表示</a>
       </div>
     </section>
@@ -203,14 +212,6 @@ import roadmapImg from '~/assets/roadmap.png';
 /* ========== Tokens / Layout ========== */
 :root{
   --maxw: 1040px;
-  --radius: 10px;
-  --brand: #2e574c;
-  --ink: #111;
-  --text: #1a1a1a;
-  --muted: #666;
-  --bg: #fff;
-  --shadow-sm: 0 8px 24px rgba(0,0,0,.06);
-
   /* 固定ヘッダーの想定高さ（ページ内だけで上書き） */
   --header-offset-mobile: 84px;   /* モバイル */
   --header-offset-desktop: 104px; /* デスクトップ */
@@ -237,7 +238,7 @@ main{
   font-size: clamp(24px, 3.6vw, 36px);
   line-height: 1.25;
   margin: 0 0 .75rem;
-  color: var(--ink);
+  color: var(--heading);
   letter-spacing: .02em;
 }
 .hero .sub{
@@ -251,7 +252,7 @@ main{
 .prose h2{
   font-size: clamp(22px, 2.8vw, 32px);
   margin: 0 0 1rem;
-  color: var(--ink);
+  color: var(--heading);
   scroll-margin-top: 96px; /* アンカー時もヘッダーに隠れない */
 }
 @media (max-width:768px){
@@ -260,7 +261,7 @@ main{
 .prose h3{
   font-size: clamp(18px, 2.2vw, 24px);
   margin: 2rem 0 .5rem;
-  color: var(--ink);
+  color: var(--heading);
 }
 .prose p{ margin: .75rem 0; }
 .bullets{ padding-left: 1.25rem; }
@@ -274,7 +275,7 @@ main{
 }
 .steps{ padding-left: 1.25rem; }
 .figure{ margin: 1rem 0; text-align: center; }
-.figure img{ max-width: 100%; height: auto; border-radius: 8px; box-shadow: var(--shadow-sm); }
+.figure img{ max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
 .figure figcaption{ color: var(--muted); font-size: .95rem; margin-top: .5rem; }
 
 /* ========== Buttons (共通) ========== */

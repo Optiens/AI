@@ -57,7 +57,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-main { flex: 1; }
+.site-main { flex: 1; }
 
 /* ========== Layout Utilities ========== */
 .container {
@@ -99,8 +99,8 @@ main { flex: 1; }
 /* ========== Navigation lists (no markers) ========== */
 .nav, .menu { list-style: none; padding: 0; margin: 0; }
 
-/* ========== Rich text (microCMS content) ========== */
-/* Apply .prose to the container that holds CMS HTML */
+/* ========== Rich text content ========== */
+/* Apply .prose to the container that holds HTML content */
 .prose {
   color: var(--text);
   font-size: 1rem;
@@ -300,42 +300,4 @@ a:focus-visible {
   .solution-body section {
     padding: 1rem;
   }
-}
-/* ===================== */
-/*   News Detail Page    */
-/* ===================== */
-.news-detail-container {
-  padding: 120px 20px 60px; /* 上120px, 下60px */
-}
-
-.news-article {
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: var(--surface);
-  padding: 30px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-}
-
-.news-title {
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--heading);
-  margin-bottom: 0.5rem;
-}
-
-.news-date {
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin-bottom: 2rem;
-  display: block;
-}
-
-.news-body :where(h2, h3, p, ul, ol) {
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-}
-
-.news-body h2 {
-  font-size: 2rem;
 }
