@@ -1,31 +1,42 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { blogPosts, categoryLabel } from '../../data/blog';
+import { getCollection, render } from 'astro:content';
+
+type BlogCategory = 'AI' | 'agriculture' | 'technology' | 'social';
+const categoryLabel: Record<BlogCategory, string> = {
+  AI: 'AI・機械学習',
+  agriculture: '農業・水耕栽培',
+  technology: 'テクノロジー',
+  social: '社会課題',
+};
 
 const { slug } = Astro.params;
-const post = blogPosts.find((p) => p.slug === slug);
+const posts = await getCollection('blog');
+const post = posts.find((p) => p.id === slug);
 
 if (!post) {
   return Astro.redirect('/404');
 }
+
+const { Content } = await render(post);
 ---
 
-<Layout title={`${post.title} | Optiens ブログ`}>
+<Layout title={`${post.data.title} | Optiens ブログ`}>
   <main>
     <section class="blog-detail-container">
       <div class="container">
         <article class="blog-article">
           <div class="post-meta">
-            <span class={`category-badge category-badge--${post.category}`}>
-              {categoryLabel[post.category]}
+            <span class={`category-badge category-badge--${post.data.category}`}>
+              {categoryLabel[post.data.category]}
             </span>
-            <time class="post-date" datetime={post.date}>
-              {post.date.replace(/-/g, '.')}
+            <time class="post-date" datetime={post.data.date}>
+              {post.data.date.replace(/-/g, '.')}
             </time>
           </div>
-          <h1 class="post-title">{post.title}</h1>
+          <h1 class="post-title">{post.data.title}</h1>
           <hr class="post-divider" />
-          <div class="post-body prose" set:html={post.body} />
+          <div class="post-body prose"><Content /></div>
         </article>
         <div class="back-link">
           <a href="/blog" class="btn-back">← ブログ一覧へ</a>

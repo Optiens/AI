@@ -1,17 +1,27 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { blogPosts, categoryLabel, type BlogCategory } from '../../data/blog';
+import { getCollection } from 'astro:content';
 import bgUrl from '~/assets/ai-nature-city.webp?url';
+
+type BlogCategory = 'AI' | 'agriculture' | 'technology' | 'social';
+
+const categoryLabel: Record<BlogCategory, string> = {
+  AI: 'AI・機械学習',
+  agriculture: '農業・水耕栽培',
+  technology: 'テクノロジー',
+  social: '社会課題',
+};
 
 const limit = 6;
 const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
 const selectedCategory = (Astro.url.searchParams.get('category') ?? '') as BlogCategory | '';
 
-const sorted = [...blogPosts].sort(
-  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+const allPosts = await getCollection('blog');
+const sorted = allPosts.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 const filtered = selectedCategory
-  ? sorted.filter((p) => p.category === selectedCategory)
+  ? sorted.filter((p) => p.data.category === selectedCategory)
   : sorted;
 
 const offset = (currentPage - 1) * limit;
@@ -71,19 +81,19 @@ function categoryUrl(cat: BlogCategory | '') {
       <div class="container blog-grid">
         {paged.length > 0 ? (
           paged.map((post) => (
-            <a href={`/blog/${post.slug}`} class="blog-card-link" aria-label={`${post.title} の詳細`}>
+            <a href={`/blog/${post.id}`} class="blog-card-link" aria-label={`${post.data.title} の詳細`}>
               <article class="card blog-card">
                 <div class="card-content">
                   <div class="blog-meta">
-                    <span class={`category-badge category-badge--${post.category}`}>
-                      {categoryLabel[post.category]}
+                    <span class={`category-badge category-badge--${post.data.category}`}>
+                      {categoryLabel[post.data.category]}
                     </span>
-                    <time class="blog-date" datetime={post.date}>
-                      {post.date.replace(/-/g, '.')}
+                    <time class="blog-date" datetime={post.data.date}>
+                      {post.data.date.replace(/-/g, '.')}
                     </time>
                   </div>
-                  <h2 class="card-title blog-title">{post.title}</h2>
-                  <p class="card-text blog-excerpt">{post.excerpt}</p>
+                  <h2 class="card-title blog-title">{post.data.title}</h2>
+                  <p class="card-text blog-excerpt">{post.data.excerpt}</p>
                 </div>
                 <span class="card-icon-container" aria-hidden="true">
                   <i class="fa-solid fa-arrow-up-right-from-square"></i>
