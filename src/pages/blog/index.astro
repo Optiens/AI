@@ -1,0 +1,276 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { blogPosts, categoryLabel, type BlogCategory } from '../../data/blog';
+import bgUrl from '~/assets/ai-nature-city.webp?url';
+
+const limit = 6;
+const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
+const selectedCategory = (Astro.url.searchParams.get('category') ?? '') as BlogCategory | '';
+
+const sorted = [...blogPosts].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+const filtered = selectedCategory
+  ? sorted.filter((p) => p.category === selectedCategory)
+  : sorted;
+
+const offset = (currentPage - 1) * limit;
+const paged = filtered.slice(offset, offset + limit);
+const totalPages = Math.ceil(filtered.length / limit);
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < totalPages;
+
+const categories = Object.entries(categoryLabel) as [BlogCategory, string][];
+
+function pageUrl(page: number) {
+  const params = new URLSearchParams();
+  params.set('page', String(page));
+  if (selectedCategory) params.set('category', selectedCategory);
+  return `?${params.toString()}`;
+}
+function categoryUrl(cat: BlogCategory | '') {
+  return cat ? `?category=${cat}` : '?';
+}
+---
+
+<Layout title="ブログ | Optiens">
+  <main>
+    <!-- Hero -->
+    <section class="hero-section blog-hero-section" style={`--hero-bg: url(${bgUrl});`}>
+      <div class="container text-center">
+        <h1>ブログ</h1>
+        <p class="hero-sub">AI・農業・テクノロジー・社会課題の最新情報をお届けします</p>
+      </div>
+    </section>
+
+    <!-- カテゴリフィルター -->
+    <section class="filter-section">
+      <div class="container">
+        <ul class="category-list" role="list">
+          <li>
+            <a href={categoryUrl('')} class={`category-tag ${!selectedCategory ? 'active' : ''}`}>
+              すべて
+            </a>
+          </li>
+          {categories.map(([key, label]) => (
+            <li>
+              <a
+                href={categoryUrl(key)}
+                class={`category-tag category-tag--${key} ${selectedCategory === key ? 'active' : ''}`}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 記事一覧 -->
+    <section class="blog-articles-section">
+      <div class="container blog-grid">
+        {paged.length > 0 ? (
+          paged.map((post) => (
+            <a href={`/blog/${post.slug}`} class="blog-card-link" aria-label={`${post.title} の詳細`}>
+              <article class="card blog-card">
+                <div class="card-content">
+                  <div class="blog-meta">
+                    <span class={`category-badge category-badge--${post.category}`}>
+                      {categoryLabel[post.category]}
+                    </span>
+                    <time class="blog-date" datetime={post.date}>
+                      {post.date.replace(/-/g, '.')}
+                    </time>
+                  </div>
+                  <h2 class="card-title blog-title">{post.title}</h2>
+                  <p class="card-text blog-excerpt">{post.excerpt}</p>
+                </div>
+                <span class="card-icon-container" aria-hidden="true">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </span>
+              </article>
+            </a>
+          ))
+        ) : (
+          <p class="text-center no-posts">該当する記事がありません。</p>
+        )}
+      </div>
+    </section>
+
+    <!-- ページネーション -->
+    {totalPages > 1 && (
+      <nav class="pagination-container" aria-label="ブログページネーション">
+        <ul class="pagination">
+          {hasPrev ? (
+            <li class="pagination-item">
+              <a href={pageUrl(currentPage - 1)} class="pagination-link">前へ</a>
+            </li>
+          ) : (
+            <li class="pagination-item disabled">
+              <span class="pagination-link">前へ</span>
+            </li>
+          )}
+          <li class="pagination-item current">
+            <span class="pagination-link">{currentPage} / {totalPages}</span>
+          </li>
+          {hasNext ? (
+            <li class="pagination-item">
+              <a href={pageUrl(currentPage + 1)} class="pagination-link">次へ</a>
+            </li>
+          ) : (
+            <li class="pagination-item disabled">
+              <span class="pagination-link">次へ</span>
+            </li>
+          )}
+        </ul>
+      </nav>
+    )}
+  </main>
+</Layout>
+
+<style>
+  /* Hero サブテキスト */
+  .hero-sub {
+    margin: .75rem 0 0;
+    font-size: clamp(.9rem, 2vw, 1.1rem);
+    opacity: .85;
+  }
+
+  /* ========== カテゴリフィルター ========== */
+  .filter-section {
+    padding: 28px 0 0;
+  }
+  .category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .category-tag {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: .85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 2px solid transparent;
+    color: var(--muted);
+    background: var(--surface-2);
+    transition: all .2s;
+  }
+  .category-tag:hover,
+  .category-tag.active {
+    background: var(--brand);
+    color: #fff;
+    border-color: var(--brand);
+  }
+
+  /* ========== 記事グリッド ========== */
+  .blog-articles-section {
+    padding: clamp(28px, 5vw, 48px) 0 clamp(32px, 6vw, 60px);
+  }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+  }
+  .blog-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .blog-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  }
+
+  /* メタ（カテゴリ + 日付） */
+  .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .blog-date {
+    font-size: .85rem;
+    color: var(--muted);
+  }
+
+  /* カテゴリバッジ */
+  .category-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: .75rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .category-badge--AI       { background: #3b6ead; }
+  .category-badge--agriculture { background: #2e7d4f; }
+  .category-badge--technology  { background: #7b4fa0; }
+  .category-badge--social      { background: #c0632b; }
+
+  .blog-title {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    margin: 0 0 .6rem;
+    line-height: 1.5;
+  }
+  .blog-excerpt {
+    font-size: .9rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .no-posts {
+    grid-column: 1 / -1;
+    padding: 40px 0;
+    color: var(--muted);
+  }
+
+  /* ========== ページネーション ========== */
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 0 40px;
+  }
+  .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  .pagination-link {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: var(--text);
+    transition: background-color .2s;
+    font-weight: bold;
+  }
+  .pagination-link:hover { background-color: var(--surface-2); }
+  .pagination-item.disabled .pagination-link {
+    color: #ccc;
+    cursor: not-allowed;
+    background: transparent;
+  }
+  .pagination-item.current .pagination-link {
+    background: var(--brand);
+    color: #fff;
+  }
+</style>
