@@ -1,23 +1,26 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { newsArticles } from '../../data/news';
+import { getCollection, render } from 'astro:content';
 
 const { slug } = Astro.params;
-const article = newsArticles.find((a) => a.slug === slug);
+const articles = await getCollection('news');
+const article = articles.find((a) => a.id === slug);
 
 if (!article) {
   return Astro.redirect('/404');
 }
+
+const { Content } = await render(article);
 ---
 
-<Layout title={`${article.title} | Optiens`}>
+<Layout title={`${article.data.title} | Optiens`}>
   <main>
     <section class="news-detail-container">
       <div class="container">
         <article class="news-article">
-          <h1 class="news-title">{article.title}</h1>
-          <p class="news-date">{article.date.replace(/-/g, '.')}</p>
-          <div class="news-body prose" set:html={article.body} />
+          <h1 class="news-title">{article.data.title}</h1>
+          <p class="news-date">{article.data.date.replace(/-/g, '.')}</p>
+          <div class="news-body prose"><Content /></div>
         </article>
         <div class="back-link">
           <a href="/news" class="btn-back">← ニュース一覧へ</a>

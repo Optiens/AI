@@ -1,14 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { newsArticles } from '../../data/news';
+import { getCollection } from 'astro:content';
 import bgUrl from '~/assets/ai-nature-city.webp?url';
 
 const limit = 5;
 const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
 const offset = (currentPage - 1) * limit;
 
-const sorted = [...newsArticles].sort(
-  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+const allArticles = await getCollection('news');
+const sorted = allArticles.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 const paged = sorted.slice(offset, offset + limit);
 const totalPages = Math.ceil(sorted.length / limit);
@@ -30,12 +31,11 @@ const hasNext = currentPage < totalPages;
       <div class="container news-list-container">
         {paged.length > 0 ? (
           paged.map((item) => (
-            <a href={`/news/${item.slug}`} class="news-item-long-link" aria-label={`${item.title} の詳細`}>
+            <a href={`/news/${item.id}`} class="news-item-long-link" aria-label={`${item.data.title} の詳細`}>
               <article class="card news-item-long">
                 <div class="card-content news-content-long">
-                  <p class="news-date">{item.date.replace(/-/g, '.')}</p>
-                  <h2 class="card-title">{item.title}</h2>
-                  <p class="card-text">{item.body.replace(/<[^>]+>/g, '').slice(0, 100)}…</p>
+                  <p class="news-date">{item.data.date.replace(/-/g, '.')}</p>
+                  <h2 class="card-title">{item.data.title}</h2>
                 </div>
                 <span class="card-icon-container" aria-hidden="true">
                   <i class="fa-solid fa-arrow-up-right-from-square"></i>
