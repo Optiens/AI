@@ -122,6 +122,31 @@ if (!post) {
     border-radius: 8px;
     margin: 2rem 0;
   }
+  .post-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: .9rem;
+    overflow-x: auto;
+    display: block;
+  }
+  .post-body :global(th) {
+    background: var(--brand, #2e574c);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .post-body :global(td) {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .post-body :global(tr:nth-child(even) td) {
+    background: var(--surface-2, #f5f5f5);
+  }
 
   /* 戻るボタン */
   .back-link {
