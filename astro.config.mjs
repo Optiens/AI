@@ -1,8 +1,12 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
+import remarkCjkFriendly from 'remark-cjk-friendly';
 
 export default defineConfig({
+  markdown: {
+    remarkPlugins: [remarkCjkFriendly],
+  },
   site: 'https://optiens.com',
   output: 'server', // ← SSR/エンドポイントあり
   adapter: vercel({

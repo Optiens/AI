@@ -7,6 +7,7 @@ const blog = defineCollection({
     date: z.string(),
     category: z.enum(['AI', 'agriculture', 'technology', 'social']),
     excerpt: z.string(),
+    image: z.string().optional(),
   }),
 });
 

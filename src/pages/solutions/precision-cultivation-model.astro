@@ -3,8 +3,9 @@ import Layout from '../../layouts/Layout.astro';
 import precisionCultivationImg from '~/assets/precision-cultivation-model.png';
 
 export const solutionData = {
-  title: '【R&D】AI駆動型 水耕栽培キットの提供',
-  overview: 'AI駆動型の次世代型栽培キット。光・温度・湿度・CO2などの環境データをAIが制御し、安定した収穫と品質を実現します。',
+  title: 'AquaLoop — AI駆動型 水耕栽培自動化モジュール',
+  badge: 'R&D',
+  overview: 'センサー・AI・SaaSを一体化した閉鎖循環型の水耕栽培モジュール。医療・防災・孤立環境に求められる安定稼働と遠隔管理を実現します。',
   image: precisionCultivationImg,
 };
 ---
@@ -13,6 +14,7 @@ export const solutionData = {
   <main>
     <section class="solution-detail-container">
       <div class="container">
+        <div class="solution-badge">{solutionData.badge}</div>
         <h1 class="solution-title">{solutionData.title}</h1>
 
         <div class="solution-thumbnail-wrapper">
@@ -21,31 +23,49 @@ export const solutionData = {
 
         <div class="solution-body prose">
           <section>
-            <h2>AIによる制御</h2>
-            <p>光、温度、湿度、CO2、養液成分など、植物の生育に不可欠な要素をAIがリアルタイムで制御します。成長段階に合わせた最適な環境を自動で構築し、植物のポテンシャルを最大限に引き出します。直感的な操作とAIによるサポートにより、次のアクションに迷いません。</p>
+            <h2>AI制御による自律運転</h2>
+            <p>光・温度・湿度・CO2・EC/pH・流量などの栽培環境データをAIがリアルタイムで統合解析し、制御パラメータを自動調整します。人手による日々のチューニングを不要にし、24時間365日の安定稼働を実現します。</p>
           </section>
 
           <section>
-            <h2>無農薬で安全・安心・美味しい</h2>
-            <p>閉鎖空間で栽培するため、虫害の心配がなく、農薬を一切必要としません。また、虫が嫌がる苦み成分が出ないため子供たちの食育に最適です。AIが溶液を監視し、衛生的な環境を保つことが可能です。</p>
+            <h2>閉鎖循環設計による安全性と再現性</h2>
+            <p>外部環境から遮断された密閉系で、給排液・空調・照明を統合管理します。衛生基準が厳しい医療機関・防災拠点での運用に適した設計で、水循環率95%以上を目標に廃液を最小化します。</p>
           </section>
 
           <section>
-            <h2>設置場所を選ばない汎用性</h2>
-            <p>環境に左右されない設計のため、都市部のオフィスビルや学校、さらには地下空間など、あらゆる場所での設置が可能です。食糧生産の場を身近にすることで、フードマイレージの削減にも貢献します。</p>
+            <h2>モジュール構造による柔軟な展開</h2>
+            <p>シングルベイMVP（約0.5m²級）から始め、設置環境に応じてユニット単位で拡張可能な設計を採用。物流が困難な離島・地下施設・船舶などの孤立環境への設置も想定しています。ユニット交換方式でダウンタイムを最小化します。</p>
           </section>
 
           <section>
-            <h2>AIモデルのライセンス供与</h2>
-            <p>当社の独自AIモデルの利用権をご提供します。継続的なアップデートにより、常に最新かつ最適な栽培ロジックをご活用いただけます。</p>
+            <h2>運用SaaSとの一体提供</h2>
+            <p>ハードウェアの販売・保守に加え、遠隔監視・アラート・稼働最適化・SLAレポーティングを含む運用SaaS（月額）をセットで提供します。設備を売って終わりではなく、運用データで継続的に学習する「生きたインフラ」として価値を提供し続けます。</p>
           </section>
 
           <section>
-            <h2>導入支援</h2>
-            <p>キットの設置から初期設定、運用指導まで、専門スタッフが丁寧にサポートいたします。初めて水耕栽培に取り組むお客様も安心してご利用いただけます。</p>
+            <h2>主なターゲット</h2>
+            <ul>
+              <li>病院・介護施設：衛生管理が厳しい施設内での安定した食材・薬草供給</li>
+              <li>防災拠点・自治体：非常時の食料自給と平時の連続稼働実証</li>
+              <li>離島・船舶・地下施設：物流が困難な孤立環境での長期自律運用</li>
+            </ul>
           </section>
         </div>
       </div>
     </section>
   </main>
 </Layout>
+
+<style>
+  .solution-badge {
+    display: inline-block;
+    background: var(--brand-2, #5ea89a);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: .75rem;
+  }
+</style>

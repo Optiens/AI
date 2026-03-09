@@ -3,8 +3,9 @@ import Layout from '../../layouts/Layout.astro';
 import dataAnalysisImg from '~/assets/data-analysis-optimization.png';
 
 export const solutionData = {
-  title: '【R&D】環境データ分析＆最適化サービス',
-  overview: '既存の栽培環境に簡単に導入できるデータ分析サービスです。AIが収集したデータを詳細に解析し、生産性の向上、コスト削減、そして持続可能性を最大化するための具体的な改善策を提案します。',
+  title: '運用データ分析・最適化サービス',
+  badge: 'R&D',
+  overview: '栽培環境から収集した時系列データをAIが継続的に分析し、稼働率向上・エネルギー削減・品質安定を実現する運用SaaSです。',
   image: dataAnalysisImg,
 };
 ---
@@ -13,6 +14,7 @@ export const solutionData = {
   <main>
     <section class="solution-detail-container">
       <div class="container">
+        <div class="solution-badge">{solutionData.badge}</div>
         <h1 class="solution-title">{solutionData.title}</h1>
 
         <div class="solution-thumbnail-wrapper">
@@ -21,26 +23,40 @@ export const solutionData = {
 
         <div class="solution-body prose">
           <section>
-            <h2>データに基づく課題の可視化</h2>
-            <p>栽培環境から収集した膨大なデータをAIが解析し、ボトルネックを特定します。これまで見過ごされてきた非効率なプロセスや無駄を明確にし、具体的な改善提案を行います。</p>
+            <h2>稼働状態の可視化とボトルネック検出</h2>
+            <p>センサーから収集した温度・湿度・EC/pH・消費電力などの時系列データをダッシュボードで常時可視化します。AIがパターン異常を検出し、障害の予兆をアラートで通知。これまで見えなかった非効率な運転条件を特定し、具体的な改善施策を提案します。</p>
           </section>
 
           <section>
-            <h2>持続可能な経営への転換</h2>
-            <p>AIによる精密な分析は、水や肥料の無駄をなくし、資源効率を飛躍的に向上させます。これにより、環境負荷を低減しながら収益を最大化し、後継者不足に悩む農家の方々が安心して続けられる、新しい農業の形を提案します。</p>
+            <h2>エネルギー・資源効率の継続的最適化</h2>
+            <p>照明・給液・空調の制御パラメータをAIが自動チューニングし、kWh/kg指標を段階的に改善します。廃液量・水循環率・電力コスト比率を定量的に管理し、SLAレポートとして定期提供します。</p>
           </section>
 
           <section>
-            <h2>AIのサポート</h2>
-            <p>データ収集や制御、解析結果の出力まで自動化し、お客様の成長を力強く支援します。</p>
+            <h2>遠隔監視とSLA対応</h2>
+            <p>AquaLoopプラットフォームの一部として、オンサイト対応を最小化する遠隔運用設計。障害発生時はMTTR（平均復旧時間）24時間以内を目標にリモートサポートを提供します。稼働率・障害履歴・改善提案を含む月次レポートをSaaS内で提供します。</p>
           </section>
 
           <section>
-            <h2>コンサルティング</h2>
-            <p>独自の栽培ノウハウを体系化し、お客様の課題解決と事業成功を支援します。経験や勘に頼りがちだった栽培技術をデータに基づいたノウハウとして可視化し、安定した生産性を実現します。</p>
+            <h2>運用ノウハウの蓄積と横展開</h2>
+            <p>複数拠点のデータを横断分析し、作物種別・環境条件別の最適制御パターンを蓄積します。蓄積されたデータは全導入先の性能向上に活用され、サービス全体の価値が時間とともに向上します。</p>
           </section>
         </div>
       </div>
     </section>
   </main>
 </Layout>
+
+<style>
+  .solution-badge {
+    display: inline-block;
+    background: var(--brand-2, #5ea89a);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: .75rem;
+  }
+</style>
