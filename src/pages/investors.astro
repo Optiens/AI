@@ -128,6 +128,7 @@ import Layout from '../layouts/Layout.astro';
       <p class="small">
         ※ Phase 1以降は地上での再現性・衛生・低電力の立証と運用SaaSの有償化に集中します。
       </p>
+      <p><a href="/roadmap" class="roadmap-link">詳細なタイムラインはロードマップページへ →</a></p>
     </section>
 
     <section class="kpis container prose">
@@ -310,6 +311,8 @@ main{
 
 /* ========== Notes ========== */
 .small{ color: var(--muted); font-size: .92rem; text-align: center; }
+.roadmap-link{ color: var(--brand, #2e574c); font-weight: 600; text-decoration: none; }
+.roadmap-link:hover{ text-decoration: underline; }
 
 /* ========== Responsive tweaks ========== */
 @media (max-width: 640px){
