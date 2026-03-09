@@ -23,6 +23,7 @@
     "node": "20.x"
   },
   "devDependencies": {
+    "@google/genai": "^1.44.0",
     "@types/nodemailer": "^7.0.0"
   }
 }
