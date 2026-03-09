@@ -3,13 +3,14 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import bgUrl from '~/assets/ai-nature-city.webp?url';
 
-type BlogCategory = 'AI' | 'agriculture' | 'technology' | 'social';
+type BlogCategory = 'AI' | 'agriculture' | 'technology' | 'social' | 'announcement';
 
 const categoryLabel: Record<BlogCategory, string> = {
   AI: 'AI・機械学習',
   agriculture: '農業・水耕栽培',
   technology: 'テクノロジー',
   social: '社会課題',
+  announcement: 'お知らせ',
 };
 
 const limit = 6;
@@ -251,10 +252,11 @@ function categoryUrl(cat: BlogCategory | '') {
     font-weight: 700;
     color: #fff;
   }
-  .category-badge--AI       { background: #3b6ead; }
-  .category-badge--agriculture { background: #2e7d4f; }
-  .category-badge--technology  { background: #7b4fa0; }
-  .category-badge--social      { background: #c0632b; }
+  .category-badge--AI           { background: #3b6ead; }
+  .category-badge--agriculture  { background: #2e7d4f; }
+  .category-badge--technology   { background: #7b4fa0; }
+  .category-badge--social       { background: #c0632b; }
+  .category-badge--announcement { background: #2e574c; }
 
   .blog-title {
     font-size: clamp(1rem, 2vw, 1.15rem);

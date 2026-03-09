@@ -24,3 +24,6 @@ pnpm-debug.log*
 .idea/
 
 .vercel
+
+# 社内機密ドキュメント（財務計画・投資家資料など）
+executive/report/

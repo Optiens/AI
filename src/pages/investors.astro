@@ -89,46 +89,13 @@ import Layout from '../layouts/Layout.astro';
     <!-- ===== ロードマップ ===== -->
     <section class="roadmap container prose">
       <h2>実行ロードマップ</h2>
-      <ol class="steps">
-        <li>
-          <strong>Phase 0：法人設立・基盤構築（～2026年6月）</strong><br>
-          一般社団法人 Optiens 設立・登記／
-          主要要件確定（低電力/衛生/冗長/遠隔運用）／BOM確定（極力COTS採用）／
-          小規模ラック＋電力計・温湿度・EC/pHの計測系を準備／
-          連携候補（大学/病院/自治体/防災）とPoC覚書の素案作成／
-          補助金申請準備（農水省スマート農業補助金等）
-        </li>
-        <li>
-          <strong>Phase 1：プロトタイプ・小規模実証（2026年7月～2027年3月）</strong><br>
-          20–40L級の閉鎖循環ミニループを製作／
-          LED・ポンプ・制御の電力ベンチ／
-          2–3作期の小規模栽培実験（葉物・高付加価値ハーブ）／
-          SaaSに遠隔監視・しきい値アラート実装／
-          デモンストレーション農場の設置・運用開始／
-          <u>目標：平均消費電力&lt;80W、循環率&gt;95%</u>
-        </li>
-        <li>
-          <strong>Phase 2：短期実証・システムv1.0（2027年4月～2028年3月）</strong><br>
-          パートナー設備内で4–6週間の連続運転／
-          SOP（洗浄・補給・障害時手順）と安全チェックリスト整備／
-          LCAベースライン取得／
-          運用SaaSの有償契約先3社の獲得（遠隔監視・最適化・技術サポートを含む）／
-          <u>目標：稼働率&gt;98%、葉物エネルギー効率 8–12 kWh/kg</u>
-        </li>
-        <li>
-          <strong>Phase 3：有償パイロット・商業化（2028年4月～2029年3月）</strong><br>
-          「シングルベイMVP（~0.5㎡級）」を設置・遠隔運用／
-          最低1拠点で<em>有償</em>評価（病院/防災拠点など）／
-          SLA試案（稼働率、MTTR）と月額SaaSの算定式を提示／
-          運用SaaS契約先10社以上へ拡大／
-          <u>目標：エネルギー効率 6–10 kWh/kg、MTTR&lt;24h、衛生指標クリア</u>
-        </li>
-      </ol>
-
-      <p class="small">
-        ※ Phase 1以降は地上での再現性・衛生・低電力の立証と運用SaaSの有償化に集中します。
-      </p>
-      <p><a href="/roadmap" class="roadmap-link">詳細なタイムラインはロードマップページへ →</a></p>
+      <ul class="ticks">
+        <li><strong>Phase 0（～2026年6月）：</strong>法人設立・登記、BOM確定、計測系準備、PoC候補先との覚書素案</li>
+        <li><strong>Phase 1（2026年7月～2027年3月）：</strong>閉鎖循環プロトタイプ製作、小規模実証、SaaS v1（遠隔監視・アラート）</li>
+        <li><strong>Phase 2（2027年4月～2028年3月）：</strong>連続運転実証、SOP整備、運用SaaS有償3社獲得</li>
+        <li><strong>Phase 3（2028年4月～2029年3月）：</strong>有償パイロット開始、運用SaaS 10社以上へ拡大</li>
+      </ul>
+      <p><a href="/roadmap" class="roadmap-link">詳細なタイムライン・KPIはロードマップページへ →</a></p>
     </section>
 
     <section class="kpis container prose">

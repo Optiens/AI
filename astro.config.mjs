@@ -7,6 +7,10 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [remarkCjkFriendly],
   },
+  redirects: {
+    '/news': '/blog',
+    '/news/official-website-launch': '/blog/official-website-launch',
+  },
   site: 'https://optiens.com',
   output: 'server', // ← SSR/エンドポイントあり
   adapter: vercel({

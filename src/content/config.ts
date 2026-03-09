@@ -5,18 +5,10 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.string(),
-    category: z.enum(['AI', 'agriculture', 'technology', 'social']),
+    category: z.enum(['AI', 'agriculture', 'technology', 'social', 'announcement']),
     excerpt: z.string(),
     image: z.string().optional(),
   }),
 });
 
-const news = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    date: z.string(),
-  }),
-});
-
-export const collections = { blog, news };
+export const collections = { blog };

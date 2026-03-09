@@ -2,12 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
-type BlogCategory = 'AI' | 'agriculture' | 'technology' | 'social';
+type BlogCategory = 'AI' | 'agriculture' | 'technology' | 'social' | 'announcement';
 const categoryLabel: Record<BlogCategory, string> = {
   AI: 'AI・機械学習',
   agriculture: '農業・水耕栽培',
   technology: 'テクノロジー',
   social: '社会課題',
+  announcement: 'お知らせ',
 };
 
 const { slug } = Astro.params;
@@ -86,10 +87,11 @@ const { Content } = await render(post);
     font-weight: 700;
     color: #fff;
   }
-  .category-badge--AI          { background: #3b6ead; }
-  .category-badge--agriculture { background: #2e7d4f; }
-  .category-badge--technology  { background: #7b4fa0; }
-  .category-badge--social      { background: #c0632b; }
+  .category-badge--AI           { background: #3b6ead; }
+  .category-badge--agriculture  { background: #2e7d4f; }
+  .category-badge--technology   { background: #7b4fa0; }
+  .category-badge--social       { background: #c0632b; }
+  .category-badge--announcement { background: #2e574c; }
 
   .post-title {
     font-size: clamp(1.5rem, 3vw, 2rem);
