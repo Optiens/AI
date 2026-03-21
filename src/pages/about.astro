@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import poster from '../assets/about-poster.jpg?url';
 import founderPhoto from '../assets/founder.jpg?url';
-const fbLink = 'https://www.facebook.com/profile.php?id=61564033651814';
 ---
 
 <Layout title="会社情報 | Optiens">
@@ -71,22 +70,15 @@ const fbLink = 'https://www.facebook.com/profile.php?id=61564033651814';
             </a> -->
 
             <!-- 新： -->
-            <div class="founder-photo">
+            <div class=”founder-photo”>
               <img
                 src={founderPhoto}
-                alt="代表者の写真"
-                loading="lazy"
-                decoding="async"
-                width="640"
-                height="640"
+                alt=”代表者の写真”
+                loading=”lazy”
+                decoding=”async”
+                width=”640”
+                height=”640”
               />
-              <a class="founder-badge fb" href={fbLink} target="_blank" rel="noopener" aria-label="Facebook">
-                <!-- Facebook “f” マーク（SVG）-->
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path fill="currentColor"
-                    d="M22 12a10 10 0 1 0-11.5 9.9v-7H8.6v-3h1.9V9.6c0-1.9 1.2-3.2 3.1-3.2.9 0 1.8.1 1.8.1v2h-1.1c-1.0 0-1.3.6-1.3 1.2V12h2.4l-.4 3h-2v7A10 10 0 0 0 22 12z"/>
-                </svg>
-              </a>
             </div>
 
             <div class="founder-body">
@@ -101,9 +93,9 @@ const fbLink = 'https://www.facebook.com/profile.php?id=61564033651814';
                 形があるモノよりも、知識・創造性・コミュニケーションといった形がないモノが社会を動かし、小さなコミュニティや個人が主体となる時代が始まりました。
               </p>
               <p>
-                一方で、前時代的な問題が顕在化していると思える状況が見えてきております。<br/>
-                気温上昇や水ストレス、物流・エネルギーの不確実性の高まり、他国による土地・水源地の買い占め、メガソーラーの設置、水道民営化、カントリーリスクなど。<br/>
-                これらのネガティブな面が既存の食料供給の基盤をリスクにさらしています。<br/>
+                一方で、構造的な課題も顕在化しています。<br/>
+                気温上昇や水ストレス、物流・エネルギーコストの不確実性、土地利用の競合やインフラ管理の変化など、<br/>
+                既存の食料供給の基盤がリスクにさらされる場面が増えています。<br/>
                 Optiensは、こうした変化を先取りし、農業を“再設計”するために生まれました。
               </p>
               <p>
