@@ -28,4 +28,4 @@ skills:
 - 補助金適用後キャッシュフロー
 - ROI・投資回収期間
 
-保存先: executive/data/YYYYMMDD_財務試算_タイトル.md
+保存先: executive/finance/report/YYYYMMDD_財務試算_タイトル.md

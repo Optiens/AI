@@ -27,4 +27,4 @@ skills:
 - 医療・防災分野の調達ニーズの変化
 - テクノロジートレンド（AI・センサー・エッジ処理）
 
-保存先: executive/inbox/YYYYMMDD_機会リスク発見.md
+保存先: executive/research/reports/YYYYMMDD_機会リスク発見.md

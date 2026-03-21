@@ -32,4 +32,4 @@ skills:
 
 ## 出力フォーマット
 ファイル先頭にYAMLフロントマター（source, date, category, status, owner）を付ける。
-保存先: executive/data/YYYYMMDD_タイトル.md
+保存先: executive/research/data/YYYYMMDD_タイトル.md

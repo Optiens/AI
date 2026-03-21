@@ -26,4 +26,6 @@ pnpm-debug.log*
 .vercel
 
 # 社内機密ドキュメント（財務計画・投資家資料など）
-executive/report/
+executive/finance/report/
+executive/secretary/diary/
+executive/ceo/decisions/

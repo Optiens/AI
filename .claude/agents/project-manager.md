@@ -25,4 +25,4 @@ skills:
 - Phase 2: 連続運転・SaaS有償3社（2027/4〜2028/3）
 - Phase 3: 有償パイロット・SaaS10社（2028/4〜2029/3）
 
-保存先: executive/report/YYYYMMDD_進捗レポート.md
+保存先: executive/pm/progress/YYYYMMDD_進捗レポート.md
