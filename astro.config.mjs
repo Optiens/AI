@@ -10,6 +10,7 @@ export default defineConfig({
   redirects: {
     '/news': '/blog',
     '/news/official-website-launch': '/blog/official-website-launch',
+    '/solutions/precision-cultivation-model': '/solutions',
   },
   site: 'https://optiens.com',
   output: 'server', // ← SSR/エンドポイントあり

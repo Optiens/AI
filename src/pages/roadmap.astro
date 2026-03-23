@@ -11,7 +11,7 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
     <section class="hero-section" style={`--hero-bg: url(${bgUrl});`}>
       <div class="container text-center">
         <h1>ロードマップ</h1>
-        <p class="hero-sub">閉鎖循環水耕モジュール＋運用SaaSの段階的な実証・商業化計画</p>
+        <p class="hero-sub">IoT×AI水耕栽培ハーブ生産の段階的な実行計画</p>
       </div>
     </section>
 
@@ -19,9 +19,7 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
     <section class="section-intro container prose">
       <h2>実行計画の概要</h2>
       <p>
-        Optiensは医療機関・防災拠点・孤立環境（離島・船舶・地下施設）を対象に、
-        低電力・自律運転の閉鎖循環水耕モジュールと運用SaaS（遠隔監視・最適化・技術サポート）を段階的に展開します。
-        各フェーズで再現性・衛生・稼働率を定量的に立証しながら、有償SaaS契約を積み上げていく計画です。
+        Optiensは自宅でのテスト栽培から始め、IoT×AIによる自動化水耕栽培システムを段階的に拡大します。センサーデータの蓄積と栽培レシピの確立を最優先し、仕組みが安定してから生産規模を拡大。テクノロジーの力で、1人でもスケールできる農業モデルを実証します。
       </p>
     </section>
 
@@ -29,55 +27,40 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
     <section class="section-timeline container">
       <ol class="timeline" aria-label="実行ロードマップ">
 
-        <!-- Phase 0 ★現在フェーズ -->
-        <li class="phase phase--current" id="phase0">
+        <!-- Phase 1 ★現在フェーズ -->
+        <li class="phase phase--current" id="phase1">
           <div class="phase-header">
-            <span class="phase-badge phase-badge--current">Phase 0</span>
+            <span class="phase-badge phase-badge--current">Phase 1</span>
             <span class="phase-status">進行中</span>
           </div>
-          <h2 class="phase-title">法人設立・基盤構築</h2>
-          <p class="phase-period">～2026年6月</p>
+          <h2 class="phase-title">自宅テスト栽培・IoTシステム構築</h2>
+          <p class="phase-period">～2026年9月</p>
           <ul class="phase-items">
-            <li>合同会社 Optiens 設立・登記（2026年4月）</li>
-            <li>主要要件確定（低電力/衛生/冗長/遠隔運用）／BOM確定（極力COTS採用）</li>
-            <li>IoTエッジ基盤構築（Raspberry Pi＋Supabase）・センサー計測系の準備</li>
-            <li>連携候補（大学/病院/自治体/防災）とPoC覚書の素案作成</li>
-            <li>補助金申請準備（ものづくり補助金・農業系SBIR等）</li>
+            <li>メタルラック1台で循環式水耕栽培開始（バジル＋マイクログリーン）</li>
+            <li>RPi×2+センサー群でIoT環境モニタリング構築</li>
+            <li>Claude Code×MCPによるAI制御システム安定化</li>
+            <li>栽培データ蓄積・品種別レシピ構築</li>
+            <li>販売なし（自家消費でノウハウ蓄積）</li>
           </ul>
-        </li>
-
-        <!-- Phase 1 -->
-        <li class="phase phase--upcoming" id="phase1">
-          <div class="phase-header">
-            <span class="phase-badge">Phase 1</span>
-            <span class="phase-status">次フェーズ</span>
-          </div>
-          <h2 class="phase-title">プロトタイプ・小規模実証</h2>
-          <p class="phase-period">2026年7月～2027年3月</p>
-          <ul class="phase-items">
-            <li>20–40L級の閉鎖循環ミニループを製作</li>
-            <li>LED・ポンプ・制御の電力ベンチ</li>
-            <li>SaaSに遠隔監視・しきい値アラート実装</li>
-            <li>デモンストレーション農場の設置・運用開始</li>
-          </ul>
-          <p class="phase-goal"><strong>目標：</strong>平均消費電力 &lt;80W、循環率 &gt;95%</p>
+          <p class="phase-goal"><strong>目標：</strong>IoTシステム稼働率99%、栽培成功率90%以上</p>
         </li>
 
         <!-- Phase 2 -->
-        <li class="phase phase--future" id="phase2">
+        <li class="phase phase--upcoming" id="phase2">
           <div class="phase-header">
             <span class="phase-badge">Phase 2</span>
-            <span class="phase-status">計画</span>
+            <span class="phase-status">次フェーズ</span>
           </div>
-          <h2 class="phase-title">短期実証・システムv1.0</h2>
-          <p class="phase-period">2027年4月～2028年3月</p>
+          <h2 class="phase-title">廃校教室で生産開始</h2>
+          <p class="phase-period">2026年10月～2027年3月</p>
           <ul class="phase-items">
-            <li>パートナー設備内で4–6週間の連続運転</li>
-            <li>SOP（洗浄・補給・障害時手順）と安全チェックリスト整備</li>
-            <li>LCAベースライン取得</li>
-            <li>運用SaaSの有償契約先3社の獲得（遠隔監視・最適化・技術サポートを含む）</li>
+            <li>北杜市の廃校教室（20m²）に移転</li>
+            <li>パート1名雇用（週3日×4時間）</li>
+            <li>レストラン・道の駅・ECへの販売開始</li>
+            <li>作業者はマニュアル+AIアプリの指示で運営</li>
+            <li>補助金申請（チャレンジ農業・ものづくり補助金）</li>
           </ul>
-          <p class="phase-goal"><strong>目標：</strong>稼働率 &gt;98%、葉物エネルギー効率 8–12 kWh/kg</p>
+          <p class="phase-goal"><strong>目標：</strong>レストラン3-5店舗と取引確立、月間売上8万円</p>
         </li>
 
         <!-- Phase 3 -->
@@ -86,15 +69,15 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
             <span class="phase-badge">Phase 3</span>
             <span class="phase-status">計画</span>
           </div>
-          <h2 class="phase-title">有償パイロット・商業化</h2>
-          <p class="phase-period">2028年4月～2029年3月</p>
+          <h2 class="phase-title">拡大・横展開</h2>
+          <p class="phase-period">2027年4月～</p>
           <ul class="phase-items">
-            <li>「シングルベイMVP（~0.5㎡級）」を設置・遠隔運用</li>
-            <li>最低1拠点で有償評価（病院/防災拠点など）</li>
-            <li>SLA試案（稼働率、MTTR）と月額SaaSの算定式を提示</li>
-            <li>運用SaaS契約先10社以上へ拡大</li>
+            <li>教室2-3室に拡大（60m²）</li>
+            <li>EC定期便サービス開始</li>
+            <li>栽培品目の拡充</li>
+            <li>仕組みの横展開（他拠点 or フランチャイズ的展開）</li>
           </ul>
-          <p class="phase-goal"><strong>目標：</strong>エネルギー効率 6–10 kWh/kg、MTTR &lt;24h、衛生指標クリア</p>
+          <p class="phase-goal"><strong>目標：</strong>月間売上30-50万円、月間利益10-20万円</p>
         </li>
 
       </ol>
@@ -104,27 +87,19 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
     <section class="section-kpis container prose">
       <h2>主要指標と目標値</h2>
       <ul class="ticks">
-        <li><strong>エネルギー効率：</strong>葉物 6–10 kWh/kg（MVP時）／エネルギーコスト比率 20%未満</li>
-        <li><strong>稼働率/SLA：</strong>稼働率 &gt;98%、MTTR &lt;24h</li>
-        <li><strong>水循環率：</strong>&gt;95%、廃液管理SOPを文書化</li>
-        <li><strong>衛生・洗浄性：</strong>ATP/微生物指標のしきい値合格、洗浄時間の標準化</li>
-        <li><strong>運用SaaS：</strong>遠隔監視・アラート・運転最適化・技術サポートを一体提供、貢献利益率 80%以上</li>
-        <li><strong>事業面：</strong>有償パイロット≧1拠点、運用SaaS有償契約先 1年目3社・2年目10社、LOI/覚書≧2件</li>
+        <li><strong>栽培成功率：</strong>Phase 1完了時に90%以上</li>
+        <li><strong>IoTシステム稼働率：</strong>24時間無人運転99%以上</li>
+        <li><strong>販路：</strong>Phase 2でレストラン3-5店舗</li>
+        <li><strong>月間売上：</strong>Phase 2で月8万円、Phase 3で月30-50万円</li>
+        <li><strong>生産効率：</strong>1m²あたり収穫量の継続的改善</li>
       </ul>
     </section>
 
     <!-- ===== CTA ===== -->
     <section class="section-cta container">
-      <h2>詳細資料・お問い合わせ</h2>
-      <p>投資・協業・実証フィールドのご提供に関するご相談は下記よりご連絡ください。</p>
+      <h2>お問い合わせ</h2>
+      <p>協業・販路パートナーシップに関するご相談は下記よりご連絡ください。</p>
       <div class="cta-btns">
-        <a
-          href="/合同会社Optiens_事業計画書.pdf"
-          class="btn-primary"
-          download="合同会社Optiens_事業計画書.pdf"
-          target="_blank"
-          rel="noopener"
-        >事業計画書をダウンロード</a>
         <a href="/contact" class="btn-primary">お問い合わせ</a>
         <a href="/investors" class="btn-secondary">投資家情報を見る</a>
       </div>

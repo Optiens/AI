@@ -8,81 +8,55 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- ===== Hero ===== -->
     <section class="hero container">
-      <h1>クローズドループ水耕栽培への投資</h1>
+      <h1>IoT×AI水耕栽培ハーブ生産への参画</h1>
       <p class="sub">
-        低電力・自律運転の水耕モジュール＋運用SaaSで、
-        医療・防災・孤立環境における食料の安定供給を実現します。
+        センサーとAIで栽培を自動化し、山梨県北杜市から高品質ハーブを安定供給します。
       </p>
     </section>
 
-    <!-- ===== 投資の考え方 ===== -->
+    <!-- ===== 事業の考え方 ===== -->
     <section class="thesis container prose">
-      <h2>投資の考え方</h2>
+      <h2>事業の考え方</h2>
       <ul class="bullets">
         <li>
           <strong>問題の定義：</strong>
-          連年の高温・極端気象と水ストレス、エネルギー/物流の高コスト化により、天候依存の露地/一般施設栽培は「収量・品質・コスト・安全」の再現性が揺らいでいます。閉鎖循環・低電力・自律運用が不可欠です。
+          日本の食料自給率37%。気温上昇・物流不確実性で食料供給リスクが増大。一方、制御環境型農業（水耕栽培）は天候不順の影響を受けず、水使用量80-90%削減、農薬不要で安全な作物を通年生産可能。
         </li>
         <li>
           <strong>解決アプローチ：</strong>
-          低電力設計 × 自律制御 × 運用SaaSで、小型・閉鎖循環モジュールを実証 → 規制/衛生要件を満たす「シングルベイMVP」を確立 → 医療/防災/孤立環境から段階的に展開します。
+          IoTセンサー×AIによる完全自動化水耕栽培。RPi+センサー群で24時間環境モニタリング、Claude Code（AI）がリアルタイムで栽培環境を最適化。「農業システムの設計者」として仕組みを構築し、スケーラブルな生産体制を確立。
         </li>
         <li>
           <strong>収益モデル：</strong>
-          ハード最小構成＋保守契約に、<strong>運用SaaS（月額）</strong>を組み合わせたARRモデル。SaaSにはリモート監視・運転最適化・コンサルティングサポートを含み、作物販売に依存せず稼働率と運用データで価値を可視化します。
+          ハーブ直販（レストラン・道の駅・EC）。高単価品目（バジル等）に特化し、小規模でも収益を確保。
         </li>
         <li>
           <strong>体制と前提：</strong>
-          現在は代表1名のため、小スコープ・短サイクルでのマイルストーン分割と、パートナー活用（部材/COTS・試験設備・データ解析）で前進します。
+          代表1名（SE経歴7年）。Phase 1は自宅テスト栽培、Phase 2からパート雇用で生産拡大。既存IoT機器50点以上を保有し、追加投資は最小限。
         </li>
       </ul>
     </section>
 
-    <!-- ===== 既存農業リスク整理 ===== -->
-    <section class="section-risk-now container prose">
-      <h2>なぜ今、既存の土壌農業はリスクに晒されているのか</h2>
-      <p>
-        記録的な高温・極端気象、水資源の逼迫、エネルギーと物流コストの上昇などが同時多発的に進行し、
-        従来の"露地×気象順応"モデルでは安定供給を維持しづらい環境になっています。ここでは、
-        <strong>直近のリスク要因</strong>と<strong>時間軸ごとの影響像</strong>を簡潔に整理します。
-      </p>
-
-      <h3>直近の主要リスク</h3>
+    <!-- ===== 市場機会 ===== -->
+    <section class="section-market container prose">
+      <h2>市場機会</h2>
       <ul class="bullets">
-        <li><strong>異常高温・極端気象の常態化：</strong>連年の高温更新、線状降水帯による豪雨・洪水で<em>開花不稔・品質劣化・作業停滞・表土流亡</em>が増加。病害虫の越冬・北上で防除負担も拡大。</li>
-        <li><strong>水資源の逼迫と競合：</strong>渇水・取水制限に加え、都市・工業・データ需要との競合で<em>用水確保・コスト</em>の不確実性が上昇。</li>
-        <li><strong>エネルギー・冷却・保全コストの増大：</strong>予冷・貯蔵・コールドチェーンや施設冷房の<em>電力費上振れ</em>が収益を圧迫。</li>
-        <li><strong>物流の不安定化：</strong>高温や豪雨による道路規制・遅延で<em>出荷計画・鮮度維持</em>に影響。燃料費も含め総コストが上昇。</li>
-        <li><strong>土地・水源へのアクセス不安：</strong>他用途転用・買収・賃料上昇で<em>農地・水源の確保</em>が難化（地域差あり）。</li>
-        <li><strong>政策・金融・保険リスク：</strong>環境・水・排出関連の規制強化、補助要件の高度化、<em>保険料の上昇・引受条件厳格化</em>で小規模経営ほど負担増。</li>
-        <li><strong>投入資材・技術への依存：</strong>種子・肥料・資材・データサービスの調達難/価格高騰で<em>原価が不安定化</em>。適応投資の初期負担も大きい。</li>
-        <li><strong>労働安全と人員確保：</strong>熱中症リスク増で作業時間帯の制約・夜間化、<em>人件費・管理負担</em>が上振れ。</li>
+        <li><strong>国内植物工場市場：</strong>281億円（2022年度）→ 450億円予測（矢野経済研究所）</li>
+        <li><strong>ハーブ市場：</strong>国内バジル需要は増加傾向。レストラン・カフェでの需要が安定</li>
+        <li><strong>北杜市の立地優位性：</strong>清里高原（標高1,200m）。冷涼な気候がバジル等の高品質栽培に適し、観光客向け飲食店も多い</li>
+        <li><strong>IoT×農業：</strong>スマート農業市場は年率15%以上で成長（矢野経済研究所）</li>
       </ul>
-
-      <h3>時間軸で見る影響像</h3>
-      <ul class="bullets">
-        <li><strong>短期（～数年）：</strong>作柄の振れ幅拡大、用水・電力・輸送の<em>突発的コスト増</em>、労務負担増。</li>
-        <li><strong>中期（～10年）：</strong>病害虫・雑草相のシフト定着、用水・エネルギーの<em>恒常的な高コスト化</em>、保険条件の厳格化、土地・水アクセスの格差。</li>
-        <li><strong>長期（10年以上）：</strong>沿岸塩害・地力低下・適地の地理的シフトにより、生産基盤の再配置と<em>経営の二極化</em>が進行。</li>
-      </ul>
-
-      <h3>補足</h3>
-      <p>
-        気象や水の構造的な不確実性が高まるほど、従来型の"天候依存"から
-        <strong>環境制御・水循環・リスク分散</strong>への移行が重要。サプライ側の
-        <strong>安定性・再現性・効率</strong>向上は、サプライチェーン全体の持続可能性へ波及します。
-      </p>
     </section>
 
     <!-- ===== 進捗 ===== -->
     <section class="traction container prose">
       <h2>進捗とマイルストーン</h2>
       <ul class="ticks">
-        <li>アーキテクチャ案・主要BOM初版（照明/ポンプ/センサ/制御）</li>
-        <li>電力収支の概算モデルと熱設計の前提条件を確定</li>
-        <li>運用SaaS基盤の雛形（遠隔モニタ/アラート）を試作</li>
-        <li>医療/防災領域でのニーズヒアリングとPoC候補先リスト化（LOI打診準備）</li>
-        <li>合同会社 Optiens 設立（2026年4月予定）</li>
+        <li>IoTセンサー群・制御機器50点以上を確保済み</li>
+        <li>循環式水耕栽培システムの設計完了（4段メタルラック）</li>
+        <li>Raspberry Pi 2台のセットアップ・SSH接続完了</li>
+        <li>Mosquitto（MQTTブローカー）稼働中</li>
+        <li>Claude Code × MCP によるAI連携アーキテクチャ設計完了</li>
       </ul>
     </section>
 
@@ -90,10 +64,9 @@ import Layout from '../layouts/Layout.astro';
     <section class="roadmap container prose">
       <h2>実行ロードマップ</h2>
       <ul class="ticks">
-        <li><strong>Phase 0（～2026年6月）：</strong>合同会社設立・登記（4月）、BOM確定、IoT基盤構築、PoC候補先との覚書素案</li>
-        <li><strong>Phase 1（2026年7月～2027年3月）：</strong>閉鎖循環プロトタイプ製作、小規模実証、SaaS v1（遠隔監視・アラート）</li>
-        <li><strong>Phase 2（2027年4月～2028年3月）：</strong>連続運転実証、SOP整備、運用SaaS有償3社獲得</li>
-        <li><strong>Phase 3（2028年4月～2029年3月）：</strong>有償パイロット開始、運用SaaS 10社以上へ拡大</li>
+        <li><strong>Phase 1（～2026年9月）：</strong>自宅メタルラック1台でテスト栽培。マイクログリーン+バジル。IoTシステム安定化・栽培データ蓄積</li>
+        <li><strong>Phase 2（2026年10月～2027年3月）：</strong>北杜市廃校教室（20m²）で生産開始。パート1名雇用。レストラン+道の駅+EC販売。月間利益目標27,000円</li>
+        <li><strong>Phase 3（2027年4月～）：</strong>教室2-3室に拡大（60m²）。EC定期便開始。月間利益10-20万円。仕組みの横展開</li>
       </ul>
       <p><a href="/roadmap" class="roadmap-link">詳細なタイムライン・KPIはロードマップページへ →</a></p>
     </section>
@@ -101,13 +74,11 @@ import Layout from '../layouts/Layout.astro';
     <section class="kpis container prose">
       <h2>主要指標と目標</h2>
       <ul class="ticks">
-        <li><strong>エネルギー効率：</strong> 葉物 8–12 kWh/kg（Phase 2目標）→ 6–10 kWh/kg（Phase 3目標）／エネルギーコスト比率 20%未満</li>
-        <li><strong>稼働率：</strong> 設計目標 稼働率&gt;98%。遠隔監視＋モジュール交換設計により、現地訪問なしでの復旧を志向</li>
-        <li><strong>水循環率：</strong> &gt;95%（業界標準値95–98%）、廃液管理SOPを文書化</li>
-        <li><strong>衛生・洗浄性：</strong> ATP/微生物指標のしきい値合格、洗浄時間の標準化</li>
-        <li><strong>運用SaaS：</strong> 遠隔監視・アラート・運転最適化・技術サポートを一体提供、貢献利益率 80%以上</li>
-        <li><strong>事業面：</strong> 有償パイロット≧1拠点、運用SaaS有償契約先 1年目3社・2年目10社、LOI/覚書≧2件</li>
-        <li><strong>補助金：</strong> 複数スキームを並行申請し、採択確率の最大化を図る</li>
+        <li><strong>栽培成功率：</strong>Phase 1完了時に90%以上</li>
+        <li><strong>IoTシステム稼働率：</strong>99%以上（24時間無人運転）</li>
+        <li><strong>販路開拓：</strong>Phase 2でレストラン3-5店舗との取引確立</li>
+        <li><strong>月間売上：</strong>Phase 2で月8万円、Phase 3で月30-50万円</li>
+        <li><strong>生産効率：</strong>1m²あたり月間収穫量の継続的改善</li>
       </ul>
     </section>
 
@@ -115,31 +86,21 @@ import Layout from '../layouts/Layout.astro';
     <section class="use-of-funds container prose">
       <h2>資金用途とリソース</h2>
       <ul class="ticks">
-        <li><strong>部材/COTS・治具：</strong> LED・ポンプ・計測、筐体・洗浄性治具（最小構成）</li>
-        <li><strong>試験費：</strong> 電力・環境・衛生の外部測定、短期実証の設置/撤去費</li>
-        <li><strong>ソフト：</strong> 遠隔監視・アラート・ログ解析の最小実装（クラウド利用）</li>
-        <li><strong>諸費用：</strong> 保険/運搬/認証事前調査・ドキュメント整備</li>
+        <li><strong>初期投資：</strong>最小限（既存機器50点以上を活用、追加購入は種+消耗品のみ）</li>
+        <li><strong>Phase 2：</strong>廃校教室賃料、パート人件費（月53,000円）、栽培資材</li>
+        <li><strong>補助金：</strong>チャレンジ農業支援補助金、ものづくり補助金等を活用予定</li>
+        <li><strong>法人化：</strong>Phase 2移行時に法人化（合同会社）を検討</li>
       </ul>
-      <p>
-        <u>資金調達計画：</u><br>
-        補助金（ものづくり補助金・小規模事業者持続化補助金・農水省施設園芸支援等）500–2,000万円 ／
-        クラウドファンディング 300–500万円 ／ エンジェル投資家（プレシード） 1,000–5,000万円。<br>
-        ※補助金はスキームごとに応募要件（連携先確保等）が異なるため、認定支援機関と連携し個別に適合性を確認のうえ申請します。<br>
-        人件費は極小（代表1人月）。必要に応じて
-        <strong>契約人材（電気/機械 各0.2–0.5人月）</strong>をスポット投入します。
-      </p>
     </section>
 
     <!-- ===== リスク ===== -->
     <section class="risks container prose">
       <h2>リスクと対応策</h2>
       <ul class="bullets">
-        <li><strong>電力コスト/効率：</strong> 低電力BOMの固定、動的制御（点灯/給液/空調）でピーク抑制。PPA/DR/蓄電をPoC先で併用。</li>
-        <li><strong>衛生・汚染：</strong> 密閉・洗浄性設計、SOP/監査、部材標準化。実証でATP/微生物指標を公開。</li>
-        <li><strong>スケジュール：</strong> 1人月前提のためスコープ凍結・段階納品・外部委託で遅延リスクを分散。</li>
-        <li><strong>調達：</strong> COTS優先・代替BOMを事前定義。長納期品は早期発注。</li>
-        <li><strong>補助金不採択：</strong> 複数スキームを並行申請。クラウドファンディングをバッファとして確保。</li>
-        <li><strong>事業性：</strong> まず有償評価の獲得とARR化（SaaS）を先行。単体採算・SLAで価値を定量。</li>
+        <li><strong>栽培リスク：</strong>病害・環境異常 → IoTセンサーで24時間監視、AI早期検知</li>
+        <li><strong>販路リスク：</strong>需要の変動 → 複数チャネル（レストラン+道の駅+EC）で分散</li>
+        <li><strong>技術リスク：</strong>IoTシステムの安定性 → RPi冗長化、ウォッチドッグ、クラウドバックアップ</li>
+        <li><strong>人材リスク：</strong>仕組み化してマニュアル＋AIアプリで作業者をガイド</li>
       </ul>
     </section>
 
@@ -147,9 +108,9 @@ import Layout from '../layouts/Layout.astro';
     <section class="entity container prose">
       <h2>法人概要</h2>
       <ul class="ticks">
-        <li><strong>法人形態：</strong> 合同会社（2026年4月設立予定）。事業拡大・外部資金調達の段階で株式会社への組織変更を計画</li>
-        <li><strong>所在地：</strong> 山梨県北杜市</li>
-        <li><strong>代表：</strong> ソフトウェアエンジニア。業務システム設計・開発7年の実務経験を活かし、IoTエッジ制御からクラウドSaaSまで一貫して開発</li>
+        <li><strong>形態：</strong>個人事業主（Phase 2移行時に合同会社化を検討）</li>
+        <li><strong>所在地：</strong>山梨県北杜市</li>
+        <li><strong>代表：</strong>SE経歴7年。IoT・AI・クラウドの実装力を活かし、農業をシステム設計する</li>
       </ul>
     </section>
 
@@ -157,25 +118,16 @@ import Layout from '../layouts/Layout.astro';
     <section class="team container prose">
       <h2>チームと提携</h2>
       <p>
-        現在は代表1名によるリーン開発で検証を進めています。
-        Phase 1開始時にOptiens専従へ移行し、開発リソースを集中させる計画です。<br>
-        <strong>募集：</strong> 実証フィールド（病院/防災/研究）、衛生・電源・熱の専門顧問、
-        契約ベースの電気/機械エンジニア。データ解析・LCA評価の協力も歓迎します。
+        代表1名でシステム設計・IoT構築・AI連携を担当。Phase 2からパート雇用で生産オペレーションを委託。<br>
+        <strong>募集：</strong>水耕栽培の実証フィールド、北杜市周辺の飲食店パートナー、農業×IoTに関心のあるエンジニア
       </p>
     </section>
 
     <!-- ===== CTA ===== -->
     <section class="cta2 container">
       <h2>お問い合わせ</h2>
-      <p>投資や協業に関するご相談は、資料と併せて下記からご連絡ください。</p>
+      <p>協業・販路パートナーシップに関するご相談は下記からご連絡ください。</p>
       <div class="cta">
-        <a
-          href="/合同会社Optiens_事業計画書.pdf"
-          class="btn btn-primary"
-          download="合同会社Optiens_事業計画書.pdf"
-          target="_blank"
-          rel="noopener"
-        >事業計画書をダウンロード</a>
         <a href="/contact" class="btn btn-primary">お問い合わせページを表示</a>
       </div>
     </section>

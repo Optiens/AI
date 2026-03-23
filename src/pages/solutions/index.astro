@@ -5,8 +5,7 @@ import { Image } from 'astro:assets';
 // ヒーロー背景画像
 import bgUrl from '~/assets/ai-nature-city.webp?url';
 
-// 各ソリューション詳細ページからデータをインポート
-import { solutionData as precisionCultivationModel } from './precision-cultivation-model.astro';
+// ソリューション詳細ページからデータをインポート
 import { solutionData as dataAnalysisOptimization } from './data-analysis-optimization.astro';
 
 type SolutionData = {
@@ -16,7 +15,6 @@ type SolutionData = {
 };
 
 const solutions: { slug: string; data: SolutionData }[] = [
-  { slug: 'precision-cultivation-model', data: precisionCultivationModel as SolutionData },
   { slug: 'data-analysis-optimization', data: dataAnalysisOptimization as SolutionData },
 ];
 
@@ -55,7 +53,7 @@ const isImageMeta = (src: unknown) =>
                           src={d.image as any}
                           alt={safeAlt(d.title)}
                           widths={[480, 640, 960]}
-                          sizes="(max-width: 768px) 100vw, 33vw"
+                          sizes="(max-width: 768px) 100vw, 50vw"
                           class="solutions-thumbnail"
                           loading="lazy"
                           decoding="async"
@@ -96,15 +94,10 @@ const isImageMeta = (src: unknown) =>
   }
   .solutions-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 28px;
-    max-width: 800px;
+    max-width: 600px;
     margin: 0 auto;
-  }
-  @media (max-width: 600px) {
-    .solutions-grid {
-      grid-template-columns: 1fr;
-    }
   }
   .solutions-thumbnail-wrapper {
     height: 200px;
