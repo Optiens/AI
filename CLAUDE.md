@@ -1,27 +1,27 @@
 # Optiens — Claude Code コンテキスト
 
 ## 事業概要
-- **法人名**: 合同会社 Optiens（オプティエンス）※2026年4月設立予定
-- **事業**: 閉鎖循環型水耕栽培モジュールの開発・販売＋運用SaaS（月額）
-- **ターゲット**: 医療機関・防災拠点・孤立環境（離島・船舶・地下施設）
-- **収益モデル**: ハード販売＋保守＋運用SaaS月額（遠隔監視・最適化・技術サポートを含む）
-- **体制**: 代表1名（リーン開発）
+- **屋号**: Optiens（オプティエンス）※個人事業主として活動中、法人化はPhase 2移行時に再検討
+- **事業**: IoT×AI自動化による水耕栽培ハーブ生産
+- **コンセプト**: 農家ではなく「農業システムの設計者」。センサー・AI・自動制御で仕組みを構築し、安定したらオペレーションは人に委託
+- **生産品目**: バジル・マイクログリーン等の高単価ハーブ
+- **販路**: 地元レストラン・道の駅・EC（食べチョク等）
+- **体制**: 代表1名（Phase 2からパート雇用）
 
 ## 禁止事項（必ず守る）
 - 宇宙・宇宙農業に関する記述を追加・残さない
-- 消費者向け（食育・家庭用・「美味しい」等）の訴求を追加しない
-- 農家向け記述（後継者不足等）を追加しない
-- コンサルティングを独立した収益モデルとして記述しない（SaaSに含む）
+- SaaSプラットフォームの外部販売を収益モデルとして記述しない（旧方針）
+- 医療機関・防災拠点・孤立環境（離島・船舶・地下施設）をターゲットとして記述しない（旧方針）
+- 家庭用ガーデニング・食育教室としてのポジショニング禁止（事業は業務用ハーブ生産）
 - 社保スキームをサイトに記載しない
 
 ## ブランドカラー
 - Primary: `#2e574c` / Secondary: `#5ea89a` / Accent: `#ea4335`
 
 ## ロードマップ（変更不可）
-- Phase 0: ～2026/6（設立・登記・BOM確定）
-- Phase 1: 2026/7～2027/3（プロト・実証・SaaS v1）
-- Phase 2: 2027/4～2028/3（連続運転・SOP・SaaS有償3社）
-- Phase 3: 2028/4～2029/3（有償パイロット・SaaS10社以上）
+- Phase 1: 自宅テスト栽培（0-6ヶ月）— メタルラック1台、データ蓄積・IoTシステム安定化、販売なし
+- Phase 2: 廃校教室で生産開始（7-12ヶ月目）— 北杜市廃校20m²、パート1名雇用、レストラン+道の駅+EC販売
+- Phase 3: 拡大（2年目〜）— 教室2-3室60m²、EC定期便、月間利益10-20万円、横展開
 
 ## 技術スタック（サイト）
 - Astro 5 + TypeScript、SSR on Vercel（hnd1）
@@ -29,20 +29,21 @@
 - スタイル: scoped CSS + global.css（prose, card, hero等の共通クラス）
 - デプロイ: `npx astro build` → Vercel
 
-## 技術スタック（IoT/MVP）
-- エッジ: Raspberry Pi + Node-RED（フロー制御・センサー統合）
-- データ保存: InfluxDB（時系列）
-- ダッシュボード: Grafana（監視・アラート）
-- 画像認識: OpenCV + TensorFlow Lite
-- クラウド/SaaS基盤: Supabase（DB・Auth・Edge Functions）
-- ※GASはIoTリアルタイムデータ処理には使用しない
+## 技術スタック（IoT/生産システム）
+- エッジ: Raspberry Pi 4B ×2（Pi1: Zigbee2MQTT+MCP Server / Pi2: センサー+カメラ）
+- センサー: EC/pH/水温/気温湿度/CO2/照度（MCP3008 ADC経由）
+- 制御: Zigbeeスマートスイッチ + リレーモジュール（ポンプ・LED・ヒーター）
+- 通信: MQTT（Mosquitto）、Zigbee2MQTT
+- AI連携: Claude Code × MCP（Model Context Protocol）でiPhoneから音声操作
+- クラウド: Supabase（データ蓄積・ダッシュボード）
+- カメラ: WiFi IPカメラ（TY-Q2）+ RPiカメラ（OV5647）
 
 ## 重要ファイル
-- 詳細設計: `memory/SESSION.md`
-- 事業計画書: `public/合同会社Optiens_事業計画書.pdf`
+- 機器インベントリ: `memory/project_equipment-inventory.md`
+- 循環式システム設計: `memory/project_hydro-system-design.md`
+- 事業計画: `memory/project_herb-farm-plan.md`
 - エージェント: `.claude/agents/`
 - スキル: `.claude/skills/`
-- 詳細APIガイド: → 必要時 `docs/` 以下を参照
 
 ## AIエージェントへの行動規範
 1. Plan Modeで作業概要を確認してから実装に進む

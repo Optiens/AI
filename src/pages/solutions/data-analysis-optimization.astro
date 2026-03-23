@@ -3,9 +3,9 @@ import Layout from '../../layouts/Layout.astro';
 import dataAnalysisImg from '~/assets/data-analysis-optimization.png';
 
 export const solutionData = {
-  title: 'AquaLoop Platform — 遠隔監視・運用SaaS',
-  badge: 'SaaS',
-  overview: 'AquaLoopハードウェアと一体で提供する遠隔監視・最適化SaaS。稼働率保証・障害予兆検知・SLAレポーティングで、物流困難な拠点でも継続稼働を支えます。',
+  title: 'IoT×AI 自動栽培システム',
+  badge: 'Smart Agriculture',
+  overview: 'センサーとAIによる24時間自動モニタリング・制御で、高品質なハーブを安定生産する循環式水耕栽培システム。',
   image: dataAnalysisImg,
 };
 ---
@@ -22,24 +22,32 @@ export const solutionData = {
         </div>
 
         <div class="solution-body prose">
+          <p class="solution-overview">
+            メタルラック4段の循環式水耕栽培システムに、Raspberry Pi×2台とセンサー群（EC/pH/水温/気温・湿度/CO2/照度）を組み合わせ、AIが24時間自動で環境を最適制御。高品質なハーブを安定的に生産します。
+          </p>
+
           <section>
-            <h2>稼働状態の可視化とボトルネック検出</h2>
-            <p>センサーから収集した温度・湿度・EC/pH・消費電力などの時系列データをダッシュボードで常時可視化します。AIがパターン異常を検出し、障害の予兆をアラートで通知。これまで見えなかった非効率な運転条件を特定し、具体的な改善施策を提案します。</p>
+            <h2>環境モニタリング</h2>
+            <p>EC/pH/水温/気温・湿度/CO2/照度をRaspberry Piとセンサー群で24時間計測。ダッシュボードでリアルタイム可視化。</p>
           </section>
 
           <section>
-            <h2>エネルギー・資源効率の継続的最適化</h2>
-            <p>照明・給液・空調の制御パラメータをAIが自動チューニングし、kWh/kg指標を段階的に改善します。廃液量・水循環率・電力コスト比率を定量的に管理し、SLAレポートとして定期提供します。</p>
+            <h2>AI最適化制御</h2>
+            <p>Claude Code × MCPでセンサーデータをAI分析。養液濃度・光量・温度の最適値を自動判定し、ポンプ・LED・ヒーターをスマートスイッチで自動制御。iPhoneから音声で操作も可能。</p>
           </section>
 
           <section>
-            <h2>遠隔監視とSLA対応</h2>
-            <p>AquaLoopプラットフォームの一部として、オンサイト対応を最小化する遠隔運用設計。障害発生時はMTTR（平均復旧時間）24時間以内を目標にリモートサポートを提供します。稼働率・障害履歴・改善提案を含む月次レポートをSaaS内で提供します。</p>
+            <h2>データ蓄積・栽培レシピ</h2>
+            <p>栽培データをクラウド（Supabase）に蓄積。品種別の最適栽培レシピをデータから構築し、再現性の高い生産体制を確立。</p>
           </section>
 
           <section>
-            <h2>運用ノウハウの蓄積と継続改善</h2>
-            <p>各拠点の運用データを継続蓄積し、作物種別・環境条件別の最適制御パターンを積み上げます。蓄積されたノウハウはサービス改善に還元され、導入拠点の性能が時間とともに向上します。複数拠点への展開フェーズでは、拠点間の横断分析により全体最適化をさらに加速します。</p>
+            <h2>生産品目</h2>
+            <ul>
+              <li>バジル（スイートバジル・タイバジル）</li>
+              <li>マイクログリーン（ブロッコリースプラウト等）</li>
+              <li>その他高単価ハーブ（ミント・ルッコラ・ディル等）</li>
+            </ul>
           </section>
         </div>
       </div>
@@ -59,4 +67,12 @@ export const solutionData = {
     border-radius: 4px;
     margin-bottom: .75rem;
   }
+
+  .solution-overview {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 2rem;
+  }
+
 </style>
