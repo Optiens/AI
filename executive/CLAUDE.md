@@ -23,7 +23,7 @@
 | 秘書室 | `orchestrator` | 司令塔。タスク分配・結果統合 |
 | 秘書室 | `ceo-soundingboard` | 壁打ち。思考バイアス検出 |
 | リサーチ | `researcher` | 汎用リサーチ（Web検索） |
-| リサーチ | `market-researcher` | 植物工場・農業IoT・SaaS市場調査 |
+| リサーチ | `market-researcher` | 水耕栽培・農業IoT・ハーブ市場調査 |
 | リサーチ | `advisor-agent` | 機会・リスク発見 |
 | コンテンツ制作 | `technical-writer` | ブログ記事・事業ドキュメント |
 | マーケティング | `branding-agent` | 製品名・ブランド名提案 |

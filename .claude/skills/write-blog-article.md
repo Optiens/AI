@@ -1,0 +1,84 @@
+# ブログ記事自動生成スキル
+
+このスキルはOptiens公式ブログの記事を自動生成し、デプロイまで行います。
+
+## 実行手順
+
+### Step 1: テーマ選定
+以下のカテゴリからローテーションでテーマを選定する。前回の記事カテゴリと重複しない。
+
+| カテゴリ | テーマ例 |
+|---|---|
+| agriculture | 水耕栽培の技術解説、品目紹介、栽培データ、季節の栽培Tips |
+| technology | IoTセンサー構築記録、Raspberry Pi活用、AI画像認識、Zigbee/MQTT |
+| AI | Claude Code × MCP、農業AI最新動向、画像認識による病害検知 |
+| social | 食料安全保障、北杜市の地域資源、廃校活用、持続可能な農業 |
+| announcement | 事業進捗、マイルストーン達成、新品目追加 |
+
+テーマ選定時は以下のエージェントを使用:
+1. **researcher**エージェントで最新の水耕栽培・農業IoTニュースを調査
+2. 既存記事（`src/content/blog/`）と重複しないテーマを選定
+3. SEOキーワードを意識（「水耕栽培 バジル」「IoT 農業」「北杜市 ハーブ」等）
+
+### Step 2: 記事執筆
+以下の構成で2000-3000字の記事を作成:
+
+```
+---
+title: '記事タイトル（SEOを意識、30-60字）'
+date: 'YYYY-MM-DD'（当日の日付）
+category: 'agriculture' | 'AI' | 'technology' | 'social' | 'announcement'
+excerpt: '要約（100-150字）'
+image: '/blog/スラッグ名.webp'
+---
+
+## 導入（なぜこのテーマが重要か）
+## 本論（2-3セクション、データ・事例を含む）
+## Optiensの取り組み（自社の関連性を自然に言及）
+## まとめ
+```
+
+### Step 3: ファクトチェック
+記事内の以下を検証:
+- **統計データ**: 出典URLが有効か確認（WebFetchで検証）
+- **技術的記述**: 正確性を確認（スペック値、プロトコル名等）
+- **禁止事項**: CLAUDE.mdの禁止表現が含まれていないか確認
+- **日付・数値**: 矛盾がないか確認
+
+### Step 4: アイキャッチ画像生成
+`scripts/generate-blog.py` を使用してアイキャッチ画像を生成:
+
+```bash
+python scripts/generate-blog.py "記事テーマに合わせた英語プロンプト" "public/blog/スラッグ名.webp"
+```
+
+内部でImagen 4.0（PNG生成→WebP変換）を使用。GEMINI_API_KEYは.envから自動読み込み。
+
+画像プロンプトのルール:
+- Optiensのブランドカラー（#2e574c, #5ea89a）を意識
+- テキストは含めない（画像のみ）
+- モダン・クリーン・プロフェッショナルなスタイル
+- 水耕栽培・IoT・ハーブ・テクノロジーのビジュアル
+
+### Step 5: ファイル保存
+- 記事: `src/content/blog/{slug}.md`
+- 画像: `public/blog/{slug}.webp`
+
+### Step 6: ビルド確認
+```bash
+npx astro build
+```
+エラーがないことを確認。
+
+### Step 7: Git commit & push
+```bash
+git add src/content/blog/{slug}.md public/blog/{slug}.webp
+git commit -m "blog: {記事タイトルの要約}"
+git push origin main
+```
+
+## 注意事項
+- CLAUDE.mdの禁止事項を必ず遵守
+- 他サイトの文章をコピーしない（参考にしてオリジナルで書く）
+- 出典は記事末尾にまとめる
+- 画像生成に失敗した場合は画像なしで記事を公開（imageフィールドを省略）
