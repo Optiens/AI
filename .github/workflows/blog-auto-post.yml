@@ -8,7 +8,6 @@ on:
     # 月・水・金 JST 9:03 (UTC 0:03)
     - cron: '3 0 * * 1,3,5'
   workflow_dispatch:
-    description: '手動でブログ記事を生成'
 
 permissions:
   contents: write
