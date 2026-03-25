@@ -3,6 +3,7 @@ title: 'Optiens 公式ウェブサイト公開のお知らせ'
 date: '2026-03-01'
 category: 'announcement'
 excerpt: 'Optiensの公式ウェブサイトが公開されました。IoT×AIを活用した水耕栽培ハーブ生産に関する情報を発信してまいります。'
+image: '/blog/official-website-launch.webp'
 ---
 
 平素より大変お世話になっております。

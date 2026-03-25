@@ -3,6 +3,7 @@ title: 'IoT×AIが実現する水耕栽培ハーブの自動生産システム'
 date: '2026-03-23'
 category: 'agriculture'
 excerpt: 'Raspberry Pi、各種センサー、AIを組み合わせた循環式水耕栽培システムの設計と実装。24時間自動モニタリングで高品質ハーブを安定生産する技術的アプローチを解説します。'
+image: '/blog/iot-ai-hydroponic-herb-production.webp'
 ---
 
 ## なぜIoT×AI水耕栽培なのか
