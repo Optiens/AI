@@ -33,16 +33,33 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
             <span class="phase-badge phase-badge--current">Phase 1</span>
             <span class="phase-status">進行中</span>
           </div>
-          <h2 class="phase-title">自宅テスト栽培・IoTシステム構築</h2>
-          <p class="phase-period">～2026年9月</p>
+          <h2 class="phase-title">自宅テスト栽培・ユニットエコノミクス証明</h2>
+          <p class="phase-period">～2026年9月（24週間計画）</p>
           <ul class="phase-items">
             <li>メタルラック1台で循環式水耕栽培開始（バジル＋マイクログリーン）</li>
             <li>RPi×2+センサー群でIoT環境モニタリング構築</li>
             <li>Claude Code×MCPによるAI制御システム安定化</li>
-            <li>栽培データ蓄積・品種別レシピ構築</li>
-            <li>販売なし（自家消費でノウハウ蓄積）</li>
+            <li>栽培データ蓄積・品種別最適パラメータの確立</li>
+            <li><strong>1株あたり生産コストの計測・ユニットエコノミクスの証明</strong></li>
+            <li>地元レストラン2-3軒への無料サンプル提供・販路テスト</li>
           </ul>
-          <p class="phase-goal"><strong>目標：</strong>IoTシステム稼働率99%、栽培成功率90%以上</p>
+          <p class="phase-goal"><strong>目標：</strong>1株あたりコストが販売価格の40%以下、IoT稼働率99%、栽培成功率90%以上</p>
+        </li>
+
+        <!-- Phase 2移行条件 -->
+        <li class="phase phase--gate" id="gate">
+          <div class="phase-header">
+            <span class="phase-badge phase-badge--gate">移行判断</span>
+          </div>
+          <h2 class="phase-title">Phase 2移行チェックリスト</h2>
+          <p class="phase-period">全条件クリアが必須</p>
+          <ul class="phase-items checklist">
+            <li>1株あたり生産コストが販売価格の40%以下</li>
+            <li>週次収穫量が安定（変動係数20%以内）</li>
+            <li>レストラン2軒以上から継続発注の約束</li>
+            <li>IoTシステムが1ヶ月以上無停止稼働</li>
+          </ul>
+          <p class="phase-goal"><strong>原則：</strong>ユニットエコノミクスの証明なくして拡大なし（破綻企業の教訓）</p>
         </li>
 
         <!-- Phase 2 -->
@@ -56,11 +73,12 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
           <ul class="phase-items">
             <li>北杜市の廃校教室（20m²）に移転</li>
             <li>パート1名雇用（週3日×4時間）</li>
-            <li>レストラン・道の駅・ECへの販売開始</li>
+            <li>レストラン3-5店舗との定期取引開始</li>
+            <li>道の駅・EC（食べチョク等）販売開始</li>
             <li>作業者はマニュアル+AIアプリの指示で運営</li>
-            <li>補助金申請（チャレンジ農業・ものづくり補助金）</li>
+            <li>毎月のコスト計算を実施・原価割れ販売を絶対に行わない</li>
           </ul>
-          <p class="phase-goal"><strong>目標：</strong>レストラン3-5店舗と取引確立、月間売上8万円</p>
+          <p class="phase-goal"><strong>目標：</strong>レストラン3-5店舗と取引確立、月間売上8万円、LED電気代比率20%以内</p>
         </li>
 
         <!-- Phase 3 -->
@@ -69,15 +87,49 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
             <span class="phase-badge">Phase 3</span>
             <span class="phase-status">計画</span>
           </div>
-          <h2 class="phase-title">拡大・横展開</h2>
-          <p class="phase-period">2027年4月～</p>
+          <h2 class="phase-title">拡大・ブランド確立</h2>
+          <p class="phase-period">2027年4月～2028年3月</p>
           <ul class="phase-items">
             <li>教室2-3室に拡大（60m²）</li>
-            <li>EC定期便サービス開始</li>
-            <li>栽培品目の拡充</li>
-            <li>仕組みの横展開（他拠点 or フランチャイズ的展開）</li>
+            <li>EC定期便サービス開始（全国配送）</li>
+            <li>栽培品目の拡充（ミニトマト・エディブルフラワー）</li>
+            <li>「高原育ちのハーブ」ブランド確立</li>
           </ul>
           <p class="phase-goal"><strong>目標：</strong>月間売上30-50万円、月間利益10-20万円</p>
+        </li>
+
+        <!-- Phase 4 -->
+        <li class="phase phase--future" id="phase4">
+          <div class="phase-header">
+            <span class="phase-badge">Phase 4</span>
+            <span class="phase-status">長期計画</span>
+          </div>
+          <h2 class="phase-title">北杜市内で複数拠点化</h2>
+          <p class="phase-period">2028年4月～2030年3月</p>
+          <ul class="phase-items">
+            <li>北杜市内の他の廃校・遊休施設へ展開（200m²以上）</li>
+            <li>パート3-5名雇用・地元雇用の創出</li>
+            <li>レストラン10店舗以上との取引ネットワーク</li>
+            <li>EC定期便の安定収益基盤構築</li>
+          </ul>
+          <p class="phase-goal"><strong>目標：</strong>年商3,000-5,000万円（試算値）</p>
+        </li>
+
+        <!-- Phase 5 -->
+        <li class="phase phase--future" id="phase5">
+          <div class="phase-header">
+            <span class="phase-badge">Phase 5</span>
+            <span class="phase-status">展望</span>
+          </div>
+          <h2 class="phase-title">仕組みの横展開</h2>
+          <p class="phase-period">2030年4月～</p>
+          <ul class="phase-items">
+            <li>「廃校×IoT水耕栽培」モデルを他地域の廃校・遊休施設に導入支援</li>
+            <li>栽培システム設計・IoT導入・データ分析を提供</li>
+            <li>現地運営は地元のオペレーターが担当</li>
+            <li>全国の廃校活用促進・地方雇用創出に貢献</li>
+          </ul>
+          <p class="phase-goal"><strong>前提：</strong>Phase 3-4の収益性が十分に証明された場合にのみ実行</p>
         </li>
 
       </ol>
@@ -87,11 +139,28 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
     <section class="section-kpis container prose">
       <h2>主要指標と目標値</h2>
       <ul class="ticks">
+        <li><strong>1株あたり生産コスト：</strong>販売価格の40%以下（Phase 1で証明）</li>
+        <li><strong>LED電気代比率：</strong>収益の20%以内（業界健全ライン）</li>
         <li><strong>栽培成功率：</strong>Phase 1完了時に90%以上</li>
         <li><strong>IoTシステム稼働率：</strong>24時間無人運転99%以上</li>
+        <li><strong>週次収穫量安定性：</strong>変動係数（CV）20%以内</li>
         <li><strong>販路：</strong>Phase 2でレストラン3-5店舗</li>
         <li><strong>月間売上：</strong>Phase 2で月8万円、Phase 3で月30-50万円</li>
-        <li><strong>生産効率：</strong>1m²あたり収穫量の継続的改善</li>
+        <li><strong>1m²あたり月間収穫量：</strong>継続的改善</li>
+      </ul>
+    </section>
+
+    <!-- ===== 破綻しないための戦略 ===== -->
+    <section class="section-research container prose">
+      <h2>破綻しないための事前調査</h2>
+      <p>
+        国内外30社以上の水耕栽培・垂直農法企業を調査し、成功パターンと失敗パターンを分析。$7億超の資金調達にもかかわらず破綻した企業群（AeroFarms、Bowery Farming等）の教訓を事業計画の各フェーズに反映しています。
+      </p>
+      <ul class="ticks">
+        <li><strong>最重要原則：</strong>ユニットエコノミクス（1株あたりの収益性）を証明してから拡大</li>
+        <li><strong>エネルギーコスト管理：</strong>LED電気代を収益の20%以内に維持（30%超で粗利5%低下）</li>
+        <li><strong>原価割れ販売の禁止：</strong>スプレッド社（京都）は稼働率99%でも原価割れ販売で破綻（負債37億円）</li>
+        <li><strong>段階的拡大：</strong>Gotham Greens（米国）は最初の農場の黒字化を確認してから13施設に段階拡大</li>
       </ul>
     </section>
 
@@ -322,6 +391,33 @@ section { padding: clamp(48px, 8vw, 80px) 0; }
   background: rgba(0,0,0,.03);
   border-left-color: #bbb;
   color: var(--muted);
+}
+
+/* ---- 移行判断ゲート ---- */
+.phase--gate {
+  background: color-mix(in srgb, var(--accent, #ea4335) 6%, transparent);
+  border: 2px dashed color-mix(in srgb, var(--accent, #ea4335) 50%, transparent);
+}
+.phase--gate::before {
+  border-color: var(--accent, #ea4335);
+  background: var(--surface);
+}
+.phase-badge--gate {
+  background: var(--accent, #ea4335);
+  box-shadow: 0 2px 8px rgba(234,67,53,.3);
+}
+.checklist li::before {
+  content: '\2610' !important;
+  color: var(--accent, #ea4335) !important;
+  font-size: 1.1em !important;
+}
+
+/* ========== Research ========== */
+.section-research {
+  background: color-mix(in srgb, var(--brand) 4%, transparent);
+  border-radius: 16px;
+  padding: clamp(32px, 5vw, 56px) clamp(20px, 4vw, 40px);
+  margin-top: -24px;
 }
 
 /* ========== KPIs ========== */
