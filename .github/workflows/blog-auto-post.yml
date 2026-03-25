@@ -1,6 +1,9 @@
 name: Auto Blog Post
 
 on:
+  push:
+    paths:
+      - '.github/workflows/blog-auto-post.yml'
   schedule:
     # 月・水・金 JST 9:03 (UTC 0:03)
     - cron: '3 0 * * 1,3,5'
