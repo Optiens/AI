@@ -5,9 +5,6 @@ on:
     # 月・水・金 JST 9:03 (UTC 0:03)
     - cron: '3 0 * * 1,3,5'
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/blog-auto-post.yml'
 
 permissions:
   contents: write
@@ -38,6 +35,19 @@ jobs:
           npm ci
           pip install google-genai pillow
 
+      - name: Collect existing articles
+        id: existing
+        run: |
+          # 既存記事のタイトル・カテゴリ・スラッグ一覧を生成
+          echo "EXISTING_ARTICLES<<ARTICLES_EOF" >> $GITHUB_ENV
+          for f in src/content/blog/*.md; do
+            slug=$(basename "$f" .md)
+            title=$(grep '^title:' "$f" | head -1 | sed "s/^title: *'\\(.*\\)'/\\1/")
+            category=$(grep '^category:' "$f" | head -1 | sed "s/^category: *'\\(.*\\)'/\\1/")
+            echo "- [$category] $title (slug: $slug)"
+          done
+          echo "ARTICLES_EOF" >> $GITHUB_ENV
+
       - name: Run Claude Code to generate blog post
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -47,14 +57,18 @@ jobs:
           claude -p "
           ブログ記事を自動生成してください。以下の手順で実行:
 
-          1. src/content/blog/ の既存記事を確認し、重複しないテーマを選定
+          【重複防止】以下は既存記事の一覧です。これらと同じテーマ・同じスラッグの記事は絶対に作成しないでください:
+          ${{ env.EXISTING_ARTICLES }}
+
+          1. 上記の既存記事と重複しないテーマを選定
              カテゴリローテーション: agriculture, technology, AI, social, announcement
-             前回と異なるカテゴリを選ぶ
-          2. .claude/skills/write-blog-article.md の手順に従い2000-3000字の記事を執筆
-          3. ファクトチェック: 統計データの出典確認、CLAUDE.md禁止表現チェック
-          4. scripts/generate-blog.py でアイキャッチ画像を生成
-          5. src/content/blog/{slug}.md と public/blog/{slug}.webp を保存
-          6. npx astro build でビルド確認
+             既存記事で最も少ないカテゴリを優先的に選ぶ
+          2. スラッグ名も既存と重複しないことを確認
+          3. .claude/skills/write-blog-article.md の手順に従い2000-3000字の記事を執筆
+          4. ファクトチェック: 統計データの出典確認、CLAUDE.md禁止表現チェック
+          5. scripts/generate-blog.py でアイキャッチ画像を生成
+          6. src/content/blog/{slug}.md と public/blog/{slug}.webp を保存
+          7. npx astro build でビルド確認
 
           注意:
           - CLAUDE.mdの禁止事項を厳守
