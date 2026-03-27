@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="事前登録ありがとうございます | Optiens">
+  <main class="thanks-page">
+    <div class="container">
+      <div class="thanks-card">
+        <div class="thanks-icon">&#10003;</div>
+        <h1>事前登録ありがとうございます</h1>
+        <p>ご登録いただいた内容を確認の上、準備が整い次第ご連絡いたします。</p>
+        <p class="sub">無料サンプルのお届けは2026年秋を予定しています。<br>ご登録いただいた飲食店様から優先的にご案内いたします。</p>
+        <a href="/" class="btn btn-primary">トップページに戻る</a>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+.thanks-page {
+  padding: 160px 0 80px;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+.container {
+  width: min(640px, 100% - 2rem);
+  margin-inline: auto;
+}
+.thanks-card {
+  text-align: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+}
+.thanks-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 32px;
+  line-height: 64px;
+  margin: 0 auto 1.5rem;
+}
+h1 {
+  font-size: clamp(22px, 3vw, 28px);
+  color: var(--heading);
+  margin: 0 0 1rem;
+}
+p {
+  color: var(--text);
+  line-height: 1.8;
+  margin: 0 0 0.5rem;
+}
+.sub {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+.btn {
+  display: inline-block;
+  padding: .85rem 2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(46,87,76,.25);
+  transition: transform .15s ease;
+}
+.btn-primary:hover { transform: translateY(-2px); }
+</style>
