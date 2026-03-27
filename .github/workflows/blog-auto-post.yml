@@ -12,7 +12,7 @@ permissions:
 jobs:
   generate-blog:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -36,29 +36,42 @@ jobs:
           pip install google-genai pillow
 
       - name: Collect existing articles
-        id: existing
         run: |
-          # 既存記事のタイトル・カテゴリ・スラッグ一覧を生成
-          echo "EXISTING_ARTICLES<<ARTICLES_EOF" >> $GITHUB_ENV
+          # 既存記事一覧をファイルに書き出し（環境変数のHEREDOC問題を回避）
+          echo "" > /tmp/existing_articles.txt
           for f in src/content/blog/*.md; do
             slug=$(basename "$f" .md)
             title=$(grep '^title:' "$f" | head -1 | sed "s/^title: *'\\(.*\\)'/\\1/")
             category=$(grep '^category:' "$f" | head -1 | sed "s/^category: *'\\(.*\\)'/\\1/")
-            echo "- [$category] $title (slug: $slug)"
+            echo "- [$category] $title (slug: $slug)" >> /tmp/existing_articles.txt
           done
-          echo "ARTICLES_EOF" >> $GITHUB_ENV
+          echo "=== Existing articles ==="
+          cat /tmp/existing_articles.txt
 
-      - name: Run Claude Code to generate blog post
+      - name: Verify secrets
+        run: |
+          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+            echo "::error::ANTHROPIC_API_KEY is not set in repository secrets"
+            exit 1
+          fi
+          if [ -z "${{ secrets.GEMINI_API_KEY }}" ]; then
+            echo "::warning::GEMINI_API_KEY is not set — images will be skipped"
+          fi
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Generate blog post
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          npm install -g @anthropic-ai/claude-code
+          EXISTING=$(cat /tmp/existing_articles.txt)
           claude -p "
           ブログ記事を自動生成してください。以下の手順で実行:
 
           【重複防止】以下は既存記事の一覧です。これらと同じテーマ・同じスラッグの記事は絶対に作成しないでください:
-          ${{ env.EXISTING_ARTICLES }}
+          ${EXISTING}
 
           1. 上記の既存記事と重複しないテーマを選定
              カテゴリローテーション: agriculture, technology, AI, social, announcement
@@ -70,12 +83,23 @@ jobs:
           6. src/content/blog/{slug}.md と public/blog/{slug}.webp を保存
           7. npx astro build でビルド確認
 
-          注意:
+          重要:
           - CLAUDE.mdの禁止事項を厳守
           - ワサビは除外（地元に大規模栽培あり）
           - 収穫まで長期間かかる品目は除外
           - 画像生成に失敗した場合はimageフィールドを省略して記事のみ公開
+          - ファイルは必ずWriteツールで書き込むこと
           " --allowedTools "Read,Write,Edit,Glob,Grep,Bash(npm*),Bash(npx*),Bash(python*),Bash(git*),WebSearch,WebFetch,Agent"
+
+      - name: Verify files were created
+        run: |
+          echo "=== New/modified files in src/content/blog/ ==="
+          git status --short src/content/blog/ public/blog/
+          if git status --short src/content/blog/ public/blog/ | grep -q .; then
+            echo "✓ New blog files detected"
+          else
+            echo "::warning::No new blog files were created by Claude Code"
+          fi
 
       - name: Build check
         run: npx astro build
@@ -90,5 +114,6 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "blog: auto-generated post $(date +%Y-%m-%d)"
+            git pull --rebase origin main
             git push origin main
           fi
