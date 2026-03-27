@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/vercel": "^8.2.6",
     "@sendgrid/mail": "^8.1.5",
+    "@supabase/supabase-js": "^2.100.1",
     "astro": "^5.13.3",
     "date-fns": "^3.6.0",
     "microcms-js-sdk": "^2.7.0",
