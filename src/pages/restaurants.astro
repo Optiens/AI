@@ -1,0 +1,257 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="飲食店の方へ | Optiens" description="清里高原産のIoT管理ハーブを、北杜市・八ヶ岳エリアの飲食店に直接お届けします。無料サンプルのお申し込みも受付中。">
+  <main>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero container">
+      <p class="hero-label">北杜市・八ヶ岳エリアの飲食店様へ</p>
+      <h1>清里高原産 IoT管理ハーブ</h1>
+      <p class="sub">
+        IoTセンサーで24時間管理された、農薬不使用の新鮮なハーブを<br>
+        当日収穫・当日配達でお届けします。
+      </p>
+    </section>
+
+    <!-- ===== 品目 ===== -->
+    <section class="lineup container prose">
+      <h2>お届けできるハーブ</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>バジル</h3>
+          <p>ジェノベーゼ・カプレーゼ・パスタに。収穫から数時間で届く鮮度。清里高原の冷涼な気候で育ったバジルは香りが豊かです。</p>
+          <span class="tag">通年供給</span>
+        </div>
+        <div class="card">
+          <h3>マイクログリーン</h3>
+          <p>サラダ・前菜の彩りに。栄養価は成熟野菜の4-40倍。小さな葉に凝縮された味と彩りで、お皿のクオリティを引き上げます。</p>
+          <span class="tag">通年供給</span>
+        </div>
+        <div class="card">
+          <h3>季節のハーブ</h3>
+          <p>ルッコラ・ディル・ミント・パセリ・シソなど、季節に合わせた品目をお届け。複数品目のセットもご用意できます。</p>
+          <span class="tag">Phase 2〜順次拡大</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 差別化 ===== -->
+    <section class="diff container prose">
+      <h2>Optiensのハーブが選ばれる理由</h2>
+      <ul class="features">
+        <li>
+          <strong>IoTで24時間管理</strong>
+          <p>温度・湿度・養液濃度・pH・CO2・照度をセンサーで常時モニタリング。環境データに基づいた栽培で品質を安定させています。</p>
+        </li>
+        <li>
+          <strong>農薬不使用</strong>
+          <p>閉鎖環境の水耕栽培のため、農薬を一切使用していません。洗わずそのままお使いいただけます。</p>
+        </li>
+        <li>
+          <strong>当日収穫・当日配達</strong>
+          <p>北杜市・八ヶ岳エリアの飲食店様には、朝収穫したハーブをその日のうちにお届けします。スーパーの流通品とは鮮度が違います。</p>
+        </li>
+        <li>
+          <strong>通年安定供給</strong>
+          <p>LED照明と温度制御により、冬季を含む年間を通じて安定した品質・量のハーブをお届けできます。「冬にバジルがない」問題を解決します。</p>
+        </li>
+        <li>
+          <strong>栽培データの見える化</strong>
+          <p>ご希望の飲食店様には、お届けするハーブの栽培環境データをお見せできます。食材の安全性・品質の裏付けとしてメニューやSNSでもご活用いただけます。</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ===== リアルタイムデータ（準備中） ===== -->
+    <section class="dashboard container prose">
+      <h2>リアルタイム栽培データ</h2>
+      <div class="placeholder-box">
+        <p class="placeholder-text">IoTダッシュボードは現在準備中です</p>
+        <p class="placeholder-sub">2026年5月より、温度・湿度・養液濃度などのリアルタイムデータを公開予定です。</p>
+      </div>
+    </section>
+
+    <!-- ===== サンプル申込（準備中） ===== -->
+    <section class="sample container prose">
+      <h2>無料サンプルのお申し込み</h2>
+      <div class="placeholder-box accent">
+        <p class="placeholder-text">サンプルお届けは現在準備中です</p>
+        <p class="placeholder-sub">2026年秋の生産開始に向けて準備を進めています。<br>ご興味のある飲食店様は、下記のお問い合わせフォームからご連絡ください。<br>準備が整い次第、優先的にご案内いたします。</p>
+        <a href="/contact" class="btn btn-primary">お問い合わせはこちら</a>
+      </div>
+    </section>
+
+    <!-- ===== 会社概要 ===== -->
+    <section class="about container prose">
+      <h2>Optiensについて</h2>
+      <p>
+        合同会社Optiens（オプティエンス）は、山梨県北杜市を拠点に、IoT×AI技術を活用した水耕栽培ハーブの生産を行っています。
+        代表はIT業界で7年の経験を持つシステムエンジニア。その技術力を農業に応用し、センサーとAIによるデータ駆動型の栽培で、高品質なハーブを安定的にお届けします。
+      </p>
+      <div class="cta">
+        <a href="/about" class="btn btn-secondary">会社情報を見る</a>
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+:root {
+  --maxw: 960px;
+  --header-offset-mobile: 84px;
+  --header-offset-desktop: 104px;
+}
+.container { width: min(var(--maxw), 100% - 2rem); margin-inline: auto; }
+section { padding: clamp(40px, 7vw, 72px) 0; }
+main {
+  padding-top: calc(env(safe-area-inset-top, 0px) + var(--header-offset-desktop));
+}
+@media (max-width: 768px) {
+  main { padding-top: calc(env(safe-area-inset-top, 0px) + var(--header-offset-mobile)); }
+}
+
+/* Hero */
+.hero { text-align: center; padding-top: clamp(8px, 2vw, 20px); }
+.hero-label {
+  display: inline-block;
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  color: var(--brand);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.hero h1 {
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.3;
+  margin: 0 0 1rem;
+  color: var(--heading);
+}
+.hero .sub {
+  color: #2b2b2b;
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.8;
+}
+
+/* Prose */
+.prose { color: var(--text); line-height: 1.9; }
+.prose h2 {
+  font-size: clamp(22px, 2.8vw, 30px);
+  margin: 0 0 1rem;
+  color: var(--heading);
+}
+
+/* Card Grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+.card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+.card h3 {
+  font-size: 1.2rem;
+  color: var(--brand);
+  margin: 0 0 0.5rem;
+}
+.card p { font-size: 0.95rem; margin: 0 0 0.75rem; }
+.tag {
+  display: inline-block;
+  background: color-mix(in srgb, var(--brand) 8%, transparent);
+  color: var(--brand);
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Features */
+.features { list-style: none; padding: 0; }
+.features li {
+  margin: 1.5rem 0;
+  padding-left: 1.5rem;
+  border-left: 3px solid var(--brand);
+}
+.features li strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--heading);
+  margin-bottom: 0.3rem;
+}
+.features li p { margin: 0; font-size: 0.95rem; }
+
+/* Diff section */
+.diff {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 4%, transparent), color-mix(in srgb, var(--brand-2) 4%, transparent));
+  border-radius: 16px;
+  padding: clamp(32px, 5vw, 56px) clamp(20px, 4vw, 40px);
+}
+
+/* Placeholder */
+.placeholder-box {
+  background: #f5f5f5;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+.placeholder-box.accent {
+  background: color-mix(in srgb, var(--brand) 4%, transparent);
+  border-color: var(--brand);
+}
+.placeholder-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--heading);
+  margin: 0 0 0.5rem;
+}
+.placeholder-sub {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0 0 1.5rem;
+  line-height: 1.7;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: .85rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(46,87,76,.25);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(46,87,76,.25); }
+.btn-secondary {
+  background: transparent;
+  color: var(--brand);
+  border: 2px solid var(--brand);
+}
+.btn-secondary:hover {
+  background: color-mix(in srgb, var(--brand) 8%, transparent);
+  transform: translateY(-2px);
+}
+.cta { margin-top: 1.25rem; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero h1 { font-size: clamp(22px, 6vw, 28px); }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
