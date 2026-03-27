@@ -97,7 +97,30 @@ CREATE TABLE devices (
 );
 
 -- ========================================
--- 6. 電力ログ（Zigbeeスイッチ経由）
+-- 6. リード管理（飲食店事前登録）
+-- ========================================
+CREATE TABLE leads (
+  id SERIAL PRIMARY KEY,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  restaurant_name TEXT NOT NULL,
+  person_name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT,
+  restaurant_type TEXT NOT NULL,       -- 'italian', 'french', 'japanese', 'cafe', 'hotel', 'other'
+  location TEXT,
+  herbs TEXT[],                         -- '{basil,microgreens,rukkola}'
+  weekly_volume TEXT,                   -- 'under500g', '500g-1kg', '1kg-2kg', 'over2kg', 'unknown'
+  message TEXT,
+  status TEXT NOT NULL DEFAULT 'new',   -- 'new', 'contacted', 'sample_sent', 'regular', 'declined'
+  notes TEXT,                           -- 内部メモ
+  followed_up_at TIMESTAMPTZ           -- 最後にフォローした日時
+);
+
+CREATE INDEX idx_leads_status ON leads (status);
+CREATE INDEX idx_leads_created ON leads (created_at DESC);
+
+-- ========================================
+-- 7. 電力ログ（Zigbeeスイッチ経由）
 -- ========================================
 CREATE TABLE power_log (
   id BIGSERIAL PRIMARY KEY,
