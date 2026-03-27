@@ -73,14 +73,88 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- ===== サンプル申込（準備中） ===== -->
+    <!-- ===== サンプル申込フォーム ===== -->
     <section class="sample container prose">
       <h2>無料サンプルのお申し込み</h2>
-      <div class="placeholder-box accent">
-        <p class="placeholder-text">サンプルお届けは現在準備中です</p>
-        <p class="placeholder-sub">2026年秋の生産開始に向けて準備を進めています。<br>ご興味のある飲食店様は、下記のお問い合わせフォームからご連絡ください。<br>準備が整い次第、優先的にご案内いたします。</p>
-        <a href="/contact" class="btn btn-primary">お問い合わせはこちら</a>
+      <div class="sample-notice">
+        <p>2026年秋の生産開始に向けて準備を進めています。事前にご登録いただいた飲食店様には、準備が整い次第、優先的に無料サンプルをお届けいたします。</p>
       </div>
+
+      <form action="/api/restaurant-inquiry" method="POST" class="restaurant-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="restaurant_name">店舗名 <span class="required">*</span></label>
+            <input type="text" id="restaurant_name" name="restaurant_name" placeholder="例: リストランテ清里" required>
+          </div>
+          <div class="form-group">
+            <label for="person_name">ご担当者名 <span class="required">*</span></label>
+            <input type="text" id="person_name" name="person_name" placeholder="例: 山田 太郎" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">メールアドレス <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="例: info@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">電話番号</label>
+            <input type="tel" id="phone" name="phone" placeholder="例: 0551-XX-XXXX">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="restaurant_type">業態 <span class="required">*</span></label>
+          <select id="restaurant_type" name="restaurant_type" required>
+            <option value="" disabled selected>選択してください</option>
+            <option value="italian">イタリアン</option>
+            <option value="french">フレンチ</option>
+            <option value="japanese">和食</option>
+            <option value="cafe">カフェ</option>
+            <option value="hotel">ホテル・旅館</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="location">店舗所在地</label>
+          <input type="text" id="location" name="location" placeholder="例: 山梨県北杜市高根町清里">
+        </div>
+
+        <div class="form-group">
+          <label>ご興味のあるハーブ（複数選択可）</label>
+          <div class="checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="basil"> バジル</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="microgreens"> マイクログリーン</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="rukkola"> ルッコラ</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="dill"> ディル</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="mint"> ミント</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="parsley"> パセリ</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="shiso"> シソ</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="other"> その他</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="volume">想定使用量（週あたり）</label>
+          <select id="volume" name="volume">
+            <option value="" disabled selected>選択してください</option>
+            <option value="under500g">500g未満</option>
+            <option value="500g-1kg">500g〜1kg</option>
+            <option value="1kg-2kg">1kg〜2kg</option>
+            <option value="over2kg">2kg以上</option>
+            <option value="unknown">まだわからない</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">ご質問・ご要望</label>
+          <textarea id="message" name="message" rows="4" placeholder="配達頻度のご希望、特定の品種のリクエスト等があればご記入ください"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-submit">事前登録する</button>
+        <p class="form-note">* 印は必須項目です。いただいた情報は無料サンプルのご案内にのみ使用します。</p>
+      </form>
     </section>
 
     <!-- ===== 会社概要 ===== -->
@@ -249,9 +323,105 @@ main {
 }
 .cta { margin-top: 1.25rem; }
 
+/* Sample Notice */
+.sample-notice {
+  background: color-mix(in srgb, var(--brand) 6%, transparent);
+  border-left: 4px solid var(--brand);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+.sample-notice p { margin: 0; }
+
+/* Restaurant Form */
+.restaurant-form {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-group {
+  margin-bottom: 1.25rem;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--heading);
+}
+.required {
+  color: var(--accent, #ea4335);
+  font-size: 0.85rem;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 12%, transparent);
+}
+.form-group textarea { resize: vertical; }
+
+/* Checkbox Group */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 4px;
+}
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 400;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--brand);
+}
+
+/* Submit Button */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.1rem;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+}
+
+.form-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.75rem;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .hero h1 { font-size: clamp(22px, 6vw, 28px); }
   .card-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
 }
 </style>
