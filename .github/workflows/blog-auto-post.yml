@@ -80,7 +80,7 @@ jobs:
           3. .claude/skills/write-blog-article.md の手順に従い2000-3000字の記事を執筆
           4. ファクトチェック: 統計データの出典確認、CLAUDE.md禁止表現チェック
           5. scripts/generate-blog.py でアイキャッチ画像を生成
-          6. src/content/blog/{slug}.md と public/blog/{slug}.webp を保存
+          6. src/content/blog/{slug}.md と public/images/blog/{slug}.webp を保存
           7. npx astro build でビルド確認
 
           重要:
@@ -94,8 +94,8 @@ jobs:
       - name: Verify files were created
         run: |
           echo "=== New/modified files in src/content/blog/ ==="
-          git status --short src/content/blog/ public/blog/
-          if git status --short src/content/blog/ public/blog/ | grep -q .; then
+          git status --short src/content/blog/ public/images/blog/
+          if git status --short src/content/blog/ public/images/blog/ | grep -q .; then
             echo "✓ New blog files detected"
           else
             echo "::warning::No new blog files were created by Claude Code"
@@ -108,7 +108,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/content/blog/ public/blog/
+          git add src/content/blog/ public/images/blog/
           # 変更がある場合のみコミット
           if git diff --cached --quiet; then
             echo "No changes to commit"
