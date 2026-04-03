@@ -4,7 +4,7 @@ Gemini Imagen 4.0（google-genai SDK）を使用
 
 使い方:
   python scripts/generate-blog.py "プロンプト" "出力ファイルパス"
-  python scripts/generate-blog.py "Hydroponic basil farm with IoT sensors" "public/blog/test.webp"
+  python scripts/generate-blog.py "Hydroponic basil farm with IoT sensors" "public/images/blog/test.webp"
 """
 
 import sys
