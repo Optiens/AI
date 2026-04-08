@@ -20,6 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Clean worktree artifacts
+        run: |
+          # .claude/worktrees/ がsubmoduleとして誤認識される問題を回避
+          rm -rf .claude/worktrees/ 2>/dev/null || true
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -37,16 +42,22 @@ jobs:
 
       - name: Collect existing articles
         run: |
-          # 既存記事一覧をファイルに書き出し（環境変数のHEREDOC問題を回避）
-          echo "" > /tmp/existing_articles.txt
+          # 既存記事一覧をファイルに書き出し
+          > /tmp/existing_articles.txt
           for f in src/content/blog/*.md; do
+            [ -f "$f" ] || continue
             slug=$(basename "$f" .md)
-            title=$(grep '^title:' "$f" | head -1 | sed "s/^title: *'\\(.*\\)'/\\1/")
-            category=$(grep '^category:' "$f" | head -1 | sed "s/^category: *'\\(.*\\)'/\\1/")
+            title=$(awk '/^title:/{gsub(/^title:[[:space:]]*[\x27"]?|[\x27"]?$/,""); print; exit}' "$f")
+            category=$(awk '/^category:/{gsub(/^category:[[:space:]]*[\x27"]?|[\x27"]?$/,""); print; exit}' "$f")
             echo "- [$category] $title (slug: $slug)" >> /tmp/existing_articles.txt
           done
           echo "=== Existing articles ==="
           cat /tmp/existing_articles.txt
+          ARTICLE_COUNT=$(wc -l < /tmp/existing_articles.txt)
+          echo "Total: ${ARTICLE_COUNT} articles"
+          if [ "$ARTICLE_COUNT" -lt 5 ]; then
+            echo "::warning::Expected 10+ articles but found only ${ARTICLE_COUNT}. Article collection may have failed."
+          fi
 
       - name: Verify secrets
         run: |
@@ -61,44 +72,87 @@ jobs:
       - name: Install Claude Code
         run: npm install -g @anthropic-ai/claude-code
 
-      - name: Generate blog post
+      - name: Generate blog post (attempt 1)
+        id: attempt1
+        continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           EXISTING=$(cat /tmp/existing_articles.txt)
           claude -p "
-          ブログ記事を自動生成してください。以下の手順で実行:
+          あなたはOptiens公式ブログの自動記事生成担当です。
+          以下の手順を必ず全てWriteツールを使って実行し、ファイルを保存してください。
 
           【重複防止】以下は既存記事の一覧です。これらと同じテーマ・同じスラッグの記事は絶対に作成しないでください:
           ${EXISTING}
 
+          【必須手順】
           1. 上記の既存記事と重複しないテーマを選定
              カテゴリローテーション: agriculture, technology, AI, social, announcement
              既存記事で最も少ないカテゴリを優先的に選ぶ
           2. スラッグ名も既存と重複しないことを確認
           3. .claude/skills/write-blog-article.md の手順に従い2000-3000字の記事を執筆
           4. ファクトチェック: 統計データの出典確認、CLAUDE.md禁止表現チェック
-          5. scripts/generate-blog.py でアイキャッチ画像を生成
-          6. src/content/blog/{slug}.md と public/images/blog/{slug}.webp を保存
-          7. npx astro build でビルド確認
+          5. scripts/generate-blog.py でアイキャッチ画像を生成（Bashツールで実行）
+          6. 【最重要】Writeツールで src/content/blog/{slug}.md にファイルを保存すること
+          7. 【最重要】画像も public/images/blog/{slug}.webp に保存されていることを確認
+          8. npx astro build でビルド確認
 
-          重要:
-          - CLAUDE.mdの禁止事項を厳守
+          【禁止事項】
+          - CLAUDE.mdの禁止事項を厳守（宇宙・SaaS外部販売・医療機関・個人向けEC等）
           - ワサビは除外（地元に大規模栽培あり）
           - 収穫まで長期間かかる品目は除外
+
+          【エラー時の対応】
           - 画像生成に失敗した場合はimageフィールドを省略して記事のみ公開
-          - ファイルは必ずWriteツールで書き込むこと
-          " --allowedTools "Read,Write,Edit,Glob,Grep,Bash(npm*),Bash(npx*),Bash(python*),Bash(git*),WebSearch,WebFetch,Agent"
+          - ファイルは必ずWriteツールで書き込むこと。書き込まずに終了しないこと。
+          " --allowedTools "Read,Write,Edit,Glob,Grep,Bash(npm*),Bash(npx*),Bash(python*),Bash(git*),WebSearch,WebFetch,Agent" --verbose
+
+      - name: Check attempt 1 result
+        id: check1
+        run: |
+          if git status --short src/content/blog/ public/images/blog/ | grep -q .; then
+            echo "result=success" >> "$GITHUB_OUTPUT"
+            echo "✓ Blog files created on attempt 1"
+          else
+            echo "result=failed" >> "$GITHUB_OUTPUT"
+            echo "::warning::Attempt 1 did not create blog files"
+          fi
+
+      - name: Generate blog post (attempt 2 - retry)
+        if: steps.check1.outputs.result == 'failed'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          EXISTING=$(cat /tmp/existing_articles.txt)
+          echo "::notice::Retrying blog generation..."
+          claude -p "
+          ブログ記事を1本生成してファイルに保存してください。
+
+          既存記事一覧（重複禁止）:
+          ${EXISTING}
+
+          手順:
+          1. .claude/skills/write-blog-article.md を読んで手順を確認
+          2. 記事を執筆（2000-3000字）
+          3. Writeツールで src/content/blog/{slug}.md に保存
+          4. python scripts/generate-blog.py でアイキャッチ画像を生成
+          5. npx astro build でビルド確認
+
+          注意: 必ずWriteツールでファイルを書き込んでから終了すること。
+          " --allowedTools "Read,Write,Edit,Glob,Grep,Bash(npm*),Bash(npx*),Bash(python*),Bash(git*),WebSearch,WebFetch,Agent" --verbose
 
       - name: Verify files were created
         run: |
-          echo "=== New/modified files in src/content/blog/ ==="
+          echo "=== New/modified files ==="
           git status --short src/content/blog/ public/images/blog/
           if git status --short src/content/blog/ public/images/blog/ | grep -q .; then
             echo "✓ New blog files detected"
           else
-            echo "::warning::No new blog files were created by Claude Code"
+            echo "::error::No blog files were created after 2 attempts"
+            exit 1
           fi
 
       - name: Build check
@@ -109,7 +163,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/content/blog/ public/images/blog/
-          # 変更がある場合のみコミット
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
