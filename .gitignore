@@ -28,4 +28,8 @@ pnpm-debug.log*
 # 社内機密ドキュメント（財務計画・投資家資料など）
 executive/finance/report/
 executive/secretary/diary/
+executive/legal-ip/registration/
 executive/ceo/decisions/
+
+# Claude Code worktrees
+.claude/worktrees/
