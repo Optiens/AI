@@ -1,6 +1,7 @@
 ---
 name: subsidy-analyst
 description: |
+  担当: セルゲイ・ペトロフ｜CFO（Chief Financial Officer）
   補助金・助成金の申請要件分析、申請書草案の作成が必要な場合に起動する。
   農水省・経産省・中小企業庁・地方自治体の補助金スキームと
   Optiensの事業内容の適合性を評価する。

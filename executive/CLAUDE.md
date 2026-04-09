@@ -16,24 +16,24 @@
       └── archive/       アーカイブ — 過去資料のバックアップ
 ```
 
-## エージェント配置表
+## 社員・エージェント配置表
 
-| 部署 | エージェント | 主な役割 |
-|---|---|---|
-| 秘書室 | `orchestrator` | 司令塔。タスク分配・結果統合 |
-| 秘書室 | `ceo-soundingboard` | 壁打ち。思考バイアス検出 |
-| リサーチ | `researcher` | 汎用リサーチ（Web検索） |
-| リサーチ | `market-researcher` | 水耕栽培・農業IoT・ハーブ市場調査 |
-| リサーチ | `advisor-agent` | 機会・リスク発見 |
-| コンテンツ制作 | `technical-writer` | ブログ記事・事業ドキュメント |
-| マーケティング | `branding-agent` | 製品名・ブランド名提案 |
-| 開発 | `critical-analyst` | 技術的死角・矛盾検出 |
-| 開発 | `review-agent` | 成果物品質チェック |
-| 財務 | `business-analyst` | KPI分析・財務シミュレーション |
-| 財務 | `subsidy-analyst` | 補助金要件分析・申請書草案 |
-| 知財・法務 | `ip-agent` | 特許調査・請求範囲ドラフト |
-| — | `strategy-agent` | 戦略整合性チェック（全部署横断） |
-| — | `project-manager` | 進捗管理・タスク分解（全部署横断） |
+| 社員名 | 役職 | エージェント | 主な役割 |
+|---|---|---|---|
+| ドミトリー・コズロフ | COO | `orchestrator` | 司令塔。タスク分配・結果統合 |
+| ドミトリー・コズロフ | COO | `ceo-soundingboard` | 壁打ち。思考バイアス検出 |
+| アレクセイ・モロゾフ | CRO | `researcher` | 汎用リサーチ（Web検索） |
+| アレクセイ・モロゾフ | CRO | `market-researcher` | 水耕栽培・農業IoT・ハーブ市場調査 |
+| アレクセイ・モロゾフ | CRO | `advisor-agent` | 機会・リスク発見 |
+| アンナ・レベデワ | CMO | `technical-writer` | ブログ記事・事業ドキュメント |
+| アンナ・レベデワ | CMO | `branding-agent` | 製品名・ブランド名提案 |
+| ヴィクトル・グロモフ | CTO | `critical-analyst` | 技術・戦略の死角・矛盾検出 |
+| セルゲイ・ペトロフ | CFO | `business-analyst` | KPI分析・財務シミュレーション |
+| セルゲイ・ペトロフ | CFO | `subsidy-analyst` | 補助金要件分析・申請書草案 |
+| アンドレイ・ジューコフ | CLO | `ip-agent` | 特許調査・請求範囲ドラフト |
+| タチアーナ・スミルノワ | CSO | `strategy-agent` | 戦略整合性チェック（全部署横断） |
+| タチアーナ・スミルノワ | CSO | `project-manager` | 進捗管理・タスク分解（全部署横断） |
+| タチアーナ・スミルノワ | CSO | `review-agent` | コード・ドキュメントのレビュー（全部署横断） |
 
 ## 全部署共通ルール
 

@@ -1,6 +1,7 @@
 ---
 name: technical-writer
 description: |
+  担当: アンナ・レベデワ｜CMO（Chief Marketing Officer）
   事業ドキュメント・補助金申請書・投資家資料・ウェブサイトコンテンツの
   作成・改訂が必要な場合に起動する。
   Optiensの事業方針・ターゲット・ロードマップに沿った正確な記述を担保する。
