@@ -4,7 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 export const solutionData = {
   title: '技術提供・導入コンサルティング',
   overview: '室内IoT水耕栽培システムの設計・構築・運用を技術者がサポート。自社農場での実証を経て、就労支援事業所・農業事業者・自治体へワンストップで提供する構想です。',
-  image: null,
+  image: '/images/solutions/technology-provision.webp',
 };
 ---
 
@@ -293,6 +293,36 @@ export const solutionData = {
       </div>
     </section>
 
+    <!-- 対応品目 -->
+    <section class="crops-section">
+      <div class="container">
+        <h2 class="section-title">対応品目</h2>
+        <p class="section-sub">通年栽培のハーブに加え、季節品目を組み合わせることで年間を通じた安定収益を目指します。</p>
+        <div class="crops-grid">
+          <div class="crops-card card">
+            <h3>通年品目</h3>
+            <ul>
+              <li>バジル（スイートバジル・タイバジル）</li>
+              <li>マイクログリーン（ブロッコリースプラウト等）</li>
+              <li>その他高単価ハーブ（ミント・ルッコラ・ディル等）</li>
+            </ul>
+          </div>
+          <div class="crops-card card">
+            <h3>夏季品目</h3>
+            <ul>
+              <li>高糖度トマト（LED補光と養液管理で糖度を最適化）</li>
+            </ul>
+          </div>
+          <div class="crops-card card">
+            <h3>冬季品目</h3>
+            <ul>
+              <li>山菜（タラの芽・コシアブラ等の促成栽培）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="cta-section">
       <div class="container text-center">
@@ -536,6 +566,21 @@ export const solutionData = {
     font-weight: 600;
     line-height: 1.5;
   }
+
+  /* 対応品目 */
+  .crops-section {
+    padding: clamp(40px, 8vw, 80px) 0;
+  }
+  .crops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .crops-card { padding: 28px; }
+  .crops-card h3 { font-size: 1.05rem; margin-bottom: 12px; color: var(--color-primary, #2e574c); }
+  .crops-card ul { padding-left: 20px; }
+  .crops-card li { margin-bottom: 6px; font-size: 0.95rem; }
 
   /* CTA */
   .cta-section {

@@ -2,21 +2,43 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="飲食店の方へ | Optiens" description="清里高原産のIoT管理ハーブを、北杜市・八ヶ岳エリアの飲食店に直接お届けします。無料サンプルのお申し込みも受付中。">
+<Layout title="農産物の販路 | Optiens" description="清里高原産のIoT管理ハーブ・野菜を、地域レストラン・業務用EC・展示会を通じてお届けします。">
   <main>
 
     <!-- ===== Hero ===== -->
     <section class="hero container">
-      <p class="hero-label">北杜市・八ヶ岳エリアの飲食店様へ</p>
-      <h1>清里高原産 IoT管理ハーブ</h1>
+      <p class="hero-label">育てたものを届ける場所</p>
+      <h1>Optiens の販路</h1>
       <p class="sub">
-        IoTセンサーで24時間管理された、農薬不使用の新鮮なハーブを<br>
-        当日収穫・当日配達でお届けします。
+        IoTセンサーで24時間管理された、農薬不使用のハーブ・野菜を<br>
+        地域レストラン・業務用EC・展示会を通じてお届けします。
       </p>
     </section>
 
+    <!-- ===== 販路一覧 ===== -->
+    <section class="channels container prose">
+      <h2>3つの販売チャネル</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>地域レストラン</h3>
+          <p>北杜市・八ヶ岳エリアの飲食店へ、朝収穫したハーブを当日配達。イタリアン・フレンチ・カフェなど、新鮮なハーブを求める店舗と直接取引します。</p>
+          <a href="#restaurant-section" class="channel-link">詳しく見る</a>
+        </div>
+        <div class="card">
+          <h3>業務用EC</h3>
+          <p>全国の飲食店・食品事業者向けに、業務用ECプラットフォームを通じて出荷。冷蔵便で鮮度を保ったままお届けします。</p>
+          <span class="tag">Phase 2〜開始予定</span>
+        </div>
+        <div class="card">
+          <h3>展示会・マルシェ</h3>
+          <p>道の駅・地域マルシェ・農業展示会に出展。IoT栽培の実演や試食を通じて、Optiensのハーブの品質を直接体験していただきます。</p>
+          <span class="tag">Phase 2〜開始予定</span>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== 品目 ===== -->
-    <section class="lineup container prose">
+    <section id="restaurant-section" class="lineup container prose">
       <h2>お届けできるハーブ</h2>
       <div class="card-grid">
         <div class="card">
@@ -75,9 +97,9 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- ===== サンプル申込フォーム ===== -->
     <section class="sample container prose">
-      <h2>無料サンプルのお申し込み</h2>
+      <h2>無料サンプル・お取引のお問い合わせ</h2>
       <div class="sample-notice">
-        <p>2026年秋の生産開始に向けて準備を進めています。事前にご登録いただいた飲食店様には、準備が整い次第、優先的に無料サンプルをお届けいたします。</p>
+        <p>2026年秋の生産開始に向けて準備を進めています。事前にご登録いただいた飲食店・事業者様には、準備が整い次第、優先的に無料サンプルをお届けいたします。</p>
       </div>
 
       <form action="/api/restaurant-inquiry" method="POST" class="restaurant-form">
@@ -417,6 +439,18 @@ main {
   color: #888;
   margin-top: 0.75rem;
 }
+
+/* Channel Link */
+.channel-link {
+  display: inline-block;
+  color: var(--brand);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--brand);
+  transition: opacity 0.2s;
+}
+.channel-link:hover { opacity: 0.7; }
 
 /* Responsive */
 @media (max-width: 640px) {
