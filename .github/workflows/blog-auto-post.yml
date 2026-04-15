@@ -104,6 +104,14 @@ jobs:
           - ワサビは除外（地元に大規模栽培あり）
           - 収穫まで長期間かかる品目は除外
 
+          【事実確認ルール（最重要）】
+          OptiensはPhase 1（自宅テスト栽培）の開始前段階です。以下を厳守する:
+          - 「センサーデータを収集しています」「モニタリングしています」など稼働中を示す現在形を使わない
+          - 具体的な実績数値（収集件数・収穫量・売上実績）は一切記載しない（架空データ禁止）
+          - 「バジルを収穫しました」「レストランに納品しています」など実績表現は禁止
+          - 自社紹介では「設計中」「構築中」「予定」「目標」を使う
+          - 技術解説記事として一般論・実装方法を解説することは可（「こうすれば実現できる」）
+
           【エラー時の対応】
           - 画像生成に失敗した場合はimageフィールドを省略して記事のみ公開
           - ファイルは必ずWriteツールで書き込むこと。書き込まずに終了しないこと。
@@ -162,11 +170,15 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Claude Codeがブログ以外のファイルを変更することがあるため、
+          # ブログ関連ファイルのみステージし、それ以外は破棄する
+          git checkout -- . 2>/dev/null || true
+          git clean -fd --exclude=src/content/blog/ --exclude=public/images/blog/ 2>/dev/null || true
           git add src/content/blog/ public/images/blog/
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
             git commit -m "blog: auto-generated post $(date +%Y-%m-%d)"
-            git pull --rebase origin main
+            git pull --rebase --autostash origin main
             git push origin main
           fi

@@ -7,6 +7,7 @@ import bgUrl from '~/assets/ai-nature-city.webp?url';
 
 // ソリューション詳細ページからデータをインポート
 import { solutionData as dataAnalysisOptimization } from './data-analysis-optimization.astro';
+import { solutionData as technologyProvision } from './technology-provision.astro';
 
 type SolutionData = {
   title: string;
@@ -16,6 +17,7 @@ type SolutionData = {
 
 const solutions: { slug: string; data: SolutionData }[] = [
   { slug: 'data-analysis-optimization', data: dataAnalysisOptimization as SolutionData },
+  { slug: 'technology-provision', data: technologyProvision as SolutionData },
 ];
 
 const safeAlt = (s: string) =>
