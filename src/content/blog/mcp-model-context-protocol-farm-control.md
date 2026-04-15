@@ -14,7 +14,7 @@ image: '/images/blog/mcp-model-context-protocol-farm-control.webp'
 
 MCPはAnthropicが2024年11月に公開したオープンな標準プロトコルです。AIモデル（Claude）と外部ツール・データソースを安全に接続するための仕様で、農業IoTの文脈では「Claudeが農場のセンサーを直接読み取り、機器を制御する」ことを可能にします。
 
-Optiensでは、Phase 1（テスト栽培）のIoTシステムにMCPサーバーを実装し、Claude Code経由でiPhoneから農場を操作する仕組みを構築しています。本記事では、その技術的な設計と実装手順を解説します。
+Optiensでは、Phase 1（テスト栽培）のIoTシステムにMCPサーバーを実装し、Claude Code経由でiPhoneから農場を操作する仕組みを設計・構築中です。本記事では、その技術的な設計と実装手順を解説します。
 
 ---
 
