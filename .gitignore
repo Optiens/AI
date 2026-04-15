@@ -33,3 +33,9 @@ executive/ceo/decisions/
 
 # Claude Code worktrees
 .claude/worktrees/
+
+# Claude Code local settings (contains API keys)
+.claude/settings.local.json
+
+# MCP server config (contains tokens)
+.mcp.json
