@@ -13,7 +13,7 @@ owner: architecture-agent
 
 ## 1. 結論（推奨案）
 
-**案C（ハイブリッド分離）を推奨する。** 具体的には、`optiens-website` はWebサイト専用のまま維持し、新規に `optiens-iot` リポジトリを作成してIoT・SaaSコードを集約する。ただし `optiens-iot` の内部構造はモノレポ的にエッジ・クラウド・管理画面を一括管理する。この構成により、Webサイトデプロイ（Vercel）とIoTシステムデプロイ（Supabase + RPi OTA）のCI/CDパイプラインを独立させつつ、IoT側コンポーネント間の共有型定義（センサーデータスキーマ等）を一元管理できる。1名体制でのコンテキスト管理コストを最小化しながら、将来のSaaSスケールアウトに耐える構造を今から確保できる点が決め手である。
+**案C（ハイブリッド分離）を推奨する。** 具体的には、`optiens-hydroponics` はWebサイト専用のまま維持し、新規に `optiens-iot` リポジトリを作成してIoT・SaaSコードを集約する。ただし `optiens-iot` の内部構造はモノレポ的にエッジ・クラウド・管理画面を一括管理する。この構成により、Webサイトデプロイ（Vercel）とIoTシステムデプロイ（Supabase + RPi OTA）のCI/CDパイプラインを独立させつつ、IoT側コンポーネント間の共有型定義（センサーデータスキーマ等）を一元管理できる。1名体制でのコンテキスト管理コストを最小化しながら、将来のSaaSスケールアウトに耐える構造を今から確保できる点が決め手である。
 
 ---
 
@@ -49,10 +49,10 @@ owner: architecture-agent
 
 ## 3. 推奨案C の詳細ディレクトリ構成
 
-### リポジトリ1: `optiens-website`（現状維持）
+### リポジトリ1: `optiens-hydroponics`（現状維持）
 
 ```
-optiens-website/               ← GitHub: optiens-website
+optiens-hydroponics/               ← GitHub: optiens-hydroponics
 ├── src/
 │   ├── pages/
 │   │   ├── index.astro
@@ -204,7 +204,7 @@ cd optiens-iot
 
 ## 5. リスクと注意点
 
-### リスク1: `optiens-website` と `optiens-iot` の型定義の乖離
+### リスク1: `optiens-hydroponics` と `optiens-iot` の型定義の乖離
 
 **リスク**: センサーデータ型定義を両リポジトリで別々に管理すると、ブログ記事やWebサイトのデータ表示部分（将来のダッシュボード埋め込み等）との整合性が崩れる。
 
@@ -245,7 +245,7 @@ cd optiens-iot
 **対策**:
 - Claude Code の `CLAUDE.md` を `optiens-iot` にも作成し、コンテキストを自動ロードする
 - Weekly で両リポジトリの `git status` を確認する習慣を設ける
-- `optiens-website` に IoT コードを追加したくなる誘惑に抗う（分離の価値はデプロイの独立性にある）
+- `optiens-hydroponics` に IoT コードを追加したくなる誘惑に抗う（分離の価値はデプロイの独立性にある）
 
 ---
 
@@ -253,7 +253,7 @@ cd optiens-iot
 
 現在（2026年3月）の段階で **Supabase移行の完了を最優先とし、他を後回しにする** 場合、一時的に案Aで素早く動かすことは合理的である。ただしその場合も、以下の制約を守ること：
 
-1. `edge/` と `supabase/` を `optiens-website` に追加する際、`astro.config.mjs` のビルド対象に含まれないよう `tsconfig.json` の `include` を明示的に設定する
+1. `edge/` と `supabase/` を `optiens-hydroponics` に追加する際、`astro.config.mjs` のビルド対象に含まれないよう `tsconfig.json` の `include` を明示的に設定する
 2. Vercel の Ignored Build Step 設定で `edge/` や `supabase/` の変更時にデプロイをスキップする
 3. Phase 1 開始前（2026年6月末）には必ず `optiens-iot` リポジトリに分離する
 
