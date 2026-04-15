@@ -2,77 +2,177 @@
 import Layout from '../../layouts/Layout.astro';
 
 export const solutionData = {
-  title: '技術提供・パートナー募集',
-  overview: '水耕栽培IoTシステムの設計・構築・運用を技術者がサポート。Raspberry Pi・Zigbee・MQTT・AI連携まで、ワンストップで対応します。',
+  title: '技術提供・導入コンサルティング',
+  overview: '室内IoT水耕栽培システムの設計・構築・運用を技術者がサポート。自社農場での実証を経て、就労支援事業所・農業事業者・自治体へワンストップで提供する構想です。',
   image: null,
 };
 ---
 
 <Layout
-  title="技術提供・パートナー募集 | Optiens"
-  description="Optiensが自社農場で実証した室内IoT水耕栽培システムを、農業事業者・就労支援事業所・自治体へ提供します。IoT制御・AI管理・クラウド蓄積を一体化したパッケージです。"
+  title="技術提供・導入コンサルティング | Optiens"
+  description="Optiensが自社農場で開発・実証を進めている室内IoT水耕栽培システムを、農業事業者・就労支援事業所・自治体へ提供予定です。IoT制御・AI管理・クラウド蓄積を一体化したパッケージです。"
 >
   <main>
     <section class="hero-section">
       <div class="container text-center">
-        <h1>技術提供・パートナー募集</h1>
-        <p class="hero-sub">室内IoT水耕栽培の設計・構築・運用を、技術者がサポートします。</p>
+        <h1>技術提供・導入コンサルティング</h1>
+        <p class="hero-sub">自社農場で開発・実証を進めている室内IoT水耕栽培の仕組みを、あなたの現場に届けます。</p>
       </div>
     </section>
 
-    <section class="intro-section">
+    <!-- 課題提起 -->
+    <section class="problem-section">
       <div class="container">
-        <div class="intro-block prose">
-          <p>
-            Optiensは、室内LED×IoT水耕栽培システムの設計・構築に特化した技術チームです。
-            Raspberry Pi・Zigbee・MQTT・AI（Claude MCP）を組み合わせたシステム設計から、
-            センサー選定・機器構成・クラウド連携まで、技術面をワンストップでサポートします。
-            水耕栽培の導入を検討中の事業者様、まずはご相談ください。
-          </p>
+        <h2 class="section-title">こんなお悩みはありませんか？</h2>
+        <div class="problem-grid">
+          <div class="problem-card">
+            <div class="problem-icon"><i class="fa-solid fa-seedling"></i></div>
+            <p>水耕栽培を始めたいが、<strong>何から手をつければよいか分からない</strong></p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-icon"><i class="fa-solid fa-temperature-half"></i></div>
+            <p>環境管理が<strong>人の経験と勘に依存</strong>しており、品質がばらつく</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-icon"><i class="fa-solid fa-microchip"></i></div>
+            <p>IoTやAIに興味があるが、<strong>技術的なハードルが高い</strong></p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+            <p>就労支援事業所で<strong>安定した作業と収益を確保</strong>したい</p>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- 提供技術 -->
+    <section class="tech-section">
+      <div class="container">
+        <h2 class="section-title">提供する技術領域</h2>
+        <p class="section-sub">ブログでも発信している技術を、導入パッケージとして提供します。</p>
+        <div class="tech-grid">
+          <div class="tech-card card">
+            <div class="tech-header">
+              <i class="fa-solid fa-wifi"></i>
+              <h3>IoTセンサー・通信設計</h3>
+            </div>
+            <p>EC/pH/水温/気温湿度/CO2/照度のセンサー群とRaspberry Piを組み合わせた環境モニタリングシステム。Zigbee・MQTT・WiFiから最適な通信プロトコルを選定します。</p>
+            <ul class="tech-tags">
+              <li>Raspberry Pi</li>
+              <li>Zigbee2MQTT</li>
+              <li>Mosquitto</li>
+              <li>MCP3008 ADC</li>
+            </ul>
+          </div>
+          <div class="tech-card card">
+            <div class="tech-header">
+              <i class="fa-solid fa-robot"></i>
+              <h3>AI制御・MCP連携</h3>
+            </div>
+            <p>Claude Code × MCP（Model Context Protocol）で農業IoTをAIから操作。センサーデータに基づく自動制御と、スマートフォンからの音声操作を実現します。</p>
+            <ul class="tech-tags">
+              <li>Claude MCP</li>
+              <li>自動制御</li>
+              <li>音声操作</li>
+            </ul>
+          </div>
+          <div class="tech-card card">
+            <div class="tech-header">
+              <i class="fa-solid fa-chart-line"></i>
+              <h3>データ蓄積・可視化</h3>
+            </div>
+            <p>MQTT経由でセンサーデータをSupabaseに蓄積し、リアルタイムダッシュボードで可視化。栽培レシピの数値化と再現性の高い生産体制を構築します。</p>
+            <ul class="tech-tags">
+              <li>Supabase</li>
+              <li>ダッシュボード</li>
+              <li>栽培レシピ</li>
+            </ul>
+          </div>
+          <div class="tech-card card">
+            <div class="tech-header">
+              <i class="fa-solid fa-lightbulb"></i>
+              <h3>LED照明・養液制御</h3>
+            </div>
+            <p>LED光スペクトルの最適化（PPFD・DLI制御）と養液管理（EC・pH自動調整）。品種ごとの最適パラメーターをデータから導き出します。</p>
+            <ul class="tech-tags">
+              <li>LED PPFD/DLI</li>
+              <li>EC/pH管理</li>
+              <li>ペリスタルティックポンプ</li>
+            </ul>
+          </div>
+          <div class="tech-card card">
+            <div class="tech-header">
+              <i class="fa-solid fa-droplet"></i>
+              <h3>循環式水耕システム設計</h3>
+            </div>
+            <p>メタルラック型の循環式水耕栽培システム。省スペースで垂直方向に栽培面積を確保し、水の使用量を土耕比80%削減。施設条件に合わせた設計を行います。</p>
+            <ul class="tech-tags">
+              <li>NFT/DWC</li>
+              <li>循環式</li>
+              <li>省スペース設計</li>
+            </ul>
+          </div>
+          <div class="tech-card card">
+            <div class="tech-header">
+              <i class="fa-solid fa-bolt"></i>
+              <h3>ユニットエコノミクス管理</h3>
+            </div>
+            <p>1株あたりの生産コスト（電力・養液・種子・人件費・減価償却）を自動計測する仕組みを構築。LED電気代比率20%以内を維持する運用設計を支援します。</p>
+            <ul class="tech-tags">
+              <li>コスト自動計測</li>
+              <li>損益分岐点管理</li>
+              <li>Zigbee電力ログ</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 対象顧客 -->
     <section class="target-section">
       <div class="container">
         <h2 class="section-title">提供対象</h2>
         <div class="target-grid">
           <div class="target-card card">
-            <div class="target-icon">🌿</div>
-            <h3>水耕栽培・農業事業者</h3>
-            <p>ハーブ・葉野菜の安定生産を目指す農業事業者。IoTによる自動化・データ管理で省力化と品質向上を実現します。</p>
-          </div>
-          <div class="target-card card">
-            <div class="target-icon">🤝</div>
+            <div class="target-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
             <h3>就労支援事業所</h3>
-            <p>就労継続支援A型・B型事業所。屋内の清潔な環境で身体的負荷が低い水耕栽培は、就労訓練の場として高い親和性を持ちます。</p>
+            <p>就労継続支援A型・B型事業所。屋内の清潔な環境で、天候に左右されない安定した作業を提供。工程が明確で反復性が高く、就労訓練プログラムとして高い親和性があります。</p>
           </div>
           <div class="target-card card">
-            <div class="target-icon">🏛️</div>
+            <div class="target-icon"><i class="fa-solid fa-seedling"></i></div>
+            <h3>水耕栽培・農業事業者</h3>
+            <p>ハーブ・葉野菜・トマト・山菜の安定生産を目指す事業者。IoTによる自動化・データ管理で省力化と品質の安定を実現します。</p>
+          </div>
+          <div class="target-card card">
+            <div class="target-icon"><i class="fa-solid fa-building-columns"></i></div>
             <h3>自治体・農業法人</h3>
-            <p>地域農業の活性化・雇用創出を目指す自治体や農業法人。遊休施設を活用した室内農場の立ち上げを支援します。</p>
+            <p>地域農業の活性化・雇用創出を目指す自治体や農業法人。遊休施設（空き家・廃校等）を活用した室内農場の立ち上げを支援します。</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- 提供パッケージ -->
     <section class="package-section">
       <div class="container">
         <h2 class="section-title">提供パッケージ</h2>
+        <p class="section-sub">規模と目的に応じた3つのプランをご用意しています。</p>
         <div class="package-grid">
           <div class="package-card card">
             <div class="package-badge">BASIC</div>
             <h3>システム設計支援</h3>
+            <p class="package-desc">「まずは相談したい」「機器だけ自分で揃えたい」方に。</p>
             <ul class="package-list">
               <li>施設調査・栽培プラン設計</li>
-              <li>機器選定・調達サポート</li>
-              <li>IoTシステム構成設計</li>
-              <li>初期セットアップ立ち合い</li>
+              <li>機器選定・調達リスト作成</li>
+              <li>IoTシステム構成設計書</li>
+              <li>初期セットアップの技術指導</li>
             </ul>
           </div>
           <div class="package-card card package-card--featured">
             <div class="package-badge package-badge--featured">STANDARD</div>
             <h3>フルパッケージ導入</h3>
+            <p class="package-desc">設計から設置・研修・月次サポートまでワンストップで。</p>
             <ul class="package-list">
               <li>施設調査・栽培プラン設計</li>
               <li>機器調達・組込み・設置</li>
@@ -85,50 +185,53 @@ export const solutionData = {
           <div class="package-card card">
             <div class="package-badge">CUSTOM</div>
             <h3>カスタム開発</h3>
+            <p class="package-desc">独自要件のある事業者・複数拠点展開を検討中の方に。</p>
             <ul class="package-list">
               <li>独自センサー・機器の組み込み</li>
-              <li>既存システムとの連携</li>
+              <li>既存システムとの連携開発</li>
               <li>専用ダッシュボード開発</li>
-              <li>複数拠点展開対応</li>
+              <li>複数拠点の一元管理設計</li>
             </ul>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Optiensの技術的強み -->
     <section class="strength-section">
       <div class="container">
-        <h2 class="section-title">Optiensの技術的強み</h2>
+        <h2 class="section-title">Optiensの強み</h2>
         <div class="strength-grid">
           <div class="strength-item">
-            <h3>自社実証データ</h3>
-            <p>自社農場での栽培データを蓄積し、品種別の最適栽培パラメーター（EC値・pH・光量・温度）を体系化します。</p>
-          </div>
-          <div class="strength-item">
-            <h3>AI×IoT一体設計</h3>
-            <p>Claude Code×MCP連携で、センサーデータをAIが解析し自動制御。専門知識がなくてもスマートフォンで農場管理が可能です。</p>
+            <h3>自社農場での実証</h3>
+            <p>提供する技術はすべて自社農場で実証してから展開します。「机上の設計」ではなく、実際の栽培現場で検証したシステムを提供する方針です。</p>
           </div>
           <div class="strength-item">
             <h3>オープン技術スタック</h3>
-            <p>Raspberry Pi・Zigbee・MQTT・Supabaseという再現可能な技術構成。ベンダーロックインを排除し、長期運用コストを抑えます。</p>
+            <p>Raspberry Pi・Zigbee・MQTT・Supabaseという再現可能な技術構成。特定メーカーへの依存を排除し、長期運用コストを抑えます。</p>
           </div>
           <div class="strength-item">
-            <h3>福祉現場への知見</h3>
-            <p>就労支援事業所の業務特性に合わせた操作性・作業設計のノウハウを蓄積。現場スタッフが使いこなせるシステムを目指します。</p>
+            <h3>AI×IoT一体設計</h3>
+            <p>Claude Code × MCP連携による自然言語での農場操作。専門知識がなくてもスマートフォンで環境管理が可能です。</p>
+          </div>
+          <div class="strength-item">
+            <h3>福祉現場を見据えた設計</h3>
+            <p>就労支援事業所の業務特性に合わせた操作性・作業設計を重視。現場スタッフが使いこなせるシステムを目指しています。</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- 導入フロー -->
     <section class="flow-section">
       <div class="container">
-        <h2 class="section-title">導入フロー</h2>
+        <h2 class="section-title">導入の流れ</h2>
         <ol class="flow-list">
           <li>
             <span class="flow-num">01</span>
             <div class="flow-content">
               <h3>お問い合わせ・ヒアリング</h3>
-              <p>施設の規模・目的・予算感についてお聞かせください。オンラインで対応します。</p>
+              <p>施設の規模・目的・予算感についてお聞かせください。オンラインまたは現地訪問で対応します。</p>
             </div>
           </li>
           <li>
@@ -148,7 +251,7 @@ export const solutionData = {
           <li>
             <span class="flow-num">04</span>
             <div class="flow-content">
-              <h3>設置・研修・稼働</h3>
+              <h3>設置・研修・稼働開始</h3>
               <p>現地設置・初期設定・スタッフ研修を実施。稼働後もリモートサポートで継続支援します。</p>
             </div>
           </li>
@@ -156,12 +259,47 @@ export const solutionData = {
       </div>
     </section>
 
+    <!-- 関連ブログ記事 -->
+    <section class="blog-section">
+      <div class="container">
+        <h2 class="section-title">関連する技術情報</h2>
+        <p class="section-sub">ブログで各技術領域の詳細を解説しています。</p>
+        <div class="blog-grid">
+          <a href="/blog/zigbee-wifi-lora-agriculture-iot-protocol" class="blog-link card">
+            <span class="blog-cat">テクノロジー</span>
+            <span class="blog-title-text">Zigbee vs WiFi vs LoRa：農業IoTに最適な無線通信プロトコルの選び方</span>
+          </a>
+          <a href="/blog/mqtt-supabase-farm-dashboard" class="blog-link card">
+            <span class="blog-cat">テクノロジー</span>
+            <span class="blog-title-text">MQTT × Supabaseで作る農業IoTリアルタイムダッシュボード</span>
+          </a>
+          <a href="/blog/mcp-model-context-protocol-farm-control" class="blog-link card">
+            <span class="blog-cat">AI</span>
+            <span class="blog-title-text">MCP（Model Context Protocol）で農業IoTをClaude Codeから操作する</span>
+          </a>
+          <a href="/blog/led-light-spectrum-herb-cultivation" class="blog-link card">
+            <span class="blog-cat">テクノロジー</span>
+            <span class="blog-title-text">LED光スペクトル最適化で変わるハーブ栽培</span>
+          </a>
+          <a href="/blog/hydroponics-startup-cost-breakeven" class="blog-link card">
+            <span class="blog-cat">栽培ビジネス</span>
+            <span class="blog-title-text">水耕栽培ビジネスの初期投資と損益分岐点</span>
+          </a>
+          <a href="/blog/a-type-welfare-hydroponics-wages" class="blog-link card">
+            <span class="blog-cat">農福連携</span>
+            <span class="blog-title-text">就労継続支援A型事業所×水耕栽培で工賃向上を実現するモデル</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
     <section class="cta-section">
       <div class="container text-center">
         <h2>まずはご相談ください</h2>
         <p>
           「水耕栽培を始めたいが、どんな機器が必要か分からない」<br />
-          「既存の設備にIoTを追加したい」「AI制御に興味がある」<br />
+          「既存の設備にIoTを追加したい」「就労支援で農業を取り入れたい」<br />
           どんな段階からでもご相談いただけます。初回相談は無料です。
         </p>
         <a href="/contact" class="cta-btn">無料相談を申し込む</a>
@@ -179,32 +317,88 @@ export const solutionData = {
   .hero-section h1 { color: #fff; margin-bottom: 16px; }
   .hero-sub { font-size: clamp(1rem, 2vw, 1.2rem); opacity: 0.88; }
 
-  .intro-section {
-    padding: clamp(32px, 6vw, 60px) 0;
-    background: var(--surface-alt, #f9fafb);
-  }
-  .intro-block { max-width: 720px; margin: 0 auto; font-size: 1.05rem; }
-
-  .target-section,
-  .package-section,
-  .strength-section,
-  .flow-section {
-    padding: clamp(40px, 8vw, 80px) 0;
-  }
-  .package-section { background: var(--surface-alt, #f9fafb); }
-
   .section-title {
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-size: clamp(1.3rem, 3vw, 1.8rem);
   }
-  .section-note {
+  .section-sub {
     text-align: center;
-    color: var(--text-muted, #666);
-    font-size: 0.9rem;
+    color: var(--muted, #666);
+    font-size: 0.95rem;
     margin-bottom: 32px;
   }
 
+  /* 課題提起 */
+  .problem-section {
+    padding: clamp(40px, 8vw, 80px) 0;
+    background: var(--surface-alt, #f9fafb);
+  }
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .problem-card {
+    padding: 24px;
+    background: var(--surface, #fff);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.06);
+    text-align: center;
+  }
+  .problem-icon {
+    font-size: 2rem;
+    color: var(--color-primary, #2e574c);
+    margin-bottom: 12px;
+  }
+  .problem-card p { font-size: 0.95rem; line-height: 1.7; }
+
+  /* 提供技術 */
+  .tech-section {
+    padding: clamp(40px, 8vw, 80px) 0;
+  }
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .tech-card { padding: 28px; }
+  .tech-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .tech-header i {
+    font-size: 1.4rem;
+    color: var(--color-primary, #2e574c);
+  }
+  .tech-header h3 { margin: 0; font-size: 1.1rem; }
+  .tech-card p { font-size: 0.95rem; line-height: 1.7; color: var(--muted, #555); }
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin-top: 12px;
+  }
+  .tech-tags li {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-primary, #2e574c);
+    background: #e8f2f0;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  /* 対象顧客 */
+  .target-section {
+    padding: clamp(40px, 8vw, 80px) 0;
+    background: var(--surface-alt, #f9fafb);
+  }
   .target-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -212,9 +406,18 @@ export const solutionData = {
     margin-top: 32px;
   }
   .target-card { padding: 28px; text-align: center; }
-  .target-icon { font-size: 2.4rem; margin-bottom: 12px; }
+  .target-icon {
+    font-size: 2.4rem;
+    color: var(--color-primary, #2e574c);
+    margin-bottom: 12px;
+  }
   .target-card h3 { margin-bottom: 8px; font-size: 1.1rem; }
+  .target-card p { font-size: 0.95rem; line-height: 1.7; }
 
+  /* パッケージ */
+  .package-section {
+    padding: clamp(40px, 8vw, 80px) 0;
+  }
   .package-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -224,7 +427,6 @@ export const solutionData = {
   .package-card { padding: 28px; }
   .package-card--featured {
     border: 2px solid var(--color-primary, #2e574c);
-    position: relative;
   }
   .package-badge {
     display: inline-block;
@@ -241,10 +443,16 @@ export const solutionData = {
     background: var(--color-primary, #2e574c);
     color: #fff;
   }
-  .package-card h3 { margin-bottom: 12px; }
+  .package-card h3 { margin-bottom: 4px; }
+  .package-desc { font-size: 0.85rem; color: var(--muted, #666); margin-bottom: 16px; }
   .package-list { padding-left: 20px; }
   .package-list li { margin-bottom: 6px; font-size: 0.95rem; }
 
+  /* 強み */
+  .strength-section {
+    padding: clamp(40px, 8vw, 80px) 0;
+    background: var(--surface-alt, #f9fafb);
+  }
   .strength-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -258,7 +466,12 @@ export const solutionData = {
     box-shadow: 0 4px 15px rgba(0,0,0,.06);
   }
   .strength-item h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--color-primary, #2e574c); }
+  .strength-item p { font-size: 0.95rem; line-height: 1.7; }
 
+  /* 導入フロー */
+  .flow-section {
+    padding: clamp(40px, 8vw, 80px) 0;
+  }
   .flow-list {
     list-style: none;
     padding: 0;
@@ -287,8 +500,44 @@ export const solutionData = {
     font-size: 0.85rem;
   }
   .flow-content h3 { margin-bottom: 4px; font-size: 1.05rem; }
-  .flow-content p { font-size: 0.95rem; color: var(--text-muted, #555); }
+  .flow-content p { font-size: 0.95rem; color: var(--muted, #555); }
 
+  /* 関連ブログ */
+  .blog-section {
+    padding: clamp(40px, 8vw, 80px) 0;
+    background: var(--surface-alt, #f9fafb);
+  }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .blog-link {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .blog-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.1);
+  }
+  .blog-cat {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-primary, #2e574c);
+  }
+  .blog-title-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* CTA */
   .cta-section {
     background: var(--color-primary, #2e574c);
     color: #fff;

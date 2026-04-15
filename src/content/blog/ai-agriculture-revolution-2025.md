@@ -1,6 +1,6 @@
 ---
 title: 'AIが変える農業の未来：2025年の最前線'
-date: '2026-03-05'
+date: '2026-03-06'
 category: 'AI'
 excerpt: '生成AIと機械学習が農業分野にもたらす革命的な変化。収量予測・病害虫検知・自動収穫ロボットの最新動向を解説します。'
 image: '/images/blog/ai-agriculture-revolution.png'

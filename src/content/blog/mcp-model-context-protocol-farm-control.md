@@ -1,6 +1,6 @@
 ---
 title: 'MCP（Model Context Protocol）で農業IoTをClaude Codeから操作する：Raspberry Pi MCPサーバーの実装'
-date: '2026-04-06'
+date: '2026-04-01'
 category: 'AI'
 excerpt: 'Anthropicが策定したMCP（Model Context Protocol）をRaspberry Piに実装し、Claude Codeから農業IoTシステムを自然言語で操作する手法を解説。センサーデータ取得から機器制御まで、AIエージェントによる農場管理の実践例を紹介します。'
 image: '/images/blog/mcp-model-context-protocol-farm-control.webp'

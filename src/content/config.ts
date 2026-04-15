@@ -5,7 +5,7 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.string(),
-    category: z.enum(['AI', 'agriculture', 'technology', 'social', 'announcement']),
+    category: z.enum(['AI', 'agriculture', 'business', 'technology', 'welfare', 'social', 'announcement']),
     excerpt: z.string(),
     image: z.string().optional(),
   }),

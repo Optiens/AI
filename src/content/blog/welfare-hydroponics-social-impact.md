@@ -1,7 +1,7 @@
 ---
 title: '就労支援×室内水耕栽培：農福連携が生み出す新たな社会モデルの可能性'
 date: '2026-03-30'
-category: 'social'
+category: 'welfare'
 excerpt: '障害者の就労機会創出と農業の担い手不足を同時に解決する「農福連携」。室内LED水耕栽培との組み合わせは就労支援事業所に安定した作業環境と収益モデルをもたらす可能性を持つ。最新事例と課題を解説する。'
 image: '/images/blog/welfare-hydroponics-social-impact.webp'
 ---

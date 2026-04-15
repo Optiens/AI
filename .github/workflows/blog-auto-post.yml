@@ -90,8 +90,11 @@ jobs:
           【必須手順】
           1. src/content/blog/_project-status.md を最初に読み、Optiensの現在の進捗状況を把握する
           2. 上記の既存記事と重複しないテーマを選定
-             カテゴリローテーション: agriculture, technology, AI, social, announcement
-             既存記事で最も少ないカテゴリを優先的に選ぶ
+             カテゴリローテーション（6カテゴリ）: agriculture, business, technology, welfare, AI, announcement
+             既存記事で最も少ないカテゴリを優先的に選ぶ（カテゴリバランス最優先）
+             月曜: agriculture/business/welfareから最少を選択
+             水曜: technology/AIから最少を選択
+             金曜: 全カテゴリから最少を選択
           3. スラッグ名も既存と重複しないことを確認
           4. .claude/skills/write-blog-article.md の手順に従い2000-3000字の記事を執筆
           5. ファクトチェック: _project-status.mdとの整合性確認、統計データの出典確認、CLAUDE.md禁止表現チェック
@@ -99,6 +102,15 @@ jobs:
           7. 【最重要】Writeツールで src/content/blog/{slug}.md にファイルを保存すること
           8. 【最重要】画像も public/images/blog/{slug}.webp に保存されていることを確認
           9. npx astro build でビルド確認
+
+          【カテゴリ戦略（Phase 5を見据えたコンテンツマーケティング）】
+          ブログの目的は「水耕栽培の魅力を発信→新規事業者を増やす→Optiensの技術・機材導入の受注」。
+          - agriculture: 水耕栽培の魅力・始め方（新規参入者向け）
+          - business: 栽培ビジネスの経営情報（事業者・就労支援事業所の管理者向け）
+          - technology: IoT×水耕栽培の技術力アピール（導入検討者向け）
+          - welfare: 農福連携・就労支援での水耕栽培活用（Phase 5の直接ターゲット）
+          - AI: AI×農業の最前線（メディア露出狙い）
+          - announcement: 事業進捗報告
 
           【禁止事項】
           - CLAUDE.mdの禁止事項を厳守（宇宙・SaaS外部販売・医療機関・個人向けEC等）
@@ -144,11 +156,12 @@ jobs:
           ${EXISTING}
 
           手順:
-          1. .claude/skills/write-blog-article.md を読んで手順を確認
-          2. 記事を執筆（2000-3000字）
-          3. Writeツールで src/content/blog/{slug}.md に保存
-          4. python scripts/generate-blog.py でアイキャッチ画像を生成
-          5. npx astro build でビルド確認
+          1. .claude/skills/write-blog-article.md を読んで手順を確認（カテゴリ6種・ローテーションルール必読）
+          2. 既存記事で最も少ないカテゴリを選択（曜日ルール: 月=agriculture/business/welfare, 水=technology/AI, 金=全体最少）
+          3. 記事を執筆（2000-3000字）
+          4. Writeツールで src/content/blog/{slug}.md に保存
+          5. python scripts/generate-blog.py でアイキャッチ画像を生成
+          6. npx astro build でビルド確認
 
           注意: 必ずWriteツールでファイルを書き込んでから終了すること。
           " --allowedTools "Read,Write,Edit,Glob,Grep,Bash(npm*),Bash(npx*),Bash(python*),Bash(git*),WebSearch,WebFetch,Agent" --verbose
