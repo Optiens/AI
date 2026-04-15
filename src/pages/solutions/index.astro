@@ -6,7 +6,6 @@ import { Image } from 'astro:assets';
 import bgUrl from '~/assets/ai-nature-city.webp?url';
 
 // ソリューション詳細ページからデータをインポート
-import { solutionData as dataAnalysisOptimization } from './data-analysis-optimization.astro';
 import { solutionData as technologyProvision } from './technology-provision.astro';
 
 type SolutionData = {
@@ -16,7 +15,6 @@ type SolutionData = {
 };
 
 const solutions: { slug: string; data: SolutionData }[] = [
-  { slug: 'data-analysis-optimization', data: dataAnalysisOptimization as SolutionData },
   { slug: 'technology-provision', data: technologyProvision as SolutionData },
 ];
 
@@ -47,7 +45,7 @@ const isImageMeta = (src: unknown) =>
               const href = `/solutions/${encodeURIComponent(solution.slug)}`;
               const d = solution.data;
               return (
-                <article class="card solutions-item" key={solution.slug}>
+                <article class="card solutions-item">
                   <a href={href} class="solutions-item-link" aria-label={`${d.title} の詳細へ`}>
                     <div class="solutions-thumbnail-wrapper">
                       {isImageMeta(d.image) ? (
