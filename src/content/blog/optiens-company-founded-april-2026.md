@@ -1,6 +1,6 @@
 ---
 title: '合同会社Optiens、設立のお知らせ：室内IoT水耕栽培で農業の新しいかたちへ'
-date: '2026-04-01'
+date: '2026-04-05'
 category: 'announcement'
 excerpt: '2026年4月、合同会社Optiensを設立しました。山梨県北杜市を拠点に、室内LED×IoT水耕栽培システムの開発・実証から、就労支援事業所への全国展開を目指す私たちの挑戦が、いよいよ法人として始まります。'
 image: '/images/blog/optiens-company-founded-april-2026.webp'
