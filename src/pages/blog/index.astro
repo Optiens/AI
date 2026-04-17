@@ -84,7 +84,7 @@ function categoryUrl(cat: BlogCategory | '') {
       <div class="container blog-grid">
         {paged.length > 0 ? (
           paged.map((post) => (
-            <a href={`/blog/${post.id}`} class="blog-card-link" aria-label={`${post.data.title} の詳細`}>
+            <a href={`/blog/${post.id.replace(/\.md$/, '')}`} class="blog-card-link" aria-label={`${post.data.title} の詳細`}>
               <article class="card blog-card">
                 {post.data.image && (
                   <div class="card-thumbnail">
