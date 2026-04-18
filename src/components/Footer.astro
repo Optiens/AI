@@ -1,14 +1,28 @@
 ---
 ---
 <footer>
-  <div class="container">
-    <p>&copy; {new Date().getFullYear()} Optiens. All rights reserved.</p>
+  <div class="container footer-grid">
+    <div class="footer-company">
+      <p class="footer-brand">合同会社Optiens</p>
+      <p class="footer-address">〒407-0301 山梨県北杜市高根町清里3545番地2483</p>
+      <p class="footer-email"><a href="mailto:info@optiens.com">info@optiens.com</a></p>
+    </div>
     <nav class="footer-nav">
+      <ul>
+        <li><a href="/about">ABOUT</a></li>
+        <li><a href="/solutions/technology-provision">SOLUTIONS</a></li>
+        <li><a href="/market">MARKET</a></li>
+        <li><a href="/blog">BLOG</a></li>
+        <li><a href="/contact">CONTACT</a></li>
+      </ul>
+    </nav>
+    <nav class="footer-legal">
       <ul>
         <li><a href="/privacy-policy">PRIVACY POLICY</a></li>
         <li><a href="/site-policy">SITE POLICY</a></li>
       </ul>
     </nav>
+    <p class="footer-copy">&copy; {new Date().getFullYear()} Optiens. All rights reserved.</p>
   </div>
 </footer>
 
@@ -16,45 +30,89 @@
   footer {
     background: var(--surface);
     color: var(--text);
-    padding: 40px 0;
-    text-align: center;
-    font-size: 0.9em;
+    padding: 48px 0 32px;
+    font-size: 0.88em;
     margin-top: auto;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* ヘッダーと対称的な影を追加 */
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
   }
-  footer .container {
+  .footer-grid {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px 40px;
+    align-items: start;
   }
-  footer p {
-    margin-bottom: 15px;
-    color: inherit; /* 親要素のテキスト色を継承 */
+
+  /* 会社情報（左） */
+  .footer-company { grid-column: 1; }
+  .footer-brand {
+    font-weight: 700;
+    font-size: 1.05em;
+    margin: 0 0 4px;
+    color: var(--heading, #111);
   }
-  .footer-nav ul {
+  .footer-address, .footer-email {
+    margin: 0;
+    color: var(--muted, #666);
+    font-size: .92em;
+    line-height: 1.6;
+  }
+  .footer-email a {
+    color: var(--brand, #2e574c);
+    text-decoration: none;
+  }
+  .footer-email a:hover { text-decoration: underline; }
+
+  /* ナビ（右） */
+  .footer-nav { grid-column: 2; grid-row: 1; }
+  .footer-nav ul, .footer-legal ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 6px 20px;
   }
-  .footer-nav li {
-    margin: 0 15px;
-  }
-  .footer-nav a {
+  .footer-nav a, .footer-legal a {
     color: var(--text);
     text-decoration: none;
-    transition: color 0.3s ease;
+    font-weight: 600;
+    transition: color 0.2s;
   }
-  .footer-nav a:hover {
-    color: var(--text);
-    text-decoration: underline; /* 下線を追加 */
+  .footer-nav a:hover, .footer-legal a:hover {
+    color: var(--brand, #2e574c);
+    text-decoration: underline;
+  }
+
+  /* リーガル */
+  .footer-legal {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+  .footer-legal a {
+    font-weight: 400;
+    font-size: .88em;
+    color: var(--muted, #666);
+  }
+
+  /* コピーライト */
+  .footer-copy {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin: 0;
+    color: var(--muted, #666);
+    font-size: .85em;
   }
 
   @media (max-width: 768px) {
-    .footer-nav li {
-      margin: 5px 10px;
+    .footer-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
     }
+    .footer-nav { grid-column: 1; grid-row: auto; }
+    .footer-nav ul { justify-content: center; }
+    .footer-legal ul { justify-content: center; }
   }
 </style>
