@@ -125,6 +125,25 @@ import founderPhoto from '../assets/founder.jpg?url';
         </aside>
 
 
+        <!-- 3) 会社概要 -->
+        <section class="company-info">
+          <h2>会社概要</h2>
+          <table class="info-table">
+            <tbody>
+              <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
+              <tr><th>英字表記</th><td>Optiens LLC</td></tr>
+              <tr><th>設立</th><td>2026年4月6日</td></tr>
+              <tr><th>代表社員</th><td>髙橋大地</td></tr>
+              <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
+              <tr><th>資本金</th><td>100,000円</td></tr>
+              <tr><th>事業内容</th><td>IoT水耕栽培システムの開発・運用支援、ハーブ生産・販売</td></tr>
+              <tr><th>メール</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
+              <tr><th>法人番号</th><td>9090003003025</td></tr>
+              <tr><th>インボイス</th><td>適格請求書発行事業者 申請中</td></tr>
+            </tbody>
+          </table>
+        </section>
+
       </div>
     </section>
   </main>
@@ -328,6 +347,54 @@ import founderPhoto from '../assets/founder.jpg?url';
 @media (max-width: 520px){
   .founder-layout{ --photo-size: 78px; --badge-size: 24px; column-gap: 14px; }
   .founder-badge{ bottom: -6px; left: 6px; }
+}
+
+/* =========================================================
+   会社概要
+   ========================================================= */
+.company-info{
+  --founder-gap: clamp(36px, 6vw, 80px);
+  max-width: 1000px;
+  margin: var(--founder-gap) auto 0;
+}
+.company-info h2{
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  margin: 0 0 1.5rem;
+  color: var(--heading, #111);
+}
+.info-table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(14px, 1.6vw, 16px);
+  line-height: 1.7;
+}
+.info-table th,
+.info-table td{
+  padding: 12px 16px;
+  border-bottom: 1px solid color-mix(in srgb, #000 8%, transparent);
+  text-align: left;
+  vertical-align: top;
+}
+.info-table th{
+  width: 140px;
+  font-weight: 700;
+  color: var(--heading, #111);
+  white-space: nowrap;
+}
+.info-table td{
+  color: var(--text, #1a1a1a);
+}
+.info-table a{
+  color: var(--brand, #2e574c);
+  text-decoration: none;
+}
+.info-table a:hover{
+  text-decoration: underline;
+}
+@media (max-width: 520px){
+  .info-table th{ width: auto; display: block; padding-bottom: 0; border-bottom: none; font-size: .85em; color: var(--muted, #666); }
+  .info-table td{ display: block; padding-top: 2px; }
 }
 
 /* a11y: 動画を無効化 */
