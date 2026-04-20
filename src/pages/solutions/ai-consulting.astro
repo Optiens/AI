@@ -128,6 +128,34 @@ import Layout from '../../layouts/Layout.astro';
       </div>
     </section>
 
+    <!-- サンプルレポート -->
+    <section class="sample-section">
+      <div class="container">
+        <h2 class="section-title">診断レポートのサンプル</h2>
+        <p class="section-sub">実際にお渡しする提案書のイメージをご覧いただけます。</p>
+        <div class="sample-grid">
+          <a href="/solutions/ai-consulting/sample-pension" class="sample-card card">
+            <div class="sample-icon"><i class="fa-solid fa-bed"></i></div>
+            <h3>ペンション・宿泊業</h3>
+            <p>多言語対応・口コミ返信・SNS投稿の自動化で<strong>月25時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/solutions/ai-consulting/sample-restaurant" class="sample-card card">
+            <div class="sample-icon"><i class="fa-solid fa-utensils"></i></div>
+            <h3>カフェ＆レストラン</h3>
+            <p>SNS毎日投稿・LINE配信・予約一元化で<strong>月18時間削減+売上増</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/solutions/ai-consulting/sample-construction" class="sample-card card">
+            <div class="sample-icon"><i class="fa-solid fa-hammer"></i></div>
+            <h3>工務店・建設業</h3>
+            <p>見積自動生成・報告書効率化・別荘管理で<strong>月35時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- 業種別の活用例 -->
     <section class="usecase-section">
       <div class="container">
@@ -346,6 +374,32 @@ import Layout from '../../layouts/Layout.astro';
     margin-bottom: 12px;
   }
   .problem-card p { font-size: 0.95rem; line-height: 1.7; }
+
+  /* サンプルレポート */
+  .sample-section {
+    padding: clamp(48px, 8vw, 80px) 0;
+  }
+  .sample-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .sample-card {
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sample-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+  .sample-icon { font-size: 2rem; color: var(--color-primary, #2e574c); }
+  .sample-card h3 { font-size: 1.05rem; margin: 0; }
+  .sample-card p { font-size: 0.9rem; line-height: 1.6; color: var(--muted, #555); flex: 1; }
+  .sample-link { font-size: 0.85rem; font-weight: 600; color: var(--color-primary, #2e574c); }
+  .sample-card:hover .sample-link { text-decoration: underline; }
 
   /* できること */
   .value-section {

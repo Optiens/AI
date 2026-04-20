@@ -1,0 +1,380 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout
+  title="AI活用診断レポート サンプル（ペンション・宿泊業）| Optiens"
+  description="八ヶ岳エリアのペンション・宿泊業向けAI活用診断レポートのサンプルです。多言語対応・口コミ返信・SNS投稿の自動化で月25時間の業務削減を提案します。"
+>
+  <main>
+    <section class="hero-section">
+      <div class="container">
+        <a href="/solutions/ai-consulting" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
+        <p class="hero-badge">SAMPLE REPORT</p>
+        <h1>AI活用診断レポート<br class="sp-only" />— ペンション・宿泊業</h1>
+        <p class="hero-sub">これは提案書のサンプルです。実際の診断では、貴社の業務に合わせた個別の提案を行います。</p>
+      </div>
+    </section>
+
+    <article class="report-body">
+      <div class="container">
+
+        <!-- 事業概要 -->
+        <section class="report-section">
+          <h2>1. 事業概要</h2>
+          <div class="info-table">
+            <div class="info-row"><span class="info-label">業種</span><span class="info-value">ペンション経営（1日3組限定）</span></div>
+            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">オーナー夫婦 + パート1名</span></div>
+            <div class="info-row"><span class="info-label">主な顧客</span><span class="info-value">国内ファミリー（70%）、海外個人旅行者（30%）</span></div>
+            <div class="info-row"><span class="info-label">予約経路</span><span class="info-value">Booking.com、じゃらん、自社HP、電話</span></div>
+            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">海外対応の負荷、SNS更新の停滞、リピーター管理</span></div>
+          </div>
+        </section>
+
+        <!-- 課題 -->
+        <section class="report-section">
+          <h2>2. 現状の業務フローと課題</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>業務</th><th>頻度</th><th>所要時間/回</th><th>月間合計</th><th>課題</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>海外ゲストへのメール返信</td><td>日10〜15件（繁忙期）</td><td>15〜30分</td><td>約20時間</td><td>英語対応に時間がかかる</td></tr>
+                <tr><td>OTA口コミ返信</td><td>週5〜10件</td><td>10〜15分</td><td>約6時間</td><td>後回しにしがち</td></tr>
+                <tr><td>SNS投稿（Instagram）</td><td>実際は月2回</td><td>30〜60分</td><td>約2時間</td><td>文章作成で止まる</td></tr>
+                <tr><td>予約確認メール</td><td>日2〜3件</td><td>5〜10分</td><td>約4時間</td><td>テンプレなし</td></tr>
+                <tr><td>経理（売上入力）</td><td>週1回</td><td>2時間</td><td>約8時間</td><td>手入力</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="highlight-box">
+            <strong>月間の削減可能時間（推定）: 約25〜30時間</strong>
+          </div>
+        </section>
+
+        <!-- 提案 -->
+        <section class="report-section">
+          <h2>3. AI活用の提案</h2>
+
+          <div class="priority-label priority-a">優先度A — すぐに効果が出る</div>
+
+          <div class="proposal-card">
+            <h3>提案1: 多言語メール返信の自動下書き生成</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月15〜18時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
+              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
+            </div>
+            <p><strong>現状</strong>: 英語メールを1通ずつGoogle翻訳しながら手書き</p>
+            <p><strong>改善後</strong>: AIに日本語で要点を入力→英語返信文を自動生成→確認して送信</p>
+            <div class="prompt-example">
+              <p class="prompt-label">プロンプト例</p>
+              <pre>あなたは八ヶ岳のペンション「〇〇」のオーナーです。
+以下のゲストからのメールに、丁寧でフレンドリーな英語で返信してください。
+
+【宿の基本情報】
+- チェックイン: 15:00〜18:00
+- チェックアウト: 10:00
+- 駐車場: 無料2台
+- 最寄駅: 小淵沢駅（送迎あり・要予約）
+
+【ゲストからのメール】
+{ここに貼り付け}
+
+【返信のトーン】温かく、カジュアルすぎず。地域の魅力を1文添える。</pre>
+            </div>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案2: OTA口コミ返信の効率化</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月4〜5時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 返信率改善→検索順位向上</span>
+            </div>
+            <p><strong>現状</strong>: 面倒で後回し→返信率30%程度</p>
+            <p><strong>改善後</strong>: 口コミをコピペ→AIが返信案を生成→微調整して投稿。返信率90%以上へ。</p>
+          </div>
+
+          <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
+
+          <div class="proposal-card">
+            <h3>提案3: Instagram投稿文の自動生成</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-camera"></i> 投稿頻度: 月2回→週2〜3回</span>
+            </div>
+            <p>写真の説明を2〜3行入力→AIがキャプション+ハッシュタグを生成。フォロワー増・直接予約比率の向上が期待できます。</p>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案4: 予約確認メールのテンプレート化</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 無料〜月$20</span>
+            </div>
+            <p>Gmailテンプレート or Zapier連携で、予約確認・リマインドを半自動化。</p>
+          </div>
+
+          <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
+
+          <div class="proposal-card">
+            <h3>提案5〜6: 宿泊プラン多言語化、リピーター管理</h3>
+            <p>OTAのプラン説明文の多言語化、NotionでのCRM構築（宿泊日・好み・記念日管理）など、基盤ができた後に段階的に拡張。</p>
+          </div>
+        </section>
+
+        <!-- ROI -->
+        <section class="report-section">
+          <h2>4. 投資対効果（ROI）</h2>
+          <div class="roi-grid">
+            <div class="roi-card">
+              <p class="roi-number">25時間</p>
+              <p class="roi-label">月間削減時間</p>
+            </div>
+            <div class="roi-card">
+              <p class="roi-number">¥37,500</p>
+              <p class="roi-label">時間価値換算/月</p>
+            </div>
+            <div class="roi-card">
+              <p class="roi-number">¥3,000</p>
+              <p class="roi-label">必要投資/月</p>
+            </div>
+            <div class="roi-card accent">
+              <p class="roi-number">¥34,500</p>
+              <p class="roi-label">純効果/月</p>
+            </div>
+          </div>
+          <p class="roi-note">※時給1,500円で換算。間接効果（OTA検索順位改善、SNSフォロワー増→直接予約増）を含めると実質的な効果はさらに大きくなります。</p>
+        </section>
+
+        <!-- ロードマップ -->
+        <section class="report-section">
+          <h2>5. 導入ロードマップ</h2>
+          <div class="roadmap">
+            <div class="roadmap-month">
+              <h3>1ヶ月目 — 基盤構築</h3>
+              <ul>
+                <li>Week 1: AIツールのアカウント開設、基本操作レクチャー</li>
+                <li>Week 2: 多言語メール返信プロンプトの作成・調整</li>
+                <li>Week 3: 口コミ返信プロンプトの作成・運用開始</li>
+                <li>Week 4: 効果測定（削減時間の記録）</li>
+              </ul>
+            </div>
+            <div class="roadmap-month">
+              <h3>2ヶ月目 — 拡張</h3>
+              <ul>
+                <li>Week 1: Instagram投稿プロンプト整備</li>
+                <li>Week 2: 予約確認メールのテンプレート化</li>
+                <li>Week 3: Zapier連携検討</li>
+                <li>Week 4: 効果測定</li>
+              </ul>
+            </div>
+            <div class="roadmap-month">
+              <h3>3ヶ月目 — 最適化</h3>
+              <ul>
+                <li>Week 1-2: プロンプト精度改善、運用の定着確認</li>
+                <li>Week 3: リピーター管理の仕組み設計</li>
+                <li>Week 4: 総合振り返り・次フェーズ判断</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </article>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container text-center">
+        <h2>あなたの事業でも診断してみませんか？</h2>
+        <p>業種・規模に合わせた具体的な提案をお届けします。<br />初回相談は無料です。</p>
+        <a href="/contact" class="cta-btn">無料相談を申し込む</a>
+        <div class="cta-links">
+          <a href="/solutions/ai-consulting/sample-restaurant">飲食業のサンプルを見る</a>
+          <a href="/solutions/ai-consulting/sample-construction">工務店のサンプルを見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, var(--color-primary, #2e574c) 0%, #1a3a33 100%);
+    color: #fff;
+    padding: clamp(40px, 8vw, 72px) 0 clamp(32px, 6vw, 56px);
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  .back-link:hover { color: #fff; }
+  .hero-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    background: rgba(255,255,255,0.15);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .hero-section h1 { color: #fff; font-size: clamp(1.4rem, 3.5vw, 2rem); margin-bottom: 16px; line-height: 1.4; }
+  .hero-sub { opacity: 0.85; font-size: 0.95rem; }
+  .sp-only { display: none; }
+  @media (max-width: 600px) { .sp-only { display: block; } }
+
+  /* Report body */
+  .report-body { padding: clamp(40px, 8vw, 72px) 0; }
+  .report-section { margin-bottom: 48px; }
+  .report-section h2 {
+    font-size: 1.3rem;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-primary, #2e574c);
+    margin-bottom: 20px;
+  }
+
+  /* Info table */
+  .info-table { display: flex; flex-direction: column; gap: 8px; }
+  .info-row { display: flex; gap: 16px; padding: 8px 0; border-bottom: 1px solid #eee; }
+  .info-label { font-weight: 600; min-width: 100px; color: var(--color-primary, #2e574c); font-size: 0.9rem; }
+  .info-value { font-size: 0.9rem; }
+
+  /* Table */
+  .table-wrapper { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: var(--color-primary, #2e574c); color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f9fafb; }
+
+  .highlight-box {
+    background: #e8f2f0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-size: 0.95rem;
+    color: var(--color-primary, #2e574c);
+  }
+
+  /* Priority labels */
+  .priority-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 24px 0 12px;
+  }
+  .priority-a { background: #dcfce7; color: #166534; }
+  .priority-b { background: #fef3c7; color: #92400e; }
+  .priority-c { background: #f3f4f6; color: #374151; }
+
+  /* Proposal cards */
+  .proposal-card {
+    background: var(--surface, #fff);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .proposal-card h3 { font-size: 1.05rem; margin-bottom: 12px; }
+  .proposal-card p { font-size: 0.9rem; line-height: 1.7; margin-bottom: 8px; }
+  .proposal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .meta-item {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary, #2e574c);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Prompt example */
+  .prompt-example {
+    background: #1a1a2e;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
+  .prompt-example pre {
+    color: #e2e8f0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+  }
+
+  /* ROI */
+  .roi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .roi-card {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .roi-card.accent { background: var(--color-primary, #2e574c); color: #fff; }
+  .roi-number { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+  .roi-card.accent .roi-number { color: #fff; }
+  .roi-label { font-size: 0.8rem; color: var(--muted, #666); }
+  .roi-card.accent .roi-label { color: rgba(255,255,255,0.8); }
+  .roi-note { font-size: 0.8rem; color: var(--muted, #666); margin-top: 12px; }
+
+  /* Roadmap */
+  .roadmap { display: flex; flex-direction: column; gap: 20px; }
+  .roadmap-month {
+    background: #f9fafb;
+    border-left: 4px solid var(--color-primary, #2e574c);
+    padding: 20px 24px;
+    border-radius: 0 8px 8px 0;
+  }
+  .roadmap-month h3 { font-size: 1rem; margin-bottom: 10px; color: var(--color-primary, #2e574c); }
+  .roadmap-month ul { padding-left: 20px; margin: 0; }
+  .roadmap-month li { font-size: 0.9rem; margin-bottom: 4px; line-height: 1.6; }
+
+  /* CTA */
+  .cta-section {
+    background: var(--color-primary, #2e574c);
+    color: #fff;
+    padding: clamp(48px, 8vw, 72px) 0;
+  }
+  .cta-section h2 { color: #fff; margin-bottom: 12px; }
+  .cta-section p { opacity: 0.9; margin-bottom: 24px; line-height: 1.8; }
+  .cta-btn {
+    display: inline-block;
+    background: #fff;
+    color: var(--color-primary, #2e574c);
+    font-weight: 700;
+    padding: 14px 36px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+  .cta-links {
+    margin-top: 20px;
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-links a { color: rgba(255,255,255,0.8); font-size: 0.85rem; text-decoration: underline; }
+  .cta-links a:hover { color: #fff; }
+</style>

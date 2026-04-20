@@ -1,0 +1,308 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout
+  title="AI活用診断レポート サンプル（工務店・建設業）| Optiens"
+  description="八ヶ岳エリアの工務店・建設業向けAI活用診断レポートのサンプルです。見積書自動生成・報告書効率化・別荘管理の自動化で月35時間の削減を提案します。"
+>
+  <main>
+    <section class="hero-section">
+      <div class="container">
+        <a href="/solutions/ai-consulting" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
+        <p class="hero-badge">SAMPLE REPORT</p>
+        <h1>AI活用診断レポート<br class="sp-only" />— 工務店・建設業</h1>
+        <p class="hero-sub">これは提案書のサンプルです。実際の診断では、貴社の業務に合わせた個別の提案を行います。</p>
+      </div>
+    </section>
+
+    <article class="report-body">
+      <div class="container">
+
+        <section class="report-section">
+          <h2>1. 事業概要</h2>
+          <div class="info-table">
+            <div class="info-row"><span class="info-label">業種</span><span class="info-value">工務店（新築・リフォーム・別荘管理）</span></div>
+            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">代表 + 現場監督1名 + 事務1名 + 職人4名（外注含む）</span></div>
+            <div class="info-row"><span class="info-label">年間施工</span><span class="info-value">新築2〜3棟、リフォーム15〜20件、別荘管理30棟</span></div>
+            <div class="info-row"><span class="info-label">集客経路</span><span class="info-value">紹介（60%）、Google検索（20%）、不動産会社経由（20%）</span></div>
+            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">見積作成に時間がかかる、事務作業を減らしたい、写真報告がおっくう</span></div>
+          </div>
+        </section>
+
+        <section class="report-section">
+          <h2>2. 現状の業務フローと課題</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>業務</th><th>頻度</th><th>月間合計</th><th>課題</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>見積書作成</td><td>月8〜12件</td><td>約30時間</td><td>過去見積を探して流用、数量拾いが手作業</td></tr>
+                <tr><td>施工報告書・写真整理</td><td>月15〜20件</td><td>約12時間</td><td>報告書にまとめるのが後回し</td></tr>
+                <tr><td>別荘オーナーへの定期報告</td><td>月30通</td><td>約7.5時間</td><td>1通ずつ手書き</td></tr>
+                <tr><td>問い合わせメール返信</td><td>月20〜30件</td><td>約5時間</td><td>定型質問にも毎回文面を考える</td></tr>
+                <tr><td>工程表の作成・更新</td><td>月5〜8件</td><td>約6時間</td><td>Excel手作業、共有が紙ベース</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="highlight-box">
+            <strong>月間の削減可能時間（推定）: 約35〜40時間</strong>
+          </div>
+        </section>
+
+        <section class="report-section">
+          <h2>3. AI活用の提案</h2>
+
+          <div class="priority-label priority-a">優先度A — すぐに効果が出る</div>
+
+          <div class="proposal-card">
+            <h3>提案1: 見積書の下書き自動生成</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月15〜20時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円</span>
+              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 中</span>
+            </div>
+            <p><strong>現状</strong>: 過去の見積書をフォルダから探し、類似案件を見つけて数字を書き換える（2〜4時間/件）</p>
+            <p><strong>改善後</strong>: 案件情報を入力→AIが単価マスタを参照して見積ドラフトを生成→確認・調整</p>
+            <p><strong>導入ステップ</strong>:</p>
+            <ol style="font-size: 0.9rem; padding-left: 20px; line-height: 1.8;">
+              <li>よく使う工事項目と単価をスプレッドシートにまとめる（初回のみ・3〜4時間）</li>
+              <li>見積依頼が来たら、工事内容をAIに入力</li>
+              <li>AIが単価マスタを参照して見積の骨子を生成</li>
+              <li>人間が現場条件に合わせて数量・単価を調整</li>
+            </ol>
+            <div class="prompt-example">
+              <p class="prompt-label">プロンプト例</p>
+              <pre>あなたは北杜市の工務店の見積担当です。
+以下の工事内容から見積書の項目と概算金額を作成してください。
+
+【単価参考】
+・クロス張替え: 1,200円/㎡
+・フローリング張替え: 8,000円/㎡
+・キッチン取替（LIXIL標準）: 80〜120万円
+・外壁塗装: 3,500円/㎡
+・諸経費率: 10%
+
+【工事内容】
+築25年の別荘、LDK（約20㎡）のクロス張替えと
+フローリング張替え。キッチンも交換希望。
+
+【出力形式】
+項目 | 数量 | 単位 | 単価 | 金額 の表形式</pre>
+            </div>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案2: 別荘オーナーへの巡回報告メール自動生成</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月5〜6時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低（即日開始可）</span>
+            </div>
+            <p><strong>現状</strong>: 巡回写真を撮影後、1軒ずつ状況報告メールを手書き（月30通）</p>
+            <p><strong>改善後</strong>: 巡回メモ（箇条書き）→AIが丁寧な報告メール文面を生成→写真添付して送信</p>
+            <div class="prompt-example">
+              <p class="prompt-label">プロンプト例</p>
+              <pre>以下の別荘巡回メモから、オーナー向けの報告メールを作成してください。
+
+【物件】〇〇別荘（大泉町）
+【巡回日】2026年X月X日
+【メモ】
+- 外観: 異常なし
+- 雨樋: 落ち葉が少し溜まっている。次回清掃予定
+- 庭: 草が伸びている。草刈りの要否確認したい
+- 室内: 換気実施。カビ・害虫なし
+- 設備: 給湯器動作確認OK
+
+【トーン】丁寧だが簡潔に。安心感を与える文面で。</pre>
+            </div>
+          </div>
+
+          <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
+
+          <div class="proposal-card">
+            <h3>提案3: 施工写真レポートの自動作成</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月6〜8時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-star"></i> 品質均一化</span>
+            </div>
+            <p>写真+メモ→AIがレポートの文章部分を生成→テンプレートに流し込み。報告書の品質が均一化し、提出スピードも向上します。</p>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案4: 問い合わせ対応の効率化</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-bolt"></i> 返信速度向上→成約率改善</span>
+            </div>
+            <p>よくある質問（対応エリア、概算費用、工事の流れ）のテンプレート化 + 個別案件はAIで返信ドラフト生成。</p>
+          </div>
+
+          <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
+
+          <div class="proposal-card">
+            <h3>提案5〜7: 工程表自動生成、施工事例ページ、安全日報</h3>
+            <p>工事内容→AIが標準工程表ドラフト生成、完工写真→Web施工事例記事の自動作成（SEO効果）、現場写真+音声メモ→安全日報の自動生成など。</p>
+          </div>
+        </section>
+
+        <section class="report-section">
+          <h2>4. 投資対効果（ROI）</h2>
+          <div class="roi-grid">
+            <div class="roi-card">
+              <p class="roi-number">35時間</p>
+              <p class="roi-label">月間削減時間</p>
+            </div>
+            <div class="roi-card">
+              <p class="roi-number">¥70,000</p>
+              <p class="roi-label">時間価値換算/月</p>
+            </div>
+            <div class="roi-card">
+              <p class="roi-number">¥3,000</p>
+              <p class="roi-label">必要投資/月</p>
+            </div>
+            <div class="roi-card accent">
+              <p class="roi-number">¥67,000</p>
+              <p class="roi-label">純効果/月</p>
+            </div>
+          </div>
+          <div class="highlight-box" style="margin-top: 16px;">
+            <strong>年間換算: 約80万円相当の業務時間を創出</strong>
+          </div>
+          <h3 style="font-size: 1rem; margin-top: 24px;">業務別の削減内訳</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>業務</th><th>削減時間/月</th><th>金額換算</th></tr></thead>
+              <tbody>
+                <tr><td>見積書作成</td><td>15〜20時間</td><td>30,000〜40,000円</td></tr>
+                <tr><td>別荘報告メール</td><td>5〜6時間</td><td>10,000〜12,000円</td></tr>
+                <tr><td>施工報告書</td><td>6〜8時間</td><td>12,000〜16,000円</td></tr>
+                <tr><td>問い合わせ対応</td><td>3時間</td><td>6,000円</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="report-section">
+          <h2>5. 導入ロードマップ</h2>
+          <div class="roadmap">
+            <div class="roadmap-month">
+              <h3>1ヶ月目 — 最大効果の施策から着手</h3>
+              <ul>
+                <li>AIツール開設、基本操作レクチャー</li>
+                <li>見積単価マスタの整備（代表+事務で作業）</li>
+                <li>見積書プロンプト作成、テスト運用</li>
+                <li>別荘報告メールのプロンプト整備・運用開始</li>
+              </ul>
+            </div>
+            <div class="roadmap-month">
+              <h3>2ヶ月目 — 書類業務の効率化</h3>
+              <ul>
+                <li>施工報告書テンプレート整備</li>
+                <li>報告書プロンプト作成・テスト</li>
+                <li>問い合わせ返信テンプレート化</li>
+                <li>効果測定（削減時間の記録）</li>
+              </ul>
+            </div>
+            <div class="roadmap-month">
+              <h3>3ヶ月目 — 仕組み化・拡張</h3>
+              <ul>
+                <li>工程表自動生成の検討</li>
+                <li>施工事例ページの作成フロー確立</li>
+                <li>3ヶ月間の総合振り返り、次フェーズ判断</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="report-section">
+          <h2>6. 導入時の注意点</h2>
+          <div class="note-grid">
+            <div class="note-card">
+              <h3><i class="fa-solid fa-shield-halved"></i> セキュリティ</h3>
+              <p>見積書の顧客情報（住所・氏名）はイニシャルや物件名で代替可能。Claude Proは入力データを学習に使用しない設定あり。</p>
+            </div>
+            <div class="note-card">
+              <h3><i class="fa-solid fa-users"></i> 社内展開</h3>
+              <p>まず代表 or 事務担当が習得→慣れたら現場監督にも展開。全員が使う必要はなく、効果の高い業務に絞って導入。</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </article>
+
+    <section class="cta-section">
+      <div class="container text-center">
+        <h2>あなたの事業でも診断してみませんか？</h2>
+        <p>業種・規模に合わせた具体的な提案をお届けします。<br />初回相談は無料です。</p>
+        <a href="/contact" class="cta-btn">無料相談を申し込む</a>
+        <div class="cta-links">
+          <a href="/solutions/ai-consulting/sample-pension">ペンションのサンプルを見る</a>
+          <a href="/solutions/ai-consulting/sample-restaurant">飲食業のサンプルを見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .hero-section { background: linear-gradient(135deg, var(--color-primary, #2e574c) 0%, #1a3a33 100%); color: #fff; padding: clamp(40px, 8vw, 72px) 0 clamp(32px, 6vw, 56px); }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem; margin-bottom: 20px; }
+  .back-link:hover { color: #fff; }
+  .hero-badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; background: rgba(255,255,255,0.15); display: inline-block; padding: 4px 12px; border-radius: 4px; margin-bottom: 16px; }
+  .hero-section h1 { color: #fff; font-size: clamp(1.4rem, 3.5vw, 2rem); margin-bottom: 16px; line-height: 1.4; }
+  .hero-sub { opacity: 0.85; font-size: 0.95rem; }
+  .sp-only { display: none; }
+  @media (max-width: 600px) { .sp-only { display: block; } }
+  .report-body { padding: clamp(40px, 8vw, 72px) 0; }
+  .report-section { margin-bottom: 48px; }
+  .report-section h2 { font-size: 1.3rem; padding-bottom: 8px; border-bottom: 2px solid var(--color-primary, #2e574c); margin-bottom: 20px; }
+  .info-table { display: flex; flex-direction: column; gap: 8px; }
+  .info-row { display: flex; gap: 16px; padding: 8px 0; border-bottom: 1px solid #eee; }
+  .info-label { font-weight: 600; min-width: 100px; color: var(--color-primary, #2e574c); font-size: 0.9rem; }
+  .info-value { font-size: 0.9rem; }
+  .table-wrapper { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: var(--color-primary, #2e574c); color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f9fafb; }
+  .highlight-box { background: #e8f2f0; padding: 16px 20px; border-radius: 8px; margin-top: 16px; font-size: 0.95rem; color: var(--color-primary, #2e574c); }
+  .priority-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; padding: 6px 14px; border-radius: 4px; display: inline-block; margin: 24px 0 12px; }
+  .priority-a { background: #dcfce7; color: #166534; }
+  .priority-b { background: #fef3c7; color: #92400e; }
+  .priority-c { background: #f3f4f6; color: #374151; }
+  .proposal-card { background: var(--surface, #fff); border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+  .proposal-card h3 { font-size: 1.05rem; margin-bottom: 12px; }
+  .proposal-card p { font-size: 0.9rem; line-height: 1.7; margin-bottom: 8px; }
+  .proposal-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
+  .meta-item { font-size: 0.8rem; font-weight: 600; color: var(--color-primary, #2e574c); display: flex; align-items: center; gap: 4px; }
+  .prompt-example { background: #1a1a2e; border-radius: 8px; padding: 16px 20px; margin-top: 12px; }
+  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
+  .prompt-example pre { color: #e2e8f0; font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; margin: 0; }
+  .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin: 20px 0; }
+  .roi-card { background: #f9fafb; border-radius: 12px; padding: 20px; text-align: center; }
+  .roi-card.accent { background: var(--color-primary, #2e574c); color: #fff; }
+  .roi-number { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+  .roi-card.accent .roi-number { color: #fff; }
+  .roi-label { font-size: 0.8rem; color: var(--muted, #666); }
+  .roi-card.accent .roi-label { color: rgba(255,255,255,0.8); }
+  .roadmap { display: flex; flex-direction: column; gap: 20px; }
+  .roadmap-month { background: #f9fafb; border-left: 4px solid var(--color-primary, #2e574c); padding: 20px 24px; border-radius: 0 8px 8px 0; }
+  .roadmap-month h3 { font-size: 1rem; margin-bottom: 10px; color: var(--color-primary, #2e574c); }
+  .roadmap-month ul { padding-left: 20px; margin: 0; }
+  .roadmap-month li { font-size: 0.9rem; margin-bottom: 4px; line-height: 1.6; }
+  .note-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .note-card { background: #f9fafb; border-radius: 12px; padding: 20px; }
+  .note-card h3 { font-size: 0.95rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .note-card h3 i { color: var(--color-primary, #2e574c); }
+  .note-card p { font-size: 0.9rem; line-height: 1.7; }
+  .cta-section { background: var(--color-primary, #2e574c); color: #fff; padding: clamp(48px, 8vw, 72px) 0; }
+  .cta-section h2 { color: #fff; margin-bottom: 12px; }
+  .cta-section p { opacity: 0.9; margin-bottom: 24px; line-height: 1.8; }
+  .cta-btn { display: inline-block; background: #fff; color: var(--color-primary, #2e574c); font-weight: 700; padding: 14px 36px; border-radius: 8px; text-decoration: none; transition: opacity 0.2s; }
+  .cta-btn:hover { opacity: 0.88; }
+  .cta-links { margin-top: 20px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .cta-links a { color: rgba(255,255,255,0.8); font-size: 0.85rem; text-decoration: underline; }
+  .cta-links a:hover { color: #fff; }
+</style>
