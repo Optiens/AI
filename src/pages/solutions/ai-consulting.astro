@@ -97,8 +97,8 @@ import Layout from '../../layouts/Layout.astro';
               <li>業務改善提案書の納品</li>
             </ul>
           </div>
-          <div class="service-card card featured">
-            <div class="service-badge">RECOMMEND</div>
+          <div class="service-card card">
+            <div class="service-badge">STEP 2</div>
             <h3>AI顧問パック</h3>
             <p class="service-price">月額5万円<span class="price-unit">（税別）</span></p>
             <p class="service-desc">導入して終わりではなく、継続的に改善をサポート。</p>
@@ -259,7 +259,7 @@ import Layout from '../../layouts/Layout.astro';
         <div class="faq-list">
           <details class="faq-item">
             <summary>一人で運営されているとのことですが、大丈夫でしょうか？</summary>
-            <p>少数精鋭で運営しているからこそ、一社一社に丁寧に向き合えます。また、必要に応じて信頼できるパートナー（デザイナー、開発者等）と連携し、大規模な実装にも対応可能です。</p>
+            <p>代表自身がAIを日常的に活用して業務を行っているため、少人数でも高い生産性を実現しています。一社一社に丁寧に向き合い、大企業にはできないスピード感と柔軟さで対応します。</p>
           </details>
           <details class="faq-item">
             <summary>AIの知識がまったくない私でも大丈夫ですか？</summary>
@@ -455,9 +455,6 @@ import Layout from '../../layouts/Layout.astro';
     margin-top: 32px;
   }
   .service-card { padding: 32px 28px; position: relative; }
-  .service-card.featured {
-    border: 2px solid var(--color-primary, #2e574c);
-  }
   .service-badge {
     display: inline-block;
     font-size: 0.7rem;
@@ -468,10 +465,6 @@ import Layout from '../../layouts/Layout.astro';
     padding: 3px 12px;
     border-radius: 4px;
     margin-bottom: 12px;
-  }
-  .service-card.featured .service-badge {
-    background: var(--color-primary, #2e574c);
-    color: #fff;
   }
   .service-card h3 { font-size: 1.2rem; margin-bottom: 8px; }
   .service-price {
