@@ -39,3 +39,4 @@ executive/ceo/decisions/
 
 # MCP server config (contains tokens)
 .mcp.json
+.env*.local

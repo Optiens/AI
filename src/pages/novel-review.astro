@@ -1,0 +1,415 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="小説推敲ツール | Optiens"
+  description="AI小説の推敲用内部ツール"
+>
+  <main class="review-main">
+    <!-- ツールバー -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span class="toolbar-title">推敲ツール</span>
+        <select id="novel-select">
+          <option value="">作品を選択</option>
+        </select>
+        <select id="chapter-select" disabled>
+          <option value="">章を選択</option>
+        </select>
+      </div>
+      <div class="toolbar-right">
+        <span id="status" class="status"></span>
+        <button id="clear-btn" class="action-btn danger" disabled>クリア</button>
+      </div>
+    </div>
+
+    <!-- 空状態 -->
+    <div id="empty-state" class="empty-state">
+      <p>作品と章を選んでください。</p>
+      <p class="empty-hint">修正メモは自動保存され、PCのClaude Codeから反映できます。</p>
+    </div>
+
+    <!-- エディタ -->
+    <div id="editor" class="editor" style="display:none;">
+      <div class="editor-header">
+        <div class="col-header col-header-left">本文</div>
+        <div class="col-header col-header-right">修正メモ</div>
+      </div>
+      <div id="editor-body" class="editor-body"></div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const novelSelect = document.getElementById('novel-select') as HTMLSelectElement;
+  const chapterSelect = document.getElementById('chapter-select') as HTMLSelectElement;
+  const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+  const statusEl = document.getElementById('status')!;
+  const emptyState = document.getElementById('empty-state')!;
+  const editor = document.getElementById('editor')!;
+  const editorBody = document.getElementById('editor-body')!;
+
+  let currentKey = '';
+  let currentTitle = '';
+  let currentLines: string[] = [];
+  let saveTimer: ReturnType<typeof setTimeout> | null = null;
+
+  interface NovelIndex { novel: string; chapters: { file: string; title: string }[] }
+  let novelIndex: NovelIndex[] = [];
+
+  // --- API ---
+  async function loadNotes(key: string): Promise<Record<number, string>> {
+    try {
+      const res = await fetch(`/api/novel-review?key=${encodeURIComponent(key)}`);
+      if (!res.ok) return {};
+      const data = await res.json();
+      return data.notes || {};
+    } catch {
+      return {};
+    }
+  }
+
+  async function saveNotes(key: string, title: string, notes: Record<number, string>) {
+    try {
+      await fetch('/api/novel-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, title, notes }),
+      });
+    } catch {
+      statusEl.textContent = '保存エラー';
+    }
+  }
+
+  // デバウンス付き保存（入力のたびにAPIを叩かない）
+  function debounceSave() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const notes = collectNotes();
+      updateStatus(notes);
+      saveNotes(currentKey, currentTitle, notes);
+    }, 2000);
+  }
+
+  function collectNotes(): Record<number, string> {
+    const notes: Record<number, string> = {};
+    editorBody.querySelectorAll('.row').forEach((row, i) => {
+      const v = (row.querySelector('.row-note') as HTMLTextAreaElement).value;
+      if (v) notes[i] = v;
+    });
+    return notes;
+  }
+
+  // --- Index ---
+  async function loadIndex() {
+    const res = await fetch('/novels/index.json');
+    novelIndex = await res.json();
+    novelSelect.innerHTML = '<option value="">作品を選択</option>';
+    for (const n of novelIndex) {
+      const o = document.createElement('option');
+      o.value = n.novel;
+      o.textContent = `${n.novel}（${n.chapters.length}話）`;
+      novelSelect.appendChild(o);
+    }
+  }
+
+  novelSelect.addEventListener('change', () => {
+    const name = novelSelect.value;
+    chapterSelect.innerHTML = '<option value="">章を選択</option>';
+    if (!name) {
+      chapterSelect.disabled = true;
+      return;
+    }
+    const novel = novelIndex.find(n => n.novel === name);
+    if (!novel) return;
+
+    for (const ch of novel.chapters) {
+      const o = document.createElement('option');
+      o.value = ch.file;
+      o.textContent = ch.title;
+      chapterSelect.appendChild(o);
+    }
+    chapterSelect.disabled = false;
+  });
+
+  chapterSelect.addEventListener('change', async () => {
+    const file = chapterSelect.value;
+    const novel = novelSelect.value;
+    if (!file || !novel) return;
+
+    statusEl.textContent = '読み込み中...';
+
+    const key = `${novel}/${file}`;
+    const url = `/novels/${encodeURIComponent(novel)}/${encodeURIComponent(file)}`;
+
+    const res = await fetch(url);
+    if (!res.ok) {
+      statusEl.textContent = '読み込みエラー';
+      return;
+    }
+    const text = await res.text();
+
+    // frontmatter除去
+    let body = text;
+    const fmMatch = text.match(/^---\n[\s\S]*?\n---\n/);
+    if (fmMatch) body = text.slice(fmMatch[0].length);
+    const lines = body.split('\n');
+
+    // タイトル
+    const titleMatch = text.match(/^title:\s*(.+)$/m);
+    const title = titleMatch ? titleMatch[1].trim() : file.replace(/\.md$/, '');
+
+    // サーバーからメモを取得
+    const notes = await loadNotes(key);
+    render(key, title, lines, notes);
+  });
+
+  // --- Render ---
+  function render(key: string, title: string, lines: string[], notes: Record<number, string> = {}) {
+    currentKey = key;
+    currentTitle = title;
+    currentLines = lines;
+    editorBody.innerHTML = '';
+
+    lines.forEach((line, i) => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      if (notes[i]) row.classList.add('has-note');
+
+      const num = document.createElement('div');
+      num.className = 'row-num';
+      num.textContent = String(i + 1);
+
+      const text = document.createElement('div');
+      text.className = 'row-text';
+      text.textContent = line;
+
+      const note = document.createElement('textarea');
+      note.className = 'row-note';
+      note.placeholder = '';
+      note.value = notes[i] || '';
+      note.rows = 1;
+
+      const resize = () => {
+        note.style.height = 'auto';
+        note.style.height = Math.max(text.offsetHeight, note.scrollHeight) + 'px';
+      };
+
+      note.addEventListener('input', () => {
+        row.classList.toggle('has-note', !!note.value);
+        resize();
+        debounceSave();
+      });
+
+      note.addEventListener('focus', () => row.classList.add('focused'));
+      note.addEventListener('blur', () => row.classList.remove('focused'));
+
+      row.appendChild(num);
+      row.appendChild(text);
+      row.appendChild(note);
+      editorBody.appendChild(row);
+
+      requestAnimationFrame(() => {
+        const h = Math.max(text.offsetHeight, note.scrollHeight);
+        text.style.minHeight = h + 'px';
+        note.style.height = h + 'px';
+      });
+    });
+
+    emptyState.style.display = 'none';
+    editor.style.display = 'block';
+    clearBtn.disabled = false;
+    updateStatus(notes);
+  }
+
+  function updateStatus(notes: Record<number, string>) {
+    const count = Object.keys(notes).length;
+    statusEl.textContent = `${currentLines.length}行 / ${count}件メモ`;
+  }
+
+  // --- Clear ---
+  clearBtn.addEventListener('click', async () => {
+    if (!confirm(`「${currentTitle}」の推敲データを削除しますか？`)) return;
+    await saveNotes(currentKey, currentTitle, {});
+    editor.style.display = 'none';
+    emptyState.style.display = 'block';
+    clearBtn.disabled = true;
+    statusEl.textContent = '';
+    chapterSelect.value = '';
+  });
+
+  loadIndex();
+</script>
+
+<style>
+  .review-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 12px 20px;
+  }
+
+  /* ツールバー */
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  .toolbar-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary, #2e574c);
+    white-space: nowrap;
+  }
+  .toolbar-left, .toolbar-right {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+
+  .toolbar select {
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    max-width: 220px;
+    background: #fff;
+    color: #333;
+  }
+
+  .action-btn {
+    padding: 7px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .action-btn:hover { opacity: 0.85; }
+  .action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .action-btn.danger { background: #fee; color: #c00; }
+
+  .status {
+    font-size: 0.75rem;
+    color: #888;
+    white-space: nowrap;
+  }
+
+  /* 空状態 */
+  .empty-state {
+    text-align: center; padding: 80px 20px; color: var(--muted, #999);
+  }
+  .empty-hint { font-size: 0.85rem; margin-top: 8px; }
+
+  /* エディタ */
+  .editor { display: flex; flex-direction: column; }
+
+  .editor-header {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-primary, #2e574c);
+    border-radius: 6px 6px 0 0;
+  }
+  .col-header {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .col-header-left { grid-column: 2; }
+  .col-header-right { grid-column: 3; border-left: 1px solid rgba(255,255,255,0.2); }
+
+  .editor-body { display: flex; flex-direction: column; }
+
+  /* 行 */
+  .row {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid #eee;
+    transition: background 0.1s;
+  }
+  .row:hover { background: rgba(94, 168, 154, 0.04); }
+  .row.focused { background: rgba(94, 168, 154, 0.08); }
+  .row.has-note { background: rgba(234, 67, 53, 0.04); }
+  .row.has-note .row-num { color: var(--color-accent, #ea4335); font-weight: 700; }
+
+  .row-num {
+    padding: 8px 4px;
+    font-size: 0.7rem;
+    color: #bbb;
+    text-align: center;
+    user-select: none;
+    border-right: 1px solid #eee;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10px;
+  }
+
+  .row-text {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    word-break: break-all;
+    border-right: 1px solid #eee;
+  }
+
+  .row-note {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    border: none;
+    background: transparent;
+    resize: none;
+    overflow: hidden;
+    font-family: inherit;
+    color: var(--text, #333);
+  }
+  .row-note:focus {
+    outline: none;
+    background: rgba(46, 87, 76, 0.04);
+  }
+  .row-note::placeholder { color: transparent; }
+  .row:hover .row-note::placeholder { color: #ccc; }
+
+  /* スマホ */
+  @media (max-width: 768px) {
+    .review-main { padding: 80px 6px 20px; }
+    .toolbar { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 12px; }
+    .toolbar-left, .toolbar-right { width: 100%; }
+    .toolbar-right { justify-content: flex-end; }
+    .toolbar select { max-width: 100%; flex: 1; }
+
+    .editor-header {
+      grid-template-columns: 28px 1fr 1fr;
+    }
+    .row {
+      grid-template-columns: 28px 1fr 1fr;
+    }
+    .row-text { font-size: 0.8rem; padding: 6px 8px; line-height: 1.7; }
+    .row-note { font-size: 0.8rem; padding: 6px 8px; }
+    .row-num { font-size: 0.65rem; }
+  }
+  @media (max-width: 480px) {
+    .editor-header {
+      grid-template-columns: 24px 1fr 1fr;
+    }
+    .row {
+      grid-template-columns: 24px 1fr 1fr;
+    }
+    .row-text { font-size: 0.75rem; padding: 4px 6px; }
+    .row-note { font-size: 0.75rem; padding: 4px 6px; }
+  }
+</style>
