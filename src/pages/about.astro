@@ -4,7 +4,7 @@ import poster from '../assets/about-poster.jpg?url';
 import founderPhoto from '../assets/founder.jpg?url';
 ---
 
-<Layout title="会社情報 | Optiens" description="合同会社Optiens（オプティエンス）の会社情報。室内IoT水耕栽培システムの開発・実証を通じて、持続可能な農業の仕組みを全国に届けます。">
+<Layout title="会社情報 | Optiens" description="合同会社Optiens（オプティエンス）の会社情報。AI活用支援と室内IoT水耕栽培の2事業で、小規模事業者の業務効率化と持続可能な農業の仕組みづくりに取り組んでいます。">
   <main>
     <!-- ===== Hero（動画） ===== -->
     <section
@@ -33,7 +33,7 @@ import founderPhoto from '../assets/founder.jpg?url';
       <div class="container">
 
         <!-- ミニ・ヒーロー（About専用の軽量版） -->
-        <section class="hero-container hero-container--inline">
+        <section class="hero-container hero-container--inline reveal">
           <div class="hero-block">
             <div class="hero-title">
               <p class="eyebrow">GRAND VISION</p>
@@ -49,16 +49,35 @@ import founderPhoto from '../assets/founder.jpg?url';
         </section>
 
         <!-- 1) Optiensの由来 -->
-        <section class="about-origin">
+        <section class="about-origin reveal">
           <h2>次の世代へ繋ぐために</h2>
             <p>Optiens（オプティエンス） は <strong>Optimization（最適化）</strong> と <strong>Ensō（円相）</strong>を重ねた造語です。</p>
             <p>既成概念を見直し、社会や暮らしの仕組みを最適化していきます。</p>
         </section>
 
+        <!-- 1.5) 2つの事業 -->
+        <section class="about-businesses reveal">
+          <h2>2つの事業</h2>
+          <div class="business-cards">
+            <div class="business-card">
+              <div class="business-icon"><i class="fas fa-brain"></i></div>
+              <h3>AI支援事業</h3>
+              <p>中小企業・小規模事業者のAI活用を伴走支援。AI診断・AI顧問・AI研修の3サービスで、業務の中にAIを自然に組み込む仕組みをつくります。</p>
+              <a href="/ai-consulting" class="business-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="business-card">
+              <div class="business-icon"><i class="fas fa-leaf"></i></div>
+              <h3>IoT水耕栽培事業</h3>
+              <p>IoTセンサーとAIを駆使した室内水耕栽培システムを開発中。データ駆動で農薬不使用のハーブを安定生産し、将来的に就労支援事業所への導入を目指します。</p>
+              <a href="/hydroponics" class="business-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </section>
+
         <!-- 2) 代表メッセージ -->
-        <section class="founder-letter">
+        <section class="founder-letter reveal">
           <div class="founder-layout">
-            <!-- <a class="founder-photo-link" href={fbLink} target="_blank" rel="noopener">
+            <div class="founder-photo">
               <img
                 src={founderPhoto}
                 alt="代表者の写真"
@@ -66,18 +85,6 @@ import founderPhoto from '../assets/founder.jpg?url';
                 decoding="async"
                 width="640"
                 height="640"
-              />
-            </a> -->
-
-            <!-- 新： -->
-            <div class=”founder-photo”>
-              <img
-                src={founderPhoto}
-                alt=”代表者の写真”
-                loading=”lazy”
-                decoding=”async”
-                width=”640”
-                height=”640”
               />
             </div>
 
@@ -102,7 +109,11 @@ import founderPhoto from '../assets/founder.jpg?url';
                 私たちは、IoTセンサーとAIを駆使した水耕栽培で、バジルやマイクログリーンなどの高単価ハーブの生産を目指しています。Raspberry Piと各種センサー（EC/pH/温湿度/CO2/照度）で24時間栽培環境をモニタリングし、AIが最適な養液濃度・光量・温度を判断する「農業システム」を構築中です。山梨県北杜市を拠点に、自宅でのテスト栽培から始め、段階的に生産規模を拡大していきます。
               </p>
               <p>
-                小さく始めて確実に仕組みを作り、仕組みが整ったらオペレーションは人に委託。テクノロジーの力で、1人でもスケールできる農業モデルを実証します。
+                もうひとつの事業軸として、中小企業・小規模事業者のAI活用を支援しています。
+                「AIを使ってみたいけれど、何から始めればいいか分からない」──そんな声に応え、業務の中にAIを自然に組み込む仕組みを一緒につくる伴走型のサービスです。
+              </p>
+              <p>
+                小さく始めて確実に仕組みを作り、仕組みが整ったらオペレーションは人に委託。テクノロジーの力で、1人でもスケールできるモデルを実証します。
               </p>
             </div>
 
@@ -126,7 +137,7 @@ import founderPhoto from '../assets/founder.jpg?url';
 
 
         <!-- 3) 会社概要 -->
-        <section class="company-info">
+        <section class="company-info reveal">
           <h2>会社概要</h2>
           <table class="info-table">
             <tbody>
@@ -136,7 +147,7 @@ import founderPhoto from '../assets/founder.jpg?url';
               <tr><th>代表社員</th><td>髙橋大地</td></tr>
               <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
               <tr><th>資本金</th><td>100,000円</td></tr>
-              <tr><th>事業内容</th><td>IoT水耕栽培システムの開発・運用支援、ハーブ生産・販売</td></tr>
+              <tr><th>事業内容</th><td>AI活用支援（AI診断・AI顧問・AI研修）、IoT水耕栽培システムの開発・ハーブ生産販売</td></tr>
               <tr><th>メール</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
               <tr><th>法人番号</th><td>9090003003025</td></tr>
               <tr><th>インボイス</th><td>適格請求書発行事業者 申請中</td></tr>
@@ -151,7 +162,7 @@ import founderPhoto from '../assets/founder.jpg?url';
 
 <style>
 /* =========================================================
-   About 上部の動画ヒーロー（既存の見た目を維持）
+   About 上部の動画ヒーロー
    ========================================================= */
 .about-hero-section{
   position: relative;
@@ -159,11 +170,11 @@ import founderPhoto from '../assets/founder.jpg?url';
   min-height: clamp(480px, 66svh, 80svh);
   display: flex; align-items: center; justify-content: center;
   background-image: var(--hero-poster),
-                    var(--brand-gradient, linear-gradient(135deg,#2e574c,#5ea89a));
+                    var(--brand-gradient);
   background-size: cover; background-position: center; background-repeat: no-repeat;
-  color: var(--on-hero, #fff);
+  color: #fff;
 }
-.about-hero-section::before{ content:''; position:absolute; inset:0; background: rgba(0,0,0,.45); z-index:1; }
+.about-hero-section::before{ content:''; position:absolute; inset:0; background: rgba(0,0,0,.55); z-index:1; }
 .about-hero-section video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; pointer-events:none; }
 .about-hero-section .hero-content{ position:relative; z-index:2; padding: clamp(56px, 8vw, 112px) 20px; width:100%; text-align:center; }
 .about-hero-section .hero-content h1{ font-size: clamp(28px, 6vw, 56px); line-height:1.15; margin:0 0 12px; color:#fff; }
@@ -172,12 +183,11 @@ import founderPhoto from '../assets/founder.jpg?url';
 /* =========================================================
    About 本文
    ========================================================= */
-.about-content-section{ padding: 64px 20px; background: var(--surface, #fff); line-height:1.8; }
+.about-content-section{ padding: 64px 20px; background: var(--surface); line-height:1.8; }
 .about-content-section .container{ width: min(1000px, 100% - 2rem); margin-inline: auto; }
 
 /* =========================================================
    ミニ・ヒーロー（カード）
-   “列（--col-w）”を全要素で共有して左起点を完全一致
    ========================================================= */
 .about-content-section .hero-container--inline{
   position: relative;
@@ -185,11 +195,10 @@ import founderPhoto from '../assets/founder.jpg?url';
   --pad-x: clamp(24px, 4vw, 40px);
   padding: var(--pad-x);
   margin-bottom: 48px;
-  background: var(--surface, #fff);
-  border: 1px solid color-mix(in srgb, var(--brand-2, #5ea89a) 22%, transparent);
+  background: var(--surface-3);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.06);
-  color: #111; text-shadow: none;
+  color: var(--text); text-shadow: none;
   --inner-w: calc(100% - (var(--pad-x) * 2));
   --col-w: min(56rem, var(--inner-w));
 }
@@ -198,16 +207,14 @@ import founderPhoto from '../assets/founder.jpg?url';
 .about-content-section .hero-container--inline .hero-title{ width: var(--col-w); max-width: 100%; margin-inline: auto; }
 .about-content-section .hero-container--inline .eyebrow{
   margin:0 0 .75rem; text-align:left; font-size: clamp(11px, 1vw, 13px);
-  letter-spacing:.18em; text-transform:uppercase; color:#76b2a8; opacity:.95;
+  letter-spacing:.18em; text-transform:uppercase; color: var(--brand); opacity:.95;
 }
-.about-content-section .hero-container--inline .hero-lead{ margin:0 0 1em; line-height:1.2; letter-spacing:.02em; }
+.about-content-section .hero-container--inline .hero-lead{ margin:0 0 1em; line-height:1.2; letter-spacing:.02em; color: var(--heading); }
 .about-content-section .hero-container--inline .hero-lead--xl{ text-align:left; font-size: clamp(28px, 3.6vw, 44px); text-wrap: balance; }
-
-/* 日本語サブコピー：PC は右寄せ、SP は1行フィット */
 .about-content-section .hero-container--inline .hero-lead--sm{
   width: var(--col-w); max-width: 100%; margin-inline: auto;
   text-align: right; font-size: clamp(14px, 1.8vw, 18px);
-  color:#666; font-weight:600;
+  color: var(--muted); font-weight:600;
 }
 @media (max-width: 640px){
   .about-content-section .hero-container--inline{ --col-w: calc(100% - (var(--pad-x) * 2)); }
@@ -230,89 +237,146 @@ import founderPhoto from '../assets/founder.jpg?url';
 }
 
 /* =========================================================
-   代表メッセージ（写真は見出し＋リードの段にだけ表示）
-   本文はその下でカード全幅を使用
+   Optiensの由来
    ========================================================= */
-.founder-letter{
-  --founder-gap: clamp(36px, 6vw, 80px);  /* ← ここで上の余白量を調整できます */
-  max-width: 1000px;
-  margin: var(--founder-gap) auto 0;       /* ← 上にスキマを作成 */
-  padding: 3rem 1.5rem;
-  background: var(--surface-2, #f9f9f9);
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.06);
+.about-origin {
+  margin-bottom: 48px;
+}
+.about-origin h2 {
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  margin: 0 0 1rem;
+  color: var(--heading);
+}
+.about-origin p {
+  color: var(--text);
+  line-height: 1.8;
+  margin: 0 0 .5rem;
 }
 
-/* 上段だけ 2 カラム（写真 + タイトル/リード）、下段以降は全幅 */
+/* =========================================================
+   2つの事業
+   ========================================================= */
+.about-businesses {
+  margin-bottom: 48px;
+}
+.about-businesses h2 {
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  margin: 0 0 1.5rem;
+  color: var(--heading);
+}
+.business-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.business-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.business-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--glow);
+}
+.business-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(91, 127, 255, 0.1);
+  color: var(--brand);
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+}
+.business-card h3 {
+  font-size: 1.15rem;
+  color: var(--heading);
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+}
+.business-card p {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin: 0 0 1rem;
+}
+.business-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--brand);
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.business-link:hover { opacity: 0.7; }
+@media (max-width: 640px) {
+  .business-cards { grid-template-columns: 1fr; }
+}
+
+/* =========================================================
+   代表メッセージ
+   ========================================================= */
+.founder-letter{
+  --founder-gap: clamp(36px, 6vw, 80px);
+  max-width: 1000px;
+  margin: var(--founder-gap) auto 0;
+  padding: 3rem 1.5rem;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
 .founder-layout{
-  --photo-size: 110px;                /* デスクトップの写真サイズ */
-  --badge-size: 32px;                 /* FBロゴボタンのサイズ */
+  --photo-size: 110px;
+  --badge-size: 32px;
   display: grid;
   grid-template-columns: var(--photo-size) 1fr;
   column-gap: 24px;
   align-items: start;
 }
-
-/* 写真（上段2行を占有） */
 .founder-photo{
   grid-column: 1; grid-row: 1 / 3;
   width: var(--photo-size); max-width: var(--photo-size);
   position: relative;
   border-radius:12px; overflow:hidden; line-height:0;
-  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  box-shadow: 0 6px 18px rgba(0,0,0,.3);
 }
 .founder-photo img{
   width: 100%; height: 100%;
   aspect-ratio: 1 / 1; object-fit: cover; display:block;
 }
-
-/* Facebookロゴボタン（写真の近くに表示） */
-.founder-badge{
-  position: absolute;
-  left: 8px; bottom: -10px;
-  width: var(--badge-size); height: var(--badge-size);
-  display: grid; place-items: center;
-  border-radius: 9999px;
-  background: #1877F2; color: #fff;
-  box-shadow: 0 6px 14px rgba(24,119,242,.35);
-  text-decoration: none;
-  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-}
-.founder-badge svg{ width: 60%; height: 60%; display:block; }
-.founder-badge:hover{ transform: translateY(-1px); filter: brightness(1.05); }
-.founder-badge:focus-visible{
-  outline: 0;
-  box-shadow: 0 0 0 4px color-mix(in srgb, #1877F2 35%, white);
-}
-
-/* 見出しとリードは写真の右隣（上段2行） */
 .founder-body{ display: contents; }
 .founder-body h2{
   grid-column: 2; grid-row: 1;
   font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800; margin: 0 0 0.35rem; color:#111; text-align: left;
+  font-weight: 800; margin: 0 0 0.35rem; color: var(--heading); text-align: left;
 }
 .founder-body .lede{
   grid-column: 2; grid-row: 2;
   font-size: clamp(16px, 2.2vw, 20px);
-  font-weight: 700; color: var(--brand, #2e574c);
+  font-weight: 700; color: var(--brand);
   margin: 0 0 1rem; text-align: left;
 }
-
-/* 以降の本文は新しい行で “全幅（1~2列）” を占有 */
 .founder-body p:not(.lede),
 .founder-body ul, .founder-body ol{
   grid-column: 1 / -1;
   margin: 0 0 1rem;
-  color: var(--text, #1a1a1a); line-height: 1.8;
+  color: var(--text); line-height: 1.8;
 }
 
-/* ===== 代表メッセージ下の補足ノート（カード外・小さく） ===== */
+/* 補足ノート */
 .founder-notes{
   width: min(1000px, 100% - 2rem);
-  margin: 10px auto 0;         /* カードの直下に密着しすぎない程度の余白 */
+  margin: 10px auto 0;
   padding: 8px 2px;
-  color: var(--muted, #666);
+  color: var(--muted);
   font-size: clamp(12px, 1.2vw, 13.5px);
   line-height: 1.7;
 }
@@ -320,33 +384,24 @@ import founderPhoto from '../assets/founder.jpg?url';
   margin: 6px 0;
 }
 .founder-notes .label{
-  font-weight: 600;            /* <strong>ではなく程よい太さで可読性を確保 */
-  color: color-mix(in srgb, var(--muted, #666) 70%, #000);
+  font-weight: 600;
+  color: var(--text);
   margin-right: .25em;
   white-space: nowrap;
 }
-
-/* PCでも本文と混ざらないよう“外側”の見え方を軽く差別化（任意） */
 .founder-notes{
-  border-left: 3px solid color-mix(in srgb, var(--brand, #2e574c) 35%, #999);
+  border-left: 3px solid var(--brand-dim);
   padding-left: 10px;
-  opacity: .95;
+  opacity: .85;
 }
-
-/* モバイル微調整 */
 @media (max-width: 640px){
   .founder-notes{ margin-top: 8px; padding-left: 8px; }
-  .founder-notes .label{ font-weight: 600; }
 }
-
-/* モバイル：写真/バッジサイズ縮小。段組は維持、本文は全幅 */
 @media (max-width: 800px){
   .founder-layout{ --photo-size: 88px; --badge-size: 28px; column-gap: 16px; }
-  .founder-badge{ bottom: -8px; left: 6px; }
 }
 @media (max-width: 520px){
   .founder-layout{ --photo-size: 78px; --badge-size: 24px; column-gap: 14px; }
-  .founder-badge{ bottom: -6px; left: 6px; }
 }
 
 /* =========================================================
@@ -361,7 +416,7 @@ import founderPhoto from '../assets/founder.jpg?url';
   font-size: clamp(22px, 3vw, 28px);
   font-weight: 800;
   margin: 0 0 1.5rem;
-  color: var(--heading, #111);
+  color: var(--heading);
 }
 .info-table{
   width: 100%;
@@ -372,32 +427,31 @@ import founderPhoto from '../assets/founder.jpg?url';
 .info-table th,
 .info-table td{
   padding: 12px 16px;
-  border-bottom: 1px solid color-mix(in srgb, #000 8%, transparent);
+  border-bottom: 1px solid var(--border);
   text-align: left;
   vertical-align: top;
 }
 .info-table th{
   width: 140px;
   font-weight: 700;
-  color: var(--heading, #111);
+  color: var(--heading);
   white-space: nowrap;
 }
 .info-table td{
-  color: var(--text, #1a1a1a);
+  color: var(--text);
 }
 .info-table a{
-  color: var(--brand, #2e574c);
+  color: var(--brand);
   text-decoration: none;
 }
 .info-table a:hover{
   text-decoration: underline;
 }
 @media (max-width: 520px){
-  .info-table th{ width: auto; display: block; padding-bottom: 0; border-bottom: none; font-size: .85em; color: var(--muted, #666); }
+  .info-table th{ width: auto; display: block; padding-bottom: 0; border-bottom: none; font-size: .85em; color: var(--muted); }
   .info-table td{ display: block; padding-top: 2px; }
 }
 
-/* a11y: 動画を無効化 */
 @media (prefers-reduced-motion: reduce){
   .about-hero-section video{ display:none; }
 }
