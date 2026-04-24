@@ -1,0 +1,624 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="IoT水耕栽培 | センサー×AIでハーブを自動栽培 | Optiens"
+  description="IoTセンサーとAIを駆使した室内水耕栽培。農薬不使用・通年安定供給のハーブを地域レストランへお届けします。"
+>
+  <main class="hydro">
+
+    <!-- ===== Hero（動画背景） ===== -->
+    <section class="hydro-hero">
+      <video
+        autoplay muted loop playsinline preload="metadata"
+        class="hydro-hero-video" aria-hidden="true"
+      >
+        <source src="/videos/about_compressed.webm" type="video/webm" />
+        <source src="/videos/about_compressed.mp4" type="video/mp4" />
+      </video>
+      <div class="hydro-hero-overlay"></div>
+      <div class="hydro-hero-content container">
+        <p class="hydro-label">IoT HYDROPONICS</p>
+        <h1>センサー &times; AIで<br class="sp-only"/>ハーブを自動栽培</h1>
+        <p class="hydro-sub">
+          IoTセンサーとAIを駆使した室内水耕栽培システムを構築中。<br/>
+          データ駆動で、1株あたりのコストから収穫安定性まで徹底管理します。
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== 販路一覧 ===== -->
+    <section class="hydro-section container">
+      <h2 class="section-heading reveal">3つの販売チャネル</h2>
+      <div class="card-grid reveal-stagger">
+        <div class="hydro-card">
+          <div class="card-icon"><i class="fas fa-utensils"></i></div>
+          <h3>地域レストラン</h3>
+          <p>北杜市・八ヶ岳エリアの飲食店へ、朝収穫したハーブを当日配達。イタリアン・フレンチ・カフェなど、新鮮なハーブを求める店舗と直接取引します。</p>
+          <a href="#inquiry-form" class="card-cta">事前登録する <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="hydro-card">
+          <div class="card-icon"><i class="fas fa-truck"></i></div>
+          <h3>業務用EC</h3>
+          <p>全国の飲食店・食品事業者向けに、業務用ECプラットフォームを通じて出荷。冷蔵便で鮮度を保ったままお届けします。</p>
+          <span class="hydro-tag">Phase 2〜開始予定</span>
+        </div>
+        <div class="hydro-card">
+          <div class="card-icon"><i class="fas fa-store"></i></div>
+          <h3>展示会・マルシェ</h3>
+          <p>道の駅・地域マルシェ・農業展示会に出展。IoT栽培の実演や試食を通じて、Optiensのハーブの品質を直接体験していただきます。</p>
+          <span class="hydro-tag">Phase 2〜開始予定</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 品目 ===== -->
+    <section class="hydro-section container">
+      <h2 class="section-heading reveal">お届けできるハーブ</h2>
+      <div class="card-grid reveal-stagger">
+        <div class="hydro-card">
+          <div class="card-icon"><i class="fas fa-leaf"></i></div>
+          <h3>バジル</h3>
+          <p>ジェノベーゼ・カプレーゼ・パスタに。収穫から数時間で届く鮮度。冷涼な気候で育ったバジルは香りが豊かです。</p>
+          <span class="hydro-tag hydro-tag--active">通年供給</span>
+        </div>
+        <div class="hydro-card">
+          <div class="card-icon"><i class="fas fa-seedling"></i></div>
+          <h3>マイクログリーン</h3>
+          <p>サラダ・前菜の彩りに。栄養価は成熟野菜の4-40倍。小さな葉に凝縮された味と彩りで、お皿のクオリティを引き上げます。</p>
+          <span class="hydro-tag hydro-tag--active">通年供給</span>
+        </div>
+        <div class="hydro-card">
+          <div class="card-icon"><i class="fas fa-spa"></i></div>
+          <h3>季節のハーブ</h3>
+          <p>ルッコラ・ディル・ミント・パセリ・シソなど、季節に合わせた品目をお届け。複数品目のセットもご用意できます。</p>
+          <span class="hydro-tag">Phase 2〜順次拡大</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 差別化 ===== -->
+    <section class="hydro-diff">
+      <div class="container">
+        <h2 class="section-heading reveal">Optiensのハーブが選ばれる理由</h2>
+        <div class="features-grid reveal-stagger">
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-microchip"></i></div>
+            <h3>IoTで24時間管理</h3>
+            <p>温度・湿度・養液濃度・pH・CO2・照度をセンサーで常時モニタリング。環境データに基づいた栽培で品質を安定させています。</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>農薬不使用</h3>
+            <p>閉鎖環境の水耕栽培のため、農薬を一切使用していません。洗わずそのままお使いいただけます。</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-clock"></i></div>
+            <h3>当日収穫・当日配達</h3>
+            <p>北杜市・八ヶ岳エリアの飲食店様には、朝収穫したハーブをその日のうちにお届けします。</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+            <h3>通年安定供給</h3>
+            <p>LED照明と温度制御により、冬季を含む年間を通じて安定した品質・量のハーブをお届けできます。</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+            <h3>栽培データの見える化</h3>
+            <p>ご希望の飲食店様には、栽培環境データをお見せできます。食材の安全性・品質の裏付けとしてご活用いただけます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== リアルタイムデータ（準備中） ===== -->
+    <section class="hydro-section container">
+      <h2 class="section-heading reveal">リアルタイム栽培データ</h2>
+      <div class="dashboard-placeholder reveal">
+        <div class="dashboard-inner">
+          <div class="dashboard-icon"><i class="fas fa-chart-area"></i></div>
+          <p class="dashboard-title">IoTダッシュボードは現在準備中です</p>
+          <p class="dashboard-sub">温度・湿度・養液濃度などのリアルタイムデータを公開予定です。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 代表メッセージ ===== -->
+    <section class="hydro-founder">
+      <div class="container">
+        <h2 class="section-heading reveal">代表メッセージ</h2>
+        <div class="founder-block reveal">
+          <p class="founder-lede">
+            競争から協調へ、所有から共有へ、分離から統合へ。<br/>
+            ──時代は大きな転換点にあります。
+          </p>
+          <p>
+            産業革命以降の数世紀、社会は大量生産・大量消費と物質的な成長を軸に発展してきました。
+            いま私たちは、テクノロジーや効率だけでなくウェルビーイングやレジリエンス、自然との共存を重視する価値観へと移行しつつあります。
+            形があるモノよりも、知識・創造性・コミュニケーションといった形がないモノが社会を動かし、小さなコミュニティや個人が主体となる時代が始まりました。
+          </p>
+          <p>
+            一方で、構造的な課題も顕在化しています。
+            気温上昇や水ストレス、物流・エネルギーコストの不確実性、土地利用の競合やインフラ管理の変化など、
+            既存の食料供給の基盤がリスクにさらされる場面が増えています。
+            Optiensは、こうした変化を先取りし、テクノロジーで農業を再設計するために生まれました。
+          </p>
+          <p>
+            私たちは、IoTセンサーとAIを駆使した水耕栽培で、バジルやマイクログリーンなどの高単価ハーブの生産を目指しています。Raspberry Piと各種センサー（EC/pH/温湿度/CO2/照度）で24時間栽培環境をモニタリングし、AIが最適な養液濃度・光量・温度を判断する「農業システム」を構築中です。山梨県北杜市を拠点に、自宅でのテスト栽培から始め、段階的に生産規模を拡大していきます。
+          </p>
+          <p>
+            小さく始めて確実に仕組みを作り、仕組みが整ったらオペレーションは人に委託。テクノロジーの力で、1人でもスケールできる農業モデルを実証します。
+          </p>
+          <div class="founder-notes">
+            <p class="supplement"><span class="note-label">ウェルビーイング：</span>身体・心・社会（つながりや安心）・環境まで含めた、総合的に良い状態。</p>
+            <p class="supplement"><span class="note-label">レジリエンス：</span>困難やストレスに直面しても、立ち直り、学び、適応していく力。</p>
+            <p class="supplement"><span class="note-label">循環式水耕栽培：</span>ポンプで養液を循環させ、植物の根に直接栄養を届ける栽培方式。土を使わず、水と養液の使用量を大幅に削減できます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== サンプル申込フォーム ===== -->
+    <section id="inquiry-form" class="hydro-section container">
+      <h2 class="section-heading reveal">無料サンプル・お取引のお問い合わせ</h2>
+      <div class="sample-notice reveal">
+        <p>2026年秋の生産開始に向けて準備を進めています。事前にご登録いただいた飲食店・事業者様には、準備が整い次第、優先的に無料サンプルをお届けいたします。</p>
+      </div>
+
+      <form action="/api/restaurant-inquiry" method="POST" class="restaurant-form reveal">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="restaurant_name">店舗名 <span class="required">*</span></label>
+            <input type="text" id="restaurant_name" name="restaurant_name" placeholder="例: リストランテ清里" required>
+          </div>
+          <div class="form-group">
+            <label for="person_name">ご担当者名 <span class="required">*</span></label>
+            <input type="text" id="person_name" name="person_name" placeholder="例: 山田 太郎" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">メールアドレス <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="例: info@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">電話番号</label>
+            <input type="tel" id="phone" name="phone" placeholder="例: 0551-XX-XXXX">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="restaurant_type">業態 <span class="required">*</span></label>
+          <select id="restaurant_type" name="restaurant_type" required>
+            <option value="" disabled selected>選択してください</option>
+            <option value="italian">イタリアン</option>
+            <option value="french">フレンチ</option>
+            <option value="japanese">和食</option>
+            <option value="cafe">カフェ</option>
+            <option value="hotel">ホテル・旅館</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="location">店舗所在地</label>
+          <input type="text" id="location" name="location" placeholder="例: 山梨県北杜市高根町清里">
+        </div>
+
+        <div class="form-group">
+          <label>ご興味のあるハーブ（複数選択可）</label>
+          <div class="checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="basil"> バジル</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="microgreens"> マイクログリーン</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="rukkola"> ルッコラ</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="dill"> ディル</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="mint"> ミント</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="parsley"> パセリ</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="shiso"> シソ</label>
+            <label class="checkbox-label"><input type="checkbox" name="herbs" value="other"> その他</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="volume">想定使用量（週あたり）</label>
+          <select id="volume" name="volume">
+            <option value="" disabled selected>選択してください</option>
+            <option value="under500g">500g未満</option>
+            <option value="500g-1kg">500g〜1kg</option>
+            <option value="1kg-2kg">1kg〜2kg</option>
+            <option value="over2kg">2kg以上</option>
+            <option value="unknown">まだわからない</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">ご質問・ご要望</label>
+          <textarea id="message" name="message" rows="4" placeholder="配達頻度のご希望、特定の品種のリクエスト等があればご記入ください"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">事前登録する</button>
+        <p class="form-note">* 印は必須項目です。いただいた情報は無料サンプルのご案内にのみ使用します。</p>
+      </form>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+/* ===== Sage Green accent for hydroponics ===== */
+.hydro {
+  --sage: #2e574c;
+  --sage-light: #5ea89a;
+  --sage-glow: rgba(94, 168, 154, 0.15);
+  padding-top: 72px;
+}
+
+/* ===== Hero ===== */
+.hydro-hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hydro-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hydro-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.5) 0%,
+    rgba(10, 10, 10, 0.7) 60%,
+    rgba(10, 10, 10, 0.95) 100%
+  );
+}
+.hydro-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 80px 20px 60px;
+}
+.hydro-label {
+  display: inline-block;
+  background: var(--sage-glow);
+  color: var(--sage-light);
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  margin-bottom: 16px;
+  border: 1px solid rgba(94, 168, 154, 0.25);
+}
+.hydro-hero-content h1 {
+  font-size: clamp(28px, 5vw, 48px);
+  line-height: 1.3;
+  margin: 0 0 1.2rem;
+  color: #fff;
+  font-weight: 800;
+}
+.hydro-sub {
+  color: var(--muted);
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.8;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ===== Common Section ===== */
+.container { width: min(960px, 100% - 2rem); margin-inline: auto; }
+.hydro-section { padding: clamp(48px, 8vw, 80px) 0; }
+.section-heading {
+  font-size: clamp(22px, 3vw, 32px);
+  color: #fff;
+  margin: 0 0 2rem;
+  text-align: center;
+  font-weight: 800;
+}
+
+/* ===== Cards ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.hydro-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.8rem 1.5rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.hydro-card:hover {
+  border-color: rgba(94, 168, 154, 0.3);
+  box-shadow: 0 0 24px var(--sage-glow);
+}
+.card-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--sage-glow);
+  color: var(--sage-light);
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+}
+.hydro-card h3 {
+  font-size: 1.15rem;
+  color: var(--sage-light);
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+}
+.hydro-card p {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin: 0 0 0.75rem;
+}
+.hydro-tag {
+  display: inline-block;
+  background: rgba(94, 168, 154, 0.1);
+  color: var(--sage-light);
+  padding: 3px 12px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid rgba(94, 168, 154, 0.2);
+}
+.hydro-tag--active {
+  background: rgba(94, 168, 154, 0.18);
+  border-color: rgba(94, 168, 154, 0.35);
+}
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--sage-light);
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.card-cta:hover { opacity: 0.7; }
+
+/* ===== Diff / Features ===== */
+.hydro-diff {
+  padding: clamp(48px, 8vw, 80px) 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(46, 87, 76, 0.06) 30%,
+    rgba(94, 168, 154, 0.06) 70%,
+    transparent 100%
+  );
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.feature-item {
+  padding: 1.5rem;
+  border-left: 3px solid var(--sage);
+  transition: border-color 0.3s;
+}
+.feature-item:hover { border-color: var(--sage-light); }
+.feature-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sage-light);
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.feature-item h3 {
+  font-size: 1.05rem;
+  color: #fff;
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+}
+.feature-item p {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ===== Dashboard Placeholder ===== */
+.dashboard-placeholder {
+  border: 1px dashed rgba(94, 168, 154, 0.3);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.dashboard-inner {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: rgba(94, 168, 154, 0.03);
+}
+.dashboard-icon {
+  font-size: 2rem;
+  color: var(--sage-light);
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+.dashboard-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.5rem;
+}
+.dashboard-sub {
+  font-size: 0.92rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ===== Founder ===== */
+.hydro-founder {
+  padding: clamp(48px, 8vw, 80px) 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(46, 87, 76, 0.04) 50%,
+    transparent 100%
+  );
+}
+.founder-block {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.founder-lede {
+  font-size: clamp(16px, 2.2vw, 20px);
+  font-weight: 700;
+  color: var(--sage-light);
+  margin: 0 0 1.5rem;
+  line-height: 1.7;
+}
+.founder-block p {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.9;
+  margin: 0 0 1.2rem;
+}
+.founder-notes {
+  margin-top: 2rem;
+  padding-left: 12px;
+  border-left: 3px solid rgba(94, 168, 154, 0.3);
+}
+.founder-notes .supplement {
+  margin: 6px 0;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.founder-notes .note-label {
+  font-weight: 600;
+  color: var(--sage-light);
+  margin-right: 0.25em;
+  white-space: nowrap;
+}
+
+/* ===== Sample Notice ===== */
+.sample-notice {
+  background: rgba(94, 168, 154, 0.06);
+  border-left: 4px solid var(--sage);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 2rem;
+}
+.sample-notice p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* ===== Form ===== */
+.restaurant-form {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-group { margin-bottom: 1.25rem; }
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+.required { color: var(--sage-light); font-size: 0.85rem; }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.92rem;
+  background: var(--surface-2);
+  color: var(--text);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--sage-light);
+  box-shadow: 0 0 0 3px var(--sage-glow);
+}
+.form-group textarea { resize: vertical; }
+.form-group select option { background: var(--surface-2); color: var(--text); }
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 4px;
+}
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 400;
+  font-size: 0.92rem;
+  cursor: pointer;
+  color: var(--text);
+}
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--sage-light);
+}
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: var(--sage);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(46, 87, 76, 0.3);
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(46, 87, 76, 0.35);
+}
+.form-note {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 0.75rem;
+}
+
+/* ===== Responsive ===== */
+.sp-only { display: none; }
+@media (max-width: 640px) {
+  .sp-only { display: inline; }
+  .card-grid, .features-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .hydro-hero { min-height: 60vh; }
+}
+</style>

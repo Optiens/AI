@@ -1,0 +1,734 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="AI活用支援 | 小規模事業者のための伴走パートナー | Optiens"
+  description="小規模事業者・個人事業主向けに、AIを活用した業務効率化・集客・情報整理を支援します。診断・顧問・研修の3つのサービスで、事業の成長に伴走します。"
+>
+  <main>
+    <!-- ヒーロー -->
+    <section class="ac-hero">
+      <div class="ac-hero-grid-bg"></div>
+      <div class="ac-hero-orb"></div>
+      <div class="container text-center" style="position:relative;z-index:1;">
+        <p class="hero-eyebrow">AI CONSULTING</p>
+        <h1>小さな事業を、<br class="sp-only" />AIで大きく支える。</h1>
+        <p class="hero-sub">大企業だけが持つITの選択肢を、地域の事業者にも。<br />合同会社Optiensは、あなたの事業に伴走するAI活用パートナーです。</p>
+        <a href="/free-diagnosis" class="btn-primary hero-cta">無料AI診断を受ける</a>
+      </div>
+    </section>
+
+    <!-- こんなお悩みありませんか？ -->
+    <section class="ac-section ac-problem-section">
+      <div class="container">
+        <h2 class="section-title reveal">こんなお悩みありませんか？</h2>
+        <div class="problem-grid reveal-stagger">
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-clock"></i></div>
+            <p>事務作業やメール対応に<strong>時間を取られすぎている</strong></p>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-language"></i></div>
+            <p>海外からの問い合わせに<strong>多言語対応が追いつかない</strong></p>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+            <p>SNS投稿を<strong>続ける時間がない</strong></p>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-robot"></i></div>
+            <p>AIに興味はあるが<strong>何から始めればいいか分からない</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Optiensにできること -->
+    <section class="ac-section ac-value-section">
+      <div class="container">
+        <h2 class="section-title reveal">Optiensにできること</h2>
+        <p class="section-sub reveal">技術の羅列ではなく、あなたの事業に合った「最適な活用法」を一緒に見つけます。</p>
+        <div class="value-grid reveal-stagger">
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+            <h3>時間を生み出す</h3>
+            <ul>
+              <li>定型業務の自動化</li>
+              <li>問い合わせ対応の効率化</li>
+              <li>書類作成のスピードアップ</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h3>売上を育てる</h3>
+            <ul>
+              <li>顧客に合わせたコミュニケーション</li>
+              <li>SNS・Web発信の継続化</li>
+              <li>多言語対応で海外集客</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-database"></i></div>
+            <h3>情報を整える</h3>
+            <ul>
+              <li>バラバラなデータの一元化</li>
+              <li>顧客情報の活用</li>
+              <li>経営判断のための可視化</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- サービスメニュー -->
+    <section class="ac-section ac-service-section">
+      <div class="container">
+        <h2 class="section-title reveal">サービスメニュー</h2>
+        <div class="service-grid reveal-stagger">
+          <div class="ac-card gradient-border">
+            <div class="ac-badge">STEP 1</div>
+            <h3>AI活用診断</h3>
+            <p class="ac-price">15万円<span class="price-unit">（税別・単発）</span></p>
+            <p class="ac-desc">あなたの業務のどこにAIが効くかを可視化します。</p>
+            <ul class="ac-list">
+              <li>現地訪問による業務フローヒアリング（2〜3時間）</li>
+              <li>AI活用領域の優先順位付け</li>
+              <li>ROI試算（月何時間削減→何円相当か）</li>
+              <li>改善ロードマップ（3〜6ヶ月分）</li>
+              <li>業務改善提案書の納品</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-badge">STEP 2</div>
+            <h3>AI顧問パック</h3>
+            <p class="ac-price">月額5万円<span class="price-unit">（税別）</span></p>
+            <p class="ac-desc">導入して終わりではなく、継続的に改善をサポート。</p>
+            <ul class="ac-list">
+              <li>月1回の定例ミーティング（1〜2時間）</li>
+              <li>チャット相談（LINE / Chatwork等）</li>
+              <li>月3時間までの実装サポート</li>
+              <li>新しいAIツールの試用・導入判断</li>
+              <li>プロンプトの改善・更新</li>
+              <li>スタッフ向け追加研修</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-badge">ENTRY</div>
+            <h3>ハンズオン研修</h3>
+            <p class="ac-price">5万円〜<span class="price-unit">（税別・1回）</span></p>
+            <p class="ac-desc">「ツールを設定してあげる」ではなく「自分で回せるようになる」がゴールの実践型研修。</p>
+            <ul class="ac-list">
+              <li>AIツールの基本操作と活用法</li>
+              <li>業種別ユースケース紹介</li>
+              <li>タスク・スケジュール管理の自動化体験</li>
+              <li>参加者による実践ワーク</li>
+              <li>質疑応答・個別相談</li>
+              <li>所要時間：2〜3時間</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subsidy-banner reveal">
+          <div class="subsidy-icon"><i class="fa-solid fa-coins"></i></div>
+          <div class="subsidy-text">
+            <p class="subsidy-title">補助金で自己負担を軽減できる場合があります</p>
+            <p class="subsidy-desc">
+              小規模事業者持続化補助金の「委託費」として申請できる場合があります。<br/>
+              採択された場合、費用の2/3が補助され、<strong>自己負担は約5万円</strong>になります。
+            </p>
+            <p class="subsidy-note">※ 小規模事業者（従業員20名以下）が対象です。採択を保証するものではありません。補助金は後払いのため、サービス利用時に全額お支払いいただきます。詳細はお問い合わせください。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- サンプルレポート -->
+    <section class="ac-section ac-sample-section">
+      <div class="container">
+        <h2 class="section-title reveal">診断レポートのサンプル</h2>
+        <p class="section-sub reveal">実際にお渡しする提案書のイメージをご覧いただけます。</p>
+        <div class="sample-grid reveal-stagger">
+          <a href="/ai-consulting/sample-pension" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-bed"></i></div>
+            <h3>ペンション・宿泊業</h3>
+            <p>多言語対応・口コミ返信・SNS投稿の自動化で<strong>月25時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-restaurant" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-utensils"></i></div>
+            <h3>カフェ＆レストラン</h3>
+            <p>SNS毎日投稿・LINE配信・予約一元化で<strong>月18時間削減+売上増</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-construction" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-hammer"></i></div>
+            <h3>工務店・建設業</h3>
+            <p>見積自動生成・報告書効率化・別荘管理で<strong>月35時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-winery" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-wine-glass"></i></div>
+            <h3>ワイナリー・醸造所</h3>
+            <p>醸造記録デジタル化・DtoC販売・卸先提案書で<strong>月30時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-outdoor" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+            <h3>アウトドアガイド</h3>
+            <p>予約一元管理・天候判断・SNS集客で<strong>月20時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-bakery" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-bread-slice"></i></div>
+            <h3>パン屋・ベーカリー</h3>
+            <p>仕込み計画AI最適化・SNS集客・売上分析で<strong>月22時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-farmer" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-seedling"></i></div>
+            <h3>個人農家</h3>
+            <p>出荷管理・SNS直販AI活用+IoTハウス環境監視で<strong>月25時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-dairy" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-cow"></i></div>
+            <h3>酪農・畜産業</h3>
+            <p>飼養記録AI分析+IoT牛舎環境モニタリングで<strong>月28時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-municipality" class="sample-card gradient-border">
+            <div class="sample-icon"><i class="fa-solid fa-landmark"></i></div>
+            <h3>自治体・市役所</h3>
+            <p>観光SNS・議事録・多言語対応の効率化で<strong>月40時間削減</strong></p>
+            <span class="sample-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 業種別の活用例 -->
+    <section class="ac-section ac-usecase-section">
+      <div class="container">
+        <h2 class="section-title reveal">業種別の活用例</h2>
+        <p class="section-sub reveal">実際のサービスは共通でも、あなたの業種に合わせた提案をします。</p>
+        <div class="usecase-grid reveal-stagger">
+          <div class="ac-card gradient-border">
+            <h3><i class="fa-solid fa-bed"></i> ペンション・宿泊業</h3>
+            <ul>
+              <li>多言語での問い合わせ対応自動化</li>
+              <li>宿泊プラン紹介文の量産</li>
+              <li>口コミ分析・返信の効率化</li>
+              <li>リピーターへの自動フォローアップ</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <h3><i class="fa-solid fa-utensils"></i> 飲食・小売業</h3>
+            <ul>
+              <li>SNS投稿の下書き自動生成</li>
+              <li>メニュー説明文の多言語化</li>
+              <li>LINE公式の一次応答自動化</li>
+              <li>在庫・発注の効率化</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <h3><i class="fa-solid fa-hammer"></i> 工務店・管理業</h3>
+            <ul>
+              <li>見積書・提案書の下書き自動化</li>
+              <li>問い合わせメールの分類・振り分け</li>
+              <li>点検報告書のテンプレート化</li>
+              <li>顧客データベースの整理</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <h3><i class="fa-solid fa-seedling"></i> 農家・加工所</h3>
+            <ul>
+              <li>複数販路の在庫・出荷管理</li>
+              <li>定期便顧客への連絡自動化</li>
+              <li>商品説明文・ラベル文の作成</li>
+              <li>補助金情報の収集・整理</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 選ばれる理由 -->
+    <section class="ac-section ac-reason-section">
+      <div class="container">
+        <h2 class="section-title reveal">Optiensが選ばれる理由</h2>
+        <div class="reason-grid">
+          <div class="reason-item reveal">
+            <span class="reason-num">01</span>
+            <div class="reason-content">
+              <h3>地域の事業を理解している</h3>
+              <p>地域の事業者の実情を理解した、現実的な提案ができます。観光・農業・飲食——その土地ならではの課題に向き合います。</p>
+            </div>
+          </div>
+          <div class="reason-item reveal">
+            <span class="reason-num">02</span>
+            <div class="reason-content">
+              <h3>大企業向けのシステム構築経験を、小さな事業に</h3>
+              <p>Salesforceエンジニアとして培った業務分析力で、小規模事業者に適したシンプルな仕組みを設計します。大企業の手法を、あなたの規模に最適化して届けます。</p>
+            </div>
+          </div>
+          <div class="reason-item reveal">
+            <span class="reason-num">03</span>
+            <div class="reason-content">
+              <h3>導入で終わらない。人を育てる支援</h3>
+              <p>ツールを入れて終わりではなく、あなた自身やスタッフがAIを使いこなせる状態を目指します。自動化できるところは自動化し、人は判断と創造に集中する——そんな組織づくりを伴走します。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 代表者紹介 -->
+    <section class="ac-section ac-profile-section">
+      <div class="container">
+        <h2 class="section-title reveal">代表者について</h2>
+        <div class="profile-card reveal">
+          <div class="profile-content">
+            <h3>髙橋 大地<span class="profile-title">合同会社Optiens 代表社員</span></h3>
+            <p>エンタープライズ向けSalesforceシステムの設計・開発に従事。業務分析からシステム実装まで一貫して手がけた経験を持つ。</p>
+            <p>2026年、山梨県北杜市に合同会社Optiensを設立。「大企業だけが享受してきたITの恩恵を、地域の小さな事業者にも届けたい」という思いで、全国の小規模事業者にAI活用支援を行う。</p>
+            <ul class="profile-tags">
+              <li>Salesforce認定資格保有</li>
+              <li>エンタープライズシステム開発10年+</li>
+              <li>IoT × AI × 水耕栽培事業を並行運営</li>
+              <li>山梨県北杜市在住</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="ac-section ac-faq-section">
+      <div class="container">
+        <h2 class="section-title reveal">よくあるご質問</h2>
+        <div class="faq-list reveal">
+          <details class="faq-item">
+            <summary>一人で運営されているとのことですが、大丈夫でしょうか？</summary>
+            <p>代表自身がAIを日常的に活用して業務を行っているため、少人数でも高い生産性を実現しています。一社一社に丁寧に向き合い、大企業にはできないスピード感と柔軟さで対応します。</p>
+          </details>
+          <details class="faq-item">
+            <summary>AIの知識がまったくない私でも大丈夫ですか？</summary>
+            <p>むしろそういった方のための支援です。専門用語を使わず、業務の言葉でお話しします。「AIって何？」からのスタートでも問題ありません。</p>
+          </details>
+          <details class="faq-item">
+            <summary>本当に効果が出るか不安です。</summary>
+            <p>初回の「AI活用診断」で、具体的にどこでどれくらいの効果が出るかを数値で試算します。効果が見込めない場合は正直にお伝えしますので、その上で導入判断いただけます。</p>
+          </details>
+          <details class="faq-item">
+            <summary>対面での対応は可能ですか？</summary>
+            <p>山梨県内は対面訪問が可能です。それ以外のエリアはオンライン（Zoom等）で対応いたします。対面・オンラインとも診断内容に差はありません。</p>
+          </details>
+          <details class="faq-item">
+            <summary>契約期間の縛りはありますか？</summary>
+            <p>顧問パックは月単位の契約です。効果を感じられなければいつでも解約可能。まずはAI活用診断（単発）から始めていただくことをお勧めしています。</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="ac-cta-section">
+      <div class="ac-cta-glow"></div>
+      <div class="container text-center" style="position:relative;z-index:1;">
+        <h2 class="reveal">まずは気軽にご相談ください</h2>
+        <p class="reveal">
+          「うちの業務にAIって使えるの？」<br />
+          「何から始めればいいか分からない」<br />
+          そんな状態からで大丈夫です。初回相談は無料です。
+        </p>
+        <a href="/free-diagnosis" class="btn-primary reveal">無料AI診断を受ける</a>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* ===== Hero ===== */
+  .ac-hero {
+    position: relative;
+    color: #fff;
+    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .ac-hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 10%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 10%, transparent 70%);
+  }
+  .ac-hero-orb {
+    position: absolute;
+    width: 400px; height: 400px;
+    top: 30%; left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(91,127,255,.1) 0%, transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin-bottom: 16px;
+  }
+  .ac-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .hero-sub {
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .hero-cta {
+    padding: .85rem 2.2rem;
+  }
+
+  .sp-only { display: none; }
+  @media (max-width: 600px) { .sp-only { display: block; } }
+
+  /* ===== 共通 ===== */
+  .ac-section {
+    padding: clamp(64px, 10vw, 100px) 0;
+  }
+  .section-title {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: var(--heading);
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+  }
+
+  /* ===== 共通カード ===== */
+  .ac-card {
+    padding: 28px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .ac-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .ac-icon {
+    font-size: 2rem;
+    color: var(--brand);
+    margin-bottom: 12px;
+  }
+  .ac-card p { font-size: 0.95rem; line-height: 1.7; color: var(--text); }
+  .ac-card strong { color: var(--heading); }
+  .ac-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+    color: var(--heading);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ac-card h3 i { color: var(--brand); }
+  .ac-card ul { padding-left: 20px; margin: 0; }
+  .ac-card li {
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .ac-card li::marker { color: var(--brand-dim); }
+
+  /* ===== Badge ===== */
+  .ac-badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    color: var(--brand);
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    padding: 4px 14px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  /* ===== Subsidy Banner ===== */
+  .subsidy-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 40px;
+    padding: 24px 28px;
+    background: rgba(91, 127, 255, .05);
+    border: 1px solid rgba(91, 127, 255, .2);
+    border-radius: var(--radius);
+  }
+  .subsidy-icon {
+    font-size: 1.6rem;
+    color: #f0b429;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .subsidy-text { flex: 1; }
+  .subsidy-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .subsidy-desc {
+    font-size: .9rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 0 0 8px;
+  }
+  .subsidy-note {
+    font-size: .78rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .ac-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--brand);
+    margin-bottom: 8px;
+  }
+  .price-unit { font-size: .8rem; font-weight: 400; color: var(--muted); }
+  .ac-desc { font-size: .9rem; color: var(--muted); margin-bottom: 16px; }
+  .ac-list { padding-left: 20px; margin: 0; }
+  .ac-list li { margin-bottom: 6px; font-size: .9rem; line-height: 1.6; color: var(--text); }
+
+  /* ===== Grids ===== */
+  .problem-grid, .value-grid, .usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .sample-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+  }
+
+  /* ===== Section backgrounds ===== */
+  .ac-problem-section { background: var(--surface-2); }
+  .ac-value-section { background: var(--surface); }
+  .ac-service-section { background: var(--surface-2); }
+  .ac-sample-section { background: var(--surface); }
+  .ac-usecase-section { background: var(--surface-2); }
+  .ac-reason-section { background: var(--surface); }
+  .ac-profile-section { background: var(--surface-2); }
+  .ac-faq-section { background: var(--surface); }
+
+  /* ===== Problem cards ===== */
+  .ac-problem-section .ac-card { text-align: center; }
+
+  /* ===== Value cards ===== */
+  .ac-value-section .ac-card { text-align: center; }
+  .ac-value-section .ac-card ul { text-align: left; }
+  .ac-value-section .ac-card li {
+    padding-left: 20px;
+    position: relative;
+  }
+  .ac-value-section .ac-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brand-dim);
+  }
+  .ac-value-section .ac-card li { list-style: none; }
+
+  /* ===== Sample cards ===== */
+  .sample-card {
+    padding: 28px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .sample-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .sample-icon { font-size: 1.8rem; color: var(--brand); }
+  .sample-card h3 { font-size: 1.05rem; margin: 0; color: var(--heading); }
+  .sample-card p { font-size: .9rem; line-height: 1.6; color: var(--muted); flex: 1; }
+  .sample-card strong { color: var(--text); }
+  .sample-link { font-size: .85rem; font-weight: 600; color: var(--brand); }
+  .sample-card:hover .sample-link { opacity: .8; }
+
+  /* ===== Reason ===== */
+  .reason-grid {
+    max-width: 720px;
+    margin: 32px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .reason-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .reason-num {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--brand);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .85rem;
+  }
+  .reason-content h3 { margin-bottom: 6px; font-size: 1.05rem; color: var(--heading); }
+  .reason-content p { font-size: .95rem; color: var(--muted); line-height: 1.7; }
+
+  /* ===== Profile ===== */
+  .profile-card {
+    max-width: 720px;
+    margin: 32px auto 0;
+    padding: 36px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .profile-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    color: var(--heading);
+  }
+  .profile-title {
+    display: block;
+    font-size: .85rem;
+    font-weight: 400;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .profile-content p {
+    font-size: .95rem;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .profile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin-top: 16px;
+  }
+  .profile-tags li {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--brand);
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    padding: 4px 12px;
+    border-radius: 4px;
+  }
+
+  /* ===== FAQ ===== */
+  .faq-list {
+    max-width: 720px;
+    margin: 32px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .3s ease;
+  }
+  .faq-item[open] { border-color: var(--border-hover); }
+  .faq-item summary {
+    padding: 20px 24px;
+    font-weight: 600;
+    font-size: .95rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+  }
+  .faq-item summary::before {
+    content: '+';
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .faq-item[open] summary::before { content: '\2212'; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item p {
+    padding: 0 24px 20px 60px;
+    font-size: .9rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  /* ===== CTA ===== */
+  .ac-cta-section {
+    position: relative;
+    background: var(--surface-3);
+    color: #fff;
+    padding: clamp(64px, 10vw, 100px) 0;
+    overflow: hidden;
+  }
+  .ac-cta-glow {
+    position: absolute;
+    width: 500px; height: 500px;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(91,127,255,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .ac-cta-section h2 { color: var(--heading); margin-bottom: 16px; }
+  .ac-cta-section p { color: var(--muted); margin-bottom: 28px; line-height: 1.8; }
+</style>

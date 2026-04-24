@@ -1,0 +1,438 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="AI活用診断レポート サンプル（酪農・畜産業）| Optiens"
+  description="酪農・畜産業向けAI活用診断レポートのサンプルです。飼養記録・乳量分析・牛舎環境モニタリングのAI+IoT活用で月28時間の業務削減を提案します。"
+>
+  <main>
+    <section class="hero-section">
+      <div class="container">
+        <a href="/ai-consulting" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
+        <p class="hero-badge">SAMPLE REPORT</p>
+        <h1>AI活用診断レポート<br class="sp-only" />— 酪農・畜産業</h1>
+        <p class="hero-sub">これは提案書のサンプルです。実際の診断では、貴社の業務に合わせた個別の提案を行います。</p>
+      </div>
+    </section>
+
+    <article class="report-body">
+      <div class="container">
+
+        <!-- 事業概要 -->
+        <section class="report-section">
+          <h2>1. 事業概要</h2>
+          <div class="info-table">
+            <div class="info-row"><span class="info-label">業種</span><span class="info-value">酪農（搾乳牛20頭+育成牛8頭）</span></div>
+            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">代表1名 + 家族1名</span></div>
+            <div class="info-row"><span class="info-label">生産</span><span class="info-value">生乳出荷（JA経由）+ 自家製ヨーグルト・チーズの直販</span></div>
+            <div class="info-row"><span class="info-label">販売構成</span><span class="info-value">JA生乳出荷（70%）、直売所・道の駅（20%）、飲食店卸（10%）</span></div>
+            <div class="info-row"><span class="info-label">年商</span><span class="info-value">約800〜1,000万円</span></div>
+            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">朝晩の搾乳で1日が終わる、牛の体調変化を見落としたくない、加工品の直販を伸ばしたいが手が回らない、飼料コストが上がり続けている</span></div>
+          </div>
+        </section>
+
+        <!-- 課題 -->
+        <section class="report-section">
+          <h2>2. 現状の業務フローと課題</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>業務</th><th>頻度</th><th>月間合計</th><th>課題</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>飼養記録（個体別の乳量・体温・エサ量）</td><td>毎日</td><td>約8時間</td><td>紙の個体台帳、後から傾向を見るのが困難</td></tr>
+                <tr><td>牛舎環境管理（温度・湿度・換気）</td><td>日3〜4回確認</td><td>約6時間</td><td>夏の暑熱ストレスが乳量に直結、冬は凍結リスク</td></tr>
+                <tr><td>繁殖管理（発情検知・授精記録）</td><td>不定期</td><td>約4時間</td><td>発情の見逃しが年に数回→経済損失大</td></tr>
+                <tr><td>SNS・直販営業</td><td>実際は月2回</td><td>約2時間</td><td>加工品の魅力を伝えたいが文章が書けない</td></tr>
+                <tr><td>飼料発注・コスト管理</td><td>月2〜3回</td><td>約4時間</td><td>飼料価格の変動が大きく最適な発注タイミングがわからない</td></tr>
+                <tr><td>経理・補助金申請書類</td><td>月末+年次</td><td>約5時間</td><td>手書きの記録から数字を拾うのが大変</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="highlight-box">
+            <strong>月間の削減可能時間（推定）: 約28〜32時間</strong>
+          </div>
+        </section>
+
+        <!-- 提案 -->
+        <section class="report-section">
+          <h2>3. AI活用の提案</h2>
+
+          <div class="priority-label priority-a">優先度A — すぐに効果が出る</div>
+
+          <div class="proposal-card">
+            <h3>提案1: 飼養記録のデジタル化+AI分析</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月6〜8時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月2,000円の投資</span>
+              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
+            </div>
+            <p><strong>現状</strong>: 紙の個体台帳に乳量・体温・エサ量を手書き</p>
+            <p><strong>改善後</strong>: スマホ音声入力→AIが個体別テーブルに自動整理→「3号の乳量が先週から15%減少」とアラート。過去データとの比較も即座に可能</p>
+            <div class="prompt-example">
+              <p class="prompt-label">プロンプト例</p>
+              <pre>以下の個体データを整理し、前週比で乳量が10%以上変動した
+個体をハイライトしてください。
+
+【今週の記録】
+{'{'} ここに音声入力した記録を貼り付け {'}'}
+
+【先週の記録】
+{'{'} ここに先週のデータを貼り付け {'}'}</pre>
+            </div>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案2: SNS・直販の強化（加工品ブランディング）</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 直販売上月2〜5万円増の可能性</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
+            </div>
+            <p><strong>現状</strong>: 自家製ヨーグルト・チーズは好評だが、発信が追いつかない</p>
+            <p><strong>改善後</strong>: 製造工程の写真+ひと言→AIが「牧場ストーリー」投稿文を生成。地域の自然×手作り感を訴求</p>
+            <div class="prompt-example">
+              <p class="prompt-label">プロンプト例</p>
+              <pre>あなたは地元の小さな牧場のSNS担当です。
+自家製ヨーグルトの製造風景から投稿文を作ってください。
+
+【写真の説明】
+{'{'} ここに写真の説明を入力 {'}'}
+
+【トーン】素朴で温かみのある文体。地域の自然と手作りの丁寧さを伝える。</pre>
+            </div>
+          </div>
+
+          <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
+
+          <div class="proposal-card">
+            <span class="iot-badge">🔧 Optiens IoT技術提供</span>
+            <h3>提案3: IoTセンサーによる牛舎環境モニタリング</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-temperature-half"></i> 暑熱ストレス早期対応+冬季凍結防止</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 初期費用8〜12万円+月額4,000円</span>
+              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 中</span>
+            </div>
+            <p><strong>現状</strong>: 牛舎の温度・湿度を体感で判断。夏場の暑熱ストレスで乳量が20〜30%低下することも</p>
+            <p><strong>改善後</strong>: 牛舎に温度・湿度・アンモニア濃度センサーを設置→スマホでリアルタイム確認。THI（温湿度指数）が危険域に入ったらLINE通知→換気・ミスト作動の判断が即座に可能</p>
+            <div class="iot-detail">
+              <p class="iot-detail-title">Optiensが提供できること</p>
+              <ul>
+                <li>温湿度センサー+Raspberry Pi+Zigbee通信のIoTキット</li>
+                <li>THI（Temperature-Humidity Index）自動計算＋危険域アラート</li>
+                <li>Supabaseダッシュボードでスマホからリアルタイム確認</li>
+                <li>過去データの蓄積→「暑熱ストレスと乳量の相関分析」</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案4: 飼料コスト最適化のAI支援</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月2〜3時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 飼料費5〜10%削減の可能性</span>
+            </div>
+            <p>飼料価格の推移+在庫量+消費ペース→AIが最適な発注タイミングと量を提案。価格変動が大きい時期の買い溜め判断もデータに基づいて行えるようになります。</p>
+          </div>
+
+          <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
+
+          <div class="proposal-card">
+            <span class="iot-badge">🔧 Optiens IoT技術提供</span>
+            <h3>提案5: IoT活動量センサーによる発情検知サポート</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 発情見逃し年2〜3回減→経済損失10〜20万円/年の削減</span>
+            </div>
+            <p>加速度センサーで歩数・活動量を個体別モニタリング→活動量急増をAIが検知→「5号が発情の可能性」とLINE通知。Phase 2として、基盤IoTが稼働した後に実装します。</p>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案6: 補助金申請書類のAI下書き</h3>
+            <p>デジタル化された飼養記録+経営データ→AIが畜産クラスター事業等の申請書類の下書きを生成。数値の転記ミスをなくし、申請書類作成の負荷を大幅に軽減します。</p>
+          </div>
+        </section>
+
+        <!-- ROI -->
+        <section class="report-section">
+          <h2>4. 投資対効果（ROI）</h2>
+          <div class="roi-grid">
+            <div class="roi-card">
+              <p class="roi-number">28時間</p>
+              <p class="roi-label">月間削減時間</p>
+            </div>
+            <div class="roi-card">
+              <p class="roi-number">¥42,000</p>
+              <p class="roi-label">時間価値換算/月</p>
+            </div>
+            <div class="roi-card">
+              <p class="roi-number">¥9,000</p>
+              <p class="roi-label">必要投資/月</p>
+            </div>
+            <div class="roi-card accent">
+              <p class="roi-number">¥33,000</p>
+              <p class="roi-label">純効果/月</p>
+            </div>
+          </div>
+          <p class="roi-note">※時給1,500円で換算。間接効果として「暑熱ストレス軽減による乳量維持（年間数十万円規模）」「発情見逃し削減（年間10〜20万円）」「直販チャネルの利益率向上」は純効果を大きく上回ります。</p>
+        </section>
+
+        <!-- ロードマップ -->
+        <section class="report-section">
+          <h2>5. 導入ロードマップ</h2>
+          <div class="roadmap">
+            <div class="roadmap-month">
+              <h3>1ヶ月目 — 基盤構築</h3>
+              <ul>
+                <li>Week 1: AIツールのアカウント開設、基本操作レクチャー</li>
+                <li>Week 2: 飼養記録デジタル化の運用開始（音声入力→AI整理）</li>
+                <li>Week 3: SNS投稿プロンプトの作成・調整</li>
+                <li>Week 4: 効果測定（削減時間の記録）</li>
+              </ul>
+            </div>
+            <div class="roadmap-month">
+              <h3>2ヶ月目 — IoT導入</h3>
+              <ul>
+                <li>Week 1: 牛舎にセンサー設置（温湿度・アンモニア）</li>
+                <li>Week 2: THIダッシュボード構築・アラート設定</li>
+                <li>Week 3: 飼料コスト最適化の試行開始</li>
+                <li>Week 4: 効果測定</li>
+              </ul>
+            </div>
+            <div class="roadmap-month">
+              <h3>3ヶ月目 — 最適化</h3>
+              <ul>
+                <li>Week 1-2: データ蓄積→乳量×環境の相関分析</li>
+                <li>Week 3: 飼料最適化の本格運用・補助金申請AI活用</li>
+                <li>Week 4: 総合振り返り・発情検知IoT（Phase 2）の判断</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </article>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container text-center">
+        <h2>あなたの事業でも診断してみませんか？</h2>
+        <p>業種・規模に合わせた具体的な提案をお届けします。<br />初回相談は無料です。</p>
+        <a href="/free-diagnosis" class="cta-btn">無料AI診断を受ける</a>
+        <div class="cta-links">
+          <a href="/ai-consulting/sample-farmer">個人農家のサンプルを見る</a>
+          <a href="/ai-consulting/sample-bakery">パン屋のサンプルを見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, var(--color-primary, #2e574c) 0%, #1a3a33 100%);
+    color: #fff;
+    padding: clamp(40px, 8vw, 72px) 0 clamp(32px, 6vw, 56px);
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  .back-link:hover { color: #fff; }
+  .hero-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    background: rgba(255,255,255,0.15);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .hero-section h1 { color: #fff; font-size: clamp(1.4rem, 3.5vw, 2rem); margin-bottom: 16px; line-height: 1.4; }
+  .hero-sub { opacity: 0.85; font-size: 0.95rem; }
+  .sp-only { display: none; }
+  @media (max-width: 600px) { .sp-only { display: block; } }
+
+  /* Report body */
+  .report-body { padding: clamp(40px, 8vw, 72px) 0; }
+  .report-section { margin-bottom: 48px; }
+  .report-section h2 {
+    font-size: 1.3rem;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-primary, #2e574c);
+    margin-bottom: 20px;
+  }
+
+  /* Info table */
+  .info-table { display: flex; flex-direction: column; gap: 8px; }
+  .info-row { display: flex; gap: 16px; padding: 8px 0; border-bottom: 1px solid #eee; }
+  .info-label { font-weight: 600; min-width: 100px; color: var(--color-primary, #2e574c); font-size: 0.9rem; }
+  .info-value { font-size: 0.9rem; }
+
+  /* Table */
+  .table-wrapper { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: var(--color-primary, #2e574c); color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f9fafb; }
+
+  .highlight-box {
+    background: #e8f2f0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-size: 0.95rem;
+    color: var(--color-primary, #2e574c);
+  }
+
+  /* Priority labels */
+  .priority-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 24px 0 12px;
+  }
+  .priority-a { background: #dcfce7; color: #166534; }
+  .priority-b { background: #fef3c7; color: #92400e; }
+  .priority-c { background: #f3f4f6; color: #374151; }
+
+  /* Proposal cards */
+  .proposal-card {
+    background: var(--surface, #fff);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .proposal-card h3 { font-size: 1.05rem; margin-bottom: 12px; }
+  .proposal-card p { font-size: 0.9rem; line-height: 1.7; margin-bottom: 8px; }
+  .proposal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .meta-item {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary, #2e574c);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Prompt example */
+  .prompt-example {
+    background: #1a1a2e;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
+  .prompt-example pre {
+    color: #e2e8f0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+  }
+
+  /* IoT badge */
+  .iot-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #2e574c, #5ea89a);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  /* IoT detail box */
+  .iot-detail {
+    background: #e8f2f0;
+    border-left: 4px solid var(--color-primary, #2e574c);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .iot-detail-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-primary, #2e574c);
+    margin-bottom: 8px;
+  }
+  .iot-detail ul { padding-left: 20px; margin: 0; }
+  .iot-detail li { font-size: 0.85rem; line-height: 1.7; margin-bottom: 4px; }
+
+  /* ROI */
+  .roi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .roi-card {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .roi-card.accent { background: var(--color-primary, #2e574c); color: #fff; }
+  .roi-number { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+  .roi-card.accent .roi-number { color: #fff; }
+  .roi-label { font-size: 0.8rem; color: var(--muted, #666); }
+  .roi-card.accent .roi-label { color: rgba(255,255,255,0.8); }
+  .roi-note { font-size: 0.8rem; color: var(--muted, #666); margin-top: 12px; }
+
+  /* Roadmap */
+  .roadmap { display: flex; flex-direction: column; gap: 20px; }
+  .roadmap-month {
+    background: #f9fafb;
+    border-left: 4px solid var(--color-primary, #2e574c);
+    padding: 20px 24px;
+    border-radius: 0 8px 8px 0;
+  }
+  .roadmap-month h3 { font-size: 1rem; margin-bottom: 10px; color: var(--color-primary, #2e574c); }
+  .roadmap-month ul { padding-left: 20px; margin: 0; }
+  .roadmap-month li { font-size: 0.9rem; margin-bottom: 4px; line-height: 1.6; }
+
+  /* CTA */
+  .cta-section {
+    background: var(--color-primary, #2e574c);
+    color: #fff;
+    padding: clamp(48px, 8vw, 72px) 0;
+  }
+  .cta-section h2 { color: #fff; margin-bottom: 12px; }
+  .cta-section p { opacity: 0.9; margin-bottom: 24px; line-height: 1.8; }
+  .cta-btn {
+    display: inline-block;
+    background: #fff;
+    color: var(--color-primary, #2e574c);
+    font-weight: 700;
+    padding: 14px 36px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+  .cta-links {
+    margin-top: 20px;
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-links a { color: rgba(255,255,255,0.8); font-size: 0.85rem; text-decoration: underline; }
+  .cta-links a:hover { color: #fff; }
+</style>

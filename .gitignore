@@ -25,6 +25,9 @@ pnpm-debug.log*
 
 .vercel
 
+# 生成されたレポートPDF
+executive/ai-consulting/reports/*.pdf
+
 # 社内機密ドキュメント（財務計画・投資家資料など）
 executive/finance/report/
 executive/secretary/diary/

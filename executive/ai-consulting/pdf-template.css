@@ -1,0 +1,161 @@
+/* Optiens AI活用診断レポート — PDF テンプレート */
+/* md-to-pdf で使用 */
+
+@page {
+  size: A4;
+  margin: 25mm 20mm 30mm 20mm;
+}
+
+/* フォント */
+body {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.8;
+  color: #1a1a1a;
+}
+
+/* ヘッダー・フッター */
+@page {
+  @bottom-center {
+    content: "合同会社Optiens — info@optiens.com";
+    font-size: 8pt;
+    color: #999;
+  }
+  @bottom-right {
+    content: counter(page);
+    font-size: 8pt;
+    color: #999;
+  }
+}
+
+/* タイトルページ */
+h1 {
+  font-size: 20pt;
+  font-weight: 700;
+  color: #2e574c;
+  border-bottom: 3px solid #2e574c;
+  padding-bottom: 8px;
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+/* メタ情報 */
+h1 + p,
+h1 + p + p,
+h1 + p + p + p,
+h1 + p + p + p + p {
+  font-size: 10pt;
+  margin: 2px 0;
+}
+
+/* セクション見出し */
+h2 {
+  font-size: 14pt;
+  font-weight: 700;
+  color: #2e574c;
+  border-left: 4px solid #5ea89a;
+  padding-left: 12px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #333;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  page-break-after: avoid;
+}
+
+/* 水平線 */
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 24px 0;
+}
+
+/* テーブル */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 9.5pt;
+}
+
+thead {
+  background-color: #2e574c;
+  color: #fff;
+}
+
+th {
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f8faf9;
+}
+
+/* 強調 */
+strong {
+  color: #2e574c;
+}
+
+/* リスト */
+ul, ol {
+  padding-left: 24px;
+}
+
+li {
+  margin-bottom: 4px;
+}
+
+/* 引用（CTA用） */
+blockquote {
+  background-color: #f0f7f5;
+  border-left: 4px solid #5ea89a;
+  padding: 12px 16px;
+  margin: 16px 0;
+  font-size: 10pt;
+}
+
+blockquote p {
+  margin: 0;
+}
+
+/* リンク */
+a {
+  color: #5ea89a;
+  text-decoration: none;
+}
+
+/* 末尾の署名 */
+body > p:last-of-type,
+body > p:nth-last-of-type(2) {
+  font-size: 9pt;
+  color: #666;
+  text-align: center;
+}
+
+/* 改ページ制御 */
+h2 {
+  page-break-before: auto;
+}
+
+table, .highlight-box {
+  page-break-inside: avoid;
+}
+
+/* ページ番号なしの1ページ目 */
+@page :first {
+  @bottom-center { content: ""; }
+  @bottom-right { content: ""; }
+}

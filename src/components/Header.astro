@@ -1,19 +1,16 @@
 ---
- // このページは `src/layouts/Layout.astro` の `<header>` セクションのコードを置き換えることを想定しています。
 ---
 <header class="main-header">
   <a href="/" class="header-logo-link">
-    <!-- <img src="/images/optiens-logo.svg" alt="OptiensLogo" class="header-logo" /> -->
-    <video src="/videos/optiens-logo-wave.mp4" autoplay muted playsinline class="header-logo"></video>
+    <img src="/images/optiens-logo.png" alt="Optiens" class="header-logo" />
   </a>
 
   <nav class="desktop-nav">
     <ul>
       <li><a href="/">HOME</a></li>
       <li><a href="/about">ABOUT</a></li>
-      <li><a href="/solutions">SOLUTIONS</a></li>
-      <li><a href="/market">MARKET</a></li>
-      <li><a href="/roadmap">ROADMAP</a></li>
+      <li><a href="/ai-consulting">SERVICE</a></li>
+      <li><a href="/hydroponics">HYDROPONICS</a></li>
       <li><a href="/blog">BLOG</a></li>
       <li><a href="/contact">CONTACT</a></li>
     </ul>
@@ -23,14 +20,12 @@
     <span></span><span></span><span></span>
   </button>
 
-  <!-- 右から出る固定パネル -->
   <nav id="sidebar-menu" class="sidebar-menu" aria-label="Mobile navigation">
     <ul>
       <li><a href="/">HOME</a></li>
       <li><a href="/about">ABOUT</a></li>
-      <li><a href="/solutions">SOLUTIONS</a></li>
-      <li><a href="/market">MARKET</a></li>
-      <li><a href="/roadmap">ROADMAP</a></li>
+      <li><a href="/ai-consulting">SERVICE</a></li>
+      <li><a href="/hydroponics">HYDROPONICS</a></li>
       <li><a href="/blog">BLOG</a></li>
       <li><a href="/contact">CONTACT</a></li>
     </ul>
@@ -38,7 +33,6 @@
 </header>
 
 <script is:inline>
-  // メニューの開閉
   const menuToggle  = document.getElementById('menu-toggle');
   const sidebarMenu = document.getElementById('sidebar-menu');
 
@@ -48,7 +42,6 @@
       menuToggle.classList.toggle('is-active');
     });
 
-    // メニュー内リンクで閉じる
     sidebarMenu.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
         sidebarMenu.classList.remove('is-open');
@@ -59,109 +52,147 @@
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
-
-/* =========================
-   ヘッダー共通
-   ========================= */
-.main-header{
-  width:100%;
-  background:var(--surface, #fff);
-  color:var(--text, #111);
-  padding:20px 40px;
-  position:fixed; top:0; left:0;
-  z-index: 9900;                 /* メニューより下、ページより上 */
-  box-shadow:0 2px 4px rgba(0,0,0,.1);
+.main-header {
+  width: 100%;
+  background: rgba(10, 10, 10, .75);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  color: var(--text);
+  padding: 14px 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9900;
+  border-bottom: 1px solid var(--border);
 }
-.header-logo{ height:60px; max-width:none; display:block; }
+.header-logo { height: 44px; max-width: none; display: block; }
 
-/* =========================
-   PC/タブレット ≥769px
-   ========================= */
-@media (min-width:769px){
-  .main-header{ display:flex; justify-content:center; align-items:center; }
-  .header-logo-link{ display:block; position:absolute; left:40px; top:50%; transform:translateY(-50%); }
-  .desktop-nav ul{ list-style:none; margin:0; padding:0; display:flex; gap:30px; }
-  .desktop-nav a{
-    color:var(--text, #111); text-decoration:none; font-size:1.1em;
-    font-family:'Lato',sans-serif; font-weight:700; transition:color .3s ease;
+@media (min-width: 769px) {
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .desktop-nav a:hover{ color:var(--brand, #2e574c); text-decoration:underline; }
-  .menu-button, .sidebar-menu{ display:none; }
+  .header-logo-link {
+    display: block;
+    flex-shrink: 0;
+  }
+  .desktop-nav {
+    margin-left: auto;
+  }
+  .desktop-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 36px;
+  }
+  .desktop-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 500;
+    letter-spacing: .08em;
+    transition: color .2s ease;
+  }
+  .desktop-nav a:hover {
+    color: #fff;
+  }
+  .menu-button, .sidebar-menu { display: none; }
 }
 
-/* =========================
-   モバイル ≤768px
-   ========================= */
-@media (max-width:768px){
-  .main-header{ display:flex; justify-content:space-between; align-items:center; padding:8px; }
-  .header-logo-link{ position:static; display:block; }
-
-  .menu-button{
-    position:static; z-index:10001; width:40px; height:30px; background:none; border:none;
-    cursor:pointer; display:flex; flex-direction:column; justify-content:space-around; padding:0;
+@media (max-width: 768px) {
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
   }
-  .menu-button span{
-    display:block; width:100%; height:3px; background:var(--heading, #0b2a4a);
-    transition:all .3s ease-in-out; border-radius:2px;
-  }
-  .menu-button.is-active span:nth-child(1){ transform:translateY(13px) rotate(45deg); }
-  .menu-button.is-active span:nth-child(2){ opacity:0; }
-  .menu-button.is-active span:nth-child(3){ transform:translateY(-13px) rotate(-45deg); }
+  .header-logo-link { position: static; display: block; }
+  .header-logo { height: 36px; }
 
-  /* ===== 右固定のスライドパネル（背景はグローバルのグラデ＋少し透過） ===== */
-  .sidebar-menu{
-    position:fixed; top:0; right:-280px;
-    width:280px; height:100vh;
-    /* 本体は透明。背景用のレイヤーは ::before で描画し、文字は不透明に保つ */
-    background: transparent;
-    color:#fff;
-    transition:right .3s ease-out;
-    z-index:10000;                       /* ヘッダーより上 */
-    padding-top:80px;
-    box-shadow:-2px 0 5px rgba(0,0,0,.5);
-    overflow-y:auto;
-    isolation:isolate;                   /* ::before のレイヤー管理を安定化 */
+  .menu-button {
+    position: static;
+    z-index: 10001;
+    width: 32px;
+    height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 0;
   }
-  .sidebar-menu.is-open{ right:0; }
-
-  /* 背景だけに透過をかける（テキストは影響なし） */
-  .sidebar-menu::before{
-    content:"";
-    position:absolute; inset:0;
-    background: var(--brand-gradient, linear-gradient(135deg,#2e574c,#5ea89a));
-    opacity: .90;                        /* ← “少し透過” の度合い */
-    pointer-events:none;
-    z-index:0;
+  .menu-button span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    transition: all .3s ease-in-out;
+    border-radius: 2px;
   }
-  /* コンテンツは背景レイヤーの上に */
-  .sidebar-menu > *{ position:relative; z-index:1; }
+  .menu-button.is-active span:nth-child(1) { transform: translateY(11px) rotate(45deg); }
+  .menu-button.is-active span:nth-child(2) { opacity: 0; }
+  .menu-button.is-active span:nth-child(3) { transform: translateY(-11px) rotate(-45deg); }
 
-  .sidebar-menu ul{ list-style:none; padding:0; margin:0; }
-  .sidebar-menu li{ margin-bottom:10px; }
-  .sidebar-menu a{
-    display:block; padding:15px 20px; color:#fff; font-size:1.1em;
-    text-decoration:none; transition:background-color .3s ease;
+  .sidebar-menu {
+    position: fixed;
+    top: 0;
+    right: -280px;
+    width: 280px;
+    height: 100vh;
+    background: rgba(10, 10, 14, .96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: #fff;
+    transition: right .3s ease-out;
+    z-index: 10000;
+    padding-top: 80px;
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+  }
+  .sidebar-menu.is-open { right: 0; }
+
+  .sidebar-menu ul { list-style: none; padding: 0; margin: 0; }
+  .sidebar-menu li { border-bottom: 1px solid var(--border); }
+  .sidebar-menu a {
+    display: block;
+    padding: 16px 24px;
+    color: var(--text);
+    font-size: .92rem;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-decoration: none;
+    transition: background-color .2s ease, color .2s ease;
   }
   .sidebar-menu a:hover,
-  .sidebar-menu a:active{ background-color:rgba(255,255,255,.1); color:#fff; }
-  .desktop-nav{ display:none; }
+  .sidebar-menu a:active {
+    background-color: rgba(91, 127, 255, .08);
+    color: var(--brand);
+  }
+  .desktop-nav { display: none; }
 }
 
-/* =========================
-   ロゴ上の細い線 再発防止
-   ========================= */
+/* Progress bar / line fix */
 #nprogress, #nprogress .bar,
 .pace, .pace .pace-progress,
 .top-loader, .top-progress, .router-progress-bar,
-progress[role="progressbar"]{ display:none !important; }
+progress[role="progressbar"] { display: none !important; }
 
-/* ヘッダー最上部を塗って“線”を覆う。メニューより下の層に。 */
-.main-header::before{
-  content:""; position:fixed; top:0; left:0; width:100vw; height:3px;
-  background:var(--surface, #fff);
-  pointer-events:none; z-index:9800;   /* メニュー(10000)より下 */
+.main-header::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 2px;
+  background: rgba(10, 10, 10, .75);
+  pointer-events: none;
+  z-index: 9800;
 }
-.main-header, .main-header::before{ transform:translateZ(0); -webkit-font-smoothing:antialiased; }
-html, body{ margin:0; border:0; }
+.main-header, .main-header::before {
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+}
 </style>

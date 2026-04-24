@@ -1,17 +1,17 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
+import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout
-  title="AI活用診断レポート サンプル（ペンション・宿泊業）| Optiens"
-  description="ペンション・宿泊業向けAI活用診断レポートのサンプルです。多言語対応・口コミ返信・SNS投稿の自動化で月25時間の業務削減を提案します。"
+  title="AI活用診断レポート サンプル（パン屋・ベーカリー）| Optiens"
+  description="パン屋・ベーカリー向けAI活用診断レポートのサンプルです。仕込み計画・SNS集客・売上分析の効率化で月22時間の業務削減を提案します。"
 >
   <main>
     <section class="hero-section">
       <div class="container">
-        <a href="/solutions/ai-consulting" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
+        <a href="/ai-consulting" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
         <p class="hero-badge">SAMPLE REPORT</p>
-        <h1>AI活用診断レポート<br class="sp-only" />— ペンション・宿泊業</h1>
+        <h1>AI活用診断レポート<br class="sp-only" />— パン屋・ベーカリー</h1>
         <p class="hero-sub">これは提案書のサンプルです。実際の診断では、貴社の業務に合わせた個別の提案を行います。</p>
       </div>
     </section>
@@ -23,11 +23,12 @@ import Layout from '../../../layouts/Layout.astro';
         <section class="report-section">
           <h2>1. 事業概要</h2>
           <div class="info-table">
-            <div class="info-row"><span class="info-label">業種</span><span class="info-value">ペンション経営（1日3組限定）</span></div>
-            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">オーナー夫婦 + パート1名</span></div>
-            <div class="info-row"><span class="info-label">主な顧客</span><span class="info-value">国内ファミリー（70%）、海外個人旅行者（30%）</span></div>
-            <div class="info-row"><span class="info-label">予約経路</span><span class="info-value">Booking.com、じゃらん、自社HP、電話</span></div>
-            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">海外対応の負荷、SNS更新の停滞、リピーター管理</span></div>
+            <div class="info-row"><span class="info-label">業種</span><span class="info-value">パン屋・ベーカリー（天然酵母・ハード系パン中心）</span></div>
+            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">オーナー（製造）+ 販売スタッフ1名 + パート1名</span></div>
+            <div class="info-row"><span class="info-label">営業</span><span class="info-value">金・土・日の週3日営業（仕込みは火〜木）</span></div>
+            <div class="info-row"><span class="info-label">販売</span><span class="info-value">店頭販売（70%）、道の駅委託（15%）、通販（15%）</span></div>
+            <div class="info-row"><span class="info-label">月商</span><span class="info-value">約50〜70万円</span></div>
+            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">仕込み量の読みが難しい（廃棄 or 売切れ早すぎ）、SNSをもっとやりたい、通販を伸ばしたいが対応が追いつかない</span></div>
           </div>
         </section>
 
@@ -37,19 +38,20 @@ import Layout from '../../../layouts/Layout.astro';
           <div class="table-wrapper">
             <table>
               <thead>
-                <tr><th>業務</th><th>頻度</th><th>所要時間/回</th><th>月間合計</th><th>課題</th></tr>
+                <tr><th>業務</th><th>頻度</th><th>所要時間/回</th><th>課題</th></tr>
               </thead>
               <tbody>
-                <tr><td>海外ゲストへのメール返信</td><td>日10〜15件（繁忙期）</td><td>15〜30分</td><td>約20時間</td><td>英語対応に時間がかかる</td></tr>
-                <tr><td>OTA口コミ返信</td><td>週5〜10件</td><td>10〜15分</td><td>約6時間</td><td>後回しにしがち</td></tr>
-                <tr><td>SNS投稿（Instagram）</td><td>実際は月2回</td><td>30〜60分</td><td>約2時間</td><td>文章作成で止まる</td></tr>
-                <tr><td>予約確認メール</td><td>日2〜3件</td><td>5〜10分</td><td>約4時間</td><td>テンプレなし</td></tr>
-                <tr><td>経理（売上入力）</td><td>週1回</td><td>2時間</td><td>約8時間</td><td>手入力</td></tr>
+                <tr><td>仕込み計画（種類×数量の決定）</td><td>仕込み日ごと</td><td>約6時間</td><td>天候・曜日・イベントで変動、経験と勘に依存</td></tr>
+                <tr><td>SNS投稿（Instagram）</td><td>実際は週2回</td><td>約4時間</td><td>焼き上がり写真は撮るが文章に悩む</td></tr>
+                <tr><td>通販受注・発送</td><td>週1回発送</td><td>約5時間</td><td>受注→梱包→発送を手作業、在庫引当が手動</td></tr>
+                <tr><td>売上集計・原価管理</td><td>月1回</td><td>約4時間</td><td>レジ→ノート→Excel、原材料費の把握が曖昧</td></tr>
+                <tr><td>道の駅への納品管理</td><td>週3回</td><td>約3時間</td><td>委託数・売上・返品の記録が紙ベース</td></tr>
+                <tr><td>新商品開発（レシピ試作）</td><td>月1〜2回</td><td>約3時間</td><td>アイデアはあるが配合計算に時間がかかる</td></tr>
               </tbody>
             </table>
           </div>
           <div class="highlight-box">
-            <strong>月間の削減可能時間（推定）: 約25〜30時間</strong>
+            <strong>月間の削減可能時間（推定）: 約22〜26時間</strong>
           </div>
         </section>
 
@@ -60,66 +62,79 @@ import Layout from '../../../layouts/Layout.astro';
           <div class="priority-label priority-a">優先度A — すぐに効果が出る</div>
 
           <div class="proposal-card">
-            <h3>提案1: 多言語メール返信の自動下書き生成</h3>
+            <h3>提案1: 仕込み計画のAIサポート</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月15〜18時間削減</span>
-              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月4〜6時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月2,000円の投資</span>
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
-            <p><strong>現状</strong>: 英語メールを1通ずつGoogle翻訳しながら手書き</p>
-            <p><strong>改善後</strong>: AIに日本語で要点を入力→英語返信文を自動生成→確認して送信</p>
+            <p><strong>現状</strong>: 前週の売れ行き・天気予報・近隣イベントを頭の中で判断</p>
+            <p><strong>改善後</strong>: 過去の販売データ（曜日×天気×売上）をスプレッドシートに蓄積→AIが仕込み量の目安を提案</p>
             <div class="prompt-example">
               <p class="prompt-label">プロンプト例</p>
-              <pre>あなたは地元のペンション「〇〇」のオーナーです。
-以下のゲストからのメールに、丁寧でフレンドリーな英語で返信してください。
+              <pre>以下は当店の過去4週間の曜日別売上データです。
+今週末の天気予報と合わせて、金・土・日の仕込み量を提案してください。
 
-【宿の基本情報】
-- チェックイン: 15:00〜18:00
-- チェックアウト: 10:00
-- 駐車場: 無料2台
-- 最寄駅: 小淵沢駅（送迎あり・要予約）
+【過去4週間の売上データ】
+{'{'} スプレッドシートから貼り付け {'}'}
 
-【ゲストからのメール】
-{'{'} ここに貼り付け {'}'}
+【今週の天気予報】
+金曜: 晴れ / 土曜: 曇り / 日曜: 雨
 
-【返信のトーン】温かく、カジュアルすぎず。地域の魅力を1文添える。</pre>
+【考慮事項】
+- 近隣イベント: {'{'} あれば記載 {'}'}
+- 前週の廃棄が多かった商品: {'{'} あれば記載 {'}'}
+- 前週売り切れが早かった商品: {'{'} あれば記載 {'}'}</pre>
             </div>
           </div>
 
           <div class="proposal-card">
-            <h3>提案2: OTA口コミ返信の効率化</h3>
+            <h3>提案2: Instagram投稿文の自動生成</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月4〜5時間削減</span>
-              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 返信率改善→検索順位向上</span>
+              <span class="meta-item"><i class="fa-solid fa-camera"></i> 投稿頻度: 週2回→毎日</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
             </div>
-            <p><strong>現状</strong>: 面倒で後回し→返信率30%程度</p>
-            <p><strong>改善後</strong>: 口コミをコピペ→AIが返信案を生成→微調整して投稿。返信率90%以上へ。</p>
+            <p><strong>現状</strong>: 焼き上がり写真は毎日撮っているが、キャプション作成で止まる</p>
+            <p><strong>改善後</strong>: パンの名前+特徴をひと言入力→AIが季節感あるキャプション+ハッシュタグ生成</p>
+            <div class="prompt-example">
+              <p class="prompt-label">プロンプト例</p>
+              <pre>あなたは地元のベーカリーのInstagram担当です。
+以下のパンについて、温かみのある投稿文を作成してください。
+
+【パンの情報】
+- 名前: {'{'} パンの名前 {'}'}
+- 特徴: {'{'} ひと言メモ {'}'}
+- 季節: {'{'} 今の季節 {'}'}
+
+【トーン】親しみやすく、素材や製法へのこだわりが伝わるように。
+【ハッシュタグ】10個程度。地域名＋商品名を必ず含める。</pre>
+            </div>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
 
           <div class="proposal-card">
-            <h3>提案3: Instagram投稿文の自動生成</h3>
+            <h3>提案3: 売上・原価のデータ分析</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-camera"></i> 投稿頻度: 月2回→週2〜3回</span>
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3〜4時間削減</span>
             </div>
-            <p>写真の説明を2〜3行入力→AIがキャプション+ハッシュタグを生成。フォロワー増・直接予約比率の向上が期待できます。</p>
+            <p>日次売上をスプレッドシートに入力→AIが月次レポート（売れ筋・粗利率・廃棄率）を自動生成。どの商品が利益に貢献しているかが一目でわかるようになります。</p>
           </div>
 
           <div class="proposal-card">
-            <h3>提案4: 予約確認メールのテンプレート化</h3>
+            <h3>提案4: 通販受注管理の効率化</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3時間削減</span>
-              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 無料〜月$20</span>
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3〜4時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月$20</span>
             </div>
-            <p>Gmailテンプレート or Zapier連携で、予約確認・リマインドを半自動化。</p>
+            <p>受注→確認メール→発送通知を半自動化。注文が入ったら確認メールを自動送信し、発送時に追跡番号を含む通知メールを生成します。</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
 
           <div class="proposal-card">
-            <h3>提案5〜6: 宿泊プラン多言語化、リピーター管理</h3>
-            <p>OTAのプラン説明文の多言語化、NotionでのCRM構築（宿泊日・好み・記念日管理）など、基盤ができた後に段階的に拡張。</p>
+            <h3>提案5〜6: レシピ配合計算のAI支援、Googleマップ口コミ返信の自動化</h3>
+            <p>レシピのスケールアップ/ダウン・代替原材料の提案をAIで効率化。Googleマップの口コミ返信もAIで下書きを生成し、返信率を向上させます。</p>
           </div>
         </section>
 
@@ -128,23 +143,23 @@ import Layout from '../../../layouts/Layout.astro';
           <h2>4. 投資対効果（ROI）</h2>
           <div class="roi-grid">
             <div class="roi-card">
-              <p class="roi-number">25時間</p>
+              <p class="roi-number">22時間</p>
               <p class="roi-label">月間削減時間</p>
             </div>
             <div class="roi-card">
-              <p class="roi-number">¥37,500</p>
+              <p class="roi-number">¥33,000</p>
               <p class="roi-label">時間価値換算/月</p>
             </div>
             <div class="roi-card">
-              <p class="roi-number">¥3,000</p>
+              <p class="roi-number">¥5,000</p>
               <p class="roi-label">必要投資/月</p>
             </div>
             <div class="roi-card accent">
-              <p class="roi-number">¥34,500</p>
+              <p class="roi-number">¥28,000</p>
               <p class="roi-label">純効果/月</p>
             </div>
           </div>
-          <p class="roi-note">※時給1,500円で換算。間接効果（OTA検索順位改善、SNSフォロワー増→直接予約増）を含めると実質的な効果はさらに大きくなります。</p>
+          <p class="roi-note">※時給1,500円で換算。間接効果（廃棄削減・SNSフォロワー増→来店増・通販売上増）を含めると実質的な効果はさらに大きくなります。</p>
         </section>
 
         <!-- ロードマップ -->
@@ -154,27 +169,25 @@ import Layout from '../../../layouts/Layout.astro';
             <div class="roadmap-month">
               <h3>1ヶ月目 — 基盤構築</h3>
               <ul>
-                <li>Week 1: AIツールのアカウント開設、基本操作レクチャー</li>
-                <li>Week 2: 多言語メール返信プロンプトの作成・調整</li>
-                <li>Week 3: 口コミ返信プロンプトの作成・運用開始</li>
-                <li>Week 4: 効果測定（削減時間の記録）</li>
+                <li>売上データの記録フォーマット整備・入力開始</li>
+                <li>SNS投稿用プロンプトの作成・調整</li>
+                <li>AIツールの基本操作レクチャー</li>
               </ul>
             </div>
             <div class="roadmap-month">
               <h3>2ヶ月目 — 拡張</h3>
               <ul>
-                <li>Week 1: Instagram投稿プロンプト整備</li>
-                <li>Week 2: 予約確認メールのテンプレート化</li>
-                <li>Week 3: Zapier連携検討</li>
-                <li>Week 4: 効果測定</li>
+                <li>仕込み量予測の仕組み構築（データ蓄積→AI分析）</li>
+                <li>通販受注フローの改善・半自動化</li>
+                <li>効果測定（削減時間・廃棄率の記録）</li>
               </ul>
             </div>
             <div class="roadmap-month">
               <h3>3ヶ月目 — 最適化</h3>
               <ul>
-                <li>Week 1-2: プロンプト精度改善、運用の定着確認</li>
-                <li>Week 3: リピーター管理の仕組み設計</li>
-                <li>Week 4: 総合振り返り・次フェーズ判断</li>
+                <li>原価分析の仕組み導入</li>
+                <li>レシピ配合計算のAI活用開始</li>
+                <li>総合振り返り・効果測定・次フェーズ判断</li>
               </ul>
             </div>
           </div>
@@ -190,8 +203,8 @@ import Layout from '../../../layouts/Layout.astro';
         <p>業種・規模に合わせた具体的な提案をお届けします。<br />初回相談は無料です。</p>
         <a href="/free-diagnosis" class="cta-btn">無料AI診断を受ける</a>
         <div class="cta-links">
-          <a href="/solutions/ai-consulting/sample-restaurant">飲食業のサンプルを見る</a>
-          <a href="/solutions/ai-consulting/sample-construction">工務店のサンプルを見る</a>
+          <a href="/ai-consulting/sample-restaurant">カフェ＆レストランのサンプルを見る</a>
+          <a href="/ai-consulting/sample-winery">ワイナリーのサンプルを見る</a>
         </div>
       </div>
     </section>
