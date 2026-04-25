@@ -11,6 +11,11 @@ export default defineConfig({
     '/news': '/blog',
     '/news/official-website-launch': '/blog/official-website-launch',
     '/solutions/precision-cultivation-model': '/solutions',
+    '/solutions/ai-consulting': '/ai-consulting',
+    '/solutions/ai-consulting/sample-pension': '/ai-consulting/sample-pension',
+    '/solutions/ai-consulting/sample-restaurant': '/ai-consulting/sample-restaurant',
+    '/solutions/ai-consulting/sample-construction': '/ai-consulting/sample-construction',
+    '/market': '/hydroponics',
   },
   site: 'https://optiens.com',
   output: 'server', // ← SSR/エンドポイントあり

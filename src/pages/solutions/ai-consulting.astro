@@ -83,45 +83,57 @@ import Layout from '../../layouts/Layout.astro';
     <section class="service-section">
       <div class="container">
         <h2 class="section-title">サービスメニュー</h2>
-        <div class="service-grid">
+        <div class="service-grid service-grid-4">
+          <div class="service-card card">
+            <div class="service-badge">FREE</div>
+            <h3>無料レポート</h3>
+            <p class="service-price">0円</p>
+            <p class="service-desc">御社の業務にAI自動化がどれだけ効果があるか、ROIを数値で算出します。</p>
+            <ul class="service-list">
+              <li>Webフォーム入力のみで完結</li>
+              <li>AI活用が効果的な業務TOP3</li>
+              <li>ROI試算（削減時間×時給＝月○万円）</li>
+              <li>活用可能な補助金の案内</li>
+              <li>特典: 無料オンラインMTG（30分）</li>
+            </ul>
+          </div>
           <div class="service-card card">
             <div class="service-badge">STEP 1</div>
-            <h3>AI活用診断</h3>
-            <p class="service-price">15万円<span class="price-unit">（税別・単発）</span></p>
-            <p class="service-desc">あなたの業務のどこにAIが効くかを可視化します。</p>
+            <h3>詳細レポート + MTG</h3>
+            <p class="service-price">5,000円<span class="price-unit">（税別）</span></p>
+            <p class="service-desc">詳細な業務分析と自動化提案。30分のオンラインMTGで直接ご説明します。</p>
             <ul class="service-list">
-              <li>現地訪問による業務フローヒアリング（2〜3時間）</li>
-              <li>AI活用領域の優先順位付け</li>
-              <li>ROI試算（月何時間削減→何円相当か）</li>
-              <li>改善ロードマップ（3〜6ヶ月分）</li>
-              <li>業務改善提案書の納品</li>
+              <li>全業務の自動化提案（5〜7件）</li>
+              <li>自動化アーキテクチャ（構成図）</li>
+              <li>詳細コスト試算 + ROI回収期間</li>
+              <li>導入支援の費用見積もり</li>
+              <li>30分オンラインMTG（提案説明）</li>
             </ul>
           </div>
-          <div class="service-card card">
+          <div class="service-card card service-card-primary">
             <div class="service-badge">STEP 2</div>
-            <h3>AI顧問パック</h3>
-            <p class="service-price">月額5万円<span class="price-unit">（税別）</span></p>
-            <p class="service-desc">導入して終わりではなく、継続的に改善をサポート。</p>
+            <h3>導入支援</h3>
+            <p class="service-price">個別見積もり</p>
+            <p class="service-desc">自動化システムの設計・構築・納品。仕組みごとお渡しします。</p>
             <ul class="service-list">
-              <li>月1回の定例ミーティング（1〜2時間）</li>
-              <li>チャット相談（LINE / Chatwork等）</li>
-              <li>月3時間までの実装サポート</li>
-              <li>新しいAIツールの試用・導入判断</li>
-              <li>プロンプトの改善・更新</li>
-              <li>スタッフ向け追加研修</li>
+              <li>自動化ワークフローの設計・構築</li>
+              <li>自動化システム一式の納品</li>
+              <li>運用マニュアル（操作はA4・1枚）</li>
+              <li>セットアップ支援・初期動作確認</li>
+              <li>月額¥500程度の運用コスト設計</li>
             </ul>
           </div>
           <div class="service-card card">
-            <div class="service-badge">ENTRY</div>
-            <h3>ハンズオン研修</h3>
-            <p class="service-price">5万円〜<span class="price-unit">（税別・1回）</span></p>
-            <p class="service-desc">チーム全体でAIの基本操作を学べる実践型研修。</p>
+            <div class="service-badge">STEP 3</div>
+            <h3>保守</h3>
+            <p class="service-price">月額<span class="price-unit">（税別）</span></p>
+            <p class="service-desc">自動化システムの改善・拡張・トラブル対応を継続サポート。</p>
             <ul class="service-list">
-              <li>AIツールの基本操作と活用法</li>
-              <li>業種別ユースケース紹介</li>
-              <li>参加者による実践ワーク</li>
-              <li>質疑応答・個別相談</li>
-              <li>所要時間：2〜3時間</li>
+              <li>ワークフローの機能追加・改善</li>
+              <li>新規業務の自動化検討・設計</li>
+              <li>システムトラブル対応</li>
+              <li>チャット相談（LINE / Chatwork等）</li>
+              <li>定例ミーティング</li>
             </ul>
           </div>
         </div>
@@ -267,7 +279,7 @@ import Layout from '../../layouts/Layout.astro';
           </details>
           <details class="faq-item">
             <summary>本当に効果が出るか不安です。</summary>
-            <p>初回の「AI活用診断」で、具体的にどこでどれくらいの効果が出るかを数値で試算します。効果が見込めない場合は正直にお伝えしますので、その上で導入判断いただけます。</p>
+            <p>まずは無料レポートでROI（投資対効果）を数値で試算します。効果が見込める場合は、5,000円の詳細レポートで具体的な自動化提案と導入費用をご確認いただけます。効果が見込めない場合は正直にお伝えします。</p>
           </details>
           <details class="faq-item">
             <summary>対面での対応は可能ですか？</summary>
@@ -275,7 +287,7 @@ import Layout from '../../layouts/Layout.astro';
           </details>
           <details class="faq-item">
             <summary>契約期間の縛りはありますか？</summary>
-            <p>顧問パックは月単位の契約です。効果を感じられなければいつでも解約可能。まずはAI活用診断（単発）から始めていただくことをお勧めしています。</p>
+            <p>保守は月単位の契約です。効果を感じられなければいつでも解約可能。まずは無料レポートから始めていただくことをお勧めしています。</p>
           </details>
         </div>
       </div>
@@ -452,6 +464,22 @@ import Layout from '../../layouts/Layout.astro';
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
+    margin-top: 32px;
+  }
+  .service-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width: 1024px) {
+    .service-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .service-grid-4 { grid-template-columns: 1fr; }
+  }
+  .service-card-primary {
+    border: 2px solid var(--color-accent, #ea4335);
+  }
+  .service-card-primary .service-badge {
+    background: var(--color-accent, #ea4335);
     margin-top: 32px;
   }
   .service-card { padding: 32px 28px; position: relative; }

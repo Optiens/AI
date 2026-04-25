@@ -14,19 +14,7 @@ body {
   color: #1a1a1a;
 }
 
-/* ヘッダー・フッター */
-@page {
-  @bottom-center {
-    content: "合同会社Optiens — info@optiens.com";
-    font-size: 8pt;
-    color: #999;
-  }
-  @bottom-right {
-    content: counter(page);
-    font-size: 8pt;
-    color: #999;
-  }
-}
+/* ヘッダー・フッター: Puppeteer footerTemplate で出力するため @page では定義しない */
 
 /* タイトルページ */
 h1 {
@@ -154,8 +142,4 @@ table, .highlight-box {
   page-break-inside: avoid;
 }
 
-/* ページ番号なしの1ページ目 */
-@page :first {
-  @bottom-center { content: ""; }
-  @bottom-right { content: ""; }
-}
+/* ページ番号なしの1ページ目: footerTemplate側で制御 */

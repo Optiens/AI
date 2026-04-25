@@ -85,46 +85,57 @@ import Layout from '../layouts/Layout.astro';
     <section class="ac-section ac-service-section">
       <div class="container">
         <h2 class="section-title reveal">サービスメニュー</h2>
-        <div class="service-grid reveal-stagger">
+        <div class="service-grid service-grid-4 reveal-stagger">
+          <div class="ac-card gradient-border">
+            <div class="ac-badge">FREE</div>
+            <h3>無料レポート</h3>
+            <p class="ac-price">0円</p>
+            <p class="ac-desc">御社の業務にAI自動化がどれだけ効果があるか、ROIを数値で算出します。</p>
+            <ul class="ac-list">
+              <li>Webフォーム入力のみで完結</li>
+              <li>AI活用が効果的な業務TOP3</li>
+              <li>ROI試算（削減時間×時給＝月○万円）</li>
+              <li>活用可能な補助金の案内</li>
+              <li>特典: 無料オンラインMTG（30分）</li>
+            </ul>
+          </div>
           <div class="ac-card gradient-border">
             <div class="ac-badge">STEP 1</div>
-            <h3>AI活用診断</h3>
-            <p class="ac-price">15万円<span class="price-unit">（税別・単発）</span></p>
-            <p class="ac-desc">あなたの業務のどこにAIが効くかを可視化します。</p>
+            <h3>詳細レポート + MTG</h3>
+            <p class="ac-price">5,000円<span class="price-unit">（税別）</span></p>
+            <p class="ac-desc">詳細な業務分析と自動化提案。30分のオンラインMTGで直接ご説明します。</p>
             <ul class="ac-list">
-              <li>現地訪問による業務フローヒアリング（2〜3時間）</li>
-              <li>AI活用領域の優先順位付け</li>
-              <li>ROI試算（月何時間削減→何円相当か）</li>
-              <li>改善ロードマップ（3〜6ヶ月分）</li>
-              <li>業務改善提案書の納品</li>
+              <li>全業務の自動化提案（5〜7件）</li>
+              <li>自動化アーキテクチャ（構成図）</li>
+              <li>詳細コスト試算 + ROI回収期間</li>
+              <li>導入支援の費用見積もり</li>
+              <li>30分オンラインMTG（提案説明）</li>
             </ul>
           </div>
-          <div class="ac-card gradient-border">
+          <div class="ac-card gradient-border ac-card-primary">
             <div class="ac-badge">STEP 2</div>
-            <h3>AI顧問パック</h3>
-            <p class="ac-price">月額5万円<span class="price-unit">（税別）</span></p>
-            <p class="ac-desc">導入して終わりではなく、継続的に改善をサポート。</p>
+            <h3>導入支援</h3>
+            <p class="ac-price">個別見積もり</p>
+            <p class="ac-desc">自動化システムの設計・構築・納品。仕組みごとお渡しします。</p>
             <ul class="ac-list">
-              <li>月1回の定例ミーティング（1〜2時間）</li>
-              <li>チャット相談（LINE / Chatwork等）</li>
-              <li>月3時間までの実装サポート</li>
-              <li>新しいAIツールの試用・導入判断</li>
-              <li>プロンプトの改善・更新</li>
-              <li>スタッフ向け追加研修</li>
+              <li>自動化ワークフローの設計・構築</li>
+              <li>自動化システム一式の納品</li>
+              <li>運用マニュアル（操作はA4・1枚）</li>
+              <li>セットアップ支援・初期動作確認</li>
+              <li>月額¥500程度の運用コスト設計</li>
             </ul>
           </div>
           <div class="ac-card gradient-border">
-            <div class="ac-badge">ENTRY</div>
-            <h3>ハンズオン研修</h3>
-            <p class="ac-price">5万円〜<span class="price-unit">（税別・1回）</span></p>
-            <p class="ac-desc">「ツールを設定してあげる」ではなく「自分で回せるようになる」がゴールの実践型研修。</p>
+            <div class="ac-badge">STEP 3</div>
+            <h3>保守</h3>
+            <p class="ac-price">月額<span class="price-unit">（税別）</span></p>
+            <p class="ac-desc">自動化システムの改善・拡張・トラブル対応を継続サポート。</p>
             <ul class="ac-list">
-              <li>AIツールの基本操作と活用法</li>
-              <li>業種別ユースケース紹介</li>
-              <li>タスク・スケジュール管理の自動化体験</li>
-              <li>参加者による実践ワーク</li>
-              <li>質疑応答・個別相談</li>
-              <li>所要時間：2〜3時間</li>
+              <li>ワークフローの機能追加・改善</li>
+              <li>新規業務の自動化検討・設計</li>
+              <li>システムトラブル対応</li>
+              <li>チャット相談（LINE / Chatwork等）</li>
+              <li>定例ミーティング</li>
             </ul>
           </div>
         </div>
@@ -132,12 +143,12 @@ import Layout from '../layouts/Layout.astro';
         <div class="subsidy-banner reveal">
           <div class="subsidy-icon"><i class="fa-solid fa-coins"></i></div>
           <div class="subsidy-text">
-            <p class="subsidy-title">補助金で自己負担を軽減できる場合があります</p>
+            <p class="subsidy-title">補助金が活用できる場合があります</p>
             <p class="subsidy-desc">
-              小規模事業者持続化補助金の「委託費」として申請できる場合があります。<br/>
-              採択された場合、費用の2/3が補助され、<strong>自己負担は約5万円</strong>になります。
+              導入支援の費用は、小規模事業者持続化補助金等の対象になる場合があります。<br/>
+              該当する補助金があれば、レポート内でご案内します。
             </p>
-            <p class="subsidy-note">※ 小規模事業者（従業員20名以下）が対象です。採択を保証するものではありません。補助金は後払いのため、サービス利用時に全額お支払いいただきます。詳細はお問い合わせください。</p>
+            <p class="subsidy-note">※ 補助金の申請サポートは当社の業務範囲外となります。詳細は各補助金の窓口にお問い合わせください。</p>
           </div>
         </div>
       </div>
@@ -318,7 +329,7 @@ import Layout from '../layouts/Layout.astro';
           </details>
           <details class="faq-item">
             <summary>本当に効果が出るか不安です。</summary>
-            <p>初回の「AI活用診断」で、具体的にどこでどれくらいの効果が出るかを数値で試算します。効果が見込めない場合は正直にお伝えしますので、その上で導入判断いただけます。</p>
+            <p>まずは無料レポートでROI（投資対効果）を数値で試算します。効果が見込める場合は、5,000円の詳細レポートで具体的な自動化提案と導入費用をご確認いただけます。効果が見込めない場合は正直にお伝えします。</p>
           </details>
           <details class="faq-item">
             <summary>対面での対応は可能ですか？</summary>
@@ -326,7 +337,7 @@ import Layout from '../layouts/Layout.astro';
           </details>
           <details class="faq-item">
             <summary>契約期間の縛りはありますか？</summary>
-            <p>顧問パックは月単位の契約です。効果を感じられなければいつでも解約可能。まずはAI活用診断（単発）から始めていただくことをお勧めしています。</p>
+            <p>保守は月単位の契約です。効果を感じられなければいつでも解約可能。まずは無料レポートから始めていただくことをお勧めしています。</p>
           </details>
         </div>
       </div>
@@ -526,6 +537,22 @@ import Layout from '../layouts/Layout.astro';
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
     margin-top: 32px;
+  }
+  .service-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width: 1024px) {
+    .service-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .service-grid-4 { grid-template-columns: 1fr; }
+  }
+  .ac-card-primary {
+    border: 2px solid var(--accent, #ea4335);
+    position: relative;
+  }
+  .ac-card-primary .ac-badge {
+    background: var(--accent, #ea4335);
   }
   .sample-grid {
     display: grid;
