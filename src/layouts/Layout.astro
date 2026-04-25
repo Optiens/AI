@@ -56,7 +56,7 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap"
       rel="stylesheet"
     />
 
@@ -76,11 +76,35 @@ const {
     {/* スキップリンク（キーボード利用者向け） */}
     <a href="#main" class="skip-link">本文へスキップ</a>
 
+    {/* Ambient floating blobs — visible through all pages */}
+    <div class="ambient-wrap" aria-hidden="true">
+      <div class="ambient-blob ambient-blob--1"></div>
+      <div class="ambient-blob ambient-blob--2"></div>
+      <div class="ambient-blob ambient-blob--3"></div>
+    </div>
+
     <Header />
     <div id="main" class="site-main">
       <slot />
     </div>
     <Footer />
+
+    {/* Scroll Reveal Observer */}
+    <script is:inline>
+      (function() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+          observer.observe(el);
+        });
+      })();
+    </script>
   </body>
 </html>
 

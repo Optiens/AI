@@ -1,0 +1,210 @@
+---
+export interface Props {
+  title: string;
+  active?: 'leads' | 'knowledge' | 'reports' | 'dashboard';
+}
+
+const { title, active = 'leads' } = Astro.props;
+
+const nav = [
+  { id: 'leads', label: '案件管理', icon: 'fa-briefcase', href: '/admin/leads' },
+  { id: 'knowledge', label: 'ナレッジ', icon: 'fa-book', href: '/admin/knowledge' },
+  { id: 'reports', label: 'レポート', icon: 'fa-file-alt', href: '/admin/reports' },
+  { id: 'dashboard', label: 'ダッシュボード', icon: 'fa-chart-bar', href: '/admin/dashboard' },
+] as const;
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>{title} | Optiens Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --admin-bg: #0f1117;
+      --admin-surface: #1a1d27;
+      --admin-surface-2: #22252f;
+      --admin-border: #2a2d3a;
+      --admin-text: #e4e6eb;
+      --admin-muted: #8b8fa3;
+      --admin-brand: #5b7fff;
+      --admin-brand-hover: #4a6de8;
+      --admin-success: #34d399;
+      --admin-warning: #fbbf24;
+      --admin-danger: #ea4335;
+      --sidebar-w: 220px;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--admin-bg);
+      color: var(--admin-text);
+      line-height: 1.5;
+    }
+    /* Sidebar */
+    .admin-sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--admin-surface);
+      border-right: 1px solid var(--admin-border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+    .sidebar-brand {
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .sidebar-brand a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+    .sidebar-brand span {
+      display: block;
+      font-size: 0.65rem;
+      color: var(--admin-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+    .sidebar-nav {
+      list-style: none;
+      padding: 12px 8px;
+      flex: 1;
+    }
+    .sidebar-nav li { margin-bottom: 2px; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--admin-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar-nav a:hover {
+      background: var(--admin-surface-2);
+      color: var(--admin-text);
+    }
+    .sidebar-nav a.active {
+      background: rgba(91, 127, 255, 0.12);
+      color: var(--admin-brand);
+    }
+    .sidebar-nav a i { width: 18px; text-align: center; font-size: 0.9rem; }
+    .sidebar-bottom {
+      padding: 12px 8px;
+      border-top: 1px solid var(--admin-border);
+    }
+    .sidebar-bottom a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--admin-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.15s;
+    }
+    .sidebar-bottom a:hover { color: var(--admin-text); }
+    /* Main */
+    .admin-main {
+      margin-left: var(--sidebar-w);
+      min-height: 100svh;
+    }
+    .admin-header {
+      position: sticky;
+      top: 0;
+      background: var(--admin-bg);
+      border-bottom: 1px solid var(--admin-border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+    }
+    .admin-header h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .admin-body {
+      padding: 24px 28px;
+    }
+    /* Mobile */
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      top: 12px; left: 12px;
+      z-index: 200;
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--admin-text);
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .mobile-toggle { display: block; }
+      .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.2s;
+      }
+      .admin-sidebar.open { transform: translateX(0); }
+      .admin-main { margin-left: 0; }
+      .admin-header { padding-left: 56px; }
+    }
+  </style>
+</head>
+<body>
+  <button class="mobile-toggle" id="sidebar-toggle" aria-label="メニュー">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <aside class="admin-sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <a href="/admin">Optiens<span>Admin Console</span></a>
+    </div>
+    <ul class="sidebar-nav">
+      {nav.map(item => (
+        <li>
+          <a href={item.href} class={active === item.id ? 'active' : ''}>
+            <i class={`fas ${item.icon}`}></i>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="sidebar-bottom">
+      <a href="/"><i class="fas fa-external-link-alt"></i> サイトに戻る</a>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-header">
+      <h1>{title}</h1>
+      <slot name="header-actions" />
+    </header>
+    <div class="admin-body">
+      <slot />
+    </div>
+  </div>
+
+  <script is:inline>
+    document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
+      document.getElementById('sidebar')?.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

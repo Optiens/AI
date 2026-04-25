@@ -67,23 +67,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
             <p><strong>現状</strong>: 英語メールを1通ずつGoogle翻訳しながら手書き</p>
-            <p><strong>改善後</strong>: AIに日本語で要点を入力→英語返信文を自動生成→確認して送信</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>あなたは地元のペンション「〇〇」のオーナーです。
-以下のゲストからのメールに、丁寧でフレンドリーな英語で返信してください。
-
-【宿の基本情報】
-- チェックイン: 15:00〜18:00
-- チェックアウト: 10:00
-- 駐車場: 無料2台
-- 最寄駅: 小淵沢駅（送迎あり・要予約）
-
-【ゲストからのメール】
-{'{'} ここに貼り付け {'}'}
-
-【返信のトーン】温かく、カジュアルすぎず。地域の魅力を1文添える。</pre>
-            </div>
+            <p><strong>改善後</strong>: 受信メールをAIエージェントが自動検知 → 宿の情報と過去の返信パターンを参照して返信ドラフトを自動生成 → オーナーは確認して送信ボタンを押すだけ</p>
           </div>
 
           <div class="proposal-card">
@@ -93,7 +77,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 返信率改善→検索順位向上</span>
             </div>
             <p><strong>現状</strong>: 面倒で後回し→返信率30%程度</p>
-            <p><strong>改善後</strong>: 口コミをコピペ→AIが返信案を生成→微調整して投稿。返信率90%以上へ。</p>
+            <p><strong>改善後</strong>: AIエージェントがOTAの新着口コミを自動検知 → 口コミ内容と宿の特徴を参照して返信ドラフトを自動生成 → オーナーは確認・微調整して投稿。返信率90%以上へ。</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
@@ -103,7 +87,7 @@ import Layout from '../../layouts/Layout.astro';
             <div class="proposal-meta">
               <span class="meta-item"><i class="fa-solid fa-camera"></i> 投稿頻度: 月2回→週2〜3回</span>
             </div>
-            <p>写真の説明を2〜3行入力→AIがキャプション+ハッシュタグを生成。フォロワー増・直接予約比率の向上が期待できます。</p>
+            <p>AIエージェントが写真のメタデータと宿のイベント情報を自動読み取り → キャプション+ハッシュタグを自動生成 → 投稿予約まで自動セット。オーナーは確認・承認のみ。フォロワー増・直接予約比率の向上が期待できます。</p>
           </div>
 
           <div class="proposal-card">
@@ -112,7 +96,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3時間削減</span>
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 無料〜月$20</span>
             </div>
-            <p>Gmailテンプレート or Zapier連携で、予約確認・リマインドを半自動化。</p>
+            <p>AIエージェントが予約データを自動読み取り → 確認メール・リマインドを自動生成・送信。オーナーは確認・承認のみ。</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
@@ -154,27 +138,27 @@ import Layout from '../../layouts/Layout.astro';
             <div class="roadmap-month">
               <h3>1ヶ月目 — 基盤構築</h3>
               <ul>
-                <li>Week 1: AIツールのアカウント開設、基本操作レクチャー</li>
-                <li>Week 2: 多言語メール返信プロンプトの作成・調整</li>
-                <li>Week 3: 口コミ返信プロンプトの作成・運用開始</li>
+                <li>Week 1: AIエージェント構築・初期設定</li>
+                <li>Week 2: メール・予約データソースの連携整備</li>
+                <li>Week 3: 多言語メール返信・口コミ返信の自動化ワークフロー構築・動作確認</li>
                 <li>Week 4: 効果測定（削減時間の記録）</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — 拡張</h3>
+              <h3>2ヶ月目 — ワークフロー拡張</h3>
               <ul>
-                <li>Week 1: Instagram投稿プロンプト整備</li>
-                <li>Week 2: 予約確認メールのテンプレート化</li>
-                <li>Week 3: Zapier連携検討</li>
+                <li>Week 1: Instagram投稿自動生成ワークフロー構築</li>
+                <li>Week 2: 予約確認メール自動送信の仕組み構築</li>
+                <li>Week 3: 新規業務の自動化追加</li>
                 <li>Week 4: 効果測定</li>
               </ul>
             </div>
             <div class="roadmap-month">
               <h3>3ヶ月目 — 最適化</h3>
               <ul>
-                <li>Week 1-2: プロンプト精度改善、運用の定着確認</li>
+                <li>Week 1-2: 効果測定・ワークフロー最適化、運用の定着確認</li>
                 <li>Week 3: リピーター管理の仕組み設計</li>
-                <li>Week 4: 総合振り返り・次フェーズ判断</li>
+                <li>Week 4: 総合振り返り・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -298,23 +282,6 @@ import Layout from '../../layouts/Layout.astro';
     display: flex;
     align-items: center;
     gap: 4px;
-  }
-
-  /* Prompt example */
-  .prompt-example {
-    background: #1a1a2e;
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-top: 12px;
-  }
-  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
-  .prompt-example pre {
-    color: #e2e8f0;
-    font-size: 0.8rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin: 0;
   }
 
   /* ROI */

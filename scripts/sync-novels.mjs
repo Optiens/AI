@@ -4,7 +4,7 @@
  *
  * Usage: node scripts/sync-novels.mjs
  */
-import { readdir, copyFile, mkdir, readFile, writeFile } from 'fs/promises';
+import { readdir, copyFile, mkdir, readFile, writeFile, access } from 'fs/promises';
 import { join, basename } from 'path';
 
 const NOVEL_SRC = 'c:/workspace/optiens-novel/projects';
@@ -24,6 +24,14 @@ function extractSeasonNum(filename) {
 }
 
 async function main() {
+  // ソースが存在しない場合はスキップ（Vercelビルド時は既にコミット済みのファイルを使う）
+  try {
+    await access(NOVEL_SRC);
+  } catch {
+    console.log('Novel source not found, skipping sync (using committed files)');
+    return;
+  }
+
   const novels = await readdir(NOVEL_SRC);
   const index = [];
 

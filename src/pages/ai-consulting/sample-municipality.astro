@@ -68,34 +68,19 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
             <p><strong>現状</strong>: 担当者1名がネタ探し→撮影→文章作成→投稿。異動のたびにノウハウが消える</p>
-            <p><strong>改善後</strong>: イベント情報や写真+ひと言メモ→AIが投稿文+ハッシュタグを生成。投稿マニュアル+プロンプト集を整備すれば異動しても引き継ぎ可能</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>あなたは北杜市観光課のSNS担当です。以下のイベント情報からInstagram投稿文を作成してください。
-【ルール】150文字以内 / 親しみやすく公的な文体 / ハッシュタグ5〜8個 / 開催日時・場所を明記
-【イベント】
-名称: 星空観望会
-日時: 2026年5月15日（金）19:00〜21:00
-場所: まきば公園
-ひと言: 今年から天体望遠鏡を3台に増設</pre>
-            </div>
+            <p><strong>改善後</strong>: イベント情報をカレンダーに登録するだけでAIエージェントが投稿文+ハッシュタグを自動生成→承認後に自動投稿。自動化ワークフローを整備すれば異動しても引き継ぎ可能</p>
           </div>
 
           <div class="proposal-card">
-            <h3>提案2: 議事録の自動下書き生成</h3>
+            <h3>提案2: 議事録の自動生成</h3>
             <div class="proposal-meta">
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月7〜8時間削減</span>
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 無料〜月3,000円</span>
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
             <p><strong>現状</strong>: 審議会の録音を聞き直しながら手打ち（1時間の会議→3〜4時間）</p>
-            <p><strong>改善後</strong>: 録音→AI文字起こし→要約・構造化。発言者ごとの整理、決定事項の抽出まで自動化</p>
+            <p><strong>改善後</strong>: 録音ファイルを保存→AIエージェントが自動文字起こし→要約・構造化→発言者ごとの整理、決定事項の抽出まで自動処理→指定フォルダに議事録を自動出力。担当者は確認・承認のみ</p>
             <p class="note-text"><strong>注意</strong>: 個人情報を含む会議は対象外。公開前提の審議会・委員会が対象</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>以下の会議録音テキストを、発言者ごとに整理し、
-議題・主な意見・決定事項・次回アクションの形式でまとめてください。</pre>
-            </div>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
@@ -107,7 +92,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円</span>
             </div>
             <p><strong>現状</strong>: 英語・中国語・韓国語のパンフレット・HP更新を外注（1件5〜10万円）</p>
-            <p><strong>改善後</strong>: AIで下書き翻訳→ネイティブチェック（ALT等）で最終確認。外注の半額以下で多言語化が回る</p>
+            <p><strong>改善後</strong>: 日本語コンテンツを更新するとAIエージェントが英語・中国語・韓国語に自動翻訳→ネイティブチェック（ALT等）で最終確認。外注の半額以下で多言語化が回る</p>
             <p><strong>対象</strong>: 観光パンフレット、HP、案内看板のテキスト</p>
           </div>
 
@@ -116,19 +101,19 @@ import Layout from '../../layouts/Layout.astro';
             <div class="proposal-meta">
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月5〜6時間削減</span>
             </div>
-            <p>よくある質問（アクセス・駐車場・イベント日程・ペット可否等）をAIでFAQページ化+メール返信テンプレート生成。将来的にはチャットボット導入も視野に。</p>
+            <p>よくある質問（アクセス・駐車場・イベント日程・ペット可否等）をAIでFAQページ化+メール返信テンプレート自動生成。将来的にはAIエージェントによる自動応答も視野に。</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降・他部署展開</div>
 
           <div class="proposal-card">
             <h3>提案5: 移住相談の初期対応効率化（企画課）</h3>
-            <p>AIが初期質問（家賃相場・学校・病院・交通アクセス）に対する回答ドラフトを生成。職員は「この方に合った具体的な提案」に集中できる。</p>
+            <p>AIエージェントが初期質問（家賃相場・学校・病院・交通アクセス）を自動検知→回答を自動生成→担当職員に承認依頼。職員は「この方に合った具体的な提案」に集中できる。</p>
           </div>
 
           <div class="proposal-card">
             <h3>提案6: 農林課の補助金案内・農家向け情報発信</h3>
-            <p>補助金の要件チェックリスト自動生成、農家向けメール・チラシの文案作成。農林課のSNS（就農支援・地産地消PR）にも横展開。</p>
+            <p>AIエージェントが補助金情報を自動読み取り→要件チェックリスト自動生成、農家向けメール・チラシの文案を自動作成。農林課のSNS（就農支援・地産地消PR）にも横展開。</p>
           </div>
         </section>
 
@@ -164,27 +149,27 @@ import Layout from '../../layouts/Layout.astro';
             <div class="roadmap-month">
               <h3>1ヶ月目 — 観光課で試行</h3>
               <ul>
-                <li>Week 1: AIツールのアカウント開設、セキュリティガイドライン確認</li>
-                <li>Week 2: SNS投稿プロンプト整備、投稿マニュアル作成</li>
-                <li>Week 3: 議事録AI化の試行（過去の公開議事録で検証）</li>
+                <li>Week 1: AIエージェント構築・データソース整備・セキュリティガイドライン確認</li>
+                <li>Week 2: SNS投稿自動化ワークフローの構築・初期動作確認</li>
+                <li>Week 3: 議事録自動生成の試行（過去の公開議事録で検証）</li>
                 <li>Week 4: 効果測定</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — 拡張</h3>
+              <h3>2ヶ月目 — ワークフロー拡張</h3>
               <ul>
-                <li>Week 1: 多言語コンテンツのAI翻訳試行</li>
-                <li>Week 2: FAQ・テンプレート整備</li>
+                <li>Week 1: 多言語自動翻訳ワークフローの追加</li>
+                <li>Week 2: FAQ自動応答・テンプレート自動生成の追加</li>
                 <li>Week 3: 他部署への説明会</li>
                 <li>Week 4: 効果測定</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>3ヶ月目 — 横展開</h3>
+              <h3>3ヶ月目 — 横展開・最適化</h3>
               <ul>
                 <li>Week 1-2: 企画課（移住）・農林課への導入</li>
                 <li>Week 3: 庁内AI活用ガイドライン策定支援</li>
-                <li>Week 4: 総合振り返り・次年度計画</li>
+                <li>Week 4: 効果測定・ワークフロー最適化・次年度計画</li>
               </ul>
             </div>
           </div>
@@ -308,23 +293,6 @@ import Layout from '../../layouts/Layout.astro';
     display: flex;
     align-items: center;
     gap: 4px;
-  }
-
-  /* Prompt example */
-  .prompt-example {
-    background: #1a1a2e;
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-top: 12px;
-  }
-  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
-  .prompt-example pre {
-    color: #e2e8f0;
-    font-size: 0.8rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin: 0;
   }
 
   /* Note text */

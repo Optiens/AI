@@ -68,22 +68,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
             <p><strong>現状</strong>: 手書きノートに温度・比重・酵母の状態を記録、後から探すのが大変</p>
-            <p><strong>改善後</strong>: スマホの音声入力→AIが構造化して記録、過去データの検索・比較も即座に可能</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>あなたはワイナリーの醸造記録アシスタントです。
-以下の音声入力を醸造日誌のフォーマットに整理してください。
-
-【出力フォーマット】
-| 日時 | タンク | 品種 | 温度 | 比重 | 酵母状態 | 作業内容 | 備考 |
-
-【音声入力】
-{'{'} ここに貼り付け {'}'}
-
-【ルール】
-- 数値は単位を補完する（例: 「じゅうご」→ 15℃）
-- 前回との差分があれば末尾にメモを追記</pre>
-            </div>
+            <p><strong>改善後</strong>: AIエージェントがスマホの音声入力を自動読み取り → 醸造日誌フォーマットに構造化してスプレッドシートに自動記録。過去データの検索・比較も即座に可能。オーナーは確認・承認のみ。</p>
           </div>
 
           <div class="proposal-card">
@@ -93,7 +78,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
             </div>
             <p><strong>現状</strong>: 畑やセラーの写真は撮るが文章で止まる</p>
-            <p><strong>改善後</strong>: ひと言メモ+写真の状況→AIがワイナリーらしいキャプション生成。季節の畑の様子、醸造の進捗、新ヴィンテージの案内などを定期発信。</p>
+            <p><strong>改善後</strong>: AIエージェントが写真フォルダを自動監視 → ひと言メモと写真の状況からワイナリーらしいキャプションを自動生成 → 投稿予約まで自動セット。オーナーは確認・承認のみ。季節の畑の様子、醸造の進捗、新ヴィンテージの案内などを定期発信。</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
@@ -103,7 +88,7 @@ import Layout from '../../layouts/Layout.astro';
             <div class="proposal-meta">
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月4〜5時間削減</span>
             </div>
-            <p>ワインの品種・ヴィンテージ・テイスティングノートをデータベース化し、AIが飲食店の業態に合わせた提案書を自動生成。ペアリング提案も添えることで成約率向上が期待できます。</p>
+            <p>ワインの品種・ヴィンテージ・テイスティングノートをデータベース化。AIエージェントが卸先の業態情報を自動読み取り → 業態に合わせた提案書を自動生成 → ペアリング提案も自動添付。オーナーは確認・送信のみ。成約率向上が期待できます。</p>
           </div>
 
           <div class="proposal-card">
@@ -112,14 +97,14 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月5〜6時間削減</span>
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月$20</span>
             </div>
-            <p>受注→確認メール→配送伝票の一連のフローを半自動化。Zapier等のツール連携で手作業を最小限に抑えます。</p>
+            <p>AIエージェントが受注メールを自動検知 → 確認メール生成・配送伝票作成まで一連のフローを自動実行。オーナーは確認・承認のみで手作業を最小限に抑えます。</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
 
           <div class="proposal-card">
             <h3>提案5〜6: 顧客CRM構築、多言語対応</h3>
-            <p>購入履歴・好みを管理するCRMの構築でリピーター育成を強化。インバウンド需要に向けたテイスティングノート・ワイナリー紹介の英語化など、基盤ができた後に段階的に拡張。</p>
+            <p>AIエージェントが購入履歴・好みを自動分析するCRMの構築でリピーター育成を強化。インバウンド需要に向けたテイスティングノート・ワイナリー紹介の多言語自動翻訳など、基盤ができた後に段階的に拡張。</p>
           </div>
         </section>
 
@@ -152,29 +137,29 @@ import Layout from '../../layouts/Layout.astro';
           <h2>5. 導入ロードマップ</h2>
           <div class="roadmap">
             <div class="roadmap-month">
-              <h3>1ヶ月目 — 基盤構築</h3>
+              <h3>1ヶ月目 — AIエージェント構築・データソース整備・初期動作確認</h3>
               <ul>
-                <li>Week 1: AIツール導入、基本操作レクチャー</li>
-                <li>Week 2: 醸造記録デジタル化のフォーマット整備・運用開始</li>
-                <li>Week 3: SNS投稿プロンプトの作成・テスト運用</li>
+                <li>Week 1: AIエージェント構築・初期設定、基本操作レクチャー</li>
+                <li>Week 2: 醸造記録デジタル化のフォーマット整備・自動記録ワークフロー運用開始</li>
+                <li>Week 3: SNS投稿の自動化ワークフロー構築・テスト運用</li>
                 <li>Week 4: 効果測定（削減時間の記録）</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — 拡張</h3>
+              <h3>2ヶ月目 — ワークフロー拡張・新規業務の自動化追加</h3>
               <ul>
-                <li>Week 1: 卸先向け提案書テンプレート・プロンプト整備</li>
-                <li>Week 2: EC受注フロー改善・自動化ツール連携</li>
-                <li>Week 3: メルマガ文章生成の仕組み構築</li>
+                <li>Week 1: 卸先向け提案書テンプレート・自動生成ワークフロー整備</li>
+                <li>Week 2: EC受注フロー改善・自動化ワークフロー連携</li>
+                <li>Week 3: メルマガ自動生成の仕組み構築</li>
                 <li>Week 4: 効果測定</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>3ヶ月目 — 最適化</h3>
+              <h3>3ヶ月目 — 効果測定・ワークフロー最適化・次フェーズ検討</h3>
               <ul>
-                <li>Week 1-2: CRM構築着手（購入履歴・好み管理）</li>
-                <li>Week 3: 多言語対応検討（インバウンド向けテイスティングノート英語化）</li>
-                <li>Week 4: 総合振り返り・次フェーズ判断</li>
+                <li>Week 1-2: CRM構築着手（購入履歴・好み管理の自動分析）</li>
+                <li>Week 3: 多言語対応検討（インバウンド向けテイスティングノート自動翻訳）</li>
+                <li>Week 4: 総合振り返り・ワークフロー最適化・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -300,22 +285,6 @@ import Layout from '../../layouts/Layout.astro';
     gap: 4px;
   }
 
-  /* Prompt example */
-  .prompt-example {
-    background: #1a1a2e;
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-top: 12px;
-  }
-  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
-  .prompt-example pre {
-    color: #e2e8f0;
-    font-size: 0.8rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin: 0;
-  }
 
   /* ROI */
   .roi-grid {

@@ -68,27 +68,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 中</span>
             </div>
             <p><strong>現状</strong>: 電話・Instagram DM・じゃらんの3経路を手動で転記</p>
-            <p><strong>改善後</strong>: Googleフォーム+スプレッドシート+AIで自動確認メール。空き状況の問合せにもAIが下書き回答</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>あなたは地元のアウトドアガイド「〇〇」のスタッフです。
-以下の予約申込に対して、確認メールを作成してください。
-
-【ツアー情報】
-- コース: {'{'} コース名 {'}'}
-- 日時: {'{'} 日付・集合時間 {'}'}
-- 集合場所: {'{'} 集合場所 {'}'}
-- 参加人数: {'{'} 人数 {'}'}
-
-【返信に含める内容】
-- 予約確認と感謝
-- 集合場所・時間のリマインド
-- 持ち物リスト（コース別）
-- 天候による中止の可能性と連絡方法
-- キャンセルポリシー
-
-【トーン】親しみやすく、アウトドアの楽しさが伝わるように。</pre>
-            </div>
+            <p><strong>改善後</strong>: AIエージェントが各予約経路からの申込を自動検知 → 予約台帳に自動集約 → 確認メール（集合場所・持ち物・天候連絡方法を含む）を自動生成・送信。オーナーは確認・承認のみ。</p>
           </div>
 
           <div class="proposal-card">
@@ -98,7 +78,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 無料〜月2,000円</span>
             </div>
             <p><strong>現状</strong>: 天気予報を自分で見て判断、参加者に1人ずつLINE/電話</p>
-            <p><strong>改善後</strong>: AIに天気情報+判断基準を渡して催行可否の判断材料を整理。テンプレートで一斉連絡</p>
+            <p><strong>改善後</strong>: AIエージェントが天気APIから自動取得 → 事前設定した判断基準と照合して催行可否を判定 → 参加者への連絡文を自動生成・一斉送信。オーナーは最終判断の承認のみ。</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
@@ -108,7 +88,7 @@ import Layout from '../../layouts/Layout.astro';
             <div class="proposal-meta">
               <span class="meta-item"><i class="fa-solid fa-camera"></i> 投稿頻度: 月4回→週3回</span>
             </div>
-            <p>ツアー中のメモ+写真をAIに渡すだけで、キャプション・ハッシュタグ・ツアーレポートを自動生成。フォロワー増・直接予約比率の向上が期待できます。</p>
+            <p>AIエージェントがツアー写真と位置情報を自動読み取り → キャプション・ハッシュタグ・ツアーレポートを自動生成 → 投稿予約まで自動セット。オーナーは確認・承認のみ。フォロワー増・直接予約比率の向上が期待できます。</p>
           </div>
 
           <div class="proposal-card">
@@ -116,7 +96,7 @@ import Layout from '../../layouts/Layout.astro';
             <div class="proposal-meta">
               <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 顧客満足度向上+リピーター育成</span>
             </div>
-            <p>ツアー終了→翌日に自動フォローメール（写真リンク+次のおすすめツアー案内）。手が回らなかった顧客フォローを仕組み化し、リピーター率を改善します。</p>
+            <p>AIエージェントがツアー終了を検知 → 翌日に写真リンク+参加コースに基づく次のおすすめツアー案内を自動生成・送信。手が回らなかった顧客フォローを完全自動化し、リピーター率を改善します。</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
@@ -158,23 +138,23 @@ import Layout from '../../layouts/Layout.astro';
             <div class="roadmap-month">
               <h3>1ヶ月目 — 基盤構築</h3>
               <ul>
-                <li>予約一元管理の仕組み構築（Googleフォーム+スプレッドシート）</li>
-                <li>自動返信テンプレートの作成・調整</li>
-                <li>天候判断フローの整備</li>
+                <li>AIエージェント構築・データソース整備（予約経路・天気API連携）</li>
+                <li>予約一元管理+自動返信ワークフロー構築・初期動作確認</li>
+                <li>天候判断自動化ワークフローの構築</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — 拡張</h3>
+              <h3>2ヶ月目 — ワークフロー拡張</h3>
               <ul>
-                <li>SNS投稿プロンプトの整備・運用開始</li>
-                <li>フォローメール自動化の仕組み構築</li>
+                <li>SNS投稿自動生成ワークフロー構築・運用開始</li>
+                <li>フォローメール自動送信の仕組み構築・新規業務の自動化追加</li>
               </ul>
             </div>
             <div class="roadmap-month">
               <h3>3ヶ月目 — 最適化</h3>
               <ul>
                 <li>安全管理記録のデジタル化</li>
-                <li>効果測定・プロンプト精度改善</li>
+                <li>効果測定・ワークフロー最適化・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -298,23 +278,6 @@ import Layout from '../../layouts/Layout.astro';
     display: flex;
     align-items: center;
     gap: 4px;
-  }
-
-  /* Prompt example */
-  .prompt-example {
-    background: #1a1a2e;
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-top: 12px;
-  }
-  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
-  .prompt-example pre {
-    color: #e2e8f0;
-    font-size: 0.8rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin: 0;
   }
 
   /* ROI */

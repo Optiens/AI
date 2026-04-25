@@ -1,0 +1,119 @@
+---
+import { makeToken, COOKIE_NAME, ADMIN_PASSWORD } from '../../middleware'
+
+let error = ''
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData()
+  const password = String(form.get('password') || '')
+
+  if (password === ADMIN_PASSWORD) {
+    Astro.cookies.set(COOKIE_NAME, makeToken(ADMIN_PASSWORD), {
+      path: '/admin',
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    })
+    return Astro.redirect('/admin/leads')
+  }
+  error = 'パスワードが違います'
+}
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin Login | Optiens</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #0f1117;
+      color: #e4e6eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100svh;
+    }
+    .login-card {
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 12px;
+      padding: 40px;
+      width: min(400px, 90vw);
+    }
+    .login-card h1 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .login-card p {
+      font-size: 0.85rem;
+      color: #8b8fa3;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #8b8fa3;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0f1117;
+      border: 1px solid #2a2d3a;
+      border-radius: 8px;
+      color: #e4e6eb;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="password"]:focus {
+      border-color: #5b7fff;
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 10px;
+      background: #5b7fff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #4a6de8; }
+    .error {
+      margin-top: 12px;
+      padding: 8px 12px;
+      background: rgba(234, 67, 53, 0.15);
+      border: 1px solid rgba(234, 67, 53, 0.3);
+      border-radius: 6px;
+      color: #ea4335;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h1>Optiens Admin</h1>
+    <p>管理画面にアクセスするにはパスワードを入力してください。</p>
+    <form method="POST">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autofocus required />
+      <button type="submit">ログイン</button>
+    </form>
+    {error && <div class="error">{error}</div>}
+  </div>
+</body>
+</html>

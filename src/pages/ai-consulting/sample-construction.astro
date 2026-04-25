@@ -64,33 +64,14 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 中</span>
             </div>
             <p><strong>現状</strong>: 過去の見積書をフォルダから探し、類似案件を見つけて数字を書き換える（2〜4時間/件）</p>
-            <p><strong>改善後</strong>: 案件情報を入力→AIが単価マスタを参照して見積ドラフトを生成→確認・調整</p>
+            <p><strong>改善後</strong>: AIエージェントが見積依頼メールを自動検知 → 過去の見積データと単価マスタを参照して下書きを自動生成 → オーナーは確認・承認のみ</p>
             <p><strong>導入ステップ</strong>:</p>
             <ol style="font-size: 0.9rem; padding-left: 20px; line-height: 1.8;">
               <li>よく使う工事項目と単価をスプレッドシートにまとめる（初回のみ・3〜4時間）</li>
-              <li>見積依頼が来たら、工事内容をAIに入力</li>
-              <li>AIが単価マスタを参照して見積の骨子を生成</li>
-              <li>人間が現場条件に合わせて数量・単価を調整</li>
+              <li>AIエージェントが見積依頼メールを自動検知し、工事内容を読み取り</li>
+              <li>単価マスタ・過去の類似見積を参照して見積の骨子を自動生成</li>
+              <li>人間が現場条件に合わせて数量・単価を確認・調整</li>
             </ol>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>あなたは北杜市の工務店の見積担当です。
-以下の工事内容から見積書の項目と概算金額を作成してください。
-
-【単価参考】
-・クロス張替え: 1,200円/㎡
-・フローリング張替え: 8,000円/㎡
-・キッチン取替（LIXIL標準）: 80〜120万円
-・外壁塗装: 3,500円/㎡
-・諸経費率: 10%
-
-【工事内容】
-築25年の別荘、LDK（約20㎡）のクロス張替えと
-フローリング張替え。キッチンも交換希望。
-
-【出力形式】
-項目 | 数量 | 単位 | 単価 | 金額 の表形式</pre>
-            </div>
           </div>
 
           <div class="proposal-card">
@@ -100,22 +81,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低（即日開始可）</span>
             </div>
             <p><strong>現状</strong>: 巡回写真を撮影後、1軒ずつ状況報告メールを手書き（月30通）</p>
-            <p><strong>改善後</strong>: 巡回メモ（箇条書き）→AIが丁寧な報告メール文面を生成→写真添付して送信</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>以下の別荘巡回メモから、オーナー向けの報告メールを作成してください。
-
-【物件】〇〇別荘（大泉町）
-【巡回日】2026年X月X日
-【メモ】
-- 外観: 異常なし
-- 雨樋: 落ち葉が少し溜まっている。次回清掃予定
-- 庭: 草が伸びている。草刈りの要否確認したい
-- 室内: 換気実施。カビ・害虫なし
-- 設備: 給湯器動作確認OK
-
-【トーン】丁寧だが簡潔に。安心感を与える文面で。</pre>
-            </div>
+            <p><strong>改善後</strong>: AIエージェントが巡回チェックリスト（スマホ入力）を自動読み取り → 丁寧な報告メール文面を自動生成 → オーナーは確認・送信ボタンを押すのみ</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
@@ -126,7 +92,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月6〜8時間削減</span>
               <span class="meta-item"><i class="fa-solid fa-star"></i> 品質均一化</span>
             </div>
-            <p>写真+メモ→AIがレポートの文章部分を生成→テンプレートに流し込み。報告書の品質が均一化し、提出スピードも向上します。</p>
+            <p>AIエージェントが施工写真フォルダを自動監視 → 写真のEXIF情報とメモから報告書の文章を自動生成 → テンプレートに自動流し込み。オーナーは確認・承認のみ。報告書の品質が均一化し、提出スピードも向上します。</p>
           </div>
 
           <div class="proposal-card">
@@ -135,14 +101,14 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3時間削減</span>
               <span class="meta-item"><i class="fa-solid fa-bolt"></i> 返信速度向上→成約率改善</span>
             </div>
-            <p>よくある質問（対応エリア、概算費用、工事の流れ）のテンプレート化 + 個別案件はAIで返信ドラフト生成。</p>
+            <p>AIエージェントが問い合わせメールを自動分類 → よくある質問は即座に返信ドラフトを生成、個別案件は過去の対応履歴を参照して返信を下書き → オーナーは確認・送信のみ。</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
 
           <div class="proposal-card">
             <h3>提案5〜7: 工程表自動生成、施工事例ページ、安全日報</h3>
-            <p>工事内容→AIが標準工程表ドラフト生成、完工写真→Web施工事例記事の自動作成（SEO効果）、現場写真+音声メモ→安全日報の自動生成など。</p>
+            <p>AIエージェントが工事内容から標準工程表を自動生成、完工写真からWeb施工事例記事を自動作成（SEO効果）、現場写真+音声メモから安全日報を自動生成など。いずれもオーナーは確認・承認のみ。</p>
           </div>
         </section>
 
@@ -187,29 +153,29 @@ import Layout from '../../layouts/Layout.astro';
           <h2>5. 導入ロードマップ</h2>
           <div class="roadmap">
             <div class="roadmap-month">
-              <h3>1ヶ月目 — 最大効果の施策から着手</h3>
+              <h3>1ヶ月目 — AIエージェント構築・データソース整備</h3>
               <ul>
-                <li>AIツール開設、基本操作レクチャー</li>
+                <li>AIエージェント構築・初期設定、基本操作レクチャー</li>
                 <li>見積単価マスタの整備（代表+事務で作業）</li>
-                <li>見積書プロンプト作成、テスト運用</li>
-                <li>別荘報告メールのプロンプト整備・運用開始</li>
+                <li>見積書自動生成ワークフロー構築・テスト運用</li>
+                <li>別荘報告メールの自動化ワークフロー構築・運用開始</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — 書類業務の効率化</h3>
+              <h3>2ヶ月目 — ワークフロー拡張・新規業務の自動化追加</h3>
               <ul>
                 <li>施工報告書テンプレート整備</li>
-                <li>報告書プロンプト作成・テスト</li>
-                <li>問い合わせ返信テンプレート化</li>
+                <li>報告書自動生成ワークフロー構築・テスト</li>
+                <li>問い合わせ返信の自動化ワークフロー追加</li>
                 <li>効果測定（削減時間の記録）</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>3ヶ月目 — 仕組み化・拡張</h3>
+              <h3>3ヶ月目 — 効果測定・ワークフロー最適化</h3>
               <ul>
                 <li>工程表自動生成の検討</li>
                 <li>施工事例ページの作成フロー確立</li>
-                <li>3ヶ月間の総合振り返り、次フェーズ判断</li>
+                <li>3ヶ月間の総合振り返り・ワークフロー最適化・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -220,7 +186,7 @@ import Layout from '../../layouts/Layout.astro';
           <div class="note-grid">
             <div class="note-card">
               <h3><i class="fa-solid fa-shield-halved"></i> セキュリティ</h3>
-              <p>見積書の顧客情報（住所・氏名）はイニシャルや物件名で代替可能。主要なAIツールは、有料プランで入力データを学習に使用しない設定が可能です。</p>
+              <p>見積書の顧客情報（住所・氏名）はイニシャルや物件名で代替可能。AIエージェントはAPI経由で動作し、入力データが学習に使用されることはありません。</p>
             </div>
             <div class="note-card">
               <h3><i class="fa-solid fa-users"></i> 社内展開</h3>
@@ -277,9 +243,6 @@ import Layout from '../../layouts/Layout.astro';
   .proposal-card p { font-size: 0.9rem; line-height: 1.7; margin-bottom: 8px; }
   .proposal-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
   .meta-item { font-size: 0.8rem; font-weight: 600; color: var(--color-primary, #2e574c); display: flex; align-items: center; gap: 4px; }
-  .prompt-example { background: #1a1a2e; border-radius: 8px; padding: 16px 20px; margin-top: 12px; }
-  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
-  .prompt-example pre { color: #e2e8f0; font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; margin: 0; }
   .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin: 20px 0; }
   .roi-card { background: #f9fafb; border-radius: 12px; padding: 20px; text-align: center; }
   .roi-card.accent { background: var(--color-primary, #2e574c); color: #fff; }

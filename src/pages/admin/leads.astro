@@ -1,0 +1,456 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { supabase } from '../../lib/supabase';
+
+// Pipeline stages with labels and colors
+const stages = [
+  { id: 'new', label: '新規', color: '#5b7fff' },
+  { id: 'report_created', label: 'レポート作成済', color: '#8b5cf6' },
+  { id: 'sent', label: '送付済', color: '#f59e0b' },
+  { id: 'mtg_scheduled', label: 'MTG予定', color: '#10b981' },
+  { id: 'paid_report', label: '有料レポート', color: '#06b6d4' },
+  { id: 'implementation', label: '導入支援', color: '#ea4335' },
+  { id: 'maintenance', label: '保守契約', color: '#34d399' },
+];
+
+// Fetch all leads
+let leads: any[] = [];
+let error = '';
+
+if (supabase) {
+  const { data, error: dbError } = await supabase
+    .from('diagnosis_leads')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (dbError) {
+    error = dbError.message;
+  } else {
+    leads = data || [];
+  }
+} else {
+  error = 'Supabaseが設定されていません';
+}
+
+// Group leads by status
+const grouped = new Map<string, any[]>();
+for (const stage of stages) {
+  grouped.set(stage.id, []);
+}
+for (const lead of leads) {
+  const status = lead.status || 'new';
+  const list = grouped.get(status);
+  if (list) {
+    list.push(lead);
+  } else {
+    // Unknown status — put in 'new'
+    grouped.get('new')?.push(lead);
+  }
+}
+
+const industryLabels: Record<string, string> = {
+  accommodation: '宿泊業',
+  restaurant: '飲食業',
+  construction: '建設業',
+  winery: '醸造所',
+  outdoor: 'アウトドア',
+  bakery: 'パン屋',
+  agriculture: '農業',
+  retail: '小売業',
+  service: 'サービス業',
+  manufacturing: '製造業',
+  municipality: '自治体',
+  other: 'その他',
+};
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+function timeAgo(dateStr: string) {
+  if (!dateStr) return '';
+  const now = Date.now();
+  const then = new Date(dateStr).getTime();
+  const diff = now - then;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  if (days === 0) return '今日';
+  if (days === 1) return '昨日';
+  return `${days}日前`;
+}
+---
+
+<AdminLayout title="案件管理" active="leads">
+  <Fragment slot="header-actions">
+    <span class="lead-count">{leads.length}件</span>
+  </Fragment>
+
+  {error && <div class="admin-error">{error}</div>}
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    {stages.slice(0, 4).map(stage => {
+      const count = grouped.get(stage.id)?.length || 0;
+      return (
+        <div class="stat-card">
+          <div class="stat-dot" style={`background: ${stage.color}`}></div>
+          <div class="stat-info">
+            <span class="stat-label">{stage.label}</span>
+            <span class="stat-value">{count}</span>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- View toggle -->
+  <div class="view-controls">
+    <button class="view-btn active" data-view="pipeline">
+      <i class="fas fa-columns"></i> パイプライン
+    </button>
+    <button class="view-btn" data-view="table">
+      <i class="fas fa-list"></i> テーブル
+    </button>
+  </div>
+
+  <!-- Pipeline view -->
+  <div class="pipeline-view" id="pipeline-view">
+    <div class="pipeline-scroll">
+      {stages.map(stage => {
+        const stageLeads = grouped.get(stage.id) || [];
+        return (
+          <div class="pipeline-col">
+            <div class="pipeline-header">
+              <span class="pipeline-dot" style={`background: ${stage.color}`}></span>
+              <span class="pipeline-label">{stage.label}</span>
+              <span class="pipeline-count">{stageLeads.length}</span>
+            </div>
+            <div class="pipeline-cards">
+              {stageLeads.map(lead => (
+                <div class="lead-card" data-id={lead.id}>
+                  <div class="lead-card-header">
+                    <span class="lead-company">{lead.company_name}</span>
+                    <span class="lead-date">{timeAgo(lead.created_at)}</span>
+                  </div>
+                  <div class="lead-card-body">
+                    <span class="lead-person">{lead.person_name}</span>
+                    {lead.industry && (
+                      <span class="lead-tag">{industryLabels[lead.industry] || lead.industry}</span>
+                    )}
+                  </div>
+                  {lead.email && (
+                    <div class="lead-card-footer">
+                      <a href={`mailto:${lead.email}`} class="lead-email">{lead.email}</a>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {stageLeads.length === 0 && (
+                <div class="pipeline-empty">なし</div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- Table view -->
+  <div class="table-view" id="table-view" style="display:none;">
+    <table class="leads-table">
+      <thead>
+        <tr>
+          <th>企業名</th>
+          <th>担当者</th>
+          <th>業種</th>
+          <th>ステータス</th>
+          <th>申込日</th>
+          <th>メール</th>
+        </tr>
+      </thead>
+      <tbody>
+        {leads.map(lead => {
+          const stage = stages.find(s => s.id === lead.status) || stages[0];
+          return (
+            <tr>
+              <td class="td-company">{lead.company_name}</td>
+              <td>{lead.person_name}</td>
+              <td>{industryLabels[lead.industry] || lead.industry || '-'}</td>
+              <td>
+                <span class="status-badge" style={`background: ${stage.color}22; color: ${stage.color}; border-color: ${stage.color}44`}>
+                  {stage.label}
+                </span>
+              </td>
+              <td>{formatDate(lead.created_at)}</td>
+              <td><a href={`mailto:${lead.email}`}>{lead.email}</a></td>
+            </tr>
+          );
+        })}
+        {leads.length === 0 && (
+          <tr><td colspan="6" class="td-empty">案件がありません</td></tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+</AdminLayout>
+
+<script is:inline>
+  // View toggle
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const view = btn.dataset.view;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('pipeline-view').style.display = view === 'pipeline' ? '' : 'none';
+      document.getElementById('table-view').style.display = view === 'table' ? '' : 'none';
+    });
+  });
+</script>
+
+<style>
+  /* Stats */
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    flex: 1;
+    min-width: 140px;
+  }
+  .stat-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .stat-info { display: flex; flex-direction: column; }
+  .stat-label { font-size: 0.75rem; color: var(--admin-muted); }
+  .stat-value { font-size: 1.3rem; font-weight: 700; color: #fff; }
+
+  /* View toggle */
+  .view-controls {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 4px;
+    width: fit-content;
+  }
+  .view-btn {
+    background: none;
+    border: none;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .view-btn:hover { color: var(--admin-text); }
+  .view-btn.active {
+    background: var(--admin-surface-2);
+    color: var(--admin-brand);
+  }
+
+  /* Lead count */
+  .lead-count {
+    font-size: 0.82rem;
+    color: var(--admin-muted);
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    padding: 4px 12px;
+    border-radius: 6px;
+  }
+
+  /* Error */
+  .admin-error {
+    padding: 12px 16px;
+    background: rgba(234, 67, 53, 0.1);
+    border: 1px solid rgba(234, 67, 53, 0.3);
+    border-radius: 8px;
+    color: var(--admin-danger);
+    font-size: 0.88rem;
+    margin-bottom: 20px;
+  }
+
+  /* Pipeline */
+  .pipeline-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+  }
+  .pipeline-col {
+    min-width: 260px;
+    flex: 1;
+  }
+  .pipeline-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .pipeline-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .pipeline-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--admin-text);
+    flex: 1;
+  }
+  .pipeline-count {
+    font-size: 0.75rem;
+    color: var(--admin-muted);
+    background: var(--admin-surface-2);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .pipeline-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 80px;
+  }
+  .pipeline-empty {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--admin-muted);
+    padding: 20px;
+    border: 1px dashed var(--admin-border);
+    border-radius: 8px;
+  }
+
+  /* Lead card */
+  .lead-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 14px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .lead-card:hover {
+    border-color: rgba(91, 127, 255, 0.4);
+    box-shadow: 0 0 0 1px rgba(91, 127, 255, 0.1);
+  }
+  .lead-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .lead-company {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .lead-date {
+    font-size: 0.7rem;
+    color: var(--admin-muted);
+    flex-shrink: 0;
+  }
+  .lead-card-body {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .lead-person {
+    font-size: 0.8rem;
+    color: var(--admin-muted);
+  }
+  .lead-tag {
+    font-size: 0.7rem;
+    color: var(--admin-brand);
+    background: rgba(91, 127, 255, 0.1);
+    border: 1px solid rgba(91, 127, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .lead-card-footer {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--admin-border);
+  }
+  .lead-email {
+    font-size: 0.75rem;
+    color: var(--admin-brand);
+    text-decoration: none;
+  }
+  .lead-email:hover { text-decoration: underline; }
+
+  /* Table */
+  .leads-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .leads-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--admin-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--admin-border);
+  }
+  .leads-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--admin-border);
+    color: var(--admin-text);
+  }
+  .leads-table tr:hover td {
+    background: var(--admin-surface);
+  }
+  .td-company {
+    font-weight: 600;
+    color: #fff !important;
+  }
+  .td-empty {
+    text-align: center;
+    color: var(--admin-muted);
+    padding: 40px 14px !important;
+  }
+  .leads-table a {
+    color: var(--admin-brand);
+    text-decoration: none;
+  }
+  .leads-table a:hover { text-decoration: underline; }
+  .status-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .stats-row { flex-direction: column; }
+    .pipeline-scroll { flex-direction: column; }
+    .pipeline-col { min-width: unset; }
+  }
+</style>

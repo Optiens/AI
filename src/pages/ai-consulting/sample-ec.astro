@@ -1,0 +1,314 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="AI活用診断レポート サンプル（EC事業者）| Optiens"
+  description="ネットショップ運営者向けAI活用診断レポートのサンプル。商品登録・受注対応・SNS運用の自動化で月25時間の業務削減を提案します。"
+>
+  <main>
+    <section class="hero-section">
+      <div class="container">
+        <a href="/ai-consulting" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
+        <p class="hero-badge">SAMPLE REPORT</p>
+        <h1>AI活用診断レポート<br class="sp-only" />— EC事業者（ネットショップ）</h1>
+        <p class="hero-sub">これは提案書のサンプルです。実際の診断では、貴社の業務に合わせた個別の提案を行います。</p>
+      </div>
+    </section>
+
+    <article class="report-body">
+      <div class="container">
+
+        <!-- 事業概要 -->
+        <section class="report-section">
+          <h2>1. 事業概要</h2>
+          <div class="info-table">
+            <div class="info-row"><span class="info-label">業種</span><span class="info-value">EC事業者（自社ブランド雑貨・ハンドメイド）</span></div>
+            <div class="info-row"><span class="info-label">運営体制</span><span class="info-value">代表1名 + パートスタッフ1名</span></div>
+            <div class="info-row"><span class="info-label">販売チャネル</span><span class="info-value">自社Shopify、楽天市場、Amazon</span></div>
+            <div class="info-row"><span class="info-label">月間受注件数</span><span class="info-value">200〜300件</span></div>
+            <div class="info-row"><span class="info-label">使用ツール</span><span class="info-value">Shopify、楽天RMS、スプレッドシート、LINE公式、Instagram</span></div>
+            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">商品登録・SNS運用・問い合わせ対応に追われ、新商品開発の時間が取れない</span></div>
+          </div>
+        </section>
+
+        <!-- 課題 -->
+        <section class="report-section">
+          <h2>2. 現状の業務フローと課題</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>業務</th><th>頻度</th><th>所要時間/回</th><th>月間合計</th><th>課題</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>商品登録・説明文作成</td><td>月15〜20商品</td><td>30〜40分</td><td>約10時間</td><td>3モール×同一商品の手動登録</td></tr>
+                <tr><td>受注確認・発送通知メール</td><td>日10〜15件</td><td>3〜5分</td><td>約6時間</td><td>定型だが手動コピペで送信</td></tr>
+                <tr><td>問い合わせ・レビュー返信</td><td>日3〜5件</td><td>5〜10分</td><td>約5時間</td><td>同じ質問が繰り返される</td></tr>
+                <tr><td>SNS投稿（Instagram・LINE）</td><td>週3〜4回</td><td>20〜30分</td><td>約6時間</td><td>撮影→加工→投稿文→ハッシュタグ</td></tr>
+                <tr><td>売上集計・在庫確認</td><td>日1回</td><td>10〜15分</td><td>約5時間</td><td>3モールの管理画面を横断確認</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="highlight-box">
+            <strong>月間の削減可能時間（推定）: 約25〜30時間</strong>
+          </div>
+        </section>
+
+        <!-- 提案 -->
+        <section class="report-section">
+          <h2>3. AI活用の提案</h2>
+
+          <div class="priority-label priority-a">優先度A — すぐに効果が出る</div>
+
+          <div class="proposal-card">
+            <h3>提案1: 商品説明文・タイトルの自動生成</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月7〜8時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月額数百円程度</span>
+              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
+            </div>
+            <p><strong>現状</strong>: 商品写真を撮影 → スペックを手入力 → 説明文を手作成 → 3モールにそれぞれ貼り付け</p>
+            <p><strong>改善後</strong>: AIエージェントが商品画像とスペックシートを自動読み取り → モール別のフォーマットに合わせた商品説明文・タイトル・検索キーワードを一括自動生成 → オーナーは確認・公開のみ</p>
+            <div class="automation-flow">
+              <p class="flow-label">自動化の仕組み</p>
+              <div class="flow-steps">
+                <span class="flow-step">商品画像＋<br/>スペック登録</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">AIエージェント<br/>説明文一括生成</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">3モール<br/>自動入力</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">オーナー確認<br/>→ 公開</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案2: 受注・発送通知メールの完全自動化</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月5〜6時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-bolt"></i> 対応スピード大幅向上</span>
+            </div>
+            <p><strong>現状</strong>: 各モールの管理画面で受注確認 → 手動でお礼メール・発送通知を送信</p>
+            <p><strong>改善後</strong>: AIエージェントが全モールの受注を自動検知 → 注文内容に応じたお礼メール・発送通知・追跡番号付き案内を自動送信 → 異常注文（高額・住所不備等）のみオーナーにアラート</p>
+          </div>
+
+          <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
+
+          <div class="proposal-card">
+            <h3>提案3: 問い合わせ・レビュー返信の自動化</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月4〜5時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 顧客満足度向上</span>
+            </div>
+            <p><strong>現状</strong>: 各モールの問い合わせ・レビューを毎日確認 → 1件ずつ手動で返信</p>
+            <p><strong>改善後</strong>: AIエージェントが全モールの問い合わせ・レビューを一元取得 → FAQナレッジベースと過去の返信パターンを参照 → 返信ドラフトを自動生成 → オーナーは確認・送信のみ</p>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案4: SNS投稿の自動化（Instagram・LINE）</h3>
+            <div class="proposal-meta">
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月5〜6時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-arrow-trend-up"></i> 投稿頻度を維持</span>
+            </div>
+            <p>AIエージェントが新商品登録を検知 → 商品画像からInstagram投稿文・ハッシュタグ・LINE配信文を自動生成 → 予約投稿まで自動セット → オーナーは確認・承認のみ</p>
+          </div>
+
+          <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
+
+          <div class="proposal-card">
+            <h3>提案5〜6: 売上ダッシュボード自動化、在庫アラート</h3>
+            <p>3モールの売上・在庫データをAIエージェントが毎朝自動集計 → 日次レポートをスプレッドシートに自動記録＋LINEに要約通知。在庫が閾値を下回った商品は自動アラート → 発注判断のみオーナーが行う。</p>
+          </div>
+        </section>
+
+        <!-- ROI -->
+        <section class="report-section">
+          <h2>4. 投資対効果（ROI）</h2>
+          <div class="roi-grid">
+            <div class="roi-card">
+              <p class="roi-number">25時間</p>
+              <p class="roi-label">月間削減時間</p>
+            </div>
+            <div class="roi-card">
+              <p class="roi-number">¥62,500</p>
+              <p class="roi-label">時間価値換算/月</p>
+            </div>
+            <div class="roi-card">
+              <p class="roi-number">数千円</p>
+              <p class="roi-label">AI運用コスト/月</p>
+            </div>
+            <div class="roi-card accent">
+              <p class="roi-number">¥58,000+</p>
+              <p class="roi-label">純効果/月</p>
+            </div>
+          </div>
+          <p class="roi-note">※オーナーの時給2,500円で換算。受注対応の即時化によるレビュー評価向上・リピート率改善効果は含まず。</p>
+        </section>
+
+        <!-- ロードマップ -->
+        <section class="report-section">
+          <h2>5. 導入ロードマップ</h2>
+          <div class="roadmap">
+            <div class="roadmap-month">
+              <h3>1ヶ月目 — 基盤構築</h3>
+              <ul>
+                <li>AIエージェント構築・各モールAPI連携設定</li>
+                <li>商品説明文自動生成ワークフロー構築・テスト</li>
+                <li>受注・発送通知の自動化設定</li>
+                <li>効果測定開始（削減時間の記録）</li>
+              </ul>
+            </div>
+            <div class="roadmap-month">
+              <h3>2ヶ月目 — 拡張</h3>
+              <ul>
+                <li>問い合わせ・レビュー返信の自動化ワークフロー構築</li>
+                <li>SNS投稿の自動化設定（Instagram・LINE連携）</li>
+                <li>FAQナレッジベース整備（過去の問い合わせから自動抽出）</li>
+                <li>効果測定</li>
+              </ul>
+            </div>
+            <div class="roadmap-month">
+              <h3>3ヶ月目 — 最適化</h3>
+              <ul>
+                <li>売上ダッシュボード・在庫アラートの自動化</li>
+                <li>ワークフロー精度改善・運用の定着確認</li>
+                <li>総合振り返り・次フェーズ検討</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </article>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container text-center">
+        <h2>あなたの事業でも診断してみませんか？</h2>
+        <p>業種・規模に合わせた具体的な提案をお届けします。<br />初回相談は無料です。</p>
+        <a href="/free-diagnosis" class="cta-btn">無料AI診断を受ける</a>
+        <div class="cta-links">
+          <a href="/ai-consulting/sample-legal">士業のサンプルを見る</a>
+          <a href="/ai-consulting/sample-pension">宿泊業のサンプルを見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, var(--color-primary, #2e574c) 0%, #1a3a33 100%);
+    color: #fff;
+    padding: clamp(40px, 8vw, 72px) 0 clamp(32px, 6vw, 56px);
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem; margin-bottom: 20px;
+  }
+  .back-link:hover { color: #fff; }
+  .hero-badge {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+    background: rgba(255,255,255,0.15); display: inline-block;
+    padding: 4px 12px; border-radius: 4px; margin-bottom: 16px;
+  }
+  .hero-section h1 { color: #fff; font-size: clamp(1.4rem, 3.5vw, 2rem); margin-bottom: 16px; line-height: 1.4; }
+  .hero-sub { opacity: 0.85; font-size: 0.95rem; }
+  .sp-only { display: none; }
+  @media (max-width: 600px) { .sp-only { display: block; } }
+
+  .report-body { padding: clamp(40px, 8vw, 72px) 0; }
+  .report-section { margin-bottom: 48px; }
+  .report-section h2 {
+    font-size: 1.3rem; padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-primary, #2e574c); margin-bottom: 20px;
+  }
+
+  .info-table { display: flex; flex-direction: column; gap: 8px; }
+  .info-row { display: flex; gap: 16px; padding: 8px 0; border-bottom: 1px solid #eee; }
+  .info-label { font-weight: 600; min-width: 100px; color: var(--color-primary, #2e574c); font-size: 0.9rem; }
+  .info-value { font-size: 0.9rem; }
+
+  .table-wrapper { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: var(--color-primary, #2e574c); color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f9fafb; }
+
+  .highlight-box {
+    background: #e8f2f0; padding: 16px 20px; border-radius: 8px;
+    margin-top: 16px; font-size: 0.95rem; color: var(--color-primary, #2e574c);
+  }
+
+  .priority-label {
+    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em;
+    padding: 6px 14px; border-radius: 4px; display: inline-block; margin: 24px 0 12px;
+  }
+  .priority-a { background: #dcfce7; color: #166534; }
+  .priority-b { background: #fef3c7; color: #92400e; }
+  .priority-c { background: #f3f4f6; color: #374151; }
+
+  .proposal-card {
+    background: var(--surface, #fff); border: 1px solid #e5e7eb;
+    border-radius: 12px; padding: 24px; margin-bottom: 16px;
+  }
+  .proposal-card h3 { font-size: 1.05rem; margin-bottom: 12px; }
+  .proposal-card p { font-size: 0.9rem; line-height: 1.7; margin-bottom: 8px; }
+  .proposal-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
+  .meta-item {
+    font-size: 0.8rem; font-weight: 600; color: var(--color-primary, #2e574c);
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  .automation-flow {
+    background: #f0f4f8; border-radius: 8px; padding: 16px 20px; margin-top: 12px;
+  }
+  .flow-label { font-size: 0.75rem; font-weight: 600; color: var(--color-primary, #2e574c); margin-bottom: 10px; }
+  .flow-steps {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center;
+  }
+  .flow-step {
+    background: #fff; border: 1px solid #d1d5db; border-radius: 8px;
+    padding: 10px 14px; font-size: 0.78rem; text-align: center; line-height: 1.4;
+    min-width: 100px;
+  }
+  .flow-arrow { color: var(--color-primary, #2e574c); font-weight: 700; font-size: 1.2rem; }
+
+  .roi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px; margin: 20px 0;
+  }
+  .roi-card { background: #f9fafb; border-radius: 12px; padding: 20px; text-align: center; }
+  .roi-card.accent { background: var(--color-primary, #2e574c); color: #fff; }
+  .roi-number { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+  .roi-card.accent .roi-number { color: #fff; }
+  .roi-label { font-size: 0.8rem; color: var(--muted, #666); }
+  .roi-card.accent .roi-label { color: rgba(255,255,255,0.8); }
+  .roi-note { font-size: 0.8rem; color: var(--muted, #666); margin-top: 12px; }
+
+  .roadmap { display: flex; flex-direction: column; gap: 20px; }
+  .roadmap-month {
+    background: #f9fafb; border-left: 4px solid var(--color-primary, #2e574c);
+    padding: 20px 24px; border-radius: 0 8px 8px 0;
+  }
+  .roadmap-month h3 { font-size: 1rem; margin-bottom: 10px; color: var(--color-primary, #2e574c); }
+  .roadmap-month ul { padding-left: 20px; margin: 0; }
+  .roadmap-month li { font-size: 0.9rem; margin-bottom: 4px; line-height: 1.6; }
+
+  .cta-section {
+    background: var(--color-primary, #2e574c); color: #fff;
+    padding: clamp(48px, 8vw, 72px) 0;
+  }
+  .cta-section h2 { color: #fff; margin-bottom: 12px; }
+  .cta-section p { opacity: 0.9; margin-bottom: 24px; line-height: 1.8; }
+  .cta-btn {
+    display: inline-block; background: #fff; color: var(--color-primary, #2e574c);
+    font-weight: 700; padding: 14px 36px; border-radius: 8px;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+  .cta-links { margin-top: 20px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .cta-links a { color: rgba(255,255,255,0.8); font-size: 0.85rem; text-decoration: underline; }
+  .cta-links a:hover { color: #fff; }
+</style>

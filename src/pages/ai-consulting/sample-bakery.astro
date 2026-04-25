@@ -69,23 +69,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
             <p><strong>現状</strong>: 前週の売れ行き・天気予報・近隣イベントを頭の中で判断</p>
-            <p><strong>改善後</strong>: 過去の販売データ（曜日×天気×売上）をスプレッドシートに蓄積→AIが仕込み量の目安を提案</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>以下は当店の過去4週間の曜日別売上データです。
-今週末の天気予報と合わせて、金・土・日の仕込み量を提案してください。
-
-【過去4週間の売上データ】
-{'{'} スプレッドシートから貼り付け {'}'}
-
-【今週の天気予報】
-金曜: 晴れ / 土曜: 曇り / 日曜: 雨
-
-【考慮事項】
-- 近隣イベント: {'{'} あれば記載 {'}'}
-- 前週の廃棄が多かった商品: {'{'} あれば記載 {'}'}
-- 前週売り切れが早かった商品: {'{'} あれば記載 {'}'}</pre>
-            </div>
+            <p><strong>改善後</strong>: AIエージェントがスプレッドシートの販売データ・天気予報APIを自動読み取り → 曜日×天気×過去実績から仕込み量を自動算出 → オーナーは確認・調整のみ</p>
           </div>
 
           <div class="proposal-card">
@@ -95,20 +79,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
             </div>
             <p><strong>現状</strong>: 焼き上がり写真は毎日撮っているが、キャプション作成で止まる</p>
-            <p><strong>改善後</strong>: パンの名前+特徴をひと言入力→AIが季節感あるキャプション+ハッシュタグ生成</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>あなたは地元のベーカリーのInstagram担当です。
-以下のパンについて、温かみのある投稿文を作成してください。
-
-【パンの情報】
-- 名前: {'{'} パンの名前 {'}'}
-- 特徴: {'{'} ひと言メモ {'}'}
-- 季節: {'{'} 今の季節 {'}'}
-
-【トーン】親しみやすく、素材や製法へのこだわりが伝わるように。
-【ハッシュタグ】10個程度。地域名＋商品名を必ず含める。</pre>
-            </div>
+            <p><strong>改善後</strong>: AIエージェントが写真フォルダと商品リストを自動読み取り → 季節感あるキャプション+ハッシュタグを自動生成 → オーナーは確認・投稿のみ</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
@@ -118,7 +89,7 @@ import Layout from '../../layouts/Layout.astro';
             <div class="proposal-meta">
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3〜4時間削減</span>
             </div>
-            <p>日次売上をスプレッドシートに入力→AIが月次レポート（売れ筋・粗利率・廃棄率）を自動生成。どの商品が利益に貢献しているかが一目でわかるようになります。</p>
+            <p>AIエージェントがスプレッドシートの日次売上データを自動読み取り → 月次レポート（売れ筋・粗利率・廃棄率）を自動生成。どの商品が利益に貢献しているかが一目でわかるようになります。</p>
           </div>
 
           <div class="proposal-card">
@@ -127,14 +98,14 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3〜4時間削減</span>
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月$20</span>
             </div>
-            <p>受注→確認メール→発送通知を半自動化。注文が入ったら確認メールを自動送信し、発送時に追跡番号を含む通知メールを生成します。</p>
+            <p>AIエージェントが受注を自動検知 → 確認メール自動送信 → 発送時に追跡番号を含む通知メールを自動生成・送信。オーナーは確認・承認のみ。</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
 
           <div class="proposal-card">
             <h3>提案5〜6: レシピ配合計算のAI支援、Googleマップ口コミ返信の自動化</h3>
-            <p>レシピのスケールアップ/ダウン・代替原材料の提案をAIで効率化。Googleマップの口コミ返信もAIで下書きを生成し、返信率を向上させます。</p>
+            <p>レシピのスケールアップ/ダウン・代替原材料の提案をAIで効率化。AIエージェントがGoogleマップの口コミを自動取得 → 返信案を自動生成し、返信率を向上させます。</p>
           </div>
         </section>
 
@@ -167,27 +138,27 @@ import Layout from '../../layouts/Layout.astro';
           <h2>5. 導入ロードマップ</h2>
           <div class="roadmap">
             <div class="roadmap-month">
-              <h3>1ヶ月目 — 基盤構築</h3>
+              <h3>1ヶ月目 — AIエージェント構築・データソース整備</h3>
               <ul>
                 <li>売上データの記録フォーマット整備・入力開始</li>
-                <li>SNS投稿用プロンプトの作成・調整</li>
-                <li>AIツールの基本操作レクチャー</li>
+                <li>AIエージェント構築・初期設定（SNS投稿・仕込み量予測の自動化ワークフロー）</li>
+                <li>データソース連携の初期動作確認</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — 拡張</h3>
+              <h3>2ヶ月目 — ワークフロー拡張・新規業務の自動化追加</h3>
               <ul>
-                <li>仕込み量予測の仕組み構築（データ蓄積→AI分析）</li>
-                <li>通販受注フローの改善・半自動化</li>
+                <li>仕込み量予測ワークフローの精度向上（データ蓄積→自動分析）</li>
+                <li>通販受注フローの自動化（受注検知→確認メール→発送通知）</li>
                 <li>効果測定（削減時間・廃棄率の記録）</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>3ヶ月目 — 最適化</h3>
+              <h3>3ヶ月目 — 効果測定・ワークフロー最適化</h3>
               <ul>
-                <li>原価分析の仕組み導入</li>
+                <li>原価分析の自動化ワークフロー導入</li>
                 <li>レシピ配合計算のAI活用開始</li>
-                <li>総合振り返り・効果測定・次フェーズ判断</li>
+                <li>効果測定・ワークフロー最適化・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -311,23 +282,6 @@ import Layout from '../../layouts/Layout.astro';
     display: flex;
     align-items: center;
     gap: 4px;
-  }
-
-  /* Prompt example */
-  .prompt-example {
-    background: #1a1a2e;
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-top: 12px;
-  }
-  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
-  .prompt-example pre {
-    color: #e2e8f0;
-    font-size: 0.8rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin: 0;
   }
 
   /* ROI */

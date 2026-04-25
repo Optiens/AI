@@ -2,39 +2,26 @@
 ---
 <footer>
   <div class="container footer-inner">
-    <div class="footer-top">
-      <!-- ロゴ + 説明 -->
-      <div class="footer-brand-col">
-        <p class="footer-tagline">AIを事業の中心に。</p>
-        <p class="footer-email"><a href="mailto:info@optiens.com">info@optiens.com</a></p>
-        <a href="https://www.ipa.go.jp/security/security-action/" target="_blank" rel="noopener noreferrer" class="footer-badge-link">
-          <img src="/images/badges/security-action-hitotsuboshi.png" alt="SECURITY ACTION 一つ星を宣言しました" class="footer-badge" width="80" height="80" />
-        </a>
-      </div>
-
-      <!-- サービス -->
+    <!-- サイトマップ（上段） -->
+    <div class="footer-sitemap">
       <div class="footer-col">
         <p class="footer-col-heading">サービス</p>
         <ul>
-          <li><a href="/ai-consulting">AI活用診断</a></li>
-          <li><a href="/ai-consulting">AI顧問</a></li>
-          <li><a href="/ai-consulting">AI研修</a></li>
+          <li><a href="/ai-consulting">無料AI診断</a></li>
+          <li><a href="/ai-consulting">導入支援</a></li>
           <li><a href="/ai-consulting#samples">サンプルレポート</a></li>
         </ul>
       </div>
 
-      <!-- 会社情報 -->
       <div class="footer-col">
         <p class="footer-col-heading">会社情報</p>
         <ul>
           <li><a href="/about">Optiensについて</a></li>
-          <li><a href="/hydroponics">IoT水耕栽培</a></li>
           <li><a href="/roadmap">ロードマップ</a></li>
           <li><a href="/contact">お問い合わせ</a></li>
         </ul>
       </div>
 
-      <!-- リソース -->
       <div class="footer-col">
         <p class="footer-col-heading">リソース</p>
         <ul>
@@ -45,8 +32,20 @@
       </div>
     </div>
 
+    <!-- ブランド（下段） -->
+    <div class="footer-brand">
+      <a href="https://www.ipa.go.jp/security/security-action/" target="_blank" rel="noopener noreferrer" class="footer-badge-link">
+        <img src="/images/badges/security-action-hitotsuboshi.png" alt="SECURITY ACTION 一つ星を宣言しました" class="footer-badge" width="64" height="64" />
+      </a>
+      <div class="footer-brand-text">
+        <p class="footer-tagline">AIを事業の中心に。</p>
+        <p class="footer-email"><a href="mailto:info@optiens.com">info@optiens.com</a></p>
+      </div>
+      <img src="/images/optiens-logo.svg" alt="Optiens" class="footer-logo" width="120" height="32" />
+    </div>
+
     <div class="footer-bottom">
-      <p class="footer-copy">&copy; {new Date().getFullYear()} Optiens. All rights reserved.</p>
+      <p class="footer-copy">&copy; {new Date().getFullYear()} Optiens LLC. All rights reserved.</p>
     </div>
   </div>
 </footer>
@@ -66,41 +65,14 @@
     padding: 0 20px;
   }
 
-  /* ---------- Top: 4 columns ---------- */
-  .footer-top {
+  /* ---------- Sitemap: 3 columns ---------- */
+  .footer-sitemap {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 40px;
     padding-bottom: 40px;
     border-bottom: 1px solid var(--border);
   }
-
-  /* Brand column */
-  .footer-brand-col { display: flex; flex-direction: column; gap: 10px; }
-  .footer-badge-link {
-    display: inline-block;
-    margin-top: 4px;
-    transition: opacity .2s;
-  }
-  .footer-badge-link:hover { opacity: .8; }
-  .footer-badge {
-    width: 80px;
-    height: auto;
-  }
-  .footer-tagline {
-    margin: 0;
-    color: var(--muted);
-    font-size: .9em;
-    line-height: 1.5;
-  }
-  .footer-email { margin: 0; }
-  .footer-email a {
-    color: var(--brand);
-    text-decoration: none;
-    font-size: .88em;
-    transition: opacity .2s;
-  }
-  .footer-email a:hover { opacity: .8; }
 
   /* Link columns */
   .footer-col { display: flex; flex-direction: column; gap: 0; }
@@ -130,6 +102,51 @@
     color: var(--brand);
   }
 
+  /* ---------- Brand row ---------- */
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-badge-link {
+    display: inline-block;
+    transition: opacity .2s;
+    flex-shrink: 0;
+  }
+  .footer-badge-link:hover { opacity: .8; }
+  .footer-badge {
+    width: 52px;
+    height: auto;
+  }
+  .footer-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .footer-tagline {
+    margin: 0;
+    color: var(--muted);
+    font-size: .88em;
+    line-height: 1.4;
+  }
+  .footer-email { margin: 0; }
+  .footer-email a {
+    color: var(--brand);
+    text-decoration: none;
+    font-size: .82em;
+    transition: opacity .2s;
+  }
+  .footer-email a:hover { opacity: .8; }
+  .footer-logo {
+    width: 100px;
+    height: auto;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
   /* ---------- Bottom ---------- */
   .footer-bottom {
     padding-top: 24px;
@@ -144,22 +161,25 @@
 
   /* ---------- Mobile ---------- */
   @media (max-width: 768px) {
-    .footer-top {
+    .footer-sitemap {
       grid-template-columns: 1fr 1fr;
       gap: 32px 24px;
     }
-    .footer-brand-col {
-      grid-column: 1 / -1;
-      align-items: center;
-      text-align: center;
+    .footer-brand {
+      flex-wrap: wrap;
+      gap: 16px;
     }
   }
   @media (max-width: 480px) {
-    .footer-top {
+    .footer-sitemap {
       grid-template-columns: 1fr;
       text-align: center;
     }
     .footer-col { align-items: center; }
-    .footer-brand-col { align-items: center; }
+    .footer-brand {
+      flex-direction: column;
+      text-align: center;
+    }
+    .footer-brand-text { align-items: center; }
   }
 </style>

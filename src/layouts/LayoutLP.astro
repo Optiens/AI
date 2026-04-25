@@ -1,0 +1,197 @@
+---
+/**
+ * 独立LP用レイアウト
+ * メインサイト（水耕栽培）のHeader/Footerを使わず、
+ * 最小限のヘッダー（ロゴのみ）とフッターで構成する。
+ * 事業間の横断リンクを排除するためのレイアウト。
+ */
+import '~/styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  /** LP内のトップページパス（ロゴクリック時の遷移先） */
+  homeHref?: string;
+}
+
+const {
+  title,
+  description = '合同会社Optiensの公式サイトです。',
+  canonical,
+  ogImage,
+  noindex = false,
+  homeHref = '/',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="generator" content={Astro.generator} />
+
+    {canonical && <link rel="canonical" href={canonical} />}
+
+    <link rel="icon" type="image/svg+xml" href="/images/optiens-logo.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/optiens-logo.png" />
+    <link rel="apple-touch-icon" href="/images/optiens-logo.png" />
+    <meta name="theme-color" content="#0B2A4A" />
+
+    <meta property="og:site_name" content="Optiens" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">本文へスキップ</a>
+
+    <header class="lp-header">
+      <a href={homeHref} class="lp-header-logo-link">
+        <video src="/videos/optiens-logo-wave.mp4" autoplay muted playsinline class="lp-header-logo"></video>
+      </a>
+    </header>
+
+    <div id="main" class="site-main">
+      <slot />
+    </div>
+
+    <footer class="lp-footer">
+      <div class="lp-footer-inner">
+        <p class="lp-footer-brand">合同会社Optiens</p>
+        <p class="lp-footer-meta">〒407-0301 山梨県北杜市高根町清里3545番地2483</p>
+        <p class="lp-footer-meta"><a href="mailto:info@optiens.com">info@optiens.com</a></p>
+        <nav class="lp-footer-legal">
+          <a href="/privacy-policy">PRIVACY POLICY</a>
+          <a href="/site-policy">SITE POLICY</a>
+        </nav>
+        <p class="lp-footer-copy">&copy; {new Date().getFullYear()} Optiens. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    z-index: 1000;
+    background: #0B2A4A;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: top .2s ease;
+  }
+  .skip-link:focus { top: 8px; }
+
+  /* LP Header: ロゴのみ */
+  .lp-header {
+    width: 100%;
+    background: var(--surface, #fff);
+    padding: 16px 40px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9900;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    display: flex;
+    align-items: center;
+  }
+  .lp-header-logo-link { display: block; }
+  .lp-header-logo { height: 50px; max-width: none; display: block; }
+
+  /* LP Header のロゴ上線防止 */
+  .lp-header::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 3px;
+    background: var(--surface, #fff);
+    pointer-events: none;
+    z-index: 9800;
+  }
+
+  @media (max-width: 768px) {
+    .lp-header { padding: 8px 16px; }
+    .lp-header-logo { height: 40px; }
+  }
+
+  /* LP Footer: 最小限 */
+  .lp-footer {
+    background: var(--surface, #fff);
+    padding: 40px 20px 24px;
+    font-size: 0.88em;
+    margin-top: auto;
+    box-shadow: 0 -2px 4px rgba(0,0,0,.1);
+    text-align: center;
+  }
+  .lp-footer-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .lp-footer-brand {
+    font-weight: 700;
+    font-size: 1.05em;
+    margin: 0 0 4px;
+    color: var(--heading, #111);
+  }
+  .lp-footer-meta {
+    margin: 0;
+    color: var(--muted, #666);
+    font-size: .92em;
+    line-height: 1.6;
+  }
+  .lp-footer-meta a {
+    color: var(--brand, #2e574c);
+    text-decoration: none;
+  }
+  .lp-footer-meta a:hover { text-decoration: underline; }
+  .lp-footer-legal {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 16px 0 12px;
+  }
+  .lp-footer-legal a {
+    font-size: .85em;
+    color: var(--muted, #666);
+    text-decoration: none;
+  }
+  .lp-footer-legal a:hover {
+    color: var(--brand, #2e574c);
+    text-decoration: underline;
+  }
+  .lp-footer-copy {
+    margin: 0;
+    color: var(--muted, #666);
+    font-size: .85em;
+  }
+</style>

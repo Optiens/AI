@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="診断を受け付けました | Optiens">
+  <main>
+    <section class="thanks-section">
+      <div class="container text-center">
+        <div class="thanks-icon" aria-hidden="true">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h1>お申し込みありがとうございます</h1>
+        <p class="thanks-text">
+          無料AI診断のお申し込みを受け付けました。<br/>
+          1〜2営業日以内に、ご入力いただいたメールアドレスへ<br/>
+          簡易診断レポートをお届けします。
+        </p>
+        <div class="thanks-hint">
+          <i class="fa-solid fa-lightbulb"></i>
+          <p>
+            有償版のAI活用診断（15万円）は<strong>持続化補助金の委託費</strong>として申請できる場合があります。<br/>
+            採択された場合、<strong>自己負担は約5万円</strong>になります。
+            <a href="/ai-consulting">詳しく見る →</a>
+          </p>
+        </div>
+
+        <div class="thanks-actions">
+          <a href="/" class="btn-primary">トップページへ</a>
+          <a href="/blog" class="thanks-link">ブログを読む →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .thanks-section {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 20px 80px;
+  }
+  .thanks-icon {
+    font-size: 3rem;
+    color: var(--brand);
+    margin-bottom: 24px;
+  }
+  .thanks-section h1 {
+    font-size: clamp(22px, 3.5vw, 32px);
+    font-weight: 800;
+    color: var(--heading);
+    margin: 0 0 16px;
+  }
+  .thanks-text {
+    color: var(--muted);
+    font-size: clamp(14px, 1.6vw, 16px);
+    line-height: 1.8;
+    margin: 0 0 32px;
+  }
+  .thanks-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .thanks-link {
+    color: var(--brand);
+    font-weight: 500;
+    font-size: .92rem;
+    text-decoration: none;
+    transition: opacity .2s;
+  }
+  .thanks-link:hover { opacity: .8; }
+  .thanks-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+    max-width: 500px;
+    margin: 0 auto 32px;
+    padding: 16px 20px;
+    background: rgba(91, 127, 255, .05);
+    border: 1px solid rgba(91, 127, 255, .15);
+    border-radius: 10px;
+  }
+  .thanks-hint i {
+    color: #f0b429;
+    font-size: 1.1rem;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .thanks-hint p {
+    margin: 0;
+    font-size: .85rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .thanks-hint a {
+    color: var(--brand);
+    font-weight: 500;
+    text-decoration: none;
+  }
+</style>

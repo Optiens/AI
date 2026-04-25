@@ -69,11 +69,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
             <p><strong>現状</strong>: 出荷伝票を手書き→月末にまとめて計算</p>
-            <p><strong>改善後</strong>: スマホでその場入力（音声でもOK）→スプレッドシートに自動蓄積→AIが月次レポート（品目別売上・単価推移・利益率）を自動生成</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>今月の出荷データを品目別・販路別に集計して月次レポートを作成してください。</pre>
-            </div>
+            <p><strong>改善後</strong>: スマホでその場入力（音声でもOK）→スプレッドシートに自動蓄積→AIエージェントが月次レポート（品目別売上・単価推移・利益率）を自動生成。担当者は確認・承認のみ</p>
           </div>
 
           <div class="proposal-card">
@@ -83,12 +79,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
             </div>
             <p><strong>現状</strong>: 直販を増やしたいが発信する時間がゼロ</p>
-            <p><strong>改善後</strong>: 畑の写真+ひと言メモ→AIがキャプション・ハッシュタグ生成。週3投稿を10分で完了</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>あなたは地元の個人農家のSNS担当です。以下の写真の状況から投稿文を作ってください。
-ルール: 150文字以内、季節感、作り手の顔が見えるトーン。</pre>
-            </div>
+            <p><strong>改善後</strong>: 写真をフォルダに保存するだけでAIエージェントが投稿文+ハッシュタグを自動生成→承認後に自動投稿。週3投稿を数分で完了</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
@@ -119,7 +110,7 @@ import Layout from '../../layouts/Layout.astro';
             <div class="proposal-meta">
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月2〜3時間削減</span>
             </div>
-            <p>スマホ音声入力→AIが散布日・薬剤名・希釈倍率・対象作物をテーブル化。GAP対応の記録が自動で残る</p>
+            <p>スマホ音声入力→AIエージェントが散布日・薬剤名・希釈倍率・対象作物をテーブルに自動整理。GAP対応の記録が自動で残る</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
@@ -127,13 +118,13 @@ import Layout from '../../layouts/Layout.astro';
           <div class="proposal-card">
             <span class="iot-badge">🔧 Optiens IoT技術提供</span>
             <h3>提案5: AIによる灌水・防除タイミング提案</h3>
-            <p>IoTセンサーデータ（土壌水分・気温・湿度）+天気予報→AIが「明日は灌水不要」「湿度が高いので防除推奨」と判断材料を提示</p>
+            <p>IoTセンサーデータ（土壌水分・気温・湿度）+天気予報APIをAIエージェントが自動読み取り→「明日は灌水不要」「湿度が高いので防除推奨」とLINE通知で判断材料を自動提示</p>
             <p>Phase 2として、センサーデータが蓄積された後に実装可能</p>
           </div>
 
           <div class="proposal-card">
             <h3>提案6: 確定申告の効率化</h3>
-            <p>レシート写真→AI-OCRで仕訳、freee連携で年末の地獄を回避</p>
+            <p>レシート写真をフォルダに保存→AIエージェントがOCR→自動仕訳→freee連携で年末の地獄を回避。担当者は確認・承認のみ</p>
           </div>
         </section>
 
@@ -168,18 +159,18 @@ import Layout from '../../layouts/Layout.astro';
             <div class="roadmap-month">
               <h3>1ヶ月目 — 基盤構築</h3>
               <ul>
-                <li>AIツール導入、基本操作レクチャー</li>
-                <li>出荷記録のデジタル化（スマホ入力→スプレッドシート）</li>
-                <li>SNS投稿プロンプトの整備・運用開始</li>
+                <li>AIエージェント構築・データソース整備（出荷記録・SNS連携）</li>
+                <li>出荷記録の自動集計ワークフロー初期動作確認</li>
+                <li>SNS投稿自動化ワークフローの構築・運用開始</li>
                 <li>効果測定（削減時間の記録）</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — IoT導入</h3>
+              <h3>2ヶ月目 — ワークフロー拡張</h3>
               <ul>
                 <li>ハウスにIoTセンサー設置（温度・湿度）</li>
                 <li>Supabaseダッシュボード構築・アラート設定</li>
-                <li>農薬散布記録のデジタル化</li>
+                <li>農薬散布記録の自動化追加</li>
                 <li>効果測定</li>
               </ul>
             </div>
@@ -188,7 +179,7 @@ import Layout from '../../layouts/Layout.astro';
               <ul>
                 <li>センサーデータ蓄積→AI分析開始</li>
                 <li>灌水タイミング提案の試行</li>
-                <li>総合振り返り・効果測定・次フェーズ判断</li>
+                <li>効果測定・ワークフロー最適化・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -312,23 +303,6 @@ import Layout from '../../layouts/Layout.astro';
     display: flex;
     align-items: center;
     gap: 4px;
-  }
-
-  /* Prompt example */
-  .prompt-example {
-    background: #1a1a2e;
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-top: 12px;
-  }
-  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
-  .prompt-example pre {
-    color: #e2e8f0;
-    font-size: 0.8rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin: 0;
   }
 
   /* IoT badge */

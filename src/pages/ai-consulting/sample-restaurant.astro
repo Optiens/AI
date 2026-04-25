@@ -65,20 +65,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
             <p><strong>現状</strong>: 料理写真は毎日撮っているが、キャプション作成で止まる</p>
-            <p><strong>改善後</strong>: 料理名+ひと言メモ→AIがキャプション+ハッシュタグを即生成</p>
-            <div class="prompt-example">
-              <p class="prompt-label">プロンプト例</p>
-              <pre>あなたは地元のカフェレストランのSNS担当です。
-以下の料理情報からInstagram投稿文を作成してください。
-
-【ルール】
-- 150文字以内 / 季節感を入れる / 地元食材に触れる
-- ハッシュタグ5〜8個 / カジュアルで温かみのあるトーン
-
-【今日の料理】
-料理名: 春キャベツと地鶏のポトフ
-ひと言: 近所の農家さんから朝採れキャベツが届いた</pre>
-            </div>
+            <p><strong>改善後</strong>: AIエージェントが写真フォルダとメニュー情報を自動読み取り → キャプション+ハッシュタグを自動生成 → オーナーは確認・投稿のみ</p>
             <div class="result-example">
               <p class="result-label">生成例</p>
               <p>近所の農家さんから届いた朝採れ春キャベツ、丸ごとコトコト煮込みました。地鶏の旨みがじんわり染みたポトフで、今日みたいな肌寒い日にぴったりです。本日のランチでお出ししています。<br /><br />#地元ランチ #地産地消 #春キャベツ #ポトフ</p>
@@ -91,7 +78,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-clock"></i> 月2時間削減</span>
               <span class="meta-item"><i class="fa-solid fa-chart-line"></i> MEO順位改善</span>
             </div>
-            <p>口コミをコピペ→AIが返信案を生成→微調整して投稿。返信率90%以上を目指し、Googleマップの表示順位改善につなげます。</p>
+            <p>AIエージェントがGoogleマップの口コミを自動取得 → 返信案を自動生成 → オーナーは確認・投稿のみ。返信率90%以上を目指し、Googleマップの表示順位改善につなげます。</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
@@ -102,7 +89,7 @@ import Layout from '../../layouts/Layout.astro';
               <span class="meta-item"><i class="fa-solid fa-bell"></i> リピーター来店頻度向上</span>
               <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 追加費用なし</span>
             </div>
-            <p><strong>1日3分の運用</strong>: 仕込み後にメニューを入力→AI配信文生成→LINE公式に貼って送信。フリープラン（月200通）で十分カバー。</p>
+            <p><strong>1日1分の運用</strong>: AIエージェントがメニュー情報を自動読み取り → 配信文を自動生成 → LINE公式に自動反映。オーナーは確認・送信のみ。フリープラン（月200通）で十分カバー。</p>
           </div>
 
           <div class="proposal-card">
@@ -160,29 +147,29 @@ import Layout from '../../layouts/Layout.astro';
           <h2>5. 導入ロードマップ</h2>
           <div class="roadmap">
             <div class="roadmap-month">
-              <h3>1ヶ月目 — SNS・口コミの基盤構築</h3>
+              <h3>1ヶ月目 — AIエージェント構築・データソース整備</h3>
               <ul>
-                <li>AIツール開設、SNS投稿プロンプト作成</li>
-                <li>毎日 or 隔日の投稿ルーティン確立</li>
+                <li>AIエージェント構築・初期設定（SNS投稿・口コミ返信の自動化ワークフロー）</li>
+                <li>データソース整備（写真フォルダ・メニュー情報・Googleマップ連携）</li>
                 <li>口コミ返信の過去未返信分を一気に対応</li>
-                <li>効果測定（投稿数・フォロワー推移・返信率）</li>
+                <li>初期動作確認（投稿数・フォロワー推移・返信率）</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — 集客・予約の仕組み化</h3>
+              <h3>2ヶ月目 — ワークフロー拡張・新規業務の自動化追加</h3>
               <ul>
-                <li>LINE公式アカウント整備、日替わり配信テスト</li>
+                <li>LINE公式アカウント整備、日替わり配信の自動化ワークフロー追加</li>
                 <li>予約受付のGoogleフォーム or LINE予約設定</li>
                 <li>Instagram→予約導線の整備</li>
                 <li>効果測定（LINE友だち数・予約経路の変化）</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>3ヶ月目 — 効率化・最適化</h3>
+              <h3>3ヶ月目 — 効果測定・ワークフロー最適化</h3>
               <ul>
                 <li>食材発注リストのデジタル化</li>
                 <li>レジデータ連携の検討</li>
-                <li>3ヶ月間の総合振り返り、次フェーズ判断</li>
+                <li>3ヶ月間の効果測定・ワークフロー最適化・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -236,9 +223,6 @@ import Layout from '../../layouts/Layout.astro';
   .proposal-card p { font-size: 0.9rem; line-height: 1.7; margin-bottom: 8px; }
   .proposal-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
   .meta-item { font-size: 0.8rem; font-weight: 600; color: var(--color-primary, #2e574c); display: flex; align-items: center; gap: 4px; }
-  .prompt-example { background: #1a1a2e; border-radius: 8px; padding: 16px 20px; margin-top: 12px; }
-  .prompt-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
-  .prompt-example pre { color: #e2e8f0; font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; margin: 0; }
   .result-example { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px 20px; margin-top: 12px; }
   .result-label { font-size: 0.75rem; font-weight: 600; color: #166534; margin-bottom: 8px; }
   .result-example p { font-size: 0.85rem; line-height: 1.7; color: #1a1a1a; }
