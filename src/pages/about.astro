@@ -10,7 +10,6 @@ import Layout from '../layouts/Layout.astro';
       <div class="hero-content">
         <div class="container text-center">
           <h1>ABOUT</h1>
-          <p>AIを事業の中心に。</p>
         </div>
       </div>
     </section>
@@ -19,7 +18,13 @@ import Layout from '../layouts/Layout.astro';
     <section class="about-content-section">
       <div class="container">
 
-        <!-- 0) 3つの価値観：調和・最適化・循環 -->
+        <!-- 0) Optiensの由来（社名・想い） -->
+        <section class="about-origin reveal">
+          <p>Optiens（オプティエンス） は <strong>Optimization（最適化）</strong> と <strong>Ensō（円相）</strong>を重ねた造語です。</p>
+          <p>既成概念を見直し、社会や暮らしの仕組みを最適化していきます。</p>
+        </section>
+
+        <!-- 1) 3つの価値観：調和・最適化・循環 -->
         <section class="about-values reveal">
           <div class="values-grid">
             <div class="value-card">
@@ -44,13 +49,6 @@ import Layout from '../layouts/Layout.astro';
               <p>資源もデータも種子も循環させ、気候リスクや外部依存に左右されない、自律した仕組みを構築します。</p>
             </div>
           </div>
-        </section>
-
-        <!-- 1) Optiensの由来 -->
-        <section class="about-origin reveal">
-          <h2>次の世代へ繋ぐために</h2>
-            <p>Optiens（オプティエンス） は <strong>Optimization（最適化）</strong> と <strong>Ensō（円相）</strong>を重ねた造語です。</p>
-            <p>既成概念を見直し、社会や暮らしの仕組みを最適化していきます。</p>
         </section>
 
         <!-- 2) 2つの事業 -->
@@ -83,7 +81,7 @@ import Layout from '../layouts/Layout.astro';
             <div class="approach-showcase-icon"><i class="fa-solid fa-flask"></i></div>
             <div class="approach-showcase-text">
               <p class="approach-showcase-title">提案する技術スタックは、弊社自身が運用しています</p>
-              <p>弊社は<strong>クラウドDB + 高速Webフロントエンド + AIエージェント</strong>の構成で、自社のCRM・書類添削ツール・水耕栽培IoTダッシュボードを日常運用しています。お客様にお渡しする仕組みは、弊社が現場で実証済みのパターンに基づくものです。技術スタックは案件ごとに最適化するため、詳細はご相談時にご説明します。</p>
+              <p>弊社自身がAIエージェントを使って、社内のCRM・書類添削ツール・水耕栽培IoTダッシュボードなどを運用しています。日常的に「自分で使い、自分で改善する」ことで得た知見をもとに、お客様の業務に合った構成を案件ごとに設計します。提案する技術はその時々の最適解を選びますが、設計と運用に対する考え方は一貫しています。</p>
             </div>
           </div>
         </section>
@@ -349,17 +347,19 @@ import Layout from '../layouts/Layout.astro';
    ========================================================= */
 .about-origin {
   margin-bottom: 48px;
-}
-.about-origin h2 {
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800;
-  margin: 0 0 1rem;
-  color: var(--heading);
+  text-align: center;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .about-origin p {
   color: var(--text);
-  line-height: 1.8;
-  margin: 0 0 .5rem;
+  line-height: 1.9;
+  margin: 0 0 .75rem;
+  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+}
+.about-origin p:last-child {
+  margin-bottom: 0;
 }
 
 /* =========================================================
