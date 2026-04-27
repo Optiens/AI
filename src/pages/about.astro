@@ -34,6 +34,33 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </section>
 
+        <!-- 0) 3つの価値観：調和・最適化・循環 -->
+        <section class="about-values reveal">
+          <div class="values-grid">
+            <div class="value-card">
+              <div class="value-icon value-icon--harmony">
+                <i class="fa-solid fa-bullseye"></i>
+              </div>
+              <h3>調和</h3>
+              <p>競争から協調へ、所有から共有へ、分離から統合へ。人・自然・テクノロジーが調和できる社会を築きます。</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon value-icon--optimization">
+                <i class="fa-solid fa-circle-plus"></i>
+              </div>
+              <h3>最適化</h3>
+              <p>センサーデータやAI技術を活用した効率化と、常識の再定義により、事業と暮らしの新しいカタチを創造します。</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon value-icon--circulation">
+                <i class="fa-solid fa-arrows-rotate"></i>
+              </div>
+              <h3>循環</h3>
+              <p>資源もデータも種子も循環させ、気候リスクや外部依存に左右されない、自律した仕組みを構築します。</p>
+            </div>
+          </div>
+        </section>
+
         <!-- 1) Optiensの由来 -->
         <section class="about-origin reveal">
           <h2>次の世代へ繋ぐために</h2>
@@ -353,6 +380,79 @@ import Layout from '../layouts/Layout.astro';
 /* =========================================================
    2つの事業
    ========================================================= */
+/* =============================================================
+   About Values（調和・最適化・循環）
+   ============================================================= */
+.about-values {
+  margin-bottom: 64px;
+}
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.value-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.value-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
+}
+.value-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  border: 2px solid;
+}
+.value-icon--harmony {
+  background: rgba(255, 184, 0, 0.12);
+  color: #FFC53D;
+  border-color: rgba(255, 184, 0, 0.4);
+}
+.value-icon--optimization {
+  background: rgba(91, 127, 255, 0.12);
+  color: #6E94FF;
+  border-color: rgba(91, 127, 255, 0.4);
+}
+.value-icon--circulation {
+  background: rgba(91, 184, 91, 0.12);
+  color: #6FCF6F;
+  border-color: rgba(91, 184, 91, 0.4);
+}
+.value-card h3 {
+  font-size: 1.1rem;
+  color: var(--heading);
+  margin: 0 0 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.value-card p {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+  .value-card {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
 .about-businesses {
   margin-bottom: 48px;
 }
