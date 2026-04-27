@@ -1,5 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import QRCode from 'qrcode';
+
+// ビルド時にこのページのQRコードSVGを生成（PC利用者がスマホへ移行する用）
+const pageUrl = 'https://optiens.com/document-editor';
+const qrSvg = await QRCode.toString(pageUrl, {
+  type: 'svg',
+  margin: 1,
+  color: {
+    dark: '#0e1525',
+    light: '#ffffff',
+  },
+  width: 160,
+});
 ---
 
 <Layout
@@ -17,6 +30,15 @@ import Layout from '../layouts/Layout.astro';
           お手元のメール文・契約書ドラフト・社内通達を、AIエージェントが添削します。<br />
           重要度付きの指摘メモと、修正後の本文をその場でダウンロードいただけます。
         </p>
+
+        <!-- スマホで開く（PC利用者向けQRコード） -->
+        <div class="ed-qr pc-only" aria-label="スマホで開く">
+          <div class="ed-qr-text">
+            <p class="ed-qr-label">スマホで開く</p>
+            <p class="ed-qr-desc">スマホからの利用を想定したUIです。<br />お手元のスマホでQRコードを読み取ってください。</p>
+          </div>
+          <div class="ed-qr-svg" set:html={qrSvg}></div>
+        </div>
       </div>
     </section>
 
@@ -458,6 +480,53 @@ import Layout from '../layouts/Layout.astro';
     color: var(--muted);
     line-height: 1.8;
     margin-bottom: 0;
+  }
+
+  /* ===== QR (PC利用者向け：スマホへ移行) ===== */
+  .ed-qr {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 32px;
+    padding: 20px 24px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: left;
+  }
+  .ed-qr-label {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: 0.04em;
+  }
+  .ed-qr-desc {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .ed-qr-svg {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ed-qr-svg :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* スマホでは非表示（既にスマホで開いているため不要） */
+  .pc-only { }
+  @media (max-width: 768px) {
+    .pc-only { display: none !important; }
   }
 
   /* ===== Sections ===== */
