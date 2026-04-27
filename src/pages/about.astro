@@ -4,17 +4,17 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="会社情報 | Optiens" description="合同会社Optiens（オプティエンス）の会社情報。AI活用支援と室内IoT水耕栽培の2事業で、小規模事業者の業務効率化と持続可能な農業の仕組みづくりに取り組んでいます。">
   <main>
-    <!-- ===== Hero（パーティクルネットワーク + Optiens由来） ===== -->
+    <!-- ===== Hero（ビジョン×バリュー融合） ===== -->
     <section class="about-hero-section">
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <div class="hero-content">
         <div class="container text-center">
-          <p class="hero-eyebrow">OPTIENS LLC</p>
+          <p class="hero-eyebrow">ABOUT OPTIENS</p>
           <h1 class="hero-statement">
-            <strong>Optimization（最適化）</strong>と<br class="sp-only" /><strong>Ensō（円相）</strong>を重ねた造語。
+            業務の仕組みから、<br class="sp-only" />AIで再設計する。
           </h1>
           <p class="hero-statement-sub">
-            既成概念を見直し、社会や暮らしの仕組みを最適化していきます。
+            エンタープライズ10年の知見を、小さな事業に最適化して届けます。
           </p>
         </div>
       </div>
@@ -41,10 +41,79 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </section>
 
-        <!-- 2) 社名のルーツ：最適化 × 円相 -->
+        <!-- 2) 2つの事業 -->
+        <section class="about-section about-businesses reveal">
+          <p class="section-eyebrow">OUR BUSINESSES</p>
+          <h2 class="section-heading">2つの事業</h2>
+          <div class="business-cards">
+            <div class="business-card">
+              <div class="business-icon"><i class="fas fa-brain"></i></div>
+              <h3>AI支援事業</h3>
+              <p>中小企業・小規模事業者のAI活用を伴走支援。無料診断から導入・保守まで一貫して、AIエージェントによる業務自動化の仕組みをつくります。</p>
+              <a href="/ai-consulting" class="business-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="business-card">
+              <div class="business-icon"><i class="fas fa-leaf"></i></div>
+              <h3>IoT水耕栽培事業</h3>
+              <p>IoTセンサーとAIを駆使した室内水耕栽培システムを開発中。データ駆動で農薬不使用のハーブを安定生産し、将来的に就労支援事業所への導入を目指します。</p>
+              <a href="/hydroponics" class="business-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3) 代表者について（一人法人は人で信頼形成） -->
+        <section class="about-section about-profile reveal">
+          <p class="section-eyebrow">REPRESENTATIVE</p>
+          <h2 class="section-heading">代表者について</h2>
+          <div class="profile-card">
+            <div class="profile-content">
+              <h3>髙橋 大地<span class="profile-title">合同会社Optiens 代表社員</span></h3>
+              <p>大手企業向けSalesforceシステムの設計・開発に従事。業務分析からシステム実装まで一貫して手がけ、「技術の高度さではなく業務への理解が現場を変える」という信念を持つ。</p>
+              <p>2026年、山梨県北杜市に合同会社Optiensを設立。自社の経営管理業務にもAIエージェントを全面導入し、その実践から得た知見をもとに、全国の小規模事業者へAI活用支援を行う。</p>
+              <ul class="profile-tags">
+                <li>Salesforce認定資格保有</li>
+                <li>業務システム開発10年+</li>
+                <li>自社業務にAIエージェントを全面導入</li>
+                <li>山梨県北杜市在住</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4) 3つの価値観：調和・最適化・循環 -->
+        <section class="about-section about-values reveal">
+          <p class="section-eyebrow">OUR VALUES</p>
+          <h2 class="section-heading">3つの価値観</h2>
+          <div class="values-grid">
+            <div class="value-card">
+              <div class="value-icon value-icon--harmony">
+                <i class="fa-solid fa-bullseye"></i>
+              </div>
+              <h3>調和</h3>
+              <p>競争から協調へ、所有から共有へ、分離から統合へ。人・自然・テクノロジーが調和できる社会を築きます。</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon value-icon--optimization">
+                <i class="fa-solid fa-circle-plus"></i>
+              </div>
+              <h3>最適化</h3>
+              <p>センサーデータやAI技術を活用した効率化と、常識の再定義により、事業と暮らしの新しいカタチを創造します。</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon value-icon--circulation">
+                <i class="fa-solid fa-arrows-rotate"></i>
+              </div>
+              <h3>循環</h3>
+              <p>資源もデータも種子も循環させ、気候リスクや外部依存に左右されない、自律した仕組みを構築します。</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5) 社名のルーツ：最適化 × 円相（深い背景） -->
         <section class="about-section about-roots reveal">
           <p class="section-eyebrow">NAME ORIGIN</p>
           <h2 class="section-heading">2つのルーツ</h2>
+          <p class="section-lead">社名「Optiens」は、<strong>Optimization（最適化）</strong>と<strong>Ensō（円相）</strong>を重ねた造語です。</p>
           <div class="roots-grid">
             <div class="root-card">
               <div class="root-visual">
@@ -96,74 +165,6 @@ import Layout from '../layouts/Layout.astro';
               <p class="root-eng">Ensō</p>
               <h3 class="root-jp">円相</h3>
               <p class="root-desc">禅の一筆書きの円。完全さも不完全さも内に含む、循環と調和の象徴。終わりが次の始まりに繋がる、循環する仕組みのかたち。</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 1) 3つの価値観：調和・最適化・循環 -->
-        <section class="about-section about-values reveal">
-          <p class="section-eyebrow">OUR VALUES</p>
-          <h2 class="section-heading">3つの価値観</h2>
-          <div class="values-grid">
-            <div class="value-card">
-              <div class="value-icon value-icon--harmony">
-                <i class="fa-solid fa-bullseye"></i>
-              </div>
-              <h3>調和</h3>
-              <p>競争から協調へ、所有から共有へ、分離から統合へ。人・自然・テクノロジーが調和できる社会を築きます。</p>
-            </div>
-            <div class="value-card">
-              <div class="value-icon value-icon--optimization">
-                <i class="fa-solid fa-circle-plus"></i>
-              </div>
-              <h3>最適化</h3>
-              <p>センサーデータやAI技術を活用した効率化と、常識の再定義により、事業と暮らしの新しいカタチを創造します。</p>
-            </div>
-            <div class="value-card">
-              <div class="value-icon value-icon--circulation">
-                <i class="fa-solid fa-arrows-rotate"></i>
-              </div>
-              <h3>循環</h3>
-              <p>資源もデータも種子も循環させ、気候リスクや外部依存に左右されない、自律した仕組みを構築します。</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 2) 2つの事業 -->
-        <section class="about-section about-businesses reveal">
-          <p class="section-eyebrow">OUR BUSINESSES</p>
-          <h2 class="section-heading">2つの事業</h2>
-          <div class="business-cards">
-            <div class="business-card">
-              <div class="business-icon"><i class="fas fa-brain"></i></div>
-              <h3>AI支援事業</h3>
-              <p>中小企業・小規模事業者のAI活用を伴走支援。無料診断から導入・保守まで一貫して、AIエージェントによる業務自動化の仕組みをつくります。</p>
-              <a href="/ai-consulting" class="business-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="business-card">
-              <div class="business-icon"><i class="fas fa-leaf"></i></div>
-              <h3>IoT水耕栽培事業</h3>
-              <p>IoTセンサーとAIを駆使した室内水耕栽培システムを開発中。データ駆動で農薬不使用のハーブを安定生産し、将来的に就労支援事業所への導入を目指します。</p>
-              <a href="/hydroponics" class="business-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </section>
-
-        <!-- 5) 代表者について -->
-        <section class="about-section about-profile reveal">
-          <p class="section-eyebrow">REPRESENTATIVE</p>
-          <h2 class="section-heading">代表者について</h2>
-          <div class="profile-card">
-            <div class="profile-content">
-              <h3>髙橋 大地<span class="profile-title">合同会社Optiens 代表社員</span></h3>
-              <p>大手企業向けSalesforceシステムの設計・開発に従事。業務分析からシステム実装まで一貫して手がけ、「技術の高度さではなく業務への理解が現場を変える」という信念を持つ。</p>
-              <p>2026年、山梨県北杜市に合同会社Optiensを設立。自社の経営管理業務にもAIエージェントを全面導入し、その実践から得た知見をもとに、全国の小規模事業者へAI活用支援を行う。</p>
-              <ul class="profile-tags">
-                <li>Salesforce認定資格保有</li>
-                <li>業務システム開発10年+</li>
-                <li>自社業務にAIエージェントを全面導入</li>
-                <li>山梨県北杜市在住</li>
-              </ul>
             </div>
           </div>
         </section>
@@ -417,6 +418,17 @@ import Layout from '../layouts/Layout.astro';
   letter-spacing: -.01em;
   color: var(--heading);
   margin: 0 0 clamp(28px, 4vw, 48px);
+}
+.section-lead{
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.9;
+  color: var(--text);
+  margin: clamp(-12px, -1vw, -8px) 0 clamp(28px, 4vw, 40px);
+  max-width: 720px;
+}
+.section-lead strong{
+  color: var(--brand);
+  font-weight: 700;
 }
 
 /* =========================================================
