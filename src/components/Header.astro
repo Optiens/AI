@@ -2,7 +2,7 @@
 ---
 <header class="main-header">
   <a href="/" class="header-logo-link">
-    <img src="/images/optiens-logo.png" alt="Optiens" class="header-logo" />
+    <video src="/videos/optiens-logo-wave.mp4" autoplay muted playsinline class="header-logo"></video>
   </a>
 
   <nav class="desktop-nav">
@@ -10,6 +10,7 @@
       <li><a href="/">HOME</a></li>
       <li><a href="/about">ABOUT</a></li>
       <li><a href="/ai-consulting">SERVICE</a></li>
+      <li><a href="/ai-examples">EXAMPLES</a></li>
       <li><a href="/blog">BLOG</a></li>
       <li><a href="/contact">CONTACT</a></li>
     </ul>
@@ -24,6 +25,7 @@
       <li><a href="/">HOME</a></li>
       <li><a href="/about">ABOUT</a></li>
       <li><a href="/ai-consulting">SERVICE</a></li>
+      <li><a href="/ai-examples">EXAMPLES</a></li>
       <li><a href="/blog">BLOG</a></li>
       <li><a href="/contact">CONTACT</a></li>
     </ul>
@@ -63,7 +65,13 @@
   z-index: 9900;
   border-bottom: 1px solid var(--border);
 }
-.header-logo { height: 44px; max-width: none; display: block; }
+.header-logo {
+  height: 44px;
+  max-width: none;
+  display: block;
+  filter: invert(1) hue-rotate(180deg);
+  mix-blend-mode: screen;
+}
 
 @media (min-width: 769px) {
   .main-header {

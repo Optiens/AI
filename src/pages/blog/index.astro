@@ -1,26 +1,26 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import bgUrl from '~/assets/ai-nature-city.webp?url';
+import ParticleCanvas from '../../components/ParticleCanvas.astro';
 
 type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
 
 const categoryLabel: Record<BlogCategory, string> = {
   AI: 'AI・機械学習',
-  agriculture: '農業・水耕栽培',
-  business: '栽培ビジネス',
   technology: 'テクノロジー',
-  welfare: '農福連携',
-  social: '社会課題',
   announcement: 'お知らせ',
 };
+
+// 水耕栽培関連カテゴリはブログ一覧から除外（hydroponicsページで掲載）
+const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'business', 'social'];
 
 const limit = 6;
 const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
 const selectedCategory = (Astro.url.searchParams.get('category') ?? '') as BlogCategory | '';
 
 const allPosts = await getCollection('blog');
-const sorted = allPosts.sort(
+const mainPosts = allPosts.filter((p) => !hydroCategories.includes(p.data.category as BlogCategory));
+const sorted = mainPosts.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 const filtered = selectedCategory
@@ -49,10 +49,11 @@ function categoryUrl(cat: BlogCategory | '') {
 <Layout title="ブログ | Optiens">
   <main>
     <!-- Hero -->
-    <section class="hero-section blog-hero-section" style={`--hero-bg: url(${bgUrl});`}>
-      <div class="container text-center">
+    <section class="blog-hero">
+      <ParticleCanvas id="blog-net" />
+      <div class="container text-center" style="position:relative;z-index:1;">
         <h1>ブログ</h1>
-        <p class="hero-sub">AI・農業・テクノロジー・社会課題の最新情報をお届けします</p>
+        <p class="hero-sub">AI・テクノロジーの最新情報をお届けします</p>
       </div>
     </section>
 
@@ -147,10 +148,22 @@ function categoryUrl(cat: BlogCategory | '') {
 </Layout>
 
 <style>
+  .blog-hero {
+    position: relative;
+    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    background: var(--surface);
+    overflow: hidden;
+    color: #fff;
+  }
+  .blog-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-bottom: 12px;
+  }
   .hero-sub {
     margin: .75rem 0 0;
     font-size: clamp(.9rem, 2vw, 1.1rem);
-    opacity: .85;
+    color: var(--muted);
   }
 
   /* ========== カテゴリフィルター ========== */

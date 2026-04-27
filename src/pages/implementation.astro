@@ -1,0 +1,246 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ParticleCanvas from '../components/ParticleCanvas.astro';
+---
+
+<Layout
+  title="導入支援 | Optiens"
+  description="業務を自動でこなすAIの仕組みを、設計から構築・納品まで対応。御社の業務に合わせた自動化システムをお渡しします。"
+>
+  <main>
+    <!-- ヒーロー -->
+    <section class="impl-hero">
+      <ParticleCanvas id="impl-net" />
+      <div class="container text-center" style="position:relative;z-index:1;">
+        <p class="eyebrow">IMPLEMENTATION</p>
+        <h1>導入支援</h1>
+        <p class="hero-sub">業務を自動でこなすAIの仕組みを、<br/>設計から構築・納品まで対応します。</p>
+      </div>
+    </section>
+
+    <!-- 導入の流れ -->
+    <section class="impl-section">
+      <div class="container">
+        <h2 class="section-title reveal">導入の流れ</h2>
+        <div class="impl-flow reveal">
+          <div class="impl-step">
+            <span class="impl-step-num">1</span>
+            <h3>ヒアリング</h3>
+            <p>業務内容や課題をお聞きし、自動化の範囲と優先順位を整理します。</p>
+          </div>
+          <div class="impl-step">
+            <span class="impl-step-num">2</span>
+            <h3>設計</h3>
+            <p>自動化ワークフローの構成を設計し、費用と期間をお見積もりします。</p>
+          </div>
+          <div class="impl-step">
+            <span class="impl-step-num">3</span>
+            <h3>構築</h3>
+            <p>設計をもとにAIエージェントを構築します。</p>
+          </div>
+          <div class="impl-step">
+            <span class="impl-step-num">4</span>
+            <h3>納品・動作確認</h3>
+            <p>お客様と一緒に動作確認を行い、操作手順を共有します。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 含まれるもの -->
+    <section class="impl-section impl-section--alt">
+      <div class="container">
+        <h2 class="section-title reveal">導入支援に含まれるもの</h2>
+        <div class="impl-includes reveal">
+          <ul>
+            <li><i class="fa-solid fa-check"></i>自動化ワークフローの設計・構築</li>
+            <li><i class="fa-solid fa-check"></i>自動化システム一式の納品</li>
+            <li><i class="fa-solid fa-check"></i>操作手順の共有</li>
+            <li><i class="fa-solid fa-check"></i>セットアップ支援・初期動作確認</li>
+            <li><i class="fa-solid fa-check"></i>ランニングコストを抑えた運用設計</li>
+            <li><i class="fa-solid fa-check"></i>納品後3ヶ月間の不具合修正（無償・累計10時間まで）</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 費用 -->
+    <section class="impl-section">
+      <div class="container">
+        <h2 class="section-title reveal">費用について</h2>
+        <div class="impl-price-card reveal">
+          <p>金額は自動化する業務の範囲や複雑さに応じて、個別にお見積もりいたします。</p>
+          <p>詳細レポート（5,000円）をご依頼いただくと、導入費用の見積もりも含めてご提示します。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="impl-cta">
+      <div class="container text-center">
+        <h2 class="reveal">まずはご相談ください</h2>
+        <p class="reveal">「こういう業務を自動化したい」「費用感を知りたい」など、お気軽にどうぞ。</p>
+        <div class="impl-cta-buttons reveal">
+          <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける</a>
+          <a href="/contact" class="btn-secondary">お問い合わせ</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .impl-hero {
+    position: relative;
+    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    background: var(--surface);
+    overflow: hidden;
+    color: #fff;
+  }
+  .eyebrow {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin-bottom: 16px;
+  }
+  .impl-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: clamp(.9rem, 1.8vw, 1.1rem);
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .impl-section {
+    padding: clamp(48px, 8vw, 80px) 0;
+  }
+  .impl-section--alt {
+    background: var(--surface-2);
+  }
+
+  /* 導入の流れ */
+  .impl-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .impl-step {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .impl-step:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .impl-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(91, 127, 255, .1);
+    border: 1px solid rgba(91, 127, 255, .3);
+    color: var(--brand);
+    font-weight: 700;
+    font-size: .95rem;
+    margin-bottom: 16px;
+  }
+  .impl-step h3 {
+    font-size: 1.05rem;
+    color: var(--heading);
+    margin: 0 0 10px;
+  }
+  .impl-step p {
+    font-size: .9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* 含まれるもの */
+  .impl-includes {
+    max-width: 640px;
+    margin: 32px auto 0;
+  }
+  .impl-includes ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .impl-includes li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: .95rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .impl-includes li i {
+    color: var(--brand);
+    font-size: .85rem;
+    flex-shrink: 0;
+  }
+
+  /* 費用 */
+  .impl-price-card {
+    max-width: 640px;
+    margin: 32px auto 0;
+    padding: 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .impl-price-card p {
+    font-size: .95rem;
+    color: var(--text);
+    line-height: 1.8;
+    margin: 0 0 8px;
+  }
+  .impl-price-card p:last-child { margin-bottom: 0; }
+
+  /* CTA */
+  .impl-cta {
+    padding: clamp(48px, 8vw, 80px) 0;
+    background: var(--surface-2);
+  }
+  .impl-cta h2 {
+    color: var(--heading);
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    margin-bottom: 12px;
+  }
+  .impl-cta p {
+    color: var(--muted);
+    font-size: .95rem;
+    margin-bottom: 28px;
+  }
+  .impl-cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 768px) {
+    .impl-flow {
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+  }
+  @media (max-width: 480px) {
+    .impl-flow {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

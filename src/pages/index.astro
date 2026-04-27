@@ -11,13 +11,14 @@ import Layout from '../layouts/Layout.astro';
     <section class="hero">
       <canvas id="hero-net" class="hero-canvas"></canvas>
       <div class="hero-content">
-        <p class="hero-eyebrow">NEXT STEP WITH AI</p>
-        <h1 class="hero-title">
-          MAKE AI NATIVE<br/>
-          TO YOUR BUSINESS.
-        </h1>
-        <p class="hero-sub">AIを事業の中心に。</p>
-        <a href="/free-diagnosis" class="btn-primary hero-cta">無料AI診断を受ける</a>
+        <div class="hero-text-block">
+          <p class="hero-eyebrow">NEXT STEP WITH AI</p>
+          <h1 class="hero-title">
+            MAKE AI NATIVE<br/>
+            TO YOUR BUSINESS.
+          </h1>
+          <p class="hero-sub">AIを事業の中心に。</p>
+        </div>
       </div>
     </section>
 
@@ -123,80 +124,57 @@ import Layout from '../layouts/Layout.astro';
             <div class="sv-icon-wrap">
               <i class="fa-solid fa-magnifying-glass-chart"></i>
             </div>
-            <h3>無料AI診断</h3>
-            <p>ROIを数値で算出。あなたの業務のどこにAIが効くか可視化</p>
+            <h3>AI活用診断</h3>
+            <p>業務にAIがどれだけ効くか、ROI（投資利益率）を算出します。無料版と有料版をご用意しています。</p>
             <span class="sv-arrow">→</span>
           </a>
-          <a href="/ai-consulting" class="sv-card gradient-border">
+          <a href="/implementation" class="sv-card gradient-border">
             <div class="sv-icon-wrap">
               <i class="fa-solid fa-gears"></i>
             </div>
             <h3>導入支援</h3>
-            <p>自動化システムの設計・構築・納品。仕組みごとお渡し</p>
+            <p>業務を自動でこなすAIの仕組みを、設計から構築・納品まで対応します。</p>
             <span class="sv-arrow">→</span>
           </a>
-          <a href="/ai-consulting" class="sv-card gradient-border">
+          <a href="/maintenance" class="sv-card gradient-border">
             <div class="sv-icon-wrap">
               <i class="fa-solid fa-arrows-spin"></i>
             </div>
             <h3>保守</h3>
-            <p>改善・拡張・トラブル対応を継続サポート</p>
+            <p>導入後の機能追加やトラブルに対応。新しい業務の自動化もご相談いただけます。</p>
             <span class="sv-arrow">→</span>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- ===== Industries — Bento Grid ===== -->
-    <section class="section industry-section">
+    <!-- ===== 差別化ストリップ：カスタムUI構築力 ===== -->
+    <section class="section custom-strip-section">
       <div class="container">
-        <h2 class="section-heading reveal">INDUSTRIES</h2>
-        <p class="section-sub reveal">11業種のサンプルレポートを公開中</p>
-        <div class="bento-grid reveal-stagger">
-          <a href="/ai-consulting/sample-legal" class="bento-item bento-lg gradient-border">
-            <i class="fa-solid fa-scale-balanced"></i>
-            <span>士業（税理士・行政書士）</span>
-          </a>
-          <a href="/ai-consulting/sample-pension" class="bento-item gradient-border">
-            <i class="fa-solid fa-bed"></i>
-            <span>ペンション・宿泊業</span>
-          </a>
-          <a href="/ai-consulting/sample-restaurant" class="bento-item gradient-border">
-            <i class="fa-solid fa-utensils"></i>
-            <span>カフェ＆レストラン</span>
-          </a>
-          <a href="/ai-consulting/sample-ec" class="bento-item bento-lg gradient-border">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span>EC事業者・ネットショップ</span>
-          </a>
-          <a href="/ai-consulting/sample-construction" class="bento-item gradient-border">
-            <i class="fa-solid fa-helmet-safety"></i>
-            <span>工務店・建設業</span>
-          </a>
-          <a href="/ai-consulting/sample-winery" class="bento-item gradient-border">
-            <i class="fa-solid fa-wine-glass"></i>
-            <span>ワイナリー・醸造所</span>
-          </a>
-          <a href="/ai-consulting/sample-outdoor" class="bento-item gradient-border">
-            <i class="fa-solid fa-mountain-sun"></i>
-            <span>アウトドアガイド</span>
-          </a>
-          <a href="/ai-consulting/sample-bakery" class="bento-item gradient-border">
-            <i class="fa-solid fa-bread-slice"></i>
-            <span>パン屋・ベーカリー</span>
-          </a>
-          <a href="/ai-consulting/sample-farmer" class="bento-item gradient-border">
-            <i class="fa-solid fa-seedling"></i>
-            <span>個人農家</span>
-          </a>
-          <a href="/ai-consulting/sample-dairy" class="bento-item gradient-border">
-            <i class="fa-solid fa-cow"></i>
-            <span>酪農・畜産業</span>
-          </a>
-          <a href="/ai-consulting/sample-municipality" class="bento-item bento-lg gradient-border">
-            <i class="fa-solid fa-landmark"></i>
-            <span>自治体・市役所</span>
-          </a>
+        <div class="custom-strip reveal">
+          <p class="custom-strip-eyebrow">OUR EDGE</p>
+          <h2 class="custom-strip-title">業界標準SaaSに業務を合わせる必要はありません。</h2>
+          <p class="custom-strip-desc">
+            業界では既製ツール（Notion・kintone等）をそのまま使う提案が一般的ですが、<br class="pc-only" />
+            弊社はクラウドDB + AIエージェントの構成で、御社の業務に合わせた専用システムを構築します。<br class="pc-only" />
+            月額ライセンス料の発生しない、御社所有の仕組みです。
+          </p>
+          <a href="/ai-consulting" class="link-arrow">詳しく見る →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Examples Teaser ===== -->
+    <section class="section examples-teaser-section">
+      <div class="container">
+        <h2 class="section-heading reveal">EXAMPLES</h2>
+        <div class="examples-teaser reveal">
+          <p class="examples-teaser-title">11業種の活用事例 + 業種を問わない共通パターン</p>
+          <p class="examples-teaser-desc">
+            業種別11業種の具体的な活用例と、業種を問わず効く6つの共通AI事例を1ページにまとめています。<br class="pc-only" />
+            御社に近い業種・近い課題を起点にご覧ください。
+          </p>
+          <a href="/ai-examples" class="link-arrow">事例を見る →</a>
         </div>
       </div>
     </section>
@@ -215,7 +193,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <div class="why-item reveal">
             <span class="why-num">全国</span>
-            <p>地域の事業者に<br/>オンラインで伴走</p>
+            <p>どこからでも<br/>オンラインで対応</p>
           </div>
         </div>
         <div class="text-center reveal" style="margin-top: 48px;">
@@ -229,7 +207,7 @@ import Layout from '../layouts/Layout.astro';
       <div class="cta-glow"></div>
       <div class="container text-center" style="position:relative;z-index:1;">
         <h2 class="reveal">まずは無料AI診断から</h2>
-        <p class="reveal">3分のフォーム入力で、あなたの事業に合った<br/>AI活用ポイントをレポートでお届けします。</p>
+        <p class="reveal">フォーム入力だけで、あなたの事業に合った<br/>AI活用ポイントをレポートでお届けします。</p>
         <a href="/free-diagnosis" class="btn-primary cta-btn reveal">無料AI診断を受ける</a>
       </div>
     </section>
@@ -290,7 +268,8 @@ import Layout from '../layouts/Layout.astro';
 .hero-content {
   position: relative;
   z-index: 1;
-  text-align: center;
+  width: min(900px, 100% - 6rem);
+  margin-inline: auto;
   padding: 20px;
   animation: hero-fade-in .8s ease-out;
 }
@@ -298,6 +277,11 @@ import Layout from '../layouts/Layout.astro';
 @keyframes hero-fade-in {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-text-block {
+  width: fit-content;
+  margin: 0 auto;
 }
 
 .hero-eyebrow {
@@ -308,6 +292,7 @@ import Layout from '../layouts/Layout.astro';
   text-transform: uppercase;
   color: var(--brand);
   font-weight: 500;
+  text-align: left;
 }
 
 .hero-title {
@@ -317,18 +302,23 @@ import Layout from '../layouts/Layout.astro';
   letter-spacing: -.02em;
   color: var(--heading);
   margin: 0 0 1rem;
+  text-align: left;
 }
 
 .hero-sub {
   font-size: clamp(15px, 2vw, 18px);
   color: var(--muted);
-  margin: 0 0 2.5rem;
-  font-weight: 400;
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
 }
 
 .hero-cta {
   font-size: clamp(14px, 1.6vw, 16px);
   padding: .85rem 2.4rem;
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
 }
 
 /* =========================================
@@ -346,7 +336,7 @@ import Layout from '../layouts/Layout.astro';
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  text-align: left;
   text-decoration: none;
   color: inherit;
   padding: 48px 28px 40px;
@@ -406,7 +396,7 @@ import Layout from '../layouts/Layout.astro';
   transform: translateX(0);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .service-visual-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -428,78 +418,82 @@ import Layout from '../layouts/Layout.astro';
 }
 
 /* =========================================
-   Industries — Bento Grid
+   差別化ストリップ
 ========================================= */
-.industry-section {
+.custom-strip-section {
   background: var(--surface);
+  padding: clamp(64px, 10vw, 96px) 20px;
 }
-
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: minmax(120px, auto);
-  gap: 16px;
-}
-
-.bento-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  text-decoration: none;
-  color: inherit;
-  padding: 28px 16px;
+.custom-strip {
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px 32px;
   background: var(--surface-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
+  position: relative;
 }
-.bento-item:hover {
-  border-color: var(--border-hover);
-  box-shadow: var(--glow);
-  transform: translateY(-3px);
-}
-
-.bento-item i {
-  font-size: 2rem;
-  color: var(--brand);
-  transition: transform .3s ease;
-}
-.bento-item:hover i {
-  transform: scale(1.15);
-}
-.bento-item span {
-  font-size: .85rem;
+.custom-strip-eyebrow {
+  font-size: clamp(11px, 1.2vw, 13px);
   font-weight: 600;
+  letter-spacing: .25em;
+  color: var(--brand);
+  margin: 0 0 16px;
+}
+.custom-strip-title {
+  font-size: clamp(18px, 2.6vw, 24px);
+  font-weight: 700;
+  color: var(--heading);
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.custom-strip-desc {
+  font-size: clamp(13px, 1.5vw, 15px);
+  color: var(--muted);
+  line-height: 1.9;
+  margin: 0 0 20px;
+}
+.custom-strip-desc strong {
   color: var(--text);
-  text-align: center;
+  font-weight: 700;
 }
-
-/* Large bento items span 2 columns */
-.bento-lg {
-  grid-column: span 2;
-  flex-direction: row;
-  gap: 16px;
-  padding: 32px;
-}
-.bento-lg i { font-size: 2.2rem; }
-.bento-lg span { font-size: .95rem; }
-
+.pc-only { display: inline; }
 @media (max-width: 768px) {
-  .bento-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(100px, auto);
-  }
-  .bento-lg { grid-column: span 2; }
+  .pc-only { display: none; }
+  .custom-strip { padding: 32px 20px; }
 }
-@media (max-width: 480px) {
-  .bento-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .bento-item { padding: 20px 12px; }
-  .bento-lg { padding: 24px 16px; }
+
+/* =========================================
+   Examples Teaser（事例ハブへの誘導）
+========================================= */
+.examples-teaser-section {
+  background: var(--surface);
+}
+.examples-teaser {
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px 32px;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.examples-teaser-title {
+  font-size: clamp(18px, 2.6vw, 24px);
+  font-weight: 700;
+  color: var(--heading);
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.examples-teaser-desc {
+  font-size: clamp(13px, 1.5vw, 15px);
+  color: var(--muted);
+  line-height: 1.9;
+  margin: 0 0 20px;
+}
+@media (max-width: 768px) {
+  .examples-teaser { padding: 32px 20px; }
 }
 
 /* =========================================
@@ -593,6 +587,6 @@ import Layout from '../layouts/Layout.astro';
   .hero { min-height: auto; padding: 120px 16px 64px; }
 }
 @media (max-width: 640px) {
-  .hero-title { font-size: clamp(24px, 7vw, 36px); }
+  .hero-title { font-size: clamp(22px, 6vw, 32px); }
 }
 </style>

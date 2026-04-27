@@ -1,0 +1,105 @@
+---
+interface Props {
+  id?: string;
+}
+const { id = 'particle-net' } = Astro.props;
+---
+
+<canvas id={id} class="particle-canvas"></canvas>
+
+<script is:inline define:vars={{ canvasId: id }}>
+(function() {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, particles, animId;
+  const CONNECT_DIST = 140;
+  const PARTICLE_COUNT = 80;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = rect.width;
+    h = rect.height;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function createParticles() {
+    particles = [];
+    for (var i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.5 + 0.5,
+        color: i % 3 === 0 ? 'rgba(78,139,160,' : 'rgba(91,127,255,',
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    for (var i = 0; i < particles.length; i++) {
+      for (var j = i + 1; j < particles.length; j++) {
+        var dx = particles[i].x - particles[j].x;
+        var dy = particles[i].y - particles[j].y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONNECT_DIST) {
+          var alpha = (1 - dist / CONNECT_DIST) * 0.15;
+          ctx.strokeStyle = 'rgba(91,127,255,' + alpha + ')';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    for (var k = 0; k < particles.length; k++) {
+      var p = particles[k];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + '0.5)';
+      ctx.fill();
+    }
+
+    if (!reducedMotion) {
+      for (var m = 0; m < particles.length; m++) {
+        var q = particles[m];
+        q.x += q.vx;
+        q.y += q.vy;
+        if (q.x < 0 || q.x > w) q.vx *= -1;
+        if (q.y < 0 || q.y > h) q.vy *= -1;
+      }
+    }
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  resize();
+  createParticles();
+  draw();
+
+  window.addEventListener('resize', function() {
+    resize();
+  });
+})();
+</script>
+
+<style>
+  .particle-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>

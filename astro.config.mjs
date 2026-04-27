@@ -10,7 +10,9 @@ export default defineConfig({
   redirects: {
     '/news': '/blog',
     '/news/official-website-launch': '/blog/official-website-launch',
-    '/solutions/precision-cultivation-model': '/solutions',
+    '/solutions': '/ai-consulting',
+    '/solutions/precision-cultivation-model': '/hydroponics',
+    '/solutions/technology-provision': '/hydroponics',
     '/solutions/ai-consulting': '/ai-consulting',
     '/solutions/ai-consulting/sample-pension': '/ai-consulting/sample-pension',
     '/solutions/ai-consulting/sample-restaurant': '/ai-consulting/sample-restaurant',

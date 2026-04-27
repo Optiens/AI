@@ -1,0 +1,699 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ParticleCanvas from '../components/ParticleCanvas.astro';
+---
+
+<Layout
+  title="Optiensの事例集 | 業種別11業種 + 業種を問わない共通パターン"
+  description="士業・宿泊業・飲食・EC・建設・ワイナリー・アウトドア・ベーカリー・農家・酪農・自治体の11業種の活用事例と、業種を問わず効く6つの共通AI事例をまとめました。御社に近い業種・近い課題を起点にご覧ください。"
+  canonical="https://optiens.com/ai-examples"
+>
+  <main>
+    <!-- ヒーロー -->
+    <section class="ax-hero">
+      <ParticleCanvas id="ax-net" />
+      <div class="container text-center" style="position:relative;z-index:1;">
+        <p class="hero-eyebrow">EXAMPLES</p>
+        <h1>Optiensの事例集</h1>
+        <p class="hero-sub">
+          業種を問わず効く「共通6事例」と、現場特有の活用を示す「業種別11業種」。<br />
+          御社に近い業種・近い課題を起点にご覧ください。
+        </p>
+        <a href="/free-diagnosis" class="btn-primary hero-cta">無料AI診断を受ける</a>
+      </div>
+    </section>
+
+    <!-- イントロ -->
+    <section class="ax-section ax-intro-section">
+      <div class="container">
+        <div class="intro-box reveal">
+          <p>
+            このページは、Optiensが提案するAI活用事例を1ページにまとめた事例集です。<br />
+            前半では業種を問わず効果が出やすい「共通の型」を6つ紹介し、<br />
+            後半では業種別11業種の具体的なサンプルレポートをご案内します。
+          </p>
+          <p class="intro-note">
+            ※掲載する事例には、弊社が自社業務で運用中のもの・現在制作中の社内ツールも含まれます。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 共通AI事例カード × 6 -->
+    <section class="ax-section ax-cases-section">
+      <div class="container">
+        <h2 class="section-title reveal">業種を問わず効く、6つの共通AI事例</h2>
+        <p class="section-sub reveal">各事例は「何ができるか」「どこで効くか」「弊社での運用状況」をまとめています。</p>
+
+        <div class="cases-grid reveal-stagger">
+          <!-- 事例1: ファイル添付AI読み取り -->
+          <article class="ax-card gradient-border">
+            <div class="ax-card-head">
+              <div class="ax-num">01</div>
+              <div class="ax-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
+            </div>
+            <h3>手元の資料を投げ込むだけで、AIが要点を整理する</h3>
+            <p class="ax-desc">
+              見積書・契約書・請求書・議事録・写真——日々たまっていく書類をフォームにアップロードすると、AIが自動で内容を読み取り、必要な情報だけ抜き出して台帳に整理します。手入力の転記時間がそのまま削減され、読み取り結果は人間が最終確認できる画面で表示するため、AI任せの誤りも防げます。請求書の金額・支払期日抽出、議事録からのToDo抽出、現場写真からの作業報告書下書きなど、紙とPDFが混じる現場ほど効果が出ます。
+            </p>
+            <div class="ax-tags">
+              <span class="ax-tag">工務店</span>
+              <span class="ax-tag">士業</span>
+              <span class="ax-tag">製造業</span>
+              <span class="ax-tag">宿泊業</span>
+              <span class="ax-tag">自治体</span>
+            </div>
+            <div class="ax-self">
+              <i class="fa-solid fa-flask"></i>
+              <p><strong>弊社での運用:</strong> 補助金公募要領のPDFを取り込み、要件を自動抽出する仕組みを社内で運用しています。</p>
+            </div>
+            <a href="/document-editor" class="ax-demo-link">
+              <i class="fa-solid fa-circle-play"></i>
+              実際に動くデモを試す（書類添削AI）
+              <i class="fa-solid fa-arrow-right ax-demo-arrow"></i>
+            </a>
+          </article>
+
+          <!-- 事例2: カスタム管理画面 -->
+          <article class="ax-card gradient-border">
+            <div class="ax-card-head">
+              <div class="ax-num">02</div>
+              <div class="ax-icon"><i class="fa-solid fa-table-columns"></i></div>
+            </div>
+            <h3>SaaSに業務を合わせない。業務に画面を合わせる</h3>
+            <p class="ax-desc">
+              既製の業務管理SaaSは便利な反面、御社の業務フローに完全には合いません。結果として「項目が多すぎて使われない」「複数SaaSを行き来して二重入力」が起きがちです。弊社は御社の業務フローに合わせた専用の管理画面を構築します。リード管理から成約・納品・保守までを1画面で追える設計、外注先や営業パートナーが見るべき情報だけを共有する画面、現場スマホ用の入力に絞ったシンプルな画面——用途別に最適化できます。月額ライセンス料は発生せず、データは御社の所有です。
+            </p>
+            <div class="ax-tags">
+              <span class="ax-tag">工務店</span>
+              <span class="ax-tag">士業</span>
+              <span class="ax-tag">EC</span>
+              <span class="ax-tag">製造業</span>
+              <span class="ax-tag">サービス業</span>
+              <span class="ax-tag">農業</span>
+            </div>
+            <div class="ax-self">
+              <i class="fa-solid fa-flask"></i>
+              <p><strong>弊社での運用:</strong> 弊社のCRMと書類添削ツールは、まさにこの構成で社内運用しています。</p>
+            </div>
+          </article>
+
+          <!-- 事例3: 自然言語データ対話 -->
+          <article class="ax-card gradient-border">
+            <div class="ax-card-head">
+              <div class="ax-num">03</div>
+              <div class="ax-icon"><i class="fa-solid fa-comments"></i></div>
+            </div>
+            <h3>「先月、何件あった？」と聞けば答えが返る</h3>
+            <p class="ax-desc">
+              社内に蓄積されたデータ（顧客リスト・売上・在庫・問い合わせ履歴等）に、自然な日本語で質問できる仕組みです。「先月の新規問い合わせを業種別に教えて」「リピート率が高い顧客の共通点は？」といった問いに、AIがデータを読み取って答えを返します。表計算ソフトでの集計やデータベースの専門知識は不要で、経営判断に必要な数字をその場で取り出せます。回答の根拠となったデータも併せて表示するため、AIの誤答を確認しながら使えます。
+            </p>
+            <div class="ax-tags">
+              <span class="ax-tag">小売</span>
+              <span class="ax-tag">EC</span>
+              <span class="ax-tag">士業</span>
+              <span class="ax-tag">宿泊業</span>
+              <span class="ax-tag">自治体</span>
+              <span class="ax-tag">全業種</span>
+            </div>
+            <div class="ax-self">
+              <i class="fa-solid fa-flask"></i>
+              <p><strong>弊社での運用:</strong> 水耕栽培の収穫データ・電力消費データに対して、同じ仕組みで対話分析しています。</p>
+            </div>
+          </article>
+
+          <!-- 事例4: 24時間業務監視 -->
+          <article class="ax-card gradient-border">
+            <div class="ax-card-head">
+              <div class="ax-num">04</div>
+              <div class="ax-icon"><i class="fa-solid fa-bell"></i></div>
+            </div>
+            <h3>営業時間外の問い合わせも、取りこぼさない</h3>
+            <p class="ax-desc">
+              メール・Webフォーム・LINE公式・SNS——複数の窓口に届く問い合わせを、AIエージェントが24時間監視します。内容を分類し、定型的なものには自動で一次回答を返し、判断が必要なものだけ通知します。夜間や休日にも一次対応が動くため、機会損失を減らせます。同時に、問い合わせ内容は自動でデータ化され、傾向分析や次の改善に使えます。完全自動化ではなく「人が判断すべきものは人に渡す」設計が前提です。
+            </p>
+            <div class="ax-tags">
+              <span class="ax-tag">宿泊業</span>
+              <span class="ax-tag">EC</span>
+              <span class="ax-tag">士業</span>
+              <span class="ax-tag">サービス業</span>
+              <span class="ax-tag">自治体</span>
+            </div>
+            <div class="ax-self">
+              <i class="fa-solid fa-flask"></i>
+              <p><strong>弊社での運用:</strong> 弊社では補助金情報や市場ニュースを定期的にモニタリングする仕組みを社内運用しています（一部は制作中の社内ツールに含まれます）。</p>
+            </div>
+          </article>
+
+          <!-- 事例5: AIエージェント分業 -->
+          <article class="ax-card gradient-border">
+            <div class="ax-card-head">
+              <div class="ax-num">05</div>
+              <div class="ax-icon"><i class="fa-solid fa-people-group"></i></div>
+            </div>
+            <h3>役割を持ったAIが、複数のタスクを並行処理する</h3>
+            <p class="ax-desc">
+              ひとつの大きなAIに何でも頼むのではなく、役割ごとに専門のAIエージェントを用意し、それぞれを連携させて業務を回します。たとえば「市場調査担当」「文章編集担当」「数値チェック担当」のように分業させると、1人の経営者が複数の専門スタッフを抱える体制に近い動き方をAIで実現できます。各エージェントには得意分野・参照資料・判断基準を仕込んでおけるため、汎用AIに毎回ゼロから指示する必要がありません。少人数の事業者ほど、この分業設計の効果が大きく出ます。
+            </p>
+            <div class="ax-tags">
+              <span class="ax-tag">一人事業主</span>
+              <span class="ax-tag">少人数チーム</span>
+              <span class="ax-tag">全業種</span>
+            </div>
+            <div class="ax-self">
+              <i class="fa-solid fa-flask"></i>
+              <p><strong>弊社での運用:</strong> COO・CRO・CMO・CFO・CSO・CTOといった役割別エージェントを社内で運用しており、本ページの設計もこの体制で進めました。</p>
+            </div>
+          </article>
+
+          <!-- 事例6: 稼働ダッシュボード -->
+          <article class="ax-card gradient-border">
+            <div class="ax-card-head">
+              <div class="ax-num">06</div>
+              <div class="ax-icon"><i class="fa-solid fa-gauge-high"></i></div>
+            </div>
+            <h3>動いている自動化が、見える状態にある</h3>
+            <p class="ax-desc">
+              AI自動化を導入した後、「ちゃんと動いているのか」「どこで止まったのか」が見えないと不安が残ります。弊社は自動化ワークフローごとに稼働状況を可視化するダッシュボードを納品します。直近の処理件数、エラー発生箇所、AIが判断に迷った件数、月次のコスト——必要な数字だけをひと目で確認できます。何かあれば通知が届き、ない日は見なくて済む設計です。導入したまま放置にならず、改善のサイクルが回ります。
+            </p>
+            <div class="ax-tags">
+              <span class="ax-tag">保守契約</span>
+              <span class="ax-tag">全業種</span>
+            </div>
+            <div class="ax-self">
+              <i class="fa-solid fa-flask"></i>
+              <p><strong>弊社での運用:</strong> 保守プラン契約者向けに、このダッシュボードを標準で提供します。水耕栽培IoTダッシュボードは現在制作中で、社内運用でも近く同じ仕組みに統合予定です。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- セカンダリCTA（中段） -->
+    <section class="ax-section ax-mid-cta-section">
+      <div class="container">
+        <div class="mid-cta reveal">
+          <div class="mid-cta-text">
+            <h3>気になる事例があれば、御社業務に当てはめてご提示します</h3>
+            <p>無料レポートでは、貴社の業務フローに照らして、上記の型のうちどれが効きやすいかをまとめます。</p>
+          </div>
+          <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 業種別11業種サンプル -->
+    <section class="ax-section ax-industries-section">
+      <div class="container">
+        <h2 class="section-title reveal">業種別の活用事例（11業種）</h2>
+        <p class="section-sub reveal">御社の業種に近いサンプルレポートをご覧ください。各ページでは想定業務・削減時間・自動化構成を提示しています。</p>
+        <div class="industries-grid reveal-stagger">
+          <a href="/ai-consulting/sample-legal" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+            <h3>士業（税理士・行政書士）</h3>
+            <p>月次報告自動生成・期限管理・FAQ対応で<strong>月30時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-pension" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-bed"></i></div>
+            <h3>ペンション・宿泊業</h3>
+            <p>多言語対応・口コミ返信・SNS投稿の自動化で<strong>月25時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-restaurant" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-utensils"></i></div>
+            <h3>カフェ＆レストラン</h3>
+            <p>SNS毎日投稿・LINE配信・予約一元化で<strong>月18時間削減＋売上増</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-ec" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+            <h3>EC事業者・ネットショップ</h3>
+            <p>商品登録・受注対応・SNS運用の自動化で<strong>月25時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-construction" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+            <h3>工務店・建設業</h3>
+            <p>見積自動生成・報告書効率化・別荘管理で<strong>月35時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-winery" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-wine-glass"></i></div>
+            <h3>ワイナリー・醸造所</h3>
+            <p>醸造記録デジタル化・DtoC販売・卸先提案書で<strong>月30時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-outdoor" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+            <h3>アウトドアガイド</h3>
+            <p>予約一元管理・天候判断・SNS集客で<strong>月20時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-bakery" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-bread-slice"></i></div>
+            <h3>パン屋・ベーカリー</h3>
+            <p>仕込み計画AI最適化・SNS集客・売上分析で<strong>月22時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-farmer" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-seedling"></i></div>
+            <h3>個人農家</h3>
+            <p>出荷管理・SNS直販AI活用＋IoTハウス環境監視で<strong>月25時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-dairy" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-cow"></i></div>
+            <h3>酪農・畜産業</h3>
+            <p>飼養記録AI分析＋IoT牛舎環境モニタリングで<strong>月28時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/ai-consulting/sample-municipality" class="industry-card gradient-border">
+            <div class="industry-icon"><i class="fa-solid fa-landmark"></i></div>
+            <h3>自治体・市役所</h3>
+            <p>観光SNS・議事録・多言語対応の効率化で<strong>月40時間削減</strong></p>
+            <span class="industry-link">サンプルを見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+        </div>
+        <p class="bridge-note reveal">
+          記載のない業種でも対応可能です。サービス内容は <a href="/ai-consulting">AI支援ページ</a> をご確認ください。
+        </p>
+      </div>
+    </section>
+
+    <!-- 強み（短縮版） -->
+    <section class="ax-section ax-strength-section">
+      <div class="container">
+        <div class="strength-box reveal">
+          <div class="strength-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
+          <div class="strength-text">
+            <h3>業務に画面を合わせる、カスタム構築力</h3>
+            <p>
+              弊社はクラウドDB＋高速Webフロントエンド＋AIエージェントの組み合わせで、御社の業務フローに沿った仕組みを構築します。月額ライセンス料の発生しない自社所有の構成で、データは御社のものです。詳細は <a href="/ai-consulting">AI支援ページ</a> でご確認ください。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ファイナルCTA -->
+    <section class="ax-cta-section">
+      <div class="ax-cta-glow"></div>
+      <div class="container text-center" style="position:relative;z-index:1;">
+        <h2 class="reveal">貴社の業務に当てはめた、具体例をご提示します</h2>
+        <p class="reveal">
+          上記の型のうち、どれが御社で効きやすいか——<br />
+          無料レポートでは数値とともにご提案します。
+        </p>
+        <div class="cta-buttons reveal">
+          <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける（0円）</a>
+          <a href="/ai-consulting" class="btn-ghost">サービス内容を見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* ===== Hero ===== */
+  .ax-hero {
+    position: relative;
+    color: #fff;
+    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .hero-eyebrow {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin-bottom: 16px;
+  }
+  .ax-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .hero-sub {
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .hero-cta { padding: .85rem 2.2rem; }
+  .sp-only { display: none; }
+  @media (max-width: 600px) { .sp-only { display: block; } }
+
+  /* ===== Sections ===== */
+  .ax-section { padding: clamp(64px, 10vw, 100px) 0; }
+  .ax-intro-section { background: var(--surface-2); }
+  .ax-cases-section { background: var(--surface); }
+  .ax-mid-cta-section { background: var(--surface-2); }
+  .ax-industries-section { background: var(--surface); }
+  .ax-strength-section { background: var(--surface-2); }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: var(--heading);
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+  }
+
+  /* ===== Intro ===== */
+  .intro-box {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .intro-box p {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--text);
+    margin: 0 0 12px;
+  }
+  .intro-box p:last-child { margin-bottom: 0; }
+  .intro-note {
+    font-size: 0.82rem !important;
+    color: var(--muted) !important;
+    margin-top: 12px !important;
+  }
+
+  /* ===== Case cards ===== */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .ax-card {
+    padding: 28px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .ax-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .ax-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .ax-num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    color: var(--brand);
+    background: rgba(91, 127, 255, .08);
+    border: 1px solid rgba(91, 127, 255, .25);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .ax-icon {
+    font-size: 1.6rem;
+    color: var(--brand);
+  }
+  .ax-card h3 {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--heading);
+    margin: 0;
+  }
+  .ax-desc {
+    font-size: 0.9rem;
+    line-height: 1.85;
+    color: var(--text);
+    margin: 0;
+  }
+  .ax-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .ax-tag {
+    font-size: 0.72rem;
+    color: var(--brand);
+    background: rgba(91, 127, 255, .06);
+    border: 1px solid rgba(91, 127, 255, .2);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .ax-self {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 6px;
+    padding: 14px 16px;
+    background: rgba(46, 87, 76, .08);
+    border: 1px solid rgba(46, 87, 76, .25);
+    border-radius: 10px;
+  }
+  .ax-self i {
+    flex-shrink: 0;
+    color: #2e574c;
+    font-size: 0.95rem;
+    margin-top: 3px;
+  }
+  .ax-self p {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 0;
+  }
+  .ax-self strong { color: var(--heading); }
+
+  .ax-demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 10px 16px;
+    background: var(--brand);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background .2s ease, transform .2s ease;
+    align-self: flex-start;
+  }
+  .ax-demo-link:hover {
+    background: var(--brand-dim);
+    transform: translateY(-1px);
+  }
+  .ax-demo-link .ax-demo-arrow {
+    font-size: 0.75rem;
+    transition: transform .2s ease;
+  }
+  .ax-demo-link:hover .ax-demo-arrow { transform: translateX(3px); }
+
+  /* ===== Mid CTA ===== */
+  .mid-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 28px 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .mid-cta-text { flex: 1; }
+  .mid-cta-text h3 {
+    font-size: 1.05rem;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .mid-cta-text p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0;
+  }
+  .mid-cta .btn-primary {
+    flex-shrink: 0;
+    padding: .75rem 1.6rem;
+  }
+  @media (max-width: 720px) {
+    .mid-cta {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+      padding: 24px;
+    }
+  }
+
+  /* ===== Industries grid ===== */
+  .industries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .industry-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 24px 22px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
+  }
+  .industry-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+    transform: translateY(-3px);
+  }
+  .industry-icon {
+    font-size: 1.6rem;
+    color: var(--brand);
+    margin-bottom: 4px;
+  }
+  .industry-card h3 {
+    font-size: 1rem;
+    margin: 0;
+    color: var(--heading);
+    line-height: 1.5;
+  }
+  .industry-card p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0;
+    flex: 1;
+  }
+  .industry-card strong { color: var(--text); }
+  .industry-link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--brand);
+    margin-top: 6px;
+  }
+  .industry-link i {
+    font-size: 0.75rem;
+    margin-left: 4px;
+    transition: transform .2s ease;
+  }
+  .industry-card:hover .industry-link i { transform: translateX(3px); }
+  .bridge-note {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .bridge-note a {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+
+  /* ===== Strength box ===== */
+  .strength-box {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 28px 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .strength-icon {
+    flex-shrink: 0;
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    background: rgba(91, 127, 255, .1);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+  .strength-text h3 {
+    font-size: 1.05rem;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .strength-text p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin: 0;
+  }
+  .strength-text a {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+  @media (max-width: 600px) {
+    .strength-box {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+  }
+
+  /* ===== Final CTA ===== */
+  .ax-cta-section {
+    position: relative;
+    background: var(--surface-3);
+    color: #fff;
+    padding: clamp(64px, 10vw, 100px) 0;
+    overflow: hidden;
+  }
+  .ax-cta-glow {
+    position: absolute;
+    width: 500px; height: 500px;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(91,127,255,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .ax-cta-section h2 { color: var(--heading); margin-bottom: 16px; }
+  .ax-cta-section p { color: var(--muted); margin-bottom: 28px; line-height: 1.8; }
+  .cta-buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-ghost {
+    display: inline-block;
+    padding: .85rem 2.2rem;
+    border: 1px solid var(--border-hover);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .btn-ghost:hover {
+    background: rgba(91, 127, 255, .08);
+    border-color: var(--brand);
+  }
+</style>

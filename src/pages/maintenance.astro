@@ -1,0 +1,381 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ParticleCanvas from '../components/ParticleCanvas.astro';
+---
+
+<Layout
+  title="保守 | Optiens"
+  description="導入後の機能追加・トラブル対応・新しい業務の自動化まで、月額制で継続サポート。不具合修正は納品後3ヶ月間無償で対応します。"
+>
+  <main>
+    <!-- ヒーロー -->
+    <section class="mt-hero">
+      <ParticleCanvas id="mt-net" />
+      <div class="container text-center" style="position:relative;z-index:1;">
+        <p class="eyebrow">MAINTENANCE</p>
+        <h1>保守</h1>
+        <p class="hero-sub">導入後の機能追加やトラブルに対応。<br/>新しい業務の自動化もご相談いただけます。</p>
+      </div>
+    </section>
+
+    <!-- プラン比較 -->
+    <section class="mt-section">
+      <div class="container">
+        <h2 class="section-title reveal">プラン</h2>
+        <div class="mt-plans reveal">
+          <div class="mt-plan-card">
+            <h3>ライト</h3>
+            <p class="mt-price">月額3万円<span class="price-unit">（税別）</span></p>
+            <ul>
+              <li><i class="fa-solid fa-check"></i>メール・チャットでの相談対応</li>
+              <li><i class="fa-solid fa-check"></i>軽微なワークフロー改善</li>
+              <li><i class="fa-solid fa-check"></i>システムトラブル対応</li>
+              <li><i class="fa-solid fa-check"></i>月3時間までの対応を含む</li>
+            </ul>
+          </div>
+          <div class="mt-plan-card mt-plan-card--recommended">
+            <span class="mt-recommended-badge">おすすめ</span>
+            <h3>スタンダード</h3>
+            <p class="mt-price">月額5万円<span class="price-unit">（税別）</span></p>
+            <ul>
+              <li><i class="fa-solid fa-check"></i>ライトの全内容</li>
+              <li><i class="fa-solid fa-check"></i>MTGの実施・参加</li>
+              <li><i class="fa-solid fa-check"></i>ワークフローの機能追加・改善</li>
+              <li><i class="fa-solid fa-check"></i>新規業務の自動化検討・設計</li>
+              <li><i class="fa-solid fa-check"></i>月8時間までの対応を含む</li>
+            </ul>
+          </div>
+        </div>
+        <p class="mt-note reveal">いずれのプランも月単位の契約です。効果を感じられなければいつでも解約可能です。</p>
+      </div>
+    </section>
+
+    <!-- 対応範囲 -->
+    <section class="mt-section mt-section--alt">
+      <div class="container">
+        <h2 class="section-title reveal">対応範囲の考え方</h2>
+        <div class="mt-scope reveal">
+          <table class="mt-scope-table">
+            <thead>
+              <tr>
+                <th>対応内容</th>
+                <th>費用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Optiensが構築した部分のバグ・設計ミス</strong>
+                  <span class="mt-scope-desc">当社の責任で発生した不具合の修正</span>
+                </td>
+                <td><span class="mt-free-badge">無償（瑕疵対応）</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>機能追加・新しい業務の自動化</strong>
+                  <span class="mt-scope-desc">「こういう作業も自動化したい」などのご要望</span>
+                </td>
+                <td>保守工数内</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>利用サービスの仕様変更による修正</strong>
+                  <span class="mt-scope-desc">連携先サービスの仕様変更への追従対応</span>
+                </td>
+                <td>保守工数内</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>トラブル調査・相談</strong>
+                  <span class="mt-scope-desc">「動かなくなった」「想定と違う動きをする」等</span>
+                </td>
+                <td>保守工数内</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 瑕疵対応 -->
+    <section class="mt-section">
+      <div class="container">
+        <h2 class="section-title reveal">不具合対応（瑕疵担保）について</h2>
+        <div class="mt-warranty reveal">
+          <div class="mt-warranty-card">
+            <div class="mt-warranty-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="mt-warranty-content">
+              <h3>納品後3ヶ月間、不具合は無償で修正します</h3>
+              <p>Optiensが設計・構築したシステムに起因するバグや設計ミスは、納品日から3ヶ月間、保守契約の有無にかかわらず無償で修正いたします。</p>
+              <p>保守工数からの差し引きも行いません。当社が構築したものの不具合は、当社の責任で対応します。</p>
+              <ul class="mt-warranty-notes">
+                <li>対象: Optiensが構築した部分のバグ・設計ミス</li>
+                <li>期間: 納品日から3ヶ月間</li>
+                <li>費用: 無償（保守工数に含まない）</li>
+                <li>対象外: お客様による設定変更に起因するもの、外部サービスの仕様変更</li>
+              </ul>
+            </div>
+          </div>
+          <p class="mt-warranty-after">3ヶ月経過後に発見された不具合は、保守契約内で対応させていただきます。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="mt-cta">
+      <div class="container text-center">
+        <h2 class="reveal">保守プランのご相談</h2>
+        <p class="reveal">導入支援とあわせてのお申し込みも、導入後からのご契約も可能です。</p>
+        <a href="/contact" class="btn-primary reveal">お問い合わせ</a>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .mt-hero {
+    position: relative;
+    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    background: var(--surface);
+    overflow: hidden;
+    color: #fff;
+  }
+  .eyebrow {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin-bottom: 16px;
+  }
+  .mt-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: clamp(.9rem, 1.8vw, 1.1rem);
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .mt-section {
+    padding: clamp(48px, 8vw, 80px) 0;
+  }
+  .mt-section--alt {
+    background: var(--surface-2);
+  }
+
+  /* プラン比較 */
+  .mt-plans {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 800px;
+    margin: 32px auto 0;
+  }
+  .mt-plan-card {
+    position: relative;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 28px;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .mt-plan-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .mt-plan-card--recommended {
+    border-color: var(--brand);
+  }
+  .mt-recommended-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--brand);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: 4px 16px;
+    border-radius: 20px;
+  }
+  .mt-plan-card h3 {
+    font-size: 1.2rem;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .mt-price {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin: 0 0 20px;
+  }
+  .price-unit {
+    font-size: .8rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .mt-plan-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mt-plan-card li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: .9rem;
+    color: var(--text);
+  }
+  .mt-plan-card li i {
+    color: var(--brand);
+    font-size: .8rem;
+    flex-shrink: 0;
+  }
+  .mt-note {
+    text-align: center;
+    margin-top: 20px;
+    font-size: .85rem;
+    color: var(--muted);
+  }
+
+  /* 対応範囲テーブル */
+  .mt-scope {
+    max-width: 800px;
+    margin: 32px auto 0;
+  }
+  .mt-scope-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .mt-scope-table th,
+  .mt-scope-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+  }
+  .mt-scope-table th {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: .05em;
+  }
+  .mt-scope-table td {
+    font-size: .92rem;
+    color: var(--text);
+  }
+  .mt-scope-table td:last-child {
+    white-space: nowrap;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .mt-scope-desc {
+    display: block;
+    font-size: .82rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .mt-free-badge {
+    display: inline-block;
+    background: rgba(91, 127, 255, .1);
+    color: var(--brand);
+    font-size: .82rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+  }
+
+  /* 瑕疵対応 */
+  .mt-warranty {
+    max-width: 800px;
+    margin: 32px auto 0;
+  }
+  .mt-warranty-card {
+    display: flex;
+    gap: 24px;
+    padding: 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .mt-warranty-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(91, 127, 255, .1);
+    color: var(--brand);
+    font-size: 1.2rem;
+  }
+  .mt-warranty-content h3 {
+    font-size: 1.05rem;
+    color: var(--heading);
+    margin: 0 0 12px;
+  }
+  .mt-warranty-content p {
+    font-size: .92rem;
+    color: var(--text);
+    line-height: 1.8;
+    margin: 0 0 12px;
+  }
+  .mt-warranty-notes {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mt-warranty-notes li {
+    font-size: .85rem;
+    color: var(--muted);
+    padding-left: 1em;
+    text-indent: -1em;
+  }
+  .mt-warranty-notes li::before {
+    content: "・";
+  }
+  .mt-warranty-after {
+    margin-top: 16px;
+    font-size: .85rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* CTA */
+  .mt-cta {
+    padding: clamp(48px, 8vw, 80px) 0;
+    background: var(--surface-2);
+  }
+  .mt-cta h2 {
+    color: var(--heading);
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    margin-bottom: 12px;
+  }
+  .mt-cta p {
+    color: var(--muted);
+    font-size: .95rem;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 640px) {
+    .mt-plans {
+      grid-template-columns: 1fr;
+    }
+    .mt-warranty-card {
+      flex-direction: column;
+      gap: 16px;
+    }
+    .mt-scope-table td:last-child {
+      white-space: normal;
+    }
+  }
+</style>

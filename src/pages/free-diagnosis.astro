@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout.astro';
     <section class="diag-hero">
       <canvas id="diag-net" class="diag-canvas"></canvas>
       <div class="container text-center" style="position:relative;z-index:1;">
-        <p class="diag-eyebrow">AI DIAGNOSIS — FREE</p>
+        <p class="diag-eyebrow">AI DIAGNOSIS</p>
         <h1>AI活用診断<span class="diag-badge">無料・簡易版</span></h1>
         <p class="diag-sub">
           かんたんなフォーム入力で、あなたの事業に合った<br/>
@@ -202,6 +202,44 @@ import Layout from '../layouts/Layout.astro';
         </form>
       </div>
     </section>
+
+    <!-- 次のステップ：詳細レポート vs 直接導入支援の比較 -->
+    <section class="diag-next-section">
+      <div class="container">
+        <h2 class="diag-next-title reveal">レポートを受け取った後は</h2>
+        <p class="diag-next-sub reveal">ご自身の状況に合わせて、次のステップをお選びください。</p>
+        <div class="diag-next-grid reveal-stagger">
+          <div class="diag-next-card">
+            <p class="diag-next-eyebrow">じっくり判断したい方向け</p>
+            <h3>詳細レポート + 60分MTG</h3>
+            <p class="diag-next-price">¥5,000<span class="diag-next-tax">（税別）</span></p>
+            <ul class="diag-next-list">
+              <li>5〜8ページの詳細レポート</li>
+              <li>御社のIT環境に合わせた個別提案</li>
+              <li>アーキテクチャ図と導入支援の具体額</li>
+              <li>60分のオンラインMTG（質疑応答含む）</li>
+            </ul>
+            <p class="diag-next-foot">「もう少し具体像を見てから判断したい」方へ</p>
+          </div>
+          <div class="diag-next-card diag-next-card--accent">
+            <p class="diag-next-eyebrow">すぐ実装したい方向け</p>
+            <h3>直接導入支援に進む</h3>
+            <p class="diag-next-price">¥30,000<span class="diag-next-tax">（税別・成約時に初期費用へ充当）</span></p>
+            <ul class="diag-next-list">
+              <li>90分のヒアリング（Zoom）</li>
+              <li>導入提案書 + 具体的な見積</li>
+              <li>そのまま本契約に進めます</li>
+              <li>成約時は¥30,000を本契約の初期費用へ充当</li>
+            </ul>
+            <p class="diag-next-foot">「方向性は決まっている、すぐ始めたい」方へ</p>
+          </div>
+        </div>
+        <p class="diag-next-note reveal">
+          ※ 直接導入支援にお進みいただいた場合、¥5,000の詳細レポート料金は発生しません。<br />
+          ご検討段階に合わせてお選びください。
+        </p>
+      </div>
+    </section>
   </main>
 </Layout>
 
@@ -296,8 +334,8 @@ import Layout from '../layouts/Layout.astro';
 <style>
   .diag-hero {
     position: relative;
-    padding: clamp(100px, 15vw, 160px) 20px clamp(48px, 8vw, 72px);
-    background: linear-gradient(170deg, #0a0e1a 0%, #111827 50%, #0f172a 100%);
+    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    background: var(--surface);
     overflow: hidden;
   }
   .diag-canvas {
@@ -558,6 +596,115 @@ import Layout from '../layouts/Layout.astro';
     cursor: not-allowed;
   }
 
+  /* ===== 次のステップ：詳細レポート vs 直接導入支援 ===== */
+  .diag-next-section {
+    padding: clamp(56px, 8vw, 80px) 0;
+    background: var(--surface-2, #0c1424);
+    border-top: 1px solid var(--border);
+  }
+  .diag-next-title {
+    text-align: center;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 800;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .diag-next-sub {
+    text-align: center;
+    font-size: .95rem;
+    color: var(--muted);
+    margin: 0 0 40px;
+  }
+  .diag-next-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .diag-next-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .diag-next-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .diag-next-card--accent {
+    border-color: rgba(91, 127, 255, .35);
+    background: linear-gradient(180deg, rgba(91, 127, 255, .04), var(--surface-card));
+  }
+  .diag-next-eyebrow {
+    font-size: .75rem;
+    letter-spacing: .15em;
+    font-weight: 600;
+    color: var(--brand);
+    margin: 0 0 10px;
+    text-transform: uppercase;
+  }
+  .diag-next-card h3 {
+    font-size: 1.15rem;
+    color: var(--heading);
+    margin: 0 0 14px;
+    line-height: 1.4;
+  }
+  .diag-next-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin: 0 0 20px;
+  }
+  .diag-next-tax {
+    font-size: .8rem;
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 6px;
+  }
+  .diag-next-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .diag-next-list li {
+    position: relative;
+    padding-left: 22px;
+    font-size: .9rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .diag-next-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand);
+  }
+  .diag-next-foot {
+    font-size: .85rem;
+    color: var(--muted);
+    margin: 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .diag-next-note {
+    text-align: center;
+    margin: 32px auto 0;
+    font-size: .85rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
   /* ===== Mobile ===== */
   @media (max-width: 640px) {
     .diag-steps {
@@ -582,6 +729,13 @@ import Layout from '../layouts/Layout.astro';
     }
     fieldset {
       padding: 20px 16px;
+    }
+    .diag-next-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .diag-next-card {
+      padding: 24px 20px;
     }
   }
 </style>

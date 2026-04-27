@@ -1,0 +1,910 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="書類添削ツール | Optiens"
+  description="経営者向け書類添削ツール（デモ）。AIエージェントによる文書レビュー支援のサンプル表示。"
+  noindex={true}
+>
+  <main class="review-main">
+    <!-- ツールバー -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span class="toolbar-title">書類添削ツール</span>
+        <select id="document-select" aria-label="書類を選択">
+          <option value="">書類を選択</option>
+        </select>
+      </div>
+      <div class="toolbar-right">
+        <span id="status" class="status"></span>
+      </div>
+    </div>
+
+    <!-- 重要度凡例 -->
+    <div class="legend" id="legend" style="display:none;">
+      <span class="legend-item legend-high"><span class="dot"></span>重要</span>
+      <span class="legend-item legend-medium"><span class="dot"></span>中</span>
+      <span class="legend-item legend-low"><span class="dot"></span>軽微</span>
+      <span class="legend-hint">行をタップでメモ詳細を開閉</span>
+    </div>
+
+    <!-- 空状態 -->
+    <div id="empty-state" class="empty-state">
+      <p>書類を選んでください。</p>
+      <p class="empty-hint">AIエージェントが文書を読み、重要度付きで指摘メモを表示します。</p>
+    </div>
+
+    <!-- エディタ -->
+    <div id="editor" class="editor" style="display:none;">
+      <div class="editor-header">
+        <div class="col-header col-header-left">本文</div>
+        <div class="col-header col-header-right">AI添削メモ</div>
+      </div>
+      <div id="editor-body" class="editor-body"></div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // 重要度型
+  type Severity = 'high' | 'medium' | 'low';
+  interface Note {
+    line: number;       // 1始まりの行番号（本文セクション内）
+    severity: Severity;
+    title: string;      // 指摘タイトル
+    comment: string;    // 提案本文
+  }
+  interface SampleDoc {
+    id: string;
+    title: string;
+    content: string;    // 書類本文
+    notes: Note[];
+  }
+
+  // ============================================================
+  // サンプル書類7件（フィクスチャ）
+  // sample-documents/ 配下のMarkdownを書類本文＋AI添削メモに分解して埋め込み
+  // ============================================================
+  const SAMPLE_DOCUMENTS: SampleDoc[] = [
+    {
+      id: '01-apology-mail',
+      title: '取引先へのお詫びメール',
+      content: `件名：納品遅延のお詫び
+
+株式会社山田製作所
+購買部　佐藤様
+
+いつも大変お世話になっております。
+合同会社中村商会の中村でございます。
+
+この度は、ご注文いただきました部品（型番A-2310）の納品が、当初お約束しておりました4月25日に間に合わず、大変ご迷惑をおかけしておりますこと、まずは深くお詫び申し上げます。
+
+原因につきましては、弊社内の調整不足によるものでございまして、現在急ぎ対応を進めております。
+納品予定日につきましては、改めてご連絡させていただきます。
+
+今後はこのようなことがないよう、社内体制を見直してまいります。
+何卒よろしくお願い申し上げます。
+
+末筆ながら、貴社のますますのご発展をお祈り申し上げます。
+
+合同会社中村商会
+代表　中村健一
+TEL：055-XXX-XXXX
+Mail：nakamura@example.co.jp`,
+      notes: [
+        {
+          line: 9,
+          severity: 'low',
+          title: '敬語重複でくどい',
+          comment: '「ご迷惑をおかけしておりますこと、深くお詫び申し上げます」に簡潔化。「大変」「まずは」が連続すると謝罪の重みより冗長さが目立ちます。',
+        },
+        {
+          line: 11,
+          severity: 'high',
+          title: '原因説明が弱い',
+          comment: '取引先は「何が起きたのか」を知りたい。例：「材料手配の発注確認漏れにより、製造着手が3営業日遅れたためです」。具体度がないと、再発の不安を相手に残します。',
+        },
+        {
+          line: 12,
+          severity: 'high',
+          title: '期限が不明で相手の業務が止まる',
+          comment: '「本日中（4月27日18時まで）に確定納期をご連絡いたします」のように明示。お詫びメールで最も重要なのは「いつ何が分かるか」の明示です。',
+        },
+        {
+          line: 14,
+          severity: 'medium',
+          title: '再発防止策が抽象的',
+          comment: '具体施策を1つに絞って明示。例：「発注後48時間以内の社内ダブルチェックを必須化し、5月1日より運用開始いたします」。',
+        },
+        {
+          line: 17,
+          severity: 'low',
+          title: 'お詫びメールでは違和感',
+          comment: '通常の挨拶文では適切ですが、お詫びの文脈では削除を推奨。形式句より「重ねてお詫び申し上げます」のほうが誠実に届きます。',
+        },
+      ],
+    },
+    {
+      id: '02-contract-draft',
+      title: '業務委託契約書ドラフト（一部抜粋）',
+      content: `業務委託契約書
+
+株式会社グリーンリーフ（以下「甲」という）と合同会社サンライズ（以下「乙」という）は、以下の通り業務委託契約を締結する。
+
+第1条（業務内容）
+乙は甲に対し、Webサイト制作およびコンテンツ運用に関する業務を提供する。具体的な業務範囲は別途協議の上、定めるものとする。
+
+第3条（委託料）
+甲は乙に対し、月額金300,000円（消費税別）を支払う。支払いは、毎月末日締めの翌月末日払いとする。
+
+第5条（成果物の権利）
+本業務により発生した成果物の権利は、甲に帰属する。ただし、乙が業務遂行のために用いた汎用的な技術・ノウハウについてはこの限りではない。
+
+第7条（秘密保持）
+甲および乙は、本契約により知り得た相手方の秘密情報を、第三者に開示してはならない。
+
+第9条（損害賠償）
+乙の業務遂行に関連して甲に損害が発生した場合、乙は甲に対しその損害を賠償する。
+
+第11条（契約期間）
+本契約の有効期間は、契約締結日から1年間とする。
+
+第13条（協議事項）
+本契約に定めのない事項または疑義が生じた事項については、甲乙協議の上、これを解決する。
+
+以上、本契約の成立を証するため本書2通を作成し、甲乙署名押印の上、各1通を保有する。
+
+2026年5月1日
+
+甲　株式会社グリーンリーフ　代表取締役
+乙　合同会社サンライズ　代表社員`,
+      notes: [
+        {
+          line: 6,
+          severity: 'high',
+          title: '業務範囲「別途協議の上、定める」',
+          comment: '範囲が決まらない契約は紛争の温床。別紙で確定するか「初回打合せ後14日以内に合意した業務範囲表をもって本契約の一部とする」を明記。',
+        },
+        {
+          line: 12,
+          severity: 'high',
+          title: '著作者人格権の取扱が不在',
+          comment: '「乙は甲に対し、成果物に関する著作者人格権を行使しない」の一文を追加。権利譲渡だけでは、後の改変・二次利用で異議の余地が残ります。',
+        },
+        {
+          line: 12,
+          severity: 'medium',
+          title: '「汎用的な技術・ノウハウ」の範囲が不明瞭',
+          comment: '例示を入れる。例：「（プログラミング言語、フレームワーク、社内テンプレート等の、乙が本業務以前から有する技術・素材を含む）」。',
+        },
+        {
+          line: 18,
+          severity: 'high',
+          title: '損害賠償の上限がない',
+          comment: '上限額を明記。例：「ただし、賠償額は本契約に基づき甲が乙に支払った直近12ヶ月分の委託料を上限とする」。無制限賠償は受託側にとって致命的リスク。',
+        },
+        {
+          line: 21,
+          severity: 'high',
+          title: '解除条項が不在',
+          comment: '中途解約条項（30日前書面通知等）と債務不履行解除条項を追加。1年契約のみで解約方法が不明だと、関係悪化時に契約終了できません。',
+        },
+        {
+          line: 24,
+          severity: 'medium',
+          title: '反社会的勢力排除条項が不在',
+          comment: '暴排条項を追加（金融機関・自治体絡みの取引では必須化が進む）。将来の取引先からのデューデリで指摘される可能性があります。',
+        },
+      ],
+    },
+    {
+      id: '03-internal-notice',
+      title: '社内通達（リモートワーク制度変更）',
+      content: `社員各位
+
+リモートワーク制度の見直しについて
+
+平素より業務にご尽力いただき、誠にありがとうございます。
+
+このたび、リモートワーク制度につきまして、以下の通り見直しを行うこととなりましたので、お知らせいたします。
+
+1. 出社頻度について
+これまで原則リモートワークとしていた運用を見直し、今後はオフィス出社を基本といたします。チームの状況に応じて柔軟に対応するものとします。
+
+2. 在宅勤務手当について
+在宅勤務に対する手当は、見直しの対象とさせていただきます。
+
+3. 開始時期について
+来月以降、順次運用を開始してまいります。詳細は追ってご連絡いたします。
+
+なお、本件に関するご質問・ご相談は、人事担当までお寄せください。
+
+ご理解とご協力のほど、よろしくお願いいたします。
+
+2026年4月27日
+合同会社サンライズ
+管理部`,
+      notes: [
+        {
+          line: 3,
+          severity: 'high',
+          title: '件名から結論が読めない',
+          comment: '件名は結論を入れる。例：「リモートワーク制度変更（5月1日より原則出社へ）のお知らせ」。曖昧な件名は読み飛ばされます。',
+        },
+        {
+          line: 9,
+          severity: 'high',
+          title: '判断者・基準が不明',
+          comment: '「チームの状況に応じて柔軟に」では誰が判断するか不明。例：「週1〜2日のリモート勤務は所属部門長の承認により可」。',
+        },
+        {
+          line: 12,
+          severity: 'high',
+          title: '増減・金額が不明',
+          comment: '結論を明示。例：「現行の在宅勤務手当（月額5,000円）は5月支給分をもって廃止」。賃金条件の変更は社員にとって最大の関心事。',
+        },
+        {
+          line: 15,
+          severity: 'high',
+          title: '開始日が確定しない',
+          comment: '「順次」は使わない。例：「2026年5月1日（金）より新制度に移行いたします」。現場が準備できません。',
+        },
+        {
+          line: 17,
+          severity: 'medium',
+          title: '対象者範囲の記載なし',
+          comment: '対象を明示。例：「本通達は正社員・契約社員を対象とし、業務委託契約者には適用しません」。個別問合せが多発します。',
+        },
+        {
+          line: 6,
+          severity: 'medium',
+          title: '変更理由の説明なし',
+          comment: '1〜2行でもよいので変更背景を記載。例：「対面コミュニケーションによる若手育成と業務効率の両立を目的としています」。',
+        },
+      ],
+    },
+    {
+      id: '04-press-release',
+      title: 'プレスリリースドラフト（新サービス発表）',
+      content: `報道関係各位
+
+2026年4月27日
+合同会社サンライズ
+
+業界初！中小企業のDXを劇的に変える革命的AIサービス「SunBoost」をリリース
+
+合同会社サンライズ（本社：山梨県北杜市、代表：田中太郎）は、2026年5月1日より中小企業向けAI業務支援サービス「SunBoost」の提供を開始いたします。本サービスは業界の常識を覆す圧倒的な性能で、導入企業の生産性を劇的に向上させます。
+
+■ サービスの特徴
+1. 業界最高水準のAIエンジンを搭載
+2. 導入企業の業務効率を最大10倍に
+3. 月額9,800円から利用可能な、衝撃の低価格を実現
+
+■ 開発の背景
+中小企業の多くがDXに取り残されている現状を打破すべく、当社は2年間の開発期間を経て本サービスを完成させました。今こそ、変革の時です。
+
+■ 今後の展開
+今後3年で全国1万社への導入を目指します。中小企業のあり方を、私たちが変えていきます。
+
+■ お問い合わせ
+合同会社サンライズ　広報担当
+TEL：055-XXX-XXXX
+Mail：press@sunrise-example.co.jp`,
+      notes: [
+        {
+          line: 6,
+          severity: 'high',
+          title: '過大表現の連発で信頼性を損なう',
+          comment: '事実ベースに修正。例：「中小企業向けAI業務支援サービス『SunBoost』を5月1日提供開始 — 月額9,800円から」。過大表現はメディア担当者が最も嫌う要素で、掲載見送りの主因になります。',
+        },
+        {
+          line: 8,
+          severity: 'high',
+          title: '「業界の常識を覆す圧倒的な性能」根拠なし',
+          comment: '比較対象と数値を入れる。例：「同価格帯の他サービスと比較し、対応業務範囲を3倍に拡張」。根拠のない最上級表現は景品表示法上のリスクもあります。',
+        },
+        {
+          line: 12,
+          severity: 'high',
+          title: '「業務効率を最大10倍に」出典・条件が不明',
+          comment: '出典または検証条件を明記。例：「自社実証（2026年2月、対象3社）において、対象業務の処理時間が平均で約60%短縮」。「最大10倍」は出典なしでは記載すべきでない。',
+        },
+        {
+          line: 13,
+          severity: 'medium',
+          title: '「衝撃の低価格」煽り表現',
+          comment: '価格優位性は事実で示す。例：「同等機能を持つ既存サービスの月額相場（3〜5万円）に対し、約3分の1の価格設定」。',
+        },
+        {
+          line: 16,
+          severity: 'medium',
+          title: '出典なしの一般論',
+          comment: '公的調査の引用に置き換え。例：「中小企業庁『2024年版中小企業白書』によれば、DXに取組済の中小企業は約24%にとどまる」。プレスリリースは出典付きの一次データで権威性を持たせるのが基本。',
+        },
+        {
+          line: 19,
+          severity: 'medium',
+          title: '「3年で全国1万社」根拠なき大型目標',
+          comment: '短期の現実的KPIに変更。例：「2026年度中に100社の導入を目指す」。過大目標は「未検証ベンチャー」と映り、信頼を下げます。',
+        },
+        {
+          line: 8,
+          severity: 'high',
+          title: '記者が記事化しにくい構成',
+          comment: '「誰が・誰のために・何を解決するか」をリード3行で完結させる。例（書き出し）：「合同会社サンライズは、従業員30名以下の中小企業を対象としたAI業務支援サービスを5月1日に提供開始する」。記者は「リード3行で記事化判断」する。',
+        },
+      ],
+    },
+    {
+      id: '05-customer-notice',
+      title: '顧客向け案内メール（料金改定）',
+      content: `件名：料金改定のお知らせ
+
+お客様各位
+
+平素より「ブルームクラウド」をご利用いただき、誠にありがとうございます。
+
+このたび、サービス品質の維持・向上のため、2026年7月1日より料金を改定させていただくこととなりました。
+改定の詳細は以下の通りです。
+
+【改定内容】
+スタンダードプラン　現行 月額3,800円 → 改定後 月額4,800円
+ビジネスプラン　　　現行 月額9,800円 → 改定後 月額12,800円
+
+【適用開始日】
+2026年7月1日（火）以降のご請求分より
+
+何卒ご理解いただきますよう、お願い申し上げます。
+
+ご不明な点がございましたら、サポート窓口までお問い合わせください。
+
+今後ともブルームクラウドをよろしくお願い申し上げます。
+
+ブルームクラウド運営事務局`,
+      notes: [
+        {
+          line: 1,
+          severity: 'medium',
+          title: '値上げか値下げか不明',
+          comment: '件名に方向性と幅を入れる。例：「【重要】ブルームクラウド 料金改定のご案内（2026年7月1日より、スタンダード+1,000円）」。件名で結論を出すことで誤解と問合せを減らせます。',
+        },
+        {
+          line: 7,
+          severity: 'high',
+          title: '理由として弱い',
+          comment: '具体施策を明示。例：「サーバー基盤の刷新と24時間サポート体制の構築に伴う運営コスト増加のため」。「維持・向上のため」は最も使われる定型句で、顧客は「言い訳」と受け取りがち。',
+        },
+        {
+          line: 11,
+          severity: 'high',
+          title: '値上げ幅 約26〜31%への配慮なし',
+          comment: '値上げ幅が大きい場合、緩和策を併記。例：「年払いプラン（月額換算 4,200円）を新設し、現行料金との差額を抑える選択肢をご用意しました」。代替案のない大幅値上げは解約率を大きく押し上げます。',
+        },
+        {
+          line: 15,
+          severity: 'high',
+          title: '既存顧客への経過措置の有無が不明',
+          comment: '経過措置を明記。例：「2026年6月30日までにご契約中のお客様は、3ヶ月間（〜9月30日）現行料金で継続利用いただけます」。',
+        },
+        {
+          line: 19,
+          severity: 'medium',
+          title: '解約・プラン変更の導線がない',
+          comment: '解約・ダウングレード方法を明記。例：「ご継続が難しい場合は、6月20日までにマイページより解約手続きが可能です」。解約導線を隠すと炎上リスクが上がります。',
+        },
+        {
+          line: 19,
+          severity: 'low',
+          title: '問合せ窓口の具体的連絡先がない',
+          comment: 'メールアドレスと営業時間を明記。例：「サポート窓口：support@example.co.jp（平日10:00〜18:00、48時間以内に返信）」。',
+        },
+      ],
+    },
+    {
+      id: '06-job-posting',
+      title: '求人票（営業職）',
+      content: `【正社員募集】営業スタッフ募集中！
+
+合同会社グリーンフィールド（北杜市）
+
+■ 仕事内容
+既存顧客への訪問営業および新規開拓業務全般。
+チームの一員として、幅広い業務に携わっていただきます。やる気のある方歓迎！
+
+■ 応募資格
+・普通自動車免許（AT限定可）
+・営業経験者歓迎、未経験者も応相談
+・コミュニケーション能力のある方
+
+■ 給与
+月給22万円〜30万円（経験・能力により決定）
+※試用期間3ヶ月（給与同額）
+
+■ 勤務地
+山梨県北杜市内（直行直帰あり）
+
+■ 勤務時間
+9:00〜18:00（休憩1時間）
+※残業あり
+
+■ 休日・休暇
+土日祝、夏季休暇、年末年始
+※業務都合により休日出勤あり
+
+■ 福利厚生
+社会保険完備、交通費支給、その他充実
+
+■ 応募方法
+履歴書を郵送またはメールにてお送りください。
+
+合同会社グリーンフィールド　採用担当
+〒408-XXXX 山梨県北杜市XXX
+Mail：saiyo@greenfield-example.co.jp`,
+      notes: [
+        {
+          line: 7,
+          severity: 'high',
+          title: '業務範囲が不明で応募ハードルが上がる',
+          comment: '1日の業務イメージを箇条書きに。例：「既存顧客（地元小売店20社）への定期訪問（週3日）／新規開拓のためのテレアポ・訪問（週1日）／見積書作成・受注処理などの内勤業務（週1日）」。',
+        },
+        {
+          line: 7,
+          severity: 'medium',
+          title: '「やる気のある方歓迎！」は意味がない',
+          comment: '求める人物像を行動レベルで表現。例：「初対面の相手とでも自分から話しかけられる方／提案を断られても切り替えられる方」。精神論より行動特性のほうが自己選別を促します。',
+        },
+        {
+          line: 23,
+          severity: 'high',
+          title: '残業・休日出勤の程度が不明',
+          comment: '実態を数値で開示。例：「残業：月平均15時間／休日出勤：年4〜5回（イベント対応時、振替休日取得）」。労働時間の不透明さは、求人離脱と入社後ミスマッチの最大要因。',
+        },
+        {
+          line: 31,
+          severity: 'medium',
+          title: '福利厚生「その他充実」が不明',
+          comment: '具体的な制度を列挙。例：「資格取得支援（年5万円まで）／社用車貸与／健康診断（年1回）／確定拠出年金」。',
+        },
+        {
+          line: 15,
+          severity: 'medium',
+          title: '給与レンジの判断基準が不明',
+          comment: 'モデル給与を併記。例：「未経験スタート：月給22万円／営業経験3年以上：月給26万円〜／前職給与考慮可」。レンジだけだと応募者は「下限しか出ない」と判断しがち。',
+        },
+        {
+          line: 34,
+          severity: 'high',
+          title: '選考フロー・期間の記載なし',
+          comment: '流れと期間を明示。例：「書類選考（3日以内）→1次面接（対面1回）→内定。応募から内定まで約2週間」。中小企業ほど明示すると応募率が上がります。',
+        },
+        {
+          line: 31,
+          severity: 'medium',
+          title: '法定記載事項の漏れリスク',
+          comment: '「雇用形態」「加入保険の内訳（健康・厚生・雇用・労災）」「定年・再雇用」を明記。職業安定法に基づく労働条件明示義務に抵触する可能性があります。',
+        },
+      ],
+    },
+    {
+      id: '07-presidents-greeting',
+      title: '社長挨拶文（年頭所感）',
+      content: `新年のご挨拶
+
+新年あけましておめでとうございます。
+旧年中は格別のご厚情を賜り、誠にありがとうございました。
+
+昨年は、変化の激しい一年でございました。社会情勢も大きく動き、私たち中小企業を取り巻く環境も日々変わっております。そのような中、社員一同が心を一つにして取り組んだ結果、無事に一年を終えることができました。
+
+本年も、お客様に信頼されるサービスを提供できるよう、社員一丸となって努力してまいる所存です。
+
+また、今年は新たな挑戦の年と位置づけております。さらなる成長を目指し、邁進してまいります。
+
+最後になりましたが、皆様のますますのご発展とご多幸をお祈り申し上げ、新年のご挨拶とさせていただきます。
+
+本年もどうぞよろしくお願い申し上げます。
+
+2026年元旦
+合同会社サンライズ
+代表社員　鈴木一郎`,
+      notes: [
+        {
+          line: 1,
+          severity: 'high',
+          title: '誰に向けた文章か不明',
+          comment: '想定読者を1つに絞る。顧客向けなら「貴社」「お客様」中心、社員向けなら「皆さん」「私たち」中心に語彙を統一する。読者像が不明な挨拶文は誰の心にも届きません。',
+        },
+        {
+          line: 6,
+          severity: 'high',
+          title: '抽象的で記憶に残らない',
+          comment: '1つでよいので具体エピソードを入れる。例：「昨年4月、新拠点を北杜市に開設し、地域のお客様20社と新たにお取引を開始することができました」。具体は記憶を残し、抽象は流される。',
+        },
+        {
+          line: 6,
+          severity: 'medium',
+          title: '社内向け定型句の連発',
+          comment: '「社員一同が心を一つにして」「社員一丸となって」はいずれか1箇所に絞る。代わりに具体的成果を1つ。例：「現場からの提案で受注処理の手順を見直し、納期を平均3日短縮できました」。',
+        },
+        {
+          line: 10,
+          severity: 'high',
+          title: '「新たな挑戦」「さらなる成長」中身が空',
+          comment: '挑戦の中身を1つ明示。例：「本年は、創業以来初めて自社サービスの開発に着手します。年内のβ版公開を目指してまいります」。「で、何をするのか」が一番知りたいところ。',
+        },
+        {
+          line: 12,
+          severity: 'low',
+          title: '締めの選択が読者層と不整合',
+          comment: '読者に合わせて選び分け。顧客向け：「貴社のますますのご発展をお祈り申し上げます」／社員向け：「皆さんとご家族の健康と幸せを願っております」。',
+        },
+        {
+          line: 6,
+          severity: 'medium',
+          title: '一文が長く、読みづらい',
+          comment: '1文40字以内を目安に区切る。朗読される場面（朝礼・社内放送）も想定し、息継ぎ位置で文を切る。社長メッセージは「読み上げても聞き取れる」ことが意外に重要。',
+        },
+      ],
+    },
+  ];
+
+  // ============================================================
+  // DOM
+  // ============================================================
+  const documentSelect = document.getElementById('document-select') as HTMLSelectElement;
+  const statusEl = document.getElementById('status')!;
+  const emptyState = document.getElementById('empty-state')!;
+  const editor = document.getElementById('editor')!;
+  const editorBody = document.getElementById('editor-body')!;
+  const legend = document.getElementById('legend')!;
+
+  // セレクタ初期化
+  for (const doc of SAMPLE_DOCUMENTS) {
+    const o = document.createElement('option');
+    o.value = doc.id;
+    o.textContent = doc.title;
+    documentSelect.appendChild(o);
+  }
+
+  documentSelect.addEventListener('change', () => {
+    const id = documentSelect.value;
+    if (!id) {
+      emptyState.style.display = 'block';
+      editor.style.display = 'none';
+      legend.style.display = 'none';
+      statusEl.textContent = '';
+      return;
+    }
+    const doc = SAMPLE_DOCUMENTS.find(d => d.id === id);
+    if (!doc) return;
+    render(doc);
+  });
+
+  function render(doc: SampleDoc) {
+    editorBody.innerHTML = '';
+    const lines = doc.content.split('\n');
+
+    // 行番号 → ノート配列のマップ作成
+    const notesByLine = new Map<number, Note[]>();
+    for (const n of doc.notes) {
+      if (!notesByLine.has(n.line)) notesByLine.set(n.line, []);
+      notesByLine.get(n.line)!.push(n);
+    }
+
+    lines.forEach((line, i) => {
+      const lineNo = i + 1;
+      const row = document.createElement('div');
+      row.className = 'row';
+      const rowNotes = notesByLine.get(lineNo) || [];
+      if (rowNotes.length > 0) {
+        row.classList.add('has-note');
+        // 最も高い重要度を行のフラグに
+        const sevRank: Record<Severity, number> = { high: 3, medium: 2, low: 1 };
+        const top = rowNotes.reduce((a, b) => sevRank[a.severity] >= sevRank[b.severity] ? a : b);
+        row.classList.add(`sev-${top.severity}`);
+      }
+
+      const num = document.createElement('div');
+      num.className = 'row-num';
+      num.textContent = String(lineNo);
+
+      const text = document.createElement('div');
+      text.className = 'row-text';
+      text.textContent = line || ' '; // 空行も高さ確保
+
+      const noteCol = document.createElement('div');
+      noteCol.className = 'row-note';
+
+      if (rowNotes.length === 0) {
+        noteCol.innerHTML = '';
+      } else {
+        for (const n of rowNotes) {
+          const card = document.createElement('div');
+          card.className = `note-card note-${n.severity}`;
+
+          const head = document.createElement('div');
+          head.className = 'note-head';
+          const badge = document.createElement('span');
+          badge.className = `note-badge badge-${n.severity}`;
+          badge.textContent = n.severity === 'high' ? '重要' : n.severity === 'medium' ? '中' : '軽微';
+          const title = document.createElement('span');
+          title.className = 'note-title';
+          title.textContent = n.title;
+          head.appendChild(badge);
+          head.appendChild(title);
+
+          const body = document.createElement('div');
+          body.className = 'note-body';
+          body.textContent = n.comment;
+
+          card.appendChild(head);
+          card.appendChild(body);
+
+          // タップで詳細展開
+          card.addEventListener('click', (e) => {
+            e.stopPropagation();
+            card.classList.toggle('expanded');
+          });
+
+          noteCol.appendChild(card);
+        }
+      }
+
+      row.appendChild(num);
+      row.appendChild(text);
+      row.appendChild(noteCol);
+      editorBody.appendChild(row);
+    });
+
+    emptyState.style.display = 'none';
+    editor.style.display = 'block';
+    legend.style.display = 'flex';
+
+    const high = doc.notes.filter(n => n.severity === 'high').length;
+    const med = doc.notes.filter(n => n.severity === 'medium').length;
+    const low = doc.notes.filter(n => n.severity === 'low').length;
+    statusEl.textContent = `${doc.notes.length}件の指摘（重要${high} / 中${med} / 軽微${low}）`;
+  }
+</script>
+
+<style>
+  .review-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 12px 40px;
+  }
+
+  /* ツールバー */
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  .toolbar-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary, #2e574c);
+    white-space: nowrap;
+  }
+  .toolbar-left, .toolbar-right {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .toolbar select {
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    max-width: 260px;
+    background: #fff;
+    color: #333;
+  }
+  .status {
+    font-size: 0.75rem;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  /* 凡例 */
+  .legend {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.75rem;
+    color: #555;
+  }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-item .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    display: inline-block;
+  }
+  .legend-high .dot { background: #ea4335; }
+  .legend-medium .dot { background: #f5a623; }
+  .legend-low .dot { background: #5ea89a; }
+  .legend-hint { color: #999; font-size: 0.7rem; margin-left: auto; }
+
+  /* 空状態 */
+  .empty-state {
+    text-align: center; padding: 80px 20px; color: #999;
+  }
+  .empty-hint { font-size: 0.85rem; margin-top: 8px; }
+
+  /* エディタ */
+  .editor { display: flex; flex-direction: column; }
+
+  .editor-header {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-primary, #2e574c);
+    border-radius: 6px 6px 0 0;
+  }
+  .col-header {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .col-header-left { grid-column: 2; }
+  .col-header-right { grid-column: 3; border-left: 1px solid rgba(255,255,255,0.2); }
+
+  .editor-body { display: flex; flex-direction: column; }
+
+  /* 行 */
+  .row {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid #eee;
+    transition: background 0.1s;
+    align-items: stretch;
+  }
+  .row:hover { background: rgba(94, 168, 154, 0.04); }
+  .row.has-note { background: rgba(234, 67, 53, 0.03); }
+  .row.has-note.sev-high .row-num { color: #ea4335; font-weight: 700; }
+  .row.has-note.sev-medium .row-num { color: #f5a623; font-weight: 700; }
+  .row.has-note.sev-low .row-num { color: #5ea89a; font-weight: 700; }
+
+  .row-num {
+    padding: 10px 4px;
+    font-size: 0.7rem;
+    color: #bbb;
+    text-align: center;
+    user-select: none;
+    border-right: 1px solid #eee;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .row-text {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    word-break: break-word;
+    border-right: 1px solid #eee;
+    white-space: pre-wrap;
+  }
+
+  .row-note {
+    padding: 8px 8px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* メモカード */
+  .note-card {
+    border-radius: 6px;
+    padding: 6px 8px;
+    background: #fff;
+    border: 1px solid #eee;
+    cursor: pointer;
+    transition: box-shadow 0.15s, transform 0.05s;
+  }
+  .note-card:active { transform: scale(0.99); }
+  .note-card.note-high { border-left: 3px solid #ea4335; }
+  .note-card.note-medium { border-left: 3px solid #f5a623; }
+  .note-card.note-low { border-left: 3px solid #5ea89a; }
+
+  .note-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .note-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .badge-high { background: #ea4335; }
+  .badge-medium { background: #f5a623; }
+  .badge-low { background: #5ea89a; }
+  .note-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+  }
+  .note-body {
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #555;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .note-card.expanded .note-body {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+  }
+
+  /* スマホ */
+  @media (max-width: 768px) {
+    .review-main { padding: 80px 6px 24px; }
+    .toolbar { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 12px; }
+    .toolbar-left, .toolbar-right { width: 100%; }
+    .toolbar select { max-width: 100%; flex: 1; }
+    .legend { padding: 7px 10px; gap: 10px; font-size: 0.7rem; }
+    .legend-hint { display: none; }
+
+    .editor-header {
+      grid-template-columns: 28px 1fr 1.1fr;
+    }
+    .row {
+      grid-template-columns: 28px 1fr 1.1fr;
+    }
+    .row-text { font-size: 0.78rem; padding: 8px 6px; line-height: 1.7; }
+    .row-note { font-size: 0.78rem; padding: 6px 4px; }
+    .row-num { font-size: 0.65rem; padding: 8px 2px; }
+
+    .note-card { padding: 5px 6px; }
+    .note-title { font-size: 0.72rem; }
+    .note-body { font-size: 0.7rem; }
+    .note-badge { font-size: 0.6rem; padding: 1px 4px; }
+  }
+  @media (max-width: 480px) {
+    .review-main { padding: 76px 4px 20px; }
+    .editor-header {
+      grid-template-columns: 22px 1fr 1.15fr;
+    }
+    .row {
+      grid-template-columns: 22px 1fr 1.15fr;
+    }
+    .col-header { padding: 6px 8px; font-size: 0.72rem; }
+    .row-text { font-size: 0.72rem; padding: 6px 4px; line-height: 1.65; }
+    .row-note { font-size: 0.72rem; padding: 5px 3px; gap: 4px; }
+    .row-num { font-size: 0.6rem; }
+    .note-card { padding: 4px 5px; border-left-width: 2px; }
+    .note-head { gap: 4px; }
+    .note-title { font-size: 0.68rem; line-height: 1.35; }
+    .note-body { font-size: 0.66rem; line-height: 1.55; }
+    .note-badge { font-size: 0.55rem; padding: 0px 4px; }
+  }
+</style>
