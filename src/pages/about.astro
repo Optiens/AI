@@ -10,10 +10,11 @@ import Layout from '../layouts/Layout.astro';
       <div class="hero-content">
         <div class="container text-center">
           <h1 class="hero-statement">
-            すべての人に、<br class="sp-only" />時間と可能性を広げる手助けを。
+            時間と可能性を広げる手助けを。
           </h1>
+          <div class="hero-divider" aria-hidden="true"></div>
           <p class="hero-statement-sub">
-            AIを軸に業務を再設計しませんか？
+            業務にも、食卓にも、自律する仕組みを。
           </p>
         </div>
       </div>
@@ -367,24 +368,32 @@ import Layout from '../layouts/Layout.astro';
   text-transform: uppercase;
 }
 .about-hero-section .hero-statement{
-  font-size: clamp(24px, 4vw, 44px);
+  font-size: clamp(26px, 4.4vw, 48px);
   font-weight: 800;
-  line-height: 1.4;
-  letter-spacing: -.01em;
+  line-height: 1.5;
+  letter-spacing: -.02em;
   color: #fff;
-  margin: 0 auto 28px;
+  margin: 0 auto;
   max-width: 880px;
 }
 .about-hero-section .hero-statement strong{
   color: var(--brand);
   font-weight: 800;
 }
+.about-hero-section .hero-divider{
+  width: 48px;
+  height: 1px;
+  background: var(--brand);
+  margin: clamp(24px, 3.5vw, 36px) auto;
+  opacity: 0.55;
+}
 .about-hero-section .hero-statement-sub{
-  font-size: clamp(14px, 1.8vw, 17px);
+  font-size: clamp(13px, 1.6vw, 16px);
   line-height: 1.9;
   max-width: 720px;
   margin: 0 auto;
   color: var(--muted);
+  letter-spacing: .03em;
 }
 .sp-only{ display: none; }
 @media (max-width: 640px){
