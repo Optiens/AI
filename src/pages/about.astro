@@ -46,18 +46,30 @@ import Layout from '../layouts/Layout.astro';
           <p class="section-eyebrow">OUR BUSINESSES</p>
           <h2 class="section-heading">2つの事業</h2>
           <div class="business-cards">
-            <div class="business-card">
-              <div class="business-icon"><i class="fas fa-brain"></i></div>
+            <article class="business-card">
+              <span class="business-num" aria-hidden="true">01</span>
+              <p class="business-eng">AI Implementation</p>
               <h3>AI支援事業</h3>
-              <p>中小企業・小規模事業者のAI活用を伴走支援。無料診断から導入・保守まで一貫して、AIエージェントによる業務自動化の仕組みをつくります。</p>
-              <a href="/ai-consulting" class="business-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="business-card">
-              <div class="business-icon"><i class="fas fa-leaf"></i></div>
+              <blockquote class="business-philosophy">
+                AIを<em>使って</em>仕事をする時代から、<br/>AIを<em>中心に</em>働き方を変える時代へ。
+              </blockquote>
+              <p class="business-desc">
+                これからのAIは"便利な道具"ではなく、業務の中心にいる存在です。人間にしかできない判断と創造に集中するため、それ以外を仕組みに任せる。中小企業・小規模事業者のAI活用を、無料診断から導入・保守まで一貫して伴走します。
+              </p>
+              <a href="/ai-consulting" class="business-link">詳しく見る</a>
+            </article>
+            <article class="business-card">
+              <span class="business-num" aria-hidden="true">02</span>
+              <p class="business-eng">IoT Hydroponics</p>
               <h3>IoT水耕栽培事業</h3>
-              <p>IoTセンサーとAIを駆使した室内水耕栽培システムを開発中。データ駆動で農薬不使用のハーブを安定生産し、将来的に就労支援事業所への導入を目指します。</p>
-              <a href="/hydroponics" class="business-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
-            </div>
+              <blockquote class="business-philosophy">
+                技術の高度さではなく、<br/>現場の理解が、農を変える。
+              </blockquote>
+              <p class="business-desc">
+                気候リスクや輸入依存に揺らぐ食料生産を、IoTとAIで再設計する。山梨県北杜市の自社農場でラック1台から仕組みを実証し、将来的に就労支援事業所が自律した食料生産の担い手になる未来を目指します。
+              </p>
+              <a href="/hydroponics" class="business-link">詳しく見る</a>
+            </article>
           </div>
         </section>
 
@@ -615,56 +627,110 @@ import Layout from '../layouts/Layout.astro';
 .business-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: clamp(1rem, 2vw, 1.75rem);
 }
 .business-card {
-  background: var(--surface-card);
+  position: relative;
+  background: linear-gradient(180deg, var(--surface-card) 0%, rgba(91, 127, 255, 0.02) 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 2rem 1.5rem;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  padding: clamp(2rem, 3.5vw, 3rem) clamp(1.5rem, 2.5vw, 2.25rem) clamp(1.75rem, 2.5vw, 2rem);
+  overflow: hidden;
+  transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+  display: flex;
+  flex-direction: column;
 }
 .business-card:hover {
-  border-color: var(--border-hover);
-  box-shadow: var(--glow);
+  border-color: rgba(91, 127, 255, 0.45);
+  box-shadow: 0 8px 32px rgba(91, 127, 255, 0.12), var(--glow);
+  transform: translateY(-3px);
 }
-.business-icon {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: rgba(91, 127, 255, 0.1);
+.business-num {
+  position: absolute;
+  top: 16px;
+  right: 22px;
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 800;
+  color: rgba(91, 127, 255, 0.10);
+  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.business-eng {
+  font-size: clamp(10px, 1vw, 12px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
   color: var(--brand);
-  font-size: 1.1rem;
-  margin-bottom: 14px;
+  margin: 0 0 12px;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
 }
 .business-card h3 {
-  font-size: 1.15rem;
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 800;
   color: var(--heading);
-  margin: 0 0 0.6rem;
+  margin: 0 0 clamp(20px, 2.5vw, 28px);
+  letter-spacing: -0.01em;
+  position: relative;
+  z-index: 1;
+}
+.business-philosophy {
+  font-size: clamp(15px, 1.7vw, 18px);
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--heading);
+  margin: 0 0 clamp(20px, 2.5vw, 28px);
+  padding: 0 0 0 16px;
+  border-left: 2px solid var(--brand);
+  letter-spacing: -0.005em;
+  font-style: normal;
+  position: relative;
+  z-index: 1;
+}
+.business-philosophy em {
+  font-style: normal;
+  color: var(--brand);
   font-weight: 700;
 }
-.business-card p {
+.business-desc {
   font-size: 0.92rem;
   color: var(--muted);
-  line-height: 1.75;
-  margin: 0 0 1rem;
+  line-height: 1.9;
+  margin: 0 0 clamp(20px, 2.5vw, 28px);
+  flex: 1;
+  position: relative;
+  z-index: 1;
 }
 .business-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--brand);
   font-weight: 600;
   font-size: 0.88rem;
   text-decoration: none;
-  transition: opacity 0.2s;
+  letter-spacing: 0.04em;
+  transition: gap 0.3s, color 0.3s;
+  position: relative;
+  z-index: 1;
 }
-.business-link:hover { opacity: 0.7; }
+.business-link::after {
+  content: '→';
+  font-size: 1rem;
+  transition: transform 0.3s;
+}
+.business-card:hover .business-link {
+  color: #8FA8FF;
+}
+.business-card:hover .business-link::after {
+  transform: translateX(4px);
+}
 @media (max-width: 640px) {
   .business-cards { grid-template-columns: 1fr; }
+  .business-num { font-size: 64px; }
 }
 
 /* =========================================================
