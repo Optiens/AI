@@ -4,12 +4,18 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="会社情報 | Optiens" description="合同会社Optiens（オプティエンス）の会社情報。AI活用支援と室内IoT水耕栽培の2事業で、小規模事業者の業務効率化と持続可能な農業の仕組みづくりに取り組んでいます。">
   <main>
-    <!-- ===== Hero（パーティクルネットワーク） ===== -->
+    <!-- ===== Hero（パーティクルネットワーク + Optiens由来） ===== -->
     <section class="about-hero-section">
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <div class="hero-content">
         <div class="container text-center">
-          <h1>ABOUT</h1>
+          <p class="hero-eyebrow">OPTIENS LLC</p>
+          <h1 class="hero-statement">
+            <strong>Optimization（最適化）</strong>と<br class="sp-only" /><strong>Ensō（円相）</strong>を重ねた造語。
+          </h1>
+          <p class="hero-statement-sub">
+            既成概念を見直し、社会や暮らしの仕組みを最適化していきます。
+          </p>
         </div>
       </div>
     </section>
@@ -18,14 +24,10 @@ import Layout from '../layouts/Layout.astro';
     <section class="about-content-section">
       <div class="container">
 
-        <!-- 0) Optiensの由来（社名・想い） -->
-        <section class="about-origin reveal">
-          <p>Optiens（オプティエンス） は <strong>Optimization（最適化）</strong> と <strong>Ensō（円相）</strong>を重ねた造語です。</p>
-          <p>既成概念を見直し、社会や暮らしの仕組みを最適化していきます。</p>
-        </section>
-
         <!-- 1) 3つの価値観：調和・最適化・循環 -->
-        <section class="about-values reveal">
+        <section class="about-section about-values reveal">
+          <p class="section-eyebrow">OUR VALUES</p>
+          <h2 class="section-heading">3つの価値観</h2>
           <div class="values-grid">
             <div class="value-card">
               <div class="value-icon value-icon--harmony">
@@ -52,8 +54,9 @@ import Layout from '../layouts/Layout.astro';
         </section>
 
         <!-- 2) 2つの事業 -->
-        <section class="about-businesses reveal">
-          <h2>2つの事業</h2>
+        <section class="about-section about-businesses reveal">
+          <p class="section-eyebrow">OUR BUSINESSES</p>
+          <h2 class="section-heading">2つの事業</h2>
           <div class="business-cards">
             <div class="business-card">
               <div class="business-icon"><i class="fas fa-brain"></i></div>
@@ -71,8 +74,9 @@ import Layout from '../layouts/Layout.astro';
         </section>
 
         <!-- 3) 私たちの姿勢 -->
-        <section class="about-approach reveal">
-          <h2>自走できる仕組みをつくる</h2>
+        <section class="about-section about-approach reveal">
+          <p class="section-eyebrow">OUR APPROACH</p>
+          <h2 class="section-heading">自走できる仕組みをつくる</h2>
           <p>Optiensが目指すのは、お客様が自分たちの力で運用できる自動化の仕組みをつくることです。</p>
           <p>日常操作は「確認して承認するだけ」で完結するよう設計し、導入時に操作手順を共有します。保守契約なしでもそのまま運用を続けられます。</p>
           <p>ワークフローの改善や新たな業務の自動化など、さらに発展させたい場合は保守プランで継続的にサポートいたします。</p>
@@ -87,8 +91,9 @@ import Layout from '../layouts/Layout.astro';
         </section>
 
         <!-- 4) 代表者について -->
-        <section class="about-profile reveal">
-          <h2>代表者について</h2>
+        <section class="about-section about-profile reveal">
+          <p class="section-eyebrow">REPRESENTATIVE</p>
+          <h2 class="section-heading">代表者について</h2>
           <div class="profile-card">
             <div class="profile-content">
               <h3>髙橋 大地<span class="profile-title">合同会社Optiens 代表社員</span></h3>
@@ -105,8 +110,9 @@ import Layout from '../layouts/Layout.astro';
         </section>
 
         <!-- 5) 会社概要 -->
-        <section class="company-info reveal">
-          <h2>会社概要</h2>
+        <section class="about-section company-info reveal">
+          <p class="section-eyebrow">COMPANY INFO</p>
+          <h2 class="section-heading">会社概要</h2>
           <table class="info-table">
             <tbody>
               <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
@@ -271,7 +277,7 @@ import Layout from '../layouts/Layout.astro';
 .about-hero-section{
   position: relative;
   overflow: hidden;
-  padding: clamp(80px, 10vw, 120px) 0 clamp(20px, 3vw, 32px);
+  padding: clamp(120px, 16vw, 200px) 0 clamp(80px, 12vw, 140px);
   background: var(--surface);
   color: #fff;
 }
@@ -282,15 +288,77 @@ import Layout from '../layouts/Layout.astro';
   height: 100%;
   z-index: 0;
 }
-.about-hero-section .hero-content{ position:relative; z-index:2; padding: clamp(32px, 5vw, 64px) 20px clamp(16px, 2.5vw, 32px); width:100%; text-align:center; }
-.about-hero-section .hero-content h1{ font-size: clamp(28px, 6vw, 56px); line-height:1.15; margin:0 0 12px; color:#fff; }
-.about-hero-section .hero-content p{ font-size: clamp(14px, 2vw, 18px); line-height:1.7; max-width: 900px; margin:0 auto; color:var(--muted); }
+.about-hero-section .hero-content{
+  position:relative;
+  z-index:2;
+  padding: 0 20px;
+  width:100%;
+  text-align:center;
+}
+.about-hero-section .hero-eyebrow{
+  font-size: clamp(11px, 1.1vw, 13px);
+  letter-spacing: .35em;
+  font-weight: 500;
+  color: var(--brand);
+  margin: 0 0 24px;
+  text-transform: uppercase;
+}
+.about-hero-section .hero-statement{
+  font-size: clamp(24px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -.01em;
+  color: #fff;
+  margin: 0 auto 28px;
+  max-width: 880px;
+}
+.about-hero-section .hero-statement strong{
+  color: var(--brand);
+  font-weight: 800;
+}
+.about-hero-section .hero-statement-sub{
+  font-size: clamp(14px, 1.8vw, 17px);
+  line-height: 1.9;
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--muted);
+}
+.sp-only{ display: none; }
+@media (max-width: 640px){
+  .sp-only{ display: inline; }
+}
 
 /* =========================================================
    About 本文
    ========================================================= */
-.about-content-section{ padding: 32px 20px 64px; background: var(--surface); line-height:1.8; }
+.about-content-section{ padding: clamp(64px, 10vw, 120px) 20px clamp(80px, 12vw, 140px); background: var(--surface); line-height:1.8; }
 .about-content-section .container{ width: min(1000px, 100% - 2rem); margin-inline: auto; }
+
+/* =========================================================
+   セクション共通（余白・見出し）
+   ========================================================= */
+.about-section{
+  margin-bottom: clamp(80px, 12vw, 140px);
+}
+.about-section:last-of-type{
+  margin-bottom: 0;
+}
+.section-eyebrow{
+  font-size: clamp(10px, 1vw, 12px);
+  letter-spacing: .35em;
+  font-weight: 500;
+  color: var(--brand);
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+.section-heading{
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -.01em;
+  color: var(--heading);
+  margin: 0 0 clamp(28px, 4vw, 48px);
+}
 
 /* =========================================================
    ミニ・ヒーロー（カード）
@@ -343,34 +411,8 @@ import Layout from '../layouts/Layout.astro';
 }
 
 /* =========================================================
-   Optiensの由来
-   ========================================================= */
-.about-origin {
-  margin-bottom: 48px;
-  text-align: center;
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.about-origin p {
-  color: var(--text);
-  line-height: 1.9;
-  margin: 0 0 .75rem;
-  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
-}
-.about-origin p:last-child {
-  margin-bottom: 0;
-}
-
-/* =========================================================
-   2つの事業
-   ========================================================= */
-/* =============================================================
    About Values（調和・最適化・循環）
-   ============================================================= */
-.about-values {
-  margin-bottom: 64px;
-}
+   ========================================================= */
 .values-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -438,15 +480,6 @@ import Layout from '../layouts/Layout.astro';
   }
 }
 
-.about-businesses {
-  margin-bottom: 48px;
-}
-.about-businesses h2 {
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800;
-  margin: 0 0 1.5rem;
-  color: var(--heading);
-}
 .business-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -505,15 +538,6 @@ import Layout from '../layouts/Layout.astro';
 /* =========================================================
    私たちの姿勢
    ========================================================= */
-.about-approach {
-  margin-bottom: 48px;
-}
-.about-approach h2 {
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800;
-  margin: 0 0 1rem;
-  color: var(--heading);
-}
 .about-approach p {
   color: var(--text);
   line-height: 1.8;
@@ -569,15 +593,6 @@ import Layout from '../layouts/Layout.astro';
 /* =========================================================
    代表者について
    ========================================================= */
-.about-profile {
-  margin-bottom: 48px;
-}
-.about-profile h2 {
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800;
-  margin: 0 0 1.5rem;
-  color: var(--heading);
-}
 .profile-card {
   padding: 36px;
   background: var(--surface-card);
@@ -626,12 +641,6 @@ import Layout from '../layouts/Layout.astro';
 .company-info{
   max-width: 1000px;
   margin: 0 auto;
-}
-.company-info h2{
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800;
-  margin: 0 0 1.5rem;
-  color: var(--heading);
 }
 .info-table{
   width: 100%;
