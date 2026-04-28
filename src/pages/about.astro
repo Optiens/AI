@@ -125,23 +125,23 @@ import Layout from '../layouts/Layout.astro';
                 <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <defs>
                     <linearGradient id="opt-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#6E94FF" stop-opacity="1"/>
-                      <stop offset="100%" stop-color="#4E8BA0" stop-opacity="1"/>
+                      <stop offset="0%" stop-color="#A259FF" stop-opacity="1"/>
+                      <stop offset="100%" stop-color="#7B40CC" stop-opacity="1"/>
                     </linearGradient>
                   </defs>
                   <!-- 非効率な複数経路（淡く） -->
-                  <path d="M 25 80 Q 80 30, 120 95 T 215 70" fill="none" stroke="rgba(91,127,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 110 Q 70 170, 130 95 T 215 110" fill="none" stroke="rgba(91,127,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 140 Q 90 80, 120 195 T 215 145" fill="none" stroke="rgba(91,127,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 170 Q 80 210, 130 130 T 215 175" fill="none" stroke="rgba(91,127,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M 25 80 Q 80 30, 120 95 T 215 70" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M 25 110 Q 70 170, 130 95 T 215 110" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M 25 140 Q 90 80, 120 195 T 215 145" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M 25 170 Q 80 210, 130 130 T 215 175" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
                   <!-- 最適経路（メイン） -->
                   <path d="M 25 120 Q 80 105, 120 115 T 215 118" fill="none" stroke="url(#opt-grad)" stroke-width="4" stroke-linecap="round"/>
                   <!-- 経路上のノード -->
-                  <circle cx="25" cy="120" r="6" fill="#6E94FF"/>
-                  <circle cx="80" cy="108" r="3.5" fill="#6E94FF" opacity="0.85"/>
-                  <circle cx="120" cy="115" r="3.5" fill="#6E94FF" opacity="0.85"/>
-                  <circle cx="170" cy="116" r="3.5" fill="#6E94FF" opacity="0.85"/>
-                  <circle cx="215" cy="118" r="6" fill="#6E94FF"/>
+                  <circle cx="25" cy="120" r="6" fill="#A259FF"/>
+                  <circle cx="80" cy="108" r="3.5" fill="#A259FF" opacity="0.85"/>
+                  <circle cx="120" cy="115" r="3.5" fill="#A259FF" opacity="0.85"/>
+                  <circle cx="170" cy="116" r="3.5" fill="#A259FF" opacity="0.85"/>
+                  <circle cx="215" cy="118" r="6" fill="#A259FF"/>
                 </svg>
               </div>
               <p class="root-eng">Optimization</p>
@@ -154,17 +154,17 @@ import Layout from '../layouts/Layout.astro';
                 <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <defs>
                     <linearGradient id="enso-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#6E94FF" stop-opacity="1"/>
-                      <stop offset="100%" stop-color="#4E8BA0" stop-opacity="0.9"/>
+                      <stop offset="0%" stop-color="#0ACF83" stop-opacity="1"/>
+                      <stop offset="100%" stop-color="#1ABCFE" stop-opacity="0.9"/>
                     </linearGradient>
                   </defs>
                   <!-- 外側のかすかなグロー -->
-                  <circle cx="120" cy="120" r="86" fill="none" stroke="rgba(91,127,255,0.10)" stroke-width="22"/>
+                  <circle cx="120" cy="120" r="86" fill="none" stroke="rgba(10,207,131,0.10)" stroke-width="22"/>
                   <!-- 円相本体（上部右側に小さな切れ目） -->
                   <path d="M 175 53 A 88 88 0 1 1 138 33" fill="none" stroke="url(#enso-grad)" stroke-width="11" stroke-linecap="round"/>
                   <!-- 筆の入りと終わり -->
-                  <circle cx="138" cy="33" r="4" fill="#6E94FF" opacity="0.95"/>
-                  <circle cx="175" cy="53" r="3" fill="#4E8BA0" opacity="0.9"/>
+                  <circle cx="138" cy="33" r="4" fill="#0ACF83" opacity="0.95"/>
+                  <circle cx="175" cy="53" r="3" fill="#1ABCFE" opacity="0.9"/>
                 </svg>
               </div>
               <p class="root-eng">Ensō</p>
@@ -305,7 +305,8 @@ import Layout from '../layouts/Layout.astro';
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(mouse.x, mouse.y);
-        ctx.strokeStyle = 'rgba(91,127,255,' + opacity + ')';
+        // マウスへの線は各パーティクルの色に追従（Figmaカラー）
+        ctx.strokeStyle = 'rgba(' + p.color.r + ',' + p.color.g + ',' + p.color.b + ',' + opacity + ')';
         ctx.lineWidth = 0.8;
         ctx.stroke();
       }
@@ -607,19 +608,22 @@ import Layout from '../layouts/Layout.astro';
   border: 2px solid;
 }
 .value-icon--harmony {
-  background: rgba(245, 158, 11, 0.12);
-  color: #F59E0B;
-  border-color: rgba(245, 158, 11, 0.45);
+  /* Figma orange/red */
+  background: rgba(242, 78, 30, 0.12);
+  color: #F24E1E;
+  border-color: rgba(242, 78, 30, 0.45);
 }
 .value-icon--optimization {
-  background: rgba(59, 130, 246, 0.12);
-  color: #3B82F6;
-  border-color: rgba(59, 130, 246, 0.45);
+  /* Figma purple（最適化＝Optiensの社名由来色） */
+  background: rgba(162, 89, 255, 0.12);
+  color: #A259FF;
+  border-color: rgba(162, 89, 255, 0.45);
 }
 .value-icon--circulation {
-  background: rgba(16, 185, 129, 0.12);
-  color: #10B981;
-  border-color: rgba(16, 185, 129, 0.45);
+  /* Figma green */
+  background: rgba(10, 207, 131, 0.12);
+  color: #0ACF83;
+  border-color: rgba(10, 207, 131, 0.45);
 }
 .value-card h3 {
   font-size: 1.1rem;
