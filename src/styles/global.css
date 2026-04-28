@@ -1,17 +1,17 @@
 /* ========== CSS Variables ========== */
 :root {
-  /* Brand — Minimal Mono (Vercel/GitHub inspired) */
-  --brand: #18181B;
-  --brand-dim: #404040;
-  --brand-2: #525252;
+  /* Brand — Purple Tech (Stripe/Linear inspired) */
+  --brand: #635BFF;
+  --brand-dim: #4F46E5;
+  --brand-2: #8B5CF6;
 
-  /* Secondary — Subtle accent blue (Vercel) */
-  --titanium: #0070F3;
-  --titanium-dim: #0050C7;
-  --titanium-light: #50A6FF;
+  /* Secondary — Cyan (cool contrast) */
+  --titanium: #06B6D4;
+  --titanium-dim: #0891B2;
+  --titanium-light: #67E8F9;
 
-  /* Gradient — Black → Dark gray (subtle) */
-  --brand-gradient: linear-gradient(135deg, #18181B 0%, #404040 50%, #525252 100%);
+  /* Gradient — Purple → Pink → Cyan blend (Stripe風) */
+  --brand-gradient: linear-gradient(135deg, #635BFF 0%, #8B5CF6 40%, #F472B6 100%);
 
   /* Surfaces & Text (dark theme) */
   --surface: #0a0a0a;
@@ -202,17 +202,17 @@ a:focus-visible {
 /*   Content: light-section でライト化            */
 /* ===================== */
 .light-section {
-  /* Minimal Mono: 純白背景 + ニュートラルグレー */
+  /* Purple Tech: 純白背景 + クリーンニュートラル */
   --surface: #FFFFFF;
-  --surface-2: #FAFAFA;
+  --surface-2: #F8FAFC;
   --surface-card: #FFFFFF;
-  --surface-3: #F4F4F5;
-  --heading: #0A0A0A;
-  --text: #404040;
-  --muted: #737373;
-  --border: #E5E5E5;
-  --border-hover: #D4D4D4;
-  --glow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --surface-3: #F1F5F9;
+  --heading: #0F172A;
+  --text: #334155;
+  --muted: #64748B;
+  --border: #E2E8F0;
+  --border-hover: #CBD5E1;
+  --glow: 0 4px 24px rgba(99, 91, 255, 0.10);
 
   background: var(--surface);
   color: var(--text);
