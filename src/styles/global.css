@@ -1,17 +1,17 @@
 /* ========== CSS Variables ========== */
 :root {
-  /* Brand — Lapis Lazuli Blue (primary accent) */
-  --brand: #5B7FFF;
-  --brand-dim: #3D5CC7;
-  --brand-2: #7B9AFF;
+  /* Brand — Purple Tech (Stripe/Linear inspired) */
+  --brand: #635BFF;
+  --brand-dim: #4F46E5;
+  --brand-2: #8B5CF6;
 
-  /* Titanium Blue (secondary / ambient) */
-  --titanium: #4E8BA0;
-  --titanium-dim: #3A6E82;
-  --titanium-light: #6BABC2;
+  /* Secondary — Cyan (cool contrast) */
+  --titanium: #06B6D4;
+  --titanium-dim: #0891B2;
+  --titanium-light: #67E8F9;
 
-  /* Gradient — Lapis → Titanium blend */
-  --brand-gradient: linear-gradient(135deg, #5B7FFF 0%, #4E8BA0 50%, #1E3A4F 100%);
+  /* Gradient — Purple → Pink → Cyan blend (Stripe風) */
+  --brand-gradient: linear-gradient(135deg, #635BFF 0%, #8B5CF6 40%, #F472B6 100%);
 
   /* Surfaces & Text (dark theme) */
   --surface: #0a0a0a;

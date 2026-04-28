@@ -210,13 +210,12 @@ import Layout from '../layouts/Layout.astro';
   const CONNECT_DIST = 140;
   const MOUSE_DIST = 180;
 
-  // Optiens独自4色パレット（CLAUDE.mdアクセント赤含む）
-  // 赤=アクセント / amber=調和 / emerald=循環 / brand=最適化
+  // Purple Tech パレット（Stripe / Linear / Discord風）
   const COLORS = [
-    { r: 234, g: 67,  b: 53 },   // #EA4335 アクセント赤
-    { r: 245, g: 158, b: 11 },   // #F59E0B amber（調和）
-    { r: 16,  g: 185, b: 129 },  // #10B981 emerald（循環）
-    { r: 91,  g: 127, b: 255 },  // #5B7FFF brand（最適化）
+    { r: 99,  g: 91,  b: 255 },   // #635BFF Stripe purple（メイン）
+    { r: 244, g: 114, b: 182 },   // #F472B6 ピンク（アクセント）
+    { r: 6,   g: 182, b: 212 },   // #06B6D4 シアン（クール）
+    { r: 139, g: 92,  b: 246 },   // #8B5CF6 ビオレット
   ];
 
   function resize() {
