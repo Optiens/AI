@@ -92,22 +92,22 @@ import Layout from '../layouts/Layout.astro';
           <h2 class="section-heading">3つの価値観</h2>
           <div class="values-grid">
             <div class="value-card">
-              <div class="value-icon value-icon--harmony">
-                <i class="fa-solid fa-bullseye"></i>
+              <div class="value-img-wrap">
+                <img src="/images/values/harmony.png" alt="調和を表すイラスト" loading="lazy" />
               </div>
               <h3>調和</h3>
               <p>競争から協調へ、所有から共有へ、分離から統合へ。人・自然・テクノロジーが調和できる社会を築きます。</p>
             </div>
             <div class="value-card">
-              <div class="value-icon value-icon--optimization">
-                <i class="fa-solid fa-circle-plus"></i>
+              <div class="value-img-wrap">
+                <img src="/images/values/optimization.png" alt="最適化を表すイラスト" loading="lazy" />
               </div>
               <h3>最適化</h3>
               <p>センサーデータやAI技術を活用した効率化と、常識の再定義により、事業と暮らしの新しいカタチを創造します。</p>
             </div>
             <div class="value-card">
-              <div class="value-icon value-icon--circulation">
-                <i class="fa-solid fa-arrows-rotate"></i>
+              <div class="value-img-wrap">
+                <img src="/images/values/circulation.png" alt="循環を表すイラスト" loading="lazy" />
               </div>
               <h3>循環</h3>
               <p>資源もデータも種子も循環させ、気候リスクや外部依存に左右されない、自律した仕組みを構築します。</p>
@@ -596,34 +596,24 @@ import Layout from '../layouts/Layout.astro';
   box-shadow: var(--glow);
   transform: translateY(-2px);
 }
-.value-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 18px;
-  border-radius: 50%;
+.value-img-wrap {
+  width: 100%;
+  max-width: 180px;
+  aspect-ratio: 1;
+  margin: 0 auto 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  border: 2px solid;
+  transition: transform .35s ease;
 }
-.value-icon--harmony {
-  /* Figma orange/red */
-  background: rgba(242, 78, 30, 0.12);
-  color: #F24E1E;
-  border-color: rgba(242, 78, 30, 0.45);
+.value-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
-.value-icon--optimization {
-  /* Figma purple（最適化＝Optiensの社名由来色） */
-  background: rgba(162, 89, 255, 0.12);
-  color: #A259FF;
-  border-color: rgba(162, 89, 255, 0.45);
-}
-.value-icon--circulation {
-  /* Figma green */
-  background: rgba(10, 207, 131, 0.12);
-  color: #0ACF83;
-  border-color: rgba(10, 207, 131, 0.45);
+.value-card:hover .value-img-wrap {
+  transform: scale(1.04);
 }
 .value-card h3 {
   font-size: 1.1rem;
