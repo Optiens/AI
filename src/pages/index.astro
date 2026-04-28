@@ -158,24 +158,24 @@ import Layout from '../layouts/Layout.astro';
         <h2 class="section-heading reveal">SERVICES</h2>
         <div class="service-visual-grid reveal-stagger">
           <a href="/free-diagnosis" class="sv-card gradient-border">
-            <div class="sv-icon-wrap">
-              <i class="fa-solid fa-magnifying-glass-chart"></i>
+            <div class="sv-img-wrap">
+              <img src="/images/services/ai-diagnosis.png" alt="AI活用診断" loading="lazy" />
             </div>
             <h3>AI活用診断</h3>
             <p>業務にAIがどれだけ効くか、ROI（投資利益率）を算出します。無料版と有料版をご用意しています。</p>
             <span class="sv-arrow">→</span>
           </a>
           <a href="/implementation" class="sv-card gradient-border">
-            <div class="sv-icon-wrap">
-              <i class="fa-solid fa-gears"></i>
+            <div class="sv-img-wrap">
+              <img src="/images/services/implementation.png" alt="導入支援" loading="lazy" />
             </div>
             <h3>導入支援</h3>
             <p>業務を自動でこなすAIの仕組みを、設計から構築・納品まで対応します。</p>
             <span class="sv-arrow">→</span>
           </a>
           <a href="/maintenance" class="sv-card gradient-border">
-            <div class="sv-icon-wrap">
-              <i class="fa-solid fa-arrows-spin"></i>
+            <div class="sv-img-wrap">
+              <img src="/images/services/maintenance.png" alt="保守" loading="lazy" />
             </div>
             <h3>保守</h3>
             <p>導入後の機能追加やトラブルに対応。新しい業務の自動化もご相談いただけます。</p>
@@ -387,6 +387,25 @@ import Layout from '../layouts/Layout.astro';
   border-color: var(--border-hover);
   box-shadow: var(--glow);
   transform: translateY(-4px);
+}
+.sv-img-wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 200px;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .35s ease;
+}
+.sv-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.sv-card:hover .sv-img-wrap {
+  transform: scale(1.04);
 }
 .sv-icon-wrap {
   width: 64px;
