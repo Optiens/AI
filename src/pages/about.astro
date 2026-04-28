@@ -210,13 +210,13 @@ import Layout from '../layouts/Layout.astro';
   const CONNECT_DIST = 140;
   const MOUSE_DIST = 180;
 
-  // カラフルパレット：4色（3価値観カラー + ブランド青）
-  // 調和=amber / 最適化=blue / 循環=emerald / brand=Optiens青
+  // Optiens独自4色パレット（CLAUDE.mdアクセント赤含む）
+  // 赤=アクセント / amber=調和 / emerald=循環 / brand=最適化
   const COLORS = [
+    { r: 234, g: 67,  b: 53 },   // #EA4335 アクセント赤
     { r: 245, g: 158, b: 11 },   // #F59E0B amber（調和）
-    { r: 59,  g: 130, b: 246 },  // #3B82F6 blue（最適化）
     { r: 16,  g: 185, b: 129 },  // #10B981 emerald（循環）
-    { r: 91,  g: 127, b: 255 },  // #5B7FFF brand
+    { r: 91,  g: 127, b: 255 },  // #5B7FFF brand（最適化）
   ];
 
   function resize() {

@@ -44,12 +44,13 @@ import Layout from '../layouts/Layout.astro';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
-      // カラフルパレット：4色（3価値観カラー + ブランド青）
+      // Optiens独自4色パレット（CLAUDE.mdアクセント赤含む）
+      // 赤=アクセント / amber=調和 / emerald=循環 / brand=最適化
       const COLORS = [
-        'rgba(245,158,11,',   // amber（調和）
-        'rgba(59,130,246,',   // blue（最適化）
-        'rgba(16,185,129,',   // emerald（循環）
-        'rgba(91,127,255,',   // brand
+        'rgba(234,67,53,',    // #EA4335 アクセント赤
+        'rgba(245,158,11,',   // #F59E0B amber（調和）
+        'rgba(16,185,129,',   // #10B981 emerald（循環）
+        'rgba(91,127,255,',   // #5B7FFF brand（最適化）
       ];
 
       function createParticles() {
