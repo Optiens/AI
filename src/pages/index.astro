@@ -29,8 +29,11 @@ import Layout from '../layouts/Layout.astro';
       const ctx = canvas.getContext('2d');
       let w, h, particles, animId;
       const CONNECT_DIST = 140;
+      const MOUSE_DIST = 180;
       const PARTICLE_COUNT = 80;
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let mouse = { x: -1000, y: -1000 };
 
       function resize() {
         const rect = canvas.parentElement.getBoundingClientRect();
@@ -67,6 +70,18 @@ import Layout from '../layouts/Layout.astro';
         }
       }
 
+      // マウス位置の追跡（ヒーロー要素全体で検知）
+      const heroEl = canvas.parentElement;
+      heroEl.addEventListener('mousemove', function(e) {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      });
+      heroEl.addEventListener('mouseleave', function() {
+        mouse.x = -1000;
+        mouse.y = -1000;
+      });
+
       function draw() {
         ctx.clearRect(0, 0, w, h);
 
@@ -85,6 +100,21 @@ import Layout from '../layouts/Layout.astro';
               ctx.lineTo(particles[j].x, particles[j].y);
               ctx.stroke();
             }
+          }
+
+          // Draw line to mouse (if nearby)
+          const p = particles[i];
+          const mdx = p.x - mouse.x;
+          const mdy = p.y - mouse.y;
+          const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mDist < MOUSE_DIST) {
+            const opacity = (1 - mDist / MOUSE_DIST) * 0.4;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = p.color + opacity + ')';
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
           }
         }
 

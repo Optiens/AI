@@ -14,8 +14,11 @@ const { id = 'particle-net' } = Astro.props;
   const ctx = canvas.getContext('2d');
   let w, h, particles, animId;
   const CONNECT_DIST = 140;
+  const MOUSE_DIST = 180;
   const PARTICLE_COUNT = 80;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let mouse = { x: -1000, y: -1000 };
 
   function resize() {
     const rect = canvas.parentElement.getBoundingClientRect();
@@ -28,6 +31,18 @@ const { id = 'particle-net' } = Astro.props;
     canvas.style.height = h + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
+
+  // マウス位置の追跡（ヒーロー要素全体で検知）
+  var heroEl = canvas.parentElement;
+  heroEl.addEventListener('mousemove', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  heroEl.addEventListener('mouseleave', function() {
+    mouse.x = -1000;
+    mouse.y = -1000;
+  });
 
   // Optiens独自4色パレット（CLAUDE.mdアクセント赤含む）
   // 赤=アクセント / amber=調和 / emerald=循環 / brand=最適化
@@ -69,6 +84,21 @@ const { id = 'particle-net' } = Astro.props;
           ctx.lineTo(particles[j].x, particles[j].y);
           ctx.stroke();
         }
+      }
+
+      // Draw line to mouse (if nearby)
+      var pp = particles[i];
+      var mdx = pp.x - mouse.x;
+      var mdy = pp.y - mouse.y;
+      var mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+      if (mDist < MOUSE_DIST) {
+        var mOpacity = (1 - mDist / MOUSE_DIST) * 0.4;
+        ctx.beginPath();
+        ctx.moveTo(pp.x, pp.y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.strokeStyle = pp.color + mOpacity + ')';
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
       }
     }
 
