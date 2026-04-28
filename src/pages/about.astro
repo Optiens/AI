@@ -401,9 +401,28 @@ import Layout from '../layouts/Layout.astro';
 }
 
 /* =========================================================
-   About 本文
+   About 本文 — ライト基調へ転換（ヒーローのダークと対比させる）
+   ローカルでCSS変数をオーバーライドし、配下のすべての要素を
+   ライトテーマに変換する
    ========================================================= */
-.about-content-section{ padding: clamp(64px, 10vw, 120px) 20px clamp(80px, 12vw, 140px); background: var(--surface); line-height:1.8; }
+.about-content-section{
+  /* ライトテーマ変数オーバーライド */
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --surface-card: #ffffff;
+  --surface-3: #f1f5f9;
+  --heading: #0f172a;
+  --text: #334155;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --glow: 0 4px 24px rgba(91, 127, 255, 0.08);
+
+  padding: clamp(64px, 10vw, 120px) 20px clamp(80px, 12vw, 140px);
+  background: var(--surface);
+  color: var(--text);
+  line-height: 1.8;
+}
 .about-content-section .container{ width: min(1000px, 100% - 2rem); margin-inline: auto; }
 
 /* =========================================================
@@ -587,19 +606,19 @@ import Layout from '../layouts/Layout.astro';
   border: 2px solid;
 }
 .value-icon--harmony {
-  background: rgba(255, 184, 0, 0.12);
-  color: #FFC53D;
-  border-color: rgba(255, 184, 0, 0.4);
+  background: rgba(245, 158, 11, 0.12);
+  color: #F59E0B;
+  border-color: rgba(245, 158, 11, 0.45);
 }
 .value-icon--optimization {
-  background: rgba(91, 127, 255, 0.12);
-  color: #6E94FF;
-  border-color: rgba(91, 127, 255, 0.4);
+  background: rgba(59, 130, 246, 0.12);
+  color: #3B82F6;
+  border-color: rgba(59, 130, 246, 0.45);
 }
 .value-icon--circulation {
-  background: rgba(91, 184, 91, 0.12);
-  color: #6FCF6F;
-  border-color: rgba(91, 184, 91, 0.4);
+  background: rgba(16, 185, 129, 0.12);
+  color: #10B981;
+  border-color: rgba(16, 185, 129, 0.45);
 }
 .value-card h3 {
   font-size: 1.1rem;
@@ -651,7 +670,7 @@ import Layout from '../layouts/Layout.astro';
   right: 22px;
   font-size: clamp(48px, 6vw, 80px);
   font-weight: 800;
-  color: rgba(91, 127, 255, 0.10);
+  color: rgba(91, 127, 255, 0.16);
   font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
   letter-spacing: -0.04em;
   line-height: 1;
