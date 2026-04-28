@@ -44,13 +44,12 @@ const { id = 'particle-net' } = Astro.props;
     mouse.y = -1000;
   });
 
-  // Purple Tech パレット（Stripe / Linear / Discord風）
-  // 紫メイン + ピンク + シアン + ビオレットで現代SaaS感
+  // Anthropic Warm パレット（焼きオレンジ + ピーチ + セージ + テラコッタ）
   var COLORS = [
-    'rgba(99,91,255,',    // #635BFF Stripe purple（メイン）
-    'rgba(244,114,182,',  // #F472B6 ピンク（アクセント）
-    'rgba(6,182,212,',    // #06B6D4 シアン（クール）
-    'rgba(139,92,246,',   // #8B5CF6 ビオレット
+    'rgba(217,119,87,',   // #D97757 焼きオレンジ（メイン）
+    'rgba(232,168,124,',  // #E8A87C ピーチ
+    'rgba(107,115,85,',   // #6B7355 セージオリーブ
+    'rgba(184,92,80,',    // #B85C50 テラコッタ
   ];
 
   function createParticles() {

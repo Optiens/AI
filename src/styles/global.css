@@ -1,17 +1,17 @@
 /* ========== CSS Variables ========== */
 :root {
-  /* Brand — Purple Tech (Stripe/Linear inspired) */
-  --brand: #635BFF;
-  --brand-dim: #4F46E5;
-  --brand-2: #8B5CF6;
+  /* Brand — Anthropic Warm (burnt orange) */
+  --brand: #D97757;
+  --brand-dim: #B85C50;
+  --brand-2: #E8A87C;
 
-  /* Secondary — Cyan (cool contrast) */
-  --titanium: #06B6D4;
-  --titanium-dim: #0891B2;
-  --titanium-light: #67E8F9;
+  /* Secondary — Sage olive (natural complement) */
+  --titanium: #6B7355;
+  --titanium-dim: #4A5A45;
+  --titanium-light: #8FA088;
 
-  /* Gradient — Purple → Pink → Cyan blend (Stripe風) */
-  --brand-gradient: linear-gradient(135deg, #635BFF 0%, #8B5CF6 40%, #F472B6 100%);
+  /* Gradient — Burnt orange → Peach → Terracotta */
+  --brand-gradient: linear-gradient(135deg, #D97757 0%, #E8A87C 50%, #B85C50 100%);
 
   /* Surfaces & Text (dark theme) */
   --surface: #0a0a0a;
@@ -202,16 +202,17 @@ a:focus-visible {
 /*   Content: light-section でライト化            */
 /* ===================== */
 .light-section {
-  --surface: #ffffff;
-  --surface-2: #f8fafc;
-  --surface-card: #ffffff;
-  --surface-3: #f1f5f9;
-  --heading: #0f172a;
-  --text: #334155;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --border-hover: #cbd5e1;
-  --glow: 0 4px 24px rgba(91, 127, 255, 0.08);
+  /* Anthropic Warm: クリーム背景 + 暖かい黒 */
+  --surface: #FAF7F2;
+  --surface-2: #F0EBE0;
+  --surface-card: #FFFFFF;
+  --surface-3: #E8E0D0;
+  --heading: #1F2025;
+  --text: #4A4540;
+  --muted: #8B7E72;
+  --border: #E2D9CC;
+  --border-hover: #C9BCA8;
+  --glow: 0 4px 24px rgba(217, 119, 87, 0.10);
 
   background: var(--surface);
   color: var(--text);
