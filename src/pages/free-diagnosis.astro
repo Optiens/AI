@@ -7,7 +7,7 @@ import Layout from '../layouts/Layout.astro';
   description="かんたんなフォーム入力で、あなたの事業のどこにAIが効くか、簡易レポートを無料でお届けします。"
 >
   <main>
-    <section class="diag-hero">
+    <section class="diag-hero light-section">
       <canvas id="diag-net" class="diag-canvas"></canvas>
       <div class="container text-center" style="position:relative;z-index:1;">
         <p class="diag-eyebrow">AI DIAGNOSIS</p>
@@ -370,7 +370,7 @@ import Layout from '../layouts/Layout.astro';
   .diag-hero h1 {
     font-size: clamp(28px, 4.5vw, 42px);
     font-weight: 800;
-    color: #fff;
+    color: var(--heading);
     margin: 0 0 1rem;
     display: flex;
     align-items: center;
@@ -423,10 +423,10 @@ import Layout from '../layouts/Layout.astro';
     margin: 0;
     font-size: .85rem;
     line-height: 1.6;
-    color: rgba(255, 255, 255, .85);
+    color: var(--text);
   }
   .diag-promise-item strong {
-    color: #fff;
+    color: var(--heading);
     font-weight: 700;
   }
   @media (max-width: 880px) {
