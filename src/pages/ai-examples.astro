@@ -13,7 +13,6 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     <section class="ax-hero light-section">
       <ParticleCanvas id="ax-net" />
       <div class="container text-center" style="position:relative;z-index:1;">
-        <p class="hero-eyebrow">EXAMPLES</p>
         <h1>Optiensの事例集</h1>
         <p class="hero-sub">
           業種を問わず効く「共通6事例」と、現場特有の活用を示す「業種別11業種」。<br />
@@ -318,7 +317,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
   /* ===== Hero ===== */
   .ax-hero {
     position: relative;
-    color: #fff;
+    color: var(--text);
     padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
     background: var(--surface);
     overflow: hidden;
