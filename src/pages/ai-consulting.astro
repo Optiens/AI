@@ -148,38 +148,55 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     <section class="ac-section light-section ac-service-section">
       <div class="container">
         <h2 class="section-title reveal">サービスメニュー</h2>
-        <div class="service-grid service-grid-4 reveal-stagger">
-          <div class="ac-card gradient-border">
-            <div class="ac-badge">FREE</div>
-            <h3>無料レポート</h3>
-            <p class="ac-price">0円</p>
-            <p class="ac-desc">御社の業務にAI自動化がどれだけ効果があるか、ROIを数値で算出します。</p>
-            <ul class="ac-list">
-              <li>Webフォーム入力のみで完結</li>
-              <li>AI活用が効果的な業務TOP3</li>
-              <li>ROI試算（削減時間×時給＝月○万円）</li>
-              <li>Google Slides（URL共有）で納品</li>
-            </ul>
-          </div>
-          <div class="ac-card gradient-border">
+        <div class="service-grid service-grid-3 reveal-stagger">
+
+          <!-- 1. AI活用診断（無料/詳細を内包） -->
+          <div class="ac-card gradient-border ac-service-card">
+            <div class="ac-img-wrap">
+              <img src="/images/services/ai-diagnosis.png" alt="AI活用診断" loading="lazy" />
+            </div>
             <div class="ac-badge">STEP 1</div>
-            <h3>詳細レポート + MTG</h3>
-            <p class="ac-price">5,000円<span class="price-unit">（税別）</span></p>
-            <p class="ac-desc">より詳細な業務ヒアリングをもとに、具体的な自動化提案を作成。レポートをお読みいただいた上で、60分のオンラインMTGで質疑応答を行います。</p>
-            <ul class="ac-list">
-              <li>全業務の自動化提案（5〜7件）</li>
-              <li>自動化アーキテクチャ（構成図）</li>
-              <li>詳細コスト試算 + ROI回収期間</li>
-              <li>導入支援の費用見積もり</li>
-              <li>60分オンラインMTG（質疑応答）</li>
-              <li>Google Slides（URL共有）で納品</li>
-            </ul>
+            <h3>AI活用診断</h3>
+            <p class="ac-desc">業務にAIがどれだけ効くか、ROI（投資利益率）をレポートで算出します。無料版と詳細版の2プランです。</p>
+
+            <div class="plan-tier">
+              <div class="plan-tier-head">
+                <span class="plan-tier-name">無料版</span>
+                <span class="plan-tier-price">0円</span>
+              </div>
+              <ul class="ac-list">
+                <li>Webフォーム入力のみで完結</li>
+                <li>AI活用が効果的な業務TOP3</li>
+                <li>ROI試算（削減時間×時給＝月○万円）</li>
+                <li>Google Slides（URL共有）で納品</li>
+              </ul>
+            </div>
+
+            <div class="plan-tier plan-tier-upgrade">
+              <div class="plan-tier-head">
+                <span class="plan-tier-name">詳細版 + MTG</span>
+                <span class="plan-tier-price">5,000円<span class="price-unit">（税別）</span></span>
+              </div>
+              <ul class="ac-list">
+                <li>全業務の自動化提案（5〜7件）</li>
+                <li>自動化アーキテクチャ（構成図）</li>
+                <li>詳細コスト試算 + ROI回収期間</li>
+                <li>導入支援の費用見積もり</li>
+                <li>60分オンラインMTG（質疑応答）</li>
+                <li>Google Slides（URL共有）で納品</li>
+              </ul>
+            </div>
           </div>
-          <div class="ac-card gradient-border">
+
+          <!-- 2. 導入支援 -->
+          <div class="ac-card gradient-border ac-service-card">
+            <div class="ac-img-wrap">
+              <img src="/images/services/implementation.png" alt="導入支援" loading="lazy" />
+            </div>
             <div class="ac-badge">STEP 2</div>
             <h3>導入支援</h3>
-            <p class="ac-price">金額は内容に応じて個別にお見積もり</p>
             <p class="ac-desc">自動化システムの設計・構築・納品。仕組みごとお渡しします。プラン内に1〜2回のヒアリング＋必要に応じたad-hoc MTGを含みます。</p>
+            <p class="ac-price">金額は内容に応じて個別にお見積もり</p>
             <ul class="ac-list">
               <li>自動化ワークフローの設計・構築</li>
               <li>自動化システム一式の納品</li>
@@ -189,20 +206,34 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
               <li>プラン内に1〜2回のヒアリング＋ad-hoc MTGを含む</li>
             </ul>
           </div>
-          <div class="ac-card gradient-border">
+
+          <!-- 3. 保守 -->
+          <div class="ac-card gradient-border ac-service-card">
+            <div class="ac-img-wrap">
+              <img src="/images/services/maintenance.png" alt="保守" loading="lazy" />
+            </div>
             <div class="ac-badge">STEP 3</div>
             <h3>保守</h3>
-            <p class="ac-price">月額3万円〜<span class="price-unit">（税別）</span></p>
             <p class="ac-desc">自動化システムの改善・拡張・トラブル対応を継続サポート。</p>
-            <p class="plan-upgrade-label">ライト:</p>
-            <ul class="ac-list">
-              <li>メール・チャットでの相談対応</li>
-              <li>軽微なワークフロー改善</li>
-              <li>システムトラブル対応</li>
-              <li>月3時間までの対応を含む</li>
-            </ul>
-            <div class="plan-upgrade">
-              <p class="plan-upgrade-label">スタンダード（月額5万円）ではさらに:</p>
+
+            <div class="plan-tier">
+              <div class="plan-tier-head">
+                <span class="plan-tier-name">ライト</span>
+                <span class="plan-tier-price">月額3万円〜<span class="price-unit">（税別）</span></span>
+              </div>
+              <ul class="ac-list">
+                <li>メール・チャットでの相談対応</li>
+                <li>軽微なワークフロー改善</li>
+                <li>システムトラブル対応</li>
+                <li>月3時間までの対応を含む</li>
+              </ul>
+            </div>
+
+            <div class="plan-tier plan-tier-upgrade">
+              <div class="plan-tier-head">
+                <span class="plan-tier-name">スタンダード</span>
+                <span class="plan-tier-price">月額5万円</span>
+              </div>
               <ul class="ac-list">
                 <li>MTGの実施・参加</li>
                 <li>ワークフローの機能追加・改善</li>
@@ -211,6 +242,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
               </ul>
             </div>
           </div>
+
         </div>
 
         <!-- その他のメニュー -->
@@ -558,11 +590,83 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
   .service-grid-4 {
     grid-template-columns: repeat(4, 1fr);
   }
+  .service-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
   @media (max-width: 1024px) {
     .service-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .service-grid-3 { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
     .service-grid-4 { grid-template-columns: 1fr; }
+  }
+
+  /* ===== Service card with image (HOME と統一) ===== */
+  .ac-service-card {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 24px 28px;
+  }
+  .ac-img-wrap {
+    width: 100%;
+    max-width: 180px;
+    aspect-ratio: 1;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .35s ease;
+  }
+  .ac-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .ac-service-card:hover .ac-img-wrap {
+    transform: scale(1.04);
+  }
+  .ac-service-card .ac-badge {
+    align-self: flex-start;
+  }
+  .ac-service-card h3 {
+    font-size: 1.15rem;
+    margin: 4px 0 10px;
+  }
+  .ac-service-card .ac-desc {
+    margin-bottom: 16px;
+  }
+
+  /* プラン階層（無料版/詳細版、ライト/スタンダード等） */
+  .plan-tier {
+    margin-top: 14px;
+    padding: 14px 14px 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .plan-tier-upgrade {
+    border-color: rgba(162, 89, 255, .3);
+    background: rgba(162, 89, 255, .04);
+  }
+  .plan-tier-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .plan-tier-name {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: .04em;
+  }
+  .plan-tier-price {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--heading);
   }
   /* Extra menu (有償要件定義 / スポット相談) */
   .extra-menu {
