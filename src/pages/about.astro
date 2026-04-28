@@ -4,17 +4,17 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="会社情報 | Optiens" description="合同会社Optiens（オプティエンス）の会社情報。AI活用支援と室内IoT水耕栽培の2事業で、小規模事業者の業務効率化と持続可能な農業の仕組みづくりに取り組んでいます。">
   <main>
-    <!-- ===== Hero（ビジョン×バリュー融合） ===== -->
+    <!-- ===== Hero ===== -->
     <section class="about-hero-section light-section">
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <div class="hero-content">
-        <div class="container text-center">
-          <h1 class="hero-statement">
-            時間と可能性を広げる手助けを。
+        <div class="hero-text-block">
+          <p class="hero-eyebrow">NEXT STEP WITH AI</p>
+          <h1 class="hero-title">
+            MAKE AI NATIVE<br/>
+            TO YOUR BUSINESS.
           </h1>
-          <p class="hero-statement-sub">
-            土台にあるのは、調和・最適化・循環。
-          </p>
+          <p class="hero-sub">AIを事業の中心に。</p>
         </div>
       </div>
     </section>
@@ -362,38 +362,39 @@ import Layout from '../layouts/Layout.astro';
 .about-hero-section .hero-content{
   position:relative;
   z-index:2;
-  padding: 0 20px;
-  width:100%;
-  text-align:center;
+  width: min(900px, 100% - 6rem);
+  margin-inline: auto;
+  padding: 20px;
+}
+.about-hero-section .hero-text-block{
+  width: fit-content;
+  margin: 0 auto;
 }
 .about-hero-section .hero-eyebrow{
-  font-size: clamp(11px, 1.1vw, 13px);
-  letter-spacing: .35em;
-  font-weight: 500;
-  color: var(--brand);
-  margin: 0 0 24px;
+  display: block;
+  margin: 0 0 1rem;
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing: .3em;
   text-transform: uppercase;
+  color: var(--brand);
+  font-weight: 500;
+  text-align: left;
 }
-.about-hero-section .hero-statement{
-  font-size: clamp(1.5rem, 4vw, 2.4rem);
+.about-hero-section .hero-title{
+  font-size: clamp(30px, 5vw, 60px);
   font-weight: 800;
-  line-height: 1.4;
+  line-height: 1.12;
   letter-spacing: -.02em;
   color: var(--heading);
-  margin: 0 auto;
-  max-width: 880px;
+  margin: 0 0 1rem;
+  text-align: left;
 }
-.about-hero-section .hero-statement strong{
-  color: var(--brand);
-  font-weight: 800;
-}
-.about-hero-section .hero-statement-sub{
-  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-  line-height: 1.85;
-  max-width: 720px;
-  margin: clamp(20px, 3vw, 32px) auto 0;
+.about-hero-section .hero-sub{
+  font-size: clamp(15px, 2vw, 18px);
   color: var(--muted);
-  letter-spacing: .03em;
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
 }
 .sp-only{ display: none; }
 @media (max-width: 640px){

@@ -12,8 +12,8 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     <section class="ac-hero light-section">
       <ParticleCanvas id="ac-net" />
       <div class="container text-center" style="position:relative;z-index:1;">
-        <h1>その仕事、本当に<br class="sp-only" />あなたがやるべきですか？</h1>
-        <p class="hero-sub">月20時間の雑務をAIエージェントに。<br />つくった時間で、あなたにしかできないことを。</p>
+        <h1>時間と可能性を<br class="sp-only" />広げる手助けを。</h1>
+        <p class="hero-sub">雑務はAIエージェントに。<br />あなたはあなたにしか出来ないことを。</p>
         <a href="/free-diagnosis" class="btn-primary hero-cta">無料AI診断を受ける</a>
       </div>
     </section>
@@ -266,6 +266,21 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
               <p class="extra-menu-desc">過去にご契約いただいた方が、検収後3ヶ月以内に再度ご相談される場合のメニューです。新規業務の追加検討・運用上の疑問など、単発でご利用いただけます。</p>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 差別化ストリップ：カスタムUI構築力 ===== -->
+    <section class="ac-section light-section custom-strip-section">
+      <div class="container">
+        <div class="custom-strip reveal">
+          <p class="custom-strip-eyebrow">OUR EDGE</p>
+          <h2 class="custom-strip-title">業界標準SaaSに業務を合わせる必要はありません。</h2>
+          <p class="custom-strip-desc">
+            業界では既製ツール（Notion・kintone等）をそのまま使う提案が一般的ですが、<br class="pc-only" />
+            弊社はクラウドDB + AIエージェントの構成で、御社の業務に合わせた専用システムを構築します。<br class="pc-only" />
+            月額ライセンス料の発生しない、御社所有の仕組みです。
+          </p>
         </div>
       </div>
     </section>
@@ -750,10 +765,51 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
   .ac-custom-section { background: var(--surface-2); }
   .ac-teaser-section { background: var(--surface); }
   .ac-service-section { background: var(--surface-2); }
-  .ac-examples-section { background: var(--surface); }
-  .ac-usecase-section { background: var(--surface-2); }
-  .ac-reason-section { background: var(--surface); }
-  .ac-faq-section { background: var(--surface-2); }
+  .custom-strip-section { background: var(--surface); }
+  .ac-examples-section { background: var(--surface-2); }
+  .ac-usecase-section { background: var(--surface); }
+  .ac-reason-section { background: var(--surface-2); }
+  .ac-faq-section { background: var(--surface); }
+
+  /* ===== Differentiation strip ===== */
+  .custom-strip {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+    padding: clamp(32px, 5vw, 48px) clamp(20px, 3vw, 32px);
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .custom-strip-eyebrow {
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin: 0 0 16px;
+    text-transform: uppercase;
+  }
+  .custom-strip-title {
+    font-size: clamp(18px, 2.6vw, 24px);
+    font-weight: 700;
+    color: var(--heading);
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+  .custom-strip-desc {
+    font-size: clamp(13px, 1.5vw, 15px);
+    color: var(--muted);
+    line-height: 1.9;
+    margin: 0;
+  }
+  .custom-strip-desc strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .pc-only { display: inline; }
+  @media (max-width: 768px) {
+    .pc-only { display: none; }
+  }
 
   /* ===== Examples banner (link to /ai-examples) ===== */
   .examples-banner {
