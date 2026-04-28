@@ -1,17 +1,17 @@
 /* ========== CSS Variables ========== */
 :root {
-  /* Brand — Purple Tech (Stripe/Linear inspired) */
-  --brand: #635BFF;
-  --brand-dim: #4F46E5;
-  --brand-2: #8B5CF6;
+  /* Brand — Modern Vibrant (Figma inspired) */
+  --brand: #A259FF;
+  --brand-dim: #7B40CC;
+  --brand-2: #C794FF;
 
-  /* Secondary — Cyan (cool contrast) */
-  --titanium: #06B6D4;
-  --titanium-dim: #0891B2;
-  --titanium-light: #67E8F9;
+  /* Secondary — Figma blue */
+  --titanium: #1ABCFE;
+  --titanium-dim: #0A99D6;
+  --titanium-light: #66D5FF;
 
-  /* Gradient — Purple → Pink → Cyan blend (Stripe風) */
-  --brand-gradient: linear-gradient(135deg, #635BFF 0%, #8B5CF6 40%, #F472B6 100%);
+  /* Gradient — Purple → Blue → Green (Figma風カラフル) */
+  --brand-gradient: linear-gradient(135deg, #A259FF 0%, #1ABCFE 50%, #0ACF83 100%);
 
   /* Surfaces & Text (dark theme) */
   --surface: #0a0a0a;
@@ -202,17 +202,17 @@ a:focus-visible {
 /*   Content: light-section でライト化            */
 /* ===================== */
 .light-section {
-  /* Purple Tech: 純白背景 + クリーンニュートラル */
+  /* Modern Vibrant: 純白基調 + やや軽快なグレー */
   --surface: #FFFFFF;
-  --surface-2: #F8FAFC;
+  --surface-2: #F9FAFB;
   --surface-card: #FFFFFF;
-  --surface-3: #F1F5F9;
-  --heading: #0F172A;
-  --text: #334155;
-  --muted: #64748B;
-  --border: #E2E8F0;
-  --border-hover: #CBD5E1;
-  --glow: 0 4px 24px rgba(99, 91, 255, 0.10);
+  --surface-3: #F3F4F6;
+  --heading: #111827;
+  --text: #374151;
+  --muted: #6B7280;
+  --border: #E5E7EB;
+  --border-hover: #D1D5DB;
+  --glow: 0 4px 24px rgba(162, 89, 255, 0.10);
 
   background: var(--surface);
   color: var(--text);
