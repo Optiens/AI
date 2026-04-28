@@ -1,585 +1,1133 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ParticleCanvas from '../components/ParticleCanvas.astro';
 ---
 
 <Layout
-  title="Optiens | AIで事業をつくる会社"
+  title="Optiens | AI活用支援サービス｜小規模事業者の業務自動化"
   description="エンタープライズシステム10年超の経験を、小さな事業に最適化。無料AI診断から導入・保守まで、AIエージェントによる業務自動化を伴走支援します。"
 >
   <main>
-    <!-- ===== ヒーロー ===== -->
-    <section class="hero light-section">
-      <canvas id="hero-net" class="hero-canvas"></canvas>
-      <div class="hero-content">
-        <div class="hero-text-block">
-          <p class="hero-eyebrow">NEXT STEP WITH AI</p>
-          <h1 class="hero-title">
-            MAKE AI NATIVE<br/>
-            TO YOUR BUSINESS.
-          </h1>
-          <p class="hero-sub">AIを事業の中心に。</p>
+    <!-- ヒーロー -->
+    <section class="ac-hero light-section">
+      <ParticleCanvas id="ac-net" />
+      <div class="container text-center" style="position:relative;z-index:1;">
+        <h1>時間と可能性を<br class="sp-only" />広げる手助けを。</h1>
+        <p class="hero-sub">雑務はAIエージェントに。<br />あなたはあなたにしか出来ないことを。</p>
+        <a href="/free-diagnosis" class="btn-primary hero-cta">無料AI診断を受ける</a>
+      </div>
+    </section>
+
+    <!-- こんなお悩みありませんか？ -->
+    <section class="ac-section light-section ac-problem-section">
+      <div class="container">
+        <h2 class="section-title reveal">こんなお悩みありませんか？</h2>
+        <div class="problem-grid reveal-stagger">
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-clock"></i></div>
+            <p>事務作業やメール対応に<strong>時間を取られすぎている</strong></p>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-language"></i></div>
+            <p>海外からの問い合わせに<strong>多言語対応が追いつかない</strong></p>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+            <p>SNS投稿を<strong>続ける時間がない</strong></p>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-robot"></i></div>
+            <p>AIに興味はあるが<strong>何から始めればいいか分からない</strong></p>
+          </div>
         </div>
       </div>
     </section>
 
-    <script is:inline>
-    (function() {
-      const canvas = document.getElementById('hero-net');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let w, h, particles, animId;
-      const CONNECT_DIST = 140;
-      const MOUSE_DIST = 180;
-      const PARTICLE_COUNT = 80;
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      let mouse = { x: -1000, y: -1000 };
-
-      function resize() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = rect.width;
-        h = rect.height;
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
-        canvas.style.width = w + 'px';
-        canvas.style.height = h + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      }
-
-      // Modern Vibrant パレット（Figma 4色：紫・青・緑・オレンジ）
-      const COLORS = [
-        'rgba(162,89,255,',   // #A259FF Figma purple（メイン）
-        'rgba(26,188,254,',   // #1ABCFE Figma blue
-        'rgba(10,207,131,',   // #0ACF83 Figma green
-        'rgba(242,78,30,',    // #F24E1E Figma orange/red
-      ];
-
-      function createParticles() {
-        particles = [];
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-          particles.push({
-            x: Math.random() * w,
-            y: Math.random() * h,
-            vx: (Math.random() - 0.5) * 0.4,
-            vy: (Math.random() - 0.5) * 0.4,
-            r: Math.random() * 1.5 + 0.5,
-            color: COLORS[i % COLORS.length],
-          });
-        }
-      }
-
-      // マウス位置の追跡（ヒーロー要素全体で検知）
-      const heroEl = canvas.parentElement;
-      heroEl.addEventListener('mousemove', function(e) {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-      });
-      heroEl.addEventListener('mouseleave', function() {
-        mouse.x = -1000;
-        mouse.y = -1000;
-      });
-
-      function draw() {
-        ctx.clearRect(0, 0, w, h);
-
-        // Draw connections
-        for (let i = 0; i < particles.length; i++) {
-          for (let j = i + 1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < CONNECT_DIST) {
-              const alpha = (1 - dist / CONNECT_DIST) * 0.15;
-              ctx.strokeStyle = particles[i].color + alpha + ')';
-              ctx.lineWidth = 0.5;
-              ctx.beginPath();
-              ctx.moveTo(particles[i].x, particles[i].y);
-              ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.stroke();
-            }
-          }
-
-          // Draw line to mouse (if nearby)
-          const p = particles[i];
-          const mdx = p.x - mouse.x;
-          const mdy = p.y - mouse.y;
-          const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
-          if (mDist < MOUSE_DIST) {
-            const opacity = (1 - mDist / MOUSE_DIST) * 0.4;
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = p.color + opacity + ')';
-            ctx.lineWidth = 0.8;
-            ctx.stroke();
-          }
-        }
-
-        // Draw particles
-        for (const p of particles) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = p.color + '0.5)';
-          ctx.fill();
-        }
-
-        // Move particles
-        if (!reducedMotion) {
-          for (const p of particles) {
-            p.x += p.vx;
-            p.y += p.vy;
-            if (p.x < 0 || p.x > w) p.vx *= -1;
-            if (p.y < 0 || p.y > h) p.vy *= -1;
-          }
-        }
-
-        animId = requestAnimationFrame(draw);
-      }
-
-      function init() {
-        resize();
-        createParticles();
-        draw();
-      }
-
-      window.addEventListener('resize', () => {
-        resize();
-      });
-
-      init();
-    })();
-    </script>
-
-    <!-- ===== サービス ===== -->
-    <section class="section service-section light-section">
+    <!-- Optiensにできること -->
+    <section class="ac-section light-section ac-value-section">
       <div class="container">
-        <h2 class="section-heading reveal">SERVICES</h2>
-        <div class="service-visual-grid reveal-stagger">
-          <a href="/free-diagnosis" class="sv-card gradient-border">
-            <div class="sv-img-wrap">
+        <h2 class="section-title reveal">Optiensにできること</h2>
+        <p class="section-sub reveal">あなたの事業に合った「最適な活用法」を一緒に見つけます。</p>
+        <div class="value-grid reveal-stagger">
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+            <h3>時間を生み出す</h3>
+            <ul>
+              <li>定型業務の自動化</li>
+              <li>問い合わせ対応の効率化</li>
+              <li>書類作成のスピードアップ</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h3>売上を育てる</h3>
+            <ul>
+              <li>顧客に合わせたコミュニケーション</li>
+              <li>SNS・Web発信の継続化</li>
+              <li>多言語対応で海外集客</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-database"></i></div>
+            <h3>情報を整える</h3>
+            <ul>
+              <li>バラバラなデータの一元化</li>
+              <li>顧客情報の活用</li>
+              <li>経営判断のための可視化</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 強み：カスタムUI構築力 -->
+    <section class="ac-section light-section ac-custom-section">
+      <div class="container">
+        <h2 class="section-title reveal">業務に合わせた、御社専用の仕組み</h2>
+        <p class="section-sub reveal">SaaSに業務を合わせるのではなく、業務にUIを合わせます。</p>
+        <div class="custom-grid reveal-stagger">
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
+            <h3>業界標準SaaSに縛られない</h3>
+            <p>業界では既製ツール（Notion・kintone等）をそのまま使う提案が一般的ですが、画面や項目を業務に合わせきれず運用が形骸化することがあります。弊社は<strong>クラウドDB + 高速Webフロントエンド + AIエージェント</strong>の構成で、御社の業務フローに沿った画面を設計・構築します。詳細な技術構成は有償レポートまたはご相談時にご説明します。</p>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-key"></i></div>
+            <h3>月額ライセンス料ゼロの自社所有</h3>
+            <p>納品するシステムは御社の所有物です。利用人数が増えてもSaaSのような従量ライセンス料は発生しません。データは御社専用のクラウドDBに格納され、ベンダーロックインなく将来の移行も自由です。</p>
+          </div>
+          <div class="ac-card gradient-border">
+            <div class="ac-icon"><i class="fa-solid fa-share-nodes"></i></div>
+            <h3>外部メンバーとの共有も簡単</h3>
+            <p>営業パートナー・外注先・現場スタッフとの情報共有は、URLと認証だけで完結します。スマホ・PC・タブレットそれぞれに最適化された画面を、御社都合で設計できます。</p>
+          </div>
+        </div>
+
+        <div class="custom-showcase reveal">
+          <div class="custom-showcase-icon"><i class="fa-solid fa-flask"></i></div>
+          <div class="custom-showcase-text">
+            <p class="custom-showcase-title">弊社自身がAIエージェントで社内ツールを運用しています</p>
+            <p class="custom-showcase-desc">CRM・書類添削ツール・水耕栽培IoTダッシュボードなどを、弊社自身がAIエージェントを使って社内運用しています。日々の運用で得た知見をベースに、お客様の業務に合った構成を案件ごとに設計します。技術選定はその時々の最適解を選びますが、設計と運用に対する考え方は一貫しています。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 共通AI事例ティーザー -->
+    <section class="ac-section light-section ac-teaser-section">
+      <div class="container">
+        <h2 class="section-title reveal">業種を問わず効く、6つの共通AI事例</h2>
+        <p class="section-sub reveal">飲食でも建設でも、AIで解ける課題には共通の型があります。代表的な3つを抜粋で紹介します。</p>
+        <div class="teaser-grid reveal-stagger">
+          <div class="teaser-card gradient-border">
+            <div class="teaser-num">01</div>
+            <div class="teaser-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
+            <h3>ファイル添付AI読み取り</h3>
+            <p>見積書・契約書・議事録などをアップロードすると、AIが内容を読み取り台帳に整理。手入力の転記時間がそのまま削減されます。</p>
+          </div>
+          <div class="teaser-card gradient-border">
+            <div class="teaser-num">02</div>
+            <div class="teaser-icon"><i class="fa-solid fa-table-columns"></i></div>
+            <h3>業務に合わせたカスタム管理画面</h3>
+            <p>SaaSに業務を合わせるのではなく、業務に画面を合わせる。月額ライセンス料の発生しない、御社所有の専用管理画面を構築します。</p>
+          </div>
+          <div class="teaser-card gradient-border">
+            <div class="teaser-num">05</div>
+            <div class="teaser-icon"><i class="fa-solid fa-people-group"></i></div>
+            <h3>AIエージェント分業体制</h3>
+            <p>役割ごとに専門のAIエージェントを用意し連携させる仕組み。少人数の事業者ほど分業設計の効果が大きく出ます。</p>
+          </div>
+        </div>
+        <div class="teaser-link-wrap reveal">
+          <a href="/ai-examples" class="teaser-link">他の共通事例を見る <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- サービスメニュー -->
+    <section class="ac-section light-section ac-service-section">
+      <div class="container">
+        <h2 class="section-title reveal">サービスメニュー</h2>
+        <div class="service-grid service-grid-3 reveal-stagger">
+
+          <!-- 1. AI活用診断（無料/詳細を内包） -->
+          <div class="ac-card gradient-border ac-service-card">
+            <div class="ac-img-wrap">
               <img src="/images/services/ai-diagnosis.png" alt="AI活用診断" loading="lazy" />
             </div>
+            <div class="ac-badge">STEP 1</div>
             <h3>AI活用診断</h3>
-            <p>業務にAIがどれだけ効くか、ROI（投資利益率）を算出します。無料版と有料版をご用意しています。</p>
-            <span class="sv-arrow">→</span>
-          </a>
-          <a href="/implementation" class="sv-card gradient-border">
-            <div class="sv-img-wrap">
+            <p class="ac-desc">業務にAIがどれだけ効くか、ROI（投資利益率）をレポートで算出します。無料版と詳細版の2プランです。</p>
+
+            <div class="plan-tier">
+              <div class="plan-tier-head">
+                <span class="plan-tier-name">無料版</span>
+                <span class="plan-tier-price">0円</span>
+              </div>
+              <ul class="ac-list">
+                <li>Webフォーム入力のみで完結</li>
+                <li>AI活用が効果的な業務TOP3</li>
+                <li>ROI試算（削減時間×時給＝月○万円）</li>
+                <li>Google Slides（URL共有）で納品</li>
+              </ul>
+            </div>
+
+            <div class="plan-tier plan-tier-upgrade">
+              <div class="plan-tier-head">
+                <span class="plan-tier-name">詳細版 + MTG</span>
+                <span class="plan-tier-price">5,000円<span class="price-unit">（税別）</span></span>
+              </div>
+              <ul class="ac-list">
+                <li>全業務の自動化提案（5〜7件）</li>
+                <li>自動化アーキテクチャ（構成図）</li>
+                <li>詳細コスト試算 + ROI回収期間</li>
+                <li>導入支援の費用見積もり</li>
+                <li>60分オンラインMTG（質疑応答）</li>
+                <li>Google Slides（URL共有）で納品</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 2. 導入支援 -->
+          <div class="ac-card gradient-border ac-service-card">
+            <div class="ac-img-wrap">
               <img src="/images/services/implementation.png" alt="導入支援" loading="lazy" />
             </div>
+            <div class="ac-badge">STEP 2</div>
             <h3>導入支援</h3>
-            <p>業務を自動でこなすAIの仕組みを、設計から構築・納品まで対応します。</p>
-            <span class="sv-arrow">→</span>
-          </a>
-          <a href="/maintenance" class="sv-card gradient-border">
-            <div class="sv-img-wrap">
+            <p class="ac-desc">自動化システムの設計・構築・納品。仕組みごとお渡しします。プラン内に1〜2回のヒアリング＋必要に応じたad-hoc MTGを含みます。</p>
+            <p class="ac-price">金額は内容に応じて個別にお見積もり</p>
+            <ul class="ac-list">
+              <li>自動化ワークフローの設計・構築</li>
+              <li>自動化システム一式の納品</li>
+              <li>操作手順の共有</li>
+              <li>セットアップ支援・初期動作確認</li>
+              <li>ランニングコストを抑えた運用設計</li>
+              <li>プラン内に1〜2回のヒアリング＋ad-hoc MTGを含む</li>
+            </ul>
+          </div>
+
+          <!-- 3. 保守 -->
+          <div class="ac-card gradient-border ac-service-card">
+            <div class="ac-img-wrap">
               <img src="/images/services/maintenance.png" alt="保守" loading="lazy" />
             </div>
+            <div class="ac-badge">STEP 3</div>
             <h3>保守</h3>
-            <p>導入後の機能追加やトラブルに対応。新しい業務の自動化もご相談いただけます。</p>
-            <span class="sv-arrow">→</span>
-          </a>
+            <p class="ac-desc">自動化システムの改善・拡張・トラブル対応を継続サポート。</p>
+
+            <div class="plan-tier">
+              <div class="plan-tier-head">
+                <span class="plan-tier-name">ライト</span>
+                <span class="plan-tier-price">月額3万円〜<span class="price-unit">（税別）</span></span>
+              </div>
+              <ul class="ac-list">
+                <li>メール・チャットでの相談対応</li>
+                <li>軽微なワークフロー改善</li>
+                <li>システムトラブル対応</li>
+                <li>月3時間までの対応を含む</li>
+              </ul>
+            </div>
+
+            <div class="plan-tier plan-tier-upgrade">
+              <div class="plan-tier-head">
+                <span class="plan-tier-name">スタンダード</span>
+                <span class="plan-tier-price">月額5万円</span>
+              </div>
+              <ul class="ac-list">
+                <li>MTGの実施・参加</li>
+                <li>ワークフローの機能追加・改善</li>
+                <li>新規業務の自動化検討・設計</li>
+                <li>月8時間までの対応を含む</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- その他のメニュー -->
+        <div class="extra-menu reveal">
+          <h3 class="extra-menu-title">その他のメニュー</h3>
+          <div class="extra-menu-grid">
+            <div class="extra-menu-card">
+              <div class="extra-menu-head">
+                <span class="extra-menu-badge">直接導入希望</span>
+                <h4>有償要件定義</h4>
+              </div>
+              <p class="extra-menu-price">30,000円<span class="price-unit">（税別）</span></p>
+              <p class="extra-menu-desc">無料診断を経ずに、直接導入支援をご希望の方向け。業務ヒアリング・要件整理・導入提案書（3〜5p）の作成までを行います。導入支援に進んだ場合、本費用は<strong>初期費用に全額充当</strong>します。</p>
+            </div>
+            <div class="extra-menu-card">
+              <div class="extra-menu-head">
+                <span class="extra-menu-badge">過去顧客向け</span>
+                <h4>スポット相談</h4>
+              </div>
+              <p class="extra-menu-price">18,000円<span class="price-unit">／90分（税別）</span></p>
+              <p class="extra-menu-desc">過去にご契約いただいた方が、検収後3ヶ月以内に再度ご相談される場合のメニューです。新規業務の追加検討・運用上の疑問など、単発でご利用いただけます。</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== Examples Teaser ===== -->
-    <section class="section examples-teaser-section light-section">
+    <!-- ===== 差別化ストリップ：カスタムUI構築力 ===== -->
+    <section class="ac-section light-section custom-strip-section">
       <div class="container">
-        <h2 class="section-heading reveal">EXAMPLES</h2>
-        <div class="examples-teaser reveal">
-          <p class="examples-teaser-title">11業種の活用事例 + 業種を問わない共通パターン</p>
-          <p class="examples-teaser-desc">
-            業種別11業種の具体的な活用例と、業種を問わず効く6つの共通AI事例を1ページにまとめています。<br class="pc-only" />
-            御社に近い業種・近い課題を起点にご覧ください。
+        <div class="custom-strip reveal">
+          <p class="custom-strip-eyebrow">OUR EDGE</p>
+          <h2 class="custom-strip-title">業界標準SaaSに業務を合わせる必要はありません。</h2>
+          <p class="custom-strip-desc">
+            業界では既製ツール（Notion・kintone等）をそのまま使う提案が一般的ですが、<br class="pc-only" />
+            弊社はクラウドDB + AIエージェントの構成で、御社の業務に合わせた専用システムを構築します。<br class="pc-only" />
+            月額ライセンス料の発生しない、御社所有の仕組みです。
           </p>
-          <a href="/ai-examples" class="link-arrow">事例を見る →</a>
         </div>
       </div>
     </section>
 
-    <!-- ===== Why Optiens — 大きなキーワード ===== -->
-    <section class="section why-section light-section">
+    <!-- 事例集への導線バナー -->
+    <section class="ac-section light-section ac-examples-section" id="samples">
       <div class="container">
-        <div class="why-grid">
-          <div class="why-item reveal">
-            <span class="why-num">10+</span>
-            <p>年のエンタープライズ<br/>システム開発実績</p>
+        <div class="examples-banner reveal">
+          <div class="examples-banner-icon"><i class="fa-solid fa-book-open"></i></div>
+          <div class="examples-banner-text">
+            <h2 class="examples-banner-title">業種別の活用事例も用意しています</h2>
+            <p class="examples-banner-desc">11業種のサンプルレポートと、業種を問わず効く共通6事例を1ページにまとめています。御社に近い業種・近い課題を起点にご覧ください。</p>
           </div>
-          <div class="why-item reveal">
-            <span class="why-num">AI</span>
-            <p>を自社事業で<br/>日常的に活用</p>
-          </div>
-          <div class="why-item reveal">
-            <span class="why-num">全国</span>
-            <p>どこからでも<br/>オンラインで対応</p>
-          </div>
-        </div>
-        <div class="text-center reveal" style="margin-top: 48px;">
-          <a href="/about" class="link-arrow">Optiensについて詳しく →</a>
+          <a href="/ai-examples" class="btn-primary examples-banner-btn">事例集を見る <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
     </section>
 
-    <!-- ===== CTA ===== -->
-    <section class="cta-section">
-      <div class="cta-glow"></div>
+    <!-- 業種別の活用例 -->
+    <section class="ac-section light-section ac-usecase-section">
+      <div class="container">
+        <h2 class="section-title reveal">業種別の活用例</h2>
+        <p class="section-sub reveal">実際のサービスは共通でも、あなたの業種に合わせた提案をします。</p>
+        <div class="usecase-grid reveal-stagger">
+          <div class="ac-card gradient-border">
+            <h3><i class="fa-solid fa-bed"></i> ペンション・宿泊業</h3>
+            <ul>
+              <li>多言語での問い合わせ対応自動化</li>
+              <li>宿泊プラン紹介文の量産</li>
+              <li>口コミ分析・返信の効率化</li>
+              <li>リピーターへの自動フォローアップ</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <h3><i class="fa-solid fa-utensils"></i> 飲食・小売業</h3>
+            <ul>
+              <li>SNS投稿の下書き自動生成</li>
+              <li>メニュー説明文の多言語化</li>
+              <li>LINE公式の一次応答自動化</li>
+              <li>在庫・発注の効率化</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <h3><i class="fa-solid fa-hammer"></i> 工務店・管理業</h3>
+            <ul>
+              <li>見積書・提案書の下書き自動化</li>
+              <li>問い合わせメールの分類・振り分け</li>
+              <li>点検報告書のテンプレート化</li>
+              <li>顧客データベースの整理</li>
+            </ul>
+          </div>
+          <div class="ac-card gradient-border">
+            <h3><i class="fa-solid fa-seedling"></i> 農家・加工所</h3>
+            <ul>
+              <li>複数販路の在庫・出荷管理</li>
+              <li>定期便顧客への連絡自動化</li>
+              <li>商品説明文・ラベル文の作成</li>
+              <li>補助金情報の収集・整理</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 選ばれる理由 -->
+    <section class="ac-section light-section ac-reason-section">
+      <div class="container">
+        <h2 class="section-title reveal">Optiensが選ばれる理由</h2>
+        <div class="reason-grid">
+          <div class="reason-item reveal">
+            <span class="reason-num">01</span>
+            <div class="reason-content">
+              <h3>地域の事業を理解している</h3>
+              <p>地域の事業者の実情を理解した、現実的な提案ができます。観光・農業・飲食——その土地ならではの課題に向き合います。</p>
+            </div>
+          </div>
+          <div class="reason-item reveal">
+            <span class="reason-num">02</span>
+            <div class="reason-content">
+              <h3>大企業向けのシステム構築経験を、小さな事業に</h3>
+              <p>Salesforceエンジニアとして培った業務分析力で、小規模事業者に適したシンプルな仕組みを設計します。大企業の手法を、あなたの規模に最適化して届けます。</p>
+            </div>
+          </div>
+          <div class="reason-item reveal">
+            <span class="reason-num">03</span>
+            <div class="reason-content">
+              <h3>導入で終わらない。人を育てる支援</h3>
+              <p>ツールを入れて終わりではなく、あなた自身やスタッフがAIを使いこなせる状態を目指します。自動化できるところは自動化し、人は判断と創造に集中する——そんな組織づくりを伴走します。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="ac-section light-section ac-faq-section">
+      <div class="container">
+        <h2 class="section-title reveal">よくあるご質問</h2>
+        <div class="faq-list reveal">
+          <details class="faq-item">
+            <summary>AIエージェントとは何ですか？ChatGPTとは違うのですか？</summary>
+            <p>ChatGPTのような対話型AIは「質問すると答えてくれる」ツールです。一方、AIエージェントは「指示を出すと、複数の作業を自律的にこなす」仕組みです。例えば、対話型AIは「メールの文面を考えて」と頼めば文面を返しますが、AIエージェントは「受信メールを確認し、内容に応じて返信を下書きし、対応が必要なものだけ通知する」といった一連の業務を自動で実行します。Optiensが構築するのは、このAIエージェントによる業務自動化の仕組みです。</p>
+          </details>
+          <details class="faq-item">
+            <summary>AIオーケストレーションとは何ですか？</summary>
+            <p>複数のAIエージェントを連携させ、ひとつの業務フローとして自動運用する仕組みです。例えば、「問い合わせメールを受信→内容を分類→回答を下書き→担当者に通知」という流れを、それぞれ専門のAIエージェントが分担して処理します。指揮者がオーケストラをまとめるように、AIエージェント同士を協調させることで、単体では難しい複雑な業務も自動化できます。</p>
+          </details>
+          <details class="faq-item">
+            <summary>一人で運営されているとのことですが、大丈夫でしょうか？</summary>
+            <p>代表自身がAIを日常的に活用して業務を行っているため、少人数でも高い生産性を実現しています。一社一社に丁寧に向き合い、大企業にはできないスピード感と柔軟さで対応します。</p>
+          </details>
+          <details class="faq-item">
+            <summary>AIの知識がまったくない私でも大丈夫ですか？</summary>
+            <p>「AIって何？」からのスタートでも問題ありません。必要に応じて専門用語もお伝えしますが、御社の業務に置き換えて具体的にご説明します。</p>
+          </details>
+          <details class="faq-item">
+            <summary>本当に効果が出るか不安です。</summary>
+            <p>まずは無料レポートでROI（投資対効果）を数値で試算します。効果が見込める場合は、5,000円の詳細レポートで具体的な自動化提案と導入費用をご確認いただけます。効果が見込めない場合は正直にお伝えします。</p>
+          </details>
+          <details class="faq-item">
+            <summary>対面での対応は可能ですか？</summary>
+            <p>山梨県内は対面訪問が可能です。それ以外のエリアはオンライン（Google Meet）で対応いたします。対面・オンラインとも診断内容に差はありません。MTGは自動文字起こしにより議事録を作成し、共有いたします。</p>
+          </details>
+          <details class="faq-item">
+            <summary>セキュリティは大丈夫ですか？</summary>
+            <p>AIエージェントはAPI経由で動作し、入力データがAIの学習に使用されることはありません。お預かりする業務データは暗号化された通信で処理され、外部に共有されることはありません。当社はIPA「SECURITY ACTION」を宣言し、情報セキュリティ対策に取り組んでいます。</p>
+          </details>
+          <details class="faq-item">
+            <summary>パソコンを持っていないのですが、導入できますか？</summary>
+            <p>お手元にパソコンがなくても導入は可能です。ただし、業務内容によってはパソコンが必要な操作もあるため、詳細レポートの段階でお客様の環境に合った運用方法をご提案します。パソコンをお持ちでない場合は、システムの管理・調整を当社が行う保守プランのご契約をお勧めいたします。</p>
+          </details>
+          <details class="faq-item">
+            <summary>契約期間の縛りはありますか？</summary>
+            <p>保守は月単位の契約です。効果を感じられなければいつでも解約可能。導入支援で構築したシステムはそのままお使いいただけます。まずは無料レポートから始めていただくことをお勧めしています。</p>
+          </details>
+          <details class="faq-item">
+            <summary>どんな業種に対応していますか？</summary>
+            <p>士業・飲食・宿泊・EC・建設・農業・自治体など、幅広い業種に対応しています。11業種のサンプルレポートを公開していますので、近い業種の事例をぜひご覧ください。記載のない業種でもお気軽にご相談ください。</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="ac-cta-section">
+      <div class="ac-cta-glow"></div>
       <div class="container text-center" style="position:relative;z-index:1;">
-        <h2 class="reveal">まずは無料AI診断から</h2>
-        <p class="reveal">フォーム入力だけで、あなたの事業に合った<br/>AI活用ポイントをレポートでお届けします。</p>
-        <a href="/free-diagnosis" class="btn-primary cta-btn reveal">無料AI診断を受ける</a>
+        <h2 class="reveal">まずは気軽にご相談ください</h2>
+        <p class="reveal">
+          「うちの業務にAIって使えるの？」<br />
+          「何から始めればいいか分からない」<br />
+          そんな状態からで大丈夫です。初回相談は無料です。
+        </p>
+        <a href="/free-diagnosis" class="btn-primary reveal">無料AI診断を受ける</a>
       </div>
     </section>
   </main>
 </Layout>
 
 <style>
-/* =========================================
-   共通
-========================================= */
-.container {
-  width: min(1000px, 100% - 2rem);
-  margin-inline: auto;
-}
-.text-center { text-align: center; }
-
-.section {
-  padding: clamp(80px, 12vw, 120px) 20px;
-}
-
-.section-heading {
-  font-size: clamp(12px, 1.4vw, 14px);
-  font-weight: 600;
-  letter-spacing: .25em;
-  text-align: center;
-  color: var(--brand);
-  margin: 0 0 48px;
-}
-.section-sub {
-  text-align: center;
-  color: var(--muted);
-  font-size: clamp(13px, 1.6vw, 15px);
-  margin: -36px 0 48px;
-}
-
-/* =========================================
-   Hero
-========================================= */
-.hero {
-  position: relative;
-  width: 100%;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--surface);
-  overflow: hidden;
-}
-
-.hero-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-  width: min(900px, 100% - 6rem);
-  margin-inline: auto;
-  padding: 20px;
-  animation: hero-fade-in .8s ease-out;
-}
-
-@keyframes hero-fade-in {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-text-block {
-  width: fit-content;
-  margin: 0 auto;
-}
-
-.hero-eyebrow {
-  display: block;
-  margin: 0 0 1rem;
-  font-size: clamp(11px, 1.2vw, 13px);
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--brand);
-  font-weight: 500;
-  text-align: left;
-}
-
-.hero-title {
-  font-size: clamp(30px, 5vw, 60px);
-  font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -.02em;
-  color: var(--heading);
-  margin: 0 0 1rem;
-  text-align: left;
-}
-
-.hero-sub {
-  font-size: clamp(15px, 2vw, 18px);
-  color: var(--muted);
-  margin: 0;
-  font-weight: 600;
-  text-align: right;
-}
-
-.hero-cta {
-  font-size: clamp(14px, 1.6vw, 16px);
-  padding: .85rem 2.4rem;
-  display: block;
-  width: fit-content;
-  margin: 0 auto;
-}
-
-/* =========================================
-   サービス — ビジュアルカード
-========================================= */
-.service-section {
-  background: var(--surface-2);
-}
-.service-visual-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.sv-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: left;
-  text-decoration: none;
-  color: inherit;
-  padding: 48px 28px 40px;
-  background: var(--surface-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
-  position: relative;
-}
-.sv-card:hover {
-  border-color: var(--border-hover);
-  box-shadow: var(--glow);
-  transform: translateY(-4px);
-}
-.sv-img-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  max-width: 200px;
-  margin: 0 auto 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform .35s ease;
-}
-.sv-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-.sv-card:hover .sv-img-wrap {
-  transform: scale(1.04);
-}
-.sv-icon-wrap {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  background: rgba(91, 127, 255, .1);
-  border: 1px solid rgba(91, 127, 255, .2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  color: var(--brand);
-  margin-bottom: 24px;
-  transition: transform .3s ease, background .3s ease;
-}
-.sv-card:hover .sv-icon-wrap {
-  transform: scale(1.08);
-  background: rgba(91, 127, 255, .16);
-}
-.sv-card h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--heading);
-  margin: 0 0 10px;
-}
-.sv-card p {
-  font-size: .88rem;
-  color: var(--muted);
-  line-height: 1.6;
-  margin: 0;
-}
-.sv-arrow {
-  position: absolute;
-  bottom: 16px;
-  right: 20px;
-  font-size: 1.1rem;
-  color: var(--brand);
-  opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity .3s ease, transform .3s ease;
-}
-.sv-card:hover .sv-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-@media (max-width: 900px) {
-  .service-visual-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  /* ===== Hero ===== */
+  .ac-hero {
+    position: relative;
+    color: var(--text);
+    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    background: var(--surface);
+    overflow: hidden;
   }
-  .sv-card {
-    padding: 32px 24px;
-    flex-direction: row;
-    text-align: left;
+  .hero-eyebrow {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin-bottom: 16px;
+  }
+  .ac-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .hero-sub {
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .hero-cta {
+    padding: .85rem 2.2rem;
+  }
+
+  .sp-only { display: none; }
+  @media (max-width: 600px) { .sp-only { display: block; } }
+
+  /* ===== 共通 ===== */
+  .ac-section {
+    padding: clamp(64px, 10vw, 100px) 0;
+  }
+  .section-title {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: var(--heading);
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+  }
+
+  /* ===== 共通カード ===== */
+  .ac-card {
+    padding: 28px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .ac-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .ac-icon {
+    font-size: 2rem;
+    color: var(--brand);
+    margin-bottom: 12px;
+  }
+  .ac-card p { font-size: 0.95rem; line-height: 1.7; color: var(--text); }
+  .ac-card strong { color: var(--heading); }
+  .ac-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+    color: var(--heading);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ac-card h3 i { color: var(--brand); }
+  .ac-card ul { padding-left: 20px; margin: 0; }
+  .ac-card li {
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .ac-card li::marker { color: var(--brand-dim); }
+
+  /* ===== Badge ===== */
+  .ac-badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    color: var(--brand);
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    padding: 4px 14px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  /* ===== Subsidy Banner ===== */
+  .subsidy-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 40px;
+    padding: 24px 28px;
+    background: rgba(91, 127, 255, .05);
+    border: 1px solid rgba(91, 127, 255, .2);
+    border-radius: var(--radius);
+  }
+  .subsidy-icon {
+    font-size: 1.6rem;
+    color: #f0b429;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .subsidy-text { flex: 1; }
+  .subsidy-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .subsidy-desc {
+    font-size: .9rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 0 0 8px;
+  }
+  .subsidy-note {
+    font-size: .78rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .ac-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--brand);
+    margin-bottom: 8px;
+  }
+  .price-unit { font-size: .8rem; font-weight: 400; color: var(--muted); }
+  .ac-desc { font-size: .9rem; color: var(--muted); margin-bottom: 16px; }
+  .ac-list { padding-left: 20px; margin: 0; }
+  .ac-list li { margin-bottom: 6px; font-size: .9rem; line-height: 1.6; color: var(--text); }
+
+  /* ===== Grids ===== */
+  .problem-grid, .value-grid, .usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .service-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .service-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 1024px) {
+    .service-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .service-grid-3 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .service-grid-4 { grid-template-columns: 1fr; }
+  }
+
+  /* ===== Service card with image (HOME と統一) ===== */
+  .ac-service-card {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 24px 28px;
+  }
+  .ac-img-wrap {
+    width: 100%;
+    max-width: 180px;
+    aspect-ratio: 1;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .35s ease;
+  }
+  .ac-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .ac-service-card:hover .ac-img-wrap {
+    transform: scale(1.04);
+  }
+  .ac-service-card .ac-badge {
+    align-self: flex-start;
+  }
+  .ac-service-card h3 {
+    font-size: 1.15rem;
+    margin: 4px 0 10px;
+  }
+  .ac-service-card .ac-desc {
+    margin-bottom: 16px;
+  }
+
+  /* プラン階層（無料版/詳細版、ライト/スタンダード等） */
+  .plan-tier {
+    margin-top: 14px;
+    padding: 14px 14px 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .plan-tier-upgrade {
+    border-color: rgba(162, 89, 255, .3);
+    background: rgba(162, 89, 255, .04);
+  }
+  .plan-tier-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .plan-tier-name {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: .04em;
+  }
+  .plan-tier-price {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  /* Extra menu (有償要件定義 / スポット相談) */
+  .extra-menu {
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .extra-menu-title {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--heading);
+    margin: 0 0 24px;
+    letter-spacing: .05em;
+  }
+  .extra-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
-  .sv-icon-wrap {
-    margin-bottom: 0;
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
-    font-size: 1.3rem;
+  .extra-menu-card {
+    padding: 24px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
   }
-  .sv-card h3 { font-size: 1.05rem; }
-}
+  .extra-menu-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .extra-menu-badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--brand);
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  .extra-menu-card h4 {
+    font-size: 1rem;
+    color: var(--heading);
+    margin: 0;
+  }
+  .extra-menu-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--brand);
+    margin: 0 0 10px;
+  }
+  .extra-menu-desc {
+    font-size: .88rem;
+    line-height: 1.75;
+    color: var(--text);
+    margin: 0;
+  }
+  .extra-menu-desc strong { color: var(--heading); }
+  @media (max-width: 768px) {
+    .extra-menu-grid { grid-template-columns: 1fr; }
+  }
 
-/* =========================================
-   Examples Teaser（事例ハブへの誘導）
-========================================= */
-.examples-teaser-section {
-  background: var(--surface);
-}
-.examples-teaser {
-  max-width: 820px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 40px 32px;
-  background: var(--surface-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-.examples-teaser-title {
-  font-size: clamp(18px, 2.6vw, 24px);
-  font-weight: 700;
-  color: var(--heading);
-  line-height: 1.5;
-  margin: 0 0 16px;
-}
-.examples-teaser-desc {
-  font-size: clamp(13px, 1.5vw, 15px);
-  color: var(--muted);
-  line-height: 1.9;
-  margin: 0 0 20px;
-}
-@media (max-width: 768px) {
-  .examples-teaser { padding: 32px 20px; }
-}
+  /* Plan upgrade note inside STEP 3 card */
+  .plan-upgrade {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .plan-upgrade-label {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--brand);
+    margin: 0 0 8px;
+  }
+  /* ===== Section backgrounds ===== */
+  .ac-problem-section { background: var(--surface-2); }
+  .ac-value-section { background: var(--surface); }
+  .ac-custom-section { background: var(--surface-2); }
+  .ac-teaser-section { background: var(--surface); }
+  .ac-service-section { background: var(--surface-2); }
+  .custom-strip-section { background: var(--surface); }
+  .ac-examples-section { background: var(--surface-2); }
+  .ac-usecase-section { background: var(--surface); }
+  .ac-reason-section { background: var(--surface-2); }
+  .ac-faq-section { background: var(--surface); }
 
-/* =========================================
-   Why Optiens — 大きな数字セクション
-========================================= */
-.why-section {
-  background: var(--surface-2);
-}
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  text-align: center;
-}
-.why-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-.why-num {
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 800;
-  letter-spacing: -.02em;
-  background: linear-gradient(135deg, var(--brand) 0%, var(--titanium-light, #6BABC2) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
-}
-.why-item p {
-  font-size: .9rem;
-  color: var(--muted);
-  line-height: 1.6;
-  margin: 0;
-}
+  /* ===== Differentiation strip ===== */
+  .custom-strip {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+    padding: clamp(32px, 5vw, 48px) clamp(20px, 3vw, 32px);
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .custom-strip-eyebrow {
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin: 0 0 16px;
+    text-transform: uppercase;
+  }
+  .custom-strip-title {
+    font-size: clamp(18px, 2.6vw, 24px);
+    font-weight: 700;
+    color: var(--heading);
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+  .custom-strip-desc {
+    font-size: clamp(13px, 1.5vw, 15px);
+    color: var(--muted);
+    line-height: 1.9;
+    margin: 0;
+  }
+  .custom-strip-desc strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .pc-only { display: inline; }
+  @media (max-width: 768px) {
+    .pc-only { display: none; }
+  }
 
-.link-arrow {
-  display: inline-block;
-  font-size: .9rem;
-  font-weight: 600;
-  color: var(--brand);
-  text-decoration: none;
-  transition: opacity .2s;
-}
-.link-arrow:hover { opacity: .75; }
+  /* ===== Examples banner (link to /ai-examples) ===== */
+  .examples-banner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 28px 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .examples-banner:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .examples-banner-icon {
+    flex-shrink: 0;
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    background: rgba(91, 127, 255, .1);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+  .examples-banner-text { flex: 1; }
+  .examples-banner-title {
+    font-size: 1.1rem;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .examples-banner-desc {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--text);
+    margin: 0;
+  }
+  .examples-banner-btn {
+    flex-shrink: 0;
+    padding: .75rem 1.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .examples-banner-btn i {
+    font-size: 0.8rem;
+    transition: transform .2s ease;
+  }
+  .examples-banner-btn:hover i { transform: translateX(3px); }
+  @media (max-width: 720px) {
+    .examples-banner {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+      padding: 24px;
+    }
+    .examples-banner-icon { margin: 0 auto; }
+  }
 
-@media (max-width: 600px) {
-  .why-grid { grid-template-columns: 1fr; gap: 40px; }
-}
+  /* ===== Teaser (common AI examples) ===== */
+  .teaser-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .teaser-card {
+    position: relative;
+    padding: 28px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .teaser-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .teaser-num {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    color: var(--brand);
+    background: rgba(91, 127, 255, .08);
+    border: 1px solid rgba(91, 127, 255, .25);
+    padding: 3px 9px;
+    border-radius: 4px;
+  }
+  .teaser-icon {
+    font-size: 1.6rem;
+    color: var(--brand);
+  }
+  .teaser-card h3 {
+    font-size: 1rem;
+    margin: 0;
+    color: var(--heading);
+  }
+  .teaser-card p {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--text);
+    margin: 0;
+  }
+  .teaser-link-wrap {
+    text-align: center;
+    margin-top: 32px;
+  }
+  .teaser-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: 1px solid var(--border-hover);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--brand);
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .teaser-link:hover {
+    background: rgba(91, 127, 255, .08);
+    border-color: var(--brand);
+  }
+  .teaser-link i {
+    font-size: 0.8rem;
+    transition: transform .2s ease;
+  }
+  .teaser-link:hover i { transform: translateX(3px); }
 
-/* =========================================
-   CTA
-========================================= */
-.cta-section {
-  position: relative;
-  background: var(--surface-3);
-  padding: clamp(80px, 12vw, 120px) 20px;
-  overflow: hidden;
-}
-.cta-glow {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(91, 127, 255, .08) 0%, transparent 70%);
-  pointer-events: none;
-}
-.cta-section h2 {
-  color: var(--heading);
-  font-size: clamp(22px, 3.2vw, 32px);
-  margin: 0 0 16px;
-}
-.cta-section p {
-  color: var(--muted);
-  margin: 0 0 32px;
-  line-height: 1.8;
-  font-size: clamp(14px, 1.6vw, 16px);
-}
-.cta-btn {
-  font-size: clamp(14px, 1.6vw, 16px);
-  padding: .85rem 2.5rem;
-}
+  /* ===== Custom UI section ===== */
+  .custom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .ac-custom-section .ac-card { text-align: left; }
+  .ac-custom-section .ac-card h3 {
+    display: block;
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+  }
+  .ac-custom-section .ac-card p {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--text);
+    margin: 0;
+  }
+  .custom-showcase {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-top: 32px;
+    padding: 24px 28px;
+    background: rgba(91, 127, 255, .05);
+    border: 1px solid rgba(91, 127, 255, .2);
+    border-radius: var(--radius);
+  }
+  .custom-showcase-icon {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(91, 127, 255, .1);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-top: 2px;
+  }
+  .custom-showcase-text { flex: 1; }
+  .custom-showcase-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .custom-showcase-desc {
+    font-size: .9rem;
+    line-height: 1.75;
+    color: var(--text);
+    margin: 0;
+  }
+  @media (max-width: 600px) {
+    .custom-showcase {
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+    }
+  }
 
-/* =========================================
-   Responsive
-========================================= */
-@media (max-width: 768px) {
-  .hero { min-height: auto; padding: 120px 16px 64px; }
-}
-@media (max-width: 640px) {
-  .hero-title { font-size: clamp(22px, 6vw, 32px); }
-}
+  /* ===== Problem cards ===== */
+  .ac-problem-section .ac-card { text-align: center; }
+
+  /* ===== Value cards ===== */
+  .ac-value-section .ac-card { text-align: center; }
+  .ac-value-section .ac-card ul { text-align: left; }
+  .ac-value-section .ac-card li {
+    padding-left: 20px;
+    position: relative;
+  }
+  .ac-value-section .ac-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brand-dim);
+  }
+  .ac-value-section .ac-card li { list-style: none; }
+
+  /* ===== Reason ===== */
+  .reason-grid {
+    max-width: 720px;
+    margin: 32px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .reason-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .reason-num {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--brand);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .85rem;
+  }
+  .reason-content h3 { margin-bottom: 6px; font-size: 1.05rem; color: var(--heading); }
+  .reason-content p { font-size: .95rem; color: var(--muted); line-height: 1.7; }
+
+  /* ===== FAQ ===== */
+  .faq-list {
+    max-width: 720px;
+    margin: 32px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .3s ease;
+  }
+  .faq-item[open] { border-color: var(--border-hover); }
+  .faq-item summary {
+    padding: 20px 24px;
+    font-weight: 600;
+    font-size: .95rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+  }
+  .faq-item summary::before {
+    content: '+';
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .faq-item[open] summary::before { content: '\2212'; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item p {
+    padding: 0 24px 20px 60px;
+    font-size: .9rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  /* ===== CTA ===== */
+  .ac-cta-section {
+    position: relative;
+    background: var(--surface-3);
+    color: #fff;
+    padding: clamp(64px, 10vw, 100px) 0;
+    overflow: hidden;
+  }
+  .ac-cta-glow {
+    position: absolute;
+    width: 500px; height: 500px;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(91,127,255,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .ac-cta-section h2 { color: var(--heading); margin-bottom: 16px; }
+  .ac-cta-section p { color: var(--muted); margin-bottom: 28px; line-height: 1.8; }
 </style>

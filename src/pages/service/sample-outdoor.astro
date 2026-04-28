@@ -3,15 +3,15 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout
-  title="AI活用診断レポート サンプル（ワイナリー・醸造所）| Optiens"
-  description="ワイナリー・醸造所向けAI活用診断レポートのサンプルです。在庫管理・DtoC販売・醸造記録の効率化で月30時間の業務削減を提案します。"
+  title="AI活用診断レポート サンプル（アウトドア・アクティビティガイド）| Optiens"
+  description="アウトドアガイド事業向けAI活用診断レポートのサンプルです。予約管理・安全管理・SNS集客の効率化で月20時間の業務削減を提案します。"
 >
   <main>
     <section class="hero-section">
       <div class="container">
-        <a href="/ai-consulting" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
+        <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
         <p class="hero-badge">SAMPLE REPORT</p>
-        <h1>AI活用診断レポート<br class="sp-only" />— ワイナリー・醸造所</h1>
+        <h1>AI活用診断レポート<br class="sp-only" />— アウトドア・アクティビティガイド</h1>
         <p class="hero-sub">これは提案書のサンプルです。実際の診断では、貴社の業務に合わせた個別の提案を行います。</p>
       </div>
     </section>
@@ -23,11 +23,11 @@ import Layout from '../../layouts/Layout.astro';
         <section class="report-section light-section">
           <h2>1. 事業概要</h2>
           <div class="info-table">
-            <div class="info-row"><span class="info-label">業種</span><span class="info-value">ワイナリー（自社栽培+委託醸造→自社醸造移行中）</span></div>
-            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">オーナー + 栽培担当1名 + パート2名（繁忙期）</span></div>
-            <div class="info-row"><span class="info-label">年間生産</span><span class="info-value">約8,000〜10,000本</span></div>
-            <div class="info-row"><span class="info-label">販売経路</span><span class="info-value">ワイナリー直売（40%）、飲食店卸（30%）、オンラインショップ（20%）、イベント出店（10%）</span></div>
-            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">在庫管理がExcelで限界、DtoC強化したいがSNS・メルマガに手が回らない、醸造記録が手書きノート</span></div>
+            <div class="info-row"><span class="info-label">業種</span><span class="info-value">アウトドアガイド（トレッキング・スノーシュー・MTB・星空ツアー）</span></div>
+            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">代表ガイド + フリーランスガイド2名（繁忙期）</span></div>
+            <div class="info-row"><span class="info-label">年間ツアー</span><span class="info-value">約200本（春夏120本、秋冬80本）</span></div>
+            <div class="info-row"><span class="info-label">集客経路</span><span class="info-value">自社HP（30%）、じゃらん体験（25%）、Instagram（20%）、紹介リピーター（25%）</span></div>
+            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">予約が電話・DM・OTAバラバラ、安全管理書類が手書き、繁忙期にSNS更新が止まる</span></div>
           </div>
         </section>
 
@@ -40,17 +40,17 @@ import Layout from '../../layouts/Layout.astro';
                 <tr><th>業務</th><th>頻度</th><th>月間合計</th><th>課題</th></tr>
               </thead>
               <tbody>
-                <tr><td>在庫管理（直売+卸+EC）</td><td>毎日</td><td>約10時間</td><td>3つの販路で在庫数が合わない</td></tr>
-                <tr><td>SNS投稿（Instagram/X）</td><td>実際は月3回</td><td>約3時間</td><td>畑作業で手一杯、投稿が止まる</td></tr>
-                <tr><td>受注・出荷対応（EC）</td><td>日2〜5件</td><td>約8時間</td><td>受注確認→梱包→発送を手作業</td></tr>
-                <tr><td>醸造記録（温度・比重・作業メモ）</td><td>毎日</td><td>約5時間</td><td>手書きノート、後から探せない</td></tr>
-                <tr><td>卸先への提案・見積</td><td>月5〜8件</td><td>約6時間</td><td>ワインリスト作成が毎回手作業</td></tr>
-                <tr><td>メルマガ・顧客通知</td><td>実際は年4回</td><td>約2時間</td><td>書き出しに時間がかかる</td></tr>
+                <tr><td>予約受付・調整（電話+DM+OTA）</td><td>日3〜8件</td><td>約8時間</td><td>経路がバラバラ、ダブルブッキングリスク</td></tr>
+                <tr><td>天候判断・ツアー可否連絡</td><td>前日〜当日</td><td>約4時間</td><td>天気予報を都度確認、参加者に個別連絡</td></tr>
+                <tr><td>安全管理記録（参加者名簿・装備チェック）</td><td>ツアーごと</td><td>約4時間</td><td>紙の名簿、後から参照できない</td></tr>
+                <tr><td>SNS投稿（Instagram/YouTube）</td><td>実際は月4回</td><td>約3時間</td><td>撮影はするが編集・文章で止まる</td></tr>
+                <tr><td>経理・請求書発行</td><td>月末</td><td>約4時間</td><td>手入力</td></tr>
+                <tr><td>ツアー後のフォローメール</td><td>実際は送れていない</td><td>0時間</td><td>やりたいが手が回らない</td></tr>
               </tbody>
             </table>
           </div>
           <div class="highlight-box">
-            <strong>月間の削減可能時間（推定）: 約30〜35時間</strong>
+            <strong>月間の削減可能時間（推定）: 約20〜25時間</strong>
           </div>
         </section>
 
@@ -61,50 +61,49 @@ import Layout from '../../layouts/Layout.astro';
           <div class="priority-label priority-a">優先度A — すぐに効果が出る</div>
 
           <div class="proposal-card">
-            <h3>提案1: 醸造記録のデジタル化とAI要約</h3>
+            <h3>提案1: 予約受付の一元管理+自動返信</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月8〜10時間削減</span>
-              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月2,000円の投資</span>
-              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月6〜8時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
+              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 中</span>
             </div>
-            <p><strong>現状</strong>: 手書きノートに温度・比重・酵母の状態を記録、後から探すのが大変</p>
-            <p><strong>改善後</strong>: AIエージェントがスマホの音声入力を自動読み取り → 醸造日誌フォーマットに構造化してスプレッドシートに自動記録。過去データの検索・比較も即座に可能。オーナーは確認・承認のみ。</p>
+            <p><strong>現状</strong>: 電話・Instagram DM・じゃらんの3経路を手動で転記</p>
+            <p><strong>改善後</strong>: AIエージェントが各予約経路からの申込を自動検知 → 予約台帳に自動集約 → 確認メール（集合場所・持ち物・天候連絡方法を含む）を自動生成・送信。オーナーは確認・承認のみ。</p>
           </div>
 
           <div class="proposal-card">
-            <h3>提案2: SNS・メルマガの文章自動生成</h3>
+            <h3>提案2: 天候判断サポート+参加者一斉連絡</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-camera"></i> 投稿頻度: 月3回→週3回</span>
-              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3〜4時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 無料〜月2,000円</span>
             </div>
-            <p><strong>現状</strong>: 畑やセラーの写真は撮るが文章で止まる</p>
-            <p><strong>改善後</strong>: AIエージェントが写真フォルダを自動監視 → ひと言メモと写真の状況からワイナリーらしいキャプションを自動生成 → 投稿予約まで自動セット。オーナーは確認・承認のみ。季節の畑の様子、醸造の進捗、新ヴィンテージの案内などを定期発信。</p>
+            <p><strong>現状</strong>: 天気予報を自分で見て判断、参加者に1人ずつLINE/電話</p>
+            <p><strong>改善後</strong>: AIエージェントが天気APIから自動取得 → 事前設定した判断基準と照合して催行可否を判定 → 参加者への連絡文を自動生成・一斉送信。オーナーは最終判断の承認のみ。</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
 
           <div class="proposal-card">
-            <h3>提案3: 卸先向けワインリスト・提案書の自動生成</h3>
+            <h3>提案3: SNS投稿・ツアーレポートの自動生成</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月4〜5時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-camera"></i> 投稿頻度: 月4回→週3回</span>
             </div>
-            <p>ワインの品種・ヴィンテージ・テイスティングノートをデータベース化。AIエージェントが卸先の業態情報を自動読み取り → 業態に合わせた提案書を自動生成 → ペアリング提案も自動添付。オーナーは確認・送信のみ。成約率向上が期待できます。</p>
+            <p>AIエージェントがツアー写真と位置情報を自動読み取り → キャプション・ハッシュタグ・ツアーレポートを自動生成 → 投稿予約まで自動セット。オーナーは確認・承認のみ。フォロワー増・直接予約比率の向上が期待できます。</p>
           </div>
 
           <div class="proposal-card">
-            <h3>提案4: EC受注管理の効率化</h3>
+            <h3>提案4: ツアー後フォローメールの自動化</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月5〜6時間削減</span>
-              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月$20</span>
+              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 顧客満足度向上+リピーター育成</span>
             </div>
-            <p>AIエージェントが受注メールを自動検知 → 確認メール生成・配送伝票作成まで一連のフローを自動実行。オーナーは確認・承認のみで手作業を最小限に抑えます。</p>
+            <p>AIエージェントがツアー終了を検知 → 翌日に写真リンク+参加コースに基づく次のおすすめツアー案内を自動生成・送信。手が回らなかった顧客フォローを完全自動化し、リピーター率を改善します。</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
 
           <div class="proposal-card">
-            <h3>提案5〜6: 顧客CRM構築、多言語対応</h3>
-            <p>AIエージェントが購入履歴・好みを自動分析するCRMの構築でリピーター育成を強化。インバウンド需要に向けたテイスティングノート・ワイナリー紹介の多言語自動翻訳など、基盤ができた後に段階的に拡張。</p>
+            <h3>提案5〜6: 安全管理記録のデジタル化、動画編集のAI活用</h3>
+            <p>参加者名簿・保険・装備チェックリストをスプレッドシートで管理しペーパーレス化。さらにツアーハイライト動画の半自動生成で、YouTubeやSNSでの発信を強化します。</p>
           </div>
         </section>
 
@@ -113,11 +112,11 @@ import Layout from '../../layouts/Layout.astro';
           <h2>4. 投資対効果（ROI）</h2>
           <div class="roi-grid">
             <div class="roi-card">
-              <p class="roi-number">30時間</p>
+              <p class="roi-number">20時間</p>
               <p class="roi-label">月間削減時間</p>
             </div>
             <div class="roi-card">
-              <p class="roi-number">¥45,000</p>
+              <p class="roi-number">¥30,000</p>
               <p class="roi-label">時間価値換算/月</p>
             </div>
             <div class="roi-card">
@@ -125,11 +124,11 @@ import Layout from '../../layouts/Layout.astro';
               <p class="roi-label">必要投資/月</p>
             </div>
             <div class="roi-card accent">
-              <p class="roi-number">¥40,000</p>
+              <p class="roi-number">¥25,000</p>
               <p class="roi-label">純効果/月</p>
             </div>
           </div>
-          <p class="roi-note">※時給1,500円で換算。間接効果（DtoC売上増・リピーター育成・SNSフォロワー増→直販比率向上）を含めると実質的な効果はさらに大きくなります。</p>
+          <p class="roi-note">※時給1,500円で換算。間接効果（予約転換率向上・リピーター増・口コミ改善）を含めると実質的な効果はさらに大きくなります。</p>
         </section>
 
         <!-- ロードマップ -->
@@ -137,29 +136,25 @@ import Layout from '../../layouts/Layout.astro';
           <h2>5. 導入ロードマップ</h2>
           <div class="roadmap">
             <div class="roadmap-month">
-              <h3>1ヶ月目 — AIエージェント構築・データソース整備・初期動作確認</h3>
+              <h3>1ヶ月目 — 基盤構築</h3>
               <ul>
-                <li>Week 1: AIエージェント構築・初期設定、基本操作レクチャー</li>
-                <li>Week 2: 醸造記録デジタル化のフォーマット整備・自動記録ワークフロー運用開始</li>
-                <li>Week 3: SNS投稿の自動化ワークフロー構築・テスト運用</li>
-                <li>Week 4: 効果測定（削減時間の記録）</li>
+                <li>AIエージェント構築・データソース整備（予約経路・天気API連携）</li>
+                <li>予約一元管理+自動返信ワークフロー構築・初期動作確認</li>
+                <li>天候判断自動化ワークフローの構築</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>2ヶ月目 — ワークフロー拡張・新規業務の自動化追加</h3>
+              <h3>2ヶ月目 — ワークフロー拡張</h3>
               <ul>
-                <li>Week 1: 卸先向け提案書テンプレート・自動生成ワークフロー整備</li>
-                <li>Week 2: EC受注フロー改善・自動化ワークフロー連携</li>
-                <li>Week 3: メルマガ自動生成の仕組み構築</li>
-                <li>Week 4: 効果測定</li>
+                <li>SNS投稿自動生成ワークフロー構築・運用開始</li>
+                <li>フォローメール自動送信の仕組み構築・新規業務の自動化追加</li>
               </ul>
             </div>
             <div class="roadmap-month">
-              <h3>3ヶ月目 — 効果測定・ワークフロー最適化・次フェーズ検討</h3>
+              <h3>3ヶ月目 — 最適化</h3>
               <ul>
-                <li>Week 1-2: CRM構築着手（購入履歴・好み管理の自動分析）</li>
-                <li>Week 3: 多言語対応検討（インバウンド向けテイスティングノート自動翻訳）</li>
-                <li>Week 4: 総合振り返り・ワークフロー最適化・次フェーズ検討</li>
+                <li>安全管理記録のデジタル化</li>
+                <li>効果測定・ワークフロー最適化・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -175,8 +170,8 @@ import Layout from '../../layouts/Layout.astro';
         <p>業種・規模に合わせた具体的な提案をお届けします。<br />初回相談は無料です。</p>
         <a href="/free-diagnosis" class="cta-btn">無料AI診断を受ける</a>
         <div class="cta-links">
-          <a href="/ai-consulting/sample-pension">ペンションのサンプルを見る</a>
-          <a href="/ai-consulting/sample-construction">工務店のサンプルを見る</a>
+          <a href="/service/sample-pension">ペンションのサンプルを見る</a>
+          <a href="/service/sample-restaurant">カフェ＆レストランのサンプルを見る</a>
           <a href="/ai-examples">他の業種・共通事例を見る</a>
         </div>
       </div>
@@ -186,8 +181,8 @@ import Layout from '../../layouts/Layout.astro';
 
 <style>
   .hero-section {
-    /* ワイナリー・醸造所 = 紫（Figma purple・芳醇さ） */
-    background: linear-gradient(135deg, #A259FF 0%, #7B40CC 100%);
+    /* アウトドア = 緑（Figma green・自然） */
+    background: linear-gradient(135deg, #0ACF83 0%, #07956C 100%);
     color: #fff;
     padding: clamp(40px, 8vw, 72px) 0 clamp(32px, 6vw, 56px);
   }
@@ -286,7 +281,6 @@ import Layout from '../../layouts/Layout.astro';
     align-items: center;
     gap: 4px;
   }
-
 
   /* ROI */
   .roi-grid {

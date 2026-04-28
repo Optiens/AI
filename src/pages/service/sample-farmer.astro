@@ -3,15 +3,15 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout
-  title="AI活用診断レポート サンプル（ペンション・宿泊業）| Optiens"
-  description="ペンション・宿泊業向けAI活用診断レポートのサンプルです。多言語対応・口コミ返信・SNS投稿の自動化で月25時間の業務削減を提案します。"
+  title="AI活用診断レポート サンプル（個人農家・露地＆ハウス栽培）| Optiens"
+  description="個人農家向けAI活用診断レポートのサンプルです。出荷管理・天候判断・直販SNSのAI活用に加え、IoTセンサーによるハウス環境モニタリングを提案します。"
 >
   <main>
     <section class="hero-section">
       <div class="container">
-        <a href="/ai-consulting" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
+        <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> AI活用支援に戻る</a>
         <p class="hero-badge">SAMPLE REPORT</p>
-        <h1>AI活用診断レポート<br class="sp-only" />— ペンション・宿泊業</h1>
+        <h1>AI活用診断レポート<br class="sp-only" />— 個人農家（露地＆ハウス栽培）</h1>
         <p class="hero-sub">これは提案書のサンプルです。実際の診断では、貴社の業務に合わせた個別の提案を行います。</p>
       </div>
     </section>
@@ -23,11 +23,12 @@ import Layout from '../../layouts/Layout.astro';
         <section class="report-section light-section">
           <h2>1. 事業概要</h2>
           <div class="info-table">
-            <div class="info-row"><span class="info-label">業種</span><span class="info-value">ペンション経営（1日3組限定）</span></div>
-            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">オーナー夫婦 + パート1名</span></div>
-            <div class="info-row"><span class="info-label">主な顧客</span><span class="info-value">国内ファミリー（70%）、海外個人旅行者（30%）</span></div>
-            <div class="info-row"><span class="info-label">予約経路</span><span class="info-value">Booking.com、じゃらん、自社HP、電話</span></div>
-            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">海外対応の負荷、SNS更新の停滞、リピーター管理</span></div>
+            <div class="info-row"><span class="info-label">業種</span><span class="info-value">個人農家（露地+ハウス3棟）</span></div>
+            <div class="info-row"><span class="info-label">スタッフ</span><span class="info-value">代表1名（繁忙期に家族手伝い）</span></div>
+            <div class="info-row"><span class="info-label">栽培品目</span><span class="info-value">レタス・トマト・ミニトマト・ズッキーニ（夏）、大根・白菜（冬）</span></div>
+            <div class="info-row"><span class="info-label">販売</span><span class="info-value">JA出荷（50%）、道の駅（30%）、直売・飲食店卸（20%）</span></div>
+            <div class="info-row"><span class="info-label">年商</span><span class="info-value">約400〜500万円</span></div>
+            <div class="info-row"><span class="info-label">課題意識</span><span class="info-value">一人で全部やるので事務作業に手が回らない、ハウスの温度管理が心配で夜中に見に行く、直販を増やしたいがSNSの時間がない</span></div>
           </div>
         </section>
 
@@ -37,14 +38,15 @@ import Layout from '../../layouts/Layout.astro';
           <div class="table-wrapper">
             <table>
               <thead>
-                <tr><th>業務</th><th>頻度</th><th>所要時間/回</th><th>月間合計</th><th>課題</th></tr>
+                <tr><th>業務</th><th>頻度</th><th>月間合計</th><th>課題</th></tr>
               </thead>
               <tbody>
-                <tr><td>海外ゲストへのメール返信</td><td>日10〜15件（繁忙期）</td><td>15〜30分</td><td>約20時間</td><td>英語対応に時間がかかる</td></tr>
-                <tr><td>OTA口コミ返信</td><td>週5〜10件</td><td>10〜15分</td><td>約6時間</td><td>後回しにしがち</td></tr>
-                <tr><td>SNS投稿（Instagram）</td><td>実際は月2回</td><td>30〜60分</td><td>約2時間</td><td>文章作成で止まる</td></tr>
-                <tr><td>予約確認メール</td><td>日2〜3件</td><td>5〜10分</td><td>約4時間</td><td>テンプレなし</td></tr>
-                <tr><td>経理（売上入力）</td><td>週1回</td><td>2時間</td><td>約8時間</td><td>手入力</td></tr>
+                <tr><td>出荷記録・売上管理</td><td>毎日</td><td>約8時間</td><td>JA・道の駅・直販で記録がバラバラ、手書き</td></tr>
+                <tr><td>ハウス環境確認（温度・湿度）</td><td>日3〜5回+夜間</td><td>約10時間</td><td>凍結・高温が心配で夜中にハウスまで見に行く</td></tr>
+                <tr><td>天候判断・作業計画</td><td>毎朝</td><td>約3時間</td><td>天気予報を見て灌水・防除のタイミングを判断</td></tr>
+                <tr><td>SNS・直販営業</td><td>実際はほぼゼロ</td><td>0時間</td><td>やりたいが全く手が回らない</td></tr>
+                <tr><td>農薬散布・防除記録</td><td>散布ごと</td><td>約3時間</td><td>記録義務があるが紙で管理、GAPで困る</td></tr>
+                <tr><td>確定申告準備（経理）</td><td>年末集中</td><td>月換算約3時間</td><td>レシート箱詰め→年末に泣く</td></tr>
               </tbody>
             </table>
           </div>
@@ -60,50 +62,69 @@ import Layout from '../../layouts/Layout.astro';
           <div class="priority-label priority-a">優先度A — すぐに効果が出る</div>
 
           <div class="proposal-card">
-            <h3>提案1: 多言語メール返信の自動下書き生成</h3>
+            <h3>提案1: 出荷・売上記録のデジタル化+AI集計</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月15〜18時間削減</span>
-              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月6〜8時間削減</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月2,000円の投資</span>
               <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 低</span>
             </div>
-            <p><strong>現状</strong>: 英語メールを1通ずつGoogle翻訳しながら手書き</p>
-            <p><strong>改善後</strong>: 受信メールをAIエージェントが自動検知 → 宿の情報と過去の返信パターンを参照して返信ドラフトを自動生成 → オーナーは確認して送信ボタンを押すだけ</p>
+            <p><strong>現状</strong>: 出荷伝票を手書き→月末にまとめて計算</p>
+            <p><strong>改善後</strong>: スマホでその場入力（音声でもOK）→スプレッドシートに自動蓄積→AIエージェントが月次レポート（品目別売上・単価推移・利益率）を自動生成。担当者は確認・承認のみ</p>
           </div>
 
           <div class="proposal-card">
-            <h3>提案2: OTA口コミ返信の効率化</h3>
+            <h3>提案2: SNS直販の立ち上げ（Instagram+LINE公式）</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月4〜5時間削減</span>
-              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 返信率改善→検索順位向上</span>
+              <span class="meta-item"><i class="fa-solid fa-chart-line"></i> 直販売上月3〜5万円増の可能性</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 月3,000円の投資</span>
             </div>
-            <p><strong>現状</strong>: 面倒で後回し→返信率30%程度</p>
-            <p><strong>改善後</strong>: AIエージェントがOTAの新着口コミを自動検知 → 口コミ内容と宿の特徴を参照して返信ドラフトを自動生成 → オーナーは確認・微調整して投稿。返信率90%以上へ。</p>
+            <p><strong>現状</strong>: 直販を増やしたいが発信する時間がゼロ</p>
+            <p><strong>改善後</strong>: 写真をフォルダに保存するだけでAIエージェントが投稿文+ハッシュタグを自動生成→承認後に自動投稿。週3投稿を数分で完了</p>
           </div>
 
           <div class="priority-label priority-b">優先度B — 1〜2ヶ月目に着手</div>
 
           <div class="proposal-card">
-            <h3>提案3: Instagram投稿文の自動生成</h3>
+            <span class="iot-badge">🔧 Optiens IoT技術提供</span>
+            <h3>提案3: IoTセンサーによるハウス環境モニタリング</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-camera"></i> 投稿頻度: 月2回→週2〜3回</span>
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 夜間確認の負担ゼロ化</span>
+              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 初期費用5〜8万円+月額3,000円</span>
+              <span class="meta-item"><i class="fa-solid fa-gauge-high"></i> 導入難易度: 中</span>
             </div>
-            <p>AIエージェントが写真のメタデータと宿のイベント情報を自動読み取り → キャプション+ハッシュタグを自動生成 → 投稿予約まで自動セット。オーナーは確認・承認のみ。フォロワー増・直接予約比率の向上が期待できます。</p>
+            <p><strong>現状</strong>: 凍結や高温が心配で、夜中にハウスまで車で見に行く（片道10分）</p>
+            <p><strong>改善後</strong>: 温度・湿度センサーをハウスに設置→スマホでリアルタイム確認。異常値でLINE通知が届くので、問題がない限りハウスに行く必要なし</p>
+            <div class="iot-detail">
+              <p class="iot-detail-title">Optiensが提供できること:</p>
+              <ul>
+                <li>温湿度センサー（DHT22）+Raspberry Pi+Zigbee通信のIoTキット</li>
+                <li>Supabaseダッシュボードでスマホからリアルタイム確認</li>
+                <li>設定温度を下回ったらLINE/SMS自動アラート</li>
+                <li>過去データの蓄積→「去年の同時期と比較」も可能に</li>
+              </ul>
+            </div>
           </div>
 
           <div class="proposal-card">
-            <h3>提案4: 予約確認メールのテンプレート化</h3>
+            <h3>提案4: 農薬散布記録のデジタル化</h3>
             <div class="proposal-meta">
-              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月3時間削減</span>
-              <span class="meta-item"><i class="fa-solid fa-yen-sign"></i> 無料〜月$20</span>
+              <span class="meta-item"><i class="fa-solid fa-clock"></i> 月2〜3時間削減</span>
             </div>
-            <p>AIエージェントが予約データを自動読み取り → 確認メール・リマインドを自動生成・送信。オーナーは確認・承認のみ。</p>
+            <p>スマホ音声入力→AIエージェントが散布日・薬剤名・希釈倍率・対象作物をテーブルに自動整理。GAP対応の記録が自動で残る</p>
           </div>
 
           <div class="priority-label priority-c">優先度C — 3ヶ月目以降</div>
 
           <div class="proposal-card">
-            <h3>提案5〜6: 宿泊プラン多言語化、リピーター管理</h3>
-            <p>OTAのプラン説明文の多言語化、NotionでのCRM構築（宿泊日・好み・記念日管理）など、基盤ができた後に段階的に拡張。</p>
+            <span class="iot-badge">🔧 Optiens IoT技術提供</span>
+            <h3>提案5: AIによる灌水・防除タイミング提案</h3>
+            <p>IoTセンサーデータ（土壌水分・気温・湿度）+天気予報APIをAIエージェントが自動読み取り→「明日は灌水不要」「湿度が高いので防除推奨」とLINE通知で判断材料を自動提示</p>
+            <p>Phase 2として、センサーデータが蓄積された後に実装可能</p>
+          </div>
+
+          <div class="proposal-card">
+            <h3>提案6: 確定申告の効率化</h3>
+            <p>レシート写真をフォルダに保存→AIエージェントがOCR→自動仕訳→freee連携で年末の地獄を回避。担当者は確認・承認のみ</p>
           </div>
         </section>
 
@@ -120,15 +141,15 @@ import Layout from '../../layouts/Layout.astro';
               <p class="roi-label">時間価値換算/月</p>
             </div>
             <div class="roi-card">
-              <p class="roi-number">¥3,000</p>
+              <p class="roi-number">¥8,000</p>
               <p class="roi-label">必要投資/月</p>
             </div>
             <div class="roi-card accent">
-              <p class="roi-number">¥34,500</p>
+              <p class="roi-number">¥29,500</p>
               <p class="roi-label">純効果/月</p>
             </div>
           </div>
-          <p class="roi-note">※時給1,500円で換算。間接効果（OTA検索順位改善、SNSフォロワー増→直接予約増）を含めると実質的な効果はさらに大きくなります。</p>
+          <p class="roi-note">※時給1,500円で換算。間接効果（夜間のハウス確認ストレスからの解放、直販チャネル構築による単価向上）は金額換算困難ですが極めて大きいと考えられます。</p>
         </section>
 
         <!-- ロードマップ -->
@@ -138,27 +159,27 @@ import Layout from '../../layouts/Layout.astro';
             <div class="roadmap-month">
               <h3>1ヶ月目 — 基盤構築</h3>
               <ul>
-                <li>Week 1: AIエージェント構築・初期設定</li>
-                <li>Week 2: メール・予約データソースの連携整備</li>
-                <li>Week 3: 多言語メール返信・口コミ返信の自動化ワークフロー構築・動作確認</li>
-                <li>Week 4: 効果測定（削減時間の記録）</li>
+                <li>AIエージェント構築・データソース整備（出荷記録・SNS連携）</li>
+                <li>出荷記録の自動集計ワークフロー初期動作確認</li>
+                <li>SNS投稿自動化ワークフローの構築・運用開始</li>
+                <li>効果測定（削減時間の記録）</li>
               </ul>
             </div>
             <div class="roadmap-month">
               <h3>2ヶ月目 — ワークフロー拡張</h3>
               <ul>
-                <li>Week 1: Instagram投稿自動生成ワークフロー構築</li>
-                <li>Week 2: 予約確認メール自動送信の仕組み構築</li>
-                <li>Week 3: 新規業務の自動化追加</li>
-                <li>Week 4: 効果測定</li>
+                <li>ハウスにIoTセンサー設置（温度・湿度）</li>
+                <li>Supabaseダッシュボード構築・アラート設定</li>
+                <li>農薬散布記録の自動化追加</li>
+                <li>効果測定</li>
               </ul>
             </div>
             <div class="roadmap-month">
               <h3>3ヶ月目 — 最適化</h3>
               <ul>
-                <li>Week 1-2: 効果測定・ワークフロー最適化、運用の定着確認</li>
-                <li>Week 3: リピーター管理の仕組み設計</li>
-                <li>Week 4: 総合振り返り・次フェーズ検討</li>
+                <li>センサーデータ蓄積→AI分析開始</li>
+                <li>灌水タイミング提案の試行</li>
+                <li>効果測定・ワークフロー最適化・次フェーズ検討</li>
               </ul>
             </div>
           </div>
@@ -174,8 +195,8 @@ import Layout from '../../layouts/Layout.astro';
         <p>業種・規模に合わせた具体的な提案をお届けします。<br />初回相談は無料です。</p>
         <a href="/free-diagnosis" class="cta-btn">無料AI診断を受ける</a>
         <div class="cta-links">
-          <a href="/ai-consulting/sample-restaurant">飲食業のサンプルを見る</a>
-          <a href="/ai-consulting/sample-construction">工務店のサンプルを見る</a>
+          <a href="/service/sample-dairy">酪農のサンプルを見る</a>
+          <a href="/service/sample-winery">ワイナリーのサンプルを見る</a>
           <a href="/ai-examples">他の業種・共通事例を見る</a>
         </div>
       </div>
@@ -185,8 +206,8 @@ import Layout from '../../layouts/Layout.astro';
 
 <style>
   .hero-section {
-    /* ペンション・宿泊 = 紫（Figma purple・上質体験） */
-    background: linear-gradient(135deg, #A259FF 0%, #7B40CC 100%);
+    /* 個人農家 = 緑（Figma green） */
+    background: linear-gradient(135deg, #0ACF83 0%, #07956C 100%);
     color: #fff;
     padding: clamp(40px, 8vw, 72px) 0 clamp(32px, 6vw, 56px);
   }
@@ -284,6 +305,42 @@ import Layout from '../../layouts/Layout.astro';
     display: flex;
     align-items: center;
     gap: 4px;
+  }
+
+  /* IoT badge */
+  .iot-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #2e574c, #5ea89a);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  /* IoT detail */
+  .iot-detail {
+    background: #e8f2f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .iot-detail-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-primary, #2e574c);
+    margin-bottom: 8px;
+  }
+  .iot-detail ul {
+    padding-left: 20px;
+    margin: 0;
+  }
+  .iot-detail li {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    margin-bottom: 4px;
+    color: #333;
   }
 
   /* ROI */

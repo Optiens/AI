@@ -21,6 +21,16 @@
           "value": "www.ensotechlab.com"
         }
       ]
+    },
+    {
+      "source": "/ai-consulting",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/ai-consulting/:slug*",
+      "destination": "/service/:slug*",
+      "permanent": true
     }
   ]
 }
