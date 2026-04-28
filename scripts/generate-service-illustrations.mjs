@@ -1,8 +1,10 @@
 /**
  * Optiens サービスカード用フラットイラスト生成
- * Figma 4色パレット（紫・青・緑・橙）でモダンSaaS風
+ * OpenAI gpt-image-2 を使用、Figma 4色パレット（紫・青・緑・橙）でモダンSaaS風
+ *
+ * 参照: c:/workspace/optiens-novel/research/gpt_image_連携ガイド.md
  */
-import { GoogleGenAI } from '@google/genai';
+import OpenAI from 'openai';
 import { writeFileSync, readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -13,7 +15,11 @@ try {
   const envContent = readFileSync(envPath, 'utf-8');
   envContent.split(/\r?\n/).forEach(line => {
     const m = line.match(/^([^#=]+?)=(.*)$/);
-    if (m) process.env[m[1].trim()] = m[2].trim();
+    if (m) {
+      const k = m[1].trim();
+      const v = m[2].trim();
+      if (v) process.env[k] = v;
+    }
   });
 } catch (e) {
   console.warn('.env not found, using existing env vars');
@@ -22,13 +28,13 @@ try {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = resolve(__dirname, '../public/images/services');
 
-const API_KEY = process.env.GEMINI_API_KEY;
+const API_KEY = process.env.OPENAI_API_KEY;
 if (!API_KEY) {
-  console.error('GEMINI_API_KEY が設定されていません');
+  console.error('OPENAI_API_KEY が設定されていません');
   process.exit(1);
 }
 
-const ai = new GoogleGenAI({ apiKey: API_KEY });
+const client = new OpenAI({ apiKey: API_KEY });
 
 // 共通のスタイル指示（色コード・テキスト・ラベルは絶対に書かない）
 const STYLE = `Flat vector illustration in modern Figma design style.
@@ -83,22 +89,21 @@ Pure white background. Remember: no text, no letters, no labels at all.`,
 async function generateImage(prompt, filename) {
   console.log(`生成中: ${filename}`);
   try {
-    const response = await ai.models.generateImages({
-      model: 'imagen-4.0-generate-001',
+    const response = await client.images.generate({
+      model: 'gpt-image-2',
       prompt,
-      config: {
-        numberOfImages: 1,
-        outputMimeType: 'image/png',
-        aspectRatio: '1:1',
-      },
+      size: '1024x1024',
+      quality: 'high',
+      n: 1,
     });
 
-    const imageData = response.generatedImages[0].image.imageBytes;
+    const b64 = response.data[0].b64_json;
     const outputPath = resolve(PUBLIC_DIR, filename);
-    writeFileSync(outputPath, Buffer.from(imageData, 'base64'));
+    writeFileSync(outputPath, Buffer.from(b64, 'base64'));
     console.log(`✓ 保存完了: ${outputPath}`);
   } catch (err) {
     console.error(`✗ エラー (${filename}):`, err.message);
+    if (err.status) console.error(`  HTTPステータス: ${err.status}`);
   }
 }
 

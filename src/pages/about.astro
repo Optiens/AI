@@ -46,6 +46,9 @@ import Layout from '../layouts/Layout.astro';
           <div class="business-cards">
             <article class="business-card">
               <span class="business-num" aria-hidden="true">01</span>
+              <div class="business-img-wrap">
+                <img src="/images/businesses/ai-consulting.png" alt="AI支援事業を表すイラスト" loading="lazy" />
+              </div>
               <h3>AI支援事業</h3>
               <blockquote class="business-philosophy">
                 AIを<em>中心に</em>、<br/>働き方を変える時代へ。
@@ -57,6 +60,9 @@ import Layout from '../layouts/Layout.astro';
             </article>
             <article class="business-card">
               <span class="business-num" aria-hidden="true">02</span>
+              <div class="business-img-wrap">
+                <img src="/images/businesses/hydroponics.png" alt="IoT水耕栽培事業を表すイラスト" loading="lazy" />
+              </div>
               <h3>IoT水耕栽培事業</h3>
               <blockquote class="business-philosophy">
                 農業の<em>在り方</em>を、<br/>一人ひとりが見直す時代へ。
@@ -671,6 +677,28 @@ import Layout from '../layouts/Layout.astro';
   line-height: 1;
   pointer-events: none;
   user-select: none;
+  z-index: 0;
+}
+.business-img-wrap {
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1;
+  margin: 0 auto clamp(12px, 1.6vw, 18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  transition: transform .35s ease;
+}
+.business-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.business-card:hover .business-img-wrap {
+  transform: scale(1.04);
 }
 .business-eng {
   font-size: clamp(10px, 1vw, 12px);
