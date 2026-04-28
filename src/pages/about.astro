@@ -12,7 +12,6 @@ import Layout from '../layouts/Layout.astro';
           <h1 class="hero-statement">
             時間と可能性を広げる手助けを。
           </h1>
-          <div class="hero-divider" aria-hidden="true"></div>
           <p class="hero-statement-sub">
             土台にあるのは、調和・最適化・循環。
           </p>
@@ -388,18 +387,11 @@ import Layout from '../layouts/Layout.astro';
   color: var(--brand);
   font-weight: 800;
 }
-.about-hero-section .hero-divider{
-  width: 48px;
-  height: 1px;
-  background: var(--brand);
-  margin: clamp(24px, 3.5vw, 36px) auto;
-  opacity: 0.55;
-}
 .about-hero-section .hero-statement-sub{
   font-size: clamp(0.9rem, 1.8vw, 1.1rem);
   line-height: 1.85;
   max-width: 720px;
-  margin: 0 auto;
+  margin: clamp(20px, 3vw, 32px) auto 0;
   color: var(--muted);
   letter-spacing: .03em;
 }
