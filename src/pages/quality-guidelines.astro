@@ -1,0 +1,813 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ParticleCanvas from '../components/ParticleCanvas.astro';
+
+// 各領域の項目数（実装に基づく）
+const areas = [
+  { id: 'report',     title: 'AI診断レポート品質基準',       count: 32, icon: 'fa-file-lines' },
+  { id: 'agent',      title: 'AIエージェント設計基準',       count: 28, icon: 'fa-robot' },
+  { id: 'workflow',   title: '自動化ワークフロー設計基準',   count: 22, icon: 'fa-arrows-spin' },
+  { id: 'process',    title: '導入支援プロセス基準',         count: 26, icon: 'fa-handshake' },
+  { id: 'security',   title: 'セキュリティ・プライバシー基準', count: 24, icon: 'fa-shield-halved' },
+];
+const totalCount = areas.reduce((sum, a) => sum + a.count, 0);
+---
+
+<Layout
+  title="AI支援 品質ガイドライン | Optiens"
+  description="OptiensがAI支援業務で守る、5領域・全132項目の品質基準を公開しています。診断レポート・エージェント設計・自動化ワークフロー・導入支援プロセス・セキュリティの作業基準をすべて開示します。"
+>
+  <main>
+    <!-- ヒーロー -->
+    <section class="qg-hero">
+      <ParticleCanvas id="qg-net" />
+      <div class="container text-center" style="position:relative;z-index:1;">
+        <p class="eyebrow">QUALITY GUIDELINES</p>
+        <h1>AI支援 品質ガイドライン</h1>
+        <p class="hero-sub">
+          弊社の作業基準を、すべて公開します。<br/>
+          5領域・全{totalCount}項目で、納品物の品質を担保します。
+        </p>
+        <p class="hero-meta">最終改訂: 2026-04-28 / version 1.0</p>
+      </div>
+    </section>
+
+    <!-- 概要：なぜ公開するか -->
+    <section class="qg-section">
+      <div class="container">
+        <div class="qg-intro reveal">
+          <h2 class="section-title">なぜ作業基準を公開するのか</h2>
+          <p>
+            AI活用支援は、成果物が動くシステムであるがゆえに、品質の良し悪しが導入後しばらく経たないと顧客に伝わりにくい領域です。
+            「とりあえず動くもの」と「長期運用に耐える設計」の見分けがつかないまま納品される事故が、業界では珍しくありません。
+          </p>
+          <p>
+            Optiensでは、ご契約前に「弊社が何を確認し、何を確認しないのか」を判断していただけるよう、作業基準を開示しています。
+            このガイドラインは、無料診断レポートから保守までのすべての業務に適用される、社内で日々運用しているチェックリストそのものです。
+          </p>
+          <p>
+            掲載しているのは各領域の主要項目のみで、全項目はご契約前のお打ち合わせ時に資料としてお渡ししています。
+            ご相談の段階で「実際にどう品質を守っているのか」を把握していただいた上でご判断いただきたいと考えています。
+          </p>
+        </div>
+
+        <!-- 領域サマリ -->
+        <div class="qg-summary reveal">
+          <div class="qg-summary-stats">
+            <div class="qg-stat">
+              <span class="qg-stat-num">5</span>
+              <span class="qg-stat-label">領域</span>
+            </div>
+            <div class="qg-stat">
+              <span class="qg-stat-num">{totalCount}</span>
+              <span class="qg-stat-label">項目</span>
+            </div>
+            <div class="qg-stat">
+              <span class="qg-stat-num">v1.0</span>
+              <span class="qg-stat-label">2026-04-28</span>
+            </div>
+          </div>
+
+          <ul class="qg-summary-list">
+            {areas.map((a, i) => (
+              <li>
+                <a href={`#${a.id}`}>
+                  <span class="qg-summary-num">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="qg-summary-title">{a.title}</span>
+                  <span class="qg-summary-count">{a.count}項目</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 領域1: AI診断レポート品質基準 -->
+    <section id="report" class="qg-section qg-section--alt">
+      <div class="container">
+        <div class="qg-area-header reveal">
+          <div class="qg-area-num">領域 01</div>
+          <h2><i class={`fa-solid ${areas[0].icon}`}></i> {areas[0].title}</h2>
+          <p class="qg-area-count">全 {areas[0].count} 項目（うち主要項目を抜粋公開）</p>
+          <p class="qg-area-desc">
+            無料診断レポート（0円）と有料詳細レポート（5,000円）の作成手順・記載内容・禁止表現を定義します。
+            業務フロー定義v1.2および無料版vs有償版_定義v2.0に準拠します。
+          </p>
+        </div>
+
+        <div class="qg-checklist reveal">
+          <div class="qg-checklist-block">
+            <h3>レポート構造・出力フォーマット</h3>
+            <ul>
+              <li>無料・有料ともにGoogle Slides形式で納品し、URL共有でお渡しする（PDF納品は廃止）</li>
+              <li>無料レポートは5〜8枚、有料レポートは15〜20枚を標準とする</li>
+              <li>無料レポート納期は1〜2営業日、有料レポート納期は3〜5営業日</li>
+              <li>有料レポートには60分オンラインMTGをデフォルトで含める（オプトアウト可）</li>
+              <li>すべての成果物末尾にOptiens独占的設計に基づく旨と転用禁止条項を明記する</li>
+              <li>すべての成果物にOptiens透かしロゴを入れる</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>業務TOP3の選定根拠</h3>
+            <ul>
+              <li>無料版は「業種×規模の汎用パターン」、有料版は「詳細フォーム回答に基づく個別選定」と明確に区別する</li>
+              <li>有料版では添付ファイル（PDF・Excel・Word・画像）の内容をAI読取で分析した結果を反映する</li>
+              <li>選定理由として頻度・所要時間・課題を一覧表で提示する</li>
+              <li>業界固有の慣行・繁忙期・顧客特性を踏まえた分析を含める</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>ROI試算・コスト記載ルール</h3>
+            <ul>
+              <li>削減時間 × 標準時給1,500円で月間効果額を算出する</li>
+              <li>計算ロジックを必ずレポート内に明示する（ブラックボックス禁止）</li>
+              <li>API月額費用は「モデル名・処理規模・前提条件」をセットで提示する</li>
+              <li>「月額500円」のような根拠なき単一値表現は禁止</li>
+              <li>有料版では具体額レンジ（数十円〜数千円）を提示する</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>禁止表現リスト（社外発信時）</h3>
+            <ul>
+              <li>「地方創生3.0」（公式用語は地方創生2.0）の使用禁止</li>
+              <li>「プロクローン」（外部記事の造語）の使用禁止</li>
+              <li>「圧倒的」「革命」「破壊」「逆転」「衝撃」等の煽り表現禁止</li>
+              <li>「業界NO.1」「10倍」等の根拠なき数値煽り禁止</li>
+              <li>「使わないと致命的」「乗り遅れる」等のFOMO訴求禁止</li>
+              <li>無料版での具体的なAIツール名（Claude・ChatGPT・Gemini等）の記載禁止</li>
+              <li>無料版でのアーキテクチャ図・導入支援見積額の記載禁止（有料版での差別化点として留保）</li>
+              <li>デジタル化補助金の記載禁止（IT導入支援事業者登録未完のため）</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="qg-area-footer reveal">
+          上記は全 {areas[0].count} 項目のうちの主要項目です。残りの項目（フォーム必須入力チェック・監修工数の上限・引用ルール等）はご相談時に資料としてお渡しします。
+        </p>
+      </div>
+    </section>
+
+    <!-- 領域2: AIエージェント設計基準 -->
+    <section id="agent" class="qg-section">
+      <div class="container">
+        <div class="qg-area-header reveal">
+          <div class="qg-area-num">領域 02</div>
+          <h2><i class={`fa-solid ${areas[1].icon}`}></i> {areas[1].title}</h2>
+          <p class="qg-area-count">全 {areas[1].count} 項目（うち主要項目を抜粋公開）</p>
+          <p class="qg-area-desc">
+            導入支援フェーズで構築するAIエージェント（自律実行型のAI）の設計基準です。
+            「動くだけのもの」ではなく、長期運用と外部基盤リスクに耐える構成を担保します。
+          </p>
+        </div>
+
+        <div class="qg-checklist reveal">
+          <div class="qg-checklist-block">
+            <h3>データソース整備</h3>
+            <ul>
+              <li>AIが読み取るデータの所在・形式・更新頻度を設計書に明記する</li>
+              <li>既存業務をなるべく変えず、データの置き場所のみ整理する設計を優先する</li>
+              <li>連携可能なサービス（Notion・freee・LINE公式・Google Drive等）の公式MCP/APIを優先採用する</li>
+              <li>顧客側で運用が継続できるよう、データソースの管理責任者を顧客側に明記してもらう</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>API・基盤の選定</h3>
+            <ul>
+              <li>Claude単一依存にしないマルチプロバイダ対応設計を顧客に提示する</li>
+              <li>API価格改定時の見積再交渉条項を契約書に明記する（年1回の見直しトリガー）</li>
+              <li>顧客が相応のスペックのPCを所有している場合、ローカルLLMでの運用コストゼロ構成も提案する</li>
+              <li>サーバー管理が不要な構成を標準とする（メンテナンスフリー設計）</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>動作テスト</h3>
+            <ul>
+              <li>主要ユースケース3件中3件の動作確認を検収条件とする</li>
+              <li>テスト結果は記録として残し、検収書とともに顧客にお渡しする</li>
+              <li>エッジケース（データ欠損・サービス障害時）の挙動を仕様書に明記する</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>異常系・フォールバック</h3>
+            <ul>
+              <li>Anthropic等の外部API障害時の代替手順を運用マニュアルに記載する</li>
+              <li>API失敗時のリトライ回数・エラー通知先を設計書に明記する</li>
+              <li>AIエージェント停止時に業務が止まらないよう、手動運用への切り戻し手順を整備する</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>ロックイン回避設計</h3>
+            <ul>
+              <li>納品システムは顧客の所有物とし、月額ライセンス料が発生しない構成にする</li>
+              <li>データは顧客専用のクラウドDBに格納し、将来の移行を妨げない</li>
+              <li>SaaS固有の独自仕様への過度な依存を避ける</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>ログ・監査記録</h3>
+            <ul>
+              <li>AIエージェントの実行ログを保持し、顧客要請時に開示できる体制とする</li>
+              <li>ログには機密情報（APIキー・個人情報）が記録されないようマスキングする</li>
+              <li>顧客クラウドへのアクセス権限の付与・剥奪手順を契約書付録に記載する</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="qg-area-footer reveal">
+          上記は全 {areas[1].count} 項目のうちの主要項目です。残りの項目（プロンプト設計レビュー・トークン使用量の見積精度・命名規則等）はご相談時に資料としてお渡しします。
+        </p>
+      </div>
+    </section>
+
+    <!-- 領域3: 自動化ワークフロー設計基準 -->
+    <section id="workflow" class="qg-section qg-section--alt">
+      <div class="container">
+        <div class="qg-area-header reveal">
+          <div class="qg-area-num">領域 03</div>
+          <h2><i class={`fa-solid ${areas[2].icon}`}></i> {areas[2].title}</h2>
+          <p class="qg-area-count">全 {areas[2].count} 項目（うち主要項目を抜粋公開）</p>
+          <p class="qg-area-desc">
+            スケジュール実行・トリガー実行型の自動化ワークフローの設計基準です。
+            人手介入を「承認」「選択」のみに最小化することを設計の原則とします。
+          </p>
+        </div>
+
+        <div class="qg-checklist reveal">
+          <div class="qg-checklist-block">
+            <h3>スケジュール実行設定</h3>
+            <ul>
+              <li>実行頻度・実行時刻・タイムゾーンを設計書に明記する</li>
+              <li>顧客側の業務時間と矛盾しないスケジュールを設計する</li>
+              <li>失敗時の自動リトライ設定とリトライ上限を定義する</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>エラーハンドリング</h3>
+            <ul>
+              <li>エラー発生時の通知先（メール・チャット）を顧客と合意する</li>
+              <li>致命エラーと一時エラーを区別し、対応手順を分ける</li>
+              <li>連続失敗時は自動停止し、暴走を防ぐ</li>
+              <li>Anthropic API・外部サービスの仕様変更時の追従対応を保守工数内で扱う</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>承認・通知フロー</h3>
+            <ul>
+              <li>外部に発信する処理（SNS投稿・顧客向けメール等）には承認ステップを設ける</li>
+              <li>誤送信リスクのある操作は人間の選択を介在させる</li>
+              <li>承認はチャット画面ではなく、業務に既にある通知チャネル（LINE・Slack・メール）で完結させる</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>データ取り扱い</h3>
+            <ul>
+              <li>処理対象データの保存期間・削除タイミングを契約書付録に記載する</li>
+              <li>顧客の個人情報を扱う処理は契約書とプライバシーポリシーで取り決める</li>
+              <li>ヒアリング録音は顧客同意後のみ実施し、3ヶ月で削除する</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="qg-area-footer reveal">
+          上記は全 {areas[2].count} 項目のうちの主要項目です。残りの項目（リトライ間隔・タイムアウト値・処理冪等性チェック等）はご相談時に資料としてお渡しします。
+        </p>
+      </div>
+    </section>
+
+    <!-- 領域4: 導入支援プロセス基準 -->
+    <section id="process" class="qg-section">
+      <div class="container">
+        <div class="qg-area-header reveal">
+          <div class="qg-area-num">領域 04</div>
+          <h2><i class={`fa-solid ${areas[3].icon}`}></i> {areas[3].title}</h2>
+          <p class="qg-area-count">全 {areas[3].count} 項目（うち主要項目を抜粋公開）</p>
+          <p class="qg-area-desc">
+            ヒアリングから検収、納品後3ヶ月間の不具合修正までの工程基準です。
+            業務フロー定義v1.2の「共通：導入支援フロー」に準拠します。
+          </p>
+        </div>
+
+        <div class="qg-checklist reveal">
+          <div class="qg-checklist-block">
+            <h3>ヒアリング</h3>
+            <ul>
+              <li>実装ヒアリングは90分以内（業務フロー定義v1.2の工数上限）</li>
+              <li>事前にIT環境フォーム（PC・クラウドサービス・会計ソフト・ネット環境・データ管理方法）を入力いただく</li>
+              <li>ヒアリング録音は顧客同意後のみ実施する</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>設計レビュー</h3>
+            <ul>
+              <li>提案書はヒアリング後10営業日以内に提出する</li>
+              <li>提案書のページ数は3〜5枚を上限とする</li>
+              <li>修正対応は1回まで含む（追加修正は別見積）</li>
+              <li>アーキテクチャ図と工数・概算費用を必ず添付する</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>テスト基準</h3>
+            <ul>
+              <li>主要ユースケース3件中3件の動作合格を検収条件とする</li>
+              <li>合格判定はOptiensと顧客の双方記名押印（電子署名可）で確定する</li>
+              <li>仕様書記載の代表ユースケースの正常動作を確認する</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>検収基準</h3>
+            <ul>
+              <li>納品後10営業日以内に書面（メール可）で具体的な不適合の指摘がない場合は検収完了とみなす（みなし検収条項）</li>
+              <li>運用マニュアル（A4・1枚）と操作画面の動画記録を必ず納品する</li>
+              <li>顧客側の運用責任者を契約書で明記いただく</li>
+              <li>着手金50%・検収後残金50%を標準とする（30万円未満は一括前払い、150万円超は3分割可）</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>納品後3ヶ月間の不具合修正範囲</h3>
+            <ul>
+              <li>不具合の定義: 仕様書記載の動作と異なるもの</li>
+              <li>対象外: 機能追加・改善 / 環境起因（顧客側API変更等）</li>
+              <li>無償対応の累計上限: 10時間まで</li>
+              <li>累計10時間超過時は保守契約への移行を必須案内する</li>
+              <li>応答SLA: 3営業日以内（一人法人として常時オンを構造的に否定）</li>
+              <li>賠償上限: 契約金額の1倍まで（業界相場下限・契約書明記）</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="qg-area-footer reveal">
+          上記は全 {areas[3].count} 項目のうちの主要項目です。残りの項目（キャンセル時の精算・連絡途絶時の対応・引き継ぎサポート等）はご相談時に資料としてお渡しします。
+        </p>
+      </div>
+    </section>
+
+    <!-- 領域5: セキュリティ・プライバシー基準 -->
+    <section id="security" class="qg-section qg-section--alt">
+      <div class="container">
+        <div class="qg-area-header reveal">
+          <div class="qg-area-num">領域 05</div>
+          <h2><i class={`fa-solid ${areas[4].icon}`}></i> {areas[4].title}</h2>
+          <p class="qg-area-count">全 {areas[4].count} 項目（うち主要項目を抜粋公開）</p>
+          <p class="qg-area-desc">
+            APIキー漏洩・プロンプトインジェクション・個人情報保護に関する基準です。
+            IPA「SECURITY ACTION 一つ星」を宣言した事業者として、基本的なセキュリティ対策を継続的に運用しています。
+          </p>
+        </div>
+
+        <div class="qg-checklist reveal">
+          <div class="qg-checklist-block">
+            <h3>APIキー管理</h3>
+            <ul>
+              <li>APIキーは環境変数で管理し、Gitリポジトリには絶対にコミットしない</li>
+              <li>各APIキーには最小権限のスコープを設定する（事故事例: 無制限スコープのキーで13時間900万円請求の事案あり）</li>
+              <li>本番用キーと開発用キーを分離する</li>
+              <li>キーのローテーション手順を契約書付録に記載する</li>
+              <li>顧客のAPIキーは顧客環境にのみ保管し、Optiens側に転送・保存しない設計を原則とする</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>プロンプトインジェクション対策</h3>
+            <ul>
+              <li>外部Webサイトを読み取る処理では、サイト側の悪意ある命令をAIが実行しない構成にする</li>
+              <li>機密ファイル（.env等）にはOSレベルでアクセス制限をかけ、AIから物理的に読めない状態にする</li>
+              <li>ログには機密情報を記録しない（マスキング処理を必須化）</li>
+              <li>AIエージェントの実行は必要に応じて隔離環境（サンドボックス）で行う</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>個人情報保護</h3>
+            <ul>
+              <li>フォーム送信前に同意取得を必須とする（個人情報保護法対応）</li>
+              <li>失注後12ヶ月で顧客データを削除する</li>
+              <li>削除請求対応の窓口をプライバシーポリシーに明記する</li>
+              <li>クラウドDB格納時はRow Level Securityを適用する</li>
+              <li>フォームDoS対策としてreCAPTCHAとレート制限を導入する</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>顧客データ取り扱い</h3>
+            <ul>
+              <li>納品時にOptiens側の作業環境から顧客データを削除する</li>
+              <li>契約終了時のキー削除責任を契約書で双方明記する</li>
+              <li>アクセスログを保持し、顧客要請時に開示できる体制とする</li>
+              <li>顧客側API・クラウドの設定起因事故はOptiens免責（責任分界点を契約書に明記）</li>
+            </ul>
+          </div>
+
+          <div class="qg-checklist-block">
+            <h3>インシデント対応</h3>
+            <ul>
+              <li>セキュリティインシデント発生時は24時間以内に一次対応・1週間以内に恒久対応を実施する</li>
+              <li>顧客通知文テンプレートを事前に整備しておく</li>
+              <li>月1回のPre-Mortem演習で失敗モードを継続棚卸しする</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="qg-area-footer reveal">
+          上記は全 {areas[4].count} 項目のうちの主要項目です。残りの項目（暗号化方式・バックアップ頻度・脆弱性スキャン等）はご相談時に資料としてお渡しします。
+        </p>
+      </div>
+    </section>
+
+    <!-- 改訂履歴 -->
+    <section class="qg-section">
+      <div class="container">
+        <h2 class="section-title reveal">改訂履歴</h2>
+        <div class="qg-history reveal">
+          <table class="qg-history-table">
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>版</th>
+                <th>変更内容</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026-04-28</td>
+                <td>v1.0</td>
+                <td>初版公開（5領域・全{totalCount}項目）。業務フロー定義v1.2および無料版vs有償版_定義v2.0に準拠。</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="qg-history-note">
+            本ガイドラインは四半期ごと、または重要な案件・基準改訂が発生した時点で更新します。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="qg-cta">
+      <div class="container text-center">
+        <h2 class="reveal">全項目をご希望の方へ</h2>
+        <p class="reveal">
+          5領域・全{totalCount}項目のフルバージョンは、ご相談時に資料としてお渡ししています。<br/>
+          まずは無料診断レポートで、Optiensの作業精度をご確認ください。
+        </p>
+        <div class="qg-cta-buttons reveal">
+          <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける</a>
+          <a href="/contact" class="btn-secondary">お問い合わせ</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* ヒーロー */
+  .qg-hero {
+    position: relative;
+    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    background: var(--surface);
+    overflow: hidden;
+    color: #fff;
+  }
+  .eyebrow {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin-bottom: 16px;
+  }
+  .qg-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: clamp(.9rem, 1.8vw, 1.05rem);
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 16px;
+  }
+  .hero-meta {
+    font-size: .78rem;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+
+  /* セクション共通 */
+  .qg-section {
+    padding: clamp(48px, 8vw, 80px) 0;
+  }
+  .qg-section--alt {
+    background: var(--surface-2);
+  }
+
+  /* 概要 */
+  .qg-intro {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .qg-intro p {
+    font-size: .95rem;
+    color: var(--text);
+    line-height: 1.95;
+    margin-bottom: 18px;
+  }
+  .qg-intro p:last-child { margin-bottom: 0; }
+
+  /* 領域サマリ */
+  .qg-summary {
+    max-width: 760px;
+    margin: 56px auto 0;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+  }
+  .qg-summary-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .qg-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .qg-stat-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: .02em;
+  }
+  .qg-stat-label {
+    font-size: .76rem;
+    color: var(--muted);
+    letter-spacing: .12em;
+  }
+  .qg-summary-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .qg-summary-list a {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    color: var(--text);
+    transition: background-color .2s, color .2s;
+  }
+  .qg-summary-list a:hover {
+    background: rgba(91, 127, 255, .08);
+    color: var(--brand);
+  }
+  .qg-summary-num {
+    font-size: .8rem;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: .08em;
+  }
+  .qg-summary-title {
+    font-size: .95rem;
+    font-weight: 500;
+  }
+  .qg-summary-count {
+    font-size: .8rem;
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+
+  /* 領域ヘッダ */
+  .qg-area-header {
+    max-width: 760px;
+    margin: 0 auto 40px;
+    text-align: center;
+  }
+  .qg-area-num {
+    display: inline-block;
+    font-size: .76rem;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: .2em;
+    padding: 4px 14px;
+    border: 1px solid rgba(91, 127, 255, .3);
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .qg-area-header h2 {
+    font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+    color: var(--heading);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .qg-area-header h2 i {
+    color: var(--brand);
+    font-size: .9em;
+  }
+  .qg-area-count {
+    font-size: .85rem;
+    color: var(--brand);
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: .04em;
+  }
+  .qg-area-desc {
+    font-size: .92rem;
+    color: var(--muted);
+    line-height: 1.85;
+  }
+
+  /* チェックリスト */
+  .qg-checklist {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .qg-checklist-block {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    transition: border-color .3s;
+  }
+  .qg-checklist-block:hover {
+    border-color: var(--border-hover);
+  }
+  .qg-checklist-block h3 {
+    font-size: 1.02rem;
+    color: var(--heading);
+    margin: 0 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .qg-checklist-block h3::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background: var(--brand);
+    border-radius: 2px;
+  }
+  .qg-checklist-block ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .qg-checklist-block li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: .9rem;
+    color: var(--text);
+    line-height: 1.75;
+  }
+  .qg-checklist-block li::before {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--brand);
+    font-size: .78rem;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .qg-area-footer {
+    max-width: 820px;
+    margin: 32px auto 0;
+    padding: 18px 24px;
+    background: rgba(91, 127, 255, .05);
+    border-left: 3px solid var(--brand);
+    border-radius: 4px;
+    font-size: .85rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* 改訂履歴 */
+  .qg-history {
+    max-width: 760px;
+    margin: 32px auto 0;
+  }
+  .qg-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .qg-history-table th,
+  .qg-history-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+  }
+  .qg-history-table th {
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: .08em;
+    background: rgba(255, 255, 255, .02);
+  }
+  .qg-history-table td {
+    font-size: .88rem;
+    color: var(--text);
+  }
+  .qg-history-table tr:last-child td {
+    border-bottom: none;
+  }
+  .qg-history-note {
+    margin-top: 16px;
+    font-size: .82rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* CTA */
+  .qg-cta {
+    padding: clamp(48px, 8vw, 80px) 0;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+  }
+  .qg-cta h2 {
+    color: var(--heading);
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    margin-bottom: 12px;
+  }
+  .qg-cta p {
+    color: var(--muted);
+    font-size: .95rem;
+    line-height: 1.85;
+    margin-bottom: 28px;
+  }
+  .qg-cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* レスポンシブ */
+  @media (max-width: 768px) {
+    .qg-summary {
+      padding: 24px 20px;
+    }
+    .qg-summary-stats {
+      gap: 20px;
+    }
+    .qg-stat-num {
+      font-size: 1.5rem;
+    }
+    .qg-summary-list a {
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      padding: 12px;
+    }
+    .qg-summary-title {
+      font-size: .88rem;
+    }
+    .qg-checklist-block {
+      padding: 22px 20px;
+    }
+    .qg-history-table th,
+    .qg-history-table td {
+      padding: 12px;
+      font-size: .82rem;
+    }
+  }
+</style>

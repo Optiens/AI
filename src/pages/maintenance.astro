@@ -50,8 +50,70 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
       </div>
     </section>
 
-    <!-- 対応範囲 -->
+    <!-- 工数の目安 -->
     <section class="mt-section mt-section--alt">
+      <div class="container">
+        <h2 class="section-title reveal">工数の目安</h2>
+        <p class="mt-section-lead reveal">月の工数枠は、以下のような作業の組み合わせで使われます。実際の工数は内容により変動します。</p>
+        <div class="mt-scope reveal">
+          <table class="mt-scope-table">
+            <thead>
+              <tr>
+                <th>作業内容</th>
+                <th>標準工数</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>ワークフロー調整・改善</strong>
+                  <span class="mt-scope-desc">既存の自動化フローの調整・分岐追加など</span>
+                </td>
+                <td>0.5〜2h</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>AIエージェントのプロンプト調整</strong>
+                  <span class="mt-scope-desc">出力品質や挙動の見直し</span>
+                </td>
+                <td>0.5〜1h</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>新規業務の自動化検討</strong>
+                  <span class="mt-scope-desc">対象業務のヒアリング・設計・小規模な構築</span>
+                </td>
+                <td>1〜3h</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>月次レポート作成</strong>
+                  <span class="mt-scope-desc">運用状況・改善提案のサマリ</span>
+                </td>
+                <td>1h</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>トラブル対応</strong>
+                  <span class="mt-scope-desc">不具合調査・原因切り分け・暫定対応（内容により変動）</span>
+                </td>
+                <td>0.5〜2h</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>チャット相談（応答含む）</strong>
+                  <span class="mt-scope-desc">運用上の質問・確認のやり取り</span>
+                </td>
+                <td>月内合計0.5〜2h</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 対応範囲 -->
+    <section class="mt-section">
       <div class="container">
         <h2 class="section-title reveal">対応範囲の考え方</h2>
         <div class="mt-scope reveal">
@@ -98,7 +160,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     </section>
 
     <!-- 瑕疵対応 -->
-    <section class="mt-section">
+    <section class="mt-section mt-section--alt">
       <div class="container">
         <h2 class="section-title reveal">不具合対応（瑕疵担保）について</h2>
         <div class="mt-warranty reveal">
@@ -163,6 +225,14 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
   }
   .mt-section--alt {
     background: var(--surface-2);
+  }
+  .mt-section-lead {
+    text-align: center;
+    max-width: 720px;
+    margin: 12px auto 0;
+    font-size: .92rem;
+    color: var(--muted);
+    line-height: 1.7;
   }
 
   /* プラン比較 */

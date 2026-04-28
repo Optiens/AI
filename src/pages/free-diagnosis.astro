@@ -16,6 +16,20 @@ import Layout from '../layouts/Layout.astro';
           かんたんなフォーム入力で、あなたの事業に合った<br/>
           AI活用ポイントを簡易レポートとしてお届けします。
         </p>
+        <div class="diag-promise">
+          <div class="diag-promise-item">
+            <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+            <p>詳細レポート（5,000円）と同じ仕組みで作成。<br/>無料版は要点に絞った2〜3ページのレポートをお届けします。</p>
+          </div>
+          <div class="diag-promise-item">
+            <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+            <p>AI活用ポイントを<strong>最低3つ</strong>ご提示することをお約束します。</p>
+          </div>
+          <div class="diag-promise-item">
+            <i class="fa-solid fa-handshake-simple" aria-hidden="true"></i>
+            <p>契約は不要です。詳細レポートやご相談をご希望の場合のみ、こちらからご案内します。</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -193,6 +207,7 @@ import Layout from '../layouts/Layout.astro';
 
           <div class="form-note">
             <p>ご入力いただいた情報は診断レポート作成のみに使用します。</p>
+            <p>レポート送付後、ご検討の負担になるような連絡はいたしません。</p>
             <p><a href="/privacy-policy">プライバシーポリシー</a>をご確認ください。</p>
           </div>
 
@@ -378,6 +393,47 @@ import Layout from '../layouts/Layout.astro';
     font-size: clamp(14px, 1.8vw, 16px);
     line-height: 1.7;
     margin: 0;
+  }
+
+  /* ===== Promise (お約束カード) ===== */
+  .diag-promise {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 880px;
+    margin: 32px auto 0;
+    text-align: left;
+  }
+  .diag-promise-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(91, 127, 255, .06);
+    border: 1px solid rgba(91, 127, 255, .2);
+    border-radius: 10px;
+  }
+  .diag-promise-item i {
+    color: var(--brand, #5B7FFF);
+    font-size: 1rem;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .diag-promise-item p {
+    margin: 0;
+    font-size: .85rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, .85);
+  }
+  .diag-promise-item strong {
+    color: #fff;
+    font-weight: 700;
+  }
+  @media (max-width: 880px) {
+    .diag-promise {
+      grid-template-columns: 1fr;
+      max-width: 480px;
+    }
   }
 
   /* ===== Steps ===== */
