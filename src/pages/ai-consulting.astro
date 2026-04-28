@@ -9,7 +9,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
 >
   <main>
     <!-- ヒーロー -->
-    <section class="ac-hero">
+    <section class="ac-hero light-section">
       <ParticleCanvas id="ac-net" />
       <div class="container text-center" style="position:relative;z-index:1;">
         <h1>その仕事、本当に<br class="sp-only" />あなたがやるべきですか？</h1>
@@ -397,7 +397,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
   /* ===== Hero ===== */
   .ac-hero {
     position: relative;
-    color: #fff;
+    color: var(--text);
     padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
     background: var(--surface);
     overflow: hidden;

@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="会社情報 | Optiens" description="合同会社Optiens（オプティエンス）の会社情報。AI活用支援と室内IoT水耕栽培の2事業で、小規模事業者の業務効率化と持続可能な農業の仕組みづくりに取り組んでいます。">
   <main>
     <!-- ===== Hero（ビジョン×バリュー融合） ===== -->
-    <section class="about-hero-section">
+    <section class="about-hero-section light-section">
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <div class="hero-content">
         <div class="container text-center">
@@ -343,7 +343,7 @@ import Layout from '../layouts/Layout.astro';
   overflow: hidden;
   padding: clamp(120px, 16vw, 200px) 0 clamp(80px, 12vw, 140px);
   background: var(--surface);
-  color: #fff;
+  color: var(--text);
 }
 #hero-canvas {
   position: absolute;
@@ -372,7 +372,7 @@ import Layout from '../layouts/Layout.astro';
   font-weight: 800;
   line-height: 1.5;
   letter-spacing: -.02em;
-  color: #fff;
+  color: var(--heading);
   margin: 0 auto;
   max-width: 880px;
 }
