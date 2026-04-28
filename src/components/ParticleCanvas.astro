@@ -29,6 +29,15 @@ const { id = 'particle-net' } = Astro.props;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
+  // カラフルパレット：4色（3価値観カラー + ブランド青）
+  // 調和=amber / 最適化=blue / 循環=emerald / brand=Optiens青
+  var COLORS = [
+    'rgba(245,158,11,',   // #F59E0B amber（調和）
+    'rgba(59,130,246,',   // #3B82F6 blue（最適化）
+    'rgba(16,185,129,',   // #10B981 emerald（循環）
+    'rgba(91,127,255,',   // #5B7FFF brand
+  ];
+
   function createParticles() {
     particles = [];
     for (var i = 0; i < PARTICLE_COUNT; i++) {
@@ -38,7 +47,7 @@ const { id = 'particle-net' } = Astro.props;
         vx: (Math.random() - 0.5) * 0.4,
         vy: (Math.random() - 0.5) * 0.4,
         r: Math.random() * 1.5 + 0.5,
-        color: i % 3 === 0 ? 'rgba(78,139,160,' : 'rgba(91,127,255,',
+        color: COLORS[i % COLORS.length],
       });
     }
   }
@@ -53,7 +62,7 @@ const { id = 'particle-net' } = Astro.props;
         var dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < CONNECT_DIST) {
           var alpha = (1 - dist / CONNECT_DIST) * 0.15;
-          ctx.strokeStyle = 'rgba(91,127,255,' + alpha + ')';
+          ctx.strokeStyle = particles[i].color + alpha + ')';
           ctx.lineWidth = 0.5;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
