@@ -1,196 +1,72 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import QRCode from 'qrcode';
-
-// ビルド時にこのページのQRコードSVGを生成（PC利用者がスマホへ移行する用）
-const pageUrl = 'https://optiens.com/document-editor';
-const qrSvg = await QRCode.toString(pageUrl, {
-  type: 'svg',
-  margin: 1,
-  color: {
-    dark: '#0e1525',
-    light: '#ffffff',
-  },
-  width: 160,
-});
 ---
 
 <Layout
   title="書類添削AI（デモ）| Optiens"
-  description="経営者向けの書類添削AIデモ。お手元のメール文・契約書ドラフト・社内通達を、AIエージェントが添削します。"
+  description="経営者向けの書類添削AIデモ。社内文書サンプルを選んで、AIエージェントによる添削を体験できます。"
   canonical="https://optiens.com/document-editor"
 >
-  <main>
+  <main class="ed-main light-section">
     <!-- ヒーロー -->
     <section class="ed-hero">
       <div class="container text-center">
         <p class="hero-eyebrow">DEMO</p>
         <h1>書類添削AI（デモ）</h1>
         <p class="hero-sub">
-          お手元のメール文・契約書ドラフト・社内通達を、AIエージェントが添削します。<br />
-          重要度付きの指摘メモと、修正後の本文をその場でダウンロードいただけます。
+          社内文書サンプルを選んで、AIエージェントによる添削を体験いただけます。<br />
+          推敲ツールの業務版として、本文と添削メモを並列に確認できます。
         </p>
-
-        <!-- スマホで開く（PC利用者向けQRコード） -->
-        <div class="ed-qr pc-only" aria-label="スマホで開く">
-          <div class="ed-qr-text">
-            <p class="ed-qr-label">スマホで開く</p>
-            <p class="ed-qr-desc">スマホからの利用を想定したUIです。<br />お手元のスマホでQRコードを読み取ってください。</p>
-          </div>
-          <div class="ed-qr-svg" set:html={qrSvg}></div>
-        </div>
       </div>
     </section>
 
-    <!-- こんな人におすすめ -->
-    <section class="ed-section ed-target-section">
+    <!-- ツール本体 -->
+    <section class="ed-tool-section">
       <div class="container">
-        <h2 class="section-title reveal">こんな経営者・担当者におすすめ</h2>
-        <p class="section-sub reveal">送る前に第三者の目で確認したい、ちょっとした添削の習慣にお使いください。</p>
-
-        <div class="targets-grid reveal-stagger">
-          <div class="target-card gradient-border">
-            <div class="target-icon"><i class="fa-regular fa-clock"></i></div>
-            <h3>時間がない経営者・個人事業主</h3>
-            <p>取引先への連絡を一通書くたびに迷っていられない。第三者チェックを数十秒で済ませたい方に。</p>
+        <!-- ツールバー -->
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <span class="toolbar-title">書類添削ツール</span>
+            <select id="doc-select">
+              <option value="">社内文書を選択</option>
+            </select>
           </div>
-          <div class="target-card gradient-border">
-            <div class="target-icon"><i class="fa-solid fa-laptop"></i></div>
-            <h3>PC操作に不慣れな経営者</h3>
-            <p>難しい設定は不要。ファイルを添付するか、本文を貼り付けてボタンを押すだけで添削できます。</p>
-          </div>
-          <div class="target-card gradient-border">
-            <div class="target-icon"><i class="fa-solid fa-file-signature"></i></div>
-            <h3>重要書類を出す前に確認したい方</h3>
-            <p>契約書ドラフト・お詫びメール・プレスリリース等、出した後に直しにくい書類の事前チェックに。</p>
-          </div>
-          <div class="target-card gradient-border">
-            <div class="target-icon"><i class="fa-solid fa-pen-nib"></i></div>
-            <h3>文章作成に苦手意識がある方</h3>
-            <p>「これで失礼ではないか」「冗長ではないか」を気にせずに済むよう、AIが代わりに目を通します。</p>
-          </div>
-          <div class="target-card gradient-border">
-            <div class="target-icon"><i class="fa-solid fa-briefcase"></i></div>
-            <h3>経理・労務・契約書類の担当者</h3>
-            <p>社内通達・案内メール・規程改定文など、定型ながら抜け漏れが許されない文書のチェックに。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 注記: 本来はDB選択方式 -->
-    <section class="ed-section ed-note-section">
-      <div class="container">
-        <div class="note-box reveal">
-          <div class="note-head">
-            <i class="fa-solid fa-circle-info"></i>
-            <h3>本デモは簡易版です（実運用ではデータベース選択方式を推奨）</h3>
-          </div>
-          <ul class="note-list">
-            <li>実運用では、過去の社内文書・テンプレート・契約書ドラフト等をデータベースに蓄積し、目的別に選択して添削する仕組みが推奨されます。</li>
-            <li>本デモでは、その場でファイルを添付（または本文貼り付け）できる簡易版として動作します。</li>
-            <li>貴社業務に最適化したカスタム版（社内テンプレートとの整合チェック・過去文書の参照・部門別の添削ルール適用等）は、<a href="/service">導入支援</a>にてご相談ください。</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- 添削ツール本体 -->
-    <section class="ed-section ed-tool-section">
-      <div class="container">
-        <h2 class="section-title reveal">書類を添付（または貼り付け）→ 添削 → ダウンロード</h2>
-
-        <!-- ステップ1: 入力 -->
-        <div class="tool-block reveal">
-          <div class="block-header">
-            <span class="step-num">STEP 1</span>
-            <h3>添削したい書類を入力</h3>
-          </div>
-
-          <!-- ファイル添付 -->
-          <div id="dropzone" class="dropzone">
-            <i class="fa-solid fa-file-arrow-up dropzone-icon"></i>
-            <p class="dropzone-main">ファイルをドラッグ＆ドロップ<span class="sp-only-br"></span>または</p>
-            <label class="dropzone-btn">
-              ファイルを選択
-              <input type="file" id="file-input" accept=".txt,.md,.markdown" hidden />
-            </label>
-            <p class="dropzone-sub">対応形式: <code>.txt</code> / <code>.md</code>（最大10MB）</p>
-            <p class="dropzone-sub dropzone-future">PDF・DOCX対応は順次予定（現バージョンはテキスト/Markdownのみ）</p>
-          </div>
-
-          <!-- または貼り付け -->
-          <div class="textarea-wrap">
-            <label for="document-text" class="textarea-label">または、本文を直接貼り付け</label>
-            <textarea
-              id="document-text"
-              rows="10"
-              placeholder="ここに書類の本文を貼り付けてください（最大8,000文字）"
-            ></textarea>
-            <div class="textarea-meta">
-              <span id="char-count">0 / 8,000 文字</span>
-              <button type="button" id="clear-input" class="link-btn">クリア</button>
-            </div>
-          </div>
-
-          <!-- 添削ボタン -->
-          <div class="action-row">
-            <button type="button" id="edit-btn" class="btn-primary" disabled>
-              <i class="fa-solid fa-wand-magic-sparkles"></i>
-              AIで添削する
+          <div class="toolbar-right">
+            <span id="status" class="status"></span>
+            <button type="button" id="ai-edit-btn" class="action-btn primary" disabled>
+              <i class="fa-solid fa-wand-magic-sparkles"></i> AIで添削
             </button>
-            <span id="action-status" class="action-status"></span>
+            <button type="button" id="clear-btn" class="action-btn danger" disabled>クリア</button>
           </div>
         </div>
 
-        <!-- ステップ2: 結果 -->
-        <div id="result-block" class="tool-block reveal" style="display:none;">
-          <div class="block-header">
-            <span class="step-num">STEP 2</span>
-            <h3>添削結果</h3>
-            <div id="result-meta" class="result-meta"></div>
-          </div>
+        <!-- 空状態 -->
+        <div id="empty-state" class="empty-state">
+          <p>左上のメニューから書類を選択してください。</p>
+          <p class="empty-hint">サンプルは社内文書を想定したダミーデータです。本番環境では御社のDBから直接選択する仕組みを構築できます。</p>
+        </div>
 
-          <!-- タブ -->
-          <div class="result-tabs">
-            <button type="button" class="tab-btn active" data-tab="revised">修正後本文</button>
-            <button type="button" class="tab-btn" data-tab="notes">添削メモ</button>
-            <button type="button" class="tab-btn" data-tab="original">元の本文</button>
+        <!-- エディタ -->
+        <div id="editor" class="editor" style="display:none;">
+          <div class="editor-header">
+            <div class="col-header col-header-num">#</div>
+            <div class="col-header col-header-text">本文</div>
+            <div class="col-header col-header-note">添削メモ</div>
           </div>
+          <div id="editor-body" class="editor-body"></div>
+        </div>
 
-          <!-- タブコンテンツ -->
-          <div class="tab-panel active" data-tab-panel="revised">
-            <pre id="revised-text" class="text-display"></pre>
-          </div>
-          <div class="tab-panel" data-tab-panel="notes">
-            <div class="legend">
-              <span class="legend-item"><span class="dot dot-high"></span>重要</span>
-              <span class="legend-item"><span class="dot dot-medium"></span>中</span>
-              <span class="legend-item"><span class="dot dot-low"></span>軽微</span>
-            </div>
-            <div id="notes-list" class="notes-list"></div>
-          </div>
-          <div class="tab-panel" data-tab-panel="original">
-            <pre id="original-text" class="text-display"></pre>
-          </div>
-
-          <!-- ダウンロード -->
-          <div class="download-row">
-            <span class="download-label">修正後本文をダウンロード</span>
-            <button type="button" id="download-txt" class="btn-secondary">
-              <i class="fa-solid fa-download"></i> .txt
-            </button>
-            <button type="button" id="download-md" class="btn-secondary">
-              <i class="fa-solid fa-download"></i> .md
-            </button>
-            <span class="download-future">PDF・DOCXは順次対応予定</span>
-          </div>
+        <!-- 凡例（メモあり時のみ表示） -->
+        <div id="legend" class="legend" style="display:none;">
+          <span class="legend-item"><span class="dot dot-high"></span>重要</span>
+          <span class="legend-item"><span class="dot dot-medium"></span>中</span>
+          <span class="legend-item"><span class="dot dot-low"></span>軽微</span>
         </div>
 
         <!-- 注意書き -->
-        <p class="disclaimer reveal">
-          ※本デモは1時間あたり10回までご利用いただけます。送信内容は添削処理にのみ使用し、AIプロバイダの規約に基づき扱われます。<br />
-          ※業務上の機密情報・個人情報の入力はお控えください。本格運用にはオンプレミス／専用環境での構築をご相談ください。
+        <p class="disclaimer">
+          ※AIによる添削は1時間あたり10回までご利用いただけます。送信内容は添削処理にのみ使用します。<br />
+          ※御社専用版では、社内テンプレート参照・過去文書からの整合チェック・部門別ルール適用などの拡張が可能です。
         </p>
       </div>
     </section>
@@ -198,14 +74,14 @@ const qrSvg = await QRCode.toString(pageUrl, {
     <!-- CTA -->
     <section class="ed-cta-section">
       <div class="container text-center">
-        <h2 class="reveal">貴社業務に合わせたカスタム版もご相談いただけます</h2>
-        <p class="reveal">
+        <h2>御社業務に合わせたカスタム版もご相談いただけます</h2>
+        <p>
           社内テンプレート参照・過去文書からの整合チェック・部門別ルール適用など、<br />
-          貴社の業務フローに沿った書類添削の仕組みを構築します。
+          御社の業務フローに沿った書類添削の仕組みを構築します。
         </p>
-        <div class="cta-buttons reveal">
+        <div class="cta-buttons">
           <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける（0円）</a>
-          <a href="/ai-examples" class="btn-ghost">他のAI活用事例を見る</a>
+          <a href="/service" class="btn-ghost">サービスメニューを見る</a>
         </div>
       </div>
     </section>
@@ -219,792 +95,507 @@ const qrSvg = await QRCode.toString(pageUrl, {
     location: string;
     comment: string;
   }
-  interface EditResponse {
-    revised: string;
-    notes: EditNote[];
-    mock?: boolean;
-    truncated?: boolean;
-    remaining?: number;
-    error?: string;
+  interface SampleDoc {
+    id: string;
+    title: string;
+    category: string;
+    text: string;
   }
 
-  const MAX_CHARS = 8000;
-  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+  const docSelect = document.getElementById('doc-select') as HTMLSelectElement;
+  const aiEditBtn = document.getElementById('ai-edit-btn') as HTMLButtonElement;
+  const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+  const statusEl = document.getElementById('status') as HTMLSpanElement;
+  const emptyState = document.getElementById('empty-state') as HTMLDivElement;
+  const editor = document.getElementById('editor') as HTMLDivElement;
+  const editorBody = document.getElementById('editor-body') as HTMLDivElement;
+  const legend = document.getElementById('legend') as HTMLDivElement;
 
-  const fileInput = document.getElementById('file-input') as HTMLInputElement;
-  const dropzone = document.getElementById('dropzone') as HTMLDivElement;
-  const textArea = document.getElementById('document-text') as HTMLTextAreaElement;
-  const charCount = document.getElementById('char-count') as HTMLSpanElement;
-  const clearInput = document.getElementById('clear-input') as HTMLButtonElement;
-  const editBtn = document.getElementById('edit-btn') as HTMLButtonElement;
-  const actionStatus = document.getElementById('action-status') as HTMLSpanElement;
+  let samples: SampleDoc[] = [];
+  let currentLines: string[] = [];
 
-  const resultBlock = document.getElementById('result-block') as HTMLDivElement;
-  const resultMeta = document.getElementById('result-meta') as HTMLDivElement;
-  const revisedText = document.getElementById('revised-text') as HTMLPreElement;
-  const originalText = document.getElementById('original-text') as HTMLPreElement;
-  const notesList = document.getElementById('notes-list') as HTMLDivElement;
-  const tabBtns = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
-  const tabPanels = document.querySelectorAll<HTMLDivElement>('.tab-panel');
-  const downloadTxt = document.getElementById('download-txt') as HTMLButtonElement;
-  const downloadMd = document.getElementById('download-md') as HTMLButtonElement;
-
-  let currentRevised = '';
-  let currentOriginalFilename = 'document';
-
-  // --- 文字数カウント ---
-  function updateCount() {
-    const len = textArea.value.length;
-    charCount.textContent = `${len.toLocaleString()} / ${MAX_CHARS.toLocaleString()} 文字`;
-    if (len > MAX_CHARS) {
-      charCount.classList.add('over');
-    } else {
-      charCount.classList.remove('over');
+  // --- サンプル読み込み ---
+  async function loadSamples() {
+    try {
+      const res = await fetch('/samples/document-editor.json');
+      samples = await res.json();
+      docSelect.innerHTML = '<option value="">社内文書を選択</option>';
+      // カテゴリでグループ化
+      const byCategory: Record<string, SampleDoc[]> = {};
+      for (const s of samples) {
+        if (!byCategory[s.category]) byCategory[s.category] = [];
+        byCategory[s.category].push(s);
+      }
+      for (const [category, docs] of Object.entries(byCategory)) {
+        const group = document.createElement('optgroup');
+        group.label = category;
+        for (const doc of docs) {
+          const o = document.createElement('option');
+          o.value = doc.id;
+          o.textContent = doc.title;
+          group.appendChild(o);
+        }
+        docSelect.appendChild(group);
+      }
+    } catch (e) {
+      statusEl.textContent = 'サンプルの読み込みに失敗しました';
     }
-    editBtn.disabled = len === 0 || len > MAX_CHARS;
   }
-  textArea.addEventListener('input', updateCount);
 
-  // --- クリア ---
-  clearInput.addEventListener('click', () => {
-    textArea.value = '';
-    updateCount();
-    actionStatus.textContent = '';
-  });
-
-  // --- ファイル読込 ---
-  function readFile(file: File) {
-    if (file.size > MAX_FILE_SIZE) {
-      actionStatus.textContent = 'ファイルサイズが大きすぎます（最大10MB）';
-      actionStatus.className = 'action-status error';
+  // --- 書類選択 ---
+  docSelect.addEventListener('change', () => {
+    const id = docSelect.value;
+    if (!id) {
+      showEmptyState();
       return;
     }
-    const ext = file.name.toLowerCase().split('.').pop() || '';
-    if (!['txt', 'md', 'markdown'].includes(ext)) {
-      actionStatus.textContent = '対応形式: .txt / .md のみ（PDF・DOCXは順次対応予定）';
-      actionStatus.className = 'action-status error';
-      return;
-    }
-    currentOriginalFilename = file.name.replace(/\.[^.]+$/, '');
-    const reader = new FileReader();
-    reader.onload = () => {
-      const content = String(reader.result || '');
-      textArea.value = content.length > MAX_CHARS ? content.slice(0, MAX_CHARS) : content;
-      updateCount();
-      actionStatus.textContent = `読み込みました: ${file.name}（${textArea.value.length.toLocaleString()}文字）`;
-      actionStatus.className = 'action-status info';
-    };
-    reader.onerror = () => {
-      actionStatus.textContent = 'ファイルの読み込みに失敗しました';
-      actionStatus.className = 'action-status error';
-    };
-    reader.readAsText(file, 'utf-8');
+    const doc = samples.find(s => s.id === id);
+    if (!doc) return;
+    renderRows(doc.text);
+  });
+
+  // --- 行レンダリング ---
+  function renderRows(text: string) {
+    const lines = text.split('\n');
+    currentLines = lines;
+    editorBody.innerHTML = '';
+
+    lines.forEach((line, i) => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.dataset.lineIndex = String(i);
+
+      const num = document.createElement('div');
+      num.className = 'row-num';
+      num.textContent = String(i + 1);
+
+      const text = document.createElement('div');
+      text.className = 'row-text';
+      if (line.trim() === '') {
+        text.innerHTML = '<span class="row-text-empty">（空行）</span>';
+      } else {
+        text.textContent = line;
+      }
+
+      const noteCell = document.createElement('div');
+      noteCell.className = 'row-note';
+      noteCell.innerHTML = '<span class="row-note-empty">—</span>';
+
+      row.appendChild(num);
+      row.appendChild(text);
+      row.appendChild(noteCell);
+      editorBody.appendChild(row);
+    });
+
+    emptyState.style.display = 'none';
+    editor.style.display = 'block';
+    aiEditBtn.disabled = false;
+    clearBtn.disabled = false;
+    legend.style.display = 'none';
+    statusEl.textContent = `${lines.length}行`;
   }
 
-  fileInput.addEventListener('change', () => {
-    const file = fileInput.files?.[0];
-    if (file) readFile(file);
-  });
+  // --- AI添削 ---
+  aiEditBtn.addEventListener('click', async () => {
+    const id = docSelect.value;
+    const doc = samples.find(s => s.id === id);
+    if (!doc) return;
 
-  // --- ドラッグ＆ドロップ ---
-  ['dragenter', 'dragover'].forEach(ev => {
-    dropzone.addEventListener(ev, (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropzone.classList.add('dragging');
-    });
-  });
-  ['dragleave', 'drop'].forEach(ev => {
-    dropzone.addEventListener(ev, (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropzone.classList.remove('dragging');
-    });
-  });
-  dropzone.addEventListener('drop', (e) => {
-    const file = (e as DragEvent).dataTransfer?.files?.[0];
-    if (file) readFile(file);
-  });
-
-  // --- 添削実行 ---
-  editBtn.addEventListener('click', async () => {
-    const text = textArea.value.trim();
-    if (!text) return;
-
-    editBtn.disabled = true;
-    actionStatus.textContent = 'AIが添削しています…（数十秒かかる場合があります）';
-    actionStatus.className = 'action-status loading';
+    aiEditBtn.disabled = true;
+    statusEl.textContent = 'AI添削中...';
 
     try {
       const res = await fetch('/api/document-edit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text: doc.text }),
       });
-      const data: EditResponse = await res.json();
-
-      if (!res.ok) {
-        actionStatus.textContent = data.error || '添削に失敗しました';
-        actionStatus.className = 'action-status error';
-        editBtn.disabled = false;
+      const data = await res.json();
+      if (data.error) {
+        statusEl.textContent = data.error;
+        aiEditBtn.disabled = false;
         return;
       }
-
-      renderResult(text, data);
-      actionStatus.textContent = '';
-      actionStatus.className = 'action-status';
-      editBtn.disabled = false;
-    } catch (err) {
-      console.error(err);
-      actionStatus.textContent = '通信エラーが発生しました';
-      actionStatus.className = 'action-status error';
-      editBtn.disabled = false;
+      placeNotes(data.notes || []);
+      statusEl.textContent = `${data.notes?.length || 0}件の添削メモを生成${data.mock ? '（モック）' : ''}`;
+    } catch (e) {
+      statusEl.textContent = '添削に失敗しました';
     }
+    aiEditBtn.disabled = false;
   });
 
-  // --- 結果描画 ---
-  function renderResult(original: string, data: EditResponse) {
-    currentRevised = data.revised || original;
+  // --- AI添削メモを行にマッピング ---
+  function placeNotes(notes: EditNote[]) {
+    // クリア
+    editorBody.querySelectorAll('.row').forEach(row => {
+      row.classList.remove('has-note', 'note-high', 'note-medium', 'note-low');
+      const noteCell = row.querySelector('.row-note') as HTMLDivElement;
+      noteCell.innerHTML = '<span class="row-note-empty">—</span>';
+    });
 
-    // メタ情報
-    const noteCount = data.notes?.length || 0;
-    const high = data.notes?.filter(n => n.severity === 'high').length || 0;
-    const med = data.notes?.filter(n => n.severity === 'medium').length || 0;
-    const low = data.notes?.filter(n => n.severity === 'low').length || 0;
-    const metaParts: string[] = [];
-    metaParts.push(`${noteCount}件の指摘（重要${high} / 中${med} / 軽微${low}）`);
-    if (data.mock) metaParts.push('※APIキー未設定のため簡易応答');
-    if (data.truncated) metaParts.push(`※文字数上限により先頭${MAX_CHARS.toLocaleString()}文字のみ処理`);
-    if (typeof data.remaining === 'number') metaParts.push(`本日の残り回数: ${data.remaining}`);
-    resultMeta.textContent = metaParts.join(' / ');
+    // 各noteを最も該当する行にマッピング
+    let assignedCount = 0;
+    notes.forEach((note) => {
+      const targetIdx = findBestMatchLine(note);
+      const row = editorBody.querySelector(`.row[data-line-index="${targetIdx}"]`);
+      if (!row) return;
+      assignNoteToRow(row as HTMLDivElement, note);
+      assignedCount++;
+    });
 
-    // テキスト
-    revisedText.textContent = currentRevised;
-    originalText.textContent = original;
+    if (assignedCount > 0) {
+      legend.style.display = 'flex';
+    }
+  }
 
-    // メモ
-    notesList.innerHTML = '';
-    if (noteCount === 0) {
-      const empty = document.createElement('p');
-      empty.className = 'notes-empty';
-      empty.textContent = '目立った指摘はありませんでした。';
-      notesList.appendChild(empty);
-    } else {
-      // 重要度順にソート
-      const sevRank: Record<Severity, number> = { high: 3, medium: 2, low: 1 };
-      const sorted = [...(data.notes || [])].sort((a, b) => sevRank[b.severity] - sevRank[a.severity]);
-      for (const n of sorted) {
-        const card = document.createElement('div');
-        card.className = `note-card note-${n.severity}`;
-        const head = document.createElement('div');
-        head.className = 'note-card-head';
-        const badge = document.createElement('span');
-        badge.className = `note-badge badge-${n.severity}`;
-        badge.textContent = n.severity === 'high' ? '重要' : n.severity === 'medium' ? '中' : '軽微';
-        const loc = document.createElement('span');
-        loc.className = 'note-location';
-        loc.textContent = n.location;
-        head.appendChild(badge);
-        head.appendChild(loc);
-        const body = document.createElement('div');
-        body.className = 'note-comment';
-        body.textContent = n.comment;
-        card.appendChild(head);
-        card.appendChild(body);
-        notesList.appendChild(card);
+  function findBestMatchLine(note: EditNote): number {
+    // location文字列に「N行目」「行N」等が含まれる場合はその行
+    const lineMatch = note.location.match(/(\d+)\s*行/);
+    if (lineMatch) {
+      const idx = parseInt(lineMatch[1]) - 1;
+      if (idx >= 0 && idx < currentLines.length) return idx;
+    }
+
+    // location文字列が本文のいずれかの行に含まれているか探す
+    const loc = note.location.replace(/^[「『]|[」』]$/g, '').trim();
+    if (loc.length >= 2) {
+      // 完全一致 or 部分一致
+      for (let i = 0; i < currentLines.length; i++) {
+        if (currentLines[i].includes(loc)) return i;
+      }
+      // 短いキーワード抽出 (2-4文字の連続するJP文字)
+      const keywords = loc.match(/[一-龯ぁ-ゔァ-ヴ]{2,4}/g) || [];
+      for (const kw of keywords) {
+        for (let i = 0; i < currentLines.length; i++) {
+          if (currentLines[i].includes(kw)) return i;
+        }
       }
     }
 
-    resultBlock.style.display = 'block';
-    resultBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // フォールバック: 最初の非空行
+    for (let i = 0; i < currentLines.length; i++) {
+      if (currentLines[i].trim()) return i;
+    }
+    return 0;
   }
 
-  // --- タブ切替 ---
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tab = btn.dataset.tab;
-      tabBtns.forEach(b => b.classList.toggle('active', b === btn));
-      tabPanels.forEach(p => p.classList.toggle('active', p.dataset.tabPanel === tab));
-    });
-  });
-
-  // --- ダウンロード ---
-  function download(content: string, filename: string, mime: string) {
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  function assignNoteToRow(row: HTMLDivElement, note: EditNote) {
+    row.classList.add('has-note', `note-${note.severity}`);
+    const noteCell = row.querySelector('.row-note') as HTMLDivElement;
+    const dot = document.createElement('span');
+    dot.className = `dot dot-${note.severity}`;
+    const text = document.createElement('span');
+    text.className = 'row-note-text';
+    text.textContent = note.comment;
+    noteCell.innerHTML = '';
+    noteCell.appendChild(dot);
+    noteCell.appendChild(text);
   }
 
-  downloadTxt.addEventListener('click', () => {
-    if (!currentRevised) return;
-    download(currentRevised, `${currentOriginalFilename}_revised.txt`, 'text/plain;charset=utf-8');
-  });
-  downloadMd.addEventListener('click', () => {
-    if (!currentRevised) return;
-    download(currentRevised, `${currentOriginalFilename}_revised.md`, 'text/markdown;charset=utf-8');
+  // --- クリア ---
+  clearBtn.addEventListener('click', () => {
+    docSelect.value = '';
+    showEmptyState();
   });
 
-  updateCount();
+  function showEmptyState() {
+    emptyState.style.display = 'block';
+    editor.style.display = 'none';
+    legend.style.display = 'none';
+    aiEditBtn.disabled = true;
+    clearBtn.disabled = true;
+    statusEl.textContent = '';
+    currentLines = [];
+  }
+
+  loadSamples();
 </script>
 
 <style>
-  /* ===== Hero ===== */
+  .ed-main {
+    padding-top: 80px;
+  }
+
+  /* ヒーロー */
   .ed-hero {
-    position: relative;
-    color: #fff;
-    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
+    padding: clamp(40px, 6vw, 64px) 0 clamp(24px, 4vw, 40px);
     background: var(--surface);
-    overflow: hidden;
   }
   .hero-eyebrow {
-    font-size: .75rem;
+    font-size: clamp(11px, 1.2vw, 13px);
     font-weight: 600;
     letter-spacing: .25em;
     color: var(--brand);
-    margin-bottom: 16px;
+    margin: 0 0 12px;
+    text-transform: uppercase;
   }
   .ed-hero h1 {
     color: var(--heading);
     font-size: clamp(1.5rem, 4vw, 2.4rem);
-    margin-bottom: 20px;
-    line-height: 1.4;
+    margin: 0 0 16px;
   }
-  .hero-sub {
-    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+  .ed-hero .hero-sub {
     color: var(--muted);
-    line-height: 1.8;
-    margin-bottom: 0;
-  }
-
-  /* ===== QR (PC利用者向け：スマホへ移行) ===== */
-  .ed-qr {
-    display: inline-flex;
-    align-items: center;
-    gap: 24px;
-    margin-top: 32px;
-    padding: 20px 24px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    text-align: left;
-  }
-  .ed-qr-label {
-    margin: 0 0 6px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--heading);
-    letter-spacing: 0.04em;
-  }
-  .ed-qr-desc {
-    margin: 0;
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-  .ed-qr-svg {
-    flex-shrink: 0;
-    width: 120px;
-    height: 120px;
-    background: #fff;
-    padding: 8px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .ed-qr-svg :global(svg) {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-  /* スマホでは非表示（既にスマホで開いているため不要） */
-  .pc-only { }
-  @media (max-width: 768px) {
-    .pc-only { display: none !important; }
-  }
-
-  /* ===== Sections ===== */
-  .ed-section { padding: clamp(56px, 8vw, 80px) 0; }
-  .ed-target-section { background: var(--surface-2); }
-  .ed-note-section { background: var(--surface); }
-  .ed-tool-section { background: var(--surface-2); }
-
-  .section-title {
-    text-align: center;
-    margin-bottom: 8px;
-    font-size: clamp(1.25rem, 3vw, 1.7rem);
-    color: var(--heading);
-  }
-  .section-sub {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.92rem;
-    margin-bottom: 36px;
-  }
-
-  /* ===== Targets ===== */
-  .targets-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 18px;
-    margin-top: 24px;
-  }
-  .target-card {
-    padding: 22px;
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: border-color .3s ease, box-shadow .3s ease;
-  }
-  .target-card:hover {
-    border-color: var(--border-hover);
-    box-shadow: var(--glow);
-  }
-  .target-icon {
-    font-size: 1.4rem;
-    color: var(--brand);
-    margin-bottom: 10px;
-  }
-  .target-card h3 {
-    font-size: 0.98rem;
-    color: var(--heading);
-    margin: 0 0 8px;
-    line-height: 1.5;
-  }
-  .target-card p {
-    font-size: 0.85rem;
-    line-height: 1.75;
-    color: var(--text);
-    margin: 0;
-  }
-
-  /* ===== Note box ===== */
-  .note-box {
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 24px 28px;
-    background: rgba(91, 127, 255, .04);
-    border: 1px solid rgba(91, 127, 255, .25);
-    border-radius: var(--radius);
-  }
-  .note-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .note-head i {
-    color: var(--brand);
-    font-size: 1.1rem;
-  }
-  .note-head h3 {
-    font-size: 1rem;
-    color: var(--heading);
-    margin: 0;
-    line-height: 1.5;
-  }
-  .note-list {
-    margin: 0;
-    padding-left: 20px;
-    color: var(--text);
-  }
-  .note-list li {
-    font-size: 0.88rem;
+    font-size: clamp(.9rem, 1.6vw, 1.05rem);
     line-height: 1.85;
-    margin-bottom: 6px;
-  }
-  .note-list a {
-    color: var(--brand);
-    text-decoration: underline;
+    margin: 0 auto;
+    max-width: 720px;
   }
 
-  /* ===== Tool block ===== */
-  .tool-block {
-    max-width: 880px;
-    margin: 0 auto 24px;
-    padding: 28px;
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
-  .block-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 18px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .step-num {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: .15em;
-    color: var(--brand);
-    background: rgba(91, 127, 255, .08);
-    border: 1px solid rgba(91, 127, 255, .25);
-    padding: 4px 10px;
-    border-radius: 4px;
-  }
-  .block-header h3 {
-    font-size: 1.05rem;
-    color: var(--heading);
-    margin: 0;
-  }
-  .result-meta {
-    margin-left: auto;
-    font-size: 0.75rem;
-    color: var(--muted);
+  /* ツール本体 */
+  .ed-tool-section {
+    padding: clamp(32px, 5vw, 48px) 0 clamp(48px, 6vw, 72px);
+    background: var(--surface-2);
   }
 
-  /* ===== Dropzone ===== */
-  .dropzone {
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 28px 20px;
-    text-align: center;
-    margin-bottom: 18px;
-    transition: border-color .2s ease, background .2s ease;
-  }
-  .dropzone.dragging {
-    border-color: var(--brand);
-    background: rgba(91, 127, 255, .06);
-  }
-  .dropzone-icon {
-    font-size: 1.8rem;
-    color: var(--brand);
-    margin-bottom: 10px;
-  }
-  .dropzone-main {
-    font-size: 0.9rem;
-    color: var(--text);
-    margin: 0 0 10px;
-  }
-  .dropzone-btn {
-    display: inline-block;
-    padding: 8px 18px;
-    border: 1px solid var(--border-hover);
-    border-radius: 6px;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: border-color .2s ease, background .2s ease;
-  }
-  .dropzone-btn:hover {
-    border-color: var(--brand);
-    background: rgba(91, 127, 255, .06);
-  }
-  .dropzone-sub {
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin: 12px 0 0;
-  }
-  .dropzone-sub code {
-    background: rgba(255, 255, 255, .06);
-    padding: 1px 6px;
-    border-radius: 3px;
-    font-size: 0.72rem;
-  }
-  .dropzone-future {
-    font-size: 0.7rem !important;
-    opacity: 0.7;
-    margin-top: 4px !important;
-  }
-  .sp-only-br { display: none; }
-  @media (max-width: 480px) {
-    .sp-only-br { display: block; height: 4px; }
-  }
-
-  /* ===== Textarea ===== */
-  .textarea-wrap {
-    margin-bottom: 18px;
-  }
-  .textarea-label {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-  textarea#document-text {
-    width: 100%;
-    padding: 12px 14px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-size: 0.9rem;
-    line-height: 1.7;
-    font-family: inherit;
-    resize: vertical;
-    min-height: 180px;
-    box-sizing: border-box;
-  }
-  textarea#document-text:focus {
-    outline: none;
-    border-color: var(--brand);
-    box-shadow: 0 0 0 3px rgba(91, 127, 255, .15);
-  }
-  .textarea-meta {
+  /* ツールバー */
+  .toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 6px;
-    font-size: 0.78rem;
-    color: var(--muted);
-  }
-  .textarea-meta .over { color: var(--accent, #ea4335); font-weight: 600; }
-  .link-btn {
-    background: none;
-    border: none;
-    color: var(--brand);
-    cursor: pointer;
-    font-size: 0.78rem;
-    padding: 0;
-    text-decoration: underline;
-  }
-
-  /* ===== Action ===== */
-  .action-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
     flex-wrap: wrap;
-  }
-  .btn-primary[disabled] {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  .btn-primary i {
-    margin-right: 6px;
-  }
-  .action-status {
-    font-size: 0.82rem;
-    color: var(--muted);
-  }
-  .action-status.loading { color: var(--brand); }
-  .action-status.error { color: #ea4335; }
-  .action-status.info { color: #5ea89a; }
-
-  /* ===== Result ===== */
-  .result-tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  .tab-btn {
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    padding: 10px 16px;
-    color: var(--muted);
-    font-size: 0.88rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: color .2s ease, border-color .2s ease;
-  }
-  .tab-btn:hover { color: var(--text); }
-  .tab-btn.active {
-    color: var(--brand);
-    border-bottom-color: var(--brand);
-  }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-
-  .text-display {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 18px;
-    font-size: 0.88rem;
-    line-height: 1.85;
-    color: var(--text);
-    white-space: pre-wrap;
-    word-break: break-word;
-    max-height: 480px;
-    overflow-y: auto;
-    margin: 0;
-    font-family: inherit;
-  }
-
-  /* ===== Notes ===== */
-  .legend {
-    display: flex;
-    gap: 14px;
-    margin-bottom: 12px;
-    font-size: 0.78rem;
-    color: var(--muted);
-  }
-  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
-  .legend-item .dot {
-    width: 10px; height: 10px; border-radius: 50%;
-    display: inline-block;
-  }
-  .dot-high { background: #ea4335; }
-  .dot-medium { background: #f5a623; }
-  .dot-low { background: #5ea89a; }
-
-  .notes-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .notes-empty {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.88rem;
-    padding: 20px;
-  }
-  .note-card {
-    padding: 12px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    border-left-width: 3px;
-  }
-  .note-high { border-left-color: #ea4335; }
-  .note-medium { border-left-color: #f5a623; }
-  .note-low { border-left-color: #5ea89a; }
-  .note-card-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-  }
-  .note-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: .05em;
-  }
-  .badge-high { background: #ea4335; }
-  .badge-medium { background: #f5a623; }
-  .badge-low { background: #5ea89a; }
-  .note-location {
-    font-size: 0.82rem;
-    color: var(--heading);
-    font-weight: 600;
-  }
-  .note-comment {
-    font-size: 0.85rem;
-    line-height: 1.75;
-    color: var(--text);
-  }
-
-  /* ===== Download ===== */
-  .download-row {
-    display: flex;
-    align-items: center;
     gap: 12px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+  }
+  .toolbar-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--heading);
+    white-space: nowrap;
+  }
+  .toolbar-left, .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
   }
-  .download-label {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-right: 4px;
+  .toolbar select {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.88rem;
+    background: var(--surface);
+    color: var(--text);
+    min-width: 220px;
   }
-  .btn-secondary {
+  .action-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    border: 1px solid var(--border-hover);
+    border: 1px solid transparent;
     border-radius: 6px;
-    background: var(--surface);
-    color: var(--text);
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: border-color .2s ease, background .2s ease;
+    transition: opacity .2s, transform .2s;
   }
-  .btn-secondary:hover {
-    border-color: var(--brand);
-    background: rgba(91, 127, 255, .08);
-  }
-  .download-future {
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-left: auto;
-  }
-
-  .disclaimer {
-    max-width: 880px;
-    margin: 24px auto 0;
-    padding: 14px 20px;
-    background: rgba(255, 255, 255, .03);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.78rem;
-    line-height: 1.75;
-    color: var(--muted);
-  }
-
-  /* ===== Final CTA ===== */
-  .ed-cta-section {
-    position: relative;
-    background: var(--surface-3, var(--surface));
+  .action-btn:hover { opacity: .85; transform: translateY(-1px); }
+  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .action-btn.primary {
+    background: var(--brand);
     color: #fff;
-    padding: clamp(64px, 10vw, 100px) 0;
+  }
+  .action-btn.danger {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--border);
+  }
+  .status {
+    font-size: 0.8rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* 空状態 */
+  .empty-state {
+    text-align: center;
+    padding: 64px 20px;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    color: var(--muted);
+  }
+  .empty-state p { margin: 0; }
+  .empty-hint {
+    font-size: 0.85rem;
+    margin-top: 12px !important;
+    line-height: 1.7;
+  }
+
+  /* エディタ */
+  .editor {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
     overflow: hidden;
   }
-  .ed-cta-section h2 { color: var(--heading); margin-bottom: 16px; }
-  .ed-cta-section p { color: var(--muted); margin-bottom: 28px; line-height: 1.8; }
+  .editor-header {
+    display: grid;
+    grid-template-columns: 48px 1fr 1fr;
+    background: var(--brand);
+    color: #fff;
+  }
+  .col-header {
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .col-header-num { text-align: center; }
+  .col-header-note { border-left: 1px solid rgba(255, 255, 255, 0.2); }
+
+  /* 行 */
+  .row {
+    display: grid;
+    grid-template-columns: 48px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s ease;
+  }
+  .row:last-child { border-bottom: none; }
+  .row:hover { background: rgba(162, 89, 255, 0.04); }
+  .row.has-note { background: rgba(162, 89, 255, 0.04); }
+  .row.has-note.note-high { background: rgba(242, 78, 30, 0.05); }
+  .row.has-note.note-high .row-num { color: #F24E1E; font-weight: 700; }
+  .row.has-note.note-medium .row-num { color: #F24E1E; opacity: 0.7; }
+  .row.has-note.note-low .row-num { color: var(--brand); opacity: 0.7; }
+
+  .row-num {
+    padding: 10px 4px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+    user-select: none;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12px;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  }
+  .row-text {
+    padding: 10px 14px;
+    font-size: 0.92rem;
+    line-height: 1.85;
+    word-break: break-word;
+    border-right: 1px solid var(--border);
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+  .row-text-empty {
+    color: var(--muted);
+    font-size: 0.78rem;
+    opacity: 0.6;
+  }
+  .row-note {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    line-height: 1.75;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .row-note-empty {
+    color: var(--muted);
+    opacity: 0.4;
+  }
+  .row-note-text {
+    flex: 1;
+  }
+
+  /* Severityドット */
+  .dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+  }
+  .dot-high { background: #F24E1E; }
+  .dot-medium { background: #F2A93E; }
+  .dot-low { background: var(--brand); }
+
+  /* 凡例 */
+  .legend {
+    display: flex;
+    gap: 18px;
+    margin-top: 16px;
+    padding: 10px 16px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-item .dot { margin-top: 0; }
+
+  /* 注意書き */
+  .disclaimer {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 24px 0 0;
+    padding: 14px 18px;
+    background: var(--surface);
+    border-left: 3px solid var(--brand);
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* CTA */
+  .ed-cta-section {
+    padding: clamp(48px, 7vw, 80px) 0;
+    background: var(--surface);
+  }
+  .ed-cta-section h2 {
+    color: var(--heading);
+    font-size: clamp(1.2rem, 3vw, 1.7rem);
+    margin: 0 0 16px;
+  }
+  .ed-cta-section p {
+    color: var(--muted);
+    font-size: clamp(.9rem, 1.5vw, 1rem);
+    line-height: 1.85;
+    margin: 0 0 28px;
+  }
   .cta-buttons {
     display: flex;
     gap: 14px;
     justify-content: center;
     flex-wrap: wrap;
   }
-  .btn-ghost {
-    display: inline-block;
-    padding: .85rem 2.2rem;
-    border: 1px solid var(--border-hover);
-    border-radius: 8px;
-    color: var(--text);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: background .2s ease, border-color .2s ease;
-  }
-  .btn-ghost:hover {
-    background: rgba(91, 127, 255, .08);
-    border-color: var(--brand);
-  }
 
-  /* ===== Mobile ===== */
-  @media (max-width: 720px) {
-    .tool-block { padding: 20px; }
-    .block-header h3 { font-size: 0.98rem; }
-    .result-meta { width: 100%; margin-left: 0; }
-    .result-tabs { overflow-x: auto; }
-    .tab-btn { padding: 8px 12px; font-size: 0.82rem; flex-shrink: 0; }
-    .text-display { font-size: 0.82rem; padding: 12px 14px; max-height: 360px; }
-    .download-row { gap: 8px; }
-    .download-future { width: 100%; margin-left: 0; margin-top: 6px; }
+  /* スマホ */
+  @media (max-width: 768px) {
+    .toolbar {
+      padding: 12px 14px;
+    }
+    .toolbar-left, .toolbar-right {
+      width: 100%;
+    }
+    .toolbar-right { justify-content: flex-end; }
+    .toolbar select { min-width: 0; flex: 1; }
+    .action-btn { padding: 7px 12px; font-size: 0.8rem; }
+
+    .editor-header { grid-template-columns: 36px 1fr 1fr; }
+    .row { grid-template-columns: 36px 1fr 1fr; }
+    .row-num { font-size: 0.68rem; padding-top: 10px; }
+    .row-text { font-size: 0.85rem; padding: 8px 10px; }
+    .row-note { font-size: 0.78rem; padding: 8px 10px; }
   }
   @media (max-width: 480px) {
-    .targets-grid { grid-template-columns: 1fr; }
-    .note-box { padding: 18px 20px; }
-    .note-head h3 { font-size: 0.95rem; }
-    .note-list li { font-size: 0.82rem; }
-    .dropzone { padding: 22px 14px; }
-    .dropzone-main { font-size: 0.85rem; }
-    .btn-primary { width: 100%; justify-content: center; display: flex; }
-    .action-row { flex-direction: column; align-items: stretch; }
+    .editor-header { grid-template-columns: 30px 1fr 1fr; }
+    .row { grid-template-columns: 30px 1fr 1fr; }
+    .row-text { font-size: 0.8rem; padding: 6px 8px; }
+    .row-note { font-size: 0.74rem; padding: 6px 8px; }
   }
 </style>
