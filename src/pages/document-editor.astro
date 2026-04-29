@@ -27,12 +27,25 @@ import Layout from '../layouts/Layout.astro';
         <div class="toolbar">
           <div class="toolbar-left">
             <span class="toolbar-title">書類添削ツール</span>
+            <span id="status-badge" class="status-badge status-draft" hidden>未提出</span>
             <select id="doc-select">
               <option value="">社内文書を選択</option>
             </select>
           </div>
           <div class="toolbar-right">
             <span id="status" class="status"></span>
+            <button type="button" id="submit-btn" class="action-btn submit" hidden>
+              <i class="fa-solid fa-paper-plane"></i> 提出
+            </button>
+            <button type="button" id="approve-btn" class="action-btn approve" hidden>
+              <i class="fa-solid fa-check"></i> 承認
+            </button>
+            <button type="button" id="reject-btn" class="action-btn reject" hidden>
+              <i class="fa-solid fa-rotate-left"></i> 差戻し
+            </button>
+            <button type="button" id="reset-btn" class="action-btn ghost" hidden>
+              <i class="fa-solid fa-pen-to-square"></i> 再編集
+            </button>
             <button type="button" id="save-btn-top" class="action-btn primary" disabled>
               <i class="fa-solid fa-floppy-disk"></i> 保存
             </button>
@@ -56,12 +69,27 @@ import Layout from '../layouts/Layout.astro';
           <div id="editor-body" class="editor-body"></div>
         </div>
 
-        <!-- 下部の保存ボタン -->
+        <!-- 下部の操作ボタン -->
         <div id="bottom-actions" class="bottom-actions" style="display:none;">
           <span id="status-bottom" class="status-bottom"></span>
           <button type="button" id="save-btn-bottom" class="action-btn primary">
             <i class="fa-solid fa-floppy-disk"></i> 保存
           </button>
+          <button type="button" id="submit-btn-bottom" class="action-btn submit" hidden>
+            <i class="fa-solid fa-paper-plane"></i> 提出
+          </button>
+          <button type="button" id="approve-btn-bottom" class="action-btn approve" hidden>
+            <i class="fa-solid fa-check"></i> 承認
+          </button>
+          <button type="button" id="reject-btn-bottom" class="action-btn reject" hidden>
+            <i class="fa-solid fa-rotate-left"></i> 差戻し
+          </button>
+        </div>
+
+        <!-- 履歴 -->
+        <div id="history-block" class="history-block" hidden>
+          <h3 class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> ステータス履歴</h3>
+          <ul id="history-list" class="history-list"></ul>
         </div>
 
         <!-- 注意書き -->
@@ -96,10 +124,40 @@ import Layout from '../layouts/Layout.astro';
     category: string;
     text: string;
   }
+  type ReviewStatus = 'draft' | 'submitted' | 'approved' | 'rejected';
+  interface HistoryEntry {
+    action: 'submitted' | 'approved' | 'rejected' | 'reopened';
+    at: string;
+  }
+  interface ReviewState {
+    memos: Record<number, string>;
+    status: ReviewStatus;
+    history: HistoryEntry[];
+  }
 
   const STORAGE_PREFIX = 'optiens:document-review:';
+  const STATUS_LABEL: Record<ReviewStatus, string> = {
+    draft: '未提出',
+    submitted: '確認中',
+    approved: '承認済',
+    rejected: '差戻し',
+  };
+  const ACTION_LABEL: Record<HistoryEntry['action'], string> = {
+    submitted: '提出',
+    approved: '承認',
+    rejected: '差戻し',
+    reopened: '再編集',
+  };
 
   const docSelect = document.getElementById('doc-select') as HTMLSelectElement;
+  const statusBadge = document.getElementById('status-badge') as HTMLSpanElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const submitBtnBottom = document.getElementById('submit-btn-bottom') as HTMLButtonElement;
+  const approveBtn = document.getElementById('approve-btn') as HTMLButtonElement;
+  const approveBtnBottom = document.getElementById('approve-btn-bottom') as HTMLButtonElement;
+  const rejectBtn = document.getElementById('reject-btn') as HTMLButtonElement;
+  const rejectBtnBottom = document.getElementById('reject-btn-bottom') as HTMLButtonElement;
+  const resetBtn = document.getElementById('reset-btn') as HTMLButtonElement;
   const saveBtnTop = document.getElementById('save-btn-top') as HTMLButtonElement;
   const saveBtnBottom = document.getElementById('save-btn-bottom') as HTMLButtonElement;
   const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
@@ -109,10 +167,14 @@ import Layout from '../layouts/Layout.astro';
   const editor = document.getElementById('editor') as HTMLDivElement;
   const editorBody = document.getElementById('editor-body') as HTMLDivElement;
   const bottomActions = document.getElementById('bottom-actions') as HTMLDivElement;
+  const historyBlock = document.getElementById('history-block') as HTMLDivElement;
+  const historyList = document.getElementById('history-list') as HTMLUListElement;
 
   let samples: SampleDoc[] = [];
   let currentDocId = '';
   let currentLines: string[] = [];
+  let currentStatus: ReviewStatus = 'draft';
+  let currentHistory: HistoryEntry[] = [];
   let dirty = false;
 
   // --- サンプル読み込み ---
@@ -142,6 +204,30 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
+  // --- localStorage ---
+  function loadReview(docId: string): ReviewState {
+    try {
+      const raw = localStorage.getItem(STORAGE_PREFIX + docId);
+      if (!raw) return { memos: {}, status: 'draft', history: [] };
+      const parsed = JSON.parse(raw);
+      return {
+        memos: parsed.memos ?? parsed ?? {},
+        status: parsed.status ?? 'draft',
+        history: parsed.history ?? [],
+      };
+    } catch {
+      return { memos: {}, status: 'draft', history: [] };
+    }
+  }
+  function saveReview(docId: string, state: ReviewState) {
+    try {
+      localStorage.setItem(STORAGE_PREFIX + docId, JSON.stringify(state));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   // --- 書類選択 ---
   docSelect.addEventListener('change', () => {
     if (dirty && !confirm('保存していない変更があります。破棄して切り替えますか？')) {
@@ -156,28 +242,13 @@ import Layout from '../layouts/Layout.astro';
     const doc = samples.find(s => s.id === id);
     if (!doc) return;
     currentDocId = id;
-    const savedMemos = loadMemos(id);
-    renderRows(doc.text, savedMemos);
+    const state = loadReview(id);
+    currentStatus = state.status;
+    currentHistory = state.history;
+    renderRows(doc.text, state.memos);
+    applyStatusUI();
+    renderHistory();
   });
-
-  // --- localStorage ---
-  function loadMemos(docId: string): Record<number, string> {
-    try {
-      const raw = localStorage.getItem(STORAGE_PREFIX + docId);
-      if (!raw) return {};
-      return JSON.parse(raw);
-    } catch {
-      return {};
-    }
-  }
-  function saveMemos(docId: string, memos: Record<number, string>) {
-    try {
-      localStorage.setItem(STORAGE_PREFIX + docId, JSON.stringify(memos));
-      return true;
-    } catch {
-      return false;
-    }
-  }
 
   // --- レンダリング ---
   function renderRows(text: string, savedMemos: Record<number, string> = {}) {
@@ -247,7 +318,7 @@ import Layout from '../layouts/Layout.astro';
     saveBtnTop.disabled = false;
     clearBtn.disabled = false;
     dirty = false;
-    updateStatus();
+    updateStatusText();
   }
 
   // --- メモ収集 ---
@@ -262,31 +333,113 @@ import Layout from '../layouts/Layout.astro';
   }
 
   // --- 保存 ---
-  function doSave() {
-    if (!currentDocId) return;
+  function persistState(showMessage = true) {
+    if (!currentDocId) return false;
     const memos = collectMemos();
-    const ok = saveMemos(currentDocId, memos);
+    const ok = saveReview(currentDocId, {
+      memos,
+      status: currentStatus,
+      history: currentHistory,
+    });
     if (ok) {
       dirty = false;
-      updateStatus('保存しました');
-      // 1.5秒後に通常表示に戻す
-      setTimeout(() => updateStatus(), 1500);
+      if (showMessage) {
+        updateStatusText('保存しました');
+        setTimeout(() => updateStatusText(), 1500);
+      } else {
+        updateStatusText();
+      }
     } else {
-      updateStatus('保存に失敗しました');
+      updateStatusText('保存に失敗しました');
+    }
+    return ok;
+  }
+  saveBtnTop.addEventListener('click', () => persistState());
+  saveBtnBottom.addEventListener('click', () => persistState());
+
+  // --- ステータス遷移 ---
+  function transitionTo(action: HistoryEntry['action']) {
+    const newStatus: ReviewStatus =
+      action === 'submitted' ? 'submitted' :
+      action === 'approved' ? 'approved' :
+      action === 'rejected' ? 'rejected' :
+      'draft';
+    currentStatus = newStatus;
+    currentHistory.push({ action, at: new Date().toISOString() });
+    persistState(false);
+    applyStatusUI();
+    renderHistory();
+    updateStatusText(`ステータスを「${STATUS_LABEL[newStatus]}」に更新しました`);
+    setTimeout(() => updateStatusText(), 1800);
+  }
+
+  submitBtn.addEventListener('click', () => transitionTo('submitted'));
+  submitBtnBottom.addEventListener('click', () => transitionTo('submitted'));
+  approveBtn.addEventListener('click', () => transitionTo('approved'));
+  approveBtnBottom.addEventListener('click', () => transitionTo('approved'));
+  rejectBtn.addEventListener('click', () => transitionTo('rejected'));
+  rejectBtnBottom.addEventListener('click', () => transitionTo('rejected'));
+  resetBtn.addEventListener('click', () => transitionTo('reopened'));
+
+  // --- ステータスUI更新 ---
+  function applyStatusUI() {
+    statusBadge.hidden = false;
+    statusBadge.className = `status-badge status-${currentStatus}`;
+    statusBadge.textContent = STATUS_LABEL[currentStatus];
+
+    // すべて非表示にしてから状態に応じて表示
+    submitBtn.hidden = true;
+    submitBtnBottom.hidden = true;
+    approveBtn.hidden = true;
+    approveBtnBottom.hidden = true;
+    rejectBtn.hidden = true;
+    rejectBtnBottom.hidden = true;
+    resetBtn.hidden = true;
+
+    if (currentStatus === 'draft') {
+      submitBtn.hidden = false;
+      submitBtnBottom.hidden = false;
+    } else if (currentStatus === 'submitted') {
+      approveBtn.hidden = false;
+      approveBtnBottom.hidden = false;
+      rejectBtn.hidden = false;
+      rejectBtnBottom.hidden = false;
+    } else {
+      // approved or rejected: 再編集
+      resetBtn.hidden = false;
+      if (currentStatus === 'rejected') {
+        submitBtn.hidden = false;
+        submitBtnBottom.hidden = false;
+      }
     }
   }
-  saveBtnTop.addEventListener('click', doSave);
-  saveBtnBottom.addEventListener('click', doSave);
+
+  // --- 履歴表示 ---
+  function renderHistory() {
+    if (currentHistory.length === 0) {
+      historyBlock.hidden = true;
+      return;
+    }
+    historyBlock.hidden = false;
+    historyList.innerHTML = '';
+    [...currentHistory].reverse().forEach((h) => {
+      const li = document.createElement('li');
+      const date = new Date(h.at);
+      const dateStr = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+      li.innerHTML = `<span class="history-action history-${h.action}">${ACTION_LABEL[h.action]}</span><span class="history-time">${dateStr}</span>`;
+      historyList.appendChild(li);
+    });
+  }
 
   // --- ダーティ管理 ---
   function markDirty() {
     if (!dirty) {
       dirty = true;
-      updateStatus();
+      updateStatusText();
     }
   }
 
-  function updateStatus(message?: string) {
+  function updateStatusText(message?: string) {
     if (message) {
       statusEl.textContent = message;
       statusBottom.textContent = message;
@@ -315,12 +468,20 @@ import Layout from '../layouts/Layout.astro';
     emptyState.style.display = 'block';
     editor.style.display = 'none';
     bottomActions.style.display = 'none';
+    historyBlock.hidden = true;
+    statusBadge.hidden = true;
+    submitBtn.hidden = true;
+    approveBtn.hidden = true;
+    rejectBtn.hidden = true;
+    resetBtn.hidden = true;
     saveBtnTop.disabled = true;
     clearBtn.disabled = true;
     dirty = false;
     statusEl.textContent = '';
     statusBottom.textContent = '';
     currentLines = [];
+    currentStatus = 'draft';
+    currentHistory = [];
   }
 
   // --- 離脱時の警告 ---
@@ -405,6 +566,21 @@ import Layout from '../layouts/Layout.astro';
     color: var(--text);
     min-width: 220px;
   }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border: 1px solid currentColor;
+    background: rgba(255, 255, 255, 0.5);
+  }
+  .status-badge.status-draft { color: #6b7280; background: rgba(107, 114, 128, 0.08); }
+  .status-badge.status-submitted { color: #1ABCFE; background: rgba(26, 188, 254, 0.10); }
+  .status-badge.status-approved { color: #0ACF83; background: rgba(10, 207, 131, 0.10); }
+  .status-badge.status-rejected { color: #F24E1E; background: rgba(242, 78, 30, 0.10); }
   .action-btn {
     display: inline-flex;
     align-items: center;
@@ -430,6 +606,23 @@ import Layout from '../layouts/Layout.astro';
   @keyframes pulseSave {
     0%, 100% { box-shadow: 0 0 0 0 rgba(242, 78, 30, 0.5); }
     50% { box-shadow: 0 0 0 6px rgba(242, 78, 30, 0); }
+  }
+  .action-btn.submit {
+    background: #1ABCFE;
+    color: #fff;
+  }
+  .action-btn.approve {
+    background: #0ACF83;
+    color: #fff;
+  }
+  .action-btn.reject {
+    background: #F24E1E;
+    color: #fff;
+  }
+  .action-btn.ghost {
+    background: transparent;
+    color: var(--brand);
+    border-color: var(--brand);
   }
   .action-btn.danger {
     background: transparent;
@@ -565,6 +758,60 @@ import Layout from '../layouts/Layout.astro';
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* ステータス履歴 */
+  .history-block {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .history-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .history-title i {
+    color: var(--brand);
+  }
+  .history-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .history-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--surface-2);
+    border-radius: 6px;
+    font-size: 0.82rem;
+  }
+  .history-action {
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+  .history-action.history-submitted { color: #1ABCFE; background: rgba(26, 188, 254, 0.10); }
+  .history-action.history-approved { color: #0ACF83; background: rgba(10, 207, 131, 0.10); }
+  .history-action.history-rejected { color: #F24E1E; background: rgba(242, 78, 30, 0.10); }
+  .history-action.history-reopened { color: var(--brand); background: rgba(162, 89, 255, 0.10); }
+  .history-time {
+    color: var(--muted);
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 0.78rem;
   }
 
   /* 注意書き */
