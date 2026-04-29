@@ -1,0 +1,580 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="見積書ドラフト自動生成（デモ）| Optiens"
+  description="案件概要を入力すると、AIが見積書のドラフトをMarkdown形式で自動生成するデモです。Salesforce CPQ（Configure, Price, Quote）相当の機能を、ライセンス不要で構築できます。"
+  canonical="https://optiens.com/quote-generator"
+>
+  <main class="qg-main light-section">
+    <!-- ヒーロー -->
+    <section class="qg-hero">
+      <div class="container text-center">
+        <p class="hero-eyebrow">DEMO</p>
+        <h1>見積書ドラフト自動生成（デモ）</h1>
+        <p class="hero-sub">
+          案件概要を入力すると、AIが <strong>見積書のドラフトをMarkdown形式</strong> で自動生成します。<br />
+          Salesforce CPQ（Configure, Price, Quote）相当の機能を、ライセンス不要で構築できます。
+        </p>
+      </div>
+    </section>
+
+    <!-- ツール本体 -->
+    <section class="qg-tool-section">
+      <div class="container">
+        <div class="tool-grid">
+          <!-- 入力 -->
+          <div class="tool-card">
+            <h2 class="card-title"><span class="step-num">STEP 1</span>案件情報を入力</h2>
+
+            <div class="sample-buttons">
+              <span class="sample-label">サンプル:</span>
+              <button type="button" class="sample-btn" data-sample="web">Webサイト制作</button>
+              <button type="button" class="sample-btn" data-sample="ai">AIシステム導入</button>
+              <button type="button" class="sample-btn" data-sample="consulting">業務コンサル</button>
+            </div>
+
+            <form id="quote-form" class="quote-form">
+              <label class="form-row">
+                <span class="form-label">顧客名 <span class="required">必須</span></span>
+                <input type="text" id="customer" name="customer" placeholder="例: 株式会社○○" required />
+              </label>
+
+              <label class="form-row">
+                <span class="form-label">案件概要 <span class="required">必須</span></span>
+                <textarea id="project" name="project" rows="3" placeholder="例: コーポレートサイト構築（5ページ・スマホ対応・お問い合わせフォーム付き）" required></textarea>
+              </label>
+
+              <label class="form-row">
+                <span class="form-label">金額 <span class="required">必須</span></span>
+                <input type="text" id="amount" name="amount" placeholder="例: 500,000円 / 1,200,000円〜" required />
+              </label>
+
+              <label class="form-row">
+                <span class="form-label">納期 <span class="required">必須</span></span>
+                <input type="text" id="deadline" name="deadline" placeholder="例: 契約後2ヶ月以内 / 2026年8月末" required />
+              </label>
+
+              <label class="form-row">
+                <span class="form-label">特記事項（任意）</span>
+                <textarea id="notes" name="notes" rows="3" placeholder="例: 検収後の保守は別途月額契約。素材データはお客様支給。"></textarea>
+              </label>
+
+              <div class="action-row">
+                <button type="submit" id="generate-btn" class="btn-primary">
+                  <i class="fa-solid fa-file-circle-plus"></i> AIで見積書を作成
+                </button>
+                <button type="reset" id="reset-btn" class="link-btn">クリア</button>
+                <span id="action-status" class="action-status"></span>
+              </div>
+            </form>
+          </div>
+
+          <!-- 結果 -->
+          <div class="tool-card">
+            <h2 class="card-title"><span class="step-num">STEP 2</span>生成された見積書（編集可）</h2>
+
+            <div id="empty-result" class="empty-result">
+              <p>左側に案件情報を入力して「AIで見積書を作成」を押してください。</p>
+            </div>
+
+            <div id="result-area" class="result-area" hidden>
+              <textarea
+                id="quote-output"
+                rows="20"
+                placeholder=""
+                spellcheck="false"
+              ></textarea>
+              <div class="output-actions">
+                <button type="button" id="copy-btn" class="btn-ghost-small">
+                  <i class="fa-regular fa-copy"></i> コピー
+                </button>
+                <button type="button" id="download-md" class="btn-ghost-small">
+                  <i class="fa-solid fa-download"></i> .md
+                </button>
+                <button type="button" id="download-txt" class="btn-ghost-small">
+                  <i class="fa-solid fa-download"></i> .txt
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 説明 -->
+        <div class="explanation">
+          <h3><i class="fa-solid fa-circle-info"></i> このデモが模した Salesforce 機能</h3>
+          <ul>
+            <li><strong>Salesforce CPQ</strong>: 商談から見積書を自動生成する Configure, Price, Quote モジュール</li>
+            <li><strong>Document Templates</strong>: 案件情報をテンプレートに流し込んでドキュメント出力</li>
+            <li><strong>Quote Generation</strong>: 営業担当が短時間で見積書を作成・送付できる仕組み</li>
+          </ul>
+          <p class="explanation-note">
+            上記はSalesforce Sales Cloud / CPQ の標準機能（要ライセンス）です。御社専用版では、<strong>御社のテンプレート・過去案件・標準価格表</strong>を参照したカスタム見積書生成を構築可能です。承認ワークフロー（複数役職の承認）も組み合わせれば、SF Approval Process相当の流れも再現できます。
+          </p>
+        </div>
+
+        <p class="disclaimer">
+          ※AI生成は1時間あたり10回までご利用いただけます。<br />
+          ※生成された見積書は<strong>下書き</strong>です。最終確認・送付は人間が行ってください。<br />
+          ※御社専用版では、CRMの過去案件参照・社内承認フロー・PDF生成までの自動化が可能です。
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="qg-cta-section">
+      <div class="container text-center">
+        <h2>御社業務に合わせたカスタム版もご相談いただけます</h2>
+        <p>
+          Salesforce CPQ相当の機能を、月額ライセンス料ゼロで構築できます。<br />
+          御社の見積書テンプレート・標準価格表・承認フローに合わせた設計が可能です。
+        </p>
+        <div class="cta-buttons">
+          <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける（0円）</a>
+          <a href="/service" class="btn-ghost">サービスメニューを見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  const SAMPLES: Record<string, Record<string, string>> = {
+    web: {
+      customer: '株式会社サンプル商事',
+      project: 'コーポレートサイト全面リニューアル（10ページ程度・スマホ最適化・問い合わせフォーム・採用情報ページ）',
+      amount: '850,000円',
+      deadline: '契約後2ヶ月以内',
+      notes: '検収後3ヶ月間の軽微な修正対応を含む。サーバー費用は別途。素材（写真・テキスト）はお客様支給。',
+    },
+    ai: {
+      customer: '株式会社○○製作所',
+      project: 'AI問い合わせ振り分けシステムの導入支援（フォーム→自動分類→Slack通知→CRM登録）',
+      amount: '1,800,000円',
+      deadline: '契約後3ヶ月以内',
+      notes: '導入後3ヶ月間の運用伴走を含む。LLM API利用料（月数千円〜数万円見込）は別途実費。社内承認フロー要件は別途協議。',
+    },
+    consulting: {
+      customer: '○○株式会社',
+      project: '業務プロセス可視化と自動化提案（営業・経理・問い合わせ対応の3領域、週1回MTG×8週）',
+      amount: '600,000円',
+      deadline: '2ヶ月間',
+      notes: '成果物: 業務マップ・自動化提案書・優先度付きロードマップ。導入実装は別契約。',
+    },
+  };
+
+  const form = document.getElementById('quote-form') as HTMLFormElement;
+  const customerInput = document.getElementById('customer') as HTMLInputElement;
+  const projectInput = document.getElementById('project') as HTMLTextAreaElement;
+  const amountInput = document.getElementById('amount') as HTMLInputElement;
+  const deadlineInput = document.getElementById('deadline') as HTMLInputElement;
+  const notesInput = document.getElementById('notes') as HTMLTextAreaElement;
+  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
+  const actionStatus = document.getElementById('action-status') as HTMLSpanElement;
+  const emptyResult = document.getElementById('empty-result') as HTMLDivElement;
+  const resultArea = document.getElementById('result-area') as HTMLDivElement;
+  const quoteOutput = document.getElementById('quote-output') as HTMLTextAreaElement;
+  const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+  const downloadMd = document.getElementById('download-md') as HTMLButtonElement;
+  const downloadTxt = document.getElementById('download-txt') as HTMLButtonElement;
+
+  document.querySelectorAll<HTMLButtonElement>('.sample-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.sample || '';
+      const sample = SAMPLES[key];
+      if (!sample) return;
+      customerInput.value = sample.customer || '';
+      projectInput.value = sample.project || '';
+      amountInput.value = sample.amount || '';
+      deadlineInput.value = sample.deadline || '';
+      notesInput.value = sample.notes || '';
+    });
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      customer: customerInput.value.trim(),
+      project: projectInput.value.trim(),
+      amount: amountInput.value.trim(),
+      deadline: deadlineInput.value.trim(),
+      notes: notesInput.value.trim(),
+    };
+    if (!payload.customer || !payload.project || !payload.amount || !payload.deadline) {
+      actionStatus.textContent = '必須項目をご入力ください';
+      actionStatus.className = 'action-status error';
+      return;
+    }
+    generateBtn.disabled = true;
+    actionStatus.textContent = 'AI生成中...';
+    actionStatus.className = 'action-status info';
+    try {
+      const res = await fetch('/api/quote-generator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.error) {
+        actionStatus.textContent = data.error;
+        actionStatus.className = 'action-status error';
+        generateBtn.disabled = false;
+        return;
+      }
+      quoteOutput.value = data.quote || '';
+      emptyResult.hidden = true;
+      resultArea.hidden = false;
+      actionStatus.textContent = data.mock ? 'モック応答（API未設定時）' : '生成完了';
+      actionStatus.className = 'action-status info';
+    } catch (err) {
+      actionStatus.textContent = '生成に失敗しました';
+      actionStatus.className = 'action-status error';
+    }
+    generateBtn.disabled = false;
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    const text = quoteOutput.value || '';
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      const original = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> コピーしました';
+      setTimeout(() => { copyBtn.innerHTML = original; }, 1500);
+    } catch {
+      // fallback
+    }
+  });
+
+  function downloadFile(content: string, filename: string, mime: string) {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+  downloadMd.addEventListener('click', () => {
+    const text = quoteOutput.value || '';
+    if (!text) return;
+    const customer = customerInput.value.trim().replace(/[\\\/:*?"<>|]/g, '_') || 'quote';
+    downloadFile(text, `${customer}_見積書.md`, 'text/markdown');
+  });
+  downloadTxt.addEventListener('click', () => {
+    const text = quoteOutput.value || '';
+    if (!text) return;
+    const customer = customerInput.value.trim().replace(/[\\\/:*?"<>|]/g, '_') || 'quote';
+    downloadFile(text, `${customer}_見積書.txt`, 'text/plain');
+  });
+</script>
+
+<style>
+  .qg-main {
+    padding-top: 80px;
+  }
+
+  /* ヒーロー */
+  .qg-hero {
+    padding: clamp(40px, 6vw, 64px) 0 clamp(24px, 4vw, 40px);
+    background: var(--surface);
+  }
+  .hero-eyebrow {
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 600;
+    letter-spacing: .25em;
+    color: var(--brand);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+  .qg-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin: 0 0 16px;
+  }
+  .qg-hero .hero-sub {
+    color: var(--muted);
+    font-size: clamp(.9rem, 1.6vw, 1.05rem);
+    line-height: 1.85;
+    margin: 0 auto;
+    max-width: 760px;
+  }
+  .qg-hero strong { color: var(--heading); }
+
+  /* ツール本体 */
+  .qg-tool-section {
+    padding: clamp(32px, 5vw, 48px) 0 clamp(48px, 6vw, 72px);
+    background: var(--surface-2);
+  }
+  .tool-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .tool-grid { grid-template-columns: 1fr; }
+  }
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+  }
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    color: var(--heading);
+    margin: 0 0 16px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    background: var(--brand);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  /* サンプルボタン */
+  .sample-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .sample-label { font-size: 0.75rem; color: var(--muted); }
+  .sample-btn {
+    padding: 5px 12px;
+    background: rgba(162, 89, 255, 0.06);
+    border: 1px solid rgba(162, 89, 255, 0.25);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: var(--brand);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .sample-btn:hover { background: rgba(162, 89, 255, 0.12); }
+
+  /* フォーム */
+  .quote-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-label {
+    font-size: 0.82rem;
+    color: var(--heading);
+    font-weight: 600;
+  }
+  .required {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    background: rgba(242, 78, 30, 0.10);
+    color: #F24E1E;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 3px;
+  }
+  .form-row input,
+  .form-row textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.88rem;
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    line-height: 1.7;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .form-row input:focus,
+  .form-row textarea:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(162, 89, 255, 0.1);
+  }
+  .form-row textarea { resize: vertical; }
+
+  .action-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .link-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 0.82rem;
+    cursor: pointer;
+    padding: 0;
+  }
+  .link-btn:hover { color: var(--brand); text-decoration: underline; }
+
+  .action-status {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .action-status.error { color: #F24E1E; }
+  .action-status.info { color: var(--brand); }
+
+  /* 結果 */
+  .empty-result {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.85;
+  }
+  .empty-result p { margin: 0; }
+
+  textarea#quote-output {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.85;
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    resize: vertical;
+    min-height: 400px;
+  }
+  textarea#quote-output:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(162, 89, 255, 0.1);
+  }
+  .output-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-ghost-small {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-ghost-small:hover {
+    color: var(--brand);
+    border-color: var(--brand);
+  }
+
+  /* 説明 */
+  .explanation {
+    margin-top: 32px;
+    padding: 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--brand);
+    border-radius: 0 10px 10px 0;
+  }
+  .explanation h3 {
+    font-size: 0.95rem;
+    color: var(--heading);
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .explanation h3 i { color: var(--brand); }
+  .explanation ul {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+  .explanation li {
+    font-size: 0.85rem;
+    line-height: 1.85;
+    color: var(--text);
+  }
+  .explanation strong { color: var(--brand); }
+  .explanation-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 0;
+  }
+  .explanation-note strong { color: var(--text); }
+
+  /* 注意書き */
+  .disclaimer {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 24px 0 0;
+    padding: 14px 18px;
+    background: var(--surface);
+    border-left: 3px solid var(--brand);
+    border-radius: 0 6px 6px 0;
+  }
+  .disclaimer strong { color: var(--text); }
+
+  /* CTA */
+  .qg-cta-section {
+    padding: clamp(48px, 7vw, 80px) 0;
+    background: var(--surface);
+  }
+  .qg-cta-section h2 {
+    color: var(--heading);
+    font-size: clamp(1.2rem, 3vw, 1.7rem);
+    margin: 0 0 16px;
+  }
+  .qg-cta-section p {
+    color: var(--muted);
+    font-size: clamp(.9rem, 1.5vw, 1rem);
+    line-height: 1.85;
+    margin: 0 0 28px;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>
