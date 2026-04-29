@@ -18,6 +18,50 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
       </div>
     </section>
 
+    <!-- なぜAIを使うのか -->
+    <section class="ac-section light-section ac-why-ai-section">
+      <div class="container">
+        <p class="why-ai-eyebrow reveal">WHY AI</p>
+        <h2 class="section-title reveal">なぜ、AIを使うのか</h2>
+
+        <div class="why-ai-reasons reveal-stagger">
+          <div class="why-ai-reason">
+            <span class="why-ai-num">01</span>
+            <div class="why-ai-content">
+              <h3>AIが「業務で使える」段階に到達した</h3>
+              <p>生成AIとAIエージェントの進化で、AIが対話だけでなく業務を自律的にこなせる時代になりました。専門家でなくても、自然言語で業務を任せられます。</p>
+            </div>
+          </div>
+          <div class="why-ai-reason">
+            <span class="why-ai-num">02</span>
+            <div class="why-ai-content">
+              <h3>少人数でも大規模な仕組みが組める</h3>
+              <p>かつては大企業しか構築できなかった業務システムが、クラウド + AIエージェントの構成で個人・小規模事業者でも実装可能になりました。コストも技術の壁も大きく下がっています。</p>
+            </div>
+          </div>
+          <div class="why-ai-reason">
+            <span class="why-ai-num">03</span>
+            <div class="why-ai-content">
+              <h3>「人の手だけで全てをこなす」前提が崩れている</h3>
+              <p>労働人口の減少が続く中、「人を増やす」のではなく「人がやらなくていい仕事を見極める」ことが、これからのスタンダードになります。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="why-ai-conclusion reveal">
+          <p class="why-ai-bridge">だからこそ、</p>
+          <blockquote class="why-ai-quote">
+            「AIを業務の中心に置き、<br/>
+            人間にしか出来ない判断と創造に集中する。」
+          </blockquote>
+          <p class="why-ai-cta">
+            その実現のため、時間と可能性を広げる仕組みづくりを<br class="pc-only" />
+            Optiensがサポートします。
+          </p>
+        </div>
+      </div>
+    </section>
+
     <!-- こんなお悩みありませんか？ -->
     <section class="ac-section light-section ac-problem-section">
       <div class="container">
@@ -492,6 +536,83 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     margin-bottom: 40px;
   }
 
+  /* ===== Why AI section ===== */
+  .why-ai-eyebrow {
+    text-align: center;
+    color: var(--brand);
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 600;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+  }
+  .why-ai-reasons {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vw, 28px);
+    max-width: 800px;
+    margin: 40px auto 0;
+  }
+  .why-ai-reason {
+    display: flex;
+    gap: clamp(16px, 2.5vw, 24px);
+    align-items: flex-start;
+    padding: clamp(20px, 3vw, 28px);
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .why-ai-num {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: var(--brand);
+    letter-spacing: -.02em;
+    line-height: 1;
+    flex-shrink: 0;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  }
+  .why-ai-content h3 {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 8px;
+    line-height: 1.5;
+  }
+  .why-ai-content p {
+    font-size: clamp(.88rem, 1.3vw, .95rem);
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 0;
+  }
+  .why-ai-conclusion {
+    max-width: 720px;
+    margin: clamp(40px, 6vw, 64px) auto 0;
+    text-align: center;
+  }
+  .why-ai-bridge {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0 0 16px;
+    letter-spacing: .03em;
+  }
+  .why-ai-quote {
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--heading);
+    margin: 0 auto clamp(24px, 3.5vw, 32px);
+    padding: clamp(16px, 2vw, 24px) clamp(20px, 3vw, 32px);
+    border-left: 3px solid var(--brand);
+    text-align: left;
+    max-width: fit-content;
+  }
+  .why-ai-cta {
+    color: var(--text);
+    font-size: clamp(.95rem, 1.5vw, 1.05rem);
+    line-height: 1.85;
+    margin: 0;
+  }
+
   /* ===== 共通カード ===== */
   .ac-card {
     padding: 28px;
@@ -760,6 +881,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     margin: 0 0 8px;
   }
   /* ===== Section backgrounds ===== */
+  .ac-why-ai-section { background: var(--surface); }
   .ac-problem-section { background: var(--surface-2); }
   .ac-value-section { background: var(--surface); }
   .ac-custom-section { background: var(--surface-2); }
