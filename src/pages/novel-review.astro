@@ -20,6 +20,8 @@ import Layout from '../layouts/Layout.astro';
       </div>
       <div class="toolbar-right">
         <span id="status" class="status"></span>
+        <span id="save-state" class="save-state"></span>
+        <button id="save-btn-top" class="action-btn primary" disabled>保存</button>
         <button id="clear-btn" class="action-btn danger" disabled>クリア</button>
       </div>
     </div>
@@ -27,7 +29,7 @@ import Layout from '../layouts/Layout.astro';
     <!-- 空状態 -->
     <div id="empty-state" class="empty-state">
       <p>作品と章を選んでください。</p>
-      <p class="empty-hint">修正メモは自動保存され、PCのClaude Codeから反映できます。</p>
+      <p class="empty-hint">修正メモを入力後、保存ボタンを押してください。<br>保存後にPCのClaude Codeから「推敲メモを反映して」と指示すると本文に修正が反映されます。</p>
     </div>
 
     <!-- エディタ -->
@@ -37,6 +39,18 @@ import Layout from '../layouts/Layout.astro';
         <div class="col-header col-header-right">修正メモ</div>
       </div>
       <div id="editor-body" class="editor-body"></div>
+
+      <!-- 保存済み修正メモ一覧 -->
+      <div id="saved-summary" class="saved-summary" style="display:none;">
+        <h3 class="saved-summary-title">保存済みの修正メモ <span id="saved-count"></span></h3>
+        <div id="saved-summary-list" class="saved-summary-list"></div>
+      </div>
+
+      <!-- 下部アクションバー -->
+      <div class="bottom-bar">
+        <span id="bottom-state" class="save-state"></span>
+        <button id="save-btn-bottom" class="action-btn primary big">保存</button>
+      </div>
     </div>
   </main>
 </Layout>
@@ -45,15 +59,23 @@ import Layout from '../layouts/Layout.astro';
   const novelSelect = document.getElementById('novel-select') as HTMLSelectElement;
   const chapterSelect = document.getElementById('chapter-select') as HTMLSelectElement;
   const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+  const saveBtnTop = document.getElementById('save-btn-top') as HTMLButtonElement;
+  const saveBtnBottom = document.getElementById('save-btn-bottom') as HTMLButtonElement;
   const statusEl = document.getElementById('status')!;
+  const saveStateEl = document.getElementById('save-state')!;
+  const bottomStateEl = document.getElementById('bottom-state')!;
   const emptyState = document.getElementById('empty-state')!;
   const editor = document.getElementById('editor')!;
   const editorBody = document.getElementById('editor-body')!;
+  const savedSummary = document.getElementById('saved-summary')!;
+  const savedSummaryList = document.getElementById('saved-summary-list')!;
+  const savedCount = document.getElementById('saved-count')!;
 
   let currentKey = '';
   let currentTitle = '';
   let currentLines: string[] = [];
-  let saveTimer: ReturnType<typeof setTimeout> | null = null;
+  let savedNotes: Record<number, string> = {}; // 最後に保存されたメモ
+  let isDirty = false; // 未保存の変更があるか
 
   interface NovelIndex { novel: string; chapters: { file: string; title: string }[] }
   let novelIndex: NovelIndex[] = [];
@@ -70,35 +92,65 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
-  async function saveNotes(key: string, title: string, notes: Record<number, string>) {
+  async function saveNotes(key: string, title: string, notes: Record<number, string>): Promise<boolean> {
     try {
-      await fetch('/api/novel-review', {
+      const res = await fetch('/api/novel-review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key, title, notes }),
       });
+      return res.ok;
     } catch {
-      statusEl.textContent = '保存エラー';
+      return false;
     }
-  }
-
-  // デバウンス付き保存（入力のたびにAPIを叩かない）
-  function debounceSave() {
-    if (saveTimer) clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => {
-      const notes = collectNotes();
-      updateStatus(notes);
-      saveNotes(currentKey, currentTitle, notes);
-    }, 2000);
   }
 
   function collectNotes(): Record<number, string> {
     const notes: Record<number, string> = {};
     editorBody.querySelectorAll('.row').forEach((row, i) => {
-      const v = (row.querySelector('.row-note') as HTMLTextAreaElement).value;
+      const v = (row.querySelector('.row-note') as HTMLTextAreaElement).value.trim();
       if (v) notes[i] = v;
     });
     return notes;
+  }
+
+  function setDirty(dirty: boolean) {
+    isDirty = dirty;
+    if (dirty) {
+      saveStateEl.textContent = '⚠ 未保存';
+      saveStateEl.className = 'save-state dirty';
+      bottomStateEl.textContent = '⚠ 未保存の変更があります';
+      bottomStateEl.className = 'save-state dirty';
+      saveBtnTop.classList.add('attention');
+      saveBtnBottom.classList.add('attention');
+    } else {
+      saveStateEl.textContent = '✓ 保存済み';
+      saveStateEl.className = 'save-state saved';
+      bottomStateEl.textContent = '';
+      saveBtnTop.classList.remove('attention');
+      saveBtnBottom.classList.remove('attention');
+    }
+  }
+
+  async function doSave() {
+    const notes = collectNotes();
+    saveStateEl.textContent = '保存中...';
+    saveStateEl.className = 'save-state';
+    saveBtnTop.disabled = true;
+    saveBtnBottom.disabled = true;
+    const ok = await saveNotes(currentKey, currentTitle, notes);
+    saveBtnTop.disabled = false;
+    saveBtnBottom.disabled = false;
+    if (ok) {
+      savedNotes = notes;
+      setDirty(false);
+      updateStatus(notes);
+      renderRowSavedState();
+      renderSavedSummary();
+    } else {
+      saveStateEl.textContent = '✕ 保存エラー';
+      saveStateEl.className = 'save-state error';
+    }
   }
 
   // --- Index ---
@@ -115,6 +167,10 @@ import Layout from '../layouts/Layout.astro';
   }
 
   novelSelect.addEventListener('change', () => {
+    if (isDirty && !confirm('未保存の変更があります。破棄して切り替えますか?')) {
+      novelSelect.value = '';
+      return;
+    }
     const name = novelSelect.value;
     chapterSelect.innerHTML = '<option value="">章を選択</option>';
     if (!name) {
@@ -134,6 +190,10 @@ import Layout from '../layouts/Layout.astro';
   });
 
   chapterSelect.addEventListener('change', async () => {
+    if (isDirty && !confirm('未保存の変更があります。破棄して切り替えますか?')) {
+      return;
+    }
+
     const file = chapterSelect.value;
     const novel = novelSelect.value;
     if (!file || !novel) return;
@@ -170,12 +230,16 @@ import Layout from '../layouts/Layout.astro';
     currentKey = key;
     currentTitle = title;
     currentLines = lines;
+    savedNotes = { ...notes };
     editorBody.innerHTML = '';
 
     lines.forEach((line, i) => {
       const row = document.createElement('div');
       row.className = 'row';
-      if (notes[i]) row.classList.add('has-note');
+      row.dataset.idx = String(i);
+      if (notes[i]) {
+        row.classList.add('has-note', 'saved-note');
+      }
 
       const num = document.createElement('div');
       num.className = 'row-num';
@@ -197,9 +261,20 @@ import Layout from '../layouts/Layout.astro';
       };
 
       note.addEventListener('input', () => {
-        row.classList.toggle('has-note', !!note.value);
+        const hasContent = !!note.value.trim();
+        row.classList.toggle('has-note', hasContent);
+        // 保存済みの内容と差分があるかチェック
+        const idx = Number(row.dataset.idx);
+        const savedVal = savedNotes[idx] || '';
+        if (note.value.trim() !== savedVal) {
+          row.classList.add('dirty-note');
+          row.classList.remove('saved-note');
+        } else {
+          row.classList.remove('dirty-note');
+          if (hasContent) row.classList.add('saved-note');
+        }
         resize();
-        debounceSave();
+        updateDirtyState();
       });
 
       note.addEventListener('focus', () => row.classList.add('focused'));
@@ -220,7 +295,65 @@ import Layout from '../layouts/Layout.astro';
     emptyState.style.display = 'none';
     editor.style.display = 'block';
     clearBtn.disabled = false;
+    saveBtnTop.disabled = false;
+    setDirty(false);
     updateStatus(notes);
+    renderSavedSummary();
+  }
+
+  function renderRowSavedState() {
+    editorBody.querySelectorAll('.row').forEach((row) => {
+      const idx = Number((row as HTMLElement).dataset.idx);
+      const note = row.querySelector('.row-note') as HTMLTextAreaElement;
+      const v = note.value.trim();
+      row.classList.remove('dirty-note');
+      row.classList.toggle('has-note', !!v);
+      row.classList.toggle('saved-note', !!v);
+    });
+  }
+
+  function renderSavedSummary() {
+    const entries = Object.entries(savedNotes).sort((a, b) => Number(a[0]) - Number(b[0]));
+    if (entries.length === 0) {
+      savedSummary.style.display = 'none';
+      return;
+    }
+    savedSummary.style.display = 'block';
+    savedCount.textContent = `（${entries.length}件）`;
+    savedSummaryList.innerHTML = '';
+    for (const [idxStr, note] of entries) {
+      const idx = Number(idxStr);
+      const lineText = currentLines[idx] || '';
+      const item = document.createElement('div');
+      item.className = 'summary-item';
+      item.innerHTML = `
+        <div class="summary-line">
+          <span class="summary-num">L${idx + 1}</span>
+          <span class="summary-text"></span>
+        </div>
+        <div class="summary-note"></div>
+      `;
+      (item.querySelector('.summary-text') as HTMLElement).textContent = lineText;
+      (item.querySelector('.summary-note') as HTMLElement).textContent = '→ ' + note;
+      // クリックで該当行にスクロール
+      item.addEventListener('click', () => {
+        const targetRow = editorBody.querySelector(`.row[data-idx="${idx}"]`) as HTMLElement;
+        if (targetRow) {
+          targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          targetRow.classList.add('flash');
+          setTimeout(() => targetRow.classList.remove('flash'), 1500);
+        }
+      });
+      savedSummaryList.appendChild(item);
+    }
+  }
+
+  function updateDirtyState() {
+    const current = collectNotes();
+    const currentJSON = JSON.stringify(current);
+    const savedJSON = JSON.stringify(savedNotes);
+    setDirty(currentJSON !== savedJSON);
+    updateStatus(current);
   }
 
   function updateStatus(notes: Record<number, string>) {
@@ -228,15 +361,36 @@ import Layout from '../layouts/Layout.astro';
     statusEl.textContent = `${currentLines.length}行 / ${count}件メモ`;
   }
 
+  // --- 保存ボタン ---
+  saveBtnTop.addEventListener('click', doSave);
+  saveBtnBottom.addEventListener('click', doSave);
+
+  // ページを離れる前の警告
+  window.addEventListener('beforeunload', (e) => {
+    if (isDirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
   // --- Clear ---
   clearBtn.addEventListener('click', async () => {
-    if (!confirm(`「${currentTitle}」の推敲データを削除しますか？`)) return;
-    await saveNotes(currentKey, currentTitle, {});
-    editor.style.display = 'none';
-    emptyState.style.display = 'block';
-    clearBtn.disabled = true;
-    statusEl.textContent = '';
-    chapterSelect.value = '';
+    if (!confirm(`「${currentTitle}」の推敲メモを全て削除しますか?`)) return;
+    const ok = await saveNotes(currentKey, currentTitle, {});
+    if (ok) {
+      savedNotes = {};
+      editorBody.querySelectorAll('.row-note').forEach((n) => {
+        (n as HTMLTextAreaElement).value = '';
+      });
+      editorBody.querySelectorAll('.row').forEach((r) => {
+        r.classList.remove('has-note', 'saved-note', 'dirty-note');
+      });
+      renderSavedSummary();
+      setDirty(false);
+      updateStatus({});
+    } else {
+      alert('削除に失敗しました');
+    }
   });
 
   loadIndex();
@@ -261,6 +415,9 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 12px;
+    position: sticky;
+    top: 70px;
+    z-index: 20;
   }
   .toolbar-title {
     font-size: 1rem;
@@ -289,11 +446,26 @@ import Layout from '../layouts/Layout.astro';
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
   }
   .action-btn:hover { opacity: 0.85; }
+  .action-btn:active { transform: scale(0.97); }
   .action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .action-btn.primary { background: var(--color-primary, #2e574c); color: #fff; }
   .action-btn.danger { background: #fee; color: #c00; }
+  .action-btn.attention {
+    box-shadow: 0 0 0 3px rgba(234, 67, 53, 0.3);
+    animation: pulse 1.5s infinite;
+  }
+  .action-btn.big {
+    padding: 12px 32px;
+    font-size: 1rem;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(234, 67, 53, 0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(234, 67, 53, 0.15); }
+  }
 
   .status {
     font-size: 0.75rem;
@@ -301,11 +473,20 @@ import Layout from '../layouts/Layout.astro';
     white-space: nowrap;
   }
 
+  .save-state {
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .save-state.saved { color: #2e7d32; }
+  .save-state.dirty { color: #c62828; }
+  .save-state.error { color: #c00; }
+
   /* 空状態 */
   .empty-state {
     text-align: center; padding: 80px 20px; color: var(--muted, #999);
   }
-  .empty-hint { font-size: 0.85rem; margin-top: 8px; }
+  .empty-hint { font-size: 0.85rem; margin-top: 8px; line-height: 1.6; }
 
   /* エディタ */
   .editor { display: flex; flex-direction: column; }
@@ -315,7 +496,7 @@ import Layout from '../layouts/Layout.astro';
     grid-template-columns: 40px 1fr 1fr;
     gap: 0;
     position: sticky;
-    top: 0;
+    top: 130px;
     z-index: 10;
     background: var(--color-primary, #2e574c);
     border-radius: 6px 6px 0 0;
@@ -339,11 +520,35 @@ import Layout from '../layouts/Layout.astro';
     gap: 0;
     border-bottom: 1px solid #eee;
     transition: background 0.1s;
+    position: relative;
   }
   .row:hover { background: rgba(94, 168, 154, 0.04); }
   .row.focused { background: rgba(94, 168, 154, 0.08); }
-  .row.has-note { background: rgba(234, 67, 53, 0.04); }
-  .row.has-note .row-num { color: var(--color-accent, #ea4335); font-weight: 700; }
+
+  /* 保存済みのメモがある行: 緑系の左ボーダー */
+  .row.saved-note {
+    background: rgba(46, 125, 50, 0.06);
+    border-left: 4px solid #2e7d32;
+  }
+  .row.saved-note .row-num { color: #2e7d32; font-weight: 700; }
+
+  /* 未保存の変更がある行: 赤系の左ボーダー */
+  .row.dirty-note {
+    background: rgba(234, 67, 53, 0.08);
+    border-left: 4px solid #ea4335;
+  }
+  .row.dirty-note .row-num { color: #ea4335; font-weight: 700; }
+
+  /* メモが空（has-noteなし）の場合は通常表示 */
+  .row.has-note:not(.saved-note):not(.dirty-note) {
+    background: rgba(234, 67, 53, 0.04);
+  }
+
+  .row.flash { animation: flashRow 1.5s; }
+  @keyframes flashRow {
+    0%, 100% { background: rgba(46, 125, 50, 0.06); }
+    25% { background: rgba(255, 235, 59, 0.5); }
+  }
 
   .row-num {
     padding: 8px 4px;
@@ -384,16 +589,92 @@ import Layout from '../layouts/Layout.astro';
   .row-note::placeholder { color: transparent; }
   .row:hover .row-note::placeholder { color: #ccc; }
 
+  /* 保存済みサマリー */
+  .saved-summary {
+    margin-top: 24px;
+    padding: 16px;
+    background: rgba(46, 125, 50, 0.04);
+    border: 1px solid rgba(46, 125, 50, 0.2);
+    border-radius: 8px;
+  }
+  .saved-summary-title {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: #2e7d32;
+    font-weight: 700;
+  }
+  .saved-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .summary-item {
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-left: 3px solid #2e7d32;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .summary-item:hover {
+    background: rgba(46, 125, 50, 0.05);
+    transform: translateX(2px);
+  }
+  .summary-line {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .summary-num {
+    font-size: 0.7rem;
+    color: #2e7d32;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .summary-text {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.5;
+    word-break: break-all;
+  }
+  .summary-note {
+    font-size: 0.85rem;
+    color: #c62828;
+    line-height: 1.5;
+    margin-left: 32px;
+    word-break: break-all;
+  }
+
+  /* 下部アクションバー */
+  .bottom-bar {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: sticky;
+    bottom: 0;
+    z-index: 15;
+  }
+
   /* スマホ */
   @media (max-width: 768px) {
     .review-main { padding: 80px 6px 20px; }
-    .toolbar { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 12px; }
+    .toolbar { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 12px; top: 60px; }
     .toolbar-left, .toolbar-right { width: 100%; }
-    .toolbar-right { justify-content: flex-end; }
+    .toolbar-right { justify-content: space-between; }
     .toolbar select { max-width: 100%; flex: 1; }
 
     .editor-header {
       grid-template-columns: 28px 1fr 1fr;
+      top: 180px;
     }
     .row {
       grid-template-columns: 28px 1fr 1fr;
@@ -401,6 +682,10 @@ import Layout from '../layouts/Layout.astro';
     .row-text { font-size: 0.8rem; padding: 6px 8px; line-height: 1.7; }
     .row-note { font-size: 0.8rem; padding: 6px 8px; }
     .row-num { font-size: 0.65rem; }
+
+    .summary-note { margin-left: 16px; }
+    .bottom-bar { flex-direction: column; align-items: stretch; }
+    .action-btn.big { width: 100%; }
   }
   @media (max-width: 480px) {
     .editor-header {

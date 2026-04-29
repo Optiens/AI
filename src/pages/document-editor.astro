@@ -3,8 +3,8 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="書類添削AI（デモ）| Optiens"
-  description="経営者向けの書類添削AIデモ。社内文書サンプルを選んで、AIエージェントによる添削を体験できます。"
+  title="書類添削ツール（デモ）| Optiens"
+  description="部下が作成した社内文書を上長が添削するための業務ツールのデモです。各行ごとにメモを書き込み、添削箇所を一覧で管理できます。"
   canonical="https://optiens.com/document-editor"
 >
   <main class="ed-main light-section">
@@ -12,10 +12,10 @@ import Layout from '../layouts/Layout.astro';
     <section class="ed-hero">
       <div class="container text-center">
         <p class="hero-eyebrow">DEMO</p>
-        <h1>書類添削AI（デモ）</h1>
+        <h1>書類添削ツール（デモ）</h1>
         <p class="hero-sub">
-          社内文書サンプルを選んで、AIエージェントによる添削を体験いただけます。<br />
-          推敲ツールの業務版として、本文と添削メモを並列に確認できます。
+          部下が作成した社内文書を上長が添削するための業務用ツールです。<br />
+          各行ごとにメモを書き込み、添削した箇所を一覧で管理できます。
         </p>
       </div>
     </section>
@@ -33,8 +33,8 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <div class="toolbar-right">
             <span id="status" class="status"></span>
-            <button type="button" id="ai-edit-btn" class="action-btn primary" disabled>
-              <i class="fa-solid fa-wand-magic-sparkles"></i> AIで添削
+            <button type="button" id="save-btn-top" class="action-btn primary" disabled>
+              <i class="fa-solid fa-floppy-disk"></i> 保存
             </button>
             <button type="button" id="clear-btn" class="action-btn danger" disabled>クリア</button>
           </div>
@@ -56,17 +56,18 @@ import Layout from '../layouts/Layout.astro';
           <div id="editor-body" class="editor-body"></div>
         </div>
 
-        <!-- 凡例（メモあり時のみ表示） -->
-        <div id="legend" class="legend" style="display:none;">
-          <span class="legend-item"><span class="dot dot-high"></span>重要</span>
-          <span class="legend-item"><span class="dot dot-medium"></span>中</span>
-          <span class="legend-item"><span class="dot dot-low"></span>軽微</span>
+        <!-- 下部の保存ボタン -->
+        <div id="bottom-actions" class="bottom-actions" style="display:none;">
+          <span id="status-bottom" class="status-bottom"></span>
+          <button type="button" id="save-btn-bottom" class="action-btn primary">
+            <i class="fa-solid fa-floppy-disk"></i> 保存
+          </button>
         </div>
 
         <!-- 注意書き -->
         <p class="disclaimer">
-          ※AIによる添削は1時間あたり10回までご利用いただけます。送信内容は添削処理にのみ使用します。<br />
-          ※御社専用版では、社内テンプレート参照・過去文書からの整合チェック・部門別ルール適用などの拡張が可能です。
+          ※添削メモはお使いのブラウザに保存されます（他端末・他ブラウザには引き継がれません）。<br />
+          ※御社専用版では、社内Slack/Teams連携・添削履歴のチーム共有・AIによる事前チェック等の拡張が可能です。
         </p>
       </div>
     </section>
@@ -76,8 +77,8 @@ import Layout from '../layouts/Layout.astro';
       <div class="container text-center">
         <h2>御社業務に合わせたカスタム版もご相談いただけます</h2>
         <p>
-          社内テンプレート参照・過去文書からの整合チェック・部門別ルール適用など、<br />
-          御社の業務フローに沿った書類添削の仕組みを構築します。
+          複数人での共有・添削履歴の管理・社内テンプレート照合など、<br />
+          御社の業務フローに沿った仕組みを構築します。
         </p>
         <div class="cta-buttons">
           <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける（0円）</a>
@@ -89,12 +90,6 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-  type Severity = 'high' | 'medium' | 'low';
-  interface EditNote {
-    severity: Severity;
-    location: string;
-    comment: string;
-  }
   interface SampleDoc {
     id: string;
     title: string;
@@ -102,17 +97,23 @@ import Layout from '../layouts/Layout.astro';
     text: string;
   }
 
+  const STORAGE_PREFIX = 'optiens:document-review:';
+
   const docSelect = document.getElementById('doc-select') as HTMLSelectElement;
-  const aiEditBtn = document.getElementById('ai-edit-btn') as HTMLButtonElement;
+  const saveBtnTop = document.getElementById('save-btn-top') as HTMLButtonElement;
+  const saveBtnBottom = document.getElementById('save-btn-bottom') as HTMLButtonElement;
   const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
   const statusEl = document.getElementById('status') as HTMLSpanElement;
+  const statusBottom = document.getElementById('status-bottom') as HTMLSpanElement;
   const emptyState = document.getElementById('empty-state') as HTMLDivElement;
   const editor = document.getElementById('editor') as HTMLDivElement;
   const editorBody = document.getElementById('editor-body') as HTMLDivElement;
-  const legend = document.getElementById('legend') as HTMLDivElement;
+  const bottomActions = document.getElementById('bottom-actions') as HTMLDivElement;
 
   let samples: SampleDoc[] = [];
+  let currentDocId = '';
   let currentLines: string[] = [];
+  let dirty = false;
 
   // --- サンプル読み込み ---
   async function loadSamples() {
@@ -120,11 +121,10 @@ import Layout from '../layouts/Layout.astro';
       const res = await fetch('/samples/document-editor.json');
       samples = await res.json();
       docSelect.innerHTML = '<option value="">社内文書を選択</option>';
-      // カテゴリでグループ化
       const byCategory: Record<string, SampleDoc[]> = {};
       for (const s of samples) {
-        if (!byCategory[s.category]) byCategory[s.category] = [];
-        byCategory[s.category].push(s);
+        const list = byCategory[s.category] ?? (byCategory[s.category] = []);
+        list.push(s);
       }
       for (const [category, docs] of Object.entries(byCategory)) {
         const group = document.createElement('optgroup');
@@ -137,13 +137,17 @@ import Layout from '../layouts/Layout.astro';
         }
         docSelect.appendChild(group);
       }
-    } catch (e) {
+    } catch {
       statusEl.textContent = 'サンプルの読み込みに失敗しました';
     }
   }
 
   // --- 書類選択 ---
   docSelect.addEventListener('change', () => {
+    if (dirty && !confirm('保存していない変更があります。破棄して切り替えますか？')) {
+      docSelect.value = currentDocId;
+      return;
+    }
     const id = docSelect.value;
     if (!id) {
       showEmptyState();
@@ -151,11 +155,32 @@ import Layout from '../layouts/Layout.astro';
     }
     const doc = samples.find(s => s.id === id);
     if (!doc) return;
-    renderRows(doc.text);
+    currentDocId = id;
+    const savedMemos = loadMemos(id);
+    renderRows(doc.text, savedMemos);
   });
 
-  // --- 行レンダリング ---
-  function renderRows(text: string) {
+  // --- localStorage ---
+  function loadMemos(docId: string): Record<number, string> {
+    try {
+      const raw = localStorage.getItem(STORAGE_PREFIX + docId);
+      if (!raw) return {};
+      return JSON.parse(raw);
+    } catch {
+      return {};
+    }
+  }
+  function saveMemos(docId: string, memos: Record<number, string>) {
+    try {
+      localStorage.setItem(STORAGE_PREFIX + docId, JSON.stringify(memos));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // --- レンダリング ---
+  function renderRows(text: string, savedMemos: Record<number, string> = {}) {
     const lines = text.split('\n');
     currentLines = lines;
     editorBody.innerHTML = '';
@@ -169,144 +194,142 @@ import Layout from '../layouts/Layout.astro';
       num.className = 'row-num';
       num.textContent = String(i + 1);
 
-      const text = document.createElement('div');
-      text.className = 'row-text';
+      const textEl = document.createElement('div');
+      textEl.className = 'row-text';
       if (line.trim() === '') {
-        text.innerHTML = '<span class="row-text-empty">（空行）</span>';
+        textEl.innerHTML = '<span class="row-text-empty">（空行）</span>';
       } else {
-        text.textContent = line;
+        textEl.textContent = line;
       }
 
-      const noteCell = document.createElement('div');
+      const noteCell = document.createElement('textarea');
       noteCell.className = 'row-note';
-      noteCell.innerHTML = '<span class="row-note-empty">—</span>';
+      noteCell.placeholder = '';
+      noteCell.value = savedMemos[i] || '';
+      noteCell.rows = 1;
+      noteCell.spellcheck = false;
+
+      const updateRowState = () => {
+        const hasNote = noteCell.value.trim().length > 0;
+        row.classList.toggle('has-note', hasNote);
+      };
+
+      const resize = () => {
+        noteCell.style.height = 'auto';
+        const h = Math.max(textEl.offsetHeight, noteCell.scrollHeight);
+        noteCell.style.height = h + 'px';
+      };
+
+      noteCell.addEventListener('input', () => {
+        updateRowState();
+        resize();
+        markDirty();
+      });
+      noteCell.addEventListener('focus', () => row.classList.add('focused'));
+      noteCell.addEventListener('blur', () => row.classList.remove('focused'));
 
       row.appendChild(num);
-      row.appendChild(text);
+      row.appendChild(textEl);
       row.appendChild(noteCell);
       editorBody.appendChild(row);
+
+      updateRowState();
+      requestAnimationFrame(() => {
+        const h = Math.max(textEl.offsetHeight, noteCell.scrollHeight);
+        textEl.style.minHeight = h + 'px';
+        noteCell.style.height = h + 'px';
+      });
     });
 
     emptyState.style.display = 'none';
     editor.style.display = 'block';
-    aiEditBtn.disabled = false;
+    bottomActions.style.display = 'flex';
+    saveBtnTop.disabled = false;
     clearBtn.disabled = false;
-    legend.style.display = 'none';
-    statusEl.textContent = `${lines.length}行`;
+    dirty = false;
+    updateStatus();
   }
 
-  // --- AI添削 ---
-  aiEditBtn.addEventListener('click', async () => {
-    const id = docSelect.value;
-    const doc = samples.find(s => s.id === id);
-    if (!doc) return;
-
-    aiEditBtn.disabled = true;
-    statusEl.textContent = 'AI添削中...';
-
-    try {
-      const res = await fetch('/api/document-edit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: doc.text }),
-      });
-      const data = await res.json();
-      if (data.error) {
-        statusEl.textContent = data.error;
-        aiEditBtn.disabled = false;
-        return;
-      }
-      placeNotes(data.notes || []);
-      statusEl.textContent = `${data.notes?.length || 0}件の添削メモを生成${data.mock ? '（モック）' : ''}`;
-    } catch (e) {
-      statusEl.textContent = '添削に失敗しました';
-    }
-    aiEditBtn.disabled = false;
-  });
-
-  // --- AI添削メモを行にマッピング ---
-  function placeNotes(notes: EditNote[]) {
-    // クリア
-    editorBody.querySelectorAll('.row').forEach(row => {
-      row.classList.remove('has-note', 'note-high', 'note-medium', 'note-low');
-      const noteCell = row.querySelector('.row-note') as HTMLDivElement;
-      noteCell.innerHTML = '<span class="row-note-empty">—</span>';
+  // --- メモ収集 ---
+  function collectMemos(): Record<number, string> {
+    const memos: Record<number, string> = {};
+    editorBody.querySelectorAll('.row').forEach((row) => {
+      const idx = parseInt((row as HTMLElement).dataset.lineIndex || '0', 10);
+      const v = ((row.querySelector('.row-note') as HTMLTextAreaElement).value || '').trim();
+      if (v) memos[idx] = v;
     });
+    return memos;
+  }
 
-    // 各noteを最も該当する行にマッピング
-    let assignedCount = 0;
-    notes.forEach((note) => {
-      const targetIdx = findBestMatchLine(note);
-      const row = editorBody.querySelector(`.row[data-line-index="${targetIdx}"]`);
-      if (!row) return;
-      assignNoteToRow(row as HTMLDivElement, note);
-      assignedCount++;
-    });
+  // --- 保存 ---
+  function doSave() {
+    if (!currentDocId) return;
+    const memos = collectMemos();
+    const ok = saveMemos(currentDocId, memos);
+    if (ok) {
+      dirty = false;
+      updateStatus('保存しました');
+      // 1.5秒後に通常表示に戻す
+      setTimeout(() => updateStatus(), 1500);
+    } else {
+      updateStatus('保存に失敗しました');
+    }
+  }
+  saveBtnTop.addEventListener('click', doSave);
+  saveBtnBottom.addEventListener('click', doSave);
 
-    if (assignedCount > 0) {
-      legend.style.display = 'flex';
+  // --- ダーティ管理 ---
+  function markDirty() {
+    if (!dirty) {
+      dirty = true;
+      updateStatus();
     }
   }
 
-  function findBestMatchLine(note: EditNote): number {
-    // location文字列に「N行目」「行N」等が含まれる場合はその行
-    const lineMatch = note.location.match(/(\d+)\s*行/);
-    if (lineMatch) {
-      const idx = parseInt(lineMatch[1]) - 1;
-      if (idx >= 0 && idx < currentLines.length) return idx;
+  function updateStatus(message?: string) {
+    if (message) {
+      statusEl.textContent = message;
+      statusBottom.textContent = message;
+      saveBtnTop.classList.remove('warn');
+      saveBtnBottom.classList.remove('warn');
+      return;
     }
-
-    // location文字列が本文のいずれかの行に含まれているか探す
-    const loc = note.location.replace(/^[「『]|[」』]$/g, '').trim();
-    if (loc.length >= 2) {
-      // 完全一致 or 部分一致
-      for (let i = 0; i < currentLines.length; i++) {
-        if (currentLines[i].includes(loc)) return i;
-      }
-      // 短いキーワード抽出 (2-4文字の連続するJP文字)
-      const keywords = loc.match(/[一-龯ぁ-ゔァ-ヴ]{2,4}/g) || [];
-      for (const kw of keywords) {
-        for (let i = 0; i < currentLines.length; i++) {
-          if (currentLines[i].includes(kw)) return i;
-        }
-      }
-    }
-
-    // フォールバック: 最初の非空行
-    for (let i = 0; i < currentLines.length; i++) {
-      if (currentLines[i].trim()) return i;
-    }
-    return 0;
-  }
-
-  function assignNoteToRow(row: HTMLDivElement, note: EditNote) {
-    row.classList.add('has-note', `note-${note.severity}`);
-    const noteCell = row.querySelector('.row-note') as HTMLDivElement;
-    const dot = document.createElement('span');
-    dot.className = `dot dot-${note.severity}`;
-    const text = document.createElement('span');
-    text.className = 'row-note-text';
-    text.textContent = note.comment;
-    noteCell.innerHTML = '';
-    noteCell.appendChild(dot);
-    noteCell.appendChild(text);
+    const memoCount = editorBody.querySelectorAll('.row.has-note').length;
+    const dirtyMark = dirty ? ' ・未保存の変更あり' : '';
+    const text = `${currentLines.length}行 / ${memoCount}件のメモ${dirtyMark}`;
+    statusEl.textContent = text;
+    statusBottom.textContent = text;
+    saveBtnTop.classList.toggle('warn', dirty);
+    saveBtnBottom.classList.toggle('warn', dirty);
   }
 
   // --- クリア ---
   clearBtn.addEventListener('click', () => {
+    if (dirty && !confirm('保存していない変更があります。破棄しますか？')) return;
     docSelect.value = '';
+    currentDocId = '';
     showEmptyState();
   });
 
   function showEmptyState() {
     emptyState.style.display = 'block';
     editor.style.display = 'none';
-    legend.style.display = 'none';
-    aiEditBtn.disabled = true;
+    bottomActions.style.display = 'none';
+    saveBtnTop.disabled = true;
     clearBtn.disabled = true;
+    dirty = false;
     statusEl.textContent = '';
+    statusBottom.textContent = '';
     currentLines = [];
   }
+
+  // --- 離脱時の警告 ---
+  window.addEventListener('beforeunload', (e) => {
+    if (dirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
 
   loadSamples();
 </script>
@@ -392,20 +415,28 @@ import Layout from '../layouts/Layout.astro';
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity .2s, transform .2s;
+    transition: opacity .2s, transform .2s, background-color .2s;
   }
-  .action-btn:hover { opacity: .85; transform: translateY(-1px); }
+  .action-btn:hover { opacity: .9; transform: translateY(-1px); }
   .action-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   .action-btn.primary {
     background: var(--brand);
     color: #fff;
+  }
+  .action-btn.primary.warn {
+    background: #F24E1E;
+    animation: pulseSave 1.5s ease-in-out infinite;
+  }
+  @keyframes pulseSave {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(242, 78, 30, 0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(242, 78, 30, 0); }
   }
   .action-btn.danger {
     background: transparent;
     color: var(--muted);
     border-color: var(--border);
   }
-  .status {
+  .status, .status-bottom {
     font-size: 0.8rem;
     color: var(--muted);
     white-space: nowrap;
@@ -458,11 +489,19 @@ import Layout from '../layouts/Layout.astro';
   }
   .row:last-child { border-bottom: none; }
   .row:hover { background: rgba(162, 89, 255, 0.04); }
-  .row.has-note { background: rgba(162, 89, 255, 0.04); }
-  .row.has-note.note-high { background: rgba(242, 78, 30, 0.05); }
-  .row.has-note.note-high .row-num { color: #F24E1E; font-weight: 700; }
-  .row.has-note.note-medium .row-num { color: #F24E1E; opacity: 0.7; }
-  .row.has-note.note-low .row-num { color: var(--brand); opacity: 0.7; }
+  .row.focused { background: rgba(162, 89, 255, 0.08); }
+
+  /* メモがある行: 本文を赤字に */
+  .row.has-note .row-text {
+    color: #d33028;
+    text-decoration: line-through;
+    text-decoration-color: rgba(211, 48, 40, 0.5);
+  }
+  .row.has-note .row-num {
+    color: #d33028;
+    font-weight: 700;
+  }
+  .row.has-note { background: rgba(211, 48, 40, 0.03); }
 
   .row-num {
     padding: 10px 4px;
@@ -485,6 +524,7 @@ import Layout from '../layouts/Layout.astro';
     border-right: 1px solid var(--border);
     color: var(--text);
     white-space: pre-wrap;
+    transition: color 0.2s ease;
   }
   .row-text-empty {
     color: var(--muted);
@@ -493,51 +533,39 @@ import Layout from '../layouts/Layout.astro';
   }
   .row-note {
     padding: 10px 14px;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     line-height: 1.75;
+    border: none;
+    background: transparent;
+    resize: none;
+    overflow: hidden;
+    font-family: inherit;
     color: var(--text);
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
   }
-  .row-note-empty {
+  .row-note:focus {
+    outline: none;
+    background: rgba(162, 89, 255, 0.04);
+  }
+  .row-note::placeholder { color: transparent; }
+  .row:hover .row-note::placeholder {
     color: var(--muted);
     opacity: 0.4;
   }
-  .row-note-text {
-    flex: 1;
-  }
 
-  /* Severityドット */
-  .dot {
-    flex-shrink: 0;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-top: 7px;
-  }
-  .dot-high { background: #F24E1E; }
-  .dot-medium { background: #F2A93E; }
-  .dot-low { background: var(--brand); }
-
-  /* 凡例 */
-  .legend {
+  /* 下部の保存アクション */
+  .bottom-actions {
     display: flex;
-    gap: 18px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
     margin-top: 16px;
-    padding: 10px 16px;
-    font-size: 0.78rem;
-    color: var(--muted);
+    padding: 14px 18px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 10px;
   }
-  .legend-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .legend-item .dot { margin-top: 0; }
 
   /* 注意書き */
   .disclaimer {
@@ -576,12 +604,8 @@ import Layout from '../layouts/Layout.astro';
 
   /* スマホ */
   @media (max-width: 768px) {
-    .toolbar {
-      padding: 12px 14px;
-    }
-    .toolbar-left, .toolbar-right {
-      width: 100%;
-    }
+    .toolbar { padding: 12px 14px; }
+    .toolbar-left, .toolbar-right { width: 100%; }
     .toolbar-right { justify-content: flex-end; }
     .toolbar select { min-width: 0; flex: 1; }
     .action-btn { padding: 7px 12px; font-size: 0.8rem; }
@@ -590,12 +614,12 @@ import Layout from '../layouts/Layout.astro';
     .row { grid-template-columns: 36px 1fr 1fr; }
     .row-num { font-size: 0.68rem; padding-top: 10px; }
     .row-text { font-size: 0.85rem; padding: 8px 10px; }
-    .row-note { font-size: 0.78rem; padding: 8px 10px; }
+    .row-note { font-size: 0.82rem; padding: 8px 10px; }
   }
   @media (max-width: 480px) {
     .editor-header { grid-template-columns: 30px 1fr 1fr; }
     .row { grid-template-columns: 30px 1fr 1fr; }
     .row-text { font-size: 0.8rem; padding: 6px 8px; }
-    .row-note { font-size: 0.74rem; padding: 6px 8px; }
+    .row-note { font-size: 0.78rem; padding: 6px 8px; }
   }
 </style>
