@@ -24,12 +24,17 @@
     },
     {
       "source": "/ai-consulting",
-      "destination": "/",
+      "destination": "/service",
       "permanent": true
     },
     {
       "source": "/ai-consulting/:slug*",
       "destination": "/service/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/",
       "permanent": true
     }
   ]
