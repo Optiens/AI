@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# 管理系・APIはクロール対象外
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_quality-guidelines
+
+# サイトマップ
+Sitemap: https://optiens.com/sitemap.xml
