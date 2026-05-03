@@ -1,0 +1,840 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const KAKUYOMU_URL = 'https://kakuyomu.jp/users/optiens-novel';
+
+const studioSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: 'Studio Optiens',
+  creator: { '@type': 'Organization', name: '合同会社Optiens' },
+  author: {
+    '@type': 'Person',
+    name: 'Studio Optiens',
+    url: KAKUYOMU_URL,
+  },
+  description: 'AI技術を活用したクリエイティブ・スタジオ。複数のAIエージェントによる多角的な創作・レビュー体制で、小説・漫画・動画分野の制作を行っています。',
+  url: 'https://optiens.com/studio',
+  sameAs: [KAKUYOMU_URL],
+};
+---
+
+<Layout
+  title="Studio Optiens | 複数AIエージェントによるクリエイティブ・スタジオ"
+  description="Studio OptiensはAI技術を活用したクリエイティブ・スタジオ。複数のAIエージェントによる多角的な創作・レビュー体制で、小説・漫画・動画など多様な作品を制作します。"
+  canonical="https://optiens.com/studio"
+  structuredData={studioSchema}
+>
+  <main class="studio">
+
+    <!-- ===== Hero ===== -->
+    <section class="studio-hero">
+      <canvas id="studio-canvas" aria-hidden="true"></canvas>
+      <div class="studio-hero-content">
+        <h1 class="studio-title">
+          Studio<br/>
+          <span class="title-accent">Optiens</span>
+        </h1>
+        <p class="studio-tagline">複数のAIエージェントが、ひとつの作品をつくる。</p>
+        <p class="studio-sub">
+          Studio Optiensは、合同会社Optiensが運営する<br class="pc-only" />
+          AI技術を活用したクリエイティブ・スタジオです。
+        </p>
+
+        <div class="studio-hero-meta">
+          <a
+            href={KAKUYOMU_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="studio-link-chip"
+          >
+            <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+            <span>カクヨムで作品公開中</span>
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ペンネーム ===== -->
+    <section class="studio-section">
+      <div class="container">
+        <div class="penname-card reveal">
+          <p class="penname-label">著者名（ペンネーム）</p>
+          <h2 class="penname-title">Studio Optiens</h2>
+          <p class="penname-desc">
+            カクヨムで小説を発表する際の<strong>著者名（ペンネーム）</strong>もスタジオ名と同じ「<strong>Studio Optiens</strong>」を使用しています。
+            複数のAIエージェントの協働によって生まれる作品である以上、特定の個人名ではなくスタジオ名を著者として掲げる方針です。
+          </p>
+          <a
+            href={KAKUYOMU_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="penname-link"
+          >
+            カクヨムのStudio Optiensページを見る
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== コンセプト ===== -->
+    <section class="studio-section">
+      <div class="container">
+        <h2 class="studio-section-heading studio-section-heading--center">
+          創作と批評を、AIエージェントの分業で
+        </h2>
+        <p class="studio-lead">
+          ひとつの作品を、ひとりのAIに丸投げするのではなく、<br/>
+          役割を持った複数のAIエージェントが、<strong>創作と批評を分業して回す</strong>。<br/>
+          それがStudio Optiensの制作スタイルです。
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== 制作プロセス（抽象） ===== -->
+    <section class="studio-section studio-section--alt">
+      <div class="container">
+        <h2 class="studio-section-heading studio-section-heading--center">
+          独自設計の制作プロセス
+        </h2>
+
+        <p class="studio-lead">
+          ひとつの作品を、ひとつのAIに任せるのではなく、<br/>
+          役割の異なる複数のAIエージェントを並走させ、<br/>
+          <strong>創作と批評の両方</strong>を回しながら作品を仕上げます。
+        </p>
+
+        <div class="process-abstract">
+          <div class="process-step reveal">
+            <span class="process-num">01</span>
+            <h3>設計</h3>
+            <p>作品の方向性・主題・対象を定め、骨格を整えます。</p>
+          </div>
+          <div class="process-arrow" aria-hidden="true">→</div>
+          <div class="process-step reveal">
+            <span class="process-num">02</span>
+            <h3>創作 × 批評</h3>
+            <p>役割の異なる複数のAIエージェントが分業し、創作と批評を並走させながら作品を磨きます。</p>
+          </div>
+          <div class="process-arrow" aria-hidden="true">→</div>
+          <div class="process-step reveal">
+            <span class="process-num">03</span>
+            <h3>承認</h3>
+            <p>最終的な公開判断は、人間が責任を持って行います。</p>
+          </div>
+        </div>
+
+        <div class="agent-note">
+          <i class="fa-solid fa-lock" aria-hidden="true"></i>
+          <p>
+            各エージェントの構成・連携設計・評価基準は<strong>Studio Optiens独自のノウハウ</strong>として非公開とさせていただきます。
+            AIは創作の代替ではなく、人間の判断と意思を起点にした拡張だと考えています。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 取り扱いジャンル ===== -->
+    <section class="studio-section">
+      <div class="container">
+        <h2 class="studio-section-heading studio-section-heading--center">
+          取り組む創作領域
+        </h2>
+
+        <div class="field-grid">
+          <div class="field-card field-card--active reveal">
+            <div class="field-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></div>
+            <span class="field-status">ACTIVE</span>
+            <h3>小説</h3>
+            <p>複数のAIエージェントによる創作・レビュー体制を、まず小説で稼働中。日本語Web小説プラットフォームでの発表からスタートしています。</p>
+          </div>
+
+          <div class="field-card reveal">
+            <div class="field-icon"><i class="fa-solid fa-pen-nib" aria-hidden="true"></i></div>
+            <span class="field-status field-status--planned">PLANNED</span>
+            <h3>漫画</h3>
+            <p>シナリオ・絵コンテ・作画・レビューをAIエージェントで分業する体制を準備中です。</p>
+          </div>
+
+          <div class="field-card reveal">
+            <div class="field-icon"><i class="fa-solid fa-clapperboard" aria-hidden="true"></i></div>
+            <span class="field-status field-status--planned">PLANNED</span>
+            <h3>動画</h3>
+            <p>脚本・絵コンテ・編集・サムネイル設計までをAIエージェントで完結させる動画制作の実証を計画しています。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Why Studio ===== -->
+    <section class="studio-section studio-section--alt">
+      <div class="container">
+        <h2 class="studio-section-heading studio-section-heading--center">
+          なぜ、AI企業が創作を？
+        </h2>
+
+        <div class="why-studio-grid">
+          <div class="why-studio-card reveal">
+            <h3>AI支援事業の品質を磨くため</h3>
+            <p>お客様向けに構築するAIエージェントシステムの設計力は、自分たちが手を動かして検証することでしか深まりません。Studio Optiensは、AI支援事業の品質を裏付ける実証フィールドのひとつです。</p>
+          </div>
+          <div class="why-studio-card reveal">
+            <h3>「AIで何ができるか」を可視化する</h3>
+            <p>AIエージェントの分業体制で、片手間でも継続的に作品を生み出せることを実証することで、「AIで何ができるか」を具体的な作品として示します。</p>
+          </div>
+          <div class="why-studio-card reveal">
+            <h3>創造への敬意を持って</h3>
+            <p>AIは創作の「代替」ではなく、人間の判断と意思を起点にした「拡張」だと考えています。最終的な公開判断は人間が行い、責任を持って届けます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Final CTA ===== -->
+    <section class="studio-final-cta">
+      <div class="studio-final-glow" aria-hidden="true"></div>
+      <div class="container text-center" style="position:relative; z-index:1;">
+        <h2 class="reveal">同じ仕組みを、御社の業務にも</h2>
+        <p class="reveal">
+          複数のAIエージェントによる分業体制は、創作だけでなく業務にも応用できます。<br/>
+          御社の業務にAIエージェント分業を組み込みたい方は、AI支援事業をご覧ください。
+        </p>
+        <div class="studio-cta-row reveal">
+          <a href="/service" class="btn-primary">AI支援事業を見る</a>
+          <a href={KAKUYOMU_URL} target="_blank" rel="noopener noreferrer" class="btn-ghost">
+            カクヨムで作品を読む <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<!-- Hero パーティクル（クリエイティブ向け：紫×ピンク基調） -->
+<script is:inline>
+(function() {
+  const canvas = document.getElementById('studio-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let w, h, particles;
+  const PARTICLE_COUNT = 60;
+  const CONNECT_DIST = 160;
+
+  // クリエイティブ寄り：紫 × ピンク × オレンジ
+  const COLORS = [
+    { r: 162, g: 89,  b: 255 },
+    { r: 242, g: 78,  b: 30  },
+    { r: 255, g: 156, b: 200 },
+    { r: 26,  g: 188, b: 254 },
+  ];
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = rect.width;
+    h = rect.height;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function createParticles() {
+    particles = [];
+    const count = Math.min(PARTICLE_COUNT, Math.floor((w * h) / 9000));
+    for (let i = 0; i < count; i++) {
+      const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 2 + 1,
+        color: c,
+        alpha: Math.random() * 0.4 + 0.4,
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -10) p.x = w + 10;
+      if (p.x > w + 10) p.x = -10;
+      if (p.y < -10) p.y = h + 10;
+      if (p.y > h + 10) p.y = -10;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.color.r + ',' + p.color.g + ',' + p.color.b + ',' + p.alpha + ')';
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const dx = p.x - q.x;
+        const dy = p.y - q.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONNECT_DIST) {
+          const op = (1 - dist / CONNECT_DIST) * 0.13;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = 'rgba(' + p.color.r + ',' + p.color.g + ',' + p.color.b + ',' + op + ')';
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+    if (!prefersReducedMotion) requestAnimationFrame(draw);
+  }
+
+  resize();
+  createParticles();
+  draw();
+
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      resize();
+      createParticles();
+    }, 200);
+  });
+})();
+</script>
+
+<style>
+.studio {
+  --s-text: #334155;
+  --s-heading: #0f172a;
+  --s-muted: #64748b;
+  --s-border: #e2e8f0;
+  --s-surface: #ffffff;
+  --s-surface-2: #f8fafc;
+  --s-brand: #A259FF;
+  --s-accent: #F24E1E;
+}
+.studio .pc-only { display: inline; }
+@media (max-width: 768px) {
+  .studio .pc-only { display: none; }
+}
+.studio .container {
+  width: min(1100px, 100% - 2rem);
+  margin-inline: auto;
+}
+
+.studio-eyebrow {
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--s-brand);
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+.studio-eyebrow--center { text-align: center; }
+
+.studio-section-heading {
+  font-size: clamp(24px, 3.4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  color: var(--s-heading);
+  margin: 0 0 clamp(28px, 4vw, 44px);
+  line-height: 1.3;
+}
+.studio-section-heading--center { text-align: center; }
+
+.studio-lead {
+  font-size: clamp(15px, 1.7vw, 17px);
+  line-height: 2;
+  color: var(--s-text);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 720px;
+}
+.studio-lead strong { color: var(--s-heading); font-weight: 700; }
+
+/* Hero */
+.studio-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(120px, 15vw, 180px) 20px clamp(80px, 10vw, 120px);
+  background: linear-gradient(135deg, #0f172a 0%, #1e1238 100%);
+  color: #fff;
+  text-align: center;
+}
+#studio-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.studio-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.studio-hero .studio-eyebrow {
+  color: #A259FF;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.studio-title {
+  font-size: clamp(42px, 7vw, 84px);
+  font-weight: 800;
+  line-height: .98;
+  letter-spacing: -.02em;
+  color: #fff;
+  margin: 0 0 28px;
+}
+.title-accent {
+  background: linear-gradient(135deg, #A259FF 0%, #F24E1E 60%, #FF9CC8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.studio-tagline {
+  font-size: clamp(15px, 1.8vw, 18px);
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 16px;
+  letter-spacing: .02em;
+}
+.studio-sub {
+  font-size: clamp(13px, 1.5vw, 15px);
+  color: rgba(255, 255, 255, .7);
+  line-height: 1.85;
+  margin: 0 0 28px;
+}
+
+/* Hero ロー: カクヨム リンクチップ */
+.studio-hero-meta {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.studio-link-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .2);
+  color: #fff;
+  text-decoration: none;
+  font-size: clamp(13px, 1.4vw, 14px);
+  font-weight: 600;
+  letter-spacing: .03em;
+  transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
+  backdrop-filter: blur(8px);
+}
+.studio-link-chip:hover {
+  background: rgba(255, 255, 255, .14);
+  border-color: rgba(255, 255, 255, .4);
+  transform: translateY(-1px);
+}
+.studio-link-chip i:first-child {
+  color: #FF9CC8;
+}
+
+/* 制作プロセス（抽象 3ステップ） */
+.process-abstract {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: stretch;
+  gap: clamp(8px, 1.5vw, 14px);
+  max-width: 920px;
+  margin: clamp(36px, 5vw, 56px) auto clamp(28px, 4vw, 40px);
+}
+.process-step {
+  background: #fff;
+  border: 1px solid var(--s-border);
+  border-radius: 14px;
+  padding: clamp(24px, 3vw, 32px);
+  text-align: center;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.process-step:hover {
+  transform: translateY(-3px);
+  border-color: rgba(162, 89, 255, .35);
+  box-shadow: 0 12px 32px rgba(162, 89, 255, .08);
+}
+.process-num {
+  display: block;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 12px;
+  letter-spacing: .25em;
+  font-weight: 700;
+  color: var(--s-brand);
+  margin-bottom: 14px;
+}
+.process-step h3 {
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  font-weight: 800;
+  color: var(--s-heading);
+  margin: 0 0 12px;
+  letter-spacing: -.005em;
+}
+.process-step p {
+  font-size: .9rem;
+  line-height: 1.85;
+  color: var(--s-muted);
+  margin: 0;
+}
+.process-arrow {
+  align-self: center;
+  font-size: 1.4rem;
+  color: var(--s-brand);
+  opacity: .5;
+  font-weight: 300;
+}
+@media (max-width: 768px) {
+  .process-abstract {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .process-arrow {
+    text-align: center;
+    transform: rotate(90deg);
+  }
+}
+
+/* ペンネーム カード */
+.penname-card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(28px, 4vw, 40px);
+  background: linear-gradient(135deg, rgba(162, 89, 255, .04) 0%, rgba(242, 78, 30, .04) 100%);
+  border: 1px solid rgba(162, 89, 255, .25);
+  border-radius: 16px;
+  text-align: center;
+}
+.penname-label {
+  font-size: 12px;
+  letter-spacing: .12em;
+  font-weight: 600;
+  color: var(--s-muted);
+  margin: 0 0 12px;
+}
+.penname-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  margin: 0 0 18px;
+  background: linear-gradient(135deg, #A259FF 0%, #F24E1E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  letter-spacing: -.01em;
+}
+.penname-desc {
+  font-size: clamp(.92rem, 1.4vw, 1rem);
+  line-height: 1.95;
+  color: var(--s-text);
+  margin: 0 0 22px;
+  text-align: left;
+  max-width: 580px;
+  margin-inline: auto;
+}
+.penname-desc strong {
+  color: var(--s-heading);
+  font-weight: 700;
+}
+.penname-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #A259FF, #F24E1E);
+  color: #fff;
+  text-decoration: none;
+  font-size: clamp(13px, 1.4vw, 14px);
+  font-weight: 700;
+  letter-spacing: .04em;
+  box-shadow: 0 8px 24px rgba(162, 89, 255, .3);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.penname-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(162, 89, 255, .42);
+}
+
+/* Section */
+.studio-section {
+  padding: clamp(72px, 10vw, 120px) 0;
+  background: var(--s-surface);
+}
+.studio-section--alt {
+  background: var(--s-surface-2);
+}
+
+/* Agent Flow */
+.agent-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 800px;
+  margin: 0 auto clamp(28px, 4vw, 40px);
+}
+.agent-step {
+  background: var(--s-surface);
+  border: 1px solid var(--s-border);
+  border-radius: 12px;
+  padding: 22px 26px;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.studio-section--alt .agent-step {
+  background: #fff;
+}
+.agent-step:hover {
+  transform: translateX(4px);
+  border-color: rgba(162, 89, 255, .35);
+  box-shadow: 0 8px 24px rgba(162, 89, 255, .08);
+}
+.agent-num {
+  display: inline-block;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--s-brand);
+  letter-spacing: -.02em;
+  margin-bottom: 10px;
+}
+.agent-step h3 {
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  font-weight: 700;
+  color: var(--s-heading);
+  margin: 0 0 8px;
+}
+.agent-step p {
+  font-size: .9rem;
+  line-height: 1.85;
+  color: var(--s-muted);
+  margin: 0;
+}
+.agent-arrow {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--s-brand);
+  opacity: .5;
+}
+
+.agent-note {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 22px 26px;
+  background: rgba(162, 89, 255, .06);
+  border: 1px solid rgba(162, 89, 255, .2);
+  border-radius: 12px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.agent-note i {
+  flex-shrink: 0;
+  color: var(--s-brand);
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+.agent-note p {
+  font-size: .9rem;
+  line-height: 1.85;
+  color: var(--s-text);
+  margin: 0;
+}
+
+/* Field grid */
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(14px, 2vw, 20px);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.field-card {
+  position: relative;
+  background: var(--s-surface);
+  border: 1px solid var(--s-border);
+  border-radius: 14px;
+  padding: clamp(26px, 3vw, 34px);
+  text-align: center;
+  transition: transform .25s ease, border-color .25s ease;
+}
+.studio-section--alt .field-card { background: #fff; }
+.field-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(162, 89, 255, .35);
+}
+.field-card--active {
+  border-color: rgba(162, 89, 255, .5);
+  box-shadow: 0 10px 30px rgba(162, 89, 255, .08);
+}
+.field-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(162, 89, 255, .12), rgba(242, 78, 30, .12));
+  color: var(--s-brand);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.field-status {
+  display: inline-block;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 10px;
+  letter-spacing: .25em;
+  font-weight: 700;
+  color: #fff;
+  background: var(--s-brand);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.field-status--planned {
+  background: var(--s-muted);
+}
+.field-card h3 {
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  font-weight: 800;
+  color: var(--s-heading);
+  margin: 0 0 12px;
+}
+.field-card p {
+  font-size: .9rem;
+  line-height: 1.85;
+  color: var(--s-muted);
+  margin: 0;
+}
+
+/* Why Studio */
+.why-studio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(14px, 2vw, 20px);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.why-studio-card {
+  background: #fff;
+  border: 1px solid var(--s-border);
+  border-radius: 12px;
+  padding: clamp(26px, 3vw, 32px);
+}
+.why-studio-card h3 {
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  font-weight: 700;
+  color: var(--s-heading);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+.why-studio-card p {
+  font-size: .9rem;
+  line-height: 1.9;
+  color: var(--s-muted);
+  margin: 0;
+}
+
+/* Final CTA */
+.studio-final-cta {
+  position: relative;
+  padding: clamp(80px, 11vw, 130px) 20px;
+  background: linear-gradient(135deg, #1e1238 0%, #0f172a 100%);
+  color: #fff;
+  overflow: hidden;
+  text-align: center;
+}
+.studio-final-glow {
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(242, 78, 30, .25) 0%, rgba(162, 89, 255, .15) 30%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+.studio-final-cta h2 {
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+.studio-final-cta p {
+  font-size: clamp(13px, 1.5vw, 15px);
+  color: rgba(255, 255, 255, .8);
+  line-height: 1.9;
+  margin: 0 0 28px;
+}
+.studio-cta-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+.studio-cta-row .btn-primary {
+  background: linear-gradient(135deg, #A259FF, #F24E1E);
+  color: #fff;
+  font-weight: 700;
+  padding: 14px 30px;
+  border-radius: 999px;
+  text-decoration: none;
+  letter-spacing: .04em;
+  box-shadow: 0 10px 30px rgba(162, 89, 255, .4);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.studio-cta-row .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px rgba(162, 89, 255, .5);
+}
+.studio-cta-row .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: .04em;
+  transition: background-color .2s ease, border-color .2s ease;
+}
+.studio-cta-row .btn-ghost:hover {
+  background: rgba(255, 255, 255, .16);
+  border-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .field-grid { grid-template-columns: 1fr; }
+  .why-studio-grid { grid-template-columns: 1fr; }
+}
+
+/* Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>

@@ -1,0 +1,210 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
+
+// このページで扱うのは水耕栽培関連カテゴリのみ
+const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'social'];
+
+const categoryLabel: Record<BlogCategory, string> = {
+  AI: 'AI・機械学習',
+  agriculture: '栽培・IoT',
+  business: '栽培ビジネス',
+  technology: 'テクノロジー',
+  welfare: '農福連携',
+  social: '社会課題',
+  announcement: 'お知らせ',
+};
+
+const { slug } = Astro.params;
+const posts = await getCollection('blog');
+const post = posts.find((p) => p.id === slug || p.id === `${slug}.md`);
+
+// 記事が存在しない、または水耕栽培カテゴリでない場合は /hydroponics に戻す
+if (!post) {
+  return Astro.redirect('/hydroponics');
+}
+if (!hydroCategories.includes(post.data.category as BlogCategory)) {
+  return Astro.redirect(`/blog/${slug}`);
+}
+
+const { Content } = await render(post);
+---
+
+<Layout
+  title={`${post.data.title} | Optiens 水耕栽培`}
+  description={post.data.excerpt}
+  canonical={`https://optiens.com/hydroponics/${slug}`}
+>
+  <main>
+    <section class="hydro-detail-container light-section">
+      <div class="container">
+        <article class="blog-article">
+          <div class="post-meta">
+            <span class={`category-badge category-badge--${post.data.category}`}>
+              {categoryLabel[post.data.category as BlogCategory]}
+            </span>
+            <time class="post-date" datetime={post.data.date}>
+              {post.data.date.replace(/-/g, '.')}
+            </time>
+          </div>
+          <h1 class="post-title">{post.data.title}</h1>
+          <hr class="post-divider" />
+          {post.data.image && (
+            <div class="post-eyecatch">
+              <img src={post.data.image} alt={post.data.title} class="eyecatch-img" />
+            </div>
+          )}
+          <div class="post-body prose"><Content /></div>
+        </article>
+        <div class="back-link">
+          <a href="/hydroponics" class="btn-back">← IoT水耕栽培ページへ戻る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .hydro-detail-container {
+    padding: clamp(80px, 10vw, 120px) 20px 60px;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .blog-article {
+    background: var(--surface, #fff);
+    padding: clamp(24px, 4vw, 40px);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+  }
+
+  /* メタ */
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .post-date {
+    font-size: .9rem;
+    color: var(--muted, #666);
+  }
+  .category-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: .8rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .category-badge--agriculture  { background: #2e7d4f; }
+  .category-badge--welfare      { background: #d45d5d; }
+  .category-badge--social       { background: #c0632b; }
+
+  .post-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: bold;
+    color: var(--heading, #111);
+    margin: 0 0 1.5rem;
+    line-height: 1.4;
+  }
+  .post-divider {
+    border: none;
+    border-top: 2px solid #2e7d4f;
+    margin: 0 0 2rem;
+    opacity: .3;
+  }
+
+  /* アイキャッチ */
+  .post-eyecatch {
+    margin: 0 0 2rem;
+  }
+  .eyecatch-img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    display: block;
+  }
+
+  /* 本文 */
+  .post-body :global(h2) {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--heading, #111);
+    margin: 2.5rem 0 1rem;
+    padding-left: .75rem;
+    border-left: 4px solid #2e7d4f;
+  }
+  .post-body :global(h3) {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--heading, #111);
+    margin: 2rem 0 .75rem;
+  }
+  .post-body :global(p) {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--text, #1a1a1a);
+    margin: 0 0 1.5rem;
+  }
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    padding-left: 1.5rem;
+    margin: 0 0 1.5rem;
+    line-height: 1.8;
+  }
+  .post-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+  }
+  .post-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: .9rem;
+    overflow-x: auto;
+    display: block;
+  }
+  .post-body :global(th) {
+    background: #2e7d4f;
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .post-body :global(td) {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .post-body :global(tr:nth-child(even) td) {
+    background: var(--surface-2, #f5f5f5);
+  }
+
+  /* 戻るボタン */
+  .back-link {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  .btn-back {
+    display: inline-block;
+    padding: 10px 24px;
+    background: #2e7d4f;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: opacity .2s;
+  }
+  .btn-back:hover { opacity: .85; }
+</style>
