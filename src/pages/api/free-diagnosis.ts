@@ -1,6 +1,9 @@
 import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
+import { generatePaymentToken } from '../../lib/payment-token'
+
+const SITE_URL = (import.meta.env.SITE_URL || 'https://optiens.com').replace(/\/$/, '')
 
 const RESEND_API_KEY = import.meta.env.RESEND_API_KEY
 const MAIL_TO = import.meta.env.CONTACT_TO ?? import.meta.env.GMAIL_USER
@@ -258,8 +261,8 @@ ${plan === 'paid' ? `<hr style="margin:20px 0;"/><p style="background:#D1FAE5;pa
           subject: plan === 'paid'
             ? `【Optiens】詳細AI診断のお申込ありがとうございます（申込番号: ${applicationId}）`
             : `【Optiens】無料AI診断のお申込ありがとうございます（申込番号: ${applicationId}）`,
-          text: plan === 'paid' ? buildPaidCustomerEmail(companyName, personName, applicationId) : buildFreeCustomerEmail(companyName, personName, applicationId),
-          html: plan === 'paid' ? buildPaidCustomerEmailHtml(companyName, personName, applicationId) : buildFreeCustomerEmailHtml(companyName, personName, applicationId),
+          text: plan === 'paid' ? buildPaidCustomerEmail(companyName, personName, applicationId, buildNotifyUrl(applicationId)) : buildFreeCustomerEmail(companyName, personName, applicationId),
+          html: plan === 'paid' ? buildPaidCustomerEmailHtml(companyName, personName, applicationId, buildNotifyUrl(applicationId)) : buildFreeCustomerEmailHtml(companyName, personName, applicationId),
         })
       } catch (mailErr) {
         console.error('[free-diagnosis] Customer auto-reply error:', mailErr)
@@ -321,8 +324,14 @@ async function generateUniqueApplicationId(): Promise<string> {
   return `${generateRandomApplicationId().slice(0, 6)}${Date.now().toString(36).slice(-2).toUpperCase()}`
 }
 
+// 振込完了通知URLの組み立て（HMAC署名付き）
+function buildNotifyUrl(applicationId: string): string {
+  const token = generatePaymentToken(applicationId)
+  return `${SITE_URL}/payment-notify?id=${encodeURIComponent(applicationId)}&t=${token}`
+}
+
 // ===== お客様向けメール本文 =====
-function buildPaidCustomerEmail(companyName: string, personName: string, appId: string): string {
+function buildPaidCustomerEmail(companyName: string, personName: string, appId: string, notifyUrl: string): string {
   const deadline = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const deadlineStr = `${deadline.getFullYear()}年${deadline.getMonth() + 1}月${deadline.getDate()}日`
   return `${companyName} ${personName} 様
@@ -353,8 +362,11 @@ function buildPaidCustomerEmail(companyName: string, personName: string, appId: 
 
 ━━━ この後の流れ ━━━
 1. 上記口座へお振込（手数料はお客様ご負担）
-2. 入金を自動検知（通常1営業日以内）→「入金を確認しました」メールを自動送信
-3. 5営業日以内に詳細レポート + 60分MTG日程調整リンクをお届け
+2. お振込み後、下記URLをクリックいただくと即座に入金確認を試みます
+   ${notifyUrl}
+   （クリックを忘れた場合も、毎朝9時に自動で入金確認しますのでご安心ください）
+3. 入金確認後「入金を確認しました」メールを自動送信
+4. 5営業日以内に詳細レポート + 60分MTG日程調整リンクをお届け
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ※ 領収書・適格請求書（インボイス）の発行に対応しています
@@ -369,7 +381,7 @@ https://optiens.com
 `
 }
 
-function buildPaidCustomerEmailHtml(companyName: string, personName: string, appId: string): string {
+function buildPaidCustomerEmailHtml(companyName: string, personName: string, appId: string, notifyUrl: string): string {
   const deadline = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const deadlineStr = `${deadline.getFullYear()}年${deadline.getMonth() + 1}月${deadline.getDate()}日`
   const safeCompany = escapeHtml(companyName)
@@ -404,7 +416,11 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 <h3 style="margin:24px 0 8px;font-size:14px;color:#0f172a;">この後の流れ</h3>
 <ol style="margin:0 0 16px;padding-left:20px;font-size:14px;">
   <li>上記口座へお振込</li>
-  <li>入金を自動検知（通常1営業日以内）→「入金を確認しました」メールを自動送信</li>
+  <li>お振込み後、下記ボタンをクリックいただくと即座に入金確認を試みます<br/>
+    <a href="${notifyUrl}" style="display:inline-block;margin:10px 0 6px;padding:12px 24px;background:#5B7FFF;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;font-size:14px;">▶ 振込完了を通知する</a><br/>
+    <span style="font-size:12px;color:#64748b;">クリックを忘れた場合も、毎朝9時に自動で入金確認します</span>
+  </li>
+  <li>入金確認後「入金を確認しました」メールを自動送信</li>
   <li>5営業日以内に<strong>詳細レポート + 60分MTG日程調整リンク</strong>をお届け</li>
 </ol>
 
