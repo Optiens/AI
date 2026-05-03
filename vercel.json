@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/payment-check",
-      "schedule": "0 * * * *"
+      "schedule": "0 9 * * *"
     }
   ],
   "redirects": [
@@ -36,11 +36,6 @@
     {
       "source": "/ai-consulting/:slug*",
       "destination": "/service/:slug*",
-      "permanent": true
-    },
-    {
-      "source": "/about",
-      "destination": "/",
       "permanent": true
     }
   ]
