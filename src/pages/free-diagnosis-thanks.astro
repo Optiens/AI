@@ -1,32 +1,96 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const isPaid = Astro.url.searchParams.get('plan') === 'paid';
+const applicationId = Astro.url.searchParams.get('id') || '';
 ---
 
-<Layout title="診断を受け付けました | Optiens">
-  <main>
+<Layout title={isPaid ? "詳細診断のお申し込みを受け付けました | Optiens" : "診断を受け付けました | Optiens"}>
+  <main class="thanks-main">
     <section class="thanks-section">
-      <div class="container text-center">
-        <div class="thanks-icon" aria-hidden="true">
-          <i class="fa-solid fa-circle-check"></i>
-        </div>
-        <h1>お申し込みありがとうございます</h1>
-        <p class="thanks-text">
-          無料AI診断のお申し込みを受け付けました。<br/>
-          1〜2営業日以内に、ご入力いただいたメールアドレスへ<br/>
-          無料診断レポートをお届けします。
-        </p>
-        <div class="thanks-hint">
-          <i class="fa-solid fa-lightbulb"></i>
-          <p>
-            有償版のAI活用診断（15万円）は<strong>持続化補助金の委託費</strong>として申請できる場合があります。<br/>
-            採択された場合、<strong>自己負担は約5万円</strong>になります。
-            <a href="/service">詳しく見る →</a>
-          </p>
-        </div>
+      <div class="container">
+        <div class="thanks-card">
+          <div class="thanks-icon" aria-hidden="true">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
 
-        <div class="thanks-actions">
-          <a href="/" class="btn-primary">トップページへ</a>
-          <a href="/blog" class="thanks-link">ブログを読む →</a>
+          {isPaid ? (
+            <>
+              <h1>詳細診断のお申し込みを受け付けました</h1>
+              {applicationId && (
+                <div class="application-id-card">
+                  <p class="application-id-label">申込番号</p>
+                  <p class="application-id-value">{applicationId}</p>
+                  <p class="application-id-hint">お振込時に <strong>振込人名義の先頭に必ずこの番号</strong> をご記入ください（例：{applicationId}オプティエンス）</p>
+                </div>
+              )}
+              <p class="thanks-text">
+                ご入力いただいたメールアドレスへ、<br/>
+                <strong>振込先口座と申込番号を記載した確認メール</strong>を送信しました。
+              </p>
+              <div class="payment-flow">
+                <h2 class="payment-flow-title">この後の流れ</h2>
+                <ol class="payment-flow-steps">
+                  <li>
+                    <span class="flow-num">1</span>
+                    <div class="flow-text">
+                      <strong>振込先案内メール（即時）</strong>
+                      <p>GMOあおぞら銀行への振込先・振込金額（¥5,500 税込）・期限（申込から7日以内）をお送りします。</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="flow-num">2</span>
+                    <div class="flow-text">
+                      <strong>お振込み</strong>
+                      <p>銀行振込にてお支払いください。手数料はお客様ご負担となります。適格請求書（インボイス）の発行に対応しています。</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="flow-num">3</span>
+                    <div class="flow-text">
+                      <strong>入金自動検知（通常1営業日以内）</strong>
+                      <p>「入金を確認しました」メールが自動送信されます。</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="flow-num">4</span>
+                    <div class="flow-text">
+                      <strong>詳細レポート + 60分MTG（入金確認後 5営業日以内）</strong>
+                      <p>5〜8ページの詳細レポートと60分オンラインMTGの日程調整リンクをお届けします。</p>
+                    </div>
+                  </li>
+                </ol>
+                <p class="payment-flow-note">
+                  ※ 導入支援契約に進まれた場合、本費用 ¥5,500（税込）は<strong>初期費用に全額充当</strong>します。<br/>
+                  ※ ご不明な点は <a href="mailto:info@optiens.com">info@optiens.com</a> までお気軽にお問い合わせください。
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1>お申し込みありがとうございます</h1>
+              {applicationId && (
+                <p class="application-id-inline">申込番号: <strong>{applicationId}</strong>（お問い合わせ時にご記入ください）</p>
+              )}
+              <p class="thanks-text">
+                無料AI診断のお申し込みを受け付けました。<br/>
+                1〜2営業日以内に、ご入力いただいたメールアドレスへ<br/>
+                無料診断レポートをお届けします。
+              </p>
+              <div class="thanks-hint">
+                <i class="fa-solid fa-lightbulb"></i>
+                <p>
+                  より具体的な提案・アーキテクチャ図・60分のオンラインMTGをご希望の場合は、<strong>詳細レポート（¥5,500・税込）</strong>もお選びいただけます。
+                  <a href="/free-diagnosis">プランを切り替える →</a>
+                </p>
+              </div>
+            </>
+          )}
+
+          <div class="thanks-actions">
+            <a href="/" class="thanks-cta thanks-cta--primary">トップページへ</a>
+            <a href="/blog" class="thanks-cta thanks-cta--ghost">ブログを読む</a>
+          </div>
         </div>
       </div>
     </section>
@@ -34,72 +98,333 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
+  /* ===== ライトテーマ変数オーバーライド（root のダーク変数を上書き） ===== */
+  .thanks-main {
+    --surface: #ffffff;
+    --surface-2: #f8fafc;
+    --surface-card: #ffffff;
+    --surface-3: #f1f5f9;
+    --heading: #0f172a;
+    --text: #334155;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --brand: #A259FF;
+    --brand-2: #1ABCFE;
+
+    background: linear-gradient(180deg, #ffffff 0%, #f8f5ff 100%);
+    min-height: 100vh;
+    color: var(--text);
+  }
+
   .thanks-section {
-    min-height: 70vh;
-    display: flex;
+    padding: clamp(120px, 16vw, 180px) 20px clamp(80px, 10vw, 120px);
+    position: relative;
+    overflow: hidden;
+  }
+  .thanks-section::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -100px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(162, 89, 255, .12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .thanks-section::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    left: -120px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(26, 188, 254, .1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    width: min(720px, 100% - 2rem);
+    margin-inline: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .thanks-card {
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(162, 89, 255, .15);
+    border-radius: 24px;
+    padding: clamp(36px, 6vw, 56px) clamp(28px, 5vw, 56px);
+    box-shadow: 0 20px 60px rgba(15, 23, 42, .06), 0 4px 16px rgba(15, 23, 42, .03);
+    text-align: center;
+  }
+
+  .thanks-icon {
+    font-size: 3.4rem;
+    margin-bottom: 24px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 120px 20px 80px;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(162, 89, 255, .12) 0%, rgba(26, 188, 254, .12) 100%);
+    color: transparent;
+    background-clip: padding-box;
   }
-  .thanks-icon {
-    font-size: 3rem;
-    color: var(--brand);
-    margin-bottom: 24px;
+  .thanks-icon i {
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
+
   .thanks-section h1 {
-    font-size: clamp(22px, 3.5vw, 32px);
+    font-size: clamp(22px, 3.6vw, 32px);
     font-weight: 800;
     color: var(--heading);
-    margin: 0 0 16px;
+    margin: 0 0 20px;
+    letter-spacing: -.01em;
+    line-height: 1.4;
   }
+
   .thanks-text {
-    color: var(--muted);
+    color: var(--text);
     font-size: clamp(14px, 1.6vw, 16px);
-    line-height: 1.8;
+    line-height: 1.85;
     margin: 0 0 32px;
   }
-  .thanks-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    flex-wrap: wrap;
+  .thanks-text strong {
+    color: var(--heading);
+    font-weight: 700;
   }
-  .thanks-link {
+
+  /* ===== 申込番号カード ===== */
+  .application-id-card {
+    max-width: 520px;
+    margin: 0 auto 32px;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, rgba(162, 89, 255, .08) 0%, rgba(26, 188, 254, .06) 100%);
+    border: 2px solid rgba(162, 89, 255, .35);
+    border-radius: 16px;
+    text-align: center;
+  }
+  .application-id-label {
+    margin: 0 0 8px;
+    font-size: .78rem;
+    font-weight: 700;
     color: var(--brand);
-    font-weight: 500;
-    font-size: .92rem;
-    text-decoration: none;
-    transition: opacity .2s;
+    letter-spacing: .25em;
+    text-transform: uppercase;
   }
-  .thanks-link:hover { opacity: .8; }
+  .application-id-value {
+    margin: 0 0 14px;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: clamp(1.8rem, 4.5vw, 2.2rem);
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: .08em;
+  }
+  .application-id-hint {
+    margin: 0;
+    font-size: .85rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .application-id-hint strong {
+    color: var(--heading);
+    font-weight: 700;
+  }
+  .application-id-inline {
+    display: inline-block;
+    margin: 0 auto 24px;
+    padding: 8px 18px;
+    background: rgba(162, 89, 255, .08);
+    border: 1px solid rgba(162, 89, 255, .25);
+    border-radius: 999px;
+    font-size: .9rem;
+    color: var(--text);
+  }
+  .application-id-inline strong {
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    color: var(--brand);
+    margin-left: 4px;
+  }
+
+  /* ===== ヒント（無料版用） ===== */
   .thanks-hint {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 12px;
     text-align: left;
-    max-width: 500px;
+    max-width: 540px;
     margin: 0 auto 32px;
-    padding: 16px 20px;
-    background: rgba(91, 127, 255, .05);
-    border: 1px solid rgba(91, 127, 255, .15);
-    border-radius: 10px;
+    padding: 18px 22px;
+    background: rgba(162, 89, 255, .05);
+    border: 1px solid rgba(162, 89, 255, .18);
+    border-radius: 12px;
   }
   .thanks-hint i {
-    color: #f0b429;
+    color: #F59E0B;
     font-size: 1.1rem;
     margin-top: 3px;
     flex-shrink: 0;
   }
   .thanks-hint p {
     margin: 0;
-    font-size: .85rem;
-    line-height: 1.7;
+    font-size: .88rem;
+    line-height: 1.75;
     color: var(--text);
+  }
+  .thanks-hint strong {
+    color: var(--heading);
+    font-weight: 700;
   }
   .thanks-hint a {
     color: var(--brand);
-    font-weight: 500;
+    font-weight: 600;
     text-decoration: none;
+    margin-left: 4px;
+  }
+  .thanks-hint a:hover {
+    text-decoration: underline;
+  }
+
+  /* ===== 有償版の支払フロー ===== */
+  .payment-flow {
+    max-width: 600px;
+    margin: 0 auto 36px;
+    padding: 28px 32px;
+    background: rgba(255, 255, 255, .65);
+    border: 1px solid rgba(162, 89, 255, .15);
+    border-radius: 16px;
+    text-align: left;
+  }
+  .payment-flow-title {
+    margin: 0 0 22px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+    text-align: center;
+    letter-spacing: .04em;
+  }
+  .payment-flow-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .payment-flow-steps li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .flow-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .9rem;
+    box-shadow: 0 4px 12px rgba(162, 89, 255, .3);
+  }
+  .flow-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .flow-text strong {
+    display: block;
+    color: var(--heading);
+    font-size: .95rem;
+    margin: 4px 0 4px;
+    line-height: 1.5;
+    font-weight: 700;
+  }
+  .flow-text p {
+    margin: 0;
+    color: var(--muted);
+    font-size: .85rem;
+    line-height: 1.7;
+  }
+  .payment-flow-note {
+    margin: 0;
+    padding-top: 16px;
+    border-top: 1px solid rgba(162, 89, 255, .12);
+    font-size: .82rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  .payment-flow-note strong {
+    color: var(--heading);
+    font-weight: 700;
+  }
+  .payment-flow-note a {
+    color: var(--brand);
+    text-decoration: none;
+  }
+
+  /* ===== CTA ボタン（ブランド統一） ===== */
+  .thanks-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .thanks-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 30px;
+    border-radius: 999px;
+    font-size: clamp(14px, 1.5vw, 15px);
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+    white-space: nowrap;
+  }
+  .thanks-cta--primary {
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(162, 89, 255, .35);
+    border: none;
+  }
+  .thanks-cta--primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 36px rgba(162, 89, 255, .45);
+  }
+  .thanks-cta--ghost {
+    background: transparent;
+    color: var(--brand);
+    border: 1px solid rgba(162, 89, 255, .35);
+  }
+  .thanks-cta--ghost:hover {
+    background: rgba(162, 89, 255, .08);
+  }
+
+  @media (max-width: 540px) {
+    .thanks-card {
+      padding: 32px 22px;
+    }
+    .thanks-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .thanks-cta {
+      width: 100%;
+    }
   }
 </style>

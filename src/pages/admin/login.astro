@@ -9,9 +9,11 @@ if (Astro.request.method === 'POST') {
 
   if (password === ADMIN_PASSWORD) {
     Astro.cookies.set(COOKIE_NAME, makeToken(ADMIN_PASSWORD), {
-      path: '/admin',
+      // path: '/' にすることで /admin/* と /api/admin/* の両方にクッキー送信される
+      path: '/',
       httpOnly: true,
-      secure: true,
+      // localhost (http) では secure クッキーが送信されないため開発時は false
+      secure: import.meta.env.PROD,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     })
