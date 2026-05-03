@@ -1,7 +1,7 @@
 ---
 title: 'AI画像認識で植物の健康診断：葉の色と形から栄養不足・病害を早期発見'
 date: '2026-03-18'
-category: 'AI'
+category: 'agriculture'
 excerpt: 'AIの画像認識技術を活用して植物の健康状態を診断する仕組みを解説。CNNや転移学習による葉色・形状の分析で、栄養素の過不足や病害を早期に発見する手法と、水耕栽培環境で精度が高まる理由を紹介します。'
 image: '/images/blog/ai-plant-health-image-recognition.webp'
 ---

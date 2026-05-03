@@ -1,7 +1,7 @@
 ---
 title: 'Zigbee vs WiFi vs LoRa：農業IoTに最適な無線通信プロトコルの選び方'
 date: '2026-04-03'
-category: 'technology'
+category: 'agriculture'
 excerpt: '農業IoTでセンサーやスマートスイッチを接続する無線プロトコルは複数あるが、用途によって最適解は異なる。Zigbee・WiFi・LoRa・Thread/Matterの特性を比較し、室内水耕栽培と露地栽培それぞれに適した構成を解説する。'
 image: '/images/blog/zigbee-wifi-lora-agriculture-iot-protocol.webp'
 ---

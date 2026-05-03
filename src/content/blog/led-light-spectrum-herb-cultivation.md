@@ -1,7 +1,7 @@
 ---
 title: 'LED光スペクトル最適化で変わるハーブ栽培 ― PPFD・DLIの基礎と実践'
 date: '2026-04-08'
-category: 'technology'
+category: 'agriculture'
 excerpt: '室内水耕栽培で収量と品質を左右するLED照明。光合成有効光量子束密度（PPFD）と日積算光量（DLI）の基本概念から、バジルやマイクログリーンに最適な光環境の設計方法まで解説します。'
 image: '/images/blog/led-light-spectrum-herb-cultivation.webp'
 ---

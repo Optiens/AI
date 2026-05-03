@@ -1,7 +1,7 @@
 ---
 title: 'MQTT × Supabaseで作る農業IoTリアルタイムダッシュボード：Raspberry Piセンサーデータの収集から可視化まで'
 date: '2026-03-25'
-category: 'technology'
+category: 'agriculture'
 excerpt: 'Mosquitto（MQTT）とSupabaseを組み合わせた農業IoTデータパイプラインの構築方法を解説。Raspberry Piのセンサーデータをクラウドに蓄積し、リアルタイムで可視化する実装手順を紹介します。'
 image: '/images/blog/mqtt-supabase-farm-dashboard.webp'
 ---

@@ -1,7 +1,7 @@
 ---
 title: '地方の小規模事業者がAIを導入するための3ステップ——八ヶ岳エリアの実践ガイド'
 date: '2026-04-20'
-category: 'AI'
+category: 'business'
 excerpt: 'AIを活用したいが何から始めればよいか分からない——地方の小規模事業者が抱えるこの課題に対して、具体的な3つのステップを紹介します。高額なシステム導入は不要。月3,000円から始められる実践的なアプローチです。'
 image: '/images/blog/optiens-two-weeks-after-founding.webp'
 ---
