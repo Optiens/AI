@@ -223,22 +223,22 @@ const totalCount = commonCases.length + industries.length + roles.length;
                   <div class="ax-detail-icon"><i class={`fa-solid ${c.icon}`}></i></div>
                   <h2 class="ax-detail-title">{c.title}</h2>
                 </header>
-                <p class="ax-detail-desc" set:html={c.desc}></p>
+                <p class="ax-detail-desc">{c.desc}</p>
                 <div class="ax-detail-tags">
                   <span class="ax-detail-tags-label">適用業種：</span>
-                  {c.tags.map((t) => (<span class="ax-tag">{t}</span>))}
+                  {c.tags.map((t: string) => <span class="ax-tag">{t}</span>)}
                 </div>
                 <div class="ax-detail-self">
                   <i class="fa-solid fa-flask"></i>
-                  <p><strong>弊社での運用：</strong>{c.self}</p>
+                  <p><strong>弊社での運用</strong>: {c.self}</p>
                 </div>
-                {c.demo && (
+                {c.demo ? (
                   <a href={c.demo.href} class="btn-primary ax-detail-cta">
                     <i class="fa-solid fa-circle-play"></i>
                     {c.demo.label}
                     <i class="fa-solid fa-arrow-right"></i>
                   </a>
-                )}
+                ) : null}
               </article>
             ))}
             <!-- 業種別の詳細 -->
@@ -739,214 +739,6 @@ const totalCount = commonCases.length + industries.length + roles.length;
     background: linear-gradient(135deg, rgba(162, 89, 255, .06) 0%, rgba(26, 188, 254, .04) 100%);
     border: 1px solid rgba(162, 89, 255, .15);
     border-radius: 12px;
-    margin-bottom: clamp(20px, 3vw, 28px);
-  }
-  .ax-metric-label {
-    font-size: .75rem;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-  }
-  .ax-metric-value {
-    font-size: clamp(1.1rem, 2vw, 1.3rem);
-    font-weight: 700;
-    color: var(--heading);
-  }
-  .ax-detail-cta {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-  .ax-detail-cta i {
-    font-size: .85rem;
-  }
-
-  /* Bridge note */
-  .ax-bridge-note {
-    text-align: center;
-    margin-top: clamp(40px, 5vw, 56px);
-    padding: 16px 24px;
-    background: rgba(162, 89, 255, .04);
-    border-radius: 10px;
-    color: var(--muted);
-    font-size: .9rem;
-  }
-  .ax-bridge-note a {
-    color: var(--brand);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .ax-bridge-note a:hover {
-    text-decoration: underline;
-  }
-
-  /* ===== CTA ===== */
-  .ax-cta-section {
-    background: #ffffff;
-    padding: clamp(60px, 8vw, 100px) 0;
-    border-top: 1px solid var(--border);
-  }
-  .ax-cta-section h2 {
-    font-size: clamp(1.4rem, 2.6vw, 1.75rem);
-    font-weight: 700;
-    color: var(--heading);
-    margin: 0 0 16px;
-  }
-  .ax-cta-section p {
-    color: var(--muted);
-    font-size: clamp(.9rem, 1.5vw, 1rem);
-    line-height: 1.8;
-    margin: 0 0 28px;
-  }
-  .cta-buttons {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 14px 30px;
-    border-radius: 999px;
-    background: #ffffff;
-    color: var(--brand);
-    font-size: clamp(14px, 1.5vw, 15px);
-    font-weight: 700;
-    letter-spacing: .04em;
-    text-decoration: none;
-    border: 1px solid var(--brand);
-    transition: background .2s ease, color .2s ease;
-  }
-  .btn-secondary:hover {
-    background: var(--brand);
-    color: #fff;
-  }
-
-  @media (max-width: 600px) {
-    .ax-tabs {
-      gap: 4px;
-      padding: 4px;
-    }
-    .ax-tab {
-      padding: 8px 10px;
-      gap: 4px;
-    }
-    .ax-tab-count {
-      min-width: 18px;
-      height: 18px;
-      font-size: .65rem;
-    }
-  }
-</style>
- border-radius: 12px;
-    margin-bottom: clamp(20px, 3vw, 28px);
-  }
-  .ax-metric-label {
-    font-size: .75rem;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-  }
-  .ax-metric-value {
-    font-size: clamp(1.1rem, 2vw, 1.3rem);
-    font-weight: 700;
-    color: var(--heading);
-  }
-  .ax-detail-cta {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-  .ax-detail-cta i {
-    font-size: .85rem;
-  }
-
-  /* Bridge note */
-  .ax-bridge-note {
-    text-align: center;
-    margin-top: clamp(40px, 5vw, 56px);
-    padding: 16px 24px;
-    background: rgba(162, 89, 255, .04);
-    border-radius: 10px;
-    color: var(--muted);
-    font-size: .9rem;
-  }
-  .ax-bridge-note a {
-    color: var(--brand);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .ax-bridge-note a:hover {
-    text-decoration: underline;
-  }
-
-  /* ===== CTA ===== */
-  .ax-cta-section {
-    background: #ffffff;
-    padding: clamp(60px, 8vw, 100px) 0;
-    border-top: 1px solid var(--border);
-  }
-  .ax-cta-section h2 {
-    font-size: clamp(1.4rem, 2.6vw, 1.75rem);
-    font-weight: 700;
-    color: var(--heading);
-    margin: 0 0 16px;
-  }
-  .ax-cta-section p {
-    color: var(--muted);
-    font-size: clamp(.9rem, 1.5vw, 1rem);
-    line-height: 1.8;
-    margin: 0 0 28px;
-  }
-  .cta-buttons {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 14px 30px;
-    border-radius: 999px;
-    background: #ffffff;
-    color: var(--brand);
-    font-size: clamp(14px, 1.5vw, 15px);
-    font-weight: 700;
-    letter-spacing: .04em;
-    text-decoration: none;
-    border: 1px solid var(--brand);
-    transition: background .2s ease, color .2s ease;
-  }
-  .btn-secondary:hover {
-    background: var(--brand);
-    color: #fff;
-  }
-
-  @media (max-width: 600px) {
-    .ax-tabs {
-      gap: 4px;
-      padding: 4px;
-    }
-    .ax-tab {
-      padding: 8px 10px;
-      gap: 4px;
-    }
-    .ax-tab-count {
-      min-width: 18px;
-      height: 18px;
-      font-size: .65rem;
-    }
-  }
-</style>
- border-radius: 12px;
     margin-bottom: clamp(20px, 3vw, 28px);
   }
   .ax-metric-label {
