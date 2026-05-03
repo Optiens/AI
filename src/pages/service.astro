@@ -76,7 +76,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
             <div class="plan-tier plan-tier-upgrade">
               <div class="plan-tier-head">
                 <span class="plan-tier-name">詳細版 + MTG</span>
-                <span class="plan-tier-price">¥5,500<span class="price-unit">（税込）</span></span>
+                <span class="plan-tier-price">5,000円<span class="price-unit">（税別）</span></span>
               </div>
               <ul class="ac-list">
                 <li>全業務の自動化提案（5〜7件）</li>
@@ -127,26 +127,39 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
 
         </div>
 
-        <!-- オプション: AI入門ワークショップ -->
+        <!-- オプション: ワークショップ（2階層） -->
         <div class="workshop-wrap reveal">
           <p class="workshop-label">オプション</p>
-          <h3 class="workshop-section-title">AI入門ワークショップ</h3>
-          <p class="workshop-section-sub">チャットAIとAIエージェントの違いを体感し、御社業務向けのAI活用イメージを掴むためのワークショップです。事前ヒアリングをもとに、講師がAI活用候補をご提案し、そのうち1件をライブデモでお見せします。</p>
-          <div class="workshop-grid workshop-grid--single">
+          <h3 class="workshop-section-title">AIワークショップ（参加費無料）</h3>
+          <p class="workshop-section-sub">対象に合わせて2階層をご用意しています。どちらも2時間構成（20分の解説＋80分の実践＋20分の振り返り）です。</p>
+          <div class="workshop-grid">
+            <!-- 入門 -->
             <div class="ac-card gradient-border workshop-tier">
-              <div class="ac-badge">WORKSHOP</div>
+              <div class="ac-badge">WORKSHOP / 入門</div>
               <h4 class="workshop-tier-title">はじめてのAIエージェント体験</h4>
-              <p class="workshop-target"><strong>対象</strong>：これからAI活用を検討する経営者・現場担当者</p>
+              <p class="workshop-target"><strong>対象</strong>：ChatGPTを少し触った程度の経営者・現場担当者</p>
+              <p class="ac-desc">チャットAIとAIエージェントの違いから始め、自分の業務に合わせたエージェントを1つ動かして持ち帰ります。</p>
               <ul class="ac-list">
-                <li>1社あたり最大5名様まで参加可</li>
-                <li>オンラインのみ（全国対応）</li>
-                <li>申込時に事前ヒアリングシートをご提出</li>
-                <li>講義：チャットAI と AIエージェントの違い・活用シーン・リスク</li>
-                <li>講師デモ：事前ヒアリングから抽出したAI活用候補をご提示し、うち1件をその場で動くデモとしてお見せ</li>
-                <li>ハンズオン：参加者ご自身でAIツールに触れていただく時間</li>
-                <li>質疑・次の一歩のご案内</li>
+                <li>20分：チャットAI vs AIエージェントの違いをデモで体感</li>
+                <li>80分：自分の業務でエージェントを組み立てる実践</li>
+                <li>20分：持ち帰り設計と次の一歩</li>
+                <li>使用ツール：ブラウザのみ（無料枠で完結）</li>
               </ul>
-              <p class="ac-price">¥38,500<span class="price-unit">／2時間・1社あたり（税込）</span></p>
+              <p class="ac-price">無料<span class="price-unit">／出張時は交通費・会場費を別途協議</span></p>
+            </div>
+            <!-- 上位 -->
+            <div class="ac-card gradient-border workshop-tier">
+              <div class="ac-badge">WORKSHOP / 上位</div>
+              <h4 class="workshop-tier-title">Claudeで業務エージェントを構築する</h4>
+              <p class="workshop-target"><strong>対象</strong>：すでにChatGPT・Claudeを業務で使っている情シス・DX担当・経営者</p>
+              <p class="ac-desc">Claudeを使った業務エージェントをご自身のPCで構築・実行し、社内展開のイメージを持ち帰ります。</p>
+              <ul class="ac-list">
+                <li>20分：Projects・Skills・社内展開の全体像</li>
+                <li>80分：Claudeで自分の業務を自動化する実装</li>
+                <li>20分：社内展開とガバナンス設計</li>
+                <li>使用ツール：Claude（無料プラン）＋ご自身のPC</li>
+              </ul>
+              <p class="ac-price">無料<span class="price-unit">／出張時は交通費・会場費を別途協議</span></p>
             </div>
           </div>
         </div>
@@ -166,8 +179,8 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
           </div>
           <div class="ac-card gradient-border">
             <div class="ac-icon"><i class="fa-solid fa-key"></i></div>
-            <h3>納品後はずっと御社の財産</h3>
-            <p>システムも、蓄積したデータも、御社の所有物として残ります。スタッフ人数が増えてもライセンス料の追加負担は発生しません。データは御社専用のクラウドのデータベースに保管されるので、将来別の事業者へ切り替える場合もそのまま持ち出して使い続けられます<small>(業界用語の「ベンダーロックイン」が起こりません)</small>。</p>
+            <h3>御社の所有物。月額の"家賃"は発生しません</h3>
+            <p>賃貸住宅は退去すれば住めなくなりますが、注文住宅は建てた後も御社のものです。納品する仕組みも同じく、御社の所有物として残ります。利用人数が増えてもライセンス料("家賃")は発生せず、データの保管庫も御社名義で契約します。将来別の事業者に乗り換える場合もデータは持ち出し自由<small>(業界用語の「ベンダーロックイン」が起こりません)</small>。</p>
           </div>
           <div class="ac-card gradient-border">
             <div class="ac-icon"><i class="fa-solid fa-share-nodes"></i></div>
@@ -180,7 +193,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
           <div class="custom-showcase-icon"><i class="fa-solid fa-flask"></i></div>
           <div class="custom-showcase-text">
             <p class="custom-showcase-title">弊社自身がAIエージェントで社内ツールを運用しています</p>
-            <p class="custom-showcase-desc">CRM・書類添削ツール・<a href="/free-diagnosis">業務資料からのフォーム自動入力</a>・<a href="/quote-generator">見積書ドラフト生成</a>・<a href="/inquiry-routing">問い合わせ自動振り分け</a>などを、弊社自身がAIエージェントを使って社内運用または公開デモとして提供しています。日々の運用で得た知見をベースに、お客様の業務に合った構成を案件ごとに設計します。技術選定はその時々の最適解を選びますが、設計と運用に対する考え方は一貫しています。</p>
+            <p class="custom-showcase-desc">CRM・書類添削ツール・水耕栽培IoTダッシュボードなどを、弊社自身がAIエージェントを使って社内運用しています。日々の運用で得た知見をベースに、お客様の業務に合った構成を案件ごとに設計します。技術選定はその時々の最適解を選びますが、設計と運用に対する考え方は一貫しています。</p>
           </div>
         </div>
       </div>
@@ -445,6 +458,41 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     border-radius: 4px;
     margin-bottom: 12px;
   }
+  /* ===== Subsidy Banner ===== */
+  .subsidy-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 40px;
+    padding: 24px 28px;
+    background: rgba(91, 127, 255, .05);
+    border: 1px solid rgba(91, 127, 255, .2);
+    border-radius: var(--radius);
+  }
+  .subsidy-icon {
+    font-size: 1.6rem;
+    color: #f0b429;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .subsidy-text { flex: 1; }
+  .subsidy-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .subsidy-desc {
+    font-size: .9rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 0 0 8px;
+  }
+  .subsidy-note {
+    font-size: .78rem;
+    color: var(--muted);
+    margin: 0;
+  }
 
   .ac-price {
     font-size: 1.4rem;
@@ -474,11 +522,14 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     gap: 24px;
     margin-top: 32px;
   }
+  .service-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
   .service-grid-3 {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  /* ===== ワークショップ ===== */
+  /* ===== ワークショップ（2階層） ===== */
   .workshop-wrap {
     max-width: 1080px;
     margin: clamp(40px, 5vw, 60px) auto 0;
@@ -504,19 +555,12 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     text-align: center;
     color: var(--muted);
     font-size: clamp(.85rem, 1.5vw, .95rem);
-    margin: 0 auto 24px;
-    max-width: 720px;
-    line-height: 1.8;
+    margin: 0 0 24px;
   }
   .workshop-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: clamp(20px, 3vw, 28px);
-  }
-  .workshop-grid--single {
-    grid-template-columns: 1fr;
-    max-width: 640px;
-    margin: 0 auto;
   }
   .workshop-tier {
     display: flex;
@@ -557,7 +601,11 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     }
   }
   @media (max-width: 1024px) {
+    .service-grid-4 { grid-template-columns: repeat(2, 1fr); }
     .service-grid-3 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .service-grid-4 { grid-template-columns: 1fr; }
   }
 
   /* ===== Service card with image (HOME と統一) ===== */
@@ -627,7 +675,82 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     font-weight: 700;
     color: var(--heading);
   }
+  /* Extra menu (有償要件定義 / スポット相談) */
+  .extra-menu {
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .extra-menu-title {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--heading);
+    margin: 0 0 24px;
+    letter-spacing: .05em;
+  }
+  .extra-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .extra-menu-card {
+    padding: 24px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .extra-menu-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .extra-menu-badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--brand);
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  .extra-menu-card h4 {
+    font-size: 1rem;
+    color: var(--heading);
+    margin: 0;
+  }
+  .extra-menu-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--brand);
+    margin: 0 0 10px;
+  }
+  .extra-menu-desc {
+    font-size: .88rem;
+    line-height: 1.75;
+    color: var(--text);
+    margin: 0;
+  }
+  .extra-menu-desc strong { color: var(--heading); }
+  @media (max-width: 768px) {
+    .extra-menu-grid { grid-template-columns: 1fr; }
+  }
 
+  /* Plan upgrade note inside STEP 3 card */
+  .plan-upgrade {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .plan-upgrade-label {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--brand);
+    margin: 0 0 8px;
+  }
   /* ===== Section backgrounds（純白統一） ===== */
   .ac-custom-section,
   .ac-service-section,

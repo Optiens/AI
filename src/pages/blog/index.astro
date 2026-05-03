@@ -7,12 +7,13 @@ type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare'
 
 const categoryLabel: Partial<Record<BlogCategory, string>> = {
   AI: 'AI・機械学習',
+  business: '経営・業務',
   technology: 'テクノロジー',
   announcement: 'お知らせ',
 };
 
 // 水耕栽培関連カテゴリはブログ一覧から除外（hydroponicsページで掲載）
-const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'business', 'social'];
+const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'social'];
 
 const limit = 6;
 const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
@@ -150,8 +151,13 @@ function categoryUrl(cat: BlogCategory | '') {
 <style>
   .blog-hero {
     position: relative;
-    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
-    background: var(--surface);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(90px, 11vw, 140px) 0;
+    background: #ffffff;
     overflow: hidden;
     color: var(--text);
   }

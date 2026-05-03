@@ -7,6 +7,9 @@ import Layout from '../layouts/Layout.astro';
   description="部下が作成した社内文書を上長が添削するための業務ツールのデモです。各行ごとにメモを書き込み、添削箇所を一覧で管理できます。"
   canonical="https://optiens.com/document-editor"
 >
+  <!-- QRコード生成ライブラリ（クライアントサイド） -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+
   <main class="ed-main light-section">
     <!-- ヒーロー -->
     <section class="ed-hero">
@@ -15,8 +18,21 @@ import Layout from '../layouts/Layout.astro';
         <h1>書類添削ツール（デモ）</h1>
         <p class="hero-sub">
           部下が作成した社内文書を上長が添削するための業務用ツールです。<br />
-          各行ごとにメモを書き込み、添削した箇所を一覧で管理できます。
+          提出者と承認者で画面が切り替わり、上長はスマホでQRコードから承認できます。
         </p>
+      </div>
+    </section>
+
+    <!-- モードバナー -->
+    <section id="mode-banner-wrap" class="mode-banner-wrap" hidden>
+      <div class="container">
+        <div id="mode-banner" class="mode-banner mode-approver">
+          <i class="fa-solid fa-user-check"></i>
+          <div>
+            <strong>承認モード</strong>
+            <span class="mode-banner-sub">スマホからQRコード経由でアクセスされた、上長による添削・承認画面です。</span>
+          </div>
+        </div>
       </div>
     </section>
 

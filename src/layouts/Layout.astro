@@ -9,15 +9,79 @@ export interface Props {
   canonical?: string;                 // 例: https://optiens.com/solutions
   ogImage?: string;                   // 例: https://optiens.com/ogp.png (public 推奨)
   noindex?: boolean;                  // true のとき robots を noindex に
+  structuredData?: Record<string, any> | Array<Record<string, any>>;  // ページ固有のJSON-LD
 }
+
+const SITE_URL = 'https://optiens.com';
+const DEFAULT_OG = SITE_URL + '/images/og-default.png';
 
 const {
   title,
-  description = 'AIテクノロジーと自然の調和を通じて、人々と地球が共に豊かになる未来を追求するオプティエンスの公式ウェブサイトです。',
+  description = '合同会社Optiens（オプティエンス）はAIエージェントによる業務自動化で、中小企業・小規模事業者の業務効率化を全国オンライン対応でサポートします。',
   canonical,
-  ogImage,
+  ogImage = DEFAULT_OG,
   noindex = false,
+  structuredData,
 } = Astro.props;
+
+// 全ページ共通の Organization スキーマ
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: '合同会社Optiens',
+  alternateName: 'Optiens LLC',
+  url: SITE_URL,
+  logo: SITE_URL + '/images/optiens-logo.png',
+  email: 'info@optiens.com',
+  foundingDate: '2026-04-06',
+  description: 'AIエージェントによる業務自動化支援を全国の中小企業・小規模事業者に提供する合同会社。',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '高根町清里3545番地2483',
+    addressLocality: '北杜市',
+    addressRegion: '山梨県',
+    postalCode: '407-0301',
+    addressCountry: 'JP',
+  },
+  founder: {
+    '@type': 'Person',
+    name: '髙橋 大地',
+  },
+  sameAs: [
+    'https://kakuyomu.jp/users/optiens-novel',
+  ],
+  taxID: '9090003003025',
+};
+
+// LocalBusiness スキーマ（地域SEO + 全国対応の補強）
+const localBizSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: '合同会社Optiens',
+  url: SITE_URL,
+  image: SITE_URL + '/images/optiens-logo.png',
+  email: 'info@optiens.com',
+  areaServed: { '@type': 'Country', name: '日本' },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '高根町清里3545番地2483',
+    addressLocality: '北杜市',
+    addressRegion: '山梨県',
+    postalCode: '407-0301',
+    addressCountry: 'JP',
+  },
+  priceRange: '¥¥',
+  serviceType: ['AI業務自動化支援', 'AI活用診断', 'AIエージェント導入支援', 'IoT水耕栽培システム'],
+};
+
+const allSchemas = [orgSchema, localBizSchema];
+if (structuredData) {
+  if (Array.isArray(structuredData)) {
+    allSchemas.push(...structuredData);
+  } else {
+    allSchemas.push(structuredData);
+  }
+}
 ---
 
 <!DOCTYPE html>
@@ -48,9 +112,17 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonical} />}
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Optiens — Make AI native to your business." />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ja_JP" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {/* JSON-LD: 構造化データ（Organization + LocalBusiness + ページ固有） */}
+    <script type="application/ld+json" set:html={JSON.stringify(allSchemas)} />
 
     {/* Fonts */}
     <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -1,11 +1,44 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+// HOME 専用 JSON-LD: WebSite + サービス
+const homeSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Optiens',
+    url: 'https://optiens.com',
+    inLanguage: 'ja',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'AI業務自動化支援',
+    provider: { '@type': 'Organization', name: '合同会社Optiens' },
+    areaServed: { '@type': 'Country', name: '日本' },
+    audience: { '@type': 'BusinessAudience', name: '中小企業・小規模事業者' },
+    description: 'AIエージェントによる業務自動化を、無料診断から導入・保守まで一貫提供。全国オンライン対応。',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'JPY',
+      name: 'AI活用診断（無料）',
+      url: 'https://optiens.com/free-diagnosis',
+    },
+  },
+];
 ---
 
-<Layout title="Optiens | AIで時間と可能性を広げる、八ヶ岳発の合同会社" description="合同会社Optiens（オプティエンス）。AIエージェントによる業務自動化支援を軸に、中小企業・小規模事業者の業務効率化と新しい働き方の仕組みづくりに伴走します。">
-  <main>
-    <!-- ===== Hero ===== -->
-    <section class="about-hero-section light-section">
+<Layout
+  title="Optiens | 中小企業のAI業務自動化・AIエージェント導入支援（全国オンライン対応）"
+  description="合同会社OptiensはAIエージェントによる業務自動化を、無料診断から導入・保守まで一貫提供。全国オンライン対応で、中小企業・小規模事業者の業務効率化を支援します。"
+  canonical="https://optiens.com/"
+  structuredData={homeSchema}
+>
+  <main class="home">
+
+    <!-- ===== Hero（変更禁止のコピーを保持） ===== -->
+    <section class="home-hero light-section">
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <div class="hero-content">
         <div class="hero-text-block">
@@ -19,218 +52,50 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- ===== Content ===== -->
-    <section class="about-content-section">
+    <!-- ===== MAIN: AI支援事業（リード+CTAのみ） ===== -->
+    <section class="home-main-service light-section">
       <div class="container">
+        <h2 class="home-section-heading home-section-heading--center">
+          AIエージェントで、業務を再設計する
+        </h2>
+        <p class="home-lead">
+          中小企業・小規模事業者向けのAI活用支援を、<br class="pc-only" />
+          無料診断から導入・保守まで一貫してご提供します。<br/>
+          エンタープライズ大規模CRM経験10年超を、御社の規模に最適化。
+        </p>
 
-        <!-- 0) なぜAIを使うのか -->
-        <section class="about-section about-why-ai reveal">
-          <p class="why-ai-eyebrow">WHY AI</p>
-          <h2 class="section-heading">なぜ、AIを使うのか</h2>
-
-          <div class="why-ai-reasons">
-            <div class="why-ai-reason">
-              <span class="why-ai-num">01</span>
-              <div class="why-ai-content">
-                <h3>AIが「業務で使える」段階に到達した</h3>
-                <p>生成AIとAIエージェントの進化で、AIが対話だけでなく業務を自律的にこなせる時代になりました。専門家でなくても、自然言語で業務を任せられます。</p>
-              </div>
-            </div>
-            <div class="why-ai-reason">
-              <span class="why-ai-num">02</span>
-              <div class="why-ai-content">
-                <h3>少人数でも大規模な仕組みが組める</h3>
-                <p>かつては大企業しか構築できなかった業務システムが、クラウド + AIエージェントの構成で個人・小規模事業者でも実装可能になりました。コストも技術の壁も大きく下がっています。</p>
-              </div>
-            </div>
-            <div class="why-ai-reason">
-              <span class="why-ai-num">03</span>
-              <div class="why-ai-content">
-                <h3>「人の手だけで全てをこなす」前提が崩れている</h3>
-                <p>労働人口の減少が続く中、「人を増やす」のではなく「人がやらなくていい仕事を見極める」ことが、これからのスタンダードになります。</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="why-ai-conclusion">
-            <p class="why-ai-bridge">だからこそ、</p>
-            <blockquote class="why-ai-quote">
-              「AIを業務の中心に置き、<br/>
-              人間にしか出来ない判断と創造に集中する。」
-            </blockquote>
-            <p class="why-ai-cta">
-              その実現のため、時間と可能性を広げる仕組みづくりを<br class="pc-only" />
-              Optiensがサポートします。
-            </p>
-          </div>
-        </section>
-
-        <!-- 1) 私たちの姿勢（What we do） -->
-        <section class="about-section about-approach reveal">
-          <h2 class="section-heading">自走できる仕組みをつくる</h2>
-          <p>Optiensが目指すのは、お客様が自分たちの力で運用できる自動化の仕組みをつくることです。</p>
-          <p>日常操作は「確認して承認するだけ」で完結するよう設計し、導入時に操作手順を共有します。保守契約なしでもそのまま運用を続けられます。</p>
-          <p>ワークフローの改善や新たな業務の自動化など、さらに発展させたい場合は保守プランで継続的にサポートいたします。</p>
-
-          <div class="approach-showcase">
-            <div class="approach-showcase-icon"><i class="fa-solid fa-flask"></i></div>
-            <div class="approach-showcase-text">
-              <p class="approach-showcase-title">自分で使い、自分で改善する。それが提案の土台です。</p>
-              <p>弊社自身がAIエージェントを使って、社内のCRM・書類添削ツール・経営管理ダッシュボードなどを運用しています。「自分で使い、自分で改善する」ことで得た知見をもとに、お客様の業務に合った構成を案件ごとに設計します。提案する技術はその時々の最適解を選びます。</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 2) 事業内容 -->
-        <section class="about-section about-businesses reveal">
-          <h2 class="section-heading">事業内容</h2>
-          <div class="business-cards business-cards--single">
-            <article class="business-card">
-              <span class="business-num" aria-hidden="true">01</span>
-              <div class="business-img-wrap">
-                <img src="/images/businesses/ai-consulting.png" alt="AI支援事業を表すイラスト" loading="lazy" />
-              </div>
-              <h3>AI支援事業</h3>
-              <blockquote class="business-philosophy">
-                AIを<em>中心に</em>、<br/>働き方を変える時代へ。
-              </blockquote>
-              <p class="business-desc">
-                AIを業務の中心に置き、人間にしかできない判断と創造に集中する。中小企業・小規模事業者のAI活用を、無料診断から導入・保守まで一貫して伴走します。これからAIに触れる方も、すでに活用されている方も、御社のペースで進められます。
-              </p>
-              <a href="/service" class="business-link">詳しく見る</a>
-            </article>
-          </div>
-        </section>
-
-        <!-- 3) 代表者について（一人法人は人で信頼形成） -->
-        <section class="about-section about-profile reveal">
-          <h2 class="section-heading">代表者について</h2>
-          <div class="profile-card">
-            <div class="profile-content">
-              <h3>髙橋 大地<span class="profile-title">合同会社Optiens 代表社員</span></h3>
-              <p>エンタープライズ向け大規模CRMシステムの設計・開発に10年以上従事。業務分析からシステム実装まで一貫して経験を積み、業務の構造そのものに踏み込む設計を強みとする。</p>
-              <p>2026年、山梨県北杜市に合同会社Optiensを設立。一人法人としてAI支援事業を中心に、自社の経営管理を全てAIエージェント体制で運営。「AIを中心に仕事の仕組みを変える」というスタンスを、自社で実証しながら全国の小規模事業者へ届けている。並行して、IoT水耕栽培事業の実証環境を構築中。</p>
-              <ul class="profile-tags">
-                <li>大規模CRM認定資格保有</li>
-                <li>エンタープライズ開発10年+</li>
-                <li>業務分析×実装の一貫経験</li>
-                <li>AIファーストで業務再設計</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- 4) 3つの価値観：調和・最適化・循環 -->
-        <section class="about-section about-values reveal">
-          <h2 class="section-heading">3つの価値観</h2>
-          <div class="values-grid">
-            <div class="value-card">
-              <div class="value-img-wrap">
-                <img src="/images/values/harmony.png" alt="調和を表すイラスト" loading="lazy" />
-              </div>
-              <h3>調和</h3>
-              <p>競争から協調へ、所有から共有へ、分離から統合へ。人・自然・テクノロジーが調和できる社会を築きます。</p>
-            </div>
-            <div class="value-card">
-              <div class="value-img-wrap">
-                <img src="/images/values/optimization.png" alt="最適化を表すイラスト" loading="lazy" />
-              </div>
-              <h3>最適化</h3>
-              <p>センサーデータやAI技術を活用した効率化と、常識の再定義により、事業と暮らしの新しいカタチを創造します。</p>
-            </div>
-            <div class="value-card">
-              <div class="value-img-wrap">
-                <img src="/images/values/circulation.png" alt="循環を表すイラスト" loading="lazy" />
-              </div>
-              <h3>循環</h3>
-              <p>資源もデータも種子も循環させ、気候リスクや外部依存に左右されない、自律した仕組みを構築します。</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 5) 社名のルーツ：最適化 × 円相（深い背景） -->
-        <section class="about-section about-roots reveal">
-          <h2 class="section-heading">2つのルーツ</h2>
-          <p class="section-lead">社名「Optiens」は、<strong>Optimization（最適化）</strong>と<strong>Ensō（円相）</strong>を重ねた造語です。</p>
-          <div class="roots-grid">
-            <div class="root-card">
-              <div class="root-visual">
-                <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="opt-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#A259FF" stop-opacity="1"/>
-                      <stop offset="100%" stop-color="#7B40CC" stop-opacity="1"/>
-                    </linearGradient>
-                  </defs>
-                  <!-- 非効率な複数経路（淡く） -->
-                  <path d="M 25 80 Q 80 30, 120 95 T 215 70" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 110 Q 70 170, 130 95 T 215 110" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 140 Q 90 80, 120 195 T 215 145" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 170 Q 80 210, 130 130 T 215 175" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <!-- 最適経路（メイン） -->
-                  <path d="M 25 120 Q 80 105, 120 115 T 215 118" fill="none" stroke="url(#opt-grad)" stroke-width="4" stroke-linecap="round"/>
-                  <!-- 経路上のノード -->
-                  <circle cx="25" cy="120" r="6" fill="#A259FF"/>
-                  <circle cx="80" cy="108" r="3.5" fill="#A259FF" opacity="0.85"/>
-                  <circle cx="120" cy="115" r="3.5" fill="#A259FF" opacity="0.85"/>
-                  <circle cx="170" cy="116" r="3.5" fill="#A259FF" opacity="0.85"/>
-                  <circle cx="215" cy="118" r="6" fill="#A259FF"/>
-                </svg>
-              </div>
-              <p class="root-eng">Optimization</p>
-              <h3 class="root-jp">最適化</h3>
-              <p class="root-desc">無数にある経路の中から、最も効率の良い一本を見つけ出す。事業も暮らしも、仕組みから整えれば最適解は必ず存在します。</p>
-            </div>
-
-            <div class="root-card">
-              <div class="root-visual">
-                <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="enso-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#0ACF83" stop-opacity="1"/>
-                      <stop offset="100%" stop-color="#1ABCFE" stop-opacity="0.9"/>
-                    </linearGradient>
-                  </defs>
-                  <!-- 外側のかすかなグロー -->
-                  <circle cx="120" cy="120" r="86" fill="none" stroke="rgba(10,207,131,0.10)" stroke-width="22"/>
-                  <!-- 円相本体（上部右側に小さな切れ目） -->
-                  <path d="M 175 53 A 88 88 0 1 1 138 33" fill="none" stroke="url(#enso-grad)" stroke-width="11" stroke-linecap="round"/>
-                  <!-- 筆の入りと終わり -->
-                  <circle cx="138" cy="33" r="4" fill="#0ACF83" opacity="0.95"/>
-                  <circle cx="175" cy="53" r="3" fill="#1ABCFE" opacity="0.9"/>
-                </svg>
-              </div>
-              <p class="root-eng">Ensō</p>
-              <h3 class="root-jp">円相</h3>
-              <p class="root-desc">禅の一筆書きの円。完全さも不完全さも内に含む、循環と調和の象徴。終わりが次の始まりに繋がる、循環する仕組みのかたち。</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 5) 会社概要 -->
-        <section class="about-section company-info reveal">
-          <h2 class="section-heading">会社概要</h2>
-          <table class="info-table">
-            <tbody>
-              <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
-              <tr><th>英字表記</th><td>Optiens LLC</td></tr>
-              <tr><th>設立</th><td>2026年4月6日</td></tr>
-              <tr><th>代表社員</th><td>髙橋大地</td></tr>
-              <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
-              <tr><th>資本金</th><td>100,000円</td></tr>
-              <tr><th>事業内容</th><td>AI活用支援（診断・導入支援・保守）／IoT水耕栽培事業（実証環境構築中）</td></tr>
-              <tr><th>メール</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
-              <tr><th>法人番号</th><td>9090003003025</td></tr>
-              <tr><th>インボイス</th><td>適格請求書発行事業者 申請中</td></tr>
-            </tbody>
-          </table>
-        </section>
-
+        <div class="home-service-cta">
+          <a href="/service" class="home-service-btn home-service-btn--primary">
+            サービスを見る <span aria-hidden="true">→</span>
+          </a>
+          <a href="/ai-examples" class="home-service-btn home-service-btn--ghost">
+            活用事例を見る <span aria-hidden="true">→</span>
+          </a>
+        </div>
       </div>
     </section>
+
+    <!-- ===== Final CTA ===== -->
+    <section class="home-final-cta">
+      <div class="container text-center" style="position:relative; z-index:1;">
+        <h2 class="reveal">まずは気軽に、無料AI診断から</h2>
+        <p class="reveal final-cta-text">
+          「うちの業務にAIって使えるの？」<br/>
+          「何から始めればいいか分からない」<br/>
+          そんな状態からで大丈夫です。<br class="pc-only" />
+          フォーム入力だけで、御社向けの簡易レポートをお届けします。
+        </p>
+        <div class="final-cta-row reveal">
+          <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける</a>
+          <a href="/contact" class="btn-secondary">お問い合わせ</a>
+        </div>
+      </div>
+    </section>
+
   </main>
 </Layout>
 
+<!-- Hero パーティクル（既存実装を保持） -->
 <script is:inline>
 (function() {
   const canvas = document.getElementById('hero-canvas');
@@ -245,10 +110,10 @@ import Layout from '../layouts/Layout.astro';
 
   // Modern Vibrant パレット（Figma 4色：紫・青・緑・オレンジ）
   const COLORS = [
-    { r: 162, g: 89,  b: 255 },  // #A259FF Figma purple（メイン）
-    { r: 26,  g: 188, b: 254 },  // #1ABCFE Figma blue
-    { r: 10,  g: 207, b: 131 },  // #0ACF83 Figma green
-    { r: 242, g: 78,  b: 30 },   // #F24E1E Figma orange/red
+    { r: 162, g: 89,  b: 255 },
+    { r: 26,  g: 188, b: 254 },
+    { r: 10,  g: 207, b: 131 },
+    { r: 242, g: 78,  b: 30 },
   ];
 
   function resize() {
@@ -293,26 +158,20 @@ import Layout from '../layouts/Layout.astro';
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-
-    // Update & draw particles
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       p.x += p.vx;
       p.y += p.vy;
-
-      // Wrap around edges
       if (p.x < -10) p.x = w + 10;
       if (p.x > w + 10) p.x = -10;
       if (p.y < -10) p.y = h + 10;
       if (p.y > h + 10) p.y = -10;
 
-      // Draw particle
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(' + p.color.r + ',' + p.color.g + ',' + p.color.b + ',' + p.alpha + ')';
       ctx.fill();
 
-      // Connect to nearby particles
       for (let j = i + 1; j < particles.length; j++) {
         const q = particles[j];
         const dx = p.x - q.x;
@@ -329,7 +188,6 @@ import Layout from '../layouts/Layout.astro';
         }
       }
 
-      // Mouse interaction — glow nearby lines
       const mdx = p.x - mouse.x;
       const mdy = p.y - mouse.y;
       const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
@@ -338,7 +196,6 @@ import Layout from '../layouts/Layout.astro';
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(mouse.x, mouse.y);
-        // マウスへの線は各パーティクルの色に追従（Figmaカラー）
         ctx.strokeStyle = 'rgba(' + p.color.r + ',' + p.color.g + ',' + p.color.b + ',' + opacity + ')';
         ctx.lineWidth = 0.8;
         ctx.stroke();
@@ -352,11 +209,7 @@ import Layout from '../layouts/Layout.astro';
 
   resize();
   createParticles();
-  if (prefersReducedMotion) {
-    draw(); // single frame
-  } else {
-    draw();
-  }
+  draw();
 
   let resizeTimer;
   window.addEventListener('resize', function() {
@@ -371,14 +224,81 @@ import Layout from '../layouts/Layout.astro';
 
 <style>
 /* =========================================================
-   About 上部のパーティクルヒーロー
+   HOME 専用スタイル（シンプル & かっこいい）
    ========================================================= */
-.about-hero-section{
+.home {
+  --home-text: #334155;
+  --home-heading: #0f172a;
+  --home-muted: #64748b;
+  --home-border: #e2e8f0;
+  --home-surface: #ffffff;
+  --home-surface-2: #f8fafc;
+  --home-surface-3: #f1f5f9;
+  --home-brand: #A259FF;
+  --home-brand-2: #1ABCFE;
+}
+
+.home .pc-only { display: inline; }
+@media (max-width: 768px) {
+  .home .pc-only { display: none; }
+}
+
+.home .container {
+  width: min(1100px, 100% - 2rem);
+  margin-inline: auto;
+}
+
+.home-eyebrow {
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--home-brand);
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+.home-eyebrow--accent {
+  text-align: center;
+}
+
+.home-section-heading {
+  font-size: clamp(26px, 3.6vw, 38px);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  color: var(--home-heading);
+  margin: 0 0 clamp(28px, 4vw, 44px);
+  line-height: 1.3;
+}
+.home-section-heading--center {
+  text-align: center;
+}
+
+.home-lead {
+  font-size: clamp(15px, 1.7vw, 17px);
+  line-height: 1.9;
+  color: var(--home-text);
+  text-align: center;
+  margin: 0 auto clamp(36px, 5vw, 56px);
+  max-width: 780px;
+}
+.home-lead--small {
+  font-size: clamp(14px, 1.5vw, 15px);
+  margin-bottom: clamp(28px, 4vw, 40px);
+}
+
+/* =========================================================
+   Hero（ファーストビュー全画面・センタリング）
+   ========================================================= */
+.home-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
-  background: var(--surface);
-  color: var(--text);
+  min-height: 100vh;
+  min-height: 100dvh; /* モバイルでアドレスバー等を考慮 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(90px, 11vw, 140px) 0;
+  background: var(--home-surface);
+  color: var(--home-text);
 }
 #hero-canvas {
   position: absolute;
@@ -387,642 +307,181 @@ import Layout from '../layouts/Layout.astro';
   height: 100%;
   z-index: 0;
 }
-.about-hero-section .hero-content{
-  position:relative;
-  z-index:2;
+.home-hero .hero-content {
+  position: relative;
+  z-index: 2;
   width: min(900px, 100% - 6rem);
   margin-inline: auto;
   padding: 20px;
 }
-.about-hero-section .hero-text-block{
+.home-hero .hero-text-block {
   width: fit-content;
   margin: 0 auto;
 }
-.about-hero-section .hero-eyebrow{
+.home-hero .hero-eyebrow {
   display: block;
   margin: 0 0 1rem;
   font-size: clamp(11px, 1.2vw, 13px);
   letter-spacing: .3em;
   text-transform: uppercase;
-  color: var(--brand);
+  color: var(--home-brand);
   font-weight: 500;
   text-align: left;
 }
-.about-hero-section .hero-title{
+.home-hero .hero-title {
   font-size: clamp(30px, 5vw, 60px);
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -.02em;
-  color: var(--heading);
+  color: var(--home-heading);
   margin: 0 0 1rem;
   text-align: left;
 }
-.about-hero-section .hero-sub{
+.home-hero .hero-sub {
   font-size: clamp(15px, 2vw, 18px);
-  color: var(--muted);
+  color: var(--home-muted);
   margin: 0;
   font-weight: 600;
   text-align: right;
 }
-.sp-only{ display: none; }
-@media (max-width: 640px){
-  .sp-only{ display: inline; }
-}
 
-/* =========================================================
-   About 本文 — ライト基調へ転換（ヒーローのダークと対比させる）
-   ローカルでCSS変数をオーバーライドし、配下のすべての要素を
-   ライトテーマに変換する
-   ========================================================= */
-.about-content-section{
-  /* ライトテーマ変数オーバーライド */
-  --surface: #ffffff;
-  --surface-2: #f8fafc;
-  --surface-card: #ffffff;
-  --surface-3: #f1f5f9;
-  --heading: #0f172a;
-  --text: #334155;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --border-hover: #cbd5e1;
-  --glow: 0 4px 24px rgba(91, 127, 255, 0.08);
-
-  padding: clamp(64px, 10vw, 120px) 20px clamp(80px, 12vw, 140px);
-  background: var(--surface);
-  color: var(--text);
-  line-height: 1.8;
-}
-.about-content-section .container{ width: min(1000px, 100% - 2rem); margin-inline: auto; }
-
-/* =========================================================
-   セクション共通（余白・見出し）
-   ========================================================= */
-.about-section{
-  margin-bottom: clamp(80px, 12vw, 140px);
-}
-.about-section:last-of-type{
-  margin-bottom: 0;
-}
-.section-eyebrow{
-  font-size: clamp(10px, 1vw, 12px);
-  letter-spacing: .35em;
-  font-weight: 500;
-  color: var(--brand);
-  margin: 0 0 12px;
-  text-transform: uppercase;
-}
-.section-heading{
-  font-size: clamp(24px, 3.4vw, 34px);
-  font-weight: 800;
-  line-height: 1.3;
-  letter-spacing: -.01em;
-  color: var(--heading);
-  margin: 0 0 clamp(28px, 4vw, 48px);
-}
-.section-lead{
-  font-size: clamp(15px, 1.8vw, 17px);
-  line-height: 1.9;
-  color: var(--text);
-  margin: clamp(-12px, -1vw, -8px) 0 clamp(28px, 4vw, 40px);
-  max-width: 720px;
-}
-/* ===== Why AI section ===== */
-.about-why-ai .why-ai-eyebrow{
-  text-align: center;
-  color: var(--brand);
-  font-size: clamp(11px, 1.2vw, 13px);
-  font-weight: 600;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  margin: 0 0 12px;
-}
-.about-why-ai .section-heading{
-  text-align: center;
-}
-.about-why-ai .why-ai-reasons{
-  display: flex;
-  flex-direction: column;
-  gap: clamp(20px, 3vw, 28px);
-  max-width: 800px;
-  margin: 0 auto;
-}
-.about-why-ai .why-ai-reason{
-  display: flex;
-  gap: clamp(16px, 2.5vw, 24px);
-  align-items: flex-start;
-  padding: clamp(20px, 3vw, 28px);
-  background: var(--surface-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-.about-why-ai .why-ai-num{
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 800;
-  color: var(--brand);
-  letter-spacing: -.02em;
-  line-height: 1;
-  flex-shrink: 0;
-  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-}
-.about-why-ai .why-ai-content h3{
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
-  font-weight: 700;
-  color: var(--heading);
-  margin: 0 0 8px;
-  line-height: 1.5;
-}
-.about-why-ai .why-ai-content p{
-  font-size: clamp(.88rem, 1.3vw, .95rem);
-  color: var(--muted);
-  line-height: 1.85;
-  margin: 0;
-}
-.about-why-ai .why-ai-conclusion{
-  max-width: 720px;
-  margin: clamp(40px, 6vw, 64px) auto 0;
-  text-align: center;
-}
-.about-why-ai .why-ai-bridge{
-  color: var(--muted);
-  font-size: 0.95rem;
-  margin: 0 0 16px;
-  letter-spacing: .03em;
-}
-.about-why-ai .why-ai-quote{
-  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-  font-weight: 700;
-  line-height: 1.7;
-  color: var(--heading);
-  margin: 0 auto clamp(24px, 3.5vw, 32px);
-  padding: clamp(16px, 2vw, 24px) clamp(20px, 3vw, 32px);
-  border-left: 3px solid var(--brand);
-  text-align: left;
-  max-width: fit-content;
-}
-.about-why-ai .why-ai-cta{
-  color: var(--text);
-  font-size: clamp(.95rem, 1.5vw, 1.05rem);
-  line-height: 1.85;
-  margin: 0;
-}
-.about-why-ai .pc-only { display: inline; }
-@media (max-width: 768px) {
-  .about-why-ai .pc-only { display: none; }
-}
-
-.section-lead strong{
-  color: var(--brand);
-  font-weight: 700;
-}
-
-/* =========================================================
-   ミニ・ヒーロー（カード）
-   ========================================================= */
-.about-content-section .hero-container--inline{
-  position: relative;
-  container-type: inline-size;
-  --pad-x: clamp(24px, 4vw, 40px);
-  padding: var(--pad-x);
-  margin-bottom: 48px;
-  background: var(--surface-3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text); text-shadow: none;
-  --inner-w: calc(100% - (var(--pad-x) * 2));
-  --col-w: min(56rem, var(--inner-w));
-}
-.about-content-section .hero-container--inline::before{ display:none; }
-.about-content-section .hero-container--inline .hero-block{ display:grid; gap:.75rem; box-sizing:border-box; }
-.about-content-section .hero-container--inline .hero-title{ width: var(--col-w); max-width: 100%; margin-inline: auto; }
-.about-content-section .hero-container--inline .eyebrow{
-  margin:0 0 .75rem; text-align:left; font-size: clamp(11px, 1vw, 13px);
-  letter-spacing:.18em; text-transform:uppercase; color: var(--brand); opacity:.95;
-}
-.about-content-section .hero-container--inline .hero-lead{ margin:0 0 1em; line-height:1.2; letter-spacing:.02em; color: var(--heading); }
-.about-content-section .hero-container--inline .hero-lead--xl{ text-align:left; font-size: clamp(28px, 3.6vw, 44px); text-wrap: balance; }
-.about-content-section .hero-container--inline .hero-lead--sm{
-  width: var(--col-w); max-width: 100%; margin-inline: auto;
-  text-align: right; font-size: clamp(14px, 1.8vw, 18px);
-  color: var(--muted); font-weight:600;
-}
-@media (max-width: 640px){
-  .about-content-section .hero-container--inline{ --col-w: calc(100% - (var(--pad-x) * 2)); }
-  .about-content-section .hero-container--inline .hero-lead--xl{ font-size: clamp(18px, 5.2vw, 26px); }
-  .about-content-section .hero-container--inline .hero-lead--sm{
-    width: var(--col-w); margin-inline:auto;
-    text-align: left;
-    white-space: nowrap;
-    font-size: min(16px, calc((100cqw - (var(--pad-x) * 2) - 36px) / 22));
-    line-height: 1.35; letter-spacing: 0;
-  }
-}
-@supports not (width: 1cqw){
-  @media (max-width: 640px){
-    .about-content-section .hero-container--inline .hero-lead--sm{
-      font-size: clamp(12px, 3.6vw, 16px);
-      white-space: nowrap;
-    }
+@media (max-width: 640px) {
+  .home-hero .hero-content {
+    width: 100%;
+    padding: 16px;
   }
 }
 
 /* =========================================================
-   Name Roots（最適化 × 円相）
+   Main Service（AI支援：リード+CTAのみ）
    ========================================================= */
-.roots-grid{
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-}
-.root-card{
-  background: var(--surface-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: clamp(28px, 4vw, 44px);
+.home-main-service {
+  padding: clamp(80px, 11vw, 130px) 0;
+  background: var(--home-surface);
   text-align: center;
-  transition: border-color .3s, box-shadow .3s, transform .3s;
 }
-.root-card:hover{
-  border-color: var(--border-hover);
-  box-shadow: var(--glow);
-  transform: translateY(-2px);
-}
-.root-visual{
-  width: clamp(140px, 22vw, 200px);
-  height: clamp(140px, 22vw, 200px);
-  margin: 0 auto 24px;
-}
-.root-visual svg{
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-.root-eng{
-  font-size: clamp(11px, 1.2vw, 13px);
-  letter-spacing: .35em;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: var(--brand);
-  margin: 0 0 8px;
-}
-.root-jp{
-  font-size: clamp(20px, 2.6vw, 28px);
-  font-weight: 800;
-  color: var(--heading);
-  margin: 0 0 16px;
-  letter-spacing: .04em;
-}
-.root-desc{
-  font-size: .92rem;
-  line-height: 1.85;
-  color: var(--muted);
-  margin: 0;
-  max-width: 380px;
-  margin-inline: auto;
-}
-@media (max-width: 720px){
-  .roots-grid{
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-}
-
-/* =========================================================
-   About Values（調和・最適化・循環）
-   ========================================================= */
-.values-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-}
-.value-card {
-  background: var(--surface-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem 1.5rem;
-  text-align: center;
-  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-}
-.value-card:hover {
-  border-color: var(--border-hover);
-  box-shadow: var(--glow);
-  transform: translateY(-2px);
-}
-.value-img-wrap {
-  width: 100%;
-  max-width: 180px;
-  aspect-ratio: 1;
-  margin: 0 auto 14px;
-  display: flex;
-  align-items: center;
+.home-service-cta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 14px;
   justify-content: center;
-  transition: transform .35s ease;
+  margin-top: clamp(8px, 1.5vw, 16px);
 }
-.value-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-.value-card:hover .value-img-wrap {
-  transform: scale(1.04);
-}
-.value-card h3 {
-  font-size: 1.1rem;
-  color: var(--heading);
-  margin: 0 0 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-.value-card p {
-  font-size: 0.9rem;
-  color: var(--muted);
-  line-height: 1.75;
-  margin: 0;
-}
-@media (max-width: 768px) {
-  .values-grid {
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
-  }
-  .value-card {
-    padding: 1.5rem 1.25rem;
-  }
-}
-
-.business-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(1rem, 2vw, 1.75rem);
-}
-.business-cards.business-cards--single {
-  grid-template-columns: 1fr;
-  max-width: 640px;
-  margin: 0 auto;
-}
-.business-card {
-  position: relative;
-  background: linear-gradient(180deg, var(--surface-card) 0%, rgba(91, 127, 255, 0.02) 100%);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: clamp(2rem, 3.5vw, 3rem) clamp(1.5rem, 2.5vw, 2.25rem) clamp(1.75rem, 2.5vw, 2rem);
-  overflow: hidden;
-  transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
-  display: flex;
-  flex-direction: column;
-}
-.business-card:hover {
-  border-color: rgba(91, 127, 255, 0.45);
-  box-shadow: 0 8px 32px rgba(91, 127, 255, 0.12), var(--glow);
-  transform: translateY(-3px);
-}
-.business-num {
-  position: absolute;
-  top: 16px;
-  right: 22px;
-  font-size: clamp(48px, 6vw, 80px);
-  font-weight: 800;
-  color: rgba(91, 127, 255, 0.16);
-  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-.business-img-wrap {
-  width: 100%;
-  max-width: 200px;
-  aspect-ratio: 1;
-  margin: 0 auto clamp(12px, 1.6vw, 18px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-  transition: transform .35s ease;
-}
-.business-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-.business-card:hover .business-img-wrap {
-  transform: scale(1.04);
-}
-.business-eng {
-  font-size: clamp(10px, 1vw, 12px);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--brand);
-  margin: 0 0 12px;
-  font-weight: 500;
-  position: relative;
-  z-index: 1;
-}
-.business-card h3 {
-  font-size: clamp(20px, 2.4vw, 26px);
-  font-weight: 800;
-  color: var(--heading);
-  margin: 0 0 clamp(20px, 2.5vw, 28px);
-  letter-spacing: -0.01em;
-  position: relative;
-  z-index: 1;
-}
-.business-philosophy {
-  font-size: clamp(15px, 1.7vw, 18px);
-  font-weight: 600;
-  line-height: 1.7;
-  color: var(--heading);
-  margin: 0 0 clamp(20px, 2.5vw, 28px);
-  padding: 0 0 0 16px;
-  border-left: 2px solid var(--brand);
-  letter-spacing: -0.005em;
-  font-style: normal;
-  position: relative;
-  z-index: 1;
-}
-.business-philosophy em {
-  font-style: normal;
-  color: var(--brand);
-  font-weight: 700;
-}
-.business-desc {
-  font-size: 0.92rem;
-  color: var(--muted);
-  line-height: 1.9;
-  margin: 0 0 clamp(20px, 2.5vw, 28px);
-  flex: 1;
-  position: relative;
-  z-index: 1;
-}
-.business-link {
+.home-service-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--brand);
-  font-weight: 600;
-  font-size: 0.88rem;
+  font-size: clamp(14px, 1.5vw, 15px);
+  font-weight: 700;
+  letter-spacing: .04em;
+  padding: 14px 30px;
+  border-radius: 999px;
   text-decoration: none;
-  letter-spacing: 0.04em;
-  transition: gap 0.3s, color 0.3s;
-  position: relative;
-  z-index: 1;
-}
-.business-link::after {
-  content: '→';
-  font-size: 1rem;
-  transition: transform 0.3s;
-}
-.business-card:hover .business-link {
-  color: #8FA8FF;
-}
-.business-card:hover .business-link::after {
-  transform: translateX(4px);
-}
-@media (max-width: 640px) {
-  .business-cards { grid-template-columns: 1fr; }
-  .business-num { font-size: 64px; }
-}
-
-/* =========================================================
-   私たちの姿勢
-   ========================================================= */
-.about-approach p {
-  color: var(--text);
-  line-height: 1.8;
-  margin: 0 0 .5rem;
-}
-.approach-showcase {
-  display: flex;
-  align-items: flex-start;
-  gap: 18px;
-  margin-top: 24px;
-  padding: 24px 28px;
-  background: rgba(91, 127, 255, .05);
-  border: 1px solid rgba(91, 127, 255, .2);
-  border-radius: var(--radius);
-}
-.approach-showcase-icon {
-  flex-shrink: 0;
-  width: 44px; height: 44px;
-  border-radius: 10px;
-  background: rgba(91, 127, 255, .1);
-  color: var(--brand);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  margin-top: 2px;
-}
-.approach-showcase-text { flex: 1; }
-.approach-showcase-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--heading);
-  margin: 0 0 8px !important;
-}
-.approach-showcase-text p {
-  font-size: .92rem;
-  line-height: 1.8;
-  color: var(--text);
-  margin: 0;
-}
-.approach-showcase strong {
-  color: var(--heading);
-  font-weight: 700;
-}
-@media (max-width: 600px) {
-  .approach-showcase {
-    flex-direction: column;
-    gap: 12px;
-    padding: 20px;
-  }
-}
-
-/* =========================================================
-   代表者について
-   ========================================================= */
-.profile-card {
-  padding: 36px;
-  background: var(--surface-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-.profile-content h3 {
-  font-size: 1.2rem;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-.profile-title {
-  display: block;
-  font-size: .85rem;
-  font-weight: 400;
-  color: var(--muted);
-  margin-top: 4px;
-}
-.profile-content p {
-  font-size: .95rem;
-  line-height: 1.8;
-  margin-bottom: 12px;
-  color: var(--text);
-}
-.profile-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  list-style: none;
-  padding: 0;
-  margin-top: 16px;
-}
-.profile-tags li {
-  font-size: .8rem;
-  font-weight: 600;
-  color: var(--brand);
-  border: 1px solid rgba(91,127,255,.3);
-  background: rgba(91,127,255,.08);
-  padding: 4px 12px;
-  border-radius: 4px;
-}
-
-/* =========================================================
-   会社概要
-   ========================================================= */
-.company-info{
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.info-table{
-  width: 100%;
-  border-collapse: collapse;
-  font-size: clamp(14px, 1.6vw, 16px);
-  line-height: 1.7;
-}
-.info-table th,
-.info-table td{
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  vertical-align: top;
-}
-.info-table th{
-  width: 140px;
-  font-weight: 700;
-  color: var(--heading);
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, border-color .2s ease, color .2s ease;
   white-space: nowrap;
 }
-.info-table td{
-  color: var(--text);
+.home-service-btn--primary {
+  background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(162, 89, 255, .35);
 }
-.info-table a{
-  color: var(--brand);
+.home-service-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px rgba(162, 89, 255, .45);
+}
+.home-service-btn--ghost {
+  background: rgba(255, 255, 255, .8);
+  border: 1px solid var(--home-border);
+  color: var(--home-heading);
+  backdrop-filter: blur(8px);
+}
+.home-service-btn--ghost:hover {
+  background: #fff;
+  border-color: var(--home-brand);
+  color: var(--home-brand);
+}
+@media (max-width: 640px) {
+  .home-service-cta { flex-direction: column; align-items: stretch; }
+  .home-service-btn { width: 100%; justify-content: center; }
+}
+
+/* =========================================================
+   Final CTA
+   ========================================================= */
+.home-final-cta {
+  position: relative;
+  padding: clamp(80px, 11vw, 130px) 20px;
+  background: var(--home-surface);
+  color: var(--home-text);
+  overflow: hidden;
+}
+.home-final-cta h2 {
+  font-size: clamp(24px, 3.4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  color: var(--home-heading);
+  margin: 0 0 18px;
+  line-height: 1.3;
+}
+.home-final-cta p {
+  font-size: clamp(14px, 1.6vw, 16px);
+  color: var(--home-muted);
+  line-height: 1.9;
+  margin: 0 0 32px;
+  max-width: 680px;
+  margin-inline: auto;
+}
+.final-cta-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+.final-cta-row .btn-primary {
+  background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(162, 89, 255, .4);
+  font-weight: 700;
+  padding: 14px 30px;
+  border-radius: 999px;
   text-decoration: none;
+  letter-spacing: .04em;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
-.info-table a:hover{
-  text-decoration: underline;
+.final-cta-row .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px rgba(162, 89, 255, .5);
 }
-@media (max-width: 520px){
-  .info-table th{ width: auto; display: block; padding-bottom: 0; border-bottom: none; font-size: .85em; color: var(--muted); }
-  .info-table td{ display: block; padding-top: 2px; }
+.final-cta-row .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  padding: 14px 30px;
+  border-radius: 999px;
+  text-decoration: none;
+  letter-spacing: .04em;
+  background: rgba(255, 255, 255, .8);
+  border: 1px solid var(--home-border);
+  color: var(--home-heading);
+  backdrop-filter: blur(8px);
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.final-cta-row .btn-secondary:hover {
+  background: #fff;
+  border-color: var(--home-brand);
+  color: var(--home-brand);
+  transform: translateY(-1px);
+}
+
+/* Reveal helper（Layoutで実装済みのIntersectionObserverに反応） */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

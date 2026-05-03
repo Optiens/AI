@@ -3,8 +3,9 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="AI活用診断（無料・簡易版）| Optiens"
-  description="かんたんなフォーム入力で、あなたの事業のどこにAIが効くか、簡易レポートを無料でお届けします。"
+  title="無料AI活用診断 | 中小企業・小規模事業者向けROIレポート | Optiens"
+  description="かんたんなフォーム入力で、あなたの事業のどこにAIが効くか、ROI（投資利益率）を含む簡易レポートを無料でお届け。全国オンライン対応・契約不要・しつこい営業なし。"
+  canonical="https://optiens.com/free-diagnosis"
 >
   <main>
     <section class="diag-hero light-section">
@@ -74,7 +75,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="diag-steps" data-plan-show="free">
           <div class="step"><span class="step-num">1</span><span>フォーム入力<small>かんたん</small></span></div>
           <div class="step-arrow" aria-hidden="true"></div>
-          <div class="step"><span class="step-num">2</span><span>業務分析・レポート作成<small>1〜2営業日</small></span></div>
+          <div class="step"><span class="step-num">2</span><span>分析<small>1〜2営業日</small></span></div>
           <div class="step-arrow" aria-hidden="true"></div>
           <div class="step"><span class="step-num">3</span><span>レポート送付<small>メールで届く</small></span></div>
         </div>
@@ -218,6 +219,18 @@ import Layout from '../layouts/Layout.astro';
                 <option value="partial">一部業務で活用中</option>
                 <option value="active">組織的に活用中</option>
               </select>
+            </div>
+            <div class="field">
+              <label for="budget_range">想定予算（導入支援の初期費用）</label>
+              <select id="budget_range" name="budget_range">
+                <option value="">選択してください</option>
+                <option value="under-30">〜30万円（小さく試したい）</option>
+                <option value="30-60">30〜60万円（本格導入を検討）</option>
+                <option value="60-100">60〜100万円（複数業務を一括）</option>
+                <option value="100-plus">100万円以上（経営課題として取り組む）</option>
+                <option value="undecided">まだ分からない・相談したい</option>
+              </select>
+              <p class="field-hint">予算をお知らせいただくと、レポートで「予算内で実現可能な範囲」を具体的にご提案できます。</p>
             </div>
             <div class="field">
               <p class="field-label">AI導入で感じている課題（複数可）</p>
@@ -1407,6 +1420,12 @@ import Layout from '../layouts/Layout.astro';
     color: var(--text);
   }
   .req { color: #e05050; }
+  .field-hint {
+    margin: 6px 0 0 !important;
+    font-size: .8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
 
   input[type="text"],
   input[type="email"],

@@ -118,26 +118,27 @@ body {
 /* ========== Buttons ========== */
 .btn-primary {
   display: inline-flex; align-items: center; justify-content: center;
-  padding: .75rem 1.5rem;
+  padding: 14px 30px;
   min-height: 44px; min-width: 44px;
-  font-size: clamp(14px, 1.6vw, 16px);
-  font-weight: 600;
+  font-size: clamp(14px, 1.6vw, 15px);
+  font-weight: 700;
+  letter-spacing: .04em;
   cursor: pointer;
   color: #fff;
-  background: var(--brand);
-  border: none; border-radius: 8px;
-  box-shadow: var(--glow);
-  transition: all .25s ease;
+  background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+  border: none; border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(162, 89, 255, .35);
+  text-decoration: none;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 .btn-primary:hover {
-  box-shadow: 0 0 36px rgba(91, 127, 255, 0.3);
-  transform: translateY(-1px);
-  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(162, 89, 255, .5);
 }
 .btn-primary:active { transform: translateY(0); }
 .btn-primary:focus-visible {
   outline: 2px solid var(--brand);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {

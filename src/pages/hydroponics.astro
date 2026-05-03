@@ -1,10 +1,29 @@
 ---
 import LayoutLP from '../layouts/LayoutLP.astro';
+import { getCollection } from 'astro:content';
+
+type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
+
+// 水耕栽培関連カテゴリ（このページで表示）
+const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'social'];
+
+// カテゴリ表示名（hydroponics用）
+const hydroCategoryLabel: Record<string, string> = {
+  agriculture: '栽培・IoT',
+  welfare: '農福連携',
+  social: '社会課題',
+};
+
+const allPosts = await getCollection('blog');
+const hydroPosts = allPosts
+  .filter((p) => hydroCategories.includes(p.data.category as BlogCategory))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 
 <LayoutLP
-  title="IoT水耕栽培 | センサー×AIでハーブを自動栽培 | Optiens"
-  description="IoTセンサーとAIを駆使した室内水耕栽培。農薬不使用・通年安定供給のハーブを地域レストランへお届けします。"
+  title="IoT水耕栽培 | センサー×AIでハーブを自動栽培（Phase H1実証中）| Optiens"
+  description="Raspberry Pi・MQTT・Supabaseで構築したIoT水耕栽培の自社実証プロジェクト。AI支援事業の技術裏付けとして、ユニットエコノミクスをデータドリブンに検証しています。"
+  canonical="https://optiens.com/hydroponics"
   noindex={true}
 >
   <main class="hydro">
@@ -368,36 +387,19 @@ import LayoutLP from '../layouts/LayoutLP.astro';
       </div>
     </section>
 
-    <!-- ===== 関連する技術情報 ===== -->
+    <!-- ===== 関連する技術・実証情報 ===== -->
     <section class="hydro-section light-section hydro-section--alt">
       <div class="container">
-        <h2 class="section-heading">関連する技術情報</h2>
-        <p class="section-sub">ブログで各技術領域の詳細を解説しています。</p>
+        <h2 class="section-heading">関連する技術・実証情報</h2>
+        <p class="section-sub">水耕栽培・農福連携・社会課題に関するOptiensの調査・実証ブログ（{hydroPosts.length}件）。</p>
         <div class="blog-grid">
-          <a href="/blog/zigbee-wifi-lora-agriculture-iot-protocol" class="blog-link">
-            <span class="blog-cat">テクノロジー</span>
-            <span class="blog-title-text">Zigbee vs WiFi vs LoRa：農業IoTに最適な無線通信プロトコルの選び方</span>
-          </a>
-          <a href="/blog/mqtt-supabase-farm-dashboard" class="blog-link">
-            <span class="blog-cat">テクノロジー</span>
-            <span class="blog-title-text">MQTT × Supabaseで作る農業IoTリアルタイムダッシュボード</span>
-          </a>
-          <a href="/blog/mcp-model-context-protocol-farm-control" class="blog-link">
-            <span class="blog-cat">AI</span>
-            <span class="blog-title-text">MCP（Model Context Protocol）で農業IoTをAIから操作する</span>
-          </a>
-          <a href="/blog/led-light-spectrum-herb-cultivation" class="blog-link">
-            <span class="blog-cat">テクノロジー</span>
-            <span class="blog-title-text">LED光スペクトル最適化で変わるハーブ栽培</span>
-          </a>
-          <a href="/blog/hydroponics-startup-cost-breakeven" class="blog-link">
-            <span class="blog-cat">栽培ビジネス</span>
-            <span class="blog-title-text">水耕栽培ビジネスの初期投資と損益分岐点</span>
-          </a>
-          <a href="/blog/a-type-welfare-hydroponics-wages" class="blog-link">
-            <span class="blog-cat">農福連携</span>
-            <span class="blog-title-text">就労継続支援A型事業所×水耕栽培で工賃向上を実現するモデル</span>
-          </a>
+          {hydroPosts.map((post) => (
+            <a href={`/hydroponics/${post.slug}`} class="blog-link">
+              <span class="blog-cat">{hydroCategoryLabel[post.data.category] ?? post.data.category}</span>
+              <span class="blog-title-text">{post.data.title}</span>
+              <time class="blog-date" datetime={post.data.date}>{post.data.date.replace(/-/g, '.')}</time>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -1068,6 +1070,12 @@ import LayoutLP from '../layouts/LayoutLP.astro';
   line-height: 1.5;
   color: var(--text-dark);
   transition: color 0.2s;
+}
+.blog-date {
+  font-size: 0.72rem;
+  color: var(--muted, #64748b);
+  letter-spacing: 0.02em;
+  margin-top: 4px;
 }
 
 /* ===== Status Card ===== */

@@ -5,13 +5,16 @@ import { getCollection, render } from 'astro:content';
 type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
 const categoryLabel: Record<BlogCategory, string> = {
   AI: 'AI・機械学習',
-  agriculture: '農業・水耕栽培',
-  business: '栽培ビジネス',
+  agriculture: '栽培・IoT',
+  business: '経営・業務',
   technology: 'テクノロジー',
   welfare: '農福連携',
   social: '社会課題',
   announcement: 'お知らせ',
 };
+
+// 水耕栽培関連カテゴリは /hydroponics/<slug> へ恒久リダイレクト（旧URLのSEO保護）
+const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'social'];
 
 const { slug } = Astro.params;
 const posts = await getCollection('blog');
@@ -19,6 +22,10 @@ const post = posts.find((p) => p.id === slug || p.id === `${slug}.md`);
 
 if (!post) {
   return Astro.redirect('/404');
+}
+
+if (hydroCategories.includes(post.data.category as BlogCategory)) {
+  return Astro.redirect(`/hydroponics/${slug}`, 301);
 }
 
 const { Content } = await render(post);
