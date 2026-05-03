@@ -1,0 +1,644 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { supabase } from '../../../lib/supabase';
+
+const { id } = Astro.params;
+const numericId = Number(id);
+
+let lead: any = null;
+let error = '';
+
+if (!Number.isFinite(numericId) || numericId <= 0) {
+  error = 'IDが不正です';
+} else if (!supabase) {
+  error = 'Supabaseが設定されていません';
+} else {
+  const { data, error: dbErr } = await supabase
+    .from('diagnosis_leads')
+    .select('*')
+    .eq('id', numericId)
+    .maybeSingle();
+  if (dbErr) {
+    error = dbErr.message;
+  } else if (!data) {
+    error = 'リードが見つかりません';
+  } else {
+    lead = data;
+  }
+}
+
+const industryOptions = [
+  ['', '選択してください'],
+  ['accommodation', '宿泊業'],
+  ['restaurant', '飲食業'],
+  ['construction', '建設業'],
+  ['winery', '醸造所'],
+  ['outdoor', 'アウトドア・観光ガイド'],
+  ['bakery', 'パン屋・菓子製造'],
+  ['agriculture', '農業・畜産業'],
+  ['retail', '小売業'],
+  ['service', 'サービス業'],
+  ['manufacturing', '製造業'],
+  ['municipality', '自治体・公共機関'],
+  ['other', 'その他'],
+];
+
+const employeeOptions = [
+  ['', '選択してください'],
+  ['1', '1名（個人事業）'],
+  ['2-5', '2〜5名'],
+  ['6-20', '6〜20名'],
+  ['21-50', '21〜50名'],
+  ['51-100', '51〜100名'],
+  ['101+', '101名以上'],
+];
+
+const revenueOptions = [
+  ['', '選択してください'],
+  ['under-10m', '〜1,000万円'],
+  ['10-30m', '1,000万〜3,000万円'],
+  ['30-50m', '3,000万〜5,000万円'],
+  ['50-100m', '5,000万〜1億円'],
+  ['100-300m', '1億〜3億円'],
+  ['300-1000m', '3億〜10億円'],
+  ['over-1000m', '10億円以上'],
+];
+
+const timelineOptions = [
+  ['', '選択してください'],
+  ['asap', 'できるだけ早く'],
+  ['3m', '3ヶ月以内'],
+  ['6m', '半年以内'],
+  ['12m', '1年以内'],
+  ['undecided', '未定'],
+];
+
+const statusOptions = [
+  ['new', '新規'],
+  ['pending_payment', '入金待ち'],
+  ['paid', '入金確認済み'],
+  ['report_created', 'レポート作成済'],
+  ['sent', '送付済'],
+  ['mtg_scheduled', 'MTG予定'],
+  ['paid_report', '有料レポート'],
+  ['implementation', '導入支援'],
+  ['maintenance', '保守契約'],
+  ['cancelled', 'キャンセル'],
+];
+
+function fmt(s: any) {
+  if (!s) return '';
+  try { return new Date(s).toLocaleString('ja-JP'); } catch { return String(s); }
+}
+---
+
+<AdminLayout title={lead ? `案件詳細：${lead.company_name || '無題'}` : '案件詳細'} active="leads">
+  <Fragment slot="header-actions">
+    <a href="/admin/leads" class="back-link"><i class="fas fa-arrow-left"></i> 一覧へ戻る</a>
+  </Fragment>
+
+  {error && <div class="admin-error">{error}</div>}
+
+  {lead && (
+    <div class="lead-detail">
+      <!-- ヘッダー：申込番号 + ステータス + 金額 -->
+      <div class="detail-header">
+        <div class="detail-id">
+          <span class="detail-id-label">申込番号</span>
+          <span class="detail-id-value">{lead.application_id || '(未採番)'}</span>
+        </div>
+        <div class="detail-meta">
+          <span class="detail-meta-item">
+            <i class="fas fa-tag"></i> プラン: <strong>{lead.plan === 'paid' ? '有償・詳細版' : '無料・簡易版'}</strong>
+          </span>
+          <span class="detail-meta-item">
+            <i class="fas fa-yen-sign"></i> 金額: <strong>¥{(lead.amount_jpy || 0).toLocaleString()}（税込）</strong>
+          </span>
+          <span class="detail-meta-item">
+            <i class="fas fa-clock"></i> 申込: {fmt(lead.created_at)}
+          </span>
+          {lead.paid_at && (
+            <span class="detail-meta-item">
+              <i class="fas fa-check-circle"></i> 入金確認: {fmt(lead.paid_at)}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <!-- アクションボタン -->
+      <div class="action-bar">
+        <button class="action-btn action-btn--success" data-action="mark_paid" disabled={lead.status === 'paid'}>
+          <i class="fas fa-check-circle"></i> 入金確認済みに変更
+        </button>
+        <button class="action-btn action-btn--accent" data-action="mark_referral_free" disabled={lead.status === 'paid'}>
+          <i class="fas fa-handshake"></i> 紹介経由・無料化
+        </button>
+        <button class="action-btn action-btn--primary" data-action="mark_report_sent" disabled={lead.status === 'sent'}>
+          <i class="fas fa-paper-plane"></i> レポート送付済みに変更
+        </button>
+      </div>
+
+      <!-- フォーム -->
+      <form id="lead-form" data-id={lead.id}>
+        <div class="grid-2">
+          <div class="field">
+            <label>ステータス</label>
+            <select name="status">
+              {statusOptions.map(([v, label]) => (
+                <option value={v} selected={lead.status === v}>{label}</option>
+              ))}
+            </select>
+          </div>
+          <div class="field">
+            <label>業種</label>
+            <select name="industry">
+              {industryOptions.map(([v, label]) => (
+                <option value={v} selected={lead.industry === v}>{label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <fieldset class="section">
+          <legend>組織情報</legend>
+          <div class="grid-2">
+            <div class="field">
+              <label>企業・団体名</label>
+              <input type="text" name="company_name" value={lead.company_name || ''} />
+            </div>
+            <div class="field">
+              <label>ご担当者名</label>
+              <input type="text" name="person_name" value={lead.person_name || ''} />
+            </div>
+            <div class="field">
+              <label>メールアドレス</label>
+              <input type="email" name="email" value={lead.email || ''} />
+            </div>
+            <div class="field">
+              <label>従業員数</label>
+              <select name="employee_count">
+                {employeeOptions.map(([v, label]) => (
+                  <option value={v} selected={lead.employee_count === v}>{label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="section">
+          <legend>業務情報</legend>
+          <div class="field">
+            <label>事業内容・主なサービス</label>
+            <textarea name="business_description" rows="3">{lead.business_description || ''}</textarea>
+          </div>
+          <div class="field">
+            <label>日常業務で時間がかかっている作業</label>
+            <textarea name="daily_tasks" rows="3">{lead.daily_tasks || ''}</textarea>
+          </div>
+          <div class="field">
+            <label>現在使用中のITツール</label>
+            <textarea name="current_tools" rows="2">{lead.current_tools || ''}</textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="section">
+          <legend>詳細レポート向け追加情報</legend>
+          <div class="grid-2">
+            <div class="field">
+              <label>創業・設立</label>
+              <input type="text" name="business_age" value={lead.business_age || ''} />
+            </div>
+            <div class="field">
+              <label>営業エリア・拠点</label>
+              <input type="text" name="service_area" value={lead.service_area || ''} />
+            </div>
+          </div>
+          <div class="field">
+            <label>主要顧客層・ターゲット</label>
+            <input type="text" name="target_customer" value={lead.target_customer || ''} />
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>売上規模感</label>
+              <select name="annual_revenue_range">
+                {revenueOptions.map(([v, label]) => (
+                  <option value={v} selected={lead.annual_revenue_range === v}>{label}</option>
+                ))}
+              </select>
+            </div>
+            <div class="field">
+              <label>検討時期</label>
+              <select name="decision_timeline">
+                {timelineOptions.map(([v, label]) => (
+                  <option value={v} selected={lead.decision_timeline === v}>{label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>過去のIT・自動化導入の経験</label>
+            <textarea name="past_it_experience" rows="3">{lead.past_it_experience || ''}</textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="section">
+          <legend>管理メモ（社内のみ・お客様には表示されません）</legend>
+          <div class="field">
+            <textarea name="admin_notes" rows="4" placeholder="紹介者情報、経緯、特記事項など">{lead.admin_notes || ''}</textarea>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="action-btn action-btn--primary">
+            <i class="fas fa-save"></i> 変更を保存
+          </button>
+          <span id="save-status" class="save-status"></span>
+        </div>
+      </form>
+    </div>
+  )}
+</AdminLayout>
+
+<!-- 紹介経由・無料化ダイアログ -->
+<div class="modal" id="referral-modal" hidden>
+  <div class="modal-backdrop" data-modal-close></div>
+  <div class="modal-card">
+    <h3>紹介経由・無料化</h3>
+    <p>このリードを「紹介経由・無料化（¥0）」に変更し、お客様に確認メールを送信します。</p>
+    <label class="modal-label">
+      紹介者名（任意・社内記録用）
+      <input type="text" id="referral-from" placeholder="例: 商工会 田中様" />
+    </label>
+    <div class="modal-actions">
+      <button class="action-btn action-btn--ghost" data-modal-close>キャンセル</button>
+      <button class="action-btn action-btn--accent" id="referral-confirm">
+        <i class="fas fa-handshake"></i> 無料化を実行
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function() {
+    const form = document.getElementById('lead-form');
+    if (!form) return;
+    const id = Number(form.dataset.id);
+    const saveStatus = document.getElementById('save-status');
+
+    function setStatus(text, kind) {
+      saveStatus.textContent = text;
+      saveStatus.className = 'save-status ' + (kind || '');
+    }
+
+    function collectFields() {
+      const fd = new FormData(form);
+      const fields = {};
+      for (const [k, v] of fd.entries()) {
+        if (k === 'status') continue;
+        fields[k] = String(v);
+      }
+      return { fields, status: String(fd.get('status') || '') };
+    }
+
+    async function postUpdate(payload) {
+      const res = await fetch('/api/admin/lead-update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, payload)),
+      });
+      return res.json();
+    }
+
+    // 保存
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const { fields, status } = collectFields();
+      setStatus('保存中…', 'info');
+      try {
+        const data = await postUpdate({ action: 'update_fields', fields: fields, status: status });
+        if (data.error) {
+          setStatus('エラー: ' + data.error, 'error');
+        } else {
+          setStatus('✅ 保存しました', 'success');
+        }
+      } catch (err) {
+        setStatus('通信エラー', 'error');
+      }
+    });
+
+    // アクションボタン
+    document.querySelectorAll('[data-action]').forEach(function(btn) {
+      btn.addEventListener('click', async function() {
+        const action = btn.dataset.action;
+        if (action === 'mark_referral_free') {
+          openReferralModal();
+          return;
+        }
+        const labels = {
+          mark_paid: 'お振込確認済みに変更し、お客様に確認メールを送信します。よろしいですか？',
+          mark_report_sent: 'レポート送付済みに変更します。よろしいですか？',
+        };
+        if (!confirm(labels[action] || '実行しますか？')) return;
+        btn.disabled = true;
+        try {
+          const data = await postUpdate({ action: action });
+          if (data.error) {
+            alert('エラー: ' + data.error);
+            btn.disabled = false;
+          } else {
+            location.reload();
+          }
+        } catch (err) {
+          alert('通信エラー');
+          btn.disabled = false;
+        }
+      });
+    });
+
+    // モーダル
+    const modal = document.getElementById('referral-modal');
+    const referralFromInput = document.getElementById('referral-from');
+    function openReferralModal() {
+      modal.hidden = false;
+      referralFromInput.value = '';
+      referralFromInput.focus();
+    }
+    function closeReferralModal() {
+      modal.hidden = true;
+    }
+    modal.querySelectorAll('[data-modal-close]').forEach(function(el) {
+      el.addEventListener('click', closeReferralModal);
+    });
+    document.getElementById('referral-confirm').addEventListener('click', async function() {
+      const referralFrom = (referralFromInput.value || '').trim();
+      const btn = this;
+      btn.disabled = true;
+      try {
+        const data = await postUpdate({ action: 'mark_referral_free', referral_from: referralFrom });
+        if (data.error) {
+          alert('エラー: ' + data.error);
+          btn.disabled = false;
+        } else {
+          location.reload();
+        }
+      } catch (err) {
+        alert('通信エラー');
+        btn.disabled = false;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .back-link {
+    color: var(--admin-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .back-link:hover { color: var(--admin-text); }
+
+  .admin-error {
+    padding: 12px 16px;
+    background: rgba(234, 67, 53, 0.1);
+    border: 1px solid rgba(234, 67, 53, 0.3);
+    border-radius: 8px;
+    color: var(--admin-danger);
+    margin-bottom: 20px;
+  }
+
+  /* Header */
+  .detail-header {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .detail-id {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--admin-border);
+  }
+  .detail-id-label {
+    font-size: 0.7rem;
+    color: var(--admin-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .detail-id-value {
+    font-family: 'SF Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--admin-brand);
+    letter-spacing: 0.04em;
+    word-break: break-all;
+  }
+  .detail-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--admin-muted);
+  }
+  .detail-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .detail-meta-item i {
+    color: var(--admin-brand);
+  }
+  .detail-meta-item strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* Action bar */
+  .action-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s, background 0.15s;
+    font-family: inherit;
+  }
+  .action-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .action-btn:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
+  .action-btn--primary {
+    background: var(--admin-brand);
+    color: #fff;
+  }
+  .action-btn--primary:not(:disabled):hover { background: var(--admin-brand-hover); }
+  .action-btn--success {
+    background: var(--admin-success);
+    color: #06291e;
+  }
+  .action-btn--accent {
+    background: #0ACF83;
+    color: #fff;
+  }
+  .action-btn--ghost {
+    background: transparent;
+    color: var(--admin-text);
+    border: 1px solid var(--admin-border);
+  }
+  .action-btn--ghost:hover {
+    background: var(--admin-surface-2);
+  }
+
+  /* Form */
+  .section {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+  .section legend {
+    padding: 0 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--admin-brand);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 720px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  .field {
+    margin-bottom: 14px;
+  }
+  .field label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--admin-muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .field input[type="text"],
+  .field input[type="email"],
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 9px 12px;
+    background: var(--admin-bg);
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    color: var(--admin-text);
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--admin-brand);
+  }
+  .field textarea {
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .form-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 24px;
+  }
+  .save-status {
+    font-size: 0.85rem;
+  }
+  .save-status.info { color: var(--admin-muted); }
+  .save-status.success { color: var(--admin-success); }
+  .save-status.error { color: var(--admin-danger); }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .modal-card {
+    position: relative;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    padding: 28px;
+    width: min(440px, 90vw);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  .modal-card h3 {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    color: #fff;
+  }
+  .modal-card p {
+    margin: 0 0 18px;
+    font-size: 0.88rem;
+    color: var(--admin-muted);
+    line-height: 1.7;
+  }
+  .modal-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--admin-muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .modal-card input {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--admin-bg);
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    color: var(--admin-text);
+    font-size: 0.9rem;
+    margin: 6px 0 22px;
+  }
+  .modal-card input:focus {
+    outline: none;
+    border-color: var(--admin-brand);
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+</style>

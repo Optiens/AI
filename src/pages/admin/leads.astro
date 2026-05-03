@@ -128,7 +128,7 @@ function timeAgo(dateStr: string) {
             </div>
             <div class="pipeline-cards">
               {stageLeads.map(lead => (
-                <div class="lead-card" data-id={lead.id}>
+                <a href={`/admin/leads/${lead.id}`} class="lead-card" data-id={lead.id}>
                   <div class="lead-card-header">
                     <span class="lead-company">{lead.company_name}</span>
                     <span class="lead-date">{timeAgo(lead.created_at)}</span>
@@ -139,12 +139,12 @@ function timeAgo(dateStr: string) {
                       <span class="lead-tag">{industryLabels[lead.industry] || lead.industry}</span>
                     )}
                   </div>
-                  {lead.email && (
-                    <div class="lead-card-footer">
-                      <a href={`mailto:${lead.email}`} class="lead-email">{lead.email}</a>
+                  {lead.application_id && (
+                    <div class="lead-card-id">
+                      <i class="fas fa-hashtag"></i> {lead.application_id}
                     </div>
                   )}
-                </div>
+                </a>
               ))}
               {stageLeads.length === 0 && (
                 <div class="pipeline-empty">なし</div>
@@ -166,14 +166,15 @@ function timeAgo(dateStr: string) {
           <th>業種</th>
           <th>ステータス</th>
           <th>申込日</th>
-          <th>メール</th>
+          <th>申込番号</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         {leads.map(lead => {
           const stage = stages.find(s => s.id === lead.status) || stages[0];
           return (
-            <tr>
+            <tr class="lead-row" data-href={`/admin/leads/${lead.id}`}>
               <td class="td-company">{lead.company_name}</td>
               <td>{lead.person_name}</td>
               <td>{industryLabels[lead.industry] || lead.industry || '-'}</td>
@@ -183,12 +184,17 @@ function timeAgo(dateStr: string) {
                 </span>
               </td>
               <td>{formatDate(lead.created_at)}</td>
-              <td><a href={`mailto:${lead.email}`}>{lead.email}</a></td>
+              <td class="td-id">{lead.application_id || '-'}</td>
+              <td>
+                <a href={`/admin/leads/${lead.id}`} class="row-edit-link">
+                  <i class="fas fa-edit"></i> 編集
+                </a>
+              </td>
             </tr>
           );
         })}
         {leads.length === 0 && (
-          <tr><td colspan="6" class="td-empty">案件がありません</td></tr>
+          <tr><td colspan="7" class="td-empty">案件がありません</td></tr>
         )}
       </tbody>
     </table>
@@ -206,6 +212,17 @@ function timeAgo(dateStr: string) {
       document.getElementById('table-view').style.display = view === 'table' ? '' : 'none';
     });
   });
+
+  // テーブル行クリックで詳細ページへ
+  document.querySelectorAll('.lead-row[data-href]').forEach(function(tr) {
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', function(e) {
+      // a 要素・button 要素クリック時はそちらに任せる
+      if (e.target.closest('a, button')) return;
+      window.location.href = tr.dataset.href;
+    });
+  });
+
 </script>
 
 <style>
@@ -343,12 +360,18 @@ function timeAgo(dateStr: string) {
 
   /* Lead card */
   .lead-card {
+    display: block;
     background: var(--admin-surface);
     border: 1px solid var(--admin-border);
     border-radius: 8px;
     padding: 14px;
     cursor: pointer;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .lead-card:hover {
+    transform: translateY(-1px);
   }
   .lead-card:hover {
     border-color: rgba(91, 127, 255, 0.4);
@@ -388,17 +411,33 @@ function timeAgo(dateStr: string) {
     padding: 2px 8px;
     border-radius: 4px;
   }
-  .lead-card-footer {
+  .lead-card-id {
     margin-top: 8px;
     padding-top: 8px;
     border-top: 1px solid var(--admin-border);
+    font-family: 'SF Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--admin-muted);
+    letter-spacing: 0.04em;
   }
-  .lead-email {
-    font-size: 0.75rem;
+  .lead-card-id i {
+    color: var(--admin-brand);
+    margin-right: 4px;
+  }
+  .td-id {
+    font-family: 'SF Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--admin-muted);
+  }
+  .row-edit-link {
     color: var(--admin-brand);
     text-decoration: none;
+    font-size: 0.82rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
-  .lead-email:hover { text-decoration: underline; }
+  .row-edit-link:hover { text-decoration: underline; }
 
   /* Table */
   .leads-table {
@@ -452,5 +491,10 @@ function timeAgo(dateStr: string) {
     .stats-row { flex-direction: column; }
     .pipeline-scroll { flex-direction: column; }
     .pipeline-col { min-width: unset; }
+  }
+
+  /* テーブル行 hover */
+  .lead-row[data-href]:hover td {
+    background: rgba(91, 127, 255, 0.04);
   }
 </style>

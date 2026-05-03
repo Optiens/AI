@@ -11,15 +11,34 @@ import Layout from '../layouts/Layout.astro';
       <canvas id="diag-net" class="diag-canvas"></canvas>
       <div class="container text-center" style="position:relative;z-index:1;">
         <p class="diag-eyebrow">AI DIAGNOSIS</p>
-        <h1>AI活用診断<span class="diag-badge">無料・簡易版</span></h1>
-        <p class="diag-sub">
+        <h1>AI活用診断</h1>
+
+        <!-- プラン切替トグル -->
+        <div class="plan-switcher" role="tablist" aria-label="診断プランの切替">
+          <button type="button" class="plan-switch-btn is-active" data-plan="free" role="tab" aria-selected="true">
+            <span class="plan-switch-name">無料・簡易版</span>
+            <span class="plan-switch-price">0円</span>
+          </button>
+          <button type="button" class="plan-switch-btn" data-plan="paid" role="tab" aria-selected="false">
+            <span class="plan-switch-name">有償・詳細版</span>
+            <span class="plan-switch-price">¥5,500 税込</span>
+          </button>
+        </div>
+
+        <p class="diag-sub" data-plan-show="free">
           かんたんなフォーム入力で、あなたの事業に合った<br/>
           AI活用ポイントを簡易レポートとしてお届けします。
         </p>
-        <div class="diag-promise">
+        <p class="diag-sub" data-plan-show="paid" hidden>
+          御社のIT環境に合わせた<strong>5〜8ページの詳細レポート</strong>と<br/>
+          <strong>60分のオンラインMTG</strong>で、AI活用の道筋を具体的にお届けします。
+        </p>
+
+        <!-- 無料版のお約束 -->
+        <div class="diag-promise" data-plan-show="free">
           <div class="diag-promise-item">
             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            <p>詳細レポート（5,000円）と同じ仕組みで作成。<br/>無料版は要点に絞った2〜3ページのレポートをお届けします。</p>
+            <p>詳細版と同じ仕組みで作成。無料版は<strong>要点に絞った2〜3ページ</strong>のレポートをお届けします。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-list-check" aria-hidden="true"></i>
@@ -30,17 +49,45 @@ import Layout from '../layouts/Layout.astro';
             <p>契約は不要です。詳細レポートやご相談をご希望の場合のみ、こちらからご案内します。</p>
           </div>
         </div>
+
+        <!-- 有償版のお約束 -->
+        <div class="diag-promise" data-plan-show="paid" hidden>
+          <div class="diag-promise-item">
+            <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+            <p><strong>5〜8ページの詳細レポート</strong>。御社のIT環境に合わせた個別提案・アーキテクチャ図・導入支援の具体額までを記載します。</p>
+          </div>
+          <div class="diag-promise-item">
+            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+            <p><strong>60分のオンラインMTG</strong>を含みます。レポート内容の質疑応答・次の判断のすり合わせを行います。</p>
+          </div>
+          <div class="diag-promise-item">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <p>導入支援にお進みになる場合、本費用は<strong>初期費用に充当</strong>します。</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="diag-form-section light-section">
       <div class="container">
-        <div class="diag-steps">
+        <!-- 無料版ステップ -->
+        <div class="diag-steps" data-plan-show="free">
           <div class="step"><span class="step-num">1</span><span>フォーム入力<small>かんたん</small></span></div>
           <div class="step-arrow" aria-hidden="true"></div>
-          <div class="step"><span class="step-num">2</span><span>AIが分析<small>1〜2営業日</small></span></div>
+          <div class="step"><span class="step-num">2</span><span>業務分析・レポート作成<small>1〜2営業日</small></span></div>
           <div class="step-arrow" aria-hidden="true"></div>
           <div class="step"><span class="step-num">3</span><span>レポート送付<small>メールで届く</small></span></div>
+        </div>
+
+        <!-- 有償版ステップ -->
+        <div class="diag-steps" data-plan-show="paid" hidden>
+          <div class="step"><span class="step-num">1</span><span>申込フォーム<small>下記から</small></span></div>
+          <div class="step-arrow" aria-hidden="true"></div>
+          <div class="step"><span class="step-num">2</span><span>お支払い<small>銀行振込</small></span></div>
+          <div class="step-arrow" aria-hidden="true"></div>
+          <div class="step"><span class="step-num">3</span><span>業務分析・提案作成<small>5営業日以内</small></span></div>
+          <div class="step-arrow" aria-hidden="true"></div>
+          <div class="step"><span class="step-num">4</span><span>レポート + MTG<small>日程調整</small></span></div>
         </div>
 
         <form method="POST" action="/api/free-diagnosis" class="diag-form" id="diag-form">
@@ -51,6 +98,65 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <!-- いたずら防止: タイムスタンプ -->
           <input type="hidden" name="_t" id="_t" />
+          <!-- 選択中プラン（free / paid） -->
+          <input type="hidden" name="plan" id="plan-field" value="free" />
+
+          <!-- ===== 業務資料から自動入力（任意） ===== -->
+          <fieldset class="upload-fieldset">
+            <legend>業務資料・自社サイトから自動入力（任意）</legend>
+            <div class="upload-hint">
+              <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+              <p>名刺・会社案内・業務報告書などのアップロード、または自社の会社案内ページのURL貼り付けで、AIが内容を読み取って下のフォームを自動入力します。<strong>抽出結果に「ご担当者名は手動でご記入ください」等の確認メッセージが出る場合があります</strong>ので、内容をご確認のうえ修正・追記してください。</p>
+            </div>
+
+            <div class="upload-tabs" role="tablist">
+              <button type="button" class="upload-tab is-active" data-mode="file" role="tab" aria-selected="true">
+                <i class="fa-solid fa-paperclip" aria-hidden="true"></i> ファイル添付
+              </button>
+              <button type="button" class="upload-tab" data-mode="url" role="tab" aria-selected="false">
+                <i class="fa-solid fa-link" aria-hidden="true"></i> URLを貼り付け
+              </button>
+            </div>
+
+            <div class="upload-mode-panel" data-panel="file">
+              <p class="upload-mode-note"><small>対応形式: JPG / PNG / GIF / WebP（最大5MB）／ 名刺・会社案内・スクリーンショット等の画像</small></p>
+              <div class="upload-controls">
+                <label for="file-upload" class="upload-file-label">
+                  <i class="fa-solid fa-paperclip" aria-hidden="true"></i>
+                  <span id="upload-file-name">ファイルを選択</span>
+                </label>
+                <input type="file" id="file-upload" accept="image/jpeg,image/png,image/gif,image/webp" />
+                <button type="button" id="extract-file-btn" class="upload-btn">
+                  <i class="fa-solid fa-file-import" aria-hidden="true"></i> AIで読み取って反映
+                </button>
+              </div>
+            </div>
+
+            <div class="upload-mode-panel" data-panel="url" hidden>
+              <p class="upload-mode-note"><small>会社案内ページなど、公開されているURLを指定してください（JavaScriptで描画されるサイトはご利用いただけない場合があります）</small></p>
+              <div class="upload-controls upload-controls--url">
+                <input type="url" id="url-input" class="upload-url-input" placeholder="https://example.co.jp/company" />
+                <button type="button" id="extract-url-btn" class="upload-btn">
+                  <i class="fa-solid fa-globe" aria-hidden="true"></i> URLから読み取って反映
+                </button>
+              </div>
+            </div>
+
+            <p id="extract-status" class="extract-status" hidden></p>
+
+            <!-- ファクトチェック・抽出結果サマリー（読み取り後に表示） -->
+            <div id="extract-factcheck" class="extract-factcheck" hidden>
+              <div class="factcheck-head">
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <h3>抽出内容の確認</h3>
+              </div>
+              <ul id="factcheck-notes" class="factcheck-notes"></ul>
+              <div id="extract-extras-wrap" class="extract-extras" hidden>
+                <p class="extras-title">参考情報（フォームには反映していません）</p>
+                <dl id="extract-extras-list" class="extras-list"></dl>
+              </div>
+            </div>
+          </fieldset>
 
           <fieldset>
             <legend>組織情報</legend>
@@ -205,6 +311,73 @@ import Layout from '../layouts/Layout.astro';
             </div>
           </fieldset>
 
+          <fieldset class="extra-fieldset">
+            <legend>詳細レポート向けの追加情報（任意）</legend>
+            <div class="detail-hint">
+              <i class="fa-solid fa-stars"></i>
+              <p>以下は<strong>詳細レポートをご希望の場合に役立つ情報</strong>です。記入が多いほど、ROI試算や提案の精度が向上します。すべて任意です。</p>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="business_age">創業・設立</label>
+                <input type="text" id="business_age" name="business_age" placeholder="例: 2010年創業 / 創業30年" />
+              </div>
+              <div class="field">
+                <label for="service_area">主な営業エリア・拠点</label>
+                <input type="text" id="service_area" name="service_area" placeholder="例: 東京都中心 / 全国対応 / 関東エリア" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="target_customer">主要顧客層・ターゲット</label>
+              <input type="text" id="target_customer" name="target_customer" placeholder="例: 30〜50代女性 / 法人（中小企業） / 建設業界の現場監督" />
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="annual_revenue_range">売上規模感</label>
+                <select id="annual_revenue_range" name="annual_revenue_range">
+                  <option value="">選択してください</option>
+                  <option value="under-10m">〜1,000万円</option>
+                  <option value="10-30m">1,000万〜3,000万円</option>
+                  <option value="30-50m">3,000万〜5,000万円</option>
+                  <option value="50-100m">5,000万〜1億円</option>
+                  <option value="100-300m">1億〜3億円</option>
+                  <option value="300-1000m">3億〜10億円</option>
+                  <option value="over-1000m">10億円以上</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="decision_timeline">AI導入のご検討時期</label>
+                <select id="decision_timeline" name="decision_timeline">
+                  <option value="">選択してください</option>
+                  <option value="asap">できるだけ早く</option>
+                  <option value="3m">3ヶ月以内</option>
+                  <option value="6m">半年以内</option>
+                  <option value="12m">1年以内</option>
+                  <option value="undecided">未定（情報収集中）</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="past_it_experience">過去のIT・自動化導入の経験</label>
+              <textarea id="past_it_experience" name="past_it_experience" rows="3" placeholder="例: 数年前にCRMを導入したが定着せず利用停止。Excel管理に戻った。"></textarea>
+            </div>
+          </fieldset>
+
+          <!-- 有償版の支払い案内（paid時のみ表示） -->
+          <div class="payment-note" data-plan-show="paid" hidden>
+            <div class="payment-note-head">
+              <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+              <h3>お支払いの流れ（全自動）</h3>
+            </div>
+            <ol class="payment-note-steps">
+              <li>このフォーム送信時に<strong>申込番号</strong>を自動採番し、振込先口座と併せて<strong>確認メールを即時お送り</strong>します。</li>
+              <li>メール記載の銀行口座へ<strong>銀行振込</strong>（お振込期限：申込から7日以内）。<strong>振込人名義はご入力いただいた会社名のみでOK</strong>です（特別な番号併記は不要）。</li>
+              <li>入金が<strong>自動検知</strong>され（通常1営業日以内）、「入金を確認しました」メールが自動送信されます。</li>
+              <li>入金確認後 <strong>5営業日以内に詳細レポート＋60分MTG日程調整リンク</strong>をお届けします。</li>
+            </ol>
+            <p class="payment-note-foot">※ お振込手数料はお客様ご負担となります。<br />※ 領収書・適格請求書（インボイス）の発行に対応しています。<br />※ 導入支援契約に進まれた場合、本費用 ¥5,500（税込）は<strong>初期費用に全額充当</strong>します。</p>
+          </div>
+
           <div class="form-note">
             <p>ご入力いただいた情報は診断レポート作成のみに使用します。</p>
             <p>レポート送付後、ご検討の負担になるような連絡はいたしません。</p>
@@ -212,49 +385,13 @@ import Layout from '../layouts/Layout.astro';
           </div>
 
           <button type="submit" class="btn-primary diag-submit" id="diag-submit">
-            無料診断を受ける
+            <span data-plan-show="free">無料診断を受ける</span>
+            <span data-plan-show="paid" hidden>詳細診断を申し込む（¥5,500 税込）</span>
           </button>
         </form>
       </div>
     </section>
 
-    <!-- 次のステップ：詳細レポート vs 直接導入支援の比較 -->
-    <section class="diag-next-section light-section">
-      <div class="container">
-        <h2 class="diag-next-title reveal">レポートを受け取った後は</h2>
-        <p class="diag-next-sub reveal">ご自身の状況に合わせて、次のステップをお選びください。</p>
-        <div class="diag-next-grid reveal-stagger">
-          <div class="diag-next-card">
-            <p class="diag-next-eyebrow">じっくり判断したい方向け</p>
-            <h3>詳細レポート + 60分MTG</h3>
-            <p class="diag-next-price">¥5,000<span class="diag-next-tax">（税別）</span></p>
-            <ul class="diag-next-list">
-              <li>5〜8ページの詳細レポート</li>
-              <li>御社のIT環境に合わせた個別提案</li>
-              <li>アーキテクチャ図と導入支援の具体額</li>
-              <li>60分のオンラインMTG（質疑応答含む）</li>
-            </ul>
-            <p class="diag-next-foot">「もう少し具体像を見てから判断したい」方へ</p>
-          </div>
-          <div class="diag-next-card diag-next-card--accent">
-            <p class="diag-next-eyebrow">すぐ実装したい方向け</p>
-            <h3>直接導入支援に進む</h3>
-            <p class="diag-next-price">¥30,000<span class="diag-next-tax">（税別・成約時に初期費用へ充当）</span></p>
-            <ul class="diag-next-list">
-              <li>90分のヒアリング（ビデオ通話）</li>
-              <li>導入提案書 + 具体的な見積</li>
-              <li>そのまま本契約に進めます</li>
-              <li>成約時は¥30,000を本契約の初期費用へ充当</li>
-            </ul>
-            <p class="diag-next-foot">「方向性は決まっている、すぐ始めたい」方へ</p>
-          </div>
-        </div>
-        <p class="diag-next-note reveal">
-          ※ 直接導入支援にお進みいただいた場合、¥5,000の詳細レポート料金は発生しません。<br />
-          ご検討段階に合わせてお選びください。
-        </p>
-      </div>
-    </section>
   </main>
 </Layout>
 
@@ -262,12 +399,282 @@ import Layout from '../layouts/Layout.astro';
   // タイムスタンプ設定（いたずら防止）
   document.getElementById('_t').value = String(Date.now());
 
+  // ===== プラン切替（free / paid） =====
+  (function() {
+    var planField = document.getElementById('plan-field');
+    var planTargets = document.querySelectorAll('[data-plan-show]');
+    var planButtons = document.querySelectorAll('.plan-switch-btn');
+
+    function applyPlan(plan) {
+      planButtons.forEach(function(btn) {
+        var on = btn.getAttribute('data-plan') === plan;
+        btn.classList.toggle('is-active', on);
+        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      planTargets.forEach(function(el) {
+        var allowed = (el.getAttribute('data-plan-show') || '').split(',').map(function(s) { return s.trim(); });
+        el.hidden = allowed.indexOf(plan) === -1;
+      });
+      if (planField) planField.value = plan;
+      document.body.setAttribute('data-plan', plan);
+    }
+
+    planButtons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var plan = btn.getAttribute('data-plan');
+        if (plan) applyPlan(plan);
+      });
+    });
+
+    applyPlan('free');
+  })();
+
   // 二重送信防止
   document.getElementById('diag-form').addEventListener('submit', function() {
     var btn = document.getElementById('diag-submit');
     btn.disabled = true;
-    btn.textContent = '送信中…';
+    var plan = (document.getElementById('plan-field') || {}).value || 'free';
+    btn.textContent = plan === 'paid' ? 'お申込中…' : '送信中…';
   });
+
+  // ===== 業務資料・URLからの自動入力 =====
+  (function() {
+    var fileUpload = document.getElementById('file-upload');
+    var fileNameLabel = document.getElementById('upload-file-name');
+    var extractFileBtn = document.getElementById('extract-file-btn');
+    var extractUrlBtn = document.getElementById('extract-url-btn');
+    var urlInput = document.getElementById('url-input');
+    var extractStatus = document.getElementById('extract-status');
+    var tabs = document.querySelectorAll('.upload-tab');
+    var panels = document.querySelectorAll('.upload-mode-panel');
+
+    if (!extractStatus) return;
+
+    function setStatus(text, kind) {
+      extractStatus.textContent = text;
+      extractStatus.className = 'extract-status ' + (kind || 'info');
+      extractStatus.hidden = false;
+    }
+
+    var FIELD_LABELS = {
+      company_name: '企業・団体名',
+      person_name: 'ご担当者名',
+      email: 'メールアドレス',
+      industry: '業種',
+      employee_count: '従業員数',
+      business_description: '事業内容',
+      daily_tasks: '日常業務',
+      current_tools: '使用ITツール',
+      business_age: '創業・設立',
+      service_area: '営業エリア',
+      target_customer: '主要顧客層',
+      annual_revenue_range: '売上規模感',
+      decision_timeline: 'ご検討時期',
+      past_it_experience: '過去のIT導入経験',
+    };
+
+    var EXTRAS_LABELS = {
+      representative_name: '代表者名',
+      phone: '電話番号',
+      address: '住所',
+      fax: 'FAX番号',
+      website: 'ウェブサイト',
+    };
+
+    function renderFactCheck(data) {
+      var factWrap = document.getElementById('extract-factcheck');
+      var notesUl = document.getElementById('factcheck-notes');
+      var extrasWrap = document.getElementById('extract-extras-wrap');
+      var extrasList = document.getElementById('extract-extras-list');
+      if (!factWrap || !notesUl) return;
+
+      notesUl.innerHTML = '';
+      var notes = Array.isArray(data.notes) ? data.notes : [];
+      if (notes.length === 0) {
+        var li = document.createElement('li');
+        li.className = 'factcheck-note factcheck-note--info';
+        li.textContent = '抽出に対する注意事項はありません。各欄の内容をご確認ください。';
+        notesUl.appendChild(li);
+      } else {
+        notes.forEach(function(n) {
+          var li = document.createElement('li');
+          var level = (n && n.level) === 'warn' ? 'warn' : 'info';
+          li.className = 'factcheck-note factcheck-note--' + level;
+          var fieldLabel = n.field && FIELD_LABELS[n.field] ? '【' + FIELD_LABELS[n.field] + '】' : '';
+          li.textContent = fieldLabel + (n.message || '');
+          notesUl.appendChild(li);
+        });
+      }
+
+      // extras
+      if (extrasList && extrasWrap) {
+        extrasList.innerHTML = '';
+        var extras = data.extracted_extras || {};
+        var extraKeys = Object.keys(extras).filter(function(k) { return extras[k] && String(extras[k]).trim(); });
+        if (extraKeys.length === 0) {
+          extrasWrap.hidden = true;
+        } else {
+          extraKeys.forEach(function(k) {
+            var dt = document.createElement('dt');
+            dt.textContent = EXTRAS_LABELS[k] || k;
+            var dd = document.createElement('dd');
+            dd.textContent = extras[k];
+            extrasList.appendChild(dt);
+            extrasList.appendChild(dd);
+          });
+          extrasWrap.hidden = false;
+        }
+      }
+      factWrap.hidden = false;
+    }
+
+    function applyFields(data) {
+      var fields = data.fields || {};
+      var setIf = function(id, val) {
+        if (val) {
+          var el = document.getElementById(id);
+          if (el) {
+            el.value = val;
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+      };
+      // 基本
+      setIf('company_name', fields.company_name);
+      setIf('person_name', fields.person_name);
+      setIf('email', fields.email);
+      setIf('industry', fields.industry);
+      setIf('employee_count', fields.employee_count);
+      setIf('business_description', fields.business_description);
+      setIf('daily_tasks', fields.daily_tasks);
+      setIf('current_tools', fields.current_tools);
+      // 詳細レポート向け追加項目
+      setIf('business_age', fields.business_age);
+      setIf('service_area', fields.service_area);
+      setIf('target_customer', fields.target_customer);
+      setIf('annual_revenue_range', fields.annual_revenue_range);
+      setIf('decision_timeline', fields.decision_timeline);
+      setIf('past_it_experience', fields.past_it_experience);
+
+      var filledCount = 0;
+      Object.keys(fields).forEach(function(k) {
+        if (fields[k] && String(fields[k]).trim()) filledCount++;
+      });
+
+      var msg;
+      if (data.mock) {
+        msg = 'モック応答（APIキー未設定）です。本番環境では実データから抽出されます。' + filledCount + '項目を反映しました。';
+      } else if (filledCount === 0) {
+        msg = '読み取り結果が空でした。情報源を変更して再度お試しください。';
+      } else {
+        msg = filledCount + '項目をフォームに反映しました。下記の確認内容と合わせてご確認・修正をお願いします。';
+      }
+      setStatus(msg, filledCount === 0 ? 'error' : 'info');
+
+      // ファクトチェック表示
+      renderFactCheck(data);
+    }
+
+    function postExtract(payload, btn, runningMsg) {
+      btn.disabled = true;
+      setStatus(runningMsg, 'info');
+      fetch('/api/file-extract', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data.error) {
+            setStatus(data.error, 'error');
+          } else {
+            applyFields(data);
+          }
+          btn.disabled = false;
+        })
+        .catch(function(err) {
+          console.error('[file-extract] fetch error:', err);
+          setStatus('通信エラーが発生しました。時間をおいて再度お試しください。', 'error');
+          btn.disabled = false;
+        });
+    }
+
+    // タブ切替
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var mode = tab.getAttribute('data-mode');
+        tabs.forEach(function(t) {
+          var on = t === tab;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        panels.forEach(function(p) {
+          p.hidden = p.getAttribute('data-panel') !== mode;
+        });
+      });
+    });
+
+    // ファイル選択時のラベル更新
+    if (fileUpload && fileNameLabel) {
+      fileUpload.addEventListener('change', function() {
+        var file = fileUpload.files && fileUpload.files[0];
+        fileNameLabel.textContent = file ? file.name : 'ファイルを選択';
+      });
+    }
+
+    // ファイル → 抽出
+    if (extractFileBtn && fileUpload) {
+      extractFileBtn.addEventListener('click', function() {
+        var file = fileUpload.files && fileUpload.files[0];
+        if (!file) {
+          setStatus('ファイルを選択してください。', 'error');
+          return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          setStatus('ファイルサイズが上限（5MB）を超えています。', 'error');
+          return;
+        }
+        var reader = new FileReader();
+        reader.onload = function() {
+          var dataUrl = String(reader.result || '');
+          var match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+          if (!match) {
+            setStatus('ファイルの読み込みに失敗しました。', 'error');
+            return;
+          }
+          postExtract(
+            { fileBase64: match[2], mediaType: match[1], fileName: file.name },
+            extractFileBtn,
+            'AIが書類を読み取り中… 通常10〜30秒かかります。'
+          );
+        };
+        reader.onerror = function() {
+          setStatus('ファイルの読み込みに失敗しました。', 'error');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // URL → 抽出
+    if (extractUrlBtn && urlInput) {
+      extractUrlBtn.addEventListener('click', function() {
+        var url = urlInput.value.trim();
+        if (!url) {
+          setStatus('URLを入力してください。', 'error');
+          return;
+        }
+        if (!/^https?:\/\//i.test(url)) {
+          setStatus('http:// または https:// で始まるURLを入力してください。', 'error');
+          return;
+        }
+        postExtract(
+          { url: url },
+          extractUrlBtn,
+          'ページを読み取り中… 通常10〜30秒かかります。'
+        );
+      });
+    }
+  })();
 
   // Canvas パーティクルネットワーク
   (function() {
@@ -347,6 +754,11 @@ import Layout from '../layouts/Layout.astro';
 </script>
 
 <style>
+  /* HTML hidden属性を最優先で効かせる（display: flex/grid 等の上書きを防ぐ） */
+  [hidden] {
+    display: none !important;
+  }
+
   .diag-hero {
     position: relative;
     padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
@@ -368,7 +780,7 @@ import Layout from '../layouts/Layout.astro';
     margin: 0 0 1rem;
   }
   .diag-hero h1 {
-    font-size: clamp(28px, 4.5vw, 42px);
+    font-size: clamp(28px, 4.5vw, 44px);
     font-weight: 800;
     color: var(--heading);
     margin: 0 0 1rem;
@@ -377,6 +789,14 @@ import Layout from '../layouts/Layout.astro';
     justify-content: center;
     gap: 12px;
     flex-wrap: wrap;
+    letter-spacing: -.01em;
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .diag-hero h1 .diag-badge {
+    -webkit-text-fill-color: var(--brand, #A259FF);
   }
   .diag-badge {
     font-size: clamp(12px, 1.4vw, 15px);
@@ -388,11 +808,198 @@ import Layout from '../layouts/Layout.astro';
     border-radius: 6px;
     letter-spacing: .05em;
   }
-  .diag-sub {
-    color: rgba(255, 255, 255, .7);
-    font-size: clamp(14px, 1.8vw, 16px);
-    line-height: 1.7;
+
+  /* ===== プラン切替（free / paid） ===== */
+  .plan-switcher {
+    display: inline-flex;
+    background: rgba(255, 255, 255, .85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(162, 89, 255, .2);
+    border-radius: 999px;
+    padding: 5px;
+    gap: 4px;
+    margin: 14px auto 28px;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, .06);
+  }
+  .plan-switch-btn {
+    background: none;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    transition: background .25s ease, color .25s ease, box-shadow .25s ease;
+    color: var(--muted, #64748b);
+    font-family: inherit;
+    min-width: 140px;
+  }
+  .plan-switch-btn:hover {
+    color: var(--text);
+    background: rgba(162, 89, 255, .05);
+  }
+  .plan-switch-btn.is-active {
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(162, 89, 255, .3);
+  }
+  .plan-switch-name {
+    font-weight: 700;
+    font-size: .92rem;
+    letter-spacing: .02em;
+  }
+  .plan-switch-price {
+    font-size: .72rem;
+    opacity: .85;
+    letter-spacing: .04em;
+  }
+  @media (max-width: 480px) {
+    .plan-switcher {
+      flex-direction: column;
+      border-radius: 16px;
+      width: min(100%, 320px);
+    }
+    .plan-switch-btn {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 12px 20px;
+    }
+  }
+
+  /* ===== 支払い案内（paid時のみ表示） ===== */
+  .payment-note {
+    margin: 0 0 24px;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, rgba(162, 89, 255, .06) 0%, rgba(26, 188, 254, .05) 100%);
+    border: 1px solid rgba(162, 89, 255, .25);
+    border-radius: 14px;
+  }
+  .payment-note-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .payment-note-head i {
+    color: var(--brand, #A259FF);
+    font-size: 1.1rem;
+  }
+  .payment-note-head h3 {
     margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .payment-note-steps {
+    margin: 0 0 12px;
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: .9rem;
+    line-height: 1.75;
+    color: var(--text);
+  }
+  .payment-note-steps li::marker {
+    color: var(--brand, #A259FF);
+    font-weight: 700;
+  }
+  .payment-note-steps strong {
+    color: var(--heading);
+    font-weight: 700;
+  }
+  .payment-note-foot {
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(162, 89, 255, .15);
+    font-size: .82rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ===== 振込先情報 ===== */
+  .bank-info {
+    margin: 16px 0 12px;
+    padding: 16px 18px;
+    background: rgba(255, 255, 255, .85);
+    border: 1px solid rgba(162, 89, 255, .2);
+    border-radius: 10px;
+  }
+  .bank-info-title {
+    margin: 0 0 12px;
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--heading);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .bank-info-title i {
+    color: var(--brand, #A259FF);
+  }
+  .bank-info-list {
+    margin: 0 0 12px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 16px;
+    font-size: .88rem;
+    line-height: 1.6;
+  }
+  .bank-info-list dt {
+    color: var(--muted);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .bank-info-list dd {
+    margin: 0;
+    color: var(--text);
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: .92rem;
+  }
+  .bank-info-list dd strong {
+    font-family: inherit;
+    color: var(--heading);
+    font-size: 1rem;
+  }
+  .bank-info-note {
+    margin: 0;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(162, 89, 255, .15);
+    font-size: .78rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .bank-info-note strong {
+    color: var(--heading);
+    font-weight: 700;
+  }
+  @media (max-width: 540px) {
+    .bank-info-list {
+      grid-template-columns: 1fr;
+      gap: 2px 0;
+    }
+    .bank-info-list dt {
+      margin-top: 8px;
+    }
+    .bank-info-list dt:first-child {
+      margin-top: 0;
+    }
+  }
+  .diag-sub {
+    color: var(--text, #334155);
+    font-size: clamp(14px, 1.8vw, 16px);
+    line-height: 1.85;
+    margin: 0;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+  .diag-sub strong {
+    color: var(--heading, #0f172a);
+    font-weight: 700;
   }
 
   /* ===== Promise (お約束カード) ===== */
@@ -504,6 +1111,270 @@ import Layout from '../layouts/Layout.astro';
     max-width: 640px;
     margin: 0 auto;
     position: relative;
+  }
+
+  /* ===== Upload (業務資料から自動入力) ===== */
+  .upload-fieldset {
+    border: 1px dashed rgba(162, 89, 255, .4);
+    background: rgba(162, 89, 255, .03);
+  }
+  .upload-fieldset legend {
+    color: var(--brand, #A259FF);
+  }
+  .upload-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .upload-hint i {
+    color: var(--brand, #A259FF);
+    font-size: 1.1rem;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .upload-hint p {
+    margin: 0;
+    font-size: .88rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .upload-hint small {
+    color: var(--muted);
+    font-size: .78rem;
+  }
+  .upload-tabs {
+    display: flex;
+    gap: 4px;
+    margin: 0 0 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .upload-tab {
+    background: none;
+    border: none;
+    padding: 10px 16px;
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+    border-bottom: 2px solid transparent;
+    transition: color .2s ease, border-color .2s ease, background .2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .upload-tab:hover {
+    color: var(--text);
+    background: rgba(162, 89, 255, .04);
+  }
+  .upload-tab.is-active {
+    color: var(--brand, #A259FF);
+    border-bottom-color: var(--brand, #A259FF);
+  }
+  .upload-tab i {
+    font-size: .85rem;
+  }
+  .upload-mode-panel {
+    margin: 0 0 4px;
+  }
+  .upload-mode-note {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .upload-mode-note small {
+    font-size: 1em;
+  }
+  .upload-url-input {
+    flex: 1 1 320px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: .9rem;
+    background: #ffffff;
+    color: var(--text);
+    transition: border-color .2s ease;
+    min-width: 0;
+  }
+  .upload-url-input:focus {
+    outline: none;
+    border-color: var(--brand, #A259FF);
+    box-shadow: 0 0 0 3px rgba(162, 89, 255, .12);
+  }
+  .upload-controls--url {
+    align-items: stretch;
+  }
+  .upload-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .upload-controls input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+  .upload-file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: .88rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .upload-file-label:hover {
+    border-color: var(--brand, #A259FF);
+    background: rgba(162, 89, 255, .04);
+  }
+  .upload-file-label i {
+    color: var(--brand, #A259FF);
+    flex-shrink: 0;
+  }
+  .upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: .88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    box-shadow: 0 4px 14px rgba(162, 89, 255, .25);
+  }
+  .upload-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(162, 89, 255, .35);
+  }
+  .upload-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .extract-status {
+    margin: 14px 0 0;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: .85rem;
+    line-height: 1.6;
+  }
+  .extract-status.info {
+    background: rgba(91, 127, 255, .08);
+    border: 1px solid rgba(91, 127, 255, .2);
+    color: var(--text);
+  }
+  .extract-status.error {
+    background: rgba(220, 38, 38, .06);
+    border: 1px solid rgba(220, 38, 38, .25);
+    color: #b91c1c;
+  }
+
+  /* ===== ファクトチェック表示 ===== */
+  .extract-factcheck {
+    margin-top: 14px;
+    padding: 16px 18px;
+    background: linear-gradient(180deg, rgba(162, 89, 255, .04) 0%, rgba(26, 188, 254, .04) 100%);
+    border: 1px solid rgba(162, 89, 255, .25);
+    border-radius: 12px;
+  }
+  .factcheck-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .factcheck-head i {
+    color: var(--brand, #A259FF);
+    font-size: 1rem;
+  }
+  .factcheck-head h3 {
+    margin: 0;
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .factcheck-notes {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .factcheck-note {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: .85rem;
+    line-height: 1.7;
+    color: var(--text);
+    border-left: 3px solid;
+  }
+  .factcheck-note--info {
+    background: rgba(26, 188, 254, .07);
+    border-left-color: #1ABCFE;
+  }
+  .factcheck-note--warn {
+    background: rgba(245, 158, 11, .08);
+    border-left-color: #F59E0B;
+    color: #92400E;
+  }
+  .extract-extras {
+    margin-top: 10px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, .55);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .extras-title {
+    margin: 0 0 8px;
+    font-size: .8rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+  .extras-list {
+    margin: 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 4px 14px;
+    font-size: .85rem;
+  }
+  .extras-list dt {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .extras-list dd {
+    margin: 0;
+    color: var(--text);
+    word-break: break-all;
+  }
+
+  /* ===== 詳細レポート向け追加項目（任意） ===== */
+  .extra-fieldset {
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, #ffffff 0%, rgba(162, 89, 255, .025) 100%);
+  }
+  .extra-fieldset legend {
+    color: var(--brand, #A259FF);
   }
 
   fieldset {

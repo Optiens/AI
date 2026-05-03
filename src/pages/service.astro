@@ -4,17 +4,42 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
 ---
 
 <Layout
-  title="AI活用支援サービス | Optiens"
-  description="小規模事業者向けAI支援メニュー。AI活用診断（無料/詳細版）・AI入門ワークショップ・導入支援・保守を一貫提供。エンタープライズ大規模CRM経験10年超を小規模事業者の規模に最適化。"
+  title="AI業務自動化・AIエージェント導入支援 | Optiens（全国オンライン対応）"
+  description="中小企業・小規模事業者向けAI業務自動化サービス。AI活用診断（無料/詳細版）・AI入門ワークショップ・導入支援・保守を一貫提供。全国オンライン対応で、エンタープライズ大規模CRM経験10年超を御社の規模に最適化します。"
+  canonical="https://optiens.com/service"
 >
   <main>
     <!-- ヒーロー -->
     <section class="ac-hero light-section">
       <ParticleCanvas id="ac-net" />
       <div class="container text-center" style="position:relative;z-index:1;">
-        <h1>時間と可能性を<br class="sp-only" />広げる手助けを。</h1>
-        <p class="hero-sub">雑務はAIエージェントに。<br />あなたはあなたにしか出来ないことを。</p>
+        <h1>定型業務の9割を自動化。</h1>
+        <p class="hero-sub">判断と創造に集中できる経営へ。</p>
         <a href="/free-diagnosis" class="btn-primary hero-cta">無料AI診断を受ける</a>
+      </div>
+    </section>
+
+    <!-- なぜ、いまAIなのか -->
+    <section class="ac-section light-section ac-why-section">
+      <div class="container">
+        <h2 class="section-title reveal">なぜ、いまAIなのか</h2>
+        <div class="why-grid reveal-stagger">
+          <div class="why-item">
+            <span class="why-num">01</span>
+            <h3>AIが業務で使える時代になった</h3>
+            <p>生成AIとAIエージェントが、対話だけでなく業務を自律的にこなせる段階まで進化しました。</p>
+          </div>
+          <div class="why-item">
+            <span class="why-num">02</span>
+            <h3>中小企業でも、大企業の仕組みを持てる</h3>
+            <p>クラウド × AIエージェントの構成で、かつては大企業の専有だった業務システムが小規模事業者にも実装可能になりました。</p>
+          </div>
+          <div class="why-item">
+            <span class="why-num">03</span>
+            <h3>人手だけで回す時代は終わった</h3>
+            <p>労働人口の減少が続く中、「人がやらなくていい仕事を見極める」ことが新しいスタンダードです。</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -22,7 +47,9 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     <section class="ac-section light-section ac-service-section">
       <div class="container">
         <h2 class="section-title reveal">サービスメニュー</h2>
-        <div class="service-grid service-grid-4 reveal-stagger">
+        <p class="section-sub reveal">活用診断 → 導入支援 → 保守 の3ステップで伴走します。</p>
+
+        <div class="service-grid service-grid-3 reveal-stagger">
 
           <!-- 1. AI活用診断（無料/詳細を内包） -->
           <div class="ac-card gradient-border ac-service-card">
@@ -49,7 +76,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
             <div class="plan-tier plan-tier-upgrade">
               <div class="plan-tier-head">
                 <span class="plan-tier-name">詳細版 + MTG</span>
-                <span class="plan-tier-price">5,000円<span class="price-unit">（税別）</span></span>
+                <span class="plan-tier-price">¥5,500<span class="price-unit">（税込）</span></span>
               </div>
               <ul class="ac-list">
                 <li>全業務の自動化提案（5〜7件）</li>
@@ -69,15 +96,14 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
             </div>
             <div class="ac-badge">STEP 2</div>
             <h3>導入支援</h3>
-            <p class="ac-desc">自動化システムの設計・構築・納品。仕組みごとお渡しします。プラン内に1〜2回のヒアリング＋必要に応じたad-hoc MTGを含みます。</p>
-            <p class="ac-price">金額は内容に応じて個別にお見積もり</p>
+            <p class="ac-desc">自動化システムの設計・構築・納品。御社の業務に合わせた仕組みごとお渡しします。<strong>「準備時間がほぼゼロ」「10時間が1時間に」</strong>といった具体的な業務インパクトを目標値に置いて設計します。</p>
+            <p class="ac-price ac-price--soft">無料AI診断後に、業務規模・要件に合わせて個別にご提案</p>
             <ul class="ac-list">
               <li>自動化ワークフローの設計・構築</li>
-              <li>自動化システム一式の納品</li>
+              <li>自動化システム一式の納品（御社所有・月額ライセンス料なし）</li>
               <li>操作手順の共有</li>
               <li>セットアップ支援・初期動作確認</li>
               <li>ランニングコストを抑えた運用設計</li>
-              <li>プラン内に1〜2回のヒアリング＋ad-hoc MTGを含む</li>
             </ul>
           </div>
 
@@ -88,74 +114,39 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
             </div>
             <div class="ac-badge">STEP 3</div>
             <h3>保守</h3>
-            <p class="ac-desc">自動化システムの改善・拡張・トラブル対応を継続サポート。</p>
-
-            <div class="plan-tier">
-              <div class="plan-tier-head">
-                <span class="plan-tier-name">ライト</span>
-                <span class="plan-tier-price">月額3万円〜<span class="price-unit">（税別）</span></span>
-              </div>
-              <ul class="ac-list">
-                <li>メール・チャットでの相談対応</li>
-                <li>軽微なワークフロー改善</li>
-                <li>システムトラブル対応</li>
-                <li>月3時間までの対応を含む</li>
-              </ul>
-            </div>
-
-            <div class="plan-tier plan-tier-upgrade">
-              <div class="plan-tier-head">
-                <span class="plan-tier-name">スタンダード</span>
-                <span class="plan-tier-price">月額5万円</span>
-              </div>
-              <ul class="ac-list">
-                <li>MTGの実施・参加</li>
-                <li>ワークフローの機能追加・改善</li>
-                <li>新規業務の自動化検討・設計</li>
-                <li>月8時間までの対応を含む</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- 4. AI入門ワークショップ -->
-          <div class="ac-card gradient-border ac-service-card">
-            <div class="ac-img-wrap">
-              <img src="/images/services/workshop.png" alt="AI入門ワークショップ" loading="lazy" />
-            </div>
-            <div class="ac-badge">WORKSHOP</div>
-            <h3>AI入門ワークショップ</h3>
-            <p class="ac-desc">「触ったことがない」「続かなかった」方向けの2時間ハンズオン。自分の業務で1つ完成させて持ち帰れます。</p>
-            <p class="ac-price">¥50,000<span class="price-unit">／2時間（税別）</span></p>
+            <p class="ac-desc">自動化システムの改善・拡張・トラブル対応を継続サポート。AIエージェントの真価は<strong>運用しながら育てるフィードバックループ</strong>にあります。導入後の改善運用を伴走します。</p>
+            <p class="ac-price ac-price--soft">導入支援の段階で、運用に応じたプランをご提案</p>
             <ul class="ac-list">
-              <li>1〜10名一律</li>
-              <li>オンライン or 北杜市内対面</li>
-              <li>業務に近い実例でハンズオン演習</li>
-              <li>質疑応答 + 次の一歩のアドバイス</li>
-              <li>山梨県外の対面: 別途交通費</li>
+              <li>システムの改善・拡張・機能追加</li>
+              <li>トラブル対応・運用相談</li>
+              <li>新規業務の自動化検討・設計</li>
+              <li>フィードバックループの運用代行</li>
+              <li>定例MTGの実施・参加（プランによる）</li>
             </ul>
           </div>
 
         </div>
 
-        <!-- その他のメニュー -->
-        <div class="extra-menu reveal">
-          <h3 class="extra-menu-title">その他のメニュー</h3>
-          <div class="extra-menu-grid">
-            <div class="extra-menu-card">
-              <div class="extra-menu-head">
-                <span class="extra-menu-badge">直接導入希望</span>
-                <h4>有償要件定義</h4>
-              </div>
-              <p class="extra-menu-price">30,000円<span class="price-unit">（税別）</span></p>
-              <p class="extra-menu-desc">無料診断を経ずに、直接導入支援をご希望の方向け。業務ヒアリング・要件整理・導入提案書（3〜5p）の作成までを行います。導入支援に進んだ場合、本費用は<strong>初期費用に全額充当</strong>します。</p>
-            </div>
-            <div class="extra-menu-card">
-              <div class="extra-menu-head">
-                <span class="extra-menu-badge">過去顧客向け</span>
-                <h4>スポット相談</h4>
-              </div>
-              <p class="extra-menu-price">18,000円<span class="price-unit">／90分（税別）</span></p>
-              <p class="extra-menu-desc">過去にご契約いただいた方が、検収後3ヶ月以内に再度ご相談される場合のメニューです。新規業務の追加検討・運用上の疑問など、単発でご利用いただけます。</p>
+        <!-- オプション: AI入門ワークショップ -->
+        <div class="workshop-wrap reveal">
+          <p class="workshop-label">オプション</p>
+          <h3 class="workshop-section-title">AI入門ワークショップ</h3>
+          <p class="workshop-section-sub">チャットAIとAIエージェントの違いを体感し、御社業務向けのAI活用イメージを掴むためのワークショップです。事前ヒアリングをもとに、講師がAI活用候補をご提案し、そのうち1件をライブデモでお見せします。</p>
+          <div class="workshop-grid workshop-grid--single">
+            <div class="ac-card gradient-border workshop-tier">
+              <div class="ac-badge">WORKSHOP</div>
+              <h4 class="workshop-tier-title">はじめてのAIエージェント体験</h4>
+              <p class="workshop-target"><strong>対象</strong>：これからAI活用を検討する経営者・現場担当者</p>
+              <ul class="ac-list">
+                <li>1社あたり最大5名様まで参加可</li>
+                <li>オンラインのみ（全国対応）</li>
+                <li>申込時に事前ヒアリングシートをご提出</li>
+                <li>講義：チャットAI と AIエージェントの違い・活用シーン・リスク</li>
+                <li>講師デモ：事前ヒアリングから抽出したAI活用候補をご提示し、うち1件をその場で動くデモとしてお見せ</li>
+                <li>ハンズオン：参加者ご自身でAIツールに触れていただく時間</li>
+                <li>質疑・次の一歩のご案内</li>
+              </ul>
+              <p class="ac-price">¥38,500<span class="price-unit">／2時間・1社あたり（税込）</span></p>
             </div>
           </div>
         </div>
@@ -165,18 +156,18 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     <!-- 強み：カスタムUI構築力 -->
     <section class="ac-section light-section ac-custom-section">
       <div class="container">
-        <h2 class="section-title reveal">業務に合わせた、御社専用の仕組み</h2>
-        <p class="section-sub reveal">SaaSに業務を合わせるのではなく、業務にUIを合わせます。</p>
+        <h2 class="section-title reveal">業務に合わせた、専用の仕組み</h2>
+        <p class="section-sub reveal">既製の仕組みを"借りる"のではなく、御社の業務に合わせて"建てる"。</p>
         <div class="custom-grid reveal-stagger">
           <div class="ac-card gradient-border">
             <div class="ac-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
-            <h3>業界標準SaaSに縛られない</h3>
-            <p>既製の業務SaaSをそのまま導入する場合、画面や項目を業務に合わせきれず運用が形骸化することもあります。弊社は<strong>クラウドDB + 高速Webフロントエンド + AIエージェント</strong>の構成で、御社の業務フローに沿った画面を設計・構築します。詳細な技術構成は有償レポートまたはご相談時にご説明します。</p>
+            <h3>既製の仕組みに、業務を合わせない</h3>
+            <p>市販の業務システム<small>(業界用語で「SaaS」)</small>は、完成済みの賃貸住宅のようなものです。すぐ入居できる反面、間取りや設備は他社と共通です。弊社は御社の業務動線に沿って画面と処理の流れを一から設計します。例えるなら、御社専用に図面を引いた<strong>"注文住宅" 型の仕組み</strong>。市販システムでは合わない部分を、設計の段階から吸収します。</p>
           </div>
           <div class="ac-card gradient-border">
             <div class="ac-icon"><i class="fa-solid fa-key"></i></div>
-            <h3>月額ライセンス料ゼロの自社所有</h3>
-            <p>納品するシステムは御社の所有物です。利用人数が増えてもSaaSのような従量ライセンス料は発生しません。データは御社専用のクラウドDBに格納され、ベンダーロックインなく将来の移行も自由です。</p>
+            <h3>納品後はずっと御社の財産</h3>
+            <p>システムも、蓄積したデータも、御社の所有物として残ります。スタッフ人数が増えてもライセンス料の追加負担は発生しません。データは御社専用のクラウドのデータベースに保管されるので、将来別の事業者へ切り替える場合もそのまま持ち出して使い続けられます<small>(業界用語の「ベンダーロックイン」が起こりません)</small>。</p>
           </div>
           <div class="ac-card gradient-border">
             <div class="ac-icon"><i class="fa-solid fa-share-nodes"></i></div>
@@ -189,7 +180,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
           <div class="custom-showcase-icon"><i class="fa-solid fa-flask"></i></div>
           <div class="custom-showcase-text">
             <p class="custom-showcase-title">弊社自身がAIエージェントで社内ツールを運用しています</p>
-            <p class="custom-showcase-desc">CRM・書類添削ツール・水耕栽培IoTダッシュボードなどを、弊社自身がAIエージェントを使って社内運用しています。日々の運用で得た知見をベースに、お客様の業務に合った構成を案件ごとに設計します。技術選定はその時々の最適解を選びますが、設計と運用に対する考え方は一貫しています。</p>
+            <p class="custom-showcase-desc">CRM・書類添削ツール・<a href="/free-diagnosis">業務資料からのフォーム自動入力</a>・<a href="/quote-generator">見積書ドラフト生成</a>・<a href="/inquiry-routing">問い合わせ自動振り分け</a>などを、弊社自身がAIエージェントを使って社内運用または公開デモとして提供しています。日々の運用で得た知見をベースに、お客様の業務に合った構成を案件ごとに設計します。技術選定はその時々の最適解を選びますが、設計と運用に対する考え方は一貫しています。</p>
           </div>
         </div>
       </div>
@@ -201,40 +192,35 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
         <div class="examples-banner reveal">
           <div class="examples-banner-icon"><i class="fa-solid fa-book-open"></i></div>
           <div class="examples-banner-text">
-            <h2 class="examples-banner-title">業種別の活用事例も用意しています</h2>
-            <p class="examples-banner-desc">11業種のサンプルレポートと、業種を問わず効く共通6事例を1ページにまとめています。御社に近い業種・近い課題を起点にご覧ください。</p>
+            <h2 class="examples-banner-title">11業種＋経営者向けの実例</h2>
+            <p class="examples-banner-desc">業種別11業種のサンプルレポート＋業種を問わず効く共通6事例＋経営者・役員向けAIブリーフィングを公開中。御社に近い業種・近い課題からご覧ください。</p>
           </div>
           <a href="/ai-examples" class="btn-primary examples-banner-btn">事例集を見る <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
     </section>
 
-    <!-- 選ばれる理由 -->
-    <section class="ac-section light-section ac-reason-section">
+    <!-- 担当コンサルタント -->
+    <section class="ac-section light-section ac-consultant-section">
       <div class="container">
-        <h2 class="section-title reveal">Optiensが選ばれる理由</h2>
-        <div class="reason-grid">
-          <div class="reason-item reveal">
-            <span class="reason-num">01</span>
-            <div class="reason-content">
-              <h3>地域の事業を理解している</h3>
-              <p>地域の事業者の実情を理解した、現実的な提案ができます。観光・農業・飲食——その土地ならではの課題に向き合います。</p>
-            </div>
-          </div>
-          <div class="reason-item reveal">
-            <span class="reason-num">02</span>
-            <div class="reason-content">
-              <h3>大企業向けのシステム構築経験を、小さな事業に</h3>
-              <p>大規模CRMエンジニアとして培った業務分析力で、小規模事業者に適したシンプルな仕組みを設計します。大企業の手法を、あなたの規模に最適化して届けます。</p>
-            </div>
-          </div>
-          <div class="reason-item reveal">
-            <span class="reason-num">03</span>
-            <div class="reason-content">
-              <h3>導入で終わらない。人を育てる支援</h3>
-              <p>ツールを入れて終わりではなく、あなた自身やスタッフがAIを使いこなせる状態を目指します。自動化できるところは自動化し、人は判断と創造に集中する——そんな組織づくりを伴走します。</p>
-            </div>
-          </div>
+        <h2 class="section-title reveal">担当コンサルタント</h2>
+        <p class="section-sub reveal">すべての案件を、コンサルタント本人が直接担当します。<br class="pc-only" />窓口・分析・実装・保守まで一貫責任で伴走します。</p>
+        <div class="consultant-grid reveal-stagger">
+          <a href="/consultants/takahashi-daichi" class="consultant-card-link reveal" aria-label="髙橋 大地 のプロフィール詳細を見る">
+            <article class="consultant-card-compact">
+              <div class="consultant-avatar-sm" aria-hidden="true">
+                <span class="consultant-initial-sm">T</span>
+              </div>
+              <div class="consultant-id-sm">
+                <p class="consultant-role-sm">代表社員 / シニアAIコンサルタント</p>
+                <h3 class="consultant-name-sm">髙橋 大地<span class="consultant-name-en-sm">Daichi Takahashi</span></h3>
+                <p class="consultant-tagline-sm">"業務分析 × 実装の一貫経験" を、御社の現場に。</p>
+              </div>
+              <span class="consultant-card-arrow" aria-hidden="true">
+                <i class="fa-solid fa-arrow-right"></i>
+              </span>
+            </article>
+          </a>
         </div>
       </div>
     </section>
@@ -249,52 +235,16 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
             <p>対話型AIは「質問すると答えてくれる」ツールです。一方、AIエージェントは「指示を出すと、複数の作業を自律的にこなす」仕組みです。例えば、対話型AIは「メールの文面を考えて」と頼めば文面を返しますが、AIエージェントは「受信メールを確認し、内容に応じて返信を下書きし、対応が必要なものだけ通知する」といった一連の業務を自動で実行します。Optiensが構築するのは、このAIエージェントによる業務自動化の仕組みです。</p>
           </details>
           <details class="faq-item">
-            <summary>AIオーケストレーションとは何ですか？</summary>
-            <p>複数のAIエージェントを連携させ、ひとつの業務フローとして自動運用する仕組みです。例えば、「問い合わせメールを受信→内容を分類→回答を下書き→担当者に通知」という流れを、それぞれ専門のAIエージェントが分担して処理します。指揮者がオーケストラをまとめるように、AIエージェント同士を協調させることで、単体では難しい複雑な業務も自動化できます。</p>
-          </details>
-          <details class="faq-item">
-            <summary>既存のCRM（Salesforce等）にAIエージェントを組み込むことはできますか？</summary>
-            <p>対応可能です。代表が大規模CRMの設計・開発に10年以上従事した経験を活かし、現行システムを残したままAIエージェントを統合する設計を行います。新規システムの構築（クラウドDB + AIエージェント）と、既存システムへのAI組み込み、両方のパターンに対応します。既存の業務データやワークフローを活かしながら、AIで運用負荷を軽減するイメージです。</p>
-          </details>
-          <details class="faq-item">
-            <summary>Salesforceの承認ワークフロー（Email Approval）相当の機能を、ライセンス不要で構築できますか？</summary>
-            <p>対応可能です。代表が大規模CRMで承認ワークフロー（Approval Process / Email Approval）を10年以上設計・実装してきた経験を活かし、御社の業務フロー（提出 → レビュー → 承認/差戻し → 監査履歴）をクラウドDB + AIエージェント構成で再現します。月額ライセンス料は不要、御社の業務に合わせた設計が可能です。<a href="/document-editor">書類添削ツール（/document-editor）</a>はその一部を簡易デモ化したものです。</p>
-          </details>
-          <details class="faq-item">
-            <summary>Salesforce Web-to-Case + Lead Routing 相当の問い合わせ自動振り分けは可能ですか？</summary>
-            <p>対応可能です。受信した問い合わせ内容をAIが読み、業種カテゴリ・優先度・推奨対応者・一次応答テンプレートを自動生成する仕組みを構築できます。御社専用版ではSlack/メール通知・CRM登録・自動応答メール送信までを一貫自動化します。<a href="/inquiry-routing">問い合わせ振り分けデモ（/inquiry-routing）</a>で簡易体験できます。</p>
-          </details>
-          <details class="faq-item">
-            <summary>Salesforce CPQ（見積書自動生成）相当の機能をライセンス不要で構築できますか？</summary>
-            <p>対応可能です。案件情報をもとにAIが見積書ドラフトをMarkdown形式で生成する仕組みを基盤として、御社の見積書テンプレート・標準価格表・承認フローと組み合わせたカスタム実装が可能です。<a href="/quote-generator">見積書ドラフト自動生成デモ（/quote-generator）</a>で簡易体験できます。</p>
-          </details>
-          <details class="faq-item">
-            <summary>AIの知識がまったくない私でも大丈夫ですか？</summary>
-            <p>「AIって何？」からのスタートでも問題ありません。必要に応じて専門用語もお伝えしますが、御社の業務に置き換えて具体的にご説明します。</p>
-          </details>
-          <details class="faq-item">
-            <summary>本当に効果が出るか不安です。</summary>
-            <p>まずは無料レポートでROI（投資対効果）を数値で試算します。効果が見込める場合は、5,000円の詳細レポートで具体的な自動化提案と導入費用をご確認いただけます。効果が見込めない場合は正直にお伝えします。</p>
-          </details>
-          <details class="faq-item">
-            <summary>対面での対応は可能ですか？</summary>
-            <p>山梨県内は対面訪問が可能です。それ以外のエリアはオンライン（ビデオ通話）で対応いたします。対面・オンラインとも診断内容に差はありません。MTGは自動文字起こしにより議事録を作成し、共有いたします。</p>
+            <summary>「SaaS」「ベンダーロックイン」など、サイトに出てくる用語が分かりません。</summary>
+            <p>住宅に例えるとシンプルです。<strong>「SaaS」(サース)</strong>は、市販の業務システム——いわば<strong>"完成済みの賃貸住宅"</strong>。すぐ入居でき便利ですが、間取り(画面構成)は他社と共通で、月額の家賃(ライセンス料)を払い続けます。退去(解約)するとデータも引き出しにくくなり、これを<strong>「ベンダーロックイン」</strong>と呼びます。一方、弊社が構築するのは<strong>"注文住宅"型の仕組み</strong>。御社の業務動線に合わせて図面を引き、建てた後は御社の所有物として残ります。データは御社名義の保管庫(クラウドのデータベース)に格納され、将来別の事業者に乗り換えても自由に持ち出せます。<br /><br />既製のSaaSが業務にぴったり合う場合は、そのまま使う方が合理的です。「合わない部分が積み重なってきた」と感じる業務に対して、専用構成をご提案しています。</p>
           </details>
           <details class="faq-item">
             <summary>セキュリティは大丈夫ですか？</summary>
             <p>AIエージェントはAPI経由で動作し、入力データがAIの学習に使用されることはありません。お預かりする業務データは暗号化された通信で処理され、外部に共有されることはありません。当社はIPA「SECURITY ACTION」を宣言し、情報セキュリティ対策に取り組んでいます。</p>
           </details>
           <details class="faq-item">
-            <summary>パソコンを持っていないのですが、導入できますか？</summary>
-            <p>お手元にパソコンがなくても導入は可能です。ただし、業務内容によってはパソコンが必要な操作もあるため、詳細レポートの段階でお客様の環境に合った運用方法をご提案します。パソコンをお持ちでない場合は、システムの管理・調整を当社が行う保守プランのご契約をお勧めいたします。</p>
-          </details>
-          <details class="faq-item">
             <summary>契約期間の縛りはありますか？</summary>
-            <p>保守は月単位の契約です。効果を感じられなければいつでも解約可能。導入支援で構築したシステムはそのままお使いいただけます。まずは無料レポートから始めていただくことをお勧めしています。</p>
-          </details>
-          <details class="faq-item">
-            <summary>どんな業種に対応していますか？</summary>
-            <p>士業・飲食・宿泊・EC・建設・農業・自治体など、幅広い業種に対応しています。11業種のサンプルレポートを公開していますので、近い業種の事例をぜひご覧ください。記載のない業種でもお気軽にご相談ください。</p>
+            <p>保守は月単位の契約です。効果を感じられなければいつでも解約可能。導入支援で構築したシステムはそのままお使いいただけます。まずは無料活用診断から始めていただくことをお勧めしています。</p>
           </details>
         </div>
       </div>
@@ -302,12 +252,11 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
 
     <!-- CTA -->
     <section class="ac-cta-section">
-      <div class="ac-cta-glow"></div>
-      <div class="container text-center" style="position:relative;z-index:1;">
+      <div class="container text-center">
         <h2 class="reveal">まずは気軽にご相談ください</h2>
         <p class="reveal">
           「うちの業務にAIって使えるの？」<br />
-          「何から始めればいいか分からない」<br />
+          「何から始めればいいか分からない」<br class="pc-only" />
           そんな状態からで大丈夫です。初回相談は無料です。
         </p>
         <a href="/free-diagnosis" class="btn-primary reveal">無料AI診断を受ける</a>
@@ -321,8 +270,13 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
   .ac-hero {
     position: relative;
     color: var(--text);
-    padding: clamp(100px, 14vw, 160px) 0 clamp(56px, 8vw, 80px);
-    background: var(--surface);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(90px, 11vw, 140px) 0;
+    background: #ffffff;
     overflow: hidden;
   }
   .hero-eyebrow {
@@ -344,8 +298,28 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     line-height: 1.8;
     margin-bottom: 32px;
   }
-  .hero-cta {
-    padding: .85rem 2.2rem;
+  /* HOMEと統一したピル形 紫×青グラデCTA */
+  .ac-hero .btn-primary.hero-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 30px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+    color: #fff;
+    font-size: clamp(14px, 1.5vw, 15px);
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(162, 89, 255, .35);
+    border: none;
+    transition: transform .2s ease, box-shadow .2s ease;
+    margin-top: clamp(20px, 3vw, 32px);
+  }
+  .ac-hero .btn-primary.hero-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 36px rgba(162, 89, 255, .45);
+    filter: none;
   }
 
   .sp-only { display: none; }
@@ -366,6 +340,59 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     color: var(--muted);
     font-size: 0.95rem;
     margin-bottom: 40px;
+  }
+
+  /* ===== なぜ、いまAIなのか ===== */
+  .ac-why-section {
+    background: #ffffff;
+  }
+  .ac-why-section .section-title {
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2vw, 22px);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .why-item {
+    background: var(--surface-card, #ffffff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 12px;
+    padding: clamp(22px, 2.6vw, 30px);
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .why-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(162, 89, 255, .35);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+  }
+  .why-num {
+    display: inline-block;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--brand, #A259FF);
+    letter-spacing: -.02em;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .why-item h3 {
+    font-size: clamp(.98rem, 1.4vw, 1.08rem);
+    font-weight: 700;
+    color: var(--heading, #0f172a);
+    margin: 0 0 10px;
+    line-height: 1.5;
+  }
+  .why-item p {
+    font-size: .9rem;
+    color: var(--muted, #64748b);
+    line-height: 1.85;
+    margin: 0;
+  }
+  @media (max-width: 768px) {
+    .why-grid { grid-template-columns: 1fr; }
   }
 
   /* ===== 共通カード ===== */
@@ -418,47 +445,22 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     border-radius: 4px;
     margin-bottom: 12px;
   }
-  /* ===== Subsidy Banner ===== */
-  .subsidy-banner {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin-top: 40px;
-    padding: 24px 28px;
-    background: rgba(91, 127, 255, .05);
-    border: 1px solid rgba(91, 127, 255, .2);
-    border-radius: var(--radius);
-  }
-  .subsidy-icon {
-    font-size: 1.6rem;
-    color: #f0b429;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .subsidy-text { flex: 1; }
-  .subsidy-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--heading);
-    margin: 0 0 8px;
-  }
-  .subsidy-desc {
-    font-size: .9rem;
-    line-height: 1.7;
-    color: var(--text);
-    margin: 0 0 8px;
-  }
-  .subsidy-note {
-    font-size: .78rem;
-    color: var(--muted);
-    margin: 0;
-  }
 
   .ac-price {
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--brand);
     margin-bottom: 8px;
+  }
+  .ac-price--soft {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: rgba(162, 89, 255, .06);
+    border-left: 3px solid var(--brand);
+    padding: 10px 14px;
+    border-radius: 4px;
+    line-height: 1.6;
   }
   .price-unit { font-size: .8rem; font-weight: 400; color: var(--muted); }
   .ac-desc { font-size: .9rem; color: var(--muted); margin-bottom: 16px; }
@@ -472,18 +474,90 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     gap: 24px;
     margin-top: 32px;
   }
-  .service-grid-4 {
-    grid-template-columns: repeat(4, 1fr);
-  }
   .service-grid-3 {
     grid-template-columns: repeat(3, 1fr);
   }
-  @media (max-width: 1024px) {
-    .service-grid-4 { grid-template-columns: repeat(2, 1fr); }
-    .service-grid-3 { grid-template-columns: 1fr; }
+
+  /* ===== ワークショップ ===== */
+  .workshop-wrap {
+    max-width: 1080px;
+    margin: clamp(40px, 5vw, 60px) auto 0;
   }
-  @media (max-width: 600px) {
-    .service-grid-4 { grid-template-columns: 1fr; }
+  .workshop-label {
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
+    letter-spacing: .25em;
+    font-weight: 700;
+    color: var(--brand);
+    text-align: center;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+  .workshop-section-title {
+    text-align: center;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 8px;
+  }
+  .workshop-section-sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: clamp(.85rem, 1.5vw, .95rem);
+    margin: 0 auto 24px;
+    max-width: 720px;
+    line-height: 1.8;
+  }
+  .workshop-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(20px, 3vw, 28px);
+  }
+  .workshop-grid--single {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .workshop-tier {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: clamp(22px, 2.6vw, 32px);
+  }
+  .workshop-tier-title {
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    font-weight: 700;
+    color: var(--heading);
+    margin: 4px 0 2px;
+    line-height: 1.5;
+  }
+  .workshop-target {
+    font-size: .85rem;
+    color: var(--muted);
+    margin: 0;
+    padding: 8px 12px;
+    background: rgba(162, 89, 255, .06);
+    border-left: 3px solid var(--brand);
+    border-radius: 0 4px 4px 0;
+  }
+  .workshop-target strong {
+    color: var(--text);
+    margin-right: 4px;
+  }
+  .workshop-tier .ac-list {
+    margin-top: 2px;
+  }
+  .workshop-tier .ac-price {
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  @media (max-width: 768px) {
+    .workshop-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 1024px) {
+    .service-grid-3 { grid-template-columns: 1fr; }
   }
 
   /* ===== Service card with image (HOME と統一) ===== */
@@ -553,88 +627,15 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     font-weight: 700;
     color: var(--heading);
   }
-  /* Extra menu (有償要件定義 / スポット相談) */
-  .extra-menu {
-    margin-top: 48px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border);
-  }
-  .extra-menu-title {
-    text-align: center;
-    font-size: 1rem;
-    color: var(--heading);
-    margin: 0 0 24px;
-    letter-spacing: .05em;
-  }
-  .extra-menu-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  .extra-menu-card {
-    padding: 24px;
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
-  .extra-menu-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-  .extra-menu-badge {
-    display: inline-block;
-    font-size: .7rem;
-    font-weight: 600;
-    letter-spacing: .08em;
-    color: var(--brand);
-    border: 1px solid rgba(91,127,255,.3);
-    background: rgba(91,127,255,.08);
-    padding: 3px 10px;
-    border-radius: 4px;
-  }
-  .extra-menu-card h4 {
-    font-size: 1rem;
-    color: var(--heading);
-    margin: 0;
-  }
-  .extra-menu-price {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--brand);
-    margin: 0 0 10px;
-  }
-  .extra-menu-desc {
-    font-size: .88rem;
-    line-height: 1.75;
-    color: var(--text);
-    margin: 0;
-  }
-  .extra-menu-desc strong { color: var(--heading); }
-  @media (max-width: 768px) {
-    .extra-menu-grid { grid-template-columns: 1fr; }
-  }
 
-  /* Plan upgrade note inside STEP 3 card */
-  .plan-upgrade {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
+  /* ===== Section backgrounds（純白統一） ===== */
+  .ac-custom-section,
+  .ac-service-section,
+  .ac-examples-section,
+  .ac-consultant-section,
+  .ac-faq-section {
+    background: #ffffff;
   }
-  .plan-upgrade-label {
-    font-size: .8rem;
-    font-weight: 600;
-    color: var(--brand);
-    margin: 0 0 8px;
-  }
-  /* ===== Section backgrounds ===== */
-  .ac-custom-section { background: var(--surface-2); }
-  .ac-service-section { background: var(--surface); }
-  .ac-examples-section { background: var(--surface-2); }
-  .ac-reason-section { background: var(--surface); }
-  .ac-faq-section { background: var(--surface-2); }
 
   .pc-only { display: inline; }
   @media (max-width: 768px) {
@@ -765,33 +766,124 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     }
   }
 
-  /* ===== Reason ===== */
-  .reason-grid {
-    max-width: 720px;
+  /* ===== Consultant Compact Card ===== */
+  .consultant-grid {
     margin: 32px auto 0;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 560px;
   }
-  .reason-item {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
+  .consultant-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .2s ease;
   }
-  .reason-num {
+  .consultant-card-link:hover {
+    transform: translateY(-2px);
+  }
+  .consultant-card-compact {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .03);
+    transition: border-color .2s ease, box-shadow .2s ease;
+    position: relative;
+  }
+  .consultant-card-link:hover .consultant-card-compact {
+    border-color: var(--brand);
+    box-shadow: 0 8px 24px rgba(162, 89, 255, .15);
+  }
+  .consultant-avatar-sm {
     flex-shrink: 0;
-    width: 44px; height: 44px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
-    background: var(--brand);
-    color: #fff;
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: .85rem;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(162, 89, 255, .3);
   }
-  .reason-content h3 { margin-bottom: 6px; font-size: 1.05rem; color: var(--heading); }
-  .reason-content p { font-size: .95rem; color: var(--muted); line-height: 1.7; }
+  .consultant-initial-sm {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .consultant-id-sm {
+    flex: 1;
+    min-width: 0;
+  }
+  .consultant-role-sm {
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 10px;
+    letter-spacing: .15em;
+    font-weight: 700;
+    color: var(--brand);
+    text-transform: uppercase;
+    margin: 0 0 2px;
+  }
+  .consultant-name-sm {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 4px;
+    line-height: 1.4;
+  }
+  .consultant-name-en-sm {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: .06em;
+    margin-left: 8px;
+  }
+  .consultant-tagline-sm {
+    font-size: .82rem;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+  .consultant-card-arrow {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(162, 89, 255, .08);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .8rem;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .consultant-card-link:hover .consultant-card-arrow {
+    background: var(--brand);
+    color: #fff;
+    transform: translateX(2px);
+  }
+  @media (max-width: 480px) {
+    .consultant-card-compact {
+      gap: 12px;
+      padding: 14px 16px;
+    }
+    .consultant-avatar-sm {
+      width: 48px;
+      height: 48px;
+    }
+    .consultant-initial-sm {
+      font-size: 1.25rem;
+    }
+    .consultant-name-en-sm {
+      display: none;
+    }
+  }
 
   /* ===== FAQ ===== */
   .faq-list {
@@ -846,19 +938,44 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
   /* ===== CTA ===== */
   .ac-cta-section {
     position: relative;
-    background: var(--surface-3);
-    color: #fff;
-    padding: clamp(64px, 10vw, 100px) 0;
+    background: #ffffff;
+    padding: clamp(80px, 11vw, 130px) 0;
     overflow: hidden;
   }
-  .ac-cta-glow {
-    position: absolute;
-    width: 500px; height: 500px;
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    background: radial-gradient(circle, rgba(91,127,255,.08) 0%, transparent 70%);
-    pointer-events: none;
+  .ac-cta-section h2 {
+    color: #0f172a;
+    margin-bottom: 16px;
+    font-size: clamp(24px, 3.4vw, 36px);
+    font-weight: 800;
+    letter-spacing: -.01em;
+    line-height: 1.3;
   }
-  .ac-cta-section h2 { color: var(--heading); margin-bottom: 16px; }
-  .ac-cta-section p { color: var(--muted); margin-bottom: 28px; line-height: 1.8; }
+  .ac-cta-section p {
+    color: #64748b;
+    margin-bottom: 28px;
+    line-height: 1.9;
+    font-size: clamp(14px, 1.6vw, 16px);
+    max-width: 680px;
+    margin-inline: auto;
+  }
+  .ac-cta-section .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(162, 89, 255, .35);
+    font-weight: 700;
+    padding: 14px 30px;
+    border-radius: 999px;
+    text-decoration: none;
+    letter-spacing: .04em;
+    transition: transform .2s ease, box-shadow .2s ease;
+    border: none;
+  }
+  .ac-cta-section .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 36px rgba(162, 89, 255, .45);
+    filter: none;
+  }
 </style>
