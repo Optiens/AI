@@ -1,0 +1,188 @@
+---
+/**
+ * 案9: アイソメトリック3Dグリッド
+ *
+ * CSS 3D transform で「地平線に伸びるグリッド平面」を描画。
+ * グリッド線が手前から奥へ流れ、空間に奥行き感を生む。
+ * 中央上部に発光ノード、四隅にブランド色の点光源を配置。
+ *
+ * 純CSS（外部依存なし・最軽量）。
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'iso-grid' } = Astro.props;
+---
+
+<div id={id} class="iso-grid-bg" aria-hidden="true">
+  <!-- 上空のソフトグロー -->
+  <div class="iso-sky-glow"></div>
+
+  <!-- アイソメトリック平面（グリッド） -->
+  <div class="iso-grid-plane"></div>
+
+  <!-- 中央のホットスポット（脈動） -->
+  <div class="iso-glow"></div>
+
+  <!-- 四隅のブランド色光源 -->
+  <div class="iso-corner iso-corner--tl"></div>
+  <div class="iso-corner iso-corner--tr"></div>
+  <div class="iso-corner iso-corner--bl"></div>
+  <div class="iso-corner iso-corner--br"></div>
+</div>
+
+<style>
+  .iso-grid-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    perspective: 700px;
+    perspective-origin: 50% 0%;
+    background: linear-gradient(
+      180deg,
+      rgba(26, 188, 254, 0.04) 0%,
+      transparent 40%
+    );
+  }
+
+  /* 上空のソフトグロー */
+  .iso-sky-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 90%;
+    height: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      ellipse at center top,
+      rgba(162, 89, 255, 0.18) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  /* アイソメトリックグリッド平面 */
+  .iso-grid-plane {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    width: 240vmax;
+    height: 240vmax;
+    transform: translate(-50%, -50%) rotateX(72deg);
+    transform-origin: 50% 50%;
+    background-image: linear-gradient(
+        rgba(162, 89, 255, 0.45) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(162, 89, 255, 0.45) 1px, transparent 1px);
+    background-size: 70px 70px;
+    animation: grid-flow 14s linear infinite;
+    -webkit-mask-image: radial-gradient(
+      ellipse at center top,
+      black 0%,
+      black 35%,
+      transparent 75%
+    );
+    mask-image: radial-gradient(
+      ellipse at center top,
+      black 0%,
+      black 35%,
+      transparent 75%
+    );
+  }
+
+  @keyframes grid-flow {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 0 70px;
+    }
+  }
+
+  /* 中央ホットスポット */
+  .iso-glow {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    width: clamp(280px, 35vw, 500px);
+    height: clamp(280px, 35vw, 500px);
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      rgba(162, 89, 255, 0.4) 0%,
+      rgba(162, 89, 255, 0.15) 30%,
+      transparent 65%
+    );
+    filter: blur(30px);
+    animation: glow-pulse 5s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.75;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.18);
+      opacity: 1;
+    }
+  }
+
+  /* 四隅の光源 */
+  .iso-corner {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.4;
+    will-change: transform;
+  }
+  .iso-corner--tl {
+    top: -100px;
+    left: -100px;
+    background: rgba(162, 89, 255, 0.6);
+    animation: drift-corner 18s ease-in-out infinite alternate;
+  }
+  .iso-corner--tr {
+    top: -100px;
+    right: -100px;
+    background: rgba(26, 188, 254, 0.5);
+    animation: drift-corner 22s ease-in-out infinite alternate;
+    animation-delay: -5s;
+  }
+  .iso-corner--bl {
+    bottom: -100px;
+    left: -100px;
+    background: rgba(10, 207, 131, 0.45);
+    animation: drift-corner 20s ease-in-out infinite alternate;
+    animation-delay: -10s;
+  }
+  .iso-corner--br {
+    bottom: -100px;
+    right: -100px;
+    background: rgba(242, 78, 30, 0.35);
+    animation: drift-corner 24s ease-in-out infinite alternate;
+    animation-delay: -14s;
+  }
+  @keyframes drift-corner {
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+    100% {
+      transform: translate(8%, 6%) scale(1.15);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .iso-grid-plane,
+    .iso-glow,
+    .iso-corner {
+      animation: none !important;
+    }
+  }
+</style>
