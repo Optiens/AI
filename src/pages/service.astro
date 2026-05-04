@@ -133,22 +133,22 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     <section class="ac-section light-section ac-custom-section">
       <div class="container">
         <h2 class="section-title reveal">業務に合わせた、専用の仕組み</h2>
-        <p class="section-sub reveal">既製の仕組みを"借りる"のではなく、御社の業務に合わせて"建てる"。</p>
+        <p class="section-sub reveal">既製のサービスを契約するのではなく、御社の業務動線に沿った専用構成を設計・構築します。</p>
         <div class="custom-grid reveal-stagger">
           <div class="ac-card gradient-border">
             <div class="ac-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
             <h3>既製の仕組みに、業務を合わせない</h3>
-            <p>市販の業務システム<small>(業界用語で「SaaS」)</small>は、完成済みの賃貸住宅のようなものです。すぐ入居できる反面、間取りや設備は他社と共通です。弊社は御社の業務動線に沿って画面と処理の流れを一から設計します。例えるなら、御社専用に図面を引いた<strong>"注文住宅" 型の仕組み</strong>。市販システムでは合わない部分を、設計の段階から吸収します。</p>
+            <p>市販の業務システムは多くが<strong>SaaS</strong><small>(Software as a Service：複数の利用企業で同じ画面・機能を共有するクラウド型サービス)</small>として提供されており、汎用的に作られているため御社の業務動線に完全には合いません。結果として「項目が多すぎて使われない」「複数サービスを行き来して二重入力」が発生しがちです。弊社は<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>で、業務動線に沿った画面と処理フローを一から設計します。</p>
           </div>
           <div class="ac-card gradient-border">
             <div class="ac-icon"><i class="fa-solid fa-key"></i></div>
-            <h3>御社の所有物。月額の"家賃"は発生しません</h3>
-            <p>賃貸住宅は退去すれば住めなくなりますが、注文住宅は建てた後も御社のものです。納品する仕組みも同じく、御社の所有物として残ります。利用人数が増えてもライセンス料("家賃")は発生せず、データの保管庫も御社名義で契約します。将来別の事業者に乗り換える場合もデータは持ち出し自由<small>(業界用語の「ベンダーロックイン」が起こりません)</small>。</p>
+            <h3>御社の所有物。月額ライセンス料は発生しません</h3>
+            <p>納品する仕組みは<strong>買い切り型</strong>の構築費用のみで、利用人数に応じたライセンス料は発生しません。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースをまとめて提供するクラウド基盤。代表例: Supabase)</small>に保管され、CSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。将来別の事業者に乗り換える場合も<strong>ベンダーロックイン</strong><small>(特定業者しか扱えなくなる状態)</small>が起こりません。</p>
           </div>
           <div class="ac-card gradient-border">
             <div class="ac-icon"><i class="fa-solid fa-share-nodes"></i></div>
             <h3>外部メンバーとの共有も簡単</h3>
-            <p>営業パートナー・外注先・現場スタッフとの情報共有は、URLと認証だけで完結します。スマホ・PC・タブレットそれぞれに最適化された画面を、御社都合で設計できます。</p>
+            <p>営業パートナー・外注先・現場スタッフとの情報共有は、URLと<strong>ロールベースの認証</strong><small>(役割ごとに閲覧・編集権限を切り分ける方式)</small>で完結します。<strong>レスポンシブデザイン</strong><small>(PC・スマホ・タブレットの画面サイズに自動最適化する設計)</small>で構築するため、デバイスごとに別画面を作る必要もありません。</p>
           </div>
         </div>
 
@@ -212,7 +212,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
           </details>
           <details class="faq-item">
             <summary>「SaaS」「ベンダーロックイン」など、サイトに出てくる用語が分かりません。</summary>
-            <p>住宅に例えるとシンプルです。<strong>「SaaS」(サース)</strong>は、市販の業務システム——いわば<strong>"完成済みの賃貸住宅"</strong>。すぐ入居でき便利ですが、間取り(画面構成)は他社と共通で、月額の家賃(ライセンス料)を払い続けます。退去(解約)するとデータも引き出しにくくなり、これを<strong>「ベンダーロックイン」</strong>と呼びます。一方、弊社が構築するのは<strong>"注文住宅"型の仕組み</strong>。御社の業務動線に合わせて図面を引き、建てた後は御社の所有物として残ります。データは御社名義の保管庫(クラウドのデータベース)に格納され、将来別の事業者に乗り換えても自由に持ち出せます。<br /><br />既製のSaaSが業務にぴったり合う場合は、そのまま使う方が合理的です。「合わない部分が積み重なってきた」と感じる業務に対して、専用構成をご提案しています。</p>
+            <p><strong>SaaS</strong><small>(Software as a Service / サース)</small>とは、複数の利用企業が同じ画面・同じ機能を共有して使うクラウド型の業務システムです。月額のライセンス料を払い続ける契約形態で、汎用的に作られているため画面構成や項目は他社と共通になります。<br /><br /><strong>ベンダーロックイン</strong>とは、特定の事業者しか保守・改修ができない状態に陥り、乗り換え時にデータの持ち出しが難しくなることを指します。<br /><br />弊社が構築するのは<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>の業務システムです。御社の業務動線に合わせて画面と処理フローを一から設計し、納品後は御社の資産として残ります。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースを提供するクラウド基盤。代表例: Supabase)</small>に保管されるため、将来別の事業者に乗り換える場合もCSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。<br /><br />既製のSaaSが業務にぴったり合う場合は、そのまま使う方が合理的です。「合わない部分が積み重なってきた」と感じる業務に対して、専用構成をご提案しています。</p>
           </details>
           <details class="faq-item">
             <summary>セキュリティは大丈夫ですか？</summary>
