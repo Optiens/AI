@@ -1,0 +1,290 @@
+---
+/**
+ * BrainCanvas: より「脳らしい」AI背景アニメ
+ *
+ * 構成:
+ * 1. 脳の左右半球シルエット（ベジエで滑らかに）
+ * 2. 中央に脳梁（縦線）
+ * 3. 上部に脳溝（しわ）を複数本
+ * 4. 脳形状内に散布した22ニューロン
+ * 5. 隣接ニューロン間に曲線接続
+ * 6. シナプスパルスが接続上を流れる
+ * 7. 中心から外側へ「思考波」がときどき広がる
+ * 8. 各ニューロンが微脈動
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'brain-canvas' } = Astro.props;
+---
+
+<canvas id={id} class="brain-canvas" data-brain></canvas>
+
+<script is:inline define:vars={{ canvasId: id }}>
+  (function () {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 768;
+
+    // ===== 脳形状内に散布したニューロン（中心0,0・相対座標） =====
+    const NEURONS = [
+      { x: -78, y: -25 }, { x: -68, y: 5 },   { x: -55, y: 35 },
+      { x: -45, y: -55 }, { x: -38, y: -10 }, { x: -28, y: 25 }, { x: -18, y: 55 },
+      { x: -10, y: -65 }, { x: -8, y: -25 },  { x: 0, y: 10 },   { x: 5, y: 50 },
+      { x: 12, y: -55 },  { x: 15, y: -10 },  { x: 22, y: 30 },  { x: 28, y: 60 },
+      { x: 35, y: -38 },  { x: 42, y: 5 },    { x: 50, y: 38 },
+      { x: 58, y: -22 },  { x: 65, y: 15 },   { x: 72, y: -5 },  { x: 78, y: 28 },
+    ];
+
+    // 接続: 距離が一定以下のペア
+    const CONNECT_DIST = 38;
+    const connections = [];
+    for (let i = 0; i < NEURONS.length; i++) {
+      for (let j = i + 1; j < NEURONS.length; j++) {
+        const dx = NEURONS[i].x - NEURONS[j].x;
+        const dy = NEURONS[i].y - NEURONS[j].y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < CONNECT_DIST) {
+          connections.push({ a: i, b: j, dist: d });
+        }
+      }
+    }
+
+    // パルス（シナプス信号）
+    let pulses = [];
+    const PULSE_COLORS = ['#C68DFF', '#5DD0FF', '#5EE0AA', '#FF8B5E'];
+    const MAX_PULSES = isMobile ? 10 : 18;
+
+    function spawnPulse() {
+      if (pulses.length >= MAX_PULSES) return;
+      if (connections.length === 0) return;
+      const conn = connections[Math.floor(Math.random() * connections.length)];
+      pulses.push({
+        a: conn.a,
+        b: conn.b,
+        t: 0,
+        speed: 0.014 + Math.random() * 0.018,
+        color: PULSE_COLORS[Math.floor(Math.random() * PULSE_COLORS.length)],
+      });
+    }
+
+    // 思考波（中央から外側へ広がる）
+    let waves = [];
+    function spawnWave() {
+      if (waves.length >= 3) return;
+      waves.push({ t: 0, speed: 0.006 });
+    }
+
+    let w = 0, h = 0, dpr = 1;
+
+    function resize() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = rect.width;
+      h = rect.height;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function drawBrainOutline(scale, cx, cy) {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // 左右半球の輪郭（左半球→右半球を一筆で）
+      ctx.beginPath();
+      ctx.moveTo(0, -88);
+      // 左半球（上→左→下）
+      ctx.bezierCurveTo(-30, -92, -65, -78, -82, -55);
+      ctx.bezierCurveTo(-95, -32, -98, 5, -88, 35);
+      ctx.bezierCurveTo(-78, 60, -55, 80, -28, 82);
+      ctx.bezierCurveTo(-12, 84, -3, 80, 0, 75);
+      // 右半球（下→右→上）
+      ctx.bezierCurveTo(3, 80, 12, 84, 28, 82);
+      ctx.bezierCurveTo(55, 80, 78, 60, 88, 35);
+      ctx.bezierCurveTo(98, 5, 95, -32, 82, -55);
+      ctx.bezierCurveTo(65, -78, 30, -92, 0, -88);
+      ctx.closePath();
+      ctx.strokeStyle = 'rgba(162, 89, 255, 0.4)';
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+
+      // 中央の脳梁（縦線）
+      ctx.beginPath();
+      ctx.moveTo(0, -82);
+      ctx.lineTo(0, 78);
+      ctx.strokeStyle = 'rgba(162, 89, 255, 0.18)';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+
+      // 脳溝（しわ） - 左右対称に配置
+      const sulci = [
+        [[-65, -55], [-50, -72], [-30, -55]],
+        [[-55, -25], [-40, -42], [-20, -25]],
+        [[-50, 0], [-35, -15], [-15, 0]],
+        [[-50, 28], [-35, 14], [-15, 28]],
+        [[-45, 50], [-28, 38], [-10, 50]],
+        [[30, -55], [50, -72], [65, -55]],
+        [[20, -25], [40, -42], [55, -25]],
+        [[15, 0], [35, -15], [50, 0]],
+        [[15, 28], [35, 14], [50, 28]],
+        [[10, 50], [28, 38], [45, 50]],
+      ];
+      ctx.strokeStyle = 'rgba(162, 89, 255, 0.22)';
+      ctx.lineWidth = 0.6;
+      for (const s of sulci) {
+        ctx.beginPath();
+        ctx.moveTo(s[0][0], s[0][1]);
+        ctx.quadraticCurveTo(s[1][0], s[1][1], s[2][0], s[2][1]);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    function draw(timeMs) {
+      ctx.clearRect(0, 0, w, h);
+
+      const scale = Math.min(w, h) / 220;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      // ===== 思考波（背景） =====
+      if (!reducedMotion && Math.random() < 0.004) spawnWave();
+      for (let i = waves.length - 1; i >= 0; i--) {
+        const wv = waves[i];
+        if (!reducedMotion) wv.t += wv.speed;
+        if (wv.t >= 1) {
+          waves.splice(i, 1);
+          continue;
+        }
+        const radius = wv.t * 130 * scale;
+        const alpha = (1 - wv.t) * 0.18;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(162, 89, 255, ${alpha})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      // ===== 脳の輪郭 =====
+      drawBrainOutline(scale, cx, cy);
+
+      // ===== 接続線（曲線、薄め） =====
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+      for (const conn of connections) {
+        const a = NEURONS[conn.a];
+        const b = NEURONS[conn.b];
+        // 軽くカーブさせる
+        const mx = (a.x + b.x) / 2 + Math.sin((conn.a + conn.b) * 1.3) * 3;
+        const my = (a.y + b.y) / 2 + Math.cos((conn.a - conn.b) * 1.3) * 3;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.quadraticCurveTo(mx, my, b.x, b.y);
+        ctx.strokeStyle = 'rgba(162, 89, 255, 0.13)';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // ===== シナプスパルス =====
+      if (!reducedMotion && Math.random() < 0.18) spawnPulse();
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+      for (let i = pulses.length - 1; i >= 0; i--) {
+        const p = pulses[i];
+        if (!reducedMotion) p.t += p.speed;
+        if (p.t >= 1) {
+          pulses.splice(i, 1);
+          continue;
+        }
+        const a = NEURONS[p.a];
+        const b = NEURONS[p.b];
+        // 曲線パスに沿って移動（接続線と同じ midpoint）
+        const mx = (a.x + b.x) / 2 + Math.sin((p.a + p.b) * 1.3) * 3;
+        const my = (a.y + b.y) / 2 + Math.cos((p.a - p.b) * 1.3) * 3;
+        // 二次ベジエ曲線上の点 B(t) = (1-t)²P0 + 2(1-t)tP1 + t²P2
+        const u = 1 - p.t;
+        const x = u * u * a.x + 2 * u * p.t * mx + p.t * p.t * b.x;
+        const y = u * u * a.y + 2 * u * p.t * my + p.t * p.t * b.y;
+
+        const intensity = Math.sin(p.t * Math.PI);
+        ctx.save();
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 10 * intensity;
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = 0.95 * intensity;
+        ctx.beginPath();
+        ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        // 中心の白色コア
+        ctx.fillStyle = '#FFFFFF';
+        ctx.globalAlpha = 0.95 * intensity;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+      ctx.restore();
+
+      // ===== ニューロン本体（脈動） =====
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+      const t = reducedMotion ? 0 : timeMs * 0.001;
+      for (let i = 0; i < NEURONS.length; i++) {
+        const n = NEURONS[i];
+        const beat = 0.85 + Math.sin(t * 1.2 + i * 0.6) * 0.15;
+        // 外側のソフトグロー
+        ctx.save();
+        ctx.shadowColor = '#A259FF';
+        ctx.shadowBlur = 6 * beat;
+        ctx.fillStyle = `rgba(162, 89, 255, ${0.55 * beat})`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 2.2 * beat, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        // 中心の明るいコア
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.85 * beat})`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 0.9, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    requestAnimationFrame(draw);
+
+    let resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 200);
+    });
+  })();
+</script>
+
+<style>
+  .brain-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: block;
+    z-index: 0;
+  }
+</style>
