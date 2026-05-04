@@ -1,0 +1,132 @@
+---
+/**
+ * 案10: イメージスライダー（ブラー強）
+ *
+ * 複数の写真をフェードでクロスフェードしつつ、強くぼかして
+ * 抽象的な「色彩のあるブラー背景」として使う。
+ * ブランド色のオーバーレイで色味を統一し、本文の可読性を確保。
+ *
+ * 画像なし時は CSS グラデーションのフォールバック。
+ *
+ * 推奨: w=1600 程度の Unsplash 直リンク or 自前の public/images/bg/ 配置
+ */
+interface Props {
+  id?: string;
+  imgs?: string[];
+}
+const {
+  id = 'image-slider',
+  imgs = [
+    // デフォルト: Unsplash「AI brain inside a lightbulb」 (Free for commercial use)
+    'https://images.unsplash.com/photo-1750365919971-7dd273e7b317?w=1600&auto=format&fit=crop&q=70',
+  ],
+} = Astro.props;
+
+const totalDuration = imgs.length * 8;
+---
+
+<div id={id} class="image-slider-bg" aria-hidden="true">
+  {imgs.length === 0 ? (
+    <div class="slider-fallback"></div>
+  ) : (
+    imgs.map((url, i) => (
+      <div
+        class="slider-slide"
+        style={`background-image: url('${url}'); animation-delay: ${i * 8}s; animation-duration: ${totalDuration}s;`}
+      ></div>
+    ))
+  )}
+  <div class="slider-overlay"></div>
+</div>
+
+<style>
+  .image-slider-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    background: #0f172a; /* スライドが入るまでの暗背景 */
+  }
+
+  .slider-slide {
+    position: absolute;
+    inset: -8%; /* ブラーで縁が切れないよう拡張 */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(48px) saturate(1.15);
+    opacity: 0;
+    will-change: opacity, transform;
+    animation-name: slide-cycle;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    transform: scale(1.1);
+  }
+
+  /* 1枚しかない場合は単純にフェードイン→ループの長尺表示 */
+  .image-slider-bg .slider-slide:only-of-type {
+    animation-name: slide-solo;
+    animation-duration: 24s;
+    animation-delay: 0s !important;
+  }
+
+  @keyframes slide-cycle {
+    0%,
+    100% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+    8%,
+    25% {
+      opacity: 0.85;
+      transform: scale(1.05);
+    }
+    33% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slide-solo {
+    0%,
+    100% {
+      opacity: 0.7;
+      transform: scale(1.05);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.1);
+    }
+  }
+
+  .slider-fallback {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 25% 30%, rgba(162, 89, 255, 0.6), transparent 55%),
+      radial-gradient(circle at 75% 70%, rgba(26, 188, 254, 0.55), transparent 55%),
+      radial-gradient(circle at 50% 80%, rgba(10, 207, 131, 0.4), transparent 55%);
+    filter: blur(40px);
+  }
+
+  .slider-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(162, 89, 255, 0.22) 0%,
+      rgba(26, 188, 254, 0.18) 50%,
+      rgba(10, 207, 131, 0.18) 100%
+    );
+    mix-blend-mode: overlay;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slider-slide,
+    .slider-fallback {
+      animation: none !important;
+      opacity: 0.75;
+    }
+  }
+</style>
