@@ -51,79 +51,38 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
 
         <div class="service-grid service-grid-3 reveal-stagger">
 
-          <!-- 1. AI活用診断（無料/詳細を内包） -->
-          <div class="ac-card gradient-border ac-service-card">
+          <!-- 1. AI活用診断 -->
+          <a href="/free-diagnosis" class="ac-card gradient-border ac-service-card ac-service-card--link">
             <div class="ac-img-wrap">
               <img src="/images/services/ai-diagnosis.png" alt="AI活用診断" loading="lazy" />
             </div>
             <div class="ac-badge">STEP 1</div>
             <h3>AI活用診断</h3>
-            <p class="ac-desc">業務にAIがどれだけ効くか、ROI（投資利益率）をレポートで算出します。無料版と詳細版の2プランです。</p>
-
-            <div class="plan-tier">
-              <div class="plan-tier-head">
-                <span class="plan-tier-name">無料版</span>
-                <span class="plan-tier-price">0円</span>
-              </div>
-              <ul class="ac-list">
-                <li>Webフォーム入力のみで完結</li>
-                <li>AI活用が効果的な業務TOP3</li>
-                <li>ROI試算（削減時間×時給＝月○万円）</li>
-                <li>オンラインスライド形式（URL共有）で納品</li>
-              </ul>
-            </div>
-
-            <div class="plan-tier plan-tier-upgrade">
-              <div class="plan-tier-head">
-                <span class="plan-tier-name">詳細版 + MTG</span>
-                <span class="plan-tier-price">5,000円<span class="price-unit">（税別）</span></span>
-              </div>
-              <ul class="ac-list">
-                <li>全業務の自動化提案（5〜7件）</li>
-                <li>自動化アーキテクチャ（構成図）</li>
-                <li>詳細コスト試算 + ROI回収期間</li>
-                <li>導入支援の費用見積もり</li>
-                <li>60分オンラインMTG（質疑応答）</li>
-                <li>オンラインスライド形式（URL共有）で納品</li>
-              </ul>
-            </div>
-          </div>
+            <p class="ac-desc">業務にAIがどれだけ効くか、ROI（投資利益率）をレポートでお届けします。<strong>無料版</strong>と<strong>詳細版（¥5,500税込）</strong>の2プランから選択可能。</p>
+            <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
 
           <!-- 2. 導入支援 -->
-          <div class="ac-card gradient-border ac-service-card">
+          <a href="/implementation" class="ac-card gradient-border ac-service-card ac-service-card--link">
             <div class="ac-img-wrap">
               <img src="/images/services/implementation.png" alt="導入支援" loading="lazy" />
             </div>
             <div class="ac-badge">STEP 2</div>
             <h3>導入支援</h3>
-            <p class="ac-desc">自動化システムの設計・構築・納品。御社の業務に合わせた仕組みごとお渡しします。<strong>「準備時間がほぼゼロ」「10時間が1時間に」</strong>といった具体的な業務インパクトを目標値に置いて設計します。</p>
-            <p class="ac-price ac-price--soft">無料AI診断後に、業務規模・要件に合わせて個別にご提案</p>
-            <ul class="ac-list">
-              <li>自動化ワークフローの設計・構築</li>
-              <li>自動化システム一式の納品（御社所有・月額ライセンス料なし）</li>
-              <li>操作手順の共有</li>
-              <li>セットアップ支援・初期動作確認</li>
-              <li>ランニングコストを抑えた運用設計</li>
-            </ul>
-          </div>
+            <p class="ac-desc">自動化システムの設計・構築・納品まで対応。御社の業務に合わせた仕組みごとお渡しします。費用は業務規模・要件に応じて個別にご提案。</p>
+            <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
 
           <!-- 3. 保守 -->
-          <div class="ac-card gradient-border ac-service-card">
+          <a href="/maintenance" class="ac-card gradient-border ac-service-card ac-service-card--link">
             <div class="ac-img-wrap">
               <img src="/images/services/maintenance.png" alt="保守" loading="lazy" />
             </div>
             <div class="ac-badge">STEP 3</div>
             <h3>保守</h3>
-            <p class="ac-desc">自動化システムの改善・拡張・トラブル対応を継続サポート。AIエージェントの真価は<strong>運用しながら育てるフィードバックループ</strong>にあります。導入後の改善運用を伴走します。</p>
-            <p class="ac-price ac-price--soft">導入支援の段階で、運用に応じたプランをご提案</p>
-            <ul class="ac-list">
-              <li>システムの改善・拡張・機能追加</li>
-              <li>トラブル対応・運用相談</li>
-              <li>新規業務の自動化検討・設計</li>
-              <li>フィードバックループの運用代行</li>
-              <li>定例MTGの実施・参加（プランによる）</li>
-            </ul>
-          </div>
+            <p class="ac-desc">導入後の機能追加・トラブル対応・新規業務の自動化を月額制で継続サポート。<strong>ライト（¥33,000）</strong>と<strong>スタンダード（¥55,000）</strong>の2プラン。</p>
+            <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
 
         </div>
       </div>
@@ -152,13 +111,6 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
           </div>
         </div>
 
-        <div class="custom-showcase reveal">
-          <div class="custom-showcase-icon"><i class="fa-solid fa-flask"></i></div>
-          <div class="custom-showcase-text">
-            <p class="custom-showcase-title">弊社自身がAIエージェントで社内ツールを運用しています</p>
-            <p class="custom-showcase-desc">CRM・書類添削ツール・経営管理ダッシュボードなどを、弊社自身がAIエージェントを使って社内運用しています。日々の運用で得た知見をベースに、お客様の業務に合った構成を案件ごとに設計します。技術選定はその時々の最適解を選びますが、設計と運用に対する考え方は一貫しています。</p>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -534,6 +486,37 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
   }
   .ac-service-card .ac-desc {
     margin-bottom: 16px;
+    flex: 1;
+  }
+
+  /* リンク化したサービスカード */
+  .ac-service-card--link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .ac-service-card--link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(91, 127, 255, .12);
+    border-color: rgba(162, 89, 255, .35);
+  }
+  .ac-service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 12px;
+    color: var(--brand);
+    font-size: .92rem;
+    font-weight: 700;
+    transition: gap .2s ease;
+  }
+  .ac-service-card--link:hover .ac-service-link {
+    gap: 12px;
+  }
+  .ac-service-link i {
+    font-size: .85rem;
   }
 
   /* プラン階層（無料版/詳細版、ライト/スタンダード等） */
@@ -738,49 +721,6 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     color: var(--text);
     margin: 0;
   }
-  .custom-showcase {
-    display: flex;
-    align-items: flex-start;
-    gap: 18px;
-    margin-top: 32px;
-    padding: 24px 28px;
-    background: rgba(91, 127, 255, .05);
-    border: 1px solid rgba(91, 127, 255, .2);
-    border-radius: var(--radius);
-  }
-  .custom-showcase-icon {
-    flex-shrink: 0;
-    width: 44px; height: 44px;
-    border-radius: 10px;
-    background: rgba(91, 127, 255, .1);
-    color: var(--brand);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    margin-top: 2px;
-  }
-  .custom-showcase-text { flex: 1; }
-  .custom-showcase-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--heading);
-    margin: 0 0 8px;
-  }
-  .custom-showcase-desc {
-    font-size: .9rem;
-    line-height: 1.75;
-    color: var(--text);
-    margin: 0;
-  }
-  @media (max-width: 600px) {
-    .custom-showcase {
-      flex-direction: column;
-      gap: 12px;
-      padding: 20px;
-    }
-  }
-
   /* ===== Consultant Compact Card ===== */
   .consultant-grid {
     margin: 32px auto 0;
