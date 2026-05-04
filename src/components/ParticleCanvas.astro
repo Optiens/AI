@@ -20,17 +20,21 @@ const { id = 'particle-net' } = Astro.props;
     const PARTICLE_COUNT = isMobile ? 60 : 90;
     const CONNECT_DIST = isMobile ? 120 : 150;
     const MOUSE_DIST = 180;
-    // パルス（シナプス発火）の最大同時数
-    const MAX_PULSES = isMobile ? 6 : 12;
-    // 1フレームあたりの新規パルス発生確率
-    const PULSE_SPAWN_RATE = 0.06;
+    // アテンションイベントの最大同時数
+    const MAX_ATTENTIONS = isMobile ? 2 : 3;
+    // フレームごとのアテンション発生確率 → 約3〜4秒に1回
+    const ATTENTION_SPAWN_RATE = 0.005;
+    // ターゲット数（attention map の "head" 数のメタファー）
+    const TARGETS_MIN = 4;
+    const TARGETS_MAX = 9;
+    // 1イベントの寿命（フレーム単位）
+    const EVENT_DURATION = 110; // 約1.8秒（60fps）
 
     let w = 0;
     let h = 0;
     let dpr = 1;
     let particles = [];
-    let pulses = [];
-    let connections = [];
+    let attentions = [];
     let mouse = { x: -1000, y: -1000 };
     let animId = null;
 
@@ -41,12 +45,11 @@ const { id = 'particle-net' } = Astro.props;
       'rgba(10, 207, 131, ', // green
       'rgba(242, 78, 30, ',  // orange
     ];
-    // パルス用の発光色（より鮮やか）
-    const PULSE_COLORS = [
-      '#C68DFF', // bright purple
-      '#5DD0FF', // bright blue
-      '#5EE0AA', // bright green
-      '#FF8B5E', // bright orange
+    const ATTENTION_COLORS = [
+      { rgb: '162, 89, 255', hex: '#A259FF' },
+      { rgb: '26, 188, 254', hex: '#1ABCFE' },
+      { rgb: '10, 207, 131', hex: '#0ACF83' },
+      { rgb: '242, 78, 30',  hex: '#F24E1E' },
     ];
 
     function resize() {
@@ -73,23 +76,48 @@ const { id = 'particle-net' } = Astro.props;
           r: Math.random() * 1.4 + 0.6,
           colorIdx,
           color: COLORS[colorIdx],
-          pulseColor: PULSE_COLORS[colorIdx],
         });
       }
-      pulses = [];
+      attentions = [];
     }
 
-    function spawnPulse() {
-      if (pulses.length >= MAX_PULSES) return;
-      if (connections.length === 0) return;
-      const conn = connections[Math.floor(Math.random() * connections.length)];
-      const speedBase = 0.012 + Math.random() * 0.018;
-      pulses.push({
-        i: conn.i,
-        j: conn.j,
+    function spawnAttention() {
+      if (attentions.length >= MAX_ATTENTIONS) return;
+      // ソースをランダムに選ぶ
+      const sourceIdx = Math.floor(Math.random() * particles.length);
+      const source = particles[sourceIdx];
+      // ターゲット候補（ある程度近いノードに限る = 接続範囲の2.5倍まで）
+      const candidateRange = CONNECT_DIST * 2.5;
+      const candidates = [];
+      for (let i = 0; i < particles.length; i++) {
+        if (i === sourceIdx) continue;
+        const dx = particles[i].x - source.x;
+        const dy = particles[i].y - source.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < candidateRange) {
+          candidates.push({ idx: i, dist });
+        }
+      }
+      if (candidates.length < TARGETS_MIN) return;
+      // ランダムにシャッフルして上位から取り出す
+      candidates.sort(() => Math.random() - 0.5);
+      const targetCount = TARGETS_MIN + Math.floor(Math.random() * (TARGETS_MAX - TARGETS_MIN + 1));
+      const picked = candidates.slice(0, Math.min(targetCount, candidates.length));
+      // 各ターゲットの attention weight をランダム生成（0.25〜1.0）→ softmax風に正規化
+      const rawWeights = picked.map(() => 0.25 + Math.random() * 0.75);
+      const maxWeight = Math.max(...rawWeights);
+      const targets = picked.map((p, i) => ({
+        idx: p.idx,
+        weight: rawWeights[i] / maxWeight, // 0-1正規化
+      }));
+
+      const palette = ATTENTION_COLORS[source.colorIdx];
+      attentions.push({
+        source: sourceIdx,
+        targets,
         t: 0,
-        speed: speedBase,
-        color: particles[conn.i].pulseColor,
+        rgb: palette.rgb,
+        hex: palette.hex,
       });
     }
 
@@ -107,9 +135,6 @@ const { id = 'particle-net' } = Astro.props;
     function draw() {
       ctx.clearRect(0, 0, w, h);
 
-      // 接続情報を毎フレーム再構築（パルス先選びに使う）
-      connections = [];
-
       // ===== 1. ベースの線（粒子間） =====
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -117,14 +142,13 @@ const { id = 'particle-net' } = Astro.props;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < CONNECT_DIST) {
-            const alpha = (1 - dist / CONNECT_DIST) * 0.13;
+            const alpha = (1 - dist / CONNECT_DIST) * 0.12;
             ctx.strokeStyle = particles[i].color + alpha + ')';
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.stroke();
-            connections.push({ i, j });
           }
         }
 
@@ -144,52 +168,67 @@ const { id = 'particle-net' } = Astro.props;
         }
       }
 
-      // ===== 3. シナプス発火パルス =====
-      // 新規パルス確率発生
-      if (!reducedMotion && Math.random() < PULSE_SPAWN_RATE) {
-        spawnPulse();
+      // ===== 3. アテンションイベント =====
+      // 新規発生
+      if (!reducedMotion && Math.random() < ATTENTION_SPAWN_RATE) {
+        spawnAttention();
       }
 
-      // パルス更新 + 描画
-      for (let p = pulses.length - 1; p >= 0; p--) {
-        const pulse = pulses[p];
-        if (!reducedMotion) {
-          pulse.t += pulse.speed;
-        }
-        if (pulse.t >= 1) {
-          pulses.splice(p, 1);
+      // 既存イベント更新+描画
+      for (let a = attentions.length - 1; a >= 0; a--) {
+        const ev = attentions[a];
+        if (!reducedMotion) ev.t += 1 / EVENT_DURATION;
+        if (ev.t >= 1) {
+          attentions.splice(a, 1);
           continue;
         }
-        const a = particles[pulse.i];
-        const b = particles[pulse.j];
-        if (!a || !b) {
-          pulses.splice(p, 1);
+        const source = particles[ev.source];
+        if (!source) {
+          attentions.splice(a, 1);
           continue;
         }
-        const x = a.x + (b.x - a.x) * pulse.t;
-        const y = a.y + (b.y - a.y) * pulse.t;
+        // sinカーブで両端フェード
+        const intensity = Math.sin(ev.t * Math.PI);
 
-        // sinカーブで両端フェード（中央で最大輝度）
-        const intensity = Math.sin(pulse.t * Math.PI);
+        // ソースから各ターゲットへの線
+        for (let k = 0; k < ev.targets.length; k++) {
+          const tgt = ev.targets[k];
+          const target = particles[tgt.idx];
+          if (!target) continue;
+          // attention weight が太さ・透明度に比例
+          const lineAlpha = 0.15 + tgt.weight * 0.6 * intensity;
+          const lineWidth = 0.5 + tgt.weight * 2.2 * intensity;
+          ctx.strokeStyle = `rgba(${ev.rgb}, ${lineAlpha})`;
+          ctx.lineWidth = lineWidth;
+          ctx.beginPath();
+          ctx.moveTo(source.x, source.y);
+          ctx.lineTo(target.x, target.y);
+          ctx.stroke();
+          // ターゲット側のグロー（attention weight が高いほど目立つ）
+          ctx.save();
+          ctx.shadowColor = ev.hex;
+          ctx.shadowBlur = 10 * tgt.weight * intensity;
+          ctx.fillStyle = `rgba(${ev.rgb}, ${0.7 * tgt.weight * intensity})`;
+          ctx.beginPath();
+          ctx.arc(target.x, target.y, 2 + tgt.weight * 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
 
-        // グロー（外側）
+        // ソースノードのグロー（中心ノードを目立たせる）
         ctx.save();
-        ctx.shadowColor = pulse.color;
-        ctx.shadowBlur = 14 * intensity;
-        ctx.fillStyle = pulse.color;
-        ctx.globalAlpha = 0.85 * intensity;
+        ctx.shadowColor = ev.hex;
+        ctx.shadowBlur = 18 * intensity;
+        ctx.fillStyle = `rgba(${ev.rgb}, ${0.9 * intensity})`;
         ctx.beginPath();
-        ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+        ctx.arc(source.x, source.y, 3.6, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
-
-        // コア（内側の明るい点）
-        ctx.fillStyle = '#FFFFFF';
-        ctx.globalAlpha = 0.95 * intensity;
+        // 中心の白色コア
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.95 * intensity})`;
         ctx.beginPath();
-        ctx.arc(x, y, 1.1, 0, Math.PI * 2);
+        ctx.arc(source.x, source.y, 1.4, 0, Math.PI * 2);
         ctx.fill();
-        ctx.globalAlpha = 1;
       }
 
       // ===== 4. 粒子本体 =====
