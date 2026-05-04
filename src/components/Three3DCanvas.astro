@@ -1,0 +1,265 @@
+---
+/**
+ * 案4: Spline風 3Dシーン（Three.js実装）
+ *
+ * Spline は外部アカウント・公開URLが必要なため、
+ * Three.js で類似の「3Dワイヤーフレーム + 粒子」シーンを実装。
+ *
+ * 中央に大きな Icosahedron（正二十面体）のワイヤーフレーム、
+ * その周囲に4色の小さな torus knots と粒子クラウドが配置され、
+ * 全体がゆっくり回転する。マウスでカメラがパララックス追従。
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'three3d' } = Astro.props;
+---
+
+<canvas id={id} class="three3d-canvas" data-three3d></canvas>
+
+<script>
+  import * as THREE from 'three';
+
+  function init(canvas: HTMLCanvasElement) {
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 768;
+
+    // ===== Renderer =====
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: !isMobile,
+      powerPreference: 'low-power',
+    });
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.setClearColor(0x000000, 0);
+
+    // ===== Scene & Camera =====
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
+    camera.position.set(0, 0, 8);
+
+    // ===== Lights =====
+    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambient);
+    const dirLight = new THREE.DirectionalLight(0xa259ff, 0.8);
+    dirLight.position.set(5, 5, 5);
+    scene.add(dirLight);
+    const dirLight2 = new THREE.DirectionalLight(0x1abcfe, 0.6);
+    dirLight2.position.set(-5, -3, 4);
+    scene.add(dirLight2);
+
+    // ===== 中央の大きな Icosahedron ワイヤーフレーム =====
+    const coreGeom = new THREE.IcosahedronGeometry(2.4, 1);
+    const coreEdges = new THREE.EdgesGeometry(coreGeom);
+    const coreMat = new THREE.LineBasicMaterial({
+      color: 0xa259ff,
+      transparent: true,
+      opacity: 0.65,
+    });
+    const core = new THREE.LineSegments(coreEdges, coreMat);
+    scene.add(core);
+
+    // 内側の小さな Icosahedron（pulse）
+    const innerGeom = new THREE.IcosahedronGeometry(1.0, 0);
+    const innerMat = new THREE.MeshStandardMaterial({
+      color: 0xf24e1e,
+      emissive: 0xf24e1e,
+      emissiveIntensity: 0.4,
+      metalness: 0.6,
+      roughness: 0.3,
+      transparent: true,
+      opacity: 0.55,
+      flatShading: true,
+    });
+    const inner = new THREE.Mesh(innerGeom, innerMat);
+    scene.add(inner);
+
+    // ===== 周囲の torus knots（4色） =====
+    const orbiters: { mesh: THREE.Mesh; orbitR: number; speed: number; phase: number; tilt: number }[] = [];
+    const orbiterColors = [0xa259ff, 0x1abcfe, 0x0acf83, 0xf24e1e];
+    for (let i = 0; i < 4; i++) {
+      const g = new THREE.TorusKnotGeometry(0.18, 0.06, 64, 8);
+      const m = new THREE.MeshStandardMaterial({
+        color: orbiterColors[i],
+        emissive: orbiterColors[i],
+        emissiveIntensity: 0.7,
+        metalness: 0.4,
+        roughness: 0.4,
+      });
+      const mesh = new THREE.Mesh(g, m);
+      scene.add(mesh);
+      orbiters.push({
+        mesh,
+        orbitR: 3.6 + i * 0.2,
+        speed: 0.4 + i * 0.1,
+        phase: (i * Math.PI) / 2,
+        tilt: (i / 4) * Math.PI * 0.5,
+      });
+    }
+
+    // ===== 粒子クラウド =====
+    const POINT_COUNT = isMobile ? 400 : 900;
+    const positions = new Float32Array(POINT_COUNT * 3);
+    const colors = new Float32Array(POINT_COUNT * 3);
+    const palette = [
+      new THREE.Color(0xa259ff),
+      new THREE.Color(0x1abcfe),
+      new THREE.Color(0x0acf83),
+      new THREE.Color(0xf24e1e),
+    ];
+    for (let i = 0; i < POINT_COUNT; i++) {
+      const r = 4.5 + Math.random() * 2.5;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() - 0.5) * 2);
+      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      positions[i * 3 + 2] = r * Math.cos(phi);
+      const c = palette[i % palette.length];
+      colors[i * 3] = c.r;
+      colors[i * 3 + 1] = c.g;
+      colors[i * 3 + 2] = c.b;
+    }
+    const pointGeo = new THREE.BufferGeometry();
+    pointGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    pointGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    const pointMat = new THREE.PointsMaterial({
+      size: 0.05,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.75,
+      sizeAttenuation: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const points = new THREE.Points(pointGeo, pointMat);
+    scene.add(points);
+
+    // ===== マウスパララックス =====
+    const mouseTarget = { x: 0, y: 0 };
+    const cameraTarget = { x: 0, y: 0 };
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = parent.getBoundingClientRect();
+      mouseTarget.x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      mouseTarget.y = ((e.clientY - rect.top) / rect.height - 0.5) * -2;
+    };
+    const onMouseLeave = () => {
+      mouseTarget.x = 0;
+      mouseTarget.y = 0;
+    };
+    parent.addEventListener('mousemove', onMouseMove);
+    parent.addEventListener('mouseleave', onMouseLeave);
+
+    // ===== Resize =====
+    const resize = () => {
+      const rect = parent.getBoundingClientRect();
+      const w = rect.width || 800;
+      const h = rect.height || 600;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    // ===== Animation =====
+    let animId: number | null = null;
+    const clock = new THREE.Clock();
+
+    const animate = () => {
+      const t = clock.getElapsedTime();
+
+      if (!reducedMotion) {
+        // 中央コアは2軸でゆっくり回転
+        core.rotation.y = t * 0.18;
+        core.rotation.x = t * 0.09;
+        // 内側はもう少し速く
+        inner.rotation.y = -t * 0.5;
+        inner.rotation.z = t * 0.3;
+        // 内側は脈動
+        const pulse = 1 + Math.sin(t * 1.2) * 0.08;
+        inner.scale.set(pulse, pulse, pulse);
+
+        // 粒子クラウドはゆっくり全体回転
+        points.rotation.y = t * 0.04;
+        points.rotation.x = t * 0.02;
+
+        // 周回 torus knots
+        orbiters.forEach((o) => {
+          const angle = t * o.speed + o.phase;
+          o.mesh.position.x = Math.cos(angle) * o.orbitR;
+          o.mesh.position.z = Math.sin(angle) * o.orbitR;
+          o.mesh.position.y = Math.sin(angle * 0.7 + o.tilt) * 1.0;
+          o.mesh.rotation.x = t * 1.2;
+          o.mesh.rotation.y = t * 0.9;
+        });
+
+        // カメラパララックス
+        cameraTarget.x += (mouseTarget.x * 1.1 - cameraTarget.x) * 0.05;
+        cameraTarget.y += (mouseTarget.y * 0.7 - cameraTarget.y) * 0.05;
+        camera.position.x = cameraTarget.x;
+        camera.position.y = cameraTarget.y;
+        camera.lookAt(0, 0, 0);
+      }
+
+      renderer.render(scene, camera);
+      animId = requestAnimationFrame(animate);
+    };
+
+    if (reducedMotion) {
+      renderer.render(scene, camera);
+    } else {
+      animate();
+    }
+
+    // ===== Cleanup =====
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        if (animId !== null) cancelAnimationFrame(animId);
+        parent.removeEventListener('mousemove', onMouseMove);
+        parent.removeEventListener('mouseleave', onMouseLeave);
+        window.removeEventListener('resize', resize);
+        coreGeom.dispose();
+        coreEdges.dispose();
+        coreMat.dispose();
+        innerGeom.dispose();
+        innerMat.dispose();
+        pointGeo.dispose();
+        pointMat.dispose();
+        orbiters.forEach((o) => {
+          o.mesh.geometry.dispose();
+          (o.mesh.material as THREE.Material).dispose();
+        });
+        renderer.dispose();
+      },
+      { once: true }
+    );
+  }
+
+  function initAll() {
+    document.querySelectorAll<HTMLCanvasElement>('canvas[data-three3d]').forEach(init);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+  document.addEventListener('astro:page-load', initAll);
+</script>
+
+<style>
+  .three3d-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: block;
+    z-index: 0;
+  }
+</style>
