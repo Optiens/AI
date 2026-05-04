@@ -1,0 +1,204 @@
+---
+/**
+ * 案3: WebGL Shader（流体ノイズ）
+ * 純WebGL（Three.js不使用）で simplex noise ベースの流体的グラデーション。
+ * Figma パレット4色を時間経過でなめらかに混ぜ合わせる。
+ *
+ * バンドル増加なし、Astroの既存ビルドだけで動作。
+ * 親要素は position: relative; 必須。
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'shader-bg' } = Astro.props;
+---
+
+<canvas id={id} class="shader-canvas" aria-hidden="true"></canvas>
+
+<script is:inline define:vars={{ canvasId: id }}>
+  (function () {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const gl =
+      canvas.getContext('webgl', { premultipliedAlpha: false, alpha: true }) ||
+      canvas.getContext('experimental-webgl', { premultipliedAlpha: false, alpha: true });
+    if (!gl) return; // WebGL未対応環境はサイレントフォールバック
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ===== Vertex Shader（全画面quad） =====
+    const vsSource = `
+      attribute vec2 a_position;
+      void main() {
+        gl_Position = vec4(a_position, 0.0, 1.0);
+      }
+    `;
+
+    // ===== Fragment Shader（simplex noise + ブランドカラー混合） =====
+    const fsSource = `
+      precision mediump float;
+      uniform float u_time;
+      uniform vec2 u_resolution;
+
+      vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+      vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+      vec3 permute(vec3 x) { return mod289(((x * 34.0) + 1.0) * x); }
+
+      float snoise(vec2 v) {
+        const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+                           -0.577350269189626, 0.024390243902439);
+        vec2 i  = floor(v + dot(v, C.yy));
+        vec2 x0 = v - i + dot(i, C.xx);
+        vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+        vec4 x12 = x0.xyxy + C.xxzz;
+        x12.xy -= i1;
+        i = mod289(i);
+        vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0))
+              + i.x + vec3(0.0, i1.x, 1.0));
+        vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy),
+                                 dot(x12.zw, x12.zw)), 0.0);
+        m = m * m;
+        m = m * m;
+        vec3 x = 2.0 * fract(p * C.www) - 1.0;
+        vec3 h = abs(x) - 0.5;
+        vec3 ox = floor(x + 0.5);
+        vec3 a0 = x - ox;
+        m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+        vec3 g;
+        g.x  = a0.x  * x0.x  + h.x  * x0.y;
+        g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+        return 130.0 * dot(m, g);
+      }
+
+      void main() {
+        vec2 uv = gl_FragCoord.xy / u_resolution;
+        // アスペクト補正
+        vec2 p = (gl_FragCoord.xy - u_resolution * 0.5) / min(u_resolution.x, u_resolution.y);
+
+        float t = u_time * 0.08;
+
+        // 多層ノイズ（fBm 風）
+        float n1 = snoise(p * 1.2 + vec2(t, t * 0.7));
+        float n2 = snoise(p * 2.4 - vec2(t * 0.5, t * 0.3));
+        float n3 = snoise(p * 0.6 + vec2(-t * 0.4, t));
+        float n = n1 * 0.55 + n2 * 0.3 + n3 * 0.15;
+        n = (n + 1.0) * 0.5; // 0-1正規化
+
+        // Figma 4色
+        vec3 cPurple = vec3(0.635, 0.349, 1.000);
+        vec3 cBlue   = vec3(0.102, 0.737, 0.996);
+        vec3 cGreen  = vec3(0.039, 0.812, 0.514);
+        vec3 cOrange = vec3(0.949, 0.306, 0.118);
+
+        // ノイズ値で色を切り替えるのでなく、4色をなめらかに混ぜる
+        float w1 = smoothstep(0.0, 0.45, n);
+        float w2 = smoothstep(0.25, 0.65, n);
+        float w3 = smoothstep(0.55, 0.95, n);
+
+        vec3 col = mix(cPurple, cBlue, w1);
+        col = mix(col, cGreen, w2 * 0.7);
+        col = mix(col, cOrange, w3 * 0.4);
+
+        // ベース全体の透明度（淡め）
+        float alpha = 0.55;
+
+        // 中心へのソフトビネット（強く出ない）
+        float d = length(p);
+        alpha *= 1.0 - smoothstep(0.7, 1.4, d) * 0.5;
+
+        gl_FragColor = vec4(col * alpha, alpha);
+      }
+    `;
+
+    function compile(type, src) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, src);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+      }
+      return shader;
+    }
+
+    const vs = compile(gl.VERTEX_SHADER, vsSource);
+    const fs = compile(gl.FRAGMENT_SHADER, fsSource);
+    if (!vs || !fs) return;
+
+    const program = gl.createProgram();
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error('Program link error:', gl.getProgramInfoLog(program));
+      return;
+    }
+
+    // 全画面 quad
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+        -1, -1, 1, -1, -1, 1,
+        -1, 1, 1, -1, 1, 1,
+      ]),
+      gl.STATIC_DRAW
+    );
+    const aPos = gl.getAttribLocation(program, 'a_position');
+    const uTime = gl.getUniformLocation(program, 'u_time');
+    const uRes = gl.getUniformLocation(program, 'u_resolution');
+
+    function resize() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.max(1, Math.floor(rect.width * dpr));
+      const h = Math.max(1, Math.floor(rect.height * dpr));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+      }
+      gl.viewport(0, 0, w, h);
+    }
+
+    function render(timeMs) {
+      resize();
+      gl.useProgram(program);
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+      const t = reducedMotion ? 0 : timeMs * 0.001;
+      gl.uniform1f(uTime, t);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+      if (!reducedMotion) {
+        requestAnimationFrame(render);
+      }
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    requestAnimationFrame(render);
+  })();
+</script>
+
+<style>
+  .shader-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: block;
+    z-index: 0;
+  }
+</style>
