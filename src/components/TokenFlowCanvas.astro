@@ -1,0 +1,171 @@
+---
+interface Props {
+  id?: string;
+}
+const { id = 'token-flow' } = Astro.props;
+---
+
+<canvas id={id} class="token-flow-canvas" data-token-flow></canvas>
+
+<script>
+  type TokenItem = {
+    text: string;
+    x: number;
+    y: number;
+    vx: number;
+    color: string;
+    fontSize: number;
+    life: number;
+    lifeSpeed: number;
+  };
+
+  function initTokenFlow(canvas: HTMLCanvasElement) {
+    const parent = canvas.parentElement;
+    if (!parent) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 768;
+
+    // ===== Tokens（Optiensのブランドメッセージとなる単語＋AI関連用語） =====
+    const TOKENS = [
+      // ブランド3価値観
+      '調和', '最適化', '循環',
+      // 業務領域
+      '業務', '判断', '自動化', '分析', '設計', '実装', '変革',
+      '効率', '創造', '伴走', '時間', 'データ', 'コンテキスト',
+      // AI関連
+      'AI', 'LLM', 'Agent', 'prompt', 'token', 'context',
+      'workflow', 'pipeline', 'automation', 'inference', 'reasoning',
+      'embedding', 'fine-tune', 'ROI', 'API', 'CRM',
+      // 記号・シンタックス
+      '{', '}', '[]', '→', '⟶', '∇', '∑', '∏', '0|1',
+    ];
+
+    const COLORS = [
+      'rgba(162, 89, 255, ', // Figma purple
+      'rgba(26, 188, 254, ', // Figma blue
+      'rgba(10, 207, 131, ', // Figma green
+      'rgba(242, 78, 30, ',  // Figma orange
+    ];
+
+    const COUNT = isMobile ? 28 : 55;
+    let w = 0,
+      h = 0,
+      dpr = 1;
+    let items: TokenItem[] = [];
+    let animId: number | null = null;
+
+    const pickToken = () => TOKENS[Math.floor(Math.random() * TOKENS.length)];
+    const pickColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
+
+    function spawn(initialX?: number): TokenItem {
+      const fontSize = 12 + Math.random() * 18; // 12〜30px
+      return {
+        text: pickToken(),
+        x: initialX ?? Math.random() * w,
+        y: Math.random() * h,
+        vx: 0.18 + Math.random() * 0.55,
+        color: pickColor(),
+        fontSize,
+        life: Math.random(),
+        lifeSpeed: 0.0008 + Math.random() * 0.0018,
+      };
+    }
+
+    function resize() {
+      const rect = parent!.getBoundingClientRect();
+      w = rect.width;
+      h = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function init() {
+      resize();
+      items = [];
+      for (let i = 0; i < COUNT; i++) {
+        items.push(spawn(Math.random() * w));
+      }
+    }
+
+    function draw() {
+      ctx!.clearRect(0, 0, w, h);
+      ctx!.textBaseline = 'middle';
+      ctx!.textAlign = 'center';
+
+      for (const item of items) {
+        if (!reducedMotion) {
+          item.life += item.lifeSpeed;
+          if (item.life > 1) item.life -= 1;
+        }
+
+        // sinカーブで中央フェード（両端で透明、中央で最大）
+        const opacity = Math.sin(item.life * Math.PI) * 0.65;
+
+        ctx!.font = `${item.fontSize}px "SF Mono", "Consolas", "Helvetica Neue", system-ui, sans-serif`;
+        ctx!.fillStyle = item.color + opacity + ')';
+        ctx!.fillText(item.text, item.x, item.y);
+
+        if (!reducedMotion) {
+          item.x += item.vx;
+          if (item.x > w + 60) {
+            item.x = -60;
+            item.y = Math.random() * h;
+            item.text = pickToken();
+            item.color = pickColor();
+            item.fontSize = 12 + Math.random() * 18;
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(draw);
+    }
+
+    init();
+    draw();
+
+    const onResize = () => {
+      resize();
+      init();
+    };
+    window.addEventListener('resize', onResize);
+
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        if (animId !== null) cancelAnimationFrame(animId);
+        window.removeEventListener('resize', onResize);
+      },
+      { once: true }
+    );
+  }
+
+  function initAll() {
+    document
+      .querySelectorAll<HTMLCanvasElement>('canvas[data-token-flow]')
+      .forEach(initTokenFlow);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+  document.addEventListener('astro:page-load', initAll);
+</script>
+
+<style>
+  .token-flow-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: block;
+  }
+</style>
