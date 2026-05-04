@@ -1,0 +1,235 @@
+---
+/**
+ * 案5: Lottie風シーンアニメ
+ *
+ * Lottie本体は After Effects で作成したJSONを lottie-web で再生する仕組み。
+ * 外部アセット・ライセンスの確認が必要なため、ここでは
+ * 「Lottie風の物語性ある SVG アニメ」を CSS animation で実装。
+ *
+ * シーン: AIブレインの中で、ニューロンが順次発火し、
+ * 連鎖的にパルスが伝播。「思考が広がっていく」物語性。
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'lottie-scene' } = Astro.props;
+---
+
+<div id={id} class="lottie-scene" aria-hidden="true">
+  <svg viewBox="-200 -150 400 300" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <radialGradient id={`${id}-brain-glow`} cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#A259FF" stop-opacity="0.18" />
+        <stop offset="70%" stop-color="#A259FF" stop-opacity="0.04" />
+        <stop offset="100%" stop-color="#A259FF" stop-opacity="0" />
+      </radialGradient>
+      <filter id={`${id}-glow-filter`}>
+        <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+        <feMerge>
+          <feMergeNode in="coloredBlur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- 背景グロー -->
+    <ellipse cx="0" cy="0" rx="180" ry="130" fill={`url(#${id}-brain-glow)`} />
+
+    <!-- 脳のアウトライン（簡易） -->
+    <g class="brain-outline" stroke="#A259FF" stroke-width="0.6" fill="none" stroke-opacity="0.35">
+      <path d="M -120 -40 Q -130 -90, -70 -100 Q -10 -115, 30 -100 Q 90 -115, 130 -85 Q 160 -50, 145 0 Q 160 50, 130 85 Q 90 115, 30 100 Q -10 115, -70 100 Q -130 90, -120 40 Q -135 0, -120 -40 Z" />
+    </g>
+
+    <!-- 内部の接続線（薄く） -->
+    <g class="connections" stroke-width="0.4" stroke-opacity="0.2">
+      <line x1="-80" y1="-40" x2="-30" y2="-10" stroke="#A259FF" />
+      <line x1="-30" y1="-10" x2="20" y2="-40" stroke="#1ABCFE" />
+      <line x1="20" y1="-40" x2="70" y2="-10" stroke="#1ABCFE" />
+      <line x1="70" y1="-10" x2="100" y2="20" stroke="#0ACF83" />
+      <line x1="-30" y1="-10" x2="-10" y2="40" stroke="#A259FF" />
+      <line x1="-10" y1="40" x2="40" y2="60" stroke="#0ACF83" />
+      <line x1="40" y1="60" x2="80" y2="35" stroke="#0ACF83" />
+      <line x1="-80" y1="-40" x2="-90" y2="20" stroke="#A259FF" />
+      <line x1="-90" y1="20" x2="-50" y2="70" stroke="#A259FF" />
+      <line x1="-50" y1="70" x2="-10" y2="40" stroke="#1ABCFE" />
+      <line x1="20" y1="-40" x2="70" y2="-60" stroke="#1ABCFE" />
+      <line x1="70" y1="-60" x2="100" y2="-30" stroke="#F24E1E" />
+      <line x1="100" y1="-30" x2="100" y2="20" stroke="#F24E1E" />
+    </g>
+
+    <!-- ノード（順次発火） -->
+    <g class="nodes" filter={`url(#${id}-glow-filter)`}>
+      <circle class="node node-1" cx="-80" cy="-40" r="3" fill="#A259FF" />
+      <circle class="node node-2" cx="-30" cy="-10" r="3" fill="#A259FF" />
+      <circle class="node node-3" cx="20" cy="-40" r="3" fill="#1ABCFE" />
+      <circle class="node node-4" cx="70" cy="-10" r="3" fill="#1ABCFE" />
+      <circle class="node node-5" cx="100" cy="20" r="3" fill="#0ACF83" />
+      <circle class="node node-6" cx="-10" cy="40" r="3" fill="#0ACF83" />
+      <circle class="node node-7" cx="40" cy="60" r="3" fill="#0ACF83" />
+      <circle class="node node-8" cx="80" cy="35" r="3" fill="#0ACF83" />
+      <circle class="node node-9" cx="-90" cy="20" r="3" fill="#A259FF" />
+      <circle class="node node-10" cx="-50" cy="70" r="3" fill="#A259FF" />
+      <circle class="node node-11" cx="70" cy="-60" r="3" fill="#1ABCFE" />
+      <circle class="node node-12" cx="100" cy="-30" r="3" fill="#F24E1E" />
+    </g>
+
+    <!-- 中心ハブ（脈動） -->
+    <g class="hub">
+      <circle cx="0" cy="0" r="8" fill="#F24E1E" fill-opacity="0.15" />
+      <circle cx="0" cy="0" r="4" fill="#F24E1E" fill-opacity="0.85" />
+    </g>
+  </svg>
+</div>
+
+<style>
+  .lottie-scene {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .lottie-scene svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* 脳のアウトラインを描いていく演出 */
+  .brain-outline path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw-outline 6s ease-in-out infinite;
+  }
+  @keyframes draw-outline {
+    0% {
+      stroke-dashoffset: 1000;
+      opacity: 0;
+    }
+    20% {
+      stroke-dashoffset: 0;
+      opacity: 0.5;
+    }
+    80% {
+      stroke-dashoffset: 0;
+      opacity: 0.5;
+    }
+    100% {
+      stroke-dashoffset: -1000;
+      opacity: 0;
+    }
+  }
+
+  /* 接続線を順次表示 */
+  .connections line {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: draw-line 6s linear infinite;
+  }
+  @keyframes draw-line {
+    0%,
+    20% {
+      stroke-dashoffset: 200;
+    }
+    40% {
+      stroke-dashoffset: 0;
+    }
+    80% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: -200;
+    }
+  }
+  .connections line:nth-child(1) { animation-delay: 0.0s; }
+  .connections line:nth-child(2) { animation-delay: 0.15s; }
+  .connections line:nth-child(3) { animation-delay: 0.3s; }
+  .connections line:nth-child(4) { animation-delay: 0.45s; }
+  .connections line:nth-child(5) { animation-delay: 0.6s; }
+  .connections line:nth-child(6) { animation-delay: 0.75s; }
+  .connections line:nth-child(7) { animation-delay: 0.9s; }
+  .connections line:nth-child(8) { animation-delay: 0.2s; }
+  .connections line:nth-child(9) { animation-delay: 0.35s; }
+  .connections line:nth-child(10) { animation-delay: 0.5s; }
+  .connections line:nth-child(11) { animation-delay: 0.65s; }
+  .connections line:nth-child(12) { animation-delay: 0.8s; }
+  .connections line:nth-child(13) { animation-delay: 0.95s; }
+
+  /* ノードが順次発火（パルス） */
+  .node {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: node-pulse 6s ease-in-out infinite;
+  }
+  @keyframes node-pulse {
+    0%,
+    25% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    35% {
+      transform: scale(1.6);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    85% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
+  .node-1  { animation-delay: 0.30s; }
+  .node-2  { animation-delay: 0.45s; }
+  .node-3  { animation-delay: 0.60s; }
+  .node-4  { animation-delay: 0.75s; }
+  .node-5  { animation-delay: 0.90s; }
+  .node-6  { animation-delay: 0.55s; }
+  .node-7  { animation-delay: 0.70s; }
+  .node-8  { animation-delay: 0.85s; }
+  .node-9  { animation-delay: 0.40s; }
+  .node-10 { animation-delay: 0.65s; }
+  .node-11 { animation-delay: 0.80s; }
+  .node-12 { animation-delay: 0.95s; }
+
+  /* 中心ハブの脈動 */
+  .hub {
+    transform-origin: 0 0;
+    transform-box: fill-box;
+    animation: hub-pulse 2s ease-in-out infinite;
+  }
+  @keyframes hub-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brain-outline path,
+    .connections line,
+    .node,
+    .hub {
+      animation: none !important;
+    }
+    .brain-outline path {
+      stroke-dashoffset: 0;
+      opacity: 0.5;
+    }
+    .connections line {
+      stroke-dashoffset: 0;
+    }
+    .node {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+  }
+</style>
