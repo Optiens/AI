@@ -26,16 +26,6 @@
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://optiens.com/studio</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://optiens.com/hydroponics</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://optiens.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>

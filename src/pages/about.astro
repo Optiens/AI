@@ -25,10 +25,10 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     <!-- ===== Content ===== -->
     <section class="about-content-section"><div class="container">
 
-        <!-- 2つの事業 -->
+        <!-- 事業内容 -->
         <section class="about-section about-businesses reveal">
-          <h2 class="section-heading">2つの事業</h2>
-          <div class="business-cards">
+          <h2 class="section-heading">事業内容</h2>
+          <div class="business-cards business-cards--single">
             <article class="business-card">
               <span class="business-num" aria-hidden="true">01</span>
               <div class="business-img-wrap">
@@ -43,36 +43,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
               </p>
               <a href="/service" class="business-link">詳しく見る</a>
             </article>
-            <article class="business-card">
-              <span class="business-num" aria-hidden="true">02</span>
-              <div class="business-img-wrap">
-                <img src="/images/businesses/hydroponics.png" alt="IoT水耕栽培事業を表すイラスト" loading="lazy" />
-              </div>
-              <h3>IoT水耕栽培事業</h3>
-              <blockquote class="business-philosophy">
-                農業の<em>在り方</em>を、<br/>一人ひとりが見直す時代へ。
-              </blockquote>
-              <p class="business-desc">
-                食料自給率の低下、担い手の減少、気候と輸入への依存、種子や水源地への海外資本流入。これから顕在化する食の脆さに対する、ひとつの答えです。水を最適化し、採種までを内側で循環させる室内IoT水耕栽培を、小さな単位から実証し、人々へ届けます。
-              </p>
-              <a href="/hydroponics" class="business-link">詳しく見る</a>
-            </article>
           </div>
-        </section>
-
-        <!-- 2.5) サイドプロジェクト: Studio Optiens -->
-        <section class="about-section about-side reveal">
-          <h2 class="section-heading">サイドプロジェクト</h2>
-          <a href="/studio" class="side-link-card">
-            <div class="side-link-meta">
-              <span class="side-link-tag">CREATIVE STUDIO</span>
-              <h3 class="side-link-title">Studio Optiens</h3>
-            </div>
-            <p class="side-link-desc">
-              AI技術を活用したクリエイティブ・スタジオ。複数のAIエージェントによる独自設計の制作プロセスで、小説・漫画・動画分野の作品を生み出しています。
-            </p>
-            <span class="side-link-cta">スタジオページを見る <span aria-hidden="true">→</span></span>
-          </a>
         </section>
 
         <!-- 3) 代表者について（一人法人は人で信頼形成） -->
@@ -82,7 +53,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
             <div class="profile-content">
               <h3>髙橋 大地<span class="profile-title">合同会社Optiens 代表社員</span></h3>
               <p>エンタープライズ向け大規模CRMシステムの設計・開発に10年以上従事。業務分析からシステム実装まで一貫して経験を積み、業務の構造そのものに踏み込む設計を強みとする。</p>
-              <p>2026年、山梨県北杜市に合同会社Optiensを設立。一人法人としてAI支援事業とIoT水耕栽培事業を並走させながら、自社の経営管理は全てAIエージェント体制で運営。「AIを中心に仕事の仕組みを変える」というスタンスを、自社で実証しながら全国の小規模事業者へ届けている。</p>
+              <p>2026年、山梨県北杜市に合同会社Optiensを設立。一人法人としてAI支援事業に注力しつつ、自社の経営管理は全てAIエージェント体制で運営。「AIを中心に仕事の仕組みを変える」というスタンスを、自社で実証しながら全国の小規模事業者へ届けている。</p>
               <ul class="profile-tags">
                 <li>大規模CRM認定資格保有</li>
                 <li>エンタープライズ開発10年+</li>
@@ -191,7 +162,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
               <tr><th>代表社員</th><td>髙橋大地</td></tr>
               <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
               <tr><th>資本金</th><td>100,000円</td></tr>
-              <tr><th>事業内容</th><td>AI活用支援（診断・導入支援・保守）、IoT水耕栽培システムの開発・ハーブ生産販売</td></tr>
+              <tr><th>事業内容</th><td>AI活用支援（診断・導入支援・保守）</td></tr>
               <tr><th>メール</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
               <tr><th>法人番号</th><td>9090003003025</td></tr>
               <tr><th>インボイス</th><td>適格請求書発行事業者 申請中</td></tr>
