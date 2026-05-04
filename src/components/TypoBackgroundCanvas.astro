@@ -1,0 +1,159 @@
+---
+/**
+ * 案7: タイポグラフィ巨大文字
+ *
+ * 複数の文字バンドが異なる速度・方向で流れるパララックス背景。
+ * 巨大文字はアウトラインのみで描画し、本文の可読性を確保。
+ * ブランドメッセージ（OPTIENS / 最適化 / 調和 / 循環 等）を
+ * 大きなタイポグラフィで強調する。
+ *
+ * 純CSSアニメーション（外部依存なし・最軽量）。
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'typo-bg' } = Astro.props;
+---
+
+<div id={id} class="typo-bg" aria-hidden="true">
+  <div class="typo-band typo-band--top">
+    <div class="typo-track">
+      <span>OPTIENS</span>
+      <span>OPTIMIZATION</span>
+      <span>ENSŌ</span>
+      <span>HARMONY</span>
+      <span>OPTIENS</span>
+      <span>OPTIMIZATION</span>
+      <span>ENSŌ</span>
+      <span>HARMONY</span>
+    </div>
+  </div>
+
+  <div class="typo-band typo-band--middle">
+    <div class="typo-track">
+      <span>調和</span>
+      <span>最適化</span>
+      <span>循環</span>
+      <span>自動化</span>
+      <span>業務</span>
+      <span>判断</span>
+      <span>調和</span>
+      <span>最適化</span>
+      <span>循環</span>
+      <span>自動化</span>
+      <span>業務</span>
+      <span>判断</span>
+    </div>
+  </div>
+
+  <div class="typo-band typo-band--bottom">
+    <div class="typo-track">
+      <span>AI AGENT</span>
+      <span>NATIVE</span>
+      <span>BUSINESS</span>
+      <span>FLOW</span>
+      <span>AI AGENT</span>
+      <span>NATIVE</span>
+      <span>BUSINESS</span>
+      <span>FLOW</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .typo-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .typo-band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .typo-track {
+    display: flex;
+    flex-shrink: 0;
+    will-change: transform;
+  }
+  .typo-track span {
+    flex-shrink: 0;
+    padding-right: 0.4em;
+    line-height: 0.9;
+    font-family: 'Helvetica Neue', 'Arial', system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  /* 上段: 英字、紫アウトライン、左→右へ流れる */
+  .typo-band--top {
+    top: -2vw;
+  }
+  .typo-band--top .typo-track {
+    animation: scroll-right 70s linear infinite;
+    color: transparent;
+    -webkit-text-stroke: 1.2px rgba(162, 89, 255, 0.32);
+  }
+  .typo-band--top .typo-track span {
+    font-size: clamp(8rem, 22vw, 22rem);
+  }
+
+  /* 中段: 漢字、青塗り（薄め）、右→左へ流れる */
+  .typo-band--middle {
+    top: 35%;
+    transform: translateY(-50%);
+  }
+  .typo-band--middle .typo-track {
+    animation: scroll-left 55s linear infinite;
+    color: rgba(26, 188, 254, 0.16);
+  }
+  .typo-band--middle .typo-track span {
+    font-size: clamp(6rem, 16vw, 16rem);
+    font-family: 'Helvetica Neue', 'Hiragino Sans', system-ui, sans-serif;
+    letter-spacing: 0;
+    padding-right: 0.6em;
+  }
+
+  /* 下段: 英字、緑アウトライン、左→右へ流れる（slow） */
+  .typo-band--bottom {
+    bottom: -3vw;
+  }
+  .typo-band--bottom .typo-track {
+    animation: scroll-right 90s linear infinite;
+    color: transparent;
+    -webkit-text-stroke: 1.2px rgba(10, 207, 131, 0.28);
+  }
+  .typo-band--bottom .typo-track span {
+    font-size: clamp(7rem, 18vw, 18rem);
+  }
+
+  @keyframes scroll-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes scroll-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .typo-track {
+      animation: none !important;
+    }
+  }
+</style>
