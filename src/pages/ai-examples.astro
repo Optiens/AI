@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ParticleCanvas from '../components/ParticleCanvas.astro';
+import IsoGridCanvas from '../components/IsoGridCanvas.astro';
 
 // ===== データ定義 =====
 type CommonCase = {
@@ -128,7 +128,7 @@ const totalCount = commonCases.length + industries.length + roles.length;
   <main>
     <!-- ヒーロー -->
     <section class="ax-hero light-section">
-      <ParticleCanvas id="ax-net" />
+      <IsoGridCanvas id="ax-net" />
       <div class="container text-center" style="position:relative;z-index:1;">
         <h1>Optiensの事例集</h1>
         <p class="hero-sub">

@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import ParticleCanvas from '../../components/ParticleCanvas.astro';
+import IsoGridCanvas from '../../components/IsoGridCanvas.astro';
 
 type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
 
@@ -51,7 +51,7 @@ function categoryUrl(cat: BlogCategory | '') {
   <main>
     <!-- Hero -->
     <section class="blog-hero light-section">
-      <ParticleCanvas id="blog-net" />
+      <IsoGridCanvas id="blog-net" />
       <div class="container text-center" style="position:relative;z-index:1;">
         <h1>ブログ</h1>
         <p class="hero-sub">AI・テクノロジーの最新情報をお届けします</p>

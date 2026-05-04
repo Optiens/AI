@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ParticleCanvas from '../components/ParticleCanvas.astro';
+import IsoGridCanvas from '../components/IsoGridCanvas.astro';
 
 // 各領域の項目数（実装に基づく）
 const areas = [
@@ -20,7 +20,7 @@ const totalCount = areas.reduce((sum, a) => sum + a.count, 0);
   <main>
     <!-- ヒーロー -->
     <section class="qg-hero light-section">
-      <ParticleCanvas id="qg-net" />
+      <IsoGridCanvas id="qg-net" />
       <div class="container text-center" style="position:relative;z-index:1;">
         <p class="eyebrow">QUALITY GUIDELINES</p>
         <h1>AI支援 品質ガイドライン</h1>

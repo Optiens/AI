@@ -48,8 +48,9 @@ const {
       muted
       loop
       playsinline
-      preload="metadata"
+      preload="auto"
       poster={poster}
+      disableRemotePlayback
     >
       {srcWebm && <source src={srcWebm} type="video/webm" />}
       <source src={src} type="video/mp4" />

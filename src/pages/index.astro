@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import BrainCanvas from '../components/BrainCanvas.astro';
+import VideoBackgroundCanvas from '../components/VideoBackgroundCanvas.astro';
 
 // HOME 専用 JSON-LD: WebSite + サービス
 const homeSchema = [
@@ -40,7 +40,11 @@ const homeSchema = [
 
     <!-- ===== Hero（変更禁止のコピーを保持） ===== -->
     <section class="home-hero light-section">
-      <BrainCanvas id="home-hero-brain" />
+      <VideoBackgroundCanvas
+        id="home-hero-video"
+        src="/videos/hero-bg.mp4"
+        overlay="brand"
+      />
       <div class="hero-content">
         <div class="hero-text-block">
           <p class="hero-eyebrow">NEXT STEP WITH AI</p>
