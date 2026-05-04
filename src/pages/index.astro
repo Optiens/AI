@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import LottieSceneCanvas from '../components/LottieSceneCanvas.astro';
 
 // HOME 専用 JSON-LD: WebSite + サービス
 const homeSchema = [
@@ -39,7 +40,7 @@ const homeSchema = [
 
     <!-- ===== Hero（変更禁止のコピーを保持） ===== -->
     <section class="home-hero light-section">
-      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <LottieSceneCanvas id="home-hero-lottie" />
       <div class="hero-content">
         <div class="hero-text-block">
           <p class="hero-eyebrow">NEXT STEP WITH AI</p>
@@ -94,133 +95,6 @@ const homeSchema = [
 
   </main>
 </Layout>
-
-<!-- Hero パーティクル（既存実装を保持） -->
-<script is:inline>
-(function() {
-  const canvas = document.getElementById('hero-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  let w, h, particles, mouse;
-  const PARTICLE_COUNT = 80;
-  const CONNECT_DIST = 140;
-  const MOUSE_DIST = 180;
-
-  // Modern Vibrant パレット（Figma 4色：紫・青・緑・オレンジ）
-  const COLORS = [
-    { r: 162, g: 89,  b: 255 },
-    { r: 26,  g: 188, b: 254 },
-    { r: 10,  g: 207, b: 131 },
-    { r: 242, g: 78,  b: 30 },
-  ];
-
-  function resize() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = rect.width;
-    h = rect.height;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  function createParticles() {
-    particles = [];
-    const count = Math.min(PARTICLE_COUNT, Math.floor((w * h) / 8000));
-    for (let i = 0; i < count; i++) {
-      const c = COLORS[Math.floor(Math.random() * COLORS.length)];
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 1.8 + 0.8,
-        color: c,
-        alpha: Math.random() * 0.5 + 0.3,
-      });
-    }
-  }
-
-  mouse = { x: -1000, y: -1000 };
-  canvas.addEventListener('mousemove', function(e) {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
-  });
-  canvas.addEventListener('mouseleave', function() {
-    mouse.x = -1000;
-    mouse.y = -1000;
-  });
-
-  function draw() {
-    ctx.clearRect(0, 0, w, h);
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < -10) p.x = w + 10;
-      if (p.x > w + 10) p.x = -10;
-      if (p.y < -10) p.y = h + 10;
-      if (p.y > h + 10) p.y = -10;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(' + p.color.r + ',' + p.color.g + ',' + p.color.b + ',' + p.alpha + ')';
-      ctx.fill();
-
-      for (let j = i + 1; j < particles.length; j++) {
-        const q = particles[j];
-        const dx = p.x - q.x;
-        const dy = p.y - q.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CONNECT_DIST) {
-          const opacity = (1 - dist / CONNECT_DIST) * 0.15;
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = 'rgba(' + p.color.r + ',' + p.color.g + ',' + p.color.b + ',' + opacity + ')';
-          ctx.lineWidth = 0.6;
-          ctx.stroke();
-        }
-      }
-
-      const mdx = p.x - mouse.x;
-      const mdy = p.y - mouse.y;
-      const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
-      if (mDist < MOUSE_DIST) {
-        const opacity = (1 - mDist / MOUSE_DIST) * 0.4;
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.strokeStyle = 'rgba(' + p.color.r + ',' + p.color.g + ',' + p.color.b + ',' + opacity + ')';
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-      }
-    }
-
-    if (!prefersReducedMotion) {
-      requestAnimationFrame(draw);
-    }
-  }
-
-  resize();
-  createParticles();
-  draw();
-
-  let resizeTimer;
-  window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-      resize();
-      createParticles();
-    }, 200);
-  });
-})();
-</script>
 
 <style>
 /* =========================================================
@@ -299,13 +173,6 @@ const homeSchema = [
   padding: clamp(90px, 11vw, 140px) 0;
   background: var(--home-surface);
   color: var(--home-text);
-}
-#hero-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
 }
 .home-hero .hero-content {
   position: relative;
