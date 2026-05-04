@@ -5,7 +5,7 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
 
 <Layout
   title="AI業務自動化・AIエージェント導入支援 | Optiens（全国オンライン対応）"
-  description="中小企業・小規模事業者向けAI業務自動化サービス。AI活用診断（無料/詳細版）・AI入門ワークショップ・導入支援・保守を一貫提供。全国オンライン対応で、エンタープライズ大規模CRM経験10年超を御社の規模に最適化します。"
+  description="中小企業・小規模事業者向けAI業務自動化サービス。AI活用診断（無料/詳細版）・導入支援・保守を一貫提供。全国オンライン対応で、エンタープライズ大規模CRM経験10年超を御社の規模に最適化します。"
   canonical="https://optiens.com/service"
 >
   <main>
@@ -125,43 +125,6 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
             </ul>
           </div>
 
-        </div>
-
-        <!-- オプション: ワークショップ（2階層） -->
-        <div class="workshop-wrap reveal">
-          <p class="workshop-label">オプション</p>
-          <h3 class="workshop-section-title">AIワークショップ（参加費無料）</h3>
-          <p class="workshop-section-sub">対象に合わせて2階層をご用意しています。どちらも2時間構成（20分の解説＋80分の実践＋20分の振り返り）です。</p>
-          <div class="workshop-grid">
-            <!-- 入門 -->
-            <div class="ac-card gradient-border workshop-tier">
-              <div class="ac-badge">WORKSHOP / 入門</div>
-              <h4 class="workshop-tier-title">はじめてのAIエージェント体験</h4>
-              <p class="workshop-target"><strong>対象</strong>：ChatGPTを少し触った程度の経営者・現場担当者</p>
-              <p class="ac-desc">チャットAIとAIエージェントの違いから始め、自分の業務に合わせたエージェントを1つ動かして持ち帰ります。</p>
-              <ul class="ac-list">
-                <li>20分：チャットAI vs AIエージェントの違いをデモで体感</li>
-                <li>80分：自分の業務でエージェントを組み立てる実践</li>
-                <li>20分：持ち帰り設計と次の一歩</li>
-                <li>使用ツール：ブラウザのみ（無料枠で完結）</li>
-              </ul>
-              <p class="ac-price">無料<span class="price-unit">／出張時は交通費・会場費を別途協議</span></p>
-            </div>
-            <!-- 上位 -->
-            <div class="ac-card gradient-border workshop-tier">
-              <div class="ac-badge">WORKSHOP / 上位</div>
-              <h4 class="workshop-tier-title">Claudeで業務エージェントを構築する</h4>
-              <p class="workshop-target"><strong>対象</strong>：すでにChatGPT・Claudeを業務で使っている情シス・DX担当・経営者</p>
-              <p class="ac-desc">Claudeを使った業務エージェントをご自身のPCで構築・実行し、社内展開のイメージを持ち帰ります。</p>
-              <ul class="ac-list">
-                <li>20分：Projects・Skills・社内展開の全体像</li>
-                <li>80分：Claudeで自分の業務を自動化する実装</li>
-                <li>20分：社内展開とガバナンス設計</li>
-                <li>使用ツール：Claude（無料プラン）＋ご自身のPC</li>
-              </ul>
-              <p class="ac-price">無料<span class="price-unit">／出張時は交通費・会場費を別途協議</span></p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -529,77 +492,6 @@ import ParticleCanvas from '../components/ParticleCanvas.astro';
     grid-template-columns: repeat(3, 1fr);
   }
 
-  /* ===== ワークショップ（2階層） ===== */
-  .workshop-wrap {
-    max-width: 1080px;
-    margin: clamp(40px, 5vw, 60px) auto 0;
-  }
-  .workshop-label {
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    font-size: 11px;
-    letter-spacing: .25em;
-    font-weight: 700;
-    color: var(--brand);
-    text-align: center;
-    margin: 0 0 12px;
-    text-transform: uppercase;
-  }
-  .workshop-section-title {
-    text-align: center;
-    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
-    font-weight: 700;
-    color: var(--heading);
-    margin: 0 0 8px;
-  }
-  .workshop-section-sub {
-    text-align: center;
-    color: var(--muted);
-    font-size: clamp(.85rem, 1.5vw, .95rem);
-    margin: 0 0 24px;
-  }
-  .workshop-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(20px, 3vw, 28px);
-  }
-  .workshop-tier {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: clamp(22px, 2.6vw, 32px);
-  }
-  .workshop-tier-title {
-    font-size: clamp(1rem, 1.8vw, 1.15rem);
-    font-weight: 700;
-    color: var(--heading);
-    margin: 4px 0 2px;
-    line-height: 1.5;
-  }
-  .workshop-target {
-    font-size: .85rem;
-    color: var(--muted);
-    margin: 0;
-    padding: 8px 12px;
-    background: rgba(162, 89, 255, .06);
-    border-left: 3px solid var(--brand);
-    border-radius: 0 4px 4px 0;
-  }
-  .workshop-target strong {
-    color: var(--text);
-    margin-right: 4px;
-  }
-  .workshop-tier .ac-list {
-    margin-top: 2px;
-  }
-  .workshop-tier .ac-price {
-    margin-top: auto;
-    padding-top: 8px;
-  }
-  @media (max-width: 768px) {
-    .workshop-grid {
-      grid-template-columns: 1fr;
-    }
-  }
   @media (max-width: 1024px) {
     .service-grid-4 { grid-template-columns: repeat(2, 1fr); }
     .service-grid-3 { grid-template-columns: 1fr; }
