@@ -1,0 +1,187 @@
+---
+/**
+ * 案2: SVGジオメトリック
+ * 幾何学的な多角形（六角・五角・八角）が同心状に重なり、
+ * 各層が異なる速度・向きで回転。頂点には粒子が配置され、
+ * 中心から放射状の接続線で結ばれる「ニューラル/分子構造」風。
+ *
+ * 純SVG + CSS animation で軽量。
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'geo-bg' } = Astro.props;
+---
+
+<div id={id} class="geo-bg" aria-hidden="true">
+  <svg viewBox="-200 -200 400 400" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <radialGradient id={`${id}-glow`} cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#A259FF" stop-opacity="0.18" />
+        <stop offset="60%" stop-color="#A259FF" stop-opacity="0.05" />
+        <stop offset="100%" stop-color="#A259FF" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <!-- 中心のグロー -->
+    <circle cx="0" cy="0" r="200" fill={`url(#${id}-glow)`} />
+
+    <!-- 外側: 八角形 -->
+    <g class="ring ring--outer">
+      <polygon
+        points="180,0 127.28,127.28 0,180 -127.28,127.28 -180,0 -127.28,-127.28 0,-180 127.28,-127.28"
+        fill="none"
+        stroke="#1ABCFE"
+        stroke-width="0.6"
+        stroke-opacity="0.7"
+      />
+      <g class="dots">
+        <circle cx="180" cy="0" r="3" fill="#1ABCFE" />
+        <circle cx="127.28" cy="127.28" r="3" fill="#1ABCFE" />
+        <circle cx="0" cy="180" r="3" fill="#1ABCFE" />
+        <circle cx="-127.28" cy="127.28" r="3" fill="#1ABCFE" />
+        <circle cx="-180" cy="0" r="3" fill="#1ABCFE" />
+        <circle cx="-127.28" cy="-127.28" r="3" fill="#1ABCFE" />
+        <circle cx="0" cy="-180" r="3" fill="#1ABCFE" />
+        <circle cx="127.28" cy="-127.28" r="3" fill="#1ABCFE" />
+      </g>
+    </g>
+
+    <!-- 中間: 六角形 -->
+    <g class="ring ring--middle">
+      <polygon
+        points="120,0 60,103.92 -60,103.92 -120,0 -60,-103.92 60,-103.92"
+        fill="none"
+        stroke="#0ACF83"
+        stroke-width="0.7"
+        stroke-opacity="0.65"
+      />
+      <g class="dots">
+        <circle cx="120" cy="0" r="2.6" fill="#0ACF83" />
+        <circle cx="60" cy="103.92" r="2.6" fill="#0ACF83" />
+        <circle cx="-60" cy="103.92" r="2.6" fill="#0ACF83" />
+        <circle cx="-120" cy="0" r="2.6" fill="#0ACF83" />
+        <circle cx="-60" cy="-103.92" r="2.6" fill="#0ACF83" />
+        <circle cx="60" cy="-103.92" r="2.6" fill="#0ACF83" />
+      </g>
+    </g>
+
+    <!-- 内側: 五角形 -->
+    <g class="ring ring--inner">
+      <polygon
+        points="60,0 18.54,57.06 -48.54,35.27 -48.54,-35.27 18.54,-57.06"
+        fill="none"
+        stroke="#A259FF"
+        stroke-width="0.8"
+        stroke-opacity="0.85"
+      />
+      <g class="dots">
+        <circle cx="60" cy="0" r="2.4" fill="#A259FF" />
+        <circle cx="18.54" cy="57.06" r="2.4" fill="#A259FF" />
+        <circle cx="-48.54" cy="35.27" r="2.4" fill="#A259FF" />
+        <circle cx="-48.54" cy="-35.27" r="2.4" fill="#A259FF" />
+        <circle cx="18.54" cy="-57.06" r="2.4" fill="#A259FF" />
+      </g>
+    </g>
+
+    <!-- 中心から外八角形への放射線（脈動） -->
+    <g class="rays">
+      <line x1="0" y1="0" x2="180" y2="0" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="127.28" y2="127.28" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="0" y2="180" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-127.28" y2="127.28" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-180" y2="0" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-127.28" y2="-127.28" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="0" y2="-180" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="127.28" y2="-127.28" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+    </g>
+
+    <!-- 中心ノード（脈動するコア） -->
+    <g class="core">
+      <circle cx="0" cy="0" r="6" fill="#F24E1E" fill-opacity="0.18" />
+      <circle cx="0" cy="0" r="3" fill="#F24E1E" fill-opacity="0.85" />
+    </g>
+  </svg>
+</div>
+
+<style>
+  .geo-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .geo-bg svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* 各層が異なる速度・向きで回転 */
+  .ring {
+    transform-origin: 0 0;
+    transform-box: fill-box;
+  }
+  .ring--outer {
+    animation: rotate-cw 90s linear infinite;
+  }
+  .ring--middle {
+    animation: rotate-ccw 65s linear infinite;
+  }
+  .ring--inner {
+    animation: rotate-cw 45s linear infinite;
+  }
+  .rays {
+    animation: pulse-rays 4s ease-in-out infinite;
+  }
+  .core {
+    animation: pulse-core 3s ease-in-out infinite;
+    transform-origin: 0 0;
+    transform-box: fill-box;
+  }
+
+  @keyframes rotate-cw {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes rotate-ccw {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+  @keyframes pulse-rays {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+  @keyframes pulse-core {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.25);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring,
+    .rays,
+    .core {
+      animation: none !important;
+    }
+  }
+</style>
