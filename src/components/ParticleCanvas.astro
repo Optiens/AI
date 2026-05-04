@@ -5,131 +5,184 @@ interface Props {
 const { id = 'particle-net' } = Astro.props;
 ---
 
-<canvas id={id} class="particle-canvas"></canvas>
+<canvas id={id} class="particle-canvas" data-particle-canvas></canvas>
 
-<script is:inline define:vars={{ canvasId: id }}>
-(function() {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let w, h, particles, animId;
-  const CONNECT_DIST = 140;
-  const MOUSE_DIST = 180;
-  const PARTICLE_COUNT = 80;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+<script>
+  import * as THREE from 'three';
 
-  let mouse = { x: -1000, y: -1000 };
+  type CanvasState = {
+    canvas: HTMLCanvasElement;
+    parent: HTMLElement;
+    renderer: THREE.WebGLRenderer;
+    scene: THREE.Scene;
+    camera: THREE.PerspectiveCamera;
+    points: THREE.Points;
+    mouseTarget: { x: number; y: number };
+    cameraTarget: { x: number; y: number };
+    animId: number | null;
+    cleanup: () => void;
+  };
 
-  function resize() {
-    const rect = canvas.parentElement.getBoundingClientRect();
+  function initParticleCanvas(canvas: HTMLCanvasElement) {
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 768;
+    const POINT_COUNT = isMobile ? 800 : 2000;
+
+    // ===== Renderer =====
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: !isMobile,
+      powerPreference: 'low-power',
+    });
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = rect.width;
-    h = rect.height;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
+    renderer.setPixelRatio(dpr);
+    renderer.setClearColor(0x000000, 0);
 
-  // マウス位置の追跡（ヒーロー要素全体で検知）
-  var heroEl = canvas.parentElement;
-  heroEl.addEventListener('mousemove', function(e) {
-    var rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
-  });
-  heroEl.addEventListener('mouseleave', function() {
-    mouse.x = -1000;
-    mouse.y = -1000;
-  });
+    // ===== Scene & Camera =====
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+    camera.position.set(0, 0, 9);
 
-  // Modern Vibrant パレット（Figma 4色：紫・青・緑・オレンジ）
-  var COLORS = [
-    'rgba(162,89,255,',   // #A259FF Figma purple（メイン）
-    'rgba(26,188,254,',   // #1ABCFE Figma blue
-    'rgba(10,207,131,',   // #0ACF83 Figma green
-    'rgba(242,78,30,',    // #F24E1E Figma orange/red
-  ];
+    // ===== Points (球状ランダム分布) =====
+    const palette = [
+      new THREE.Color(0xa259ff), // Figma purple
+      new THREE.Color(0x1abcfe), // Figma blue
+      new THREE.Color(0x0acf83), // Figma green
+      new THREE.Color(0xf24e1e), // Figma orange
+    ];
 
-  function createParticles() {
-    particles = [];
-    for (var i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 1.5 + 0.5,
-        color: COLORS[i % COLORS.length],
-      });
-    }
-  }
+    const positions = new Float32Array(POINT_COUNT * 3);
+    const colors = new Float32Array(POINT_COUNT * 3);
+    const sizes = new Float32Array(POINT_COUNT);
 
-  function draw() {
-    ctx.clearRect(0, 0, w, h);
+    for (let i = 0; i < POINT_COUNT; i++) {
+      const r = 3.5 + Math.random() * 2.5;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() - 0.5) * 2);
+      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      positions[i * 3 + 2] = r * Math.cos(phi);
 
-    for (var i = 0; i < particles.length; i++) {
-      for (var j = i + 1; j < particles.length; j++) {
-        var dx = particles[i].x - particles[j].x;
-        var dy = particles[i].y - particles[j].y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CONNECT_DIST) {
-          var alpha = (1 - dist / CONNECT_DIST) * 0.15;
-          ctx.strokeStyle = particles[i].color + alpha + ')';
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
+      const color = palette[i % palette.length];
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
 
-      // Draw line to mouse (if nearby)
-      var pp = particles[i];
-      var mdx = pp.x - mouse.x;
-      var mdy = pp.y - mouse.y;
-      var mDist = Math.sqrt(mdx * mdx + mdy * mdy);
-      if (mDist < MOUSE_DIST) {
-        var mOpacity = (1 - mDist / MOUSE_DIST) * 0.4;
-        ctx.beginPath();
-        ctx.moveTo(pp.x, pp.y);
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.strokeStyle = pp.color + mOpacity + ')';
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-      }
+      sizes[i] = 0.04 + Math.random() * 0.06;
     }
 
-    for (var k = 0; k < particles.length; k++) {
-      var p = particles[k];
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color + '0.5)';
-      ctx.fill();
-    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    if (!reducedMotion) {
-      for (var m = 0; m < particles.length; m++) {
-        var q = particles[m];
-        q.x += q.vx;
-        q.y += q.vy;
-        if (q.x < 0 || q.x > w) q.vx *= -1;
-        if (q.y < 0 || q.y > h) q.vy *= -1;
-      }
-    }
+    const material = new THREE.PointsMaterial({
+      size: 0.07,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.85,
+      sizeAttenuation: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
 
-    animId = requestAnimationFrame(draw);
-  }
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
 
-  resize();
-  createParticles();
-  draw();
+    // ===== State =====
+    const state: CanvasState = {
+      canvas,
+      parent,
+      renderer,
+      scene,
+      camera,
+      points,
+      mouseTarget: { x: 0, y: 0 },
+      cameraTarget: { x: 0, y: 0 },
+      animId: null,
+      cleanup: () => {},
+    };
 
-  window.addEventListener('resize', function() {
+    // ===== Resize =====
+    const resize = () => {
+      const rect = parent.getBoundingClientRect();
+      const w = rect.width || 800;
+      const h = rect.height || 600;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
     resize();
-  });
-})();
+
+    // ===== Mouse parallax =====
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = parent.getBoundingClientRect();
+      state.mouseTarget.x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      state.mouseTarget.y = ((e.clientY - rect.top) / rect.height - 0.5) * -2;
+    };
+    const onMouseLeave = () => {
+      state.mouseTarget.x = 0;
+      state.mouseTarget.y = 0;
+    };
+    parent.addEventListener('mousemove', onMouseMove);
+    parent.addEventListener('mouseleave', onMouseLeave);
+    window.addEventListener('resize', resize);
+
+    // ===== Animation =====
+    const animate = () => {
+      if (!reducedMotion) {
+        // ゆっくり全体を回転
+        points.rotation.y += 0.0018;
+        points.rotation.x += 0.0009;
+
+        // マウスパララックスでカメラを微移動
+        state.cameraTarget.x += (state.mouseTarget.x * 0.8 - state.cameraTarget.x) * 0.05;
+        state.cameraTarget.y += (state.mouseTarget.y * 0.8 - state.cameraTarget.y) * 0.05;
+        camera.position.x = state.cameraTarget.x;
+        camera.position.y = state.cameraTarget.y;
+        camera.lookAt(scene.position);
+      }
+      renderer.render(scene, camera);
+      state.animId = requestAnimationFrame(animate);
+    };
+
+    if (reducedMotion) {
+      // モーション低減希望: 1度だけレンダリング
+      renderer.render(scene, camera);
+    } else {
+      animate();
+    }
+
+    // ===== Cleanup =====
+    state.cleanup = () => {
+      if (state.animId !== null) cancelAnimationFrame(state.animId);
+      parent.removeEventListener('mousemove', onMouseMove);
+      parent.removeEventListener('mouseleave', onMouseLeave);
+      window.removeEventListener('resize', resize);
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
+    };
+
+    // Astro view transition / page navigation 時のクリーンアップ
+    document.addEventListener('astro:before-swap', state.cleanup, { once: true });
+  }
+
+  function initAll() {
+    const canvases = document.querySelectorAll<HTMLCanvasElement>('canvas[data-particle-canvas]');
+    canvases.forEach((canvas) => initParticleCanvas(canvas));
+  }
+
+  // 初回ロード + Astro view transitions 対応
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+  document.addEventListener('astro:page-load', initAll);
 </script>
 
 <style>
@@ -139,5 +192,6 @@ const { id = 'particle-net' } = Astro.props;
     width: 100%;
     height: 100%;
     pointer-events: none;
+    display: block;
   }
 </style>
