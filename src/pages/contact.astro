@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import IsoGridCanvas from '../components/IsoGridCanvas.astro';
 ---
 
 <Layout
@@ -8,8 +9,8 @@ import Layout from '../layouts/Layout.astro';
   canonical="https://optiens.com/contact"
 >
   <main class="contact-page light-section">
-    <!-- パーティクルネットワーク背景 -->
-    <canvas id="contact-net" class="contact-canvas"></canvas>
+    <!-- 背景: アイソメトリック3Dグリッド（全ページ統一） -->
+    <IsoGridCanvas id="contact-bg" />
 
     <div class="container" style="position:relative;z-index:1;">
       <h1 class="reveal">お問い合わせ</h1>
@@ -82,98 +83,6 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script is:inline>
-(function() {
-  const canvas = document.getElementById('contact-net');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let w, h, particles, animId;
-  const CONNECT_DIST = 140;
-  const PARTICLE_COUNT = 80;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function resize() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = rect.width;
-    h = rect.height;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  // Modern Vibrant パレット（Figma 4色：紫・青・緑・オレンジ）
-  const COLORS = [
-    'rgba(162,89,255,',   // #A259FF Figma purple
-    'rgba(26,188,254,',   // #1ABCFE Figma blue
-    'rgba(10,207,131,',   // #0ACF83 Figma green
-    'rgba(242,78,30,',    // #F24E1E Figma orange
-  ];
-
-  function createParticles() {
-    particles = [];
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 1.5 + 0.5,
-        color: COLORS[i % COLORS.length],
-      });
-    }
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, w, h);
-
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CONNECT_DIST) {
-          const alpha = (1 - dist / CONNECT_DIST) * 0.15;
-          ctx.strokeStyle = 'rgba(162,89,255,' + alpha + ')';
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    for (const p of particles) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color + '0.5)';
-      ctx.fill();
-    }
-
-    if (!reducedMotion) {
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
-      }
-    }
-
-    animId = requestAnimationFrame(draw);
-  }
-
-  function init() {
-    resize();
-    createParticles();
-    draw();
-  }
-
-  window.addEventListener('resize', () => { resize(); });
-  init();
-})();
-
 // タイムスタンプ設定（いたずら防止）
 (function() {
   const t = document.getElementById('_t');
