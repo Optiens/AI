@@ -1,0 +1,266 @@
+---
+/**
+ * 案8: コードラインアニメ（IDE風）
+ *
+ * 中央〜やや上にmacOS風のIDEウィンドウを配置し、
+ * AIエージェントのコードがタイプライター風に順次表示される。
+ * 5つのコードサンプルをローテーションし、各サンプル後にクリアして次へ。
+ *
+ * 半透明・ガラス感（backdrop-filter）で本文の邪魔を抑制。
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'code-ide' } = Astro.props;
+---
+
+<div id={id} class="code-ide-bg" aria-hidden="true">
+  <!-- うっすら背景に流れるコード片（装飾） -->
+  <div class="code-bg-lines">
+    <span class="bg-line bg-line--1">{"const agent = new Agent({ goal: '...' });"}</span>
+    <span class="bg-line bg-line--2">await agent.run(prompt);</span>
+    <span class="bg-line bg-line--3">{"if (compliance.matches(guidelines)) { ... }"}</span>
+    <span class="bg-line bg-line--4">{"workflow.parallel([fetch, analyze, notify])"}</span>
+    <span class="bg-line bg-line--5">return summary.toJSON();</span>
+  </div>
+
+  <!-- メインIDEウィンドウ -->
+  <div class="ide-window">
+    <div class="ide-titlebar">
+      <div class="ide-dots">
+        <span class="ide-dot ide-dot--red"></span>
+        <span class="ide-dot ide-dot--yellow"></span>
+        <span class="ide-dot ide-dot--green"></span>
+      </div>
+      <span class="ide-filename" id={`${id}-filename`}>optiens-agent.ts</span>
+    </div>
+    <pre class="ide-body"><code id={`${id}-code`}></code><span class="ide-cursor">█</span></pre>
+  </div>
+</div>
+
+<script is:inline define:vars={{ canvasId: id }}>
+  (function () {
+    const codeEl = document.getElementById(canvasId + '-code');
+    const filenameEl = document.getElementById(canvasId + '-filename');
+    if (!codeEl || !filenameEl) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const SAMPLES = [
+      {
+        filename: 'optiens-agent.ts',
+        code:
+          "import { Agent } from 'optiens';\n\n" +
+          "const ceo = new Agent({\n" +
+          "  name: 'CEO',\n" +
+          "  goal: '事業判断に集中する',\n" +
+          "  delegate: ['CMO', 'CTO', 'CFO'],\n" +
+          "});\n\n" +
+          "await ceo.run('週次レポート作成');",
+      },
+      {
+        filename: 'compliance-check.ts',
+        code:
+          "// AI事業者ガイドライン整合性チェック\n" +
+          "const review = await agent.review({\n" +
+          "  prompt: businessFlow,\n" +
+          "  guidelines: 'METI_AI_v1.1',\n" +
+          "  output: 'compliance-report.pdf',\n" +
+          "});\n\n" +
+          "console.log(review.score);",
+      },
+      {
+        filename: 'workflow.ts',
+        code:
+          "const workflow = new Workflow({\n" +
+          "  steps: [\n" +
+          "    { agent: 'researcher', task: '市場調査' },\n" +
+          "    { agent: 'analyst',    task: '数値分析' },\n" +
+          "    { agent: 'writer',     task: 'レポート執筆' },\n" +
+          "  ],\n" +
+          "});\n\n" +
+          "await workflow.run();",
+      },
+      {
+        filename: 'briefing.ts',
+        code:
+          "// 朝の事業ブリーフィングを生成\n" +
+          "const briefing = await morningAgent({\n" +
+          "  inbox: gmail.unread(),\n" +
+          "  calendar: today.events(),\n" +
+          "  metrics: dashboard.snapshot(),\n" +
+          "});\n\n" +
+          "await slack.send(briefing);",
+      },
+      {
+        filename: 'payment-notify.ts',
+        code:
+          "// 入金検知 → 自動レポート送付\n" +
+          "bank.onIncoming(async (txn) => {\n" +
+          "  const lead = await crm.match(txn);\n" +
+          "  if (lead) {\n" +
+          "    await report.generate(lead);\n" +
+          "    await mail.send(lead.email);\n" +
+          "  }\n" +
+          "});",
+      },
+    ];
+
+    const TYPE_DELAY = 28; // ms per char
+    const PAUSE_AFTER = 2200; // 完成後の表示時間
+    const CLEAR_DELAY = 600;
+
+    let sampleIdx = 0;
+    let charIdx = 0;
+    let timer = null;
+
+    function typeNext() {
+      const sample = SAMPLES[sampleIdx];
+      if (charIdx === 0) {
+        filenameEl.textContent = sample.filename;
+        codeEl.textContent = '';
+      }
+      if (charIdx < sample.code.length) {
+        codeEl.textContent = sample.code.substring(0, charIdx + 1);
+        charIdx++;
+        timer = setTimeout(typeNext, TYPE_DELAY + Math.random() * 30);
+      } else {
+        // 完了 → 表示時間 → クリア → 次サンプル
+        timer = setTimeout(() => {
+          codeEl.textContent = '';
+          charIdx = 0;
+          sampleIdx = (sampleIdx + 1) % SAMPLES.length;
+          timer = setTimeout(typeNext, CLEAR_DELAY);
+        }, PAUSE_AFTER);
+      }
+    }
+
+    if (reducedMotion) {
+      // モーション低減: 1サンプルを最後まで表示
+      const sample = SAMPLES[0];
+      filenameEl.textContent = sample.filename;
+      codeEl.textContent = sample.code;
+    } else {
+      typeNext();
+    }
+  })();
+</script>
+
+<style>
+  .code-ide-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+      circle at 30% 20%,
+      rgba(162, 89, 255, 0.08),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 70% 80%,
+      rgba(26, 188, 254, 0.06),
+      transparent 50%
+    );
+  }
+
+  /* 背景に薄く流れるコード片 */
+  .code-bg-lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    color: rgba(162, 89, 255, 0.18);
+    font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+    pointer-events: none;
+  }
+  .bg-line {
+    position: absolute;
+    white-space: nowrap;
+    will-change: transform, opacity;
+  }
+  .bg-line--1 { top: 8%;  left: 60%; animation: drift-line 22s linear infinite; }
+  .bg-line--2 { top: 22%; left: -30%; animation: drift-line 28s linear infinite; animation-delay: -8s; }
+  .bg-line--3 { top: 45%; left: 70%; animation: drift-line 26s linear infinite; animation-delay: -12s; }
+  .bg-line--4 { top: 65%; left: -20%; animation: drift-line 30s linear infinite; animation-delay: -5s; }
+  .bg-line--5 { top: 85%; left: 50%; animation: drift-line 24s linear infinite; animation-delay: -16s; }
+
+  @keyframes drift-line {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { transform: translateX(-130vw); opacity: 0; }
+  }
+
+  /* IDEウィンドウ */
+  .ide-window {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(560px, 88vw);
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    opacity: 0.92;
+  }
+
+  .ide-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(30, 41, 59, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .ide-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .ide-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+  }
+  .ide-dot--red { background: #ff5f56; }
+  .ide-dot--yellow { background: #ffbd2e; }
+  .ide-dot--green { background: #27c93f; }
+  .ide-filename {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'SF Mono', 'Consolas', monospace;
+    font-size: 0.75rem;
+    margin-left: 8px;
+  }
+
+  .ide-body {
+    margin: 0;
+    padding: 16px 18px 22px;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: clamp(0.78rem, 1.15vw, 0.92rem);
+    line-height: 1.7;
+    color: #c8d3e0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 220px;
+  }
+  .ide-cursor {
+    display: inline-block;
+    color: #5eddff;
+    animation: blink 1s steps(2) infinite;
+    margin-left: -1px;
+  }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bg-line, .ide-cursor { animation: none !important; }
+  }
+</style>
