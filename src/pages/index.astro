@@ -1,6 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import VideoBackgroundCanvas from '../components/VideoBackgroundCanvas.astro';
+import { getCollection } from 'astro:content';
+
+// 最新ブログ3件（水耕系除外）
+const hydroCategories = ['agriculture', 'welfare', 'social'];
+const allPosts = await getCollection('blog');
+const latestPosts = allPosts
+  .filter((p) => !hydroCategories.includes(p.data.category as string))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+
+const fmtDate = (d: string) => {
+  const date = new Date(d);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+};
 
 // HOME 専用 JSON-LD: WebSite + サービス
 const homeSchema = [
@@ -139,6 +153,32 @@ const homeSchema = [
         </p>
       </div>
     </section>
+
+    <!-- ===== 最新ブログ3件 ===== -->
+    {latestPosts.length > 0 && (
+      <section class="home-blog-section light-section">
+        <div class="container">
+          <div class="home-blog-head">
+            <h2 class="home-section-heading home-section-heading--center">最新の記事</h2>
+            <a href="/blog" class="home-blog-all">記事一覧を見る <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="home-blog-list">
+            {latestPosts.map((post) => (
+              <a href={`/blog/${post.id}`} class="home-blog-row">
+                <div class="home-blog-meta">
+                  <time class="home-blog-date">{fmtDate(post.data.date)}</time>
+                </div>
+                <div class="home-blog-body">
+                  <h3 class="home-blog-title">{post.data.title}</h3>
+                  <p class="home-blog-excerpt">{post.data.excerpt}</p>
+                </div>
+                <span class="home-blog-arrow" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
 
     <!-- ===== Final CTA ===== -->
     <section class="home-final-cta">
@@ -449,6 +489,122 @@ const homeSchema = [
   letter-spacing: 0.08em;
   margin-top: 8px;
   text-transform: none;
+}
+
+/* =========================================================
+   最新ブログ3件
+   ========================================================= */
+.home-blog-section {
+  padding: clamp(60px, 8vw, 100px) 20px;
+  background: var(--home-surface-2);
+}
+.home-blog-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: clamp(28px, 4vw, 40px);
+  max-width: 880px;
+  margin-inline: auto;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.home-blog-head .home-section-heading {
+  margin: 0;
+}
+.home-blog-all {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--home-brand);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.home-blog-all:hover {
+  color: var(--home-brand-2);
+}
+.home-blog-list {
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.home-blog-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 24px;
+  gap: 24px;
+  align-items: center;
+  padding: 24px 28px;
+  background: #fff;
+  border: 1px solid var(--home-border);
+  border-bottom: none;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s ease;
+}
+.home-blog-row:first-child {
+  border-radius: 12px 12px 0 0;
+}
+.home-blog-row:last-child {
+  border-bottom: 1px solid var(--home-border);
+  border-radius: 0 0 12px 12px;
+}
+.home-blog-row:only-child {
+  border-radius: 12px;
+}
+.home-blog-row:hover {
+  background: rgba(162, 89, 255, 0.03);
+}
+.home-blog-row:hover .home-blog-arrow {
+  color: var(--home-brand);
+  transform: translateX(4px);
+}
+.home-blog-date {
+  font-family: 'SF Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--home-muted);
+  letter-spacing: 0.05em;
+}
+.home-blog-body {
+  min-width: 0;
+}
+.home-blog-title {
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  font-weight: 700;
+  color: var(--home-heading);
+  margin: 0 0 6px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.home-blog-excerpt {
+  color: var(--home-muted);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.home-blog-arrow {
+  font-size: 1rem;
+  color: var(--home-muted);
+  transition: color 0.2s ease, transform 0.2s ease;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .home-blog-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 20px;
+  }
+  .home-blog-arrow {
+    display: none;
+  }
 }
 
 /* =========================================================
