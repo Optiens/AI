@@ -83,6 +83,63 @@ const homeSchema = [
       </div>
     </section>
 
+    <!-- ===== なぜ、いまAIなのか ===== -->
+    <section class="home-why-section light-section">
+      <div class="container">
+        <h2 class="home-section-heading home-section-heading--center">なぜ、いまAIなのか</h2>
+        <div class="home-why-grid">
+          <div class="home-why-item">
+            <span class="home-why-num">01</span>
+            <h3>AIエージェントの台頭で、業務の在り方が変わる</h3>
+            <p>チャットに答えるだけでなく、業務を自律的にこなす<strong>AIエージェント</strong>が実用段階に到達しました。業務プロセスをAIが理解できる形に<strong>最適化</strong>することが、これからの設計思想です。</p>
+          </div>
+          <div class="home-why-item">
+            <span class="home-why-num">02</span>
+            <h3>中小企業でも、大企業の仕組みを持てる</h3>
+            <p>クラウド × AIエージェントの構成で、かつては大企業しか持てなかった業務システムが小規模事業者にも実装可能になりました。テクノロジーの恩恵が規模を超えて<strong>循環</strong>する時代です。</p>
+          </div>
+          <div class="home-why-item">
+            <span class="home-why-num">03</span>
+            <h3>人手だけで回す時代は終わった</h3>
+            <p>労働人口の減少が続く中、人とAIが<strong>調和</strong>しながら業務を回す形が新しいスタンダードです。「人がやるべきこと」と「AIに任せること」の境界を引き直す段階に来ています。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 中小企業にAXはなぜ大切か ===== -->
+    <section class="home-ax-section light-section">
+      <div class="container">
+        <h2 class="home-section-heading home-section-heading--center">中小企業にAXはなぜ大切か</h2>
+        <p class="home-lead home-ax-lead">
+          大企業と比べて人手や資金が限られている中小企業では、毎日の業務を効率よく進める工夫が必要です。<br class="pc-only" />
+          AXは、従来の業務を根本から変革および高度化するため、<br class="pc-only" />
+          限られたリソースの中でも成果を出すための効果的な手段になります。
+        </p>
+        <div class="home-ax-grid">
+          <div class="home-ax-card">
+            <div class="home-ax-icon"><i class="fa-solid fa-comments"></i></div>
+            <h3>問い合わせ対応の自動化</h3>
+            <p>顧客からの問い合わせが多い企業では、AIチャットボットを導入することで、よくある質問への対応を自動化できます。負担軽減により、担当者は個別対応や改善施策に集中できます。</p>
+          </div>
+          <div class="home-ax-card">
+            <div class="home-ax-icon"><i class="fa-solid fa-receipt"></i></div>
+            <h3>事務作業の自動処理</h3>
+            <p>経費精算や勤怠管理などもAIを使って自動処理することで、事務作業にかかる時間を削減できます。本来やるべき業務に時間を取り戻せます。</p>
+          </div>
+          <div class="home-ax-card">
+            <div class="home-ax-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h3>データに基づく経営判断</h3>
+            <p>売上データや在庫情報をAIで分析すれば、「どの商品がよく売れているか」「どの時間帯に顧客が多いか」を視覚的に把握。経験や勘に頼らず、数字に基づく予測や判断ができます。</p>
+          </div>
+        </div>
+        <p class="home-ax-closing">
+          AXは、ITやAIの専門知識がない企業でも、ツールの選び方と使い方次第で実践できる取り組みです。<br class="pc-only" />
+          少しずつでも導入を進めることで、仕事の無駄が見つかり、自然と新しい働き方へ移行していけます。
+        </p>
+      </div>
+    </section>
+
     <!-- ===== Final CTA ===== -->
     <section class="home-final-cta">
       <div class="container text-center" style="position:relative; z-index:1;">
@@ -280,6 +337,118 @@ const homeSchema = [
 @media (max-width: 640px) {
   .home-service-cta { flex-direction: column; align-items: stretch; }
   .home-service-btn { width: 100%; justify-content: center; }
+}
+
+/* =========================================================
+   なぜ、いまAIなのか
+   ========================================================= */
+.home-why-section {
+  padding: clamp(60px, 8vw, 100px) 20px;
+  background: var(--home-surface-2);
+}
+.home-why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.home-why-item {
+  background: #fff;
+  border: 1px solid var(--home-border);
+  border-radius: 14px;
+  padding: clamp(24px, 3vw, 32px);
+  position: relative;
+}
+.home-why-num {
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--home-brand);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 12px;
+}
+.home-why-item h3 {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-weight: 700;
+  color: var(--home-heading);
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+.home-why-item p {
+  color: var(--home-text);
+  font-size: 0.92rem;
+  line-height: 1.95;
+  margin: 0;
+}
+
+/* =========================================================
+   中小企業にAXはなぜ大切か
+   ========================================================= */
+.home-ax-section {
+  padding: clamp(60px, 8vw, 100px) 20px;
+  background: var(--home-surface);
+}
+.home-ax-lead {
+  margin-bottom: clamp(36px, 5vw, 56px) !important;
+}
+.home-ax-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto clamp(36px, 5vw, 56px);
+}
+.home-ax-card {
+  background: linear-gradient(180deg, var(--home-surface-2) 0%, #fff 100%);
+  border: 1px solid var(--home-border);
+  border-radius: 14px;
+  padding: clamp(24px, 3vw, 32px);
+  text-align: center;
+}
+.home-ax-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #a259ff 0%, #1abcfe 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.4rem;
+}
+.home-ax-card h3 {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-weight: 700;
+  color: var(--home-heading);
+  margin: 0 0 14px;
+}
+.home-ax-card p {
+  color: var(--home-text);
+  font-size: 0.9rem;
+  line-height: 1.95;
+  margin: 0;
+  text-align: left;
+}
+.home-ax-closing {
+  text-align: center;
+  color: var(--home-muted);
+  font-size: clamp(13px, 1.5vw, 14px);
+  line-height: 1.95;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.home-section-heading-ax {
+  display: block;
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 500;
+  color: var(--home-muted);
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+  text-transform: none;
 }
 
 /* =========================================================

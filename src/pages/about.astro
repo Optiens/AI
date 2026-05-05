@@ -42,128 +42,23 @@ import Layout from '../layouts/Layout.astro';
           </article>
         </section>
 
-        <!-- 3) 代表者について（一人法人は人で信頼形成） -->
-        <section class="about-section about-profile reveal">
-          <h2 class="section-heading">代表者について</h2>
-          <div class="profile-card">
-            <div class="profile-content">
-              <h3>髙橋 大地<span class="profile-title">合同会社Optiens 代表社員</span></h3>
-              <p>エンタープライズ向け大規模CRMシステムの設計・開発に10年以上従事。業務分析からシステム実装まで一貫して経験を積み、業務の構造そのものに踏み込む設計を強みとする。</p>
-              <p>2026年、山梨県北杜市に合同会社Optiensを設立。一人法人としてAI支援事業に注力しつつ、自社の経営管理は全てAIエージェント体制で運営。「AIを中心に仕事の仕組みを変える」というスタンスを、自社で実証しながら全国の小規模事業者へ届けている。</p>
-              <ul class="profile-tags">
-                <li>大規模CRM認定資格保有</li>
-                <li>エンタープライズ開発10年+</li>
-                <li>業務分析×実装の一貫経験</li>
-                <li>AIファーストで業務再設計</li>
-              </ul>
-            </div>
+        <!-- もっと知る: メッセージ・会社概要 -->
+        <section class="about-section about-more reveal">
+          <h2 class="section-heading">もっと知る</h2>
+          <div class="more-grid">
+            <a href="/message" class="more-card">
+              <p class="more-eyebrow">MESSAGE</p>
+              <h3>メッセージ</h3>
+              <p class="more-desc">ミッション・ビジョン・代表メッセージ。私たちが大切にしている2つの考え方（最適化と円相）。</p>
+              <span class="more-link">詳しく見る <span aria-hidden="true">→</span></span>
+            </a>
+            <a href="/company-profile" class="more-card">
+              <p class="more-eyebrow">COMPANY</p>
+              <h3>会社概要</h3>
+              <p class="more-desc">商号・所在地・代表社員・法人番号など、合同会社Optiensの基本情報。</p>
+              <span class="more-link">詳しく見る <span aria-hidden="true">→</span></span>
+            </a>
           </div>
-        </section>
-
-        <!-- 4) 3つの価値観：調和・最適化・循環 -->
-        <section class="about-section about-values reveal">
-          <h2 class="section-heading">3つの価値観</h2>
-          <div class="values-grid">
-            <div class="value-card">
-              <div class="value-img-wrap">
-                <img src="/images/values/harmony.png" alt="調和を表すイラスト" loading="lazy" />
-              </div>
-              <h3>調和</h3>
-              <p>競争から協調へ、所有から共有へ、分離から統合へ。人・自然・テクノロジーが調和できる社会を築きます。</p>
-            </div>
-            <div class="value-card">
-              <div class="value-img-wrap">
-                <img src="/images/values/optimization.png" alt="最適化を表すイラスト" loading="lazy" />
-              </div>
-              <h3>最適化</h3>
-              <p>センサーデータやAI技術を活用した効率化と、常識の再定義により、事業と暮らしの新しいカタチを創造します。</p>
-            </div>
-            <div class="value-card">
-              <div class="value-img-wrap">
-                <img src="/images/values/circulation.png" alt="循環を表すイラスト" loading="lazy" />
-              </div>
-              <h3>循環</h3>
-              <p>資源もデータも種子も循環させ、気候リスクや外部依存に左右されない、自律した仕組みを構築します。</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 5) 社名のルーツ：最適化 × 円相（深い背景） -->
-        <section class="about-section about-roots reveal">
-          <h2 class="section-heading">2つのルーツ</h2>
-          <p class="section-lead">社名「Optiens」は、<strong>Optimization（最適化）</strong>と<strong>Ensō（円相）</strong>を重ねた造語です。</p>
-          <div class="roots-grid">
-            <div class="root-card">
-              <div class="root-visual">
-                <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="opt-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#A259FF" stop-opacity="1"/>
-                      <stop offset="100%" stop-color="#7B40CC" stop-opacity="1"/>
-                    </linearGradient>
-                  </defs>
-                  <!-- 非効率な複数経路（淡く） -->
-                  <path d="M 25 80 Q 80 30, 120 95 T 215 70" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 110 Q 70 170, 130 95 T 215 110" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 140 Q 90 80, 120 195 T 215 145" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M 25 170 Q 80 210, 130 130 T 215 175" fill="none" stroke="rgba(162,89,255,0.18)" stroke-width="1.6" stroke-linecap="round"/>
-                  <!-- 最適経路（メイン） -->
-                  <path d="M 25 120 Q 80 105, 120 115 T 215 118" fill="none" stroke="url(#opt-grad)" stroke-width="4" stroke-linecap="round"/>
-                  <!-- 経路上のノード -->
-                  <circle cx="25" cy="120" r="6" fill="#A259FF"/>
-                  <circle cx="80" cy="108" r="3.5" fill="#A259FF" opacity="0.85"/>
-                  <circle cx="120" cy="115" r="3.5" fill="#A259FF" opacity="0.85"/>
-                  <circle cx="170" cy="116" r="3.5" fill="#A259FF" opacity="0.85"/>
-                  <circle cx="215" cy="118" r="6" fill="#A259FF"/>
-                </svg>
-              </div>
-              <p class="root-eng">Optimization</p>
-              <h3 class="root-jp">最適化</h3>
-              <p class="root-desc">無数にある経路の中から、最も効率の良い一本を見つけ出す。事業も暮らしも、仕組みから整えれば最適解は必ず存在します。</p>
-            </div>
-
-            <div class="root-card">
-              <div class="root-visual">
-                <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="enso-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#0ACF83" stop-opacity="1"/>
-                      <stop offset="100%" stop-color="#1ABCFE" stop-opacity="0.9"/>
-                    </linearGradient>
-                  </defs>
-                  <!-- 外側のかすかなグロー -->
-                  <circle cx="120" cy="120" r="86" fill="none" stroke="rgba(10,207,131,0.10)" stroke-width="22"/>
-                  <!-- 円相本体（上部右側に小さな切れ目） -->
-                  <path d="M 175 53 A 88 88 0 1 1 138 33" fill="none" stroke="url(#enso-grad)" stroke-width="11" stroke-linecap="round"/>
-                  <!-- 筆の入りと終わり -->
-                  <circle cx="138" cy="33" r="4" fill="#0ACF83" opacity="0.95"/>
-                  <circle cx="175" cy="53" r="3" fill="#1ABCFE" opacity="0.9"/>
-                </svg>
-              </div>
-              <p class="root-eng">Ensō</p>
-              <h3 class="root-jp">円相</h3>
-              <p class="root-desc">禅の一筆書きの円。完全さも不完全さも内に含む、循環と調和の象徴。終わりが次の始まりに繋がる、循環する仕組みのかたち。</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 5) 会社概要 -->
-        <section class="about-section company-info reveal">
-          <h2 class="section-heading">会社概要</h2>
-          <table class="info-table">
-            <tbody>
-              <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
-              <tr><th>英字表記</th><td>Optiens LLC</td></tr>
-              <tr><th>設立</th><td>2026年4月6日</td></tr>
-              <tr><th>代表社員</th><td>髙橋大地</td></tr>
-              <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
-              <tr><th>資本金</th><td>100,000円</td></tr>
-              <tr><th>事業内容</th><td>AI活用支援（診断・導入支援・保守）</td></tr>
-              <tr><th>メール</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
-              <tr><th>法人番号</th><td>9090003003025</td></tr>
-              <tr><th>インボイス</th><td>適格請求書発行事業者 申請中</td></tr>
-            </tbody>
-          </table>
         </section>
 
       </div>
@@ -458,6 +353,64 @@ import Layout from '../layouts/Layout.astro';
   margin: 0 0 12px;
   text-transform: uppercase;
 }
+
+/* もっと知るカード */
+.about-more {
+  margin-top: clamp(40px, 5vw, 60px);
+}
+.more-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 880px;
+  margin: 0 auto;
+}
+.more-card {
+  display: block;
+  padding: clamp(24px, 3vw, 32px);
+  background: linear-gradient(180deg, #fff 0%, rgba(91, 127, 255, 0.02) 100%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.more-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(162, 89, 255, 0.35);
+  box-shadow: 0 12px 32px rgba(162, 89, 255, 0.08);
+}
+.more-eyebrow {
+  font-family: 'SF Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+  color: var(--brand);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+.more-card h3 {
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+  font-weight: 700;
+  color: var(--heading);
+  margin: 0 0 12px;
+}
+.more-desc {
+  color: var(--muted);
+  line-height: 1.85;
+  font-size: 0.92rem;
+  margin: 0 0 18px;
+}
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--brand);
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+}
+
 .section-heading{
   font-size: clamp(24px, 3.4vw, 34px);
   font-weight: 800;
