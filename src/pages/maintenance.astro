@@ -181,6 +181,31 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="mt-section light-section">
+      <div class="container">
+        <h2 class="section-title reveal">よくあるご質問</h2>
+        <div class="mt-faq-list reveal">
+          <details class="mt-faq-item">
+            <summary>契約期間の縛りはありますか？</summary>
+            <p>保守は<strong>月単位の契約</strong>です。効果を感じられなければいつでも解約可能。導入支援で構築したシステムはそのままお使いいただけます。まずは無料活用診断から始めていただくことをお勧めしています。</p>
+          </details>
+          <details class="mt-faq-item">
+            <summary>保守プランはあとから変更できますか？</summary>
+            <p>はい、月単位で<strong>ライト ⇔ スタンダードの切り替え</strong>が可能です。新規業務の自動化を検討する月だけスタンダードに上げる、といった使い方もできます。</p>
+          </details>
+          <details class="mt-faq-item">
+            <summary>保守契約なしで運用を続けることはできますか？</summary>
+            <p>可能です。Optiensは<strong>納品時点で「自走できる状態」</strong>を目指して設計しており、日常運用に保守契約は必須ではありません。納品後3ヶ月間は不具合修正を無償で行います。3ヶ月経過後に新たな修正・追加が必要になった場合のみ、保守契約またはスポット対応をご検討ください。</p>
+          </details>
+          <details class="mt-faq-item">
+            <summary>月の工数を超えた場合はどうなりますか？</summary>
+            <p>超過分はオーバー単価でお引き受けするか、翌月分の工数を前借りする形でも対応可能です。詳細はご契約時にご説明します。「気付いたら超過していた」が起きないよう、超過しそうな時点で事前にご相談する運用としています。</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="mt-cta">
       <div class="container text-center">
@@ -446,4 +471,55 @@ import Layout from '../layouts/Layout.astro';
       white-space: normal;
     }
   }
+
+  /* ===== FAQ ===== */
+  .mt-faq-list {
+    max-width: 720px;
+    margin: 32px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mt-faq-item {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .3s ease;
+  }
+  .mt-faq-item[open] { border-color: var(--border-hover); }
+  .mt-faq-item summary {
+    padding: 20px 24px;
+    font-weight: 600;
+    font-size: .95rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+  }
+  .mt-faq-item summary::before {
+    content: '+';
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .mt-faq-item[open] summary::before { content: '\2212'; }
+  .mt-faq-item summary::-webkit-details-marker { display: none; }
+  .mt-faq-item p {
+    padding: 0 24px 20px 60px;
+    font-size: .9rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+  .mt-faq-item p strong { color: var(--text); }
 </style>

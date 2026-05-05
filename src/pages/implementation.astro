@@ -73,6 +73,31 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="impl-section light-section">
+      <div class="container">
+        <h2 class="section-title reveal">よくあるご質問</h2>
+        <div class="impl-faq-list reveal">
+          <details class="impl-faq-item">
+            <summary>AIエージェントとは何ですか？対話型AIとは違うのですか？</summary>
+            <p>対話型AIは「質問すると答えてくれる」ツールです。一方、AIエージェントは「指示を出すと、複数の作業を自律的にこなす」仕組みです。例えば、対話型AIは「メールの文面を考えて」と頼めば文面を返しますが、AIエージェントは「受信メールを確認し、内容に応じて返信を下書きし、対応が必要なものだけ通知する」といった一連の業務を自動で実行します。Optiensが構築するのは、このAIエージェントによる業務自動化の仕組みです。</p>
+          </details>
+          <details class="impl-faq-item">
+            <summary>「SaaS」「ベンダーロックイン」など、サイトに出てくる用語が分かりません。</summary>
+            <p><strong>SaaS</strong><small>(Software as a Service / サース)</small>とは、複数の利用企業が同じ画面・同じ機能を共有して使うクラウド型の業務システムです。月額のライセンス料を払い続ける契約形態で、汎用的に作られているため画面構成や項目は他社と共通になります。<br /><br /><strong>ベンダーロックイン</strong>とは、特定の事業者しか保守・改修ができない状態に陥り、乗り換え時にデータの持ち出しが難しくなることを指します。<br /><br />弊社が構築するのは<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>の業務システムです。御社の業務動線に合わせて画面と処理フローを一から設計し、納品後は御社の資産として残ります。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースを提供するクラウド基盤。代表例: Supabase)</small>に保管されるため、将来別の事業者に乗り換える場合もCSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。<br /><br />既製のSaaSが業務にぴったり合う場合は、そのまま使う方が合理的です。「合わない部分が積み重なってきた」と感じる業務に対して、専用構成をご提案しています。</p>
+          </details>
+          <details class="impl-faq-item">
+            <summary>セキュリティは大丈夫ですか？</summary>
+            <p>AIエージェントはAPI経由で動作し、入力データがAIの学習に使用されることはありません。お預かりする業務データは暗号化された通信で処理され、外部に共有されることはありません。当社はIPA「SECURITY ACTION」を宣言し、情報セキュリティ対策に取り組んでいます。</p>
+          </details>
+          <details class="impl-faq-item">
+            <summary>どれくらいの期間で導入できますか？</summary>
+            <p>業務範囲によりますが、シンプルな自動化フロー1本であれば<strong>2〜4週間</strong>、複数業務にまたがる仕組みでも<strong>1〜2ヶ月</strong>が目安です。詳細レポート（¥5,500・税込）の中で、御社の業務に合わせた具体的なスケジュールをご提示します。</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="impl-cta">
       <div class="container text-center">
@@ -241,4 +266,55 @@ import Layout from '../layouts/Layout.astro';
       grid-template-columns: 1fr;
     }
   }
+
+  /* ===== FAQ ===== */
+  .impl-faq-list {
+    max-width: 720px;
+    margin: 32px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .impl-faq-item {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .3s ease;
+  }
+  .impl-faq-item[open] { border-color: var(--border-hover); }
+  .impl-faq-item summary {
+    padding: 20px 24px;
+    font-weight: 600;
+    font-size: .95rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+  }
+  .impl-faq-item summary::before {
+    content: '+';
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(91,127,255,.3);
+    background: rgba(91,127,255,.08);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .impl-faq-item[open] summary::before { content: '\2212'; }
+  .impl-faq-item summary::-webkit-details-marker { display: none; }
+  .impl-faq-item p {
+    padding: 0 24px 20px 60px;
+    font-size: .9rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+  .impl-faq-item p strong { color: var(--text); }
 </style>

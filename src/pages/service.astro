@@ -86,29 +86,51 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- 強み：カスタムUI構築力 -->
+    <!-- 強み：カスタムUI構築力（左右交互レイアウト） -->
     <section class="ac-section light-section ac-custom-section">
       <div class="container">
         <h2 class="section-title reveal">業務に合わせた、専用の仕組み</h2>
         <p class="section-sub reveal">既製のサービスを契約するのではなく、御社の業務動線に沿った専用構成を設計・構築します。</p>
-        <div class="custom-grid reveal-stagger">
-          <div class="ac-card gradient-border">
-            <div class="ac-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
-            <h3>既製の仕組みに、業務を合わせない</h3>
-            <p>市販の業務システムは多くが<strong>SaaS</strong><small>(Software as a Service：複数の利用企業で同じ画面・機能を共有するクラウド型サービス)</small>として提供されており、汎用的に作られているため御社の業務動線に完全には合いません。結果として「項目が多すぎて使われない」「複数サービスを行き来して二重入力」が発生しがちです。弊社は<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>で、業務動線に沿った画面と処理フローを一から設計します。</p>
-          </div>
-          <div class="ac-card gradient-border">
-            <div class="ac-icon"><i class="fa-solid fa-key"></i></div>
-            <h3>御社の所有物。月額ライセンス料は発生しません</h3>
-            <p>納品する仕組みは<strong>買い切り型</strong>の構築費用のみで、利用人数に応じたライセンス料は発生しません。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースをまとめて提供するクラウド基盤。代表例: Supabase)</small>に保管され、CSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。将来別の事業者に乗り換える場合も<strong>ベンダーロックイン</strong><small>(特定業者しか扱えなくなる状態)</small>が起こりません。</p>
-          </div>
-          <div class="ac-card gradient-border">
-            <div class="ac-icon"><i class="fa-solid fa-share-nodes"></i></div>
-            <h3>外部メンバーとの共有も簡単</h3>
-            <p>営業パートナー・外注先・現場スタッフとの情報共有は、URLと<strong>ロールベースの認証</strong><small>(役割ごとに閲覧・編集権限を切り分ける方式)</small>で完結します。<strong>レスポンシブデザイン</strong><small>(PC・スマホ・タブレットの画面サイズに自動最適化する設計)</small>で構築するため、デバイスごとに別画面を作る必要もありません。</p>
-          </div>
-        </div>
 
+        <div class="custom-stack">
+
+          <!-- 1. 既製の仕組みに、業務を合わせない -->
+          <div class="custom-row reveal">
+            <div class="custom-row-media">
+              <img src="/images/services/custom-fit.png" alt="業務動線に沿って組み上げる専用設計" loading="lazy" />
+            </div>
+            <div class="custom-row-body">
+              <span class="custom-row-num">01</span>
+              <h3>既製の仕組みに、業務を合わせない</h3>
+              <p>市販の業務システムは多くが<strong>SaaS</strong><small>(Software as a Service：複数の利用企業で同じ画面・機能を共有するクラウド型サービス)</small>として提供されており、汎用的に作られているため御社の業務動線に完全には合いません。結果として「項目が多すぎて使われない」「複数サービスを行き来して二重入力」が発生しがちです。弊社は<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>で、業務動線に沿った画面と処理フローを一から設計します。</p>
+            </div>
+          </div>
+
+          <!-- 2. 御社の所有物 -->
+          <div class="custom-row custom-row--reverse reveal">
+            <div class="custom-row-media">
+              <img src="/images/services/asset-ownership.png" alt="買い切り型で御社の資産になる仕組み" loading="lazy" />
+            </div>
+            <div class="custom-row-body">
+              <span class="custom-row-num">02</span>
+              <h3>御社の所有物。月額ライセンス料は発生しません</h3>
+              <p>納品する仕組みは<strong>買い切り型</strong>の構築費用のみで、利用人数に応じたライセンス料は発生しません。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースをまとめて提供するクラウド基盤。代表例: Supabase)</small>に保管され、CSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。将来別の事業者に乗り換える場合も<strong>ベンダーロックイン</strong><small>(特定業者しか扱えなくなる状態)</small>が起こりません。</p>
+            </div>
+          </div>
+
+          <!-- 3. 外部共有 -->
+          <div class="custom-row reveal">
+            <div class="custom-row-media">
+              <img src="/images/services/easy-sharing.png" alt="外部メンバーとの共有もURLひとつ" loading="lazy" />
+            </div>
+            <div class="custom-row-body">
+              <span class="custom-row-num">03</span>
+              <h3>外部メンバーとの共有も簡単</h3>
+              <p>営業パートナー・外注先・現場スタッフとの情報共有は、URLと<strong>ロールベースの認証</strong><small>(役割ごとに閲覧・編集権限を切り分ける方式)</small>で完結します。<strong>レスポンシブデザイン</strong><small>(PC・スマホ・タブレットの画面サイズに自動最適化する設計)</small>で構築するため、デバイスごとに別画面を作る必要もありません。</p>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
 
@@ -126,31 +148,6 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-
-    <!-- FAQ -->
-    <section class="ac-section light-section ac-faq-section">
-      <div class="container">
-        <h2 class="section-title reveal">よくあるご質問</h2>
-        <div class="faq-list reveal">
-          <details class="faq-item">
-            <summary>AIエージェントとは何ですか？対話型AIとは違うのですか？</summary>
-            <p>対話型AIは「質問すると答えてくれる」ツールです。一方、AIエージェントは「指示を出すと、複数の作業を自律的にこなす」仕組みです。例えば、対話型AIは「メールの文面を考えて」と頼めば文面を返しますが、AIエージェントは「受信メールを確認し、内容に応じて返信を下書きし、対応が必要なものだけ通知する」といった一連の業務を自動で実行します。Optiensが構築するのは、このAIエージェントによる業務自動化の仕組みです。</p>
-          </details>
-          <details class="faq-item">
-            <summary>「SaaS」「ベンダーロックイン」など、サイトに出てくる用語が分かりません。</summary>
-            <p><strong>SaaS</strong><small>(Software as a Service / サース)</small>とは、複数の利用企業が同じ画面・同じ機能を共有して使うクラウド型の業務システムです。月額のライセンス料を払い続ける契約形態で、汎用的に作られているため画面構成や項目は他社と共通になります。<br /><br /><strong>ベンダーロックイン</strong>とは、特定の事業者しか保守・改修ができない状態に陥り、乗り換え時にデータの持ち出しが難しくなることを指します。<br /><br />弊社が構築するのは<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>の業務システムです。御社の業務動線に合わせて画面と処理フローを一から設計し、納品後は御社の資産として残ります。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースを提供するクラウド基盤。代表例: Supabase)</small>に保管されるため、将来別の事業者に乗り換える場合もCSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。<br /><br />既製のSaaSが業務にぴったり合う場合は、そのまま使う方が合理的です。「合わない部分が積み重なってきた」と感じる業務に対して、専用構成をご提案しています。</p>
-          </details>
-          <details class="faq-item">
-            <summary>セキュリティは大丈夫ですか？</summary>
-            <p>AIエージェントはAPI経由で動作し、入力データがAIの学習に使用されることはありません。お預かりする業務データは暗号化された通信で処理され、外部に共有されることはありません。当社はIPA「SECURITY ACTION」を宣言し、情報セキュリティ対策に取り組んでいます。</p>
-          </details>
-          <details class="faq-item">
-            <summary>契約期間の縛りはありますか？</summary>
-            <p>保守は月単位の契約です。効果を感じられなければいつでも解約可能。導入支援で構築したシステムはそのままお使いいただけます。まずは無料活用診断から始めていただくことをお勧めしています。</p>
-          </details>
-        </div>
-      </div>
-    </section>
 
     <!-- CTA -->
     <section class="ac-cta-section">
@@ -603,8 +600,7 @@ import Layout from '../layouts/Layout.astro';
   /* ===== Section backgrounds（純白統一） ===== */
   .ac-custom-section,
   .ac-service-section,
-  .ac-examples-section,
-  .ac-faq-section {
+  .ac-examples-section {
     background: #ffffff;
   }
 
@@ -675,24 +671,80 @@ import Layout from '../layouts/Layout.astro';
     .examples-banner-icon { margin: 0 auto; }
   }
 
-  /* ===== Custom UI section ===== */
-  .custom-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-    margin-top: 32px;
+  /* ===== Custom UI section（左右交互） ===== */
+  .custom-stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(56px, 8vw, 96px);
+    margin-top: clamp(40px, 6vw, 64px);
+    max-width: 1080px;
+    margin-inline: auto;
   }
-  .ac-custom-section .ac-card { text-align: left; }
-  .ac-custom-section .ac-card h3 {
+  .custom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 64px);
+  }
+  .custom-row--reverse .custom-row-media {
+    order: 2;
+  }
+  .custom-row-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .custom-row-media img {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
     display: block;
-    font-size: 1.05rem;
+    aspect-ratio: 1;
+    object-fit: contain;
+  }
+  .custom-row-body {
+    color: var(--text);
+  }
+  .custom-row-num {
+    display: inline-block;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--brand);
+    letter-spacing: .04em;
     margin-bottom: 12px;
   }
-  .ac-custom-section .ac-card p {
-    font-size: 0.92rem;
-    line-height: 1.75;
+  .custom-row-body h3 {
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    color: var(--heading);
+    margin: 0 0 14px;
+    line-height: 1.5;
+    font-weight: 700;
+  }
+  .custom-row-body p {
+    font-size: clamp(.9rem, 1.4vw, .96rem);
     color: var(--text);
+    line-height: 1.9;
     margin: 0;
+  }
+  .custom-row-body strong { color: var(--heading); }
+  .custom-row-body small {
+    display: inline;
+    font-size: .82em;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+  @media (max-width: 768px) {
+    .custom-row {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .custom-row--reverse .custom-row-media {
+      order: 0;
+    }
+    .custom-row-media img {
+      max-width: 280px;
+    }
   }
   /* ===== FAQ ===== */
   .faq-list {

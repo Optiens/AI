@@ -3,25 +3,58 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="会社概要 | Optiens"
-  description="合同会社Optiens（オプティエンス）の会社概要。法人情報・事業構造・代表者・連絡先をまとめた1ページ版です。"
+  title="会社概要 | 合同会社Optiens"
+  description="合同会社Optiens（オプティエンス）の会社概要。山梨県北杜市を拠点に、AI活用支援とIoT水耕栽培の自社実証を組み合わせた事業を運営しています。"
+  canonical="https://optiens.com/company-profile"
 >
   <main class="cp-main">
+
+    <!-- ヒーロー -->
     <section class="cp-hero light-section">
       <div class="container">
         <p class="cp-eyebrow">COMPANY PROFILE</p>
         <h1>会社概要</h1>
-        <p class="cp-sub">合同会社Optiens（オプティエンス）の事業内容・体制・連絡先を1ページにまとめています。</p>
-        <p class="cp-meta">最終更新日: 2026年4月28日</p>
+        <p class="cp-sub">合同会社Optiens（オプティエンス）<br/>山梨県北杜市を拠点に、AI活用支援を全国オンラインで提供しています。</p>
+        <p class="cp-meta">最終更新日: 2026年5月5日</p>
       </div>
     </section>
 
+    <!-- ハイライトカード -->
+    <section class="cp-highlight-section light-section">
+      <div class="container">
+        <div class="cp-highlight-grid">
+          <div class="cp-highlight-card">
+            <span class="cp-highlight-label">設立</span>
+            <p class="cp-highlight-value">2026.04.06</p>
+            <p class="cp-highlight-note">合同会社として登記</p>
+          </div>
+          <div class="cp-highlight-card">
+            <span class="cp-highlight-label">拠点</span>
+            <p class="cp-highlight-value">山梨県北杜市</p>
+            <p class="cp-highlight-note">全国オンライン対応</p>
+          </div>
+          <div class="cp-highlight-card">
+            <span class="cp-highlight-label">事業</span>
+            <p class="cp-highlight-value">AI 支援 / IoT 実証</p>
+            <p class="cp-highlight-note">自社で使い、自社で改善</p>
+          </div>
+          <div class="cp-highlight-card">
+            <span class="cp-highlight-label">体制</span>
+            <p class="cp-highlight-value">代表 1 名 + AI</p>
+            <p class="cp-highlight-note">AIエージェント連携で運営</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. 法人情報 -->
     <section class="cp-section light-section">
       <div class="container cp-container">
-
-        <!-- 1. 法人情報 -->
         <article class="cp-block">
-          <h2 class="cp-h2"><span class="cp-num">01</span>法人情報</h2>
+          <header class="cp-block-head">
+            <span class="cp-block-num">01</span>
+            <h2 class="cp-block-title">法人情報</h2>
+          </header>
           <table class="cp-table">
             <tbody>
               <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
@@ -31,30 +64,40 @@ import Layout from '../layouts/Layout.astro';
               <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
               <tr><th>資本金</th><td>100,000円</td></tr>
               <tr><th>法人番号</th><td>9090003003025</td></tr>
-              <tr><th>インボイス</th><td>適格請求書発行事業者 申請中</td></tr>
+              <tr><th>インボイス登録</th><td>適格請求書発行事業者 申請中</td></tr>
+              <tr><th>取引銀行</th><td>GMOあおぞらネット銀行 フリー支店</td></tr>
             </tbody>
           </table>
         </article>
+      </div>
+    </section>
 
-        <!-- 2. 事業構造 -->
+    <!-- 2. 事業構造 -->
+    <section class="cp-section light-section cp-section--alt">
+      <div class="container cp-container">
         <article class="cp-block">
-          <h2 class="cp-h2"><span class="cp-num">02</span>事業構造</h2>
+          <header class="cp-block-head">
+            <span class="cp-block-num">02</span>
+            <h2 class="cp-block-title">事業構造</h2>
+          </header>
           <p class="cp-lead">中小企業・小規模事業者のAI活用支援を主軸に、自社で実証したIoT水耕栽培の知見を組み合わせて事業を組み立てています。</p>
-          <div class="cp-cards">
-            <div class="cp-card">
+          <div class="cp-cards-2">
+            <div class="cp-feature-card">
+              <div class="cp-feature-tag">MAIN</div>
               <h3>AI活用支援事業</h3>
               <p>無料診断 → 詳細レポート → 導入支援 → 保守の4階層で、業務に合わせた自動化の仕組みを設計・構築・運用します。AIエージェントを業務の中心に置き、お客様自身で運用できる状態への移行を重視しています。</p>
-              <ul class="cp-card-list">
+              <ul class="cp-feature-list">
                 <li>無料診断（簡易レポート）</li>
                 <li>詳細レポート + 60分MTG（¥5,500・税込）</li>
                 <li>導入支援（個別見積）</li>
-                <li>保守プラン（月額¥33,000／月額¥55,000・税込）</li>
+                <li>保守プラン（月額¥33,000 / 月額¥55,000・税込）</li>
               </ul>
             </div>
-            <div class="cp-card">
-              <h3>IoT水耕栽培事業</h3>
-              <p>室内LED×IoTによる水耕栽培システムを自社で開発・実証し、業務用ハーブの安定生産を行います。AI支援事業のIoT提案における実証データの基盤としても機能しています。</p>
-              <ul class="cp-card-list">
+            <div class="cp-feature-card">
+              <div class="cp-feature-tag cp-feature-tag--sub">FIELD</div>
+              <h3>IoT水耕栽培事業（自社実証）</h3>
+              <p>室内LED×IoTによる水耕栽培システムを自社で開発・実証し、業務用ハーブを生産しています。AI支援事業のIoT提案における実証データの基盤として機能します。</p>
+              <ul class="cp-feature-list">
                 <li>自社農場でのバジル・マイクログリーン等の生産</li>
                 <li>センサー・自動制御によるユニットエコノミクス管理</li>
                 <li>業務用販路（地元レストラン・道の駅・業務用EC）</li>
@@ -62,13 +105,23 @@ import Layout from '../layouts/Layout.astro';
             </div>
           </div>
         </article>
+      </div>
+    </section>
 
-        <!-- 3. 代表者 -->
+    <!-- 3. 代表者 -->
+    <section class="cp-section light-section">
+      <div class="container cp-container">
         <article class="cp-block">
-          <h2 class="cp-h2"><span class="cp-num">03</span>代表者</h2>
+          <header class="cp-block-head">
+            <span class="cp-block-num">03</span>
+            <h2 class="cp-block-title">代表者</h2>
+          </header>
           <div class="cp-profile">
-            <h3>髙橋 大地<span class="cp-profile-title">合同会社Optiens 代表社員</span></h3>
-            <p>エンタープライズ向け大規模CRMシステムの設計・開発に10年以上従事。業務分析からシステム実装まで一貫した経験を持ち、業務の構造そのものに踏み込んだ設計を強みとしています。</p>
+            <div class="cp-profile-head">
+              <h3>髙橋 大地</h3>
+              <p class="cp-profile-title">合同会社Optiens 代表社員</p>
+            </div>
+            <p>エンタープライズ向け大規模CRMシステムの設計・開発に10年以上従事。業務分析からシステム実装までを一貫して経験し、業務の構造そのものに踏み込んだ設計を強みとしています。</p>
             <p>2026年、山梨県北杜市にて合同会社Optiensを設立。一人法人としてAI支援事業とIoT水耕栽培事業を並走させながら、自社の経営管理はAIエージェント体制で運営。「AIを中心に仕事の仕組みを変える」というスタンスを、自社で実証しながら全国の小規模事業者へ届けています。</p>
             <ul class="cp-profile-tags">
               <li>大規模CRM認定資格保有</li>
@@ -78,134 +131,249 @@ import Layout from '../layouts/Layout.astro';
             </ul>
           </div>
         </article>
+      </div>
+    </section>
 
-        <!-- 4. 姿勢・取り組み -->
+    <!-- 4. 姿勢・取り組み -->
+    <section class="cp-section light-section cp-section--alt">
+      <div class="container cp-container">
         <article class="cp-block">
-          <h2 class="cp-h2"><span class="cp-num">04</span>姿勢・取り組み</h2>
-          <div class="cp-cards">
-            <div class="cp-card">
+          <header class="cp-block-head">
+            <span class="cp-block-num">04</span>
+            <h2 class="cp-block-title">姿勢・取り組み</h2>
+          </header>
+          <div class="cp-values-grid">
+            <div class="cp-value-card">
+              <div class="cp-value-num">01</div>
               <h3>自走できる仕組みをつくる</h3>
               <p>お客様が自分たちの力で運用できる自動化の仕組みをつくることを目指します。日常操作は「確認して承認するだけ」で完結するよう設計し、保守契約なしでもそのまま運用を続けられる状態でお渡しします。</p>
             </div>
-            <div class="cp-card">
+            <div class="cp-value-card">
+              <div class="cp-value-num">02</div>
               <h3>自分で使い、自分で改善する</h3>
               <p>弊社自身がAIエージェントを使って、社内のCRM・書類添削ツール・水耕栽培IoTダッシュボードなどを運用しています。「自分で使い、自分で改善する」ことで得た知見をもとに、案件ごとに最適な構成を設計します。</p>
             </div>
-            <div class="cp-card">
+            <div class="cp-value-card">
+              <div class="cp-value-num">03</div>
               <h3>不具合は当社の責任で対応する</h3>
               <p>Optiensが設計・構築したシステムに起因するバグや設計ミスは、納品日から3ヶ月間、保守契約の有無にかかわらず無償で修正します。「構築したものの責任を取る」を運用ルールの中心に置いています。</p>
             </div>
-            <div class="cp-block-note">
-              <p>SECURITY ACTION「一つ星」を宣言し、情報セキュリティ基本方針に沿った運用を行っています。</p>
-            </div>
+          </div>
+          <div class="cp-security-note">
+            <i class="fa-solid fa-shield-halved"></i>
+            <p>IPA「SECURITY ACTION」一つ星を宣言し、情報セキュリティ基本方針に沿った運用を行っています。</p>
           </div>
         </article>
-
-        <!-- 5. 連絡先・関連リンク -->
-        <article class="cp-block">
-          <h2 class="cp-h2"><span class="cp-num">05</span>連絡先・関連リンク</h2>
-          <table class="cp-table">
-            <tbody>
-              <tr><th>メール</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
-              <tr><th>お問い合わせ</th><td><a href="/contact">/contact</a></td></tr>
-              <tr><th>無料診断</th><td><a href="/free-diagnosis">/free-diagnosis</a></td></tr>
-              <tr><th>サービス紹介</th><td><a href="/service">/service</a></td></tr>
-              <tr><th>会社情報（詳細）</th><td><a href="/">/</a></td></tr>
-            </tbody>
-          </table>
-          <p class="cp-foot">本ページはPDF版会社概要の代わりにご利用いただけます。印刷時はブラウザの印刷機能をご利用ください。</p>
-        </article>
-
       </div>
     </section>
+
+    <!-- 5. 連絡先・関連リンク -->
+    <section class="cp-section light-section">
+      <div class="container cp-container">
+        <article class="cp-block">
+          <header class="cp-block-head">
+            <span class="cp-block-num">05</span>
+            <h2 class="cp-block-title">連絡先・関連リンク</h2>
+          </header>
+          <div class="cp-links-grid">
+            <a href="mailto:info@optiens.com" class="cp-link-card">
+              <div class="cp-link-icon"><i class="fa-solid fa-envelope"></i></div>
+              <div class="cp-link-body">
+                <span class="cp-link-label">メール</span>
+                <span class="cp-link-value">info@optiens.com</span>
+              </div>
+            </a>
+            <a href="/contact" class="cp-link-card">
+              <div class="cp-link-icon"><i class="fa-solid fa-paper-plane"></i></div>
+              <div class="cp-link-body">
+                <span class="cp-link-label">お問い合わせ</span>
+                <span class="cp-link-value">/contact</span>
+              </div>
+            </a>
+            <a href="/free-diagnosis" class="cp-link-card">
+              <div class="cp-link-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+              <div class="cp-link-body">
+                <span class="cp-link-label">無料AI診断</span>
+                <span class="cp-link-value">/free-diagnosis</span>
+              </div>
+            </a>
+            <a href="/service" class="cp-link-card">
+              <div class="cp-link-icon"><i class="fa-solid fa-bars-progress"></i></div>
+              <div class="cp-link-body">
+                <span class="cp-link-label">サービス紹介</span>
+                <span class="cp-link-value">/service</span>
+              </div>
+            </a>
+            <a href="/about" class="cp-link-card">
+              <div class="cp-link-icon"><i class="fa-solid fa-circle-info"></i></div>
+              <div class="cp-link-body">
+                <span class="cp-link-label">私たちについて</span>
+                <span class="cp-link-value">/about</span>
+              </div>
+            </a>
+            <a href="/message" class="cp-link-card">
+              <div class="cp-link-icon"><i class="fa-solid fa-quote-right"></i></div>
+              <div class="cp-link-body">
+                <span class="cp-link-label">メッセージ</span>
+                <span class="cp-link-value">/message</span>
+              </div>
+            </a>
+          </div>
+          <p class="cp-foot">本ページは会社概要PDFの代わりにご利用いただけます。印刷時はブラウザの印刷機能をご利用ください。</p>
+        </article>
+      </div>
+    </section>
+
   </main>
 </Layout>
 
 <style>
   .cp-main {
     color: var(--text);
+    background: #ffffff;
   }
+
+  /* ===== Hero ===== */
   .cp-hero {
-    padding: clamp(96px, 12vw, 140px) 0 clamp(40px, 6vw, 60px);
-    background: var(--surface);
+    padding: clamp(110px, 14vw, 160px) 0 clamp(48px, 7vw, 72px);
+    background: #ffffff;
     border-bottom: 1px solid var(--border);
   }
   .cp-eyebrow {
     font-size: .75rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: .25em;
     color: var(--brand);
-    margin: 0 0 12px;
+    margin: 0 0 14px;
   }
   .cp-hero h1 {
     color: var(--heading);
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
-    margin: 0 0 14px;
+    font-size: clamp(1.7rem, 4.4vw, 2.6rem);
+    margin: 0 0 18px;
+    letter-spacing: -.01em;
   }
   .cp-sub {
-    font-size: clamp(.92rem, 1.7vw, 1.05rem);
+    font-size: clamp(.94rem, 1.7vw, 1.05rem);
     color: var(--muted);
-    line-height: 1.8;
-    margin: 0 0 8px;
+    line-height: 1.85;
+    margin: 0 0 12px;
   }
   .cp-meta {
-    font-size: .8rem;
+    font-size: .78rem;
     color: var(--muted);
     margin: 0;
+    letter-spacing: .04em;
   }
 
+  /* ===== Highlight ===== */
+  .cp-highlight-section {
+    padding: clamp(36px, 6vw, 56px) 0;
+    background: #ffffff;
+  }
+  .cp-highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(12px, 1.6vw, 18px);
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .cp-highlight-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: clamp(18px, 2.4vw, 24px) clamp(16px, 2vw, 22px);
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .cp-highlight-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(162, 89, 255, .35);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, .06);
+  }
+  .cp-highlight-label {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    color: var(--brand);
+    margin-bottom: 10px;
+  }
+  .cp-highlight-value {
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: clamp(1.1rem, 1.9vw, 1.35rem);
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 6px;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+  }
+  .cp-highlight-note {
+    font-size: .78rem;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.6;
+  }
+  @media (max-width: 768px) {
+    .cp-highlight-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ===== Section ===== */
   .cp-section {
-    padding: clamp(48px, 7vw, 72px) 0;
-    background: var(--surface-2);
+    padding: clamp(56px, 9vw, 88px) 0;
+    background: #ffffff;
+  }
+  .cp-section--alt {
+    background: #fafbfc;
   }
   .cp-container {
-    max-width: 880px;
+    max-width: 920px;
   }
 
   .cp-block {
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: clamp(24px, 4vw, 36px);
-    margin-bottom: 24px;
+    background: transparent;
   }
-  .cp-block:last-child {
-    margin-bottom: 0;
-  }
-  .cp-h2 {
+  .cp-block-head {
     display: flex;
     align-items: baseline;
-    gap: 14px;
-    font-size: 1.15rem;
-    color: var(--heading);
-    margin: 0 0 20px;
-    padding-bottom: 14px;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
     border-bottom: 1px solid var(--border);
   }
-  .cp-num {
-    font-size: .85rem;
-    letter-spacing: .12em;
-    color: var(--brand);
+  .cp-block-num {
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: .9rem;
     font-weight: 700;
+    color: var(--brand);
+    letter-spacing: .08em;
+  }
+  .cp-block-title {
+    font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+    color: var(--heading);
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -.005em;
   }
   .cp-lead {
-    font-size: .95rem;
+    font-size: .96rem;
     color: var(--text);
-    line-height: 1.8;
-    margin: 0 0 20px;
+    line-height: 1.85;
+    margin: 0 0 28px;
   }
 
+  /* ===== Table ===== */
   .cp-table {
     width: 100%;
     border-collapse: collapse;
   }
   .cp-table th,
   .cp-table td {
-    padding: 12px 14px;
+    padding: 14px 16px;
     border-bottom: 1px solid var(--border);
     text-align: left;
     vertical-align: top;
-    font-size: .9rem;
+    font-size: .92rem;
     line-height: 1.7;
   }
   .cp-table th {
@@ -213,93 +381,124 @@ import Layout from '../layouts/Layout.astro';
     color: var(--muted);
     font-weight: 600;
     white-space: nowrap;
+    font-size: .85rem;
+    letter-spacing: .02em;
   }
   .cp-table td {
     color: var(--text);
+    font-weight: 500;
   }
   .cp-table a {
     color: var(--brand);
     text-decoration: underline;
   }
 
-  .cp-cards {
+  /* ===== Feature cards ===== */
+  .cp-cards-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 20px;
   }
-  .cp-card {
-    background: var(--surface-2);
+  .cp-feature-card {
+    background: #ffffff;
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
+    border-radius: 14px;
+    padding: 28px 26px;
+    transition: border-color .25s, box-shadow .25s;
   }
-  .cp-card h3 {
-    font-size: 1rem;
+  .cp-feature-card:hover {
+    border-color: rgba(162, 89, 255, .35);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, .06);
+  }
+  .cp-feature-tag {
+    display: inline-block;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(162, 89, 255, .1);
+    color: var(--brand);
+    margin-bottom: 14px;
+  }
+  .cp-feature-tag--sub {
+    background: rgba(91, 127, 255, .08);
+    color: #5b7fff;
+  }
+  .cp-feature-card h3 {
+    font-size: 1.08rem;
     color: var(--heading);
-    margin: 0 0 10px;
+    margin: 0 0 12px;
+    font-weight: 700;
   }
-  .cp-card p {
-    font-size: .88rem;
+  .cp-feature-card p {
+    font-size: .9rem;
     color: var(--text);
-    line-height: 1.7;
-    margin: 0 0 10px;
+    line-height: 1.85;
+    margin: 0 0 14px;
   }
-  .cp-card-list {
+  .cp-feature-list {
     list-style: none;
     padding: 0;
-    margin: 12px 0 0;
+    margin: 14px 0 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    border-top: 1px dashed var(--border);
+    padding-top: 14px;
   }
-  .cp-card-list li {
+  .cp-feature-list li {
     position: relative;
-    padding-left: 16px;
+    padding-left: 18px;
     font-size: .85rem;
     color: var(--muted);
     line-height: 1.6;
   }
-  .cp-card-list li::before {
+  .cp-feature-list li::before {
     content: '';
     position: absolute;
     left: 4px;
     top: 9px;
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--brand);
   }
-  .cp-block-note {
-    grid-column: 1 / -1;
-    background: rgba(91, 127, 255, .06);
-    border: 1px solid rgba(91, 127, 255, .2);
-    border-radius: 10px;
-    padding: 14px 18px;
-  }
-  .cp-block-note p {
-    margin: 0;
-    font-size: .85rem;
-    color: var(--text);
-    line-height: 1.7;
-  }
 
+  /* ===== Profile ===== */
+  .cp-profile {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 30px;
+  }
+  .cp-profile-head {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border);
+  }
   .cp-profile h3 {
-    font-size: 1.05rem;
+    font-size: 1.25rem;
     color: var(--heading);
-    margin: 0 0 14px;
+    margin: 0 0 6px;
+    font-weight: 700;
+    letter-spacing: -.005em;
   }
   .cp-profile-title {
-    display: block;
     font-size: .82rem;
-    font-weight: 500;
-    color: var(--muted);
-    margin-top: 4px;
+    font-weight: 600;
+    color: var(--brand);
+    margin: 0;
+    letter-spacing: .04em;
   }
   .cp-profile p {
-    font-size: .92rem;
+    font-size: .94rem;
     color: var(--text);
-    line-height: 1.8;
-    margin: 0 0 12px;
+    line-height: 1.9;
+    margin: 0 0 14px;
+  }
+  .cp-profile p:last-of-type {
+    margin-bottom: 18px;
   }
   .cp-profile-tags {
     list-style: none;
@@ -310,35 +509,169 @@ import Layout from '../layouts/Layout.astro';
     gap: 8px;
   }
   .cp-profile-tags li {
-    font-size: .8rem;
-    color: var(--muted);
-    background: var(--surface-2);
+    font-size: .78rem;
+    color: var(--text);
+    background: #fafbfc;
     border: 1px solid var(--border);
     border-radius: 999px;
-    padding: 4px 12px;
+    padding: 5px 14px;
+    font-weight: 500;
   }
 
-  .cp-foot {
-    margin: 16px 0 0;
-    font-size: .82rem;
+  /* ===== Values ===== */
+  .cp-values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .cp-value-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px 22px;
+    transition: border-color .25s, transform .25s;
+  }
+  .cp-value-card:hover {
+    border-color: rgba(162, 89, 255, .35);
+    transform: translateY(-2px);
+  }
+  .cp-value-num {
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--brand);
+    margin-bottom: 10px;
+    letter-spacing: -.02em;
+  }
+  .cp-value-card h3 {
+    font-size: .98rem;
+    color: var(--heading);
+    margin: 0 0 10px;
+    line-height: 1.5;
+    font-weight: 700;
+  }
+  .cp-value-card p {
+    font-size: .87rem;
     color: var(--muted);
-    line-height: 1.6;
+    line-height: 1.85;
+    margin: 0;
+  }
+  .cp-security-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: rgba(91, 127, 255, .05);
+    border: 1px solid rgba(91, 127, 255, .18);
+    border-radius: 10px;
+  }
+  .cp-security-note i {
+    font-size: 1.1rem;
+    color: var(--brand);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .cp-security-note p {
+    margin: 0;
+    font-size: .86rem;
+    color: var(--text);
+    line-height: 1.7;
   }
 
-  @media (max-width: 640px) {
-    .cp-cards {
+  /* ===== Links ===== */
+  .cp-links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .cp-link-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .cp-link-card:hover {
+    border-color: rgba(162, 89, 255, .4);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, .05);
+  }
+  .cp-link-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(162, 89, 255, .08);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .95rem;
+  }
+  .cp-link-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .cp-link-label {
+    font-size: .72rem;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .04em;
+  }
+  .cp-link-value {
+    font-size: .88rem;
+    color: var(--heading);
+    font-weight: 600;
+    word-break: break-all;
+  }
+  .cp-foot {
+    margin: 22px 0 0;
+    font-size: .8rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .cp-cards-2 {
       grid-template-columns: 1fr;
+    }
+    .cp-values-grid {
+      grid-template-columns: 1fr;
+    }
+    .cp-links-grid {
+      grid-template-columns: 1fr 1fr;
     }
     .cp-table th {
       width: 36%;
+      font-size: .8rem;
+    }
+    .cp-table td {
+      font-size: .88rem;
+    }
+  }
+  @media (max-width: 480px) {
+    .cp-links-grid {
+      grid-template-columns: 1fr;
     }
   }
 
   @media print {
-    .cp-section {
+    .cp-section,
+    .cp-hero,
+    .cp-highlight-section {
       background: #fff;
     }
-    .cp-block {
+    .cp-block,
+    .cp-feature-card,
+    .cp-value-card,
+    .cp-link-card {
       break-inside: avoid;
       page-break-inside: avoid;
     }
