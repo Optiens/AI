@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import IsoGridCanvas from '../components/IsoGridCanvas.astro';
 ---
 
 <Layout
@@ -11,7 +10,6 @@ import IsoGridCanvas from '../components/IsoGridCanvas.astro';
   <main>
     <!-- ヒーロー -->
     <section class="ac-hero light-section">
-      <IsoGridCanvas id="ac-net" />
       <div class="container text-center" style="position:relative;z-index:1;">
         <h1>定型業務の9割を自動化。</h1>
         <p class="hero-sub">判断と創造に集中できる経営へ。</p>
@@ -128,19 +126,6 @@ import IsoGridCanvas from '../components/IsoGridCanvas.astro';
       </div>
     </section>
 
-    <!-- 補助金活用バナー -->
-    <section class="ac-section light-section">
-      <div class="container">
-        <div class="examples-banner reveal">
-          <div class="examples-banner-icon"><i class="fa-solid fa-yen-sign"></i></div>
-          <div class="examples-banner-text">
-            <h2 class="examples-banner-title">補助金で実質1/3〜1/5の自己負担で導入</h2>
-            <p class="examples-banner-desc">小規模事業者持続化補助金（補助率2/3・最大200万円）など、中小企業がAI導入で使える補助金を整理しました。Optiensのサービスは多くの補助金の対象になります。</p>
-          </div>
-          <a href="/subsidy-guide" class="btn-primary examples-banner-btn">補助金ガイドを見る <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-    </section>
 
     <!-- FAQ -->
     <section class="ac-section light-section ac-faq-section">
