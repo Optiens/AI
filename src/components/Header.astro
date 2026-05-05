@@ -13,9 +13,8 @@
       <li><a href="/service">サービス</a></li>
       <li><a href="/ai-examples">活用事例</a></li>
       <li class="has-dropdown">
-        <a href="/about" class="nav-trigger">私たちについて <span class="nav-caret" aria-hidden="true">▾</span></a>
+        <span class="nav-trigger nav-trigger--label">私たちについて <span class="nav-caret" aria-hidden="true">▾</span></span>
         <ul class="nav-dropdown">
-          <li><a href="/about">私たちについて</a></li>
           <li><a href="/message">メッセージ</a></li>
           <li><a href="/company-profile">会社概要</a></li>
         </ul>
@@ -36,7 +35,6 @@
       <li class="mobile-group">
         <p class="mobile-group-label">私たちについて</p>
         <ul class="mobile-sub">
-          <li><a href="/about">私たちについて</a></li>
           <li><a href="/message">メッセージ</a></li>
           <li><a href="/company-profile">会社概要</a></li>
         </ul>
@@ -128,6 +126,18 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
+  }
+  .nav-trigger--label {
+    color: #475569;
+    font-size: .88rem;
+    font-weight: 500;
+    letter-spacing: .02em;
+    cursor: default;
+    user-select: none;
+    padding: 4px 0;
+  }
+  .has-dropdown:hover .nav-trigger--label {
+    color: #0f172a;
   }
   .nav-caret {
     font-size: .65rem;
