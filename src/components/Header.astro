@@ -2,7 +2,10 @@
 ---
 <header class="main-header">
   <a href="/" class="header-logo-link">
-    <video src="/videos/optiens-logo-wave.mp4" autoplay muted playsinline class="header-logo"></video>
+    <video autoplay muted playsinline loop class="header-logo">
+      <source src="/videos/optiens-logo-wave.webm" type="video/webm" />
+      <source src="/videos/optiens-logo-wave.mp4" type="video/mp4" />
+    </video>
   </a>
 
   <nav class="desktop-nav">
@@ -82,8 +85,7 @@
   height: 44px;
   max-width: none;
   display: block;
-  /* 動画ロゴの白背景を mix-blend-mode で透明化 */
-  mix-blend-mode: multiply;
+  /* webm版は alpha チャンネル付き（chromakey で白を透明化済） */
 }
 
 @media (min-width: 769px) {
