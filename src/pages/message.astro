@@ -10,12 +10,11 @@ import Layout from '../layouts/Layout.astro';
   <main class="msg-page">
     <!-- Hero -->
     <section class="msg-hero">
-      <div class="container">
-        <p class="msg-eyebrow">MESSAGE</p>
+      <div class="container text-center">
         <h1 class="msg-title">AIを中心に、<br/>働き方を変える時代へ。</h1>
         <p class="msg-lead">
           AIを業務の中心に置き、人間にしか出来ない判断と創造に集中する。<br class="pc-only" />
-          その仕組みづくりを支援します。
+          その仕組みづくりを伴走支援します。
         </p>
       </div>
     </section>
@@ -25,14 +24,12 @@ import Layout from '../layouts/Layout.astro';
       <div class="container">
         <div class="mv-grid">
           <article class="mv-card">
-            <p class="mv-label">MISSION</p>
             <h2 class="mv-title">ミッション</h2>
             <p class="mv-text">
               AIを業務の中心に置き、人間にしか出来ない判断と創造に集中する仕組みを、全国の中小企業・小規模事業者へ届ける。
             </p>
           </article>
           <article class="mv-card">
-            <p class="mv-label">VISION</p>
             <h2 class="mv-title">ビジョン</h2>
             <p class="mv-text">
               定型業務は AI に、判断と創造は人間に。<br/>
@@ -47,7 +44,6 @@ import Layout from '../layouts/Layout.astro';
     <!-- 2つの考え方（最適化 × 円相） -->
     <section class="msg-section msg-roots">
       <div class="container">
-        <p class="msg-section-eyebrow">PHILOSOPHY</p>
         <h2 class="msg-section-title">私たちの考え方</h2>
         <p class="msg-section-sub">
           社名「Optiens」は、<strong>Optimization（最適化）</strong>と<strong>Ensō（円相）</strong>を重ねた造語です。<br class="pc-only" />
@@ -119,7 +115,6 @@ import Layout from '../layouts/Layout.astro';
     <!-- 代表メッセージ -->
     <section class="msg-section msg-ceo">
       <div class="container">
-        <p class="msg-section-eyebrow">FROM CEO</p>
         <h2 class="msg-section-title">代表メッセージ</h2>
         <div class="ceo-card">
           <div class="ceo-avatar" aria-hidden="true">
@@ -172,27 +167,20 @@ import Layout from '../layouts/Layout.astro';
     padding: clamp(120px, 14vw, 180px) 0 clamp(60px, 8vw, 100px);
     background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
   }
-  .msg-eyebrow {
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    font-weight: 700;
-    color: var(--brand);
-    text-transform: uppercase;
-    margin: 0 0 24px;
-  }
   .msg-title {
     font-size: clamp(1.8rem, 4vw, 2.8rem);
     font-weight: 800;
     line-height: 1.4;
-    margin: 0 0 24px;
+    margin: 0 auto 24px;
     letter-spacing: -0.01em;
+    color: #0f172a;
   }
   .msg-lead {
     font-size: clamp(0.95rem, 1.6vw, 1.1rem);
     line-height: 1.95;
     color: #475569;
-    margin: 0;
+    margin: 0 auto;
+    max-width: 720px;
   }
 
   /* Sections */
