@@ -300,8 +300,17 @@ const homeSchema = [
   padding: 20px;
 }
 .home-hero .hero-text-block {
+  /* 半透明カードで背景動画を透かしつつ可読性を確保 */
   width: fit-content;
+  max-width: 100%;
   margin: 0 auto;
+  padding: clamp(28px, 4vw, 48px) clamp(28px, 4vw, 56px);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px -20px rgba(15, 23, 42, 0.18);
 }
 .home-hero .hero-eyebrow {
   display: block;
@@ -309,10 +318,9 @@ const homeSchema = [
   font-size: clamp(11px, 1.2vw, 13px);
   letter-spacing: .3em;
   text-transform: uppercase;
-  color: #6E2BC9; /* 濃い紫で動画背景上でもコントラスト確保 */
+  color: var(--home-brand, #3D6FA0);
   font-weight: 700;
   text-align: left;
-  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.65), 0 0 18px rgba(255, 255, 255, 0.4);
 }
 .home-hero .hero-title {
   font-size: clamp(30px, 5vw, 60px);
@@ -322,21 +330,22 @@ const homeSchema = [
   color: var(--home-heading);
   margin: 0 0 1rem;
   text-align: left;
-  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.45);
 }
 .home-hero .hero-sub {
   font-size: clamp(15px, 2vw, 18px);
-  color: #0f172a; /* 黒に近い濃グレーで可読性確保 */
+  color: #0f172a;
   margin: 0;
   font-weight: 700;
   text-align: right;
-  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.65), 0 0 18px rgba(255, 255, 255, 0.4);
 }
 
 @media (max-width: 640px) {
   .home-hero .hero-content {
     width: 100%;
     padding: 16px;
+  }
+  .home-hero .hero-text-block {
+    padding: 24px 20px;
   }
 }
 

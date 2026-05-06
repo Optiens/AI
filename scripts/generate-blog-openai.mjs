@@ -52,11 +52,11 @@ const isWebp = outputPath.toLowerCase().endsWith('.webp');
 
 const STYLE_SUFFIX = `
 
-Style: modern, clean, professional. Photographic or 3D rendered illustration style.
-Color palette: dark navy (#0E2A47), silver/titanium (#C0C0C0), soft cherry blossom pink (#E48A95).
+Style: modern, clean, professional editorial business magazine illustration or photography.
+Use a neutral color palette appropriate to the topic — natural lighting, subdued tones,
+or topic-relevant colors. DO NOT apply any specific brand color scheme.
 No text, no letters, no numbers, no logos, no watermarks.
-Editorial business magazine quality. 16:9 horizontal composition.
-Plenty of negative space, sophisticated lighting, high quality.`;
+16:9 horizontal composition, plenty of negative space, sophisticated lighting, high quality.`;
 
 const fullPrompt = `${userPrompt}${STYLE_SUFFIX}`;
 

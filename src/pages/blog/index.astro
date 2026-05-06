@@ -14,7 +14,9 @@ const categoryLabel: Partial<Record<BlogCategory, string>> = {
 // 水耕栽培関連カテゴリはブログ一覧から除外（hydroponicsページで掲載）
 const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'social'];
 
-const limit = 6;
+const DEFAULT_LIMIT = 18;
+const showAll = Astro.url.searchParams.get('all') === '1';
+const limit = showAll ? Infinity : DEFAULT_LIMIT;
 const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
 const selectedCategory = (Astro.url.searchParams.get('category') ?? '') as BlogCategory | '';
 
@@ -27,11 +29,14 @@ const filtered = selectedCategory
   ? sorted.filter((p) => p.data.category === selectedCategory)
   : sorted;
 
-const offset = (currentPage - 1) * limit;
-const paged = filtered.slice(offset, offset + limit);
-const totalPages = Math.ceil(filtered.length / limit);
-const hasPrev = currentPage > 1;
-const hasNext = currentPage < totalPages;
+const offset = showAll ? 0 : (currentPage - 1) * DEFAULT_LIMIT;
+const paged = showAll ? filtered : filtered.slice(offset, offset + DEFAULT_LIMIT);
+const totalPages = showAll ? 1 : Math.ceil(filtered.length / DEFAULT_LIMIT);
+const hasPrev = !showAll && currentPage > 1;
+const hasNext = !showAll && currentPage < totalPages;
+
+// 表示用ページ番号配列（最大10ページ表示）
+const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
 const categories = Object.entries(categoryLabel) as [BlogCategory, string][];
 
@@ -43,6 +48,17 @@ function pageUrl(page: number) {
 }
 function categoryUrl(cat: BlogCategory | '') {
   return cat ? `?category=${cat}` : '?';
+}
+function showAllUrl() {
+  const params = new URLSearchParams();
+  params.set('all', '1');
+  if (selectedCategory) params.set('category', selectedCategory);
+  return `?${params.toString()}`;
+}
+function paginatedUrl() {
+  const params = new URLSearchParams();
+  if (selectedCategory) params.set('category', selectedCategory);
+  return params.toString() ? `?${params.toString()}` : '?';
 }
 ---
 
@@ -108,31 +124,47 @@ function categoryUrl(cat: BlogCategory | '') {
     </section>
 
     <!-- ページネーション -->
-    {totalPages > 1 && (
+    {(totalPages > 1 || showAll) && (
       <nav class="pagination-container" aria-label="ブログページネーション">
-        <ul class="pagination">
-          {hasPrev ? (
-            <li class="pagination-item">
-              <a href={pageUrl(currentPage - 1)} class="pagination-link">前へ</a>
-            </li>
-          ) : (
-            <li class="pagination-item disabled">
-              <span class="pagination-link">前へ</span>
-            </li>
-          )}
-          <li class="pagination-item current">
-            <span class="pagination-link">{currentPage} / {totalPages}</span>
-          </li>
-          {hasNext ? (
-            <li class="pagination-item">
-              <a href={pageUrl(currentPage + 1)} class="pagination-link">次へ</a>
-            </li>
-          ) : (
-            <li class="pagination-item disabled">
-              <span class="pagination-link">次へ</span>
-            </li>
-          )}
-        </ul>
+        {showAll ? (
+          <div class="pagination-mode">
+            <span class="pagination-info">全 {filtered.length} 件を表示中</span>
+            <a href={paginatedUrl()} class="pagination-link pagination-link--mode">ページ表示に戻す</a>
+          </div>
+        ) : (
+          <div class="pagination-mode">
+            <ul class="pagination">
+              {hasPrev ? (
+                <li class="pagination-item">
+                  <a href={pageUrl(currentPage - 1)} class="pagination-link">前へ</a>
+                </li>
+              ) : (
+                <li class="pagination-item disabled">
+                  <span class="pagination-link">前へ</span>
+                </li>
+              )}
+              {pageNumbers.map((n) => (
+                <li class={`pagination-item pagination-item--num ${n === currentPage ? 'current' : ''}`}>
+                  {n === currentPage ? (
+                    <span class="pagination-link">{n}</span>
+                  ) : (
+                    <a href={pageUrl(n)} class="pagination-link">{n}</a>
+                  )}
+                </li>
+              ))}
+              {hasNext ? (
+                <li class="pagination-item">
+                  <a href={pageUrl(currentPage + 1)} class="pagination-link">次へ</a>
+                </li>
+              ) : (
+                <li class="pagination-item disabled">
+                  <span class="pagination-link">次へ</span>
+                </li>
+              )}
+            </ul>
+            <a href={showAllUrl()} class="pagination-link pagination-link--mode">全 {filtered.length} 件を一度に見る</a>
+          </div>
+        )}
       </nav>
     )}
   </main>
@@ -289,34 +321,74 @@ function categoryUrl(cat: BlogCategory | '') {
   .pagination-container {
     display: flex;
     justify-content: center;
-    padding: 0 0 40px;
+    padding: 0 0 60px;
+  }
+  .pagination-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
   }
   .pagination {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
     list-style: none;
     padding: 0;
     margin: 0;
+  }
+  .pagination-item {
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 6px;
     overflow: hidden;
   }
   .pagination-link {
     display: block;
-    padding: 10px 15px;
+    padding: 9px 14px;
     text-decoration: none;
     color: var(--text);
-    transition: background-color .2s;
+    transition: background-color .2s, color .2s;
     font-weight: 600;
     font-size: .9rem;
+    min-width: 40px;
+    text-align: center;
   }
-  .pagination-link:hover { background-color: var(--surface-3); }
+  .pagination-link:hover { background-color: var(--surface-3); color: var(--brand); }
   .pagination-item.disabled .pagination-link {
-    color: rgba(255,255,255,.2);
+    color: rgba(0,0,0,.25);
     cursor: not-allowed;
     background: transparent;
+  }
+  .pagination-item.current {
+    border-color: var(--brand);
   }
   .pagination-item.current .pagination-link {
     background: var(--brand);
     color: #fff;
+  }
+  .pagination-link--mode {
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 8px 18px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .pagination-link--mode:hover {
+    color: var(--brand);
+    border-color: var(--brand);
+  }
+  .pagination-info {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  @media (max-width: 640px) {
+    .pagination-link {
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      min-width: 32px;
+    }
   }
 </style>

@@ -26,7 +26,8 @@ if (!API_KEY) {
 
 const STYLE = `
 Style: modern editorial business magazine, sophisticated photographic or 3D render quality.
-Color palette: dark navy (#0E2A47), silver/titanium (#C0C0C0), soft cherry blossom pink (#E48A95) as accent.
+Use a neutral color palette appropriate to the topic — natural lighting, subdued tones,
+or topic-relevant colors. DO NOT apply any specific brand color scheme.
 No text, no letters, no numbers, no logos, no watermarks.
 16:9 horizontal composition, plenty of negative space, cinematic lighting, high quality.
 `.trim();
