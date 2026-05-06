@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import founderPhoto from '../assets/founder.jpg?url';
 ---
 
 <Layout
@@ -107,8 +108,8 @@ import Layout from '../layouts/Layout.astro';
       <div class="container">
         <h2 class="msg-section-title">代表メッセージ</h2>
         <div class="ceo-card">
-          <div class="ceo-avatar" aria-hidden="true">
-            <span class="ceo-initial">T</span>
+          <div class="ceo-avatar">
+            <img src={founderPhoto} alt="髙橋 大地（合同会社Optiens 代表社員）" loading="lazy" />
           </div>
           <div class="ceo-body">
             <p class="ceo-name">髙橋 大地<span class="ceo-role">合同会社Optiens 代表社員</span></p>
@@ -385,20 +386,18 @@ import Layout from '../layouts/Layout.astro';
   }
   .ceo-avatar {
     flex-shrink: 0;
-    width: clamp(80px, 10vw, 110px);
-    height: clamp(80px, 10vw, 110px);
+    width: clamp(96px, 12vw, 140px);
+    height: clamp(96px, 12vw, 140px);
     border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(14, 42, 71, 0.3), 0 0 0 4px rgba(14, 42, 71, 0.06);
     background: linear-gradient(135deg, #0E2A47 0%, #C0C0C0 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    box-shadow: 0 8px 24px rgba(14, 42, 71, 0.3);
   }
-  .ceo-initial {
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: clamp(2.2rem, 4vw, 3rem);
-    font-weight: 700;
+  .ceo-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .ceo-body {
     flex: 1;
