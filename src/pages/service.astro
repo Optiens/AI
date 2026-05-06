@@ -59,48 +59,42 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- 強み：なぜOptiensを選ぶのか（左右交互レイアウト） -->
+    <!-- 強み：Optiensの3つの強み（カード並列） -->
     <section class="ac-section light-section ac-custom-section">
       <div class="container">
         <h2 class="section-title reveal">Optiensの3つの強み</h2>
 
-        <div class="custom-stack">
+        <div class="strength-grid reveal-stagger">
 
           <!-- 1. エンタープライズの設計思想を、中小事業者の規模で -->
-          <div class="custom-row reveal">
-            <div class="custom-row-media">
+          <article class="strength-card reveal" data-num="01">
+            <div class="strength-card-media">
               <img src="/images/services/custom-fit.png" alt="エンタープライズの設計思想を中小事業者の規模に最適化" loading="lazy" />
             </div>
-            <div class="custom-row-body">
-              <span class="custom-row-num">01</span>
-              <h3>エンタープライズの設計思想を、御社の規模で</h3>
-              <p>代表は大手向けCRM（<strong>Salesforce</strong>）で10年以上、業務動線の設計と運用改善に携わってきました。Optiensは、その設計知見を<strong>中小事業者の規模・予算・人員</strong>に最適化して提供します。汎用<strong>SaaS</strong><small>(Software as a Service：複数の利用企業で同じ画面・機能を共有するクラウド型サービス)</small>では合わせきれない業務動線も、<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>で一から組み上げ、「項目が多すぎて使われない」「複数ツールを行き来して二重入力」をなくします。<strong>過剰でも不足でもない、ちょうどいい仕組み</strong>を、御社の規模感で設計します。</p>
-            </div>
-          </div>
+            <span class="strength-card-num">01</span>
+            <h3>エンタープライズの設計思想を、御社の規模で</h3>
+            <p>代表は大手向けCRM（<strong>Salesforce</strong>）で10年以上、業務動線の設計と運用改善に携わってきました。Optiensは、その設計知見を<strong>中小事業者の規模・予算・人員</strong>に最適化して提供します。汎用<strong>SaaS</strong><small>(Software as a Service：複数の利用企業で同じ画面・機能を共有するクラウド型サービス)</small>では合わせきれない業務動線も、<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>で一から組み上げ、<strong>過剰でも不足でもない、ちょうどいい仕組み</strong>を御社の規模感で設計します。</p>
+          </article>
 
           <!-- 2. 買い切り型・御社の資産 -->
-          <div class="custom-row custom-row--reverse reveal">
-            <div class="custom-row-media">
+          <article class="strength-card reveal" data-num="02">
+            <div class="strength-card-media">
               <img src="/images/services/asset-ownership.png" alt="買い切り型で御社の資産になる仕組み" loading="lazy" />
             </div>
-            <div class="custom-row-body">
-              <span class="custom-row-num">02</span>
-              <h3>買い切り型で、御社の資産になる</h3>
-              <p>納品する仕組みは<strong>買い切り型</strong>の構築費用のみ。利用人数に応じたライセンス料は発生しません。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースをまとめて提供するクラウド基盤。代表例: Supabase)</small>に保管され、CSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。将来別の事業者に乗り換える場合も<strong>ベンダーロックイン</strong><small>(特定業者しか扱えなくなる状態)</small>は起こりません。<strong>月額の固定支出を抑えたい中小事業者ほど、構造的に有利</strong>になる契約形態です。</p>
-            </div>
-          </div>
+            <span class="strength-card-num">02</span>
+            <h3>買い切り型で、御社の資産になる</h3>
+            <p>納品する仕組みは<strong>買い切り型</strong>の構築費用のみ。利用人数に応じたライセンス料は発生しません。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースをまとめて提供するクラウド基盤。代表例: Supabase)</small>に保管され、CSVエクスポートやダンプでいつでも持ち出せます。<strong>ベンダーロックイン</strong><small>(特定業者しか扱えなくなる状態)</small>は起こらず、<strong>月額の固定支出を抑えたい中小事業者ほど構造的に有利</strong>な契約形態です。</p>
+          </article>
 
           <!-- 3. 自分たちで使い、改善してきた運用知見 -->
-          <div class="custom-row reveal">
-            <div class="custom-row-media">
+          <article class="strength-card reveal" data-num="03">
+            <div class="strength-card-media">
               <img src="/images/services/easy-sharing.png" alt="自社で使い改善し続けてきた運用知見をそのまま提供" loading="lazy" />
             </div>
-            <div class="custom-row-body">
-              <span class="custom-row-num">03</span>
-              <h3>自分たちで使い、改善してきた運用知見</h3>
-              <p>Optiens自身が、<strong>Claude Code・Supabase・AIエージェント</strong>を組み合わせた仕組みで日々の経営を回しています。社内CRM・コンテンツ運用ツール・IoT水耕栽培の管理基盤── どれも自社運用で改善サイクルを回しているため、ご提案は<strong>机上の設計図ではなく、実装と運用の知見</strong>です。「導入後どこでつまずきやすいか」「半年後に何を見直すべきか」まで、自社で経験してきた知見をベースにお伝えします。<strong>自分が使いたくないものを、お客様にお勧めしない</strong>── それがOptiensのスタンスです。</p>
-            </div>
-          </div>
+            <span class="strength-card-num">03</span>
+            <h3>自分たちで使い、改善してきた運用知見</h3>
+            <p>Optiens自身が、<strong>Claude Code・Supabase・AIエージェント</strong>を組み合わせた仕組みで日々の経営を回しています。社内CRM・コンテンツ運用ツール・IoT水耕栽培の管理基盤── どれも自社運用で改善サイクルを回しているため、ご提案は<strong>机上の設計図ではなく、実装と運用の知見</strong>です。<strong>自分が使いたくないものを、お客様にお勧めしない</strong>── それがOptiensのスタンスです。</p>
+          </article>
 
         </div>
       </div>
@@ -558,6 +552,123 @@ import Layout from '../layouts/Layout.astro';
     }
     .service-row-media img {
       max-width: 320px;
+    }
+  }
+
+  /* ===== Strength Cards (3つの強み — カード並列) ===== */
+  .strength-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 2.5vw, 32px);
+    max-width: 1200px;
+    margin: clamp(40px, 6vw, 64px) auto 0;
+  }
+  .strength-card {
+    background: linear-gradient(180deg, #ffffff 0%, var(--surface-2, #F9FAFB) 100%);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: clamp(24px, 3vw, 32px);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .strength-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -28px;
+    right: -8px;
+    font-family: 'Inter', 'SF Pro Display', sans-serif;
+    font-size: clamp(6rem, 10vw, 8rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: var(--brand);
+    opacity: 0.05;
+    pointer-events: none;
+    user-select: none;
+  }
+  .strength-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 48px -22px rgba(14, 42, 71, 0.30);
+    border-color: rgba(14, 42, 71, 0.20);
+  }
+  .strength-card-media {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+    background: linear-gradient(135deg, rgba(14, 42, 71, 0.04) 0%, rgba(192, 192, 192, 0.06) 100%);
+    border-radius: 16px;
+    padding: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .strength-card-media img {
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+    display: block;
+  }
+  .strength-card-num {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', 'SF Pro Display', sans-serif;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, var(--brand) 0%, #4a7ba8 60%, var(--titanium) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    position: relative;
+    z-index: 1;
+  }
+  .strength-card-num::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--titanium) 0%, transparent 100%);
+    border-radius: 2px;
+    align-self: center;
+  }
+  .strength-card h3 {
+    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+    color: var(--heading);
+    margin: 0 0 14px;
+    line-height: 1.55;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+  }
+  .strength-card p {
+    color: var(--text);
+    font-size: 0.92rem;
+    line-height: 1.95;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .strength-card p strong { color: var(--heading); }
+  .strength-card p small {
+    display: inline;
+    font-size: .82em;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+  @media (max-width: 1024px) {
+    .strength-grid {
+      grid-template-columns: 1fr;
+      max-width: 640px;
     }
   }
   }
