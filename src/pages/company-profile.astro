@@ -15,17 +15,40 @@ import Layout from '../layouts/Layout.astro';
         <h1 class="cp-title">会社概要</h1>
         <table class="cp-table">
           <tbody>
-            <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
-            <tr><th>英字表記</th><td>Optiens LLC</td></tr>
-            <tr><th>設立</th><td>2026年4月6日</td></tr>
-            <tr><th>代表社員</th><td>髙橋 大地</td></tr>
-            <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
-            <tr><th>資本金</th><td>100,000円</td></tr>
-            <tr><th>法人番号</th><td>9090003003025</td></tr>
-            <tr><th>事業内容</th><td>AI活用支援、IoT水耕栽培の自社実証</td></tr>
-            <tr><th>インボイス登録</th><td>適格請求書発行事業者 申請中</td></tr>
-            <tr><th>取引銀行</th><td>GMOあおぞらネット銀行 フリー支店</td></tr>
-            <tr><th>連絡先</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
+            <tr>
+              <th>会社名</th>
+              <td>合同会社Optiens（オプティエンス） / Optiens LLC</td>
+            </tr>
+            <tr>
+              <th>設立</th>
+              <td>2026年4月6日</td>
+            </tr>
+            <tr>
+              <th>代表者</th>
+              <td>髙橋 大地</td>
+            </tr>
+            <tr>
+              <th>所在地</th>
+              <td>
+                〒407-0301<br/>
+                山梨県北杜市高根町清里3545番地2483
+              </td>
+            </tr>
+            <tr>
+              <th>法人番号</th>
+              <td>9090003003025</td>
+            </tr>
+            <tr>
+              <th>事業内容</th>
+              <td>
+                <ul class="cp-business-list">
+                  <li>中小企業・小規模事業者向けAI活用支援（活用診断・導入支援・保守）</li>
+                  <li>AIエージェントを核とした業務自動化システムの設計・構築</li>
+                  <li>業務に合わせた専用UI／業務システムの開発</li>
+                  <li>IoT水耕栽培システムの自社実証および知見蓄積</li>
+                </ul>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -88,6 +111,31 @@ import Layout from '../layouts/Layout.astro';
   .cp-table a {
     color: var(--brand);
     text-decoration: underline;
+  }
+  .cp-business-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cp-business-list li {
+    position: relative;
+    padding-left: 16px;
+    font-size: .92rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .cp-business-list li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 11px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--brand);
   }
 
   @media (max-width: 768px) {
