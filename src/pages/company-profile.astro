@@ -47,14 +47,10 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- 1. 法人情報 -->
+    <!-- 法人情報 -->
     <section class="cp-section light-section">
       <div class="container cp-container">
         <article class="cp-block">
-          <header class="cp-block-head">
-            <span class="cp-block-num">01</span>
-            <h2 class="cp-block-title">法人情報</h2>
-          </header>
           <table class="cp-table">
             <tbody>
               <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
@@ -64,155 +60,21 @@ import Layout from '../layouts/Layout.astro';
               <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
               <tr><th>資本金</th><td>100,000円</td></tr>
               <tr><th>法人番号</th><td>9090003003025</td></tr>
+              <tr><th>事業内容</th><td>AI活用支援、IoT水耕栽培の自社実証</td></tr>
               <tr><th>インボイス登録</th><td>適格請求書発行事業者 申請中</td></tr>
               <tr><th>取引銀行</th><td>GMOあおぞらネット銀行 フリー支店</td></tr>
+              <tr><th>連絡先</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
             </tbody>
           </table>
-        </article>
-      </div>
-    </section>
 
-    <!-- 2. 事業構造 -->
-    <section class="cp-section light-section cp-section--alt">
-      <div class="container cp-container">
-        <article class="cp-block">
-          <header class="cp-block-head">
-            <span class="cp-block-num">02</span>
-            <h2 class="cp-block-title">事業構造</h2>
-          </header>
-          <p class="cp-lead">中小企業・小規模事業者のAI活用支援を主軸に、自社で実証したIoT水耕栽培の知見を組み合わせて事業を組み立てています。</p>
-          <div class="cp-cards-2">
-            <div class="cp-feature-card">
-              <div class="cp-feature-tag">MAIN</div>
-              <h3>AI活用支援事業</h3>
-              <p>無料診断 → 詳細レポート → 導入支援 → 保守の4階層で、業務に合わせた自動化の仕組みを設計・構築・運用します。AIエージェントを業務の中心に置き、お客様自身で運用できる状態への移行を重視しています。</p>
-              <ul class="cp-feature-list">
-                <li>無料診断（簡易レポート）</li>
-                <li>詳細レポート + 60分MTG（¥5,500・税込）</li>
-                <li>導入支援（個別見積）</li>
-                <li>保守プラン（月額¥33,000 / 月額¥55,000・税込）</li>
-              </ul>
-            </div>
-            <div class="cp-feature-card">
-              <div class="cp-feature-tag cp-feature-tag--sub">FIELD</div>
-              <h3>IoT水耕栽培事業（自社実証）</h3>
-              <p>室内LED×IoTによる水耕栽培システムを自社で開発・実証し、業務用ハーブを生産しています。AI支援事業のIoT提案における実証データの基盤として機能します。</p>
-              <ul class="cp-feature-list">
-                <li>自社農場でのバジル・マイクログリーン等の生産</li>
-                <li>センサー・自動制御によるユニットエコノミクス管理</li>
-                <li>業務用販路（地元レストラン・道の駅・業務用EC）</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- 3. 代表者 -->
-    <section class="cp-section light-section">
-      <div class="container cp-container">
-        <article class="cp-block">
-          <header class="cp-block-head">
-            <span class="cp-block-num">03</span>
-            <h2 class="cp-block-title">代表者</h2>
-          </header>
-          <div class="cp-profile">
-            <div class="cp-profile-head">
-              <h3>髙橋 大地</h3>
-              <p class="cp-profile-title">合同会社Optiens 代表社員</p>
-            </div>
-            <p>エンタープライズ向け大規模CRMシステムの設計・開発に10年以上従事。業務分析からシステム実装までを一貫して経験し、業務の構造そのものに踏み込んだ設計を強みとしています。</p>
-            <p>2026年、山梨県北杜市にて合同会社Optiensを設立。一人法人としてAI支援事業とIoT水耕栽培事業を並走させながら、自社の経営管理はAIエージェント体制で運営。「AIを中心に仕事の仕組みを変える」というスタンスを、自社で実証しながら全国の小規模事業者へ届けています。</p>
-            <ul class="cp-profile-tags">
-              <li>大規模CRM認定資格保有</li>
-              <li>エンタープライズ開発10年以上</li>
-              <li>業務分析×実装の一貫経験</li>
-              <li>AIファーストで業務再設計</li>
-            </ul>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- 4. 姿勢・取り組み -->
-    <section class="cp-section light-section cp-section--alt">
-      <div class="container cp-container">
-        <article class="cp-block">
-          <header class="cp-block-head">
-            <span class="cp-block-num">04</span>
-            <h2 class="cp-block-title">姿勢・取り組み</h2>
-          </header>
-          <div class="cp-values-grid">
-            <div class="cp-value-card">
-              <div class="cp-value-num">01</div>
-              <h3>自走できる仕組みをつくる</h3>
-              <p>お客様が自分たちの力で運用できる自動化の仕組みをつくることを目指します。日常操作は「確認して承認するだけ」で完結するよう設計し、保守契約なしでもそのまま運用を続けられる状態でお渡しします。</p>
-            </div>
-            <div class="cp-value-card">
-              <div class="cp-value-num">02</div>
-              <h3>自分で使い、自分で改善する</h3>
-              <p>弊社自身がAIエージェントを使って、社内のCRM・書類添削ツール・水耕栽培IoTダッシュボードなどを運用しています。「自分で使い、自分で改善する」ことで得た知見をもとに、案件ごとに最適な構成を設計します。</p>
-            </div>
-            <div class="cp-value-card">
-              <div class="cp-value-num">03</div>
-              <h3>不具合は当社の責任で対応する</h3>
-              <p>Optiensが設計・構築したシステムに起因するバグや設計ミスは、納品日から3ヶ月間、保守契約の有無にかかわらず無償で修正します。「構築したものの責任を取る」を運用ルールの中心に置いています。</p>
-            </div>
-          </div>
-          <div class="cp-security-note">
-            <i class="fa-solid fa-shield-halved"></i>
-            <p>IPA「SECURITY ACTION」一つ星を宣言し、情報セキュリティ基本方針に沿った運用を行っています。</p>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- 5. 連絡先・関連リンク -->
-    <section class="cp-section light-section">
-      <div class="container cp-container">
-        <article class="cp-block">
-          <header class="cp-block-head">
-            <span class="cp-block-num">05</span>
-            <h2 class="cp-block-title">連絡先・関連リンク</h2>
-          </header>
-          <div class="cp-links-grid">
-            <a href="mailto:info@optiens.com" class="cp-link-card">
-              <div class="cp-link-icon"><i class="fa-solid fa-envelope"></i></div>
-              <div class="cp-link-body">
-                <span class="cp-link-label">メール</span>
-                <span class="cp-link-value">info@optiens.com</span>
-              </div>
-            </a>
-            <a href="/contact" class="cp-link-card">
-              <div class="cp-link-icon"><i class="fa-solid fa-paper-plane"></i></div>
-              <div class="cp-link-body">
-                <span class="cp-link-label">お問い合わせ</span>
-                <span class="cp-link-value">/contact</span>
-              </div>
-            </a>
-            <a href="/free-diagnosis" class="cp-link-card">
-              <div class="cp-link-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
-              <div class="cp-link-body">
-                <span class="cp-link-label">無料AI診断</span>
-                <span class="cp-link-value">/free-diagnosis</span>
-              </div>
-            </a>
-            <a href="/service" class="cp-link-card">
-              <div class="cp-link-icon"><i class="fa-solid fa-bars-progress"></i></div>
-              <div class="cp-link-body">
-                <span class="cp-link-label">サービス紹介</span>
-                <span class="cp-link-value">/service</span>
-              </div>
-            </a>
-            <a href="/message" class="cp-link-card">
-              <div class="cp-link-icon"><i class="fa-solid fa-quote-right"></i></div>
-              <div class="cp-link-body">
-                <span class="cp-link-label">メッセージ</span>
-                <span class="cp-link-value">/message</span>
-              </div>
-            </a>
-          </div>
-          <p class="cp-foot">本ページは会社概要PDFの代わりにご利用いただけます。印刷時はブラウザの印刷機能をご利用ください。</p>
+          <p class="cp-related-links">
+            関連:
+            <a href="/message">メッセージ</a>
+            <span aria-hidden="true">·</span>
+            <a href="/service">サービス</a>
+            <span aria-hidden="true">·</span>
+            <a href="/contact">お問い合わせ</a>
+          </p>
         </article>
       </div>
     </section>
@@ -313,56 +175,25 @@ import Layout from '../layouts/Layout.astro';
 
   /* ===== Section ===== */
   .cp-section {
-    padding: clamp(56px, 9vw, 88px) 0;
+    padding: clamp(48px, 7vw, 72px) 0 clamp(64px, 10vw, 100px);
     background: #ffffff;
   }
-  .cp-section--alt {
-    background: #fafbfc;
-  }
   .cp-container {
-    max-width: 920px;
+    max-width: 760px;
   }
-
   .cp-block {
     background: transparent;
-  }
-  .cp-block-head {
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid var(--border);
-  }
-  .cp-block-num {
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    font-size: .9rem;
-    font-weight: 700;
-    color: var(--brand);
-    letter-spacing: .08em;
-  }
-  .cp-block-title {
-    font-size: clamp(1.15rem, 2.2vw, 1.4rem);
-    color: var(--heading);
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: -.005em;
-  }
-  .cp-lead {
-    font-size: .96rem;
-    color: var(--text);
-    line-height: 1.85;
-    margin: 0 0 28px;
   }
 
   /* ===== Table ===== */
   .cp-table {
     width: 100%;
     border-collapse: collapse;
+    border-top: 1px solid var(--border);
   }
   .cp-table th,
   .cp-table td {
-    padding: 14px 16px;
+    padding: 16px 18px;
     border-bottom: 1px solid var(--border);
     text-align: left;
     vertical-align: top;
@@ -370,12 +201,13 @@ import Layout from '../layouts/Layout.astro';
     line-height: 1.7;
   }
   .cp-table th {
-    width: 30%;
+    width: 32%;
     color: var(--muted);
     font-weight: 600;
     white-space: nowrap;
     font-size: .85rem;
     letter-spacing: .02em;
+    background: #fafbfc;
   }
   .cp-table td {
     color: var(--text);
@@ -386,272 +218,34 @@ import Layout from '../layouts/Layout.astro';
     text-decoration: underline;
   }
 
-  /* ===== Feature cards ===== */
-  .cp-cards-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .cp-feature-card {
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 28px 26px;
-    transition: border-color .25s, box-shadow .25s;
-  }
-  .cp-feature-card:hover {
-    border-color: rgba(162, 89, 255, .35);
-    box-shadow: 0 10px 28px rgba(15, 23, 42, .06);
-  }
-  .cp-feature-tag {
-    display: inline-block;
-    font-size: .68rem;
-    font-weight: 700;
-    letter-spacing: .15em;
-    padding: 4px 10px;
-    border-radius: 4px;
-    background: rgba(162, 89, 255, .1);
-    color: var(--brand);
-    margin-bottom: 14px;
-  }
-  .cp-feature-tag--sub {
-    background: rgba(91, 127, 255, .08);
-    color: #5b7fff;
-  }
-  .cp-feature-card h3 {
-    font-size: 1.08rem;
-    color: var(--heading);
-    margin: 0 0 12px;
-    font-weight: 700;
-  }
-  .cp-feature-card p {
-    font-size: .9rem;
-    color: var(--text);
-    line-height: 1.85;
-    margin: 0 0 14px;
-  }
-  .cp-feature-list {
-    list-style: none;
-    padding: 0;
-    margin: 14px 0 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    border-top: 1px dashed var(--border);
-    padding-top: 14px;
-  }
-  .cp-feature-list li {
-    position: relative;
-    padding-left: 18px;
-    font-size: .85rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-  .cp-feature-list li::before {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 9px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--brand);
-  }
-
-  /* ===== Profile ===== */
-  .cp-profile {
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 32px 30px;
-  }
-  .cp-profile-head {
-    margin-bottom: 18px;
-    padding-bottom: 14px;
-    border-bottom: 1px dashed var(--border);
-  }
-  .cp-profile h3 {
-    font-size: 1.25rem;
-    color: var(--heading);
-    margin: 0 0 6px;
-    font-weight: 700;
-    letter-spacing: -.005em;
-  }
-  .cp-profile-title {
+  .cp-related-links {
+    margin: 28px 0 0;
     font-size: .82rem;
-    font-weight: 600;
-    color: var(--brand);
-    margin: 0;
-    letter-spacing: .04em;
-  }
-  .cp-profile p {
-    font-size: .94rem;
-    color: var(--text);
-    line-height: 1.9;
-    margin: 0 0 14px;
-  }
-  .cp-profile p:last-of-type {
-    margin-bottom: 18px;
-  }
-  .cp-profile-tags {
-    list-style: none;
-    padding: 0;
-    margin: 16px 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .cp-profile-tags li {
-    font-size: .78rem;
-    color: var(--text);
-    background: #fafbfc;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 5px 14px;
-    font-weight: 500;
-  }
-
-  /* ===== Values ===== */
-  .cp-values-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .cp-value-card {
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 26px 22px;
-    transition: border-color .25s, transform .25s;
-  }
-  .cp-value-card:hover {
-    border-color: rgba(162, 89, 255, .35);
-    transform: translateY(-2px);
-  }
-  .cp-value-num {
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--brand);
-    margin-bottom: 10px;
-    letter-spacing: -.02em;
-  }
-  .cp-value-card h3 {
-    font-size: .98rem;
-    color: var(--heading);
-    margin: 0 0 10px;
-    line-height: 1.5;
-    font-weight: 700;
-  }
-  .cp-value-card p {
-    font-size: .87rem;
     color: var(--muted);
-    line-height: 1.85;
-    margin: 0;
+    line-height: 1.8;
   }
-  .cp-security-note {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin-top: 20px;
-    padding: 16px 20px;
-    background: rgba(91, 127, 255, .05);
-    border: 1px solid rgba(91, 127, 255, .18);
-    border-radius: 10px;
-  }
-  .cp-security-note i {
-    font-size: 1.1rem;
+  .cp-related-links a {
     color: var(--brand);
-    margin-top: 2px;
-    flex-shrink: 0;
-  }
-  .cp-security-note p {
-    margin: 0;
-    font-size: .86rem;
-    color: var(--text);
-    line-height: 1.7;
-  }
-
-  /* ===== Links ===== */
-  .cp-links-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-  .cp-link-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px 18px;
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: 12px;
     text-decoration: none;
-    transition: border-color .2s, transform .2s, box-shadow .2s;
+    margin: 0 4px;
   }
-  .cp-link-card:hover {
-    border-color: rgba(162, 89, 255, .4);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 22px rgba(15, 23, 42, .05);
+  .cp-related-links a:hover {
+    text-decoration: underline;
   }
-  .cp-link-icon {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: rgba(162, 89, 255, .08);
-    color: var(--brand);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .95rem;
-  }
-  .cp-link-body {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-  .cp-link-label {
-    font-size: .72rem;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: .04em;
-  }
-  .cp-link-value {
-    font-size: .88rem;
-    color: var(--heading);
-    font-weight: 600;
-    word-break: break-all;
-  }
-  .cp-foot {
-    margin: 22px 0 0;
-    font-size: .8rem;
-    color: var(--muted);
-    line-height: 1.7;
+  .cp-related-links span {
+    color: var(--border);
+    margin: 0 2px;
   }
 
   @media (max-width: 768px) {
-    .cp-cards-2 {
-      grid-template-columns: 1fr;
-    }
-    .cp-values-grid {
-      grid-template-columns: 1fr;
-    }
-    .cp-links-grid {
-      grid-template-columns: 1fr 1fr;
-    }
     .cp-table th {
-      width: 36%;
+      width: 38%;
       font-size: .8rem;
+      padding: 12px 12px;
     }
     .cp-table td {
       font-size: .88rem;
-    }
-  }
-  @media (max-width: 480px) {
-    .cp-links-grid {
-      grid-template-columns: 1fr;
+      padding: 12px 12px;
     }
   }
 
@@ -661,10 +255,7 @@ import Layout from '../layouts/Layout.astro';
     .cp-highlight-section {
       background: #fff;
     }
-    .cp-block,
-    .cp-feature-card,
-    .cp-value-card,
-    .cp-link-card {
+    .cp-block {
       break-inside: avoid;
       page-break-inside: avoid;
     }
