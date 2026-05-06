@@ -123,7 +123,8 @@ const homeSchema = [
       <div class="container">
         <h2 class="home-section-heading home-section-heading--center">中小企業にAXはなぜ大切か</h2>
         <p class="home-lead home-ax-lead">
-          大企業と比べて人手や資金が限られている中小企業では、毎日の業務を効率よく進める工夫が必要です。<br class="pc-only" />
+          大企業と比べて人手や資金が限られている中小企業では、<br class="pc-only" />
+          毎日の業務を効率よく進める工夫が必要です。<br />
           AXは、従来の業務を根本から変革および高度化するため、<br class="pc-only" />
           限られたリソースの中でも成果を出すための効果的な手段になります。
         </p>
@@ -144,10 +145,6 @@ const homeSchema = [
             <p>売上データや在庫情報をAIで分析すれば、「どの商品がよく売れているか」「どの時間帯に顧客が多いか」を視覚的に把握。経験や勘に頼らず、数字に基づく予測や判断ができます。</p>
           </div>
         </div>
-        <p class="home-ax-closing">
-          AXは、ITやAIの専門知識がない企業でも、ツールの選び方と使い方次第で実践できる取り組みです。<br class="pc-only" />
-          少しずつでも導入を進めることで、仕事の無駄が見つかり、自然と新しい働き方へ移行していけます。
-        </p>
       </div>
     </section>
 
@@ -156,7 +153,7 @@ const homeSchema = [
       <section class="home-blog-section light-section">
         <div class="container">
           <div class="home-blog-head">
-            <h2 class="home-section-heading home-section-heading--center">最新の記事</h2>
+            <h2 class="home-section-heading home-section-heading--center">最新記事</h2>
             <a href="/blog" class="home-blog-all">記事一覧を見る <span aria-hidden="true">→</span></a>
           </div>
           <div class="home-blog-list">
@@ -502,27 +499,46 @@ const homeSchema = [
 .home-ax-card {
   background: linear-gradient(180deg, var(--home-surface-2) 0%, #fff 100%);
   border: 1px solid var(--home-border);
-  border-radius: 14px;
-  padding: clamp(24px, 3vw, 32px);
+  border-radius: 18px;
+  padding: clamp(32px, 4vw, 44px) clamp(24px, 3vw, 32px);
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.home-ax-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 44px -22px rgba(14, 42, 71, 0.32);
+  border-color: rgba(14, 42, 71, 0.18);
 }
 .home-ax-icon {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 16px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #0E2A47 0%, #C0C0C0 100%);
+  width: clamp(96px, 11vw, 120px);
+  height: clamp(96px, 11vw, 120px);
+  margin: 0 auto clamp(20px, 2.5vw, 28px);
+  border-radius: 26px;
+  background: linear-gradient(135deg, #0E2A47 0%, #2c5282 50%, #C0C0C0 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 1.4rem;
+  font-size: clamp(2.2rem, 3.4vw, 2.8rem);
+  position: relative;
+  box-shadow:
+    0 14px 36px -16px rgba(14, 42, 71, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.home-ax-icon::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 32px;
+  background: linear-gradient(135deg, rgba(14, 42, 71, 0.08) 0%, rgba(192, 192, 192, 0.06) 100%);
+  z-index: -1;
 }
 .home-ax-card h3 {
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
   font-weight: 700;
   color: var(--home-heading);
-  margin: 0 0 14px;
+  margin: 0 0 16px;
+  letter-spacing: 0.01em;
 }
 .home-ax-card p {
   color: var(--home-text);
