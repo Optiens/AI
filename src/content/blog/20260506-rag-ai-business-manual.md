@@ -3,6 +3,7 @@ title: '業務マニュアルをAIに読ませる仕組み（RAG）の作り方 
 date: '2026-05-06'
 category: 'technology'
 excerpt: '社内マニュアル・規程・FAQをAIが理解して回答する「RAG（Retrieval-Augmented Generation）」を、中小企業の現実的な予算で構築する方法。Supabase pgvector + OpenAI Embeddings + Claude/GPT-4o-miniの最小構成、PDF/Word取り込みの具体的な実装、運用の注意点まで実践的にまとめました。'
+image: '/images/blog/20260506-rag-ai-business-manual.webp'
 ---
 
 ## 「マニュアルをAIに読ませたい」という相談が増えている
