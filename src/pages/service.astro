@@ -14,39 +14,45 @@ import Layout from '../layouts/Layout.astro';
         <h1 class="section-title reveal">サービスメニュー</h1>
         <p class="section-sub reveal">活用診断 → 導入支援 → 保守 の3ステップで伴走します。</p>
 
-        <div class="service-grid service-grid-3 reveal-stagger">
+        <div class="service-stack reveal-stagger">
 
-          <!-- 1. AI活用診断 -->
-          <a href="/free-diagnosis" class="ac-card gradient-border ac-service-card ac-service-card--link">
-            <div class="ac-img-wrap">
+          <!-- 1. AI活用診断（左画像 / 右説明） -->
+          <a href="/free-diagnosis" class="service-row">
+            <div class="service-row-media">
               <img src="/images/services/ai-diagnosis.png" alt="AI活用診断" loading="lazy" />
             </div>
-            <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">01</span></div>
-            <h3>AI活用診断</h3>
-            <p class="ac-desc">業務にAIがどれだけ効くか、ROI（投資利益率）をレポートでお届けします。<strong>無料版</strong>と<strong>詳細版</strong>の2プランから選択可能。詳細版は<strong>AI事業者ガイドライン（経産省・総務省）整合性チェック</strong>付き。</p>
-            <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+            <div class="service-row-body">
+              <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">01</span></div>
+              <h3>AI活用診断</h3>
+              <p class="ac-desc">業務にAIがどれだけ効くか、ROI（投資利益率）をレポートでお届けします。<strong>無料版</strong>と<strong>詳細版</strong>の2プランから選択可能。詳細版は<strong>AI事業者ガイドライン（経産省・総務省）整合性チェック</strong>付き。</p>
+              <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
           </a>
 
-          <!-- 2. 導入支援 -->
-          <a href="/implementation" class="ac-card gradient-border ac-service-card ac-service-card--link">
-            <div class="ac-img-wrap">
+          <!-- 2. 導入支援（左説明 / 右画像） -->
+          <a href="/implementation" class="service-row service-row--reverse">
+            <div class="service-row-media">
               <img src="/images/services/implementation.png" alt="導入支援" loading="lazy" />
             </div>
-            <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">02</span></div>
-            <h3>導入支援</h3>
-            <p class="ac-desc">自動化システムの設計・構築・納品まで対応。御社の業務に合わせた仕組みごとお渡しします。</p>
-            <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+            <div class="service-row-body">
+              <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">02</span></div>
+              <h3>導入支援</h3>
+              <p class="ac-desc">自動化システムの設計・構築・納品まで対応。御社の業務に合わせた仕組みごとお渡しします。シングルテナント構成で業務動線に沿った専用画面を一から組み上げ、買い切り型で御社の資産としてお渡しします。</p>
+              <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
           </a>
 
-          <!-- 3. 保守 -->
-          <a href="/maintenance" class="ac-card gradient-border ac-service-card ac-service-card--link">
-            <div class="ac-img-wrap">
+          <!-- 3. 保守（左画像 / 右説明） -->
+          <a href="/maintenance" class="service-row">
+            <div class="service-row-media">
               <img src="/images/services/maintenance.png" alt="保守" loading="lazy" />
             </div>
-            <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">03</span></div>
-            <h3>保守</h3>
-            <p class="ac-desc">導入後の機能追加・トラブル対応・新規業務の自動化を月額制で継続サポート。<strong>ライト</strong>と<strong>スタンダード</strong>の2プラン。</p>
-            <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+            <div class="service-row-body">
+              <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">03</span></div>
+              <h3>保守</h3>
+              <p class="ac-desc">導入後の機能追加・トラブル対応・新規業務の自動化を月額制で継続サポート。<strong>ライト</strong>と<strong>スタンダード</strong>の2プラン。導入したまま放置にならず、改善のサイクルが回り続ける運用体制をご提供します。</p>
+              <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
           </a>
 
         </div>
@@ -57,7 +63,6 @@ import Layout from '../layouts/Layout.astro';
     <section class="ac-section light-section ac-custom-section">
       <div class="container">
         <h2 class="section-title reveal">なぜ、Optiensを選ぶのか</h2>
-        <p class="section-sub reveal">AI支援サービスは数あれど、Optiensには「<strong>エンタープライズで10年磨いた設計思想</strong>」と「<strong>自分たちで使い、改善してきた運用知見</strong>」の両輪があります。御社専用の仕組みを、規模に合った形で組み上げ、買い切りで御社の資産にしてお渡しします。</p>
 
         <div class="custom-stack">
 
@@ -450,6 +455,111 @@ import Layout from '../layouts/Layout.astro';
   }
   .ac-service-link i {
     font-size: .85rem;
+    transition: transform .2s ease;
+  }
+
+  /* ===== Service Menu — 縦積み左右交互レイアウト ===== */
+  .service-stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(48px, 7vw, 80px);
+    margin-top: clamp(40px, 6vw, 64px);
+    max-width: 1140px;
+    margin-inline: auto;
+  }
+  .service-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 64px);
+    padding: clamp(28px, 3.5vw, 48px);
+    background: linear-gradient(180deg, #ffffff 0%, var(--surface-2, #F9FAFB) 100%);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 6px 22px -14px rgba(14, 42, 71, 0.18);
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-row::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand) 0%, var(--titanium) 70%, var(--sakura) 100%);
+    opacity: 0.85;
+  }
+  .service-row:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 26px 56px -22px rgba(14, 42, 71, 0.32);
+    border-color: rgba(14, 42, 71, 0.22);
+  }
+  .service-row--reverse .service-row-media {
+    order: 2;
+  }
+  .service-row-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .service-row-media img {
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+    display: block;
+  }
+  .service-row-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .service-row-body .ac-badge {
+    align-self: flex-start;
+    margin-bottom: 16px;
+  }
+  .service-row-body h3 {
+    font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+    color: var(--heading);
+    margin: 0 0 18px;
+    line-height: 1.4;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+  }
+  .service-row-body .ac-desc {
+    font-size: clamp(.95rem, 1.5vw, 1rem);
+    color: var(--text);
+    line-height: 1.95;
+    margin: 0 0 24px;
+  }
+  .service-row-body .ac-service-link {
+    align-self: flex-start;
+    margin-top: 0;
+    padding-top: 0;
+    font-size: clamp(.95rem, 1.5vw, 1rem);
+  }
+  .service-row:hover .ac-service-link {
+    gap: 14px;
+  }
+  .service-row:hover .ac-service-link i {
+    transform: translateX(2px);
+  }
+  @media (max-width: 768px) {
+    .service-row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: clamp(24px, 5vw, 32px);
+    }
+    .service-row--reverse .service-row-media {
+      order: 0;
+    }
+    .service-row-media img {
+      max-width: 320px;
+    }
+  }
   }
 
   /* プラン階層（無料版/詳細版、ライト/スタンダード等） */
