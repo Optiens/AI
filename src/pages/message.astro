@@ -9,31 +9,28 @@ import founderPhoto from '../assets/founder.jpg?url';
   canonical="https://optiens.com/message"
 >
   <main class="msg-page">
-    <!-- Mission / Vision -->
+    <!-- Vision / Mission -->
     <section class="msg-section msg-mv">
       <div class="container">
         <div class="mv-stack">
+          <article class="mv-card mv-card--vision mv-card--hero" data-watermark="V">
+            <div class="mv-card-head">
+              <span class="mv-card-eyebrow">Vision</span>
+              <h1 class="mv-card-jp">ビジョン</h1>
+            </div>
+            <p class="mv-card-text">
+              <strong>人・自然・テクノロジーが調和できる組織、社会</strong>を目指します。
+            </p>
+          </article>
+
           <article class="mv-card mv-card--mission" data-watermark="M">
             <div class="mv-card-head">
               <span class="mv-card-eyebrow">Mission</span>
-              <h1 class="mv-card-jp">ミッション</h1>
+              <h2 class="mv-card-jp">ミッション</h2>
             </div>
             <p class="mv-card-text">
               <strong>AIを業務の中心に置き、人間にしか出来ない判断と創造に集中する仕組み</strong>を、<br class="pc-only" />
               全国の中小企業・小規模事業者へ届ける。
-            </p>
-          </article>
-
-          <article class="mv-card mv-card--vision" data-watermark="V">
-            <div class="mv-card-head">
-              <span class="mv-card-eyebrow">Vision</span>
-              <h2 class="mv-card-jp">ビジョン</h2>
-            </div>
-            <p class="mv-card-text">
-              <strong>競争から協調へ、所有から共有へ、分離から統合へ。</strong><br/>
-              人・自然・テクノロジーが調和できる社会を築きます。<br/>
-              資源もデータも種子も循環させ、気候リスクや外部依存に左右されない、<br class="pc-only" />
-              <strong>自律した仕組み</strong>を構築します。
             </p>
           </article>
         </div>
@@ -203,6 +200,39 @@ import founderPhoto from '../assets/founder.jpg?url';
     border-radius: 28px;
     overflow: hidden;
     box-shadow: 0 24px 64px -28px rgba(14, 42, 71, 0.18);
+  }
+  /* Vision を主役カードに（より大きく・強く） */
+  .mv-card--hero {
+    padding: clamp(56px, 7vw, 96px) clamp(36px, 6vw, 96px);
+    background:
+      radial-gradient(circle at 100% 0%, rgba(228, 138, 149, 0.10) 0%, transparent 55%),
+      linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 32px;
+    box-shadow: 0 32px 80px -32px rgba(14, 42, 71, 0.24);
+  }
+  .mv-card--hero .mv-card-jp {
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+  .mv-card--hero .mv-card-eyebrow {
+    font-size: clamp(0.92rem, 1.5vw, 1.1rem);
+    letter-spacing: 0.4em;
+  }
+  .mv-card--hero .mv-card-text {
+    font-size: clamp(1.2rem, 2.4vw, 1.65rem);
+    line-height: 1.95;
+    font-weight: 600;
+    color: #1e293b;
+    max-width: 920px;
+  }
+  .mv-card--hero::before {
+    width: 12px;
+  }
+  .mv-card--hero::after {
+    font-size: clamp(16rem, 36vw, 30rem);
+    opacity: 0.06;
+    top: -80px;
   }
   .mv-card::before {
     content: '';
