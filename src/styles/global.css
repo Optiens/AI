@@ -1,9 +1,10 @@
 /* ========== CSS Variables ========== */
-/* 和テック (Wa-Tech) パレット #4 — 濃紺・銀・桜
- * 濃紺 (noukon / dark navy) #0E2A47 — primary brand
- * 銀 (gin / silver)         #C0C0C0 — secondary
- * 桜 (sakura / cherry pink) #FFCED0 — accent
- * 墨 (sumi)                  #1A1A2E — heading / dark text
+/* 和テック (Wa-Tech) パレット #4 — 濃紺・銀・桜（強化版）
+ * 濃紺 (noukon / dark navy)        #0E2A47 — primary brand
+ * 銀 (gin / silver)                #C0C0C0 — secondary
+ * 桜 (sakura / 薄紅梅・kobai pink) #E48A95 — accent（視認性確保のため強化）
+ * 桜淡 (sakura soft)               #FFCED0 — ambient/decorative only
+ * 墨 (sumi)                         #1A1A2E — heading / dark text
  */
 :root {
   /* Brand — 濃紺 (noukon / dark navy) */
@@ -16,9 +17,13 @@
   --titanium-dim: #9A9A9A;
   --titanium-light: #D6D6D6;
 
-  /* Tertiary — 桜 (sakura / cherry blossom pink) */
-  --silver: #FFCED0;
-  --silver-dim: #E8B8BA;
+  /* Tertiary — 桜 (sakura / 薄紅梅 light kobai pink) */
+  --sakura: #E48A95;
+  --sakura-dim: #C76A77;
+  --sakura-soft: #FFCED0; /* 装飾用淡桜（ambient blob・粒子等） */
+  /* 互換用エイリアス（旧 --silver は桜色を保持していた。徐々に --sakura に置換） */
+  --silver: #E48A95;
+  --silver-dim: #C76A77;
 
   /* Gradient — 濃紺 → 銀 (navy → silver) */
   --brand-gradient: linear-gradient(135deg, #0E2A47 0%, #C0C0C0 100%);
@@ -95,7 +100,7 @@ body {
 .ambient-blob--3 {
   width: 400px; height: 350px;
   top: 50%; left: 40%;
-  background: rgba(255, 206, 208, .07); /* 桜 soft */
+  background: rgba(228, 138, 149, .12); /* 桜 / 薄紅梅 — 視認性確保 */
   animation: blob-drift-3 26s ease-in-out infinite alternate;
 }
 
