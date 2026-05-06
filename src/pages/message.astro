@@ -23,17 +23,13 @@ import founderPhoto from '../assets/founder.jpg?url';
 
     <!-- MISSION (ライト基調・洗練版) -->
     <section class="msg-mission">
-      <div class="mission-grid">
-        <div class="mission-mark">
-          <span class="mission-eyebrow">Mission</span>
-          <h2 class="mission-jp">ミッション</h2>
-          <span class="mission-accent-line"></span>
-        </div>
-        <div class="mission-content">
-          <p class="mission-statement">
-            AIを業務の中心に置き、人間にしか出来ない<strong>判断と創造</strong>に集中する仕組みを、全国の中小企業・小規模事業者へ届ける。
-          </p>
-        </div>
+      <div class="mission-inner">
+        <span class="mission-eyebrow">Mission</span>
+        <span class="mission-accent-line"></span>
+        <h2 class="mission-statement">
+          AIを業務の中心に置き、人間にしか出来ない<strong>判断と創造</strong>に集中する仕組みを、<br class="pc-only" />
+          全国の中小企業・小規模事業者へ届ける。
+        </h2>
       </div>
     </section>
 
@@ -343,72 +339,58 @@ import founderPhoto from '../assets/founder.jpg?url';
     line-height: 1;
     white-space: nowrap;
   }
-  .mission-grid {
+  .mission-inner {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
-    gap: clamp(40px, 6vw, 96px);
-    max-width: 1200px;
+    max-width: 980px;
     margin: 0 auto;
     padding: 0 clamp(20px, 4vw, 40px);
-    align-items: center;
+    text-align: center;
   }
   .mission-eyebrow {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
     font-family: 'Inter', 'SF Pro Display', sans-serif;
-    font-size: clamp(0.78rem, 1.2vw, 0.95rem);
+    font-size: clamp(0.82rem, 1.2vw, 1rem);
     font-weight: 800;
-    letter-spacing: 0.4em;
+    letter-spacing: 0.42em;
     text-transform: uppercase;
     color: var(--brand);
-    margin-bottom: 18px;
-    padding-left: 30px;
-    position: relative;
+    margin: 0 0 26px;
   }
-  .mission-eyebrow::before {
+  .mission-eyebrow::before,
+  .mission-eyebrow::after {
     content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 18px;
+    width: 28px;
     height: 1px;
-    background: var(--brand);
-  }
-  .mission-jp {
-    font-size: clamp(2rem, 5.5vw, 3.6rem);
-    font-weight: 900;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-    color: #0f172a;
-    margin: 0 0 22px;
+    background: linear-gradient(90deg, transparent 0%, var(--brand) 50%, transparent 100%);
+    flex: none;
   }
   .mission-accent-line {
     display: block;
     width: 56px;
     height: 3px;
-    background: linear-gradient(90deg, var(--brand) 0%, var(--titanium) 100%);
+    margin: 0 auto clamp(28px, 4vw, 44px);
+    background: linear-gradient(90deg, var(--brand) 0%, var(--titanium) 60%, #E48A95 100%);
     border-radius: 2px;
   }
   .mission-statement {
-    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
-    line-height: 2;
-    color: #334155;
+    font-size: clamp(1.2rem, 2.6vw, 1.85rem);
+    line-height: 1.9;
+    color: #1e293b;
     margin: 0;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.01em;
   }
   .mission-statement strong {
     color: #0f172a;
-    font-weight: 700;
-    background: linear-gradient(180deg, transparent 60%, rgba(228, 138, 149, 0.28) 60%, rgba(228, 138, 149, 0.28) 100%);
-    padding: 0 2px;
+    font-weight: 800;
+    background: linear-gradient(180deg, transparent 62%, rgba(228, 138, 149, 0.32) 62%, rgba(228, 138, 149, 0.32) 88%, transparent 88%);
+    padding: 0 4px;
   }
 
   @media (max-width: 900px) {
-    .mission-grid {
-      grid-template-columns: 1fr;
-      gap: 28px;
-    }
     .msg-vision-hero::before,
     .msg-mission::before {
       font-size: clamp(8rem, 28vw, 14rem);
