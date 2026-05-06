@@ -17,9 +17,9 @@ const { id = 'geo-bg' } = Astro.props;
   <svg viewBox="-200 -200 400 400" preserveAspectRatio="xMidYMid slice">
     <defs>
       <radialGradient id={`${id}-glow`} cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#D4453B" stop-opacity="0.18" />
-        <stop offset="60%" stop-color="#D4453B" stop-opacity="0.05" />
-        <stop offset="100%" stop-color="#D4453B" stop-opacity="0" />
+        <stop offset="0%" stop-color="#1F4E79" stop-opacity="0.18" />
+        <stop offset="60%" stop-color="#1F4E79" stop-opacity="0.05" />
+        <stop offset="100%" stop-color="#1F4E79" stop-opacity="0" />
       </radialGradient>
     </defs>
 
@@ -71,29 +71,29 @@ const { id = 'geo-bg' } = Astro.props;
       <polygon
         points="60,0 18.54,57.06 -48.54,35.27 -48.54,-35.27 18.54,-57.06"
         fill="none"
-        stroke="#D4453B"
+        stroke="#1F4E79"
         stroke-width="0.8"
         stroke-opacity="0.85"
       />
       <g class="dots">
-        <circle cx="60" cy="0" r="2.4" fill="#D4453B" />
-        <circle cx="18.54" cy="57.06" r="2.4" fill="#D4453B" />
-        <circle cx="-48.54" cy="35.27" r="2.4" fill="#D4453B" />
-        <circle cx="-48.54" cy="-35.27" r="2.4" fill="#D4453B" />
-        <circle cx="18.54" cy="-57.06" r="2.4" fill="#D4453B" />
+        <circle cx="60" cy="0" r="2.4" fill="#1F4E79" />
+        <circle cx="18.54" cy="57.06" r="2.4" fill="#1F4E79" />
+        <circle cx="-48.54" cy="35.27" r="2.4" fill="#1F4E79" />
+        <circle cx="-48.54" cy="-35.27" r="2.4" fill="#1F4E79" />
+        <circle cx="18.54" cy="-57.06" r="2.4" fill="#1F4E79" />
       </g>
     </g>
 
     <!-- 中心から外八角形への放射線（脈動） -->
     <g class="rays">
-      <line x1="0" y1="0" x2="180" y2="0" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="127.28" y2="127.28" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="0" y2="180" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="-127.28" y2="127.28" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="-180" y2="0" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="-127.28" y2="-127.28" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="0" y2="-180" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="127.28" y2="-127.28" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="180" y2="0" stroke="#1F4E79" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="127.28" y2="127.28" stroke="#1F4E79" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="0" y2="180" stroke="#1F4E79" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-127.28" y2="127.28" stroke="#1F4E79" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-180" y2="0" stroke="#1F4E79" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-127.28" y2="-127.28" stroke="#1F4E79" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="0" y2="-180" stroke="#1F4E79" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="127.28" y2="-127.28" stroke="#1F4E79" stroke-width="0.4" stroke-opacity="0.25" />
     </g>
 
     <!-- 中心ノード（脈動するコア） -->
