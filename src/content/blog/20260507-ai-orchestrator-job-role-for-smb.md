@@ -8,9 +8,9 @@ image: '/images/blog/ai-orchestrator-job-role-for-smb.webp'
 
 ## 「AIオーケストレーター」は2026年に正式な職種になった
 
-2026年1月、グローバル採用プラットフォームの SmartRecruiters は「**The Orchestrator**」を Job Title of the Year に選びました。Harvard Business Review は2月号で「**AI Agent Manager**」を職種として公式定義し、Salesforce や Microsoft をはじめ大企業で正式採用が進んでいます。
+2026年に入って、海外のテック業界では「**The Orchestrator**」「**AI Agent Manager**」といった職種が注目を集めていると報じられています。グローバルの採用プラットフォームによる「Job Title of the Year」級の取り上げや、Harvard Business Review 等での職種定義の議論、Salesforce や Microsoft 等の大企業での採用動向などが、各種メディアで紹介されています。
 
-オーケストレーション関連の求人は、前年比+25%超で伸びています。これは一過性のトレンドではなく、**AI 時代の運用責任を担う恒常職**として定着しつつあることを意味します。
+オーケストレーション関連の求人が前年比で大きく伸びているとの報告もあり、これは一過性のトレンドではなく、**AI 時代の運用責任を担う恒常職**として定着しつつあると捉えられます。
 
 本稿は、この新しい職種を**中小事業者の規模で**どう実現するかを整理したものです。
 
@@ -109,7 +109,7 @@ image: '/images/blog/ai-orchestrator-job-role-for-smb.webp'
 
 ## Optiens の方針
 
-Optiens は、この「中小事業者向け AI オーケストレーター」を実現するために、**育成プログラム**の提供を準備しています（詳細は[育成プログラムページ](/orchestrator-program)で公開予定）。
+Optiens は、この「中小事業者向け AI オーケストレーター」を実現するために、**社内人材の育成支援**を提供しています。詳細は[無料AI活用診断](/free-diagnosis)でお問い合わせください。
 
 提供形態の方向性:
 - 経営者が自分自身でオーケストレーターになる「セルフ育成」

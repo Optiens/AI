@@ -91,6 +91,8 @@ image: '/images/blog/20260506-ai-agent-vs-chatbot-vs-rag-definition.webp'
 
 ---
 
+> ※ 上記の月額コスト目安は、**外注・中規模利用を前提とした業界相場**です。Optiens のように専用構成で最小規模に組む場合、月額数千円〜数万円から始められるケースもあります。詳細は別記事「[月3万円以下で始めるAI業務自動化](/blog/20260506-ai-automation-under-30k-budget)」を参照してください。
+
 ## 3カテゴリ比較表（保存版）
 
 | 観点 | チャット型AI | RAG | AIエージェント |
