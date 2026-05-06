@@ -1,7 +1,7 @@
 ---
 title: 'マイクログリーンは本当に儲かるのか？室内栽培ビジネスの収益構造を解剖する'
 date: '2026-04-15'
-category: 'business'
+category: 'agriculture'
 excerpt: '世界市場33億ドル、年成長率11%超——マイクログリーンは「小さな作物、大きな利益」と言われますが、新規参入の半数が1年以内に撤退するという現実も。室内水耕栽培でマイクログリーンビジネスを成立させるための収益構造と成功条件を、データをもとに解説します。'
 image: '/images/blog/microgreens-business-indoor-farming-2026.webp'
 ---

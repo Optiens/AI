@@ -1,7 +1,7 @@
 ---
 title: '水耕栽培ビジネスの初期投資と損益分岐点——小規模室内栽培のリアルなコスト構造'
 date: '2026-03-13'
-category: 'business'
+category: 'agriculture'
 excerpt: '室内水耕栽培で事業を始めるには、実際いくら必要なのか。LED照明・栽培ラック・センサー・養液システムの費用内訳から、固定費と変動費の構造、損益分岐点の考え方まで。「ユニットエコノミクス」を軸に、小規模でも黒字化できる条件をデータで解説します。'
 image: '/images/blog/hydroponics-startup-cost-breakeven.webp'
 ---

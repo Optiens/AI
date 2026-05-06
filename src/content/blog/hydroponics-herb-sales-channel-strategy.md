@@ -1,7 +1,7 @@
 ---
 title: '水耕栽培ハーブの販路開拓戦略：レストラン・道の駅・業務用ECの攻め方'
 date: '2026-04-13'
-category: 'business'
+category: 'agriculture'
 excerpt: '室内水耕栽培で育てたハーブをどこに売るか——レストラン直販・道の駅/直売所・業務用ECの3大販路それぞれの特徴・メリット・注意点を比較し、小規模事業者が「半径30km」の地域密着モデルで着実に売上を伸ばすための実践的な販路開拓戦略を解説します。'
 image: '/images/blog/hydroponics-herb-sales-channel-strategy.webp'
 ---
