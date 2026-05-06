@@ -246,7 +246,7 @@ https://optiens.com
 function buildReferralFreeEmailHtml(lead: any, referralFrom: string): string {
   const safeCompany = escapeHtml(lead.company_name || '')
   const safePerson = escapeHtml(lead.person_name || '')
-  const fromTag = referralFrom ? `<span style="color:#9CA3AF;">（${escapeHtml(referralFrom)} よりご紹介）</span>` : ''
+  const fromTag = referralFrom ? `<span style="color:#FFCED0;">（${escapeHtml(referralFrom)} よりご紹介）</span>` : ''
   return `<div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${safeCompany} ${safePerson} 様</p>
 <p>合同会社Optiensです。<br/>詳細AI診断のお申込ありがとうございます${fromTag}。</p>

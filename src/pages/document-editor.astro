@@ -594,8 +594,8 @@ import Layout from '../layouts/Layout.astro';
     background: rgba(255, 255, 255, 0.5);
   }
   .status-badge.status-draft { color: #6b7280; background: rgba(107, 114, 128, 0.08); }
-  .status-badge.status-submitted { color: #C9A227; background: rgba(201, 162, 39, 0.10); }
-  .status-badge.status-approved { color: #9CA3AF; background: rgba(156, 163, 175, 0.10); }
+  .status-badge.status-submitted { color: #C0C0C0; background: rgba(192, 192, 192, 0.10); }
+  .status-badge.status-approved { color: #FFCED0; background: rgba(255, 206, 208, 0.10); }
   .status-badge.status-rejected { color: #F24E1E; background: rgba(242, 78, 30, 0.10); }
   .action-btn {
     display: inline-flex;
@@ -624,11 +624,11 @@ import Layout from '../layouts/Layout.astro';
     50% { box-shadow: 0 0 0 6px rgba(242, 78, 30, 0); }
   }
   .action-btn.submit {
-    background: #C9A227;
+    background: #C0C0C0;
     color: #fff;
   }
   .action-btn.approve {
-    background: #9CA3AF;
+    background: #FFCED0;
     color: #fff;
   }
   .action-btn.reject {
@@ -697,8 +697,8 @@ import Layout from '../layouts/Layout.astro';
     transition: background 0.15s ease;
   }
   .row:last-child { border-bottom: none; }
-  .row:hover { background: rgba(31, 78, 121, 0.04); }
-  .row.focused { background: rgba(31, 78, 121, 0.08); }
+  .row:hover { background: rgba(14, 42, 71, 0.04); }
+  .row.focused { background: rgba(14, 42, 71, 0.08); }
 
   /* メモがある行: 本文を赤字に */
   .row.has-note .row-text {
@@ -755,7 +755,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .row-note:focus {
     outline: none;
-    background: rgba(31, 78, 121, 0.04);
+    background: rgba(14, 42, 71, 0.04);
   }
   .row-note::placeholder { color: transparent; }
   .row:hover .row-note::placeholder {
@@ -820,10 +820,10 @@ import Layout from '../layouts/Layout.astro';
     border-radius: 4px;
     font-size: 0.75rem;
   }
-  .history-action.history-submitted { color: #C9A227; background: rgba(201, 162, 39, 0.10); }
-  .history-action.history-approved { color: #9CA3AF; background: rgba(156, 163, 175, 0.10); }
+  .history-action.history-submitted { color: #C0C0C0; background: rgba(192, 192, 192, 0.10); }
+  .history-action.history-approved { color: #FFCED0; background: rgba(255, 206, 208, 0.10); }
   .history-action.history-rejected { color: #F24E1E; background: rgba(242, 78, 30, 0.10); }
-  .history-action.history-reopened { color: var(--brand); background: rgba(31, 78, 121, 0.10); }
+  .history-action.history-reopened { color: var(--brand); background: rgba(14, 42, 71, 0.10); }
   .history-time {
     color: var(--muted);
     font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;

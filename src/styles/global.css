@@ -1,27 +1,27 @@
 /* ========== CSS Variables ========== */
-/* 和テック (Wa-Tech) パレット #2 — 墨・藍・金
- * 藍 (ai / indigo)  #1F4E79 — primary brand
- * 金 (kin / gold)   #C9A227 — secondary / highlight
- * 墨 (sumi)         #1A1A2E — heading / dark text
- * 銀 (gin / silver) #9CA3AF — subtle accent
+/* 和テック (Wa-Tech) パレット #4 — 濃紺・銀・桜
+ * 濃紺 (noukon / dark navy) #0E2A47 — primary brand
+ * 銀 (gin / silver)         #C0C0C0 — secondary
+ * 桜 (sakura / cherry pink) #FFCED0 — accent
+ * 墨 (sumi)                  #1A1A2E — heading / dark text
  */
 :root {
-  /* Brand — 藍 (ai / indigo) */
-  --brand: #1F4E79;
-  --brand-dim: #163E61;
-  --brand-2: #4A7BA5;
+  /* Brand — 濃紺 (noukon / dark navy) */
+  --brand: #0E2A47;
+  --brand-dim: #061829;
+  --brand-2: #2D5680;
 
-  /* Secondary — 金 (kin / gold) */
-  --titanium: #C9A227;
-  --titanium-dim: #9F7F1F;
-  --titanium-light: #DCB44C;
+  /* Secondary — 銀 (gin / silver) */
+  --titanium: #C0C0C0;
+  --titanium-dim: #9A9A9A;
+  --titanium-light: #D6D6D6;
 
-  /* Tertiary — 銀 (gin / silver) */
-  --silver: #9CA3AF;
-  --silver-dim: #6B7280;
+  /* Tertiary — 桜 (sakura / cherry blossom pink) */
+  --silver: #FFCED0;
+  --silver-dim: #E8B8BA;
 
-  /* Gradient — 藍 → 金 (indigo → gold) */
-  --brand-gradient: linear-gradient(135deg, #1F4E79 0%, #C9A227 100%);
+  /* Gradient — 濃紺 → 銀 (navy → silver) */
+  --brand-gradient: linear-gradient(135deg, #0E2A47 0%, #C0C0C0 100%);
 
   /* Surfaces & Text (dark theme) */
   --surface: #0a0a0a;
@@ -38,7 +38,7 @@
   --radius: 12px;
   --shadow-sm: 0 2px 6px rgba(0,0,0,.3);
   --shadow-md: 0 4px 12px rgba(0,0,0,.4);
-  --glow: 0 0 24px rgba(31, 78, 121, 0.12);
+  --glow: 0 0 24px rgba(14, 42, 71, 0.14);
 }
 
 /* ========== Minimal Reset ========== */
@@ -83,19 +83,19 @@ body {
 .ambient-blob--1 {
   width: 600px; height: 400px;
   top: 10%; left: 5%;
-  background: rgba(31, 78, 121, .06);  /* 藍 soft */
+  background: rgba(14, 42, 71, .07);   /* 濃紺 soft */
   animation: blob-drift-1 18s ease-in-out infinite alternate;
 }
 .ambient-blob--2 {
   width: 500px; height: 500px;
   bottom: 5%; right: 5%;
-  background: rgba(201, 162, 39, .05); /* 金 soft */
+  background: rgba(192, 192, 192, .05); /* 銀 soft */
   animation: blob-drift-2 22s ease-in-out infinite alternate;
 }
 .ambient-blob--3 {
   width: 400px; height: 350px;
   top: 50%; left: 40%;
-  background: rgba(156, 163, 175, .04); /* 銀 soft */
+  background: rgba(255, 206, 208, .07); /* 桜 soft */
   animation: blob-drift-3 26s ease-in-out infinite alternate;
 }
 
@@ -140,15 +140,15 @@ body {
   letter-spacing: .04em;
   cursor: pointer;
   color: #fff;
-  background: linear-gradient(135deg, #1F4E79 0%, #C9A227 100%);
+  background: linear-gradient(135deg, #0E2A47 0%, #2D5680 100%);
   border: none; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(31, 78, 121, .28);
+  box-shadow: 0 10px 30px rgba(14, 42, 71, .30);
   text-decoration: none;
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 36px rgba(31, 78, 121, .42);
+  box-shadow: 0 14px 36px rgba(14, 42, 71, .45);
 }
 .btn-primary:active { transform: translateY(0); }
 .btn-primary:focus-visible {
@@ -228,7 +228,7 @@ a:focus-visible {
   --muted: #6B7280;
   --border: #E5E7EB;
   --border-hover: #D1D5DB;
-  --glow: 0 4px 24px rgba(31, 78, 121, 0.10);
+  --glow: 0 4px 24px rgba(14, 42, 71, 0.12);
 
   background: var(--surface);
   color: var(--text);
