@@ -1,6 +1,6 @@
 ---
 title: 'AIオーケストレーターとは ── 2026年に確立された新職種を、中小事業者の規模で実現する方法'
-date: '2026-04-29'
+date: '2026-05-02'
 category: 'business'
 excerpt: '「AIオーケストレーター」── 2026年に SmartRecruiters が「Job Title of the Year」に選んだ、急速に確立されつつある職種です。一般には大企業の VP / Director 級専任職として議論されていますが、本稿では中小事業者がこの役割をどう持つべきかを実務目線で整理します。'
 image: '/images/blog/ai-orchestrator-job-role-for-smb.webp'

@@ -1,6 +1,6 @@
 ---
 title: '合同会社Optiens、設立のお知らせ ── AI活用支援を中心に、自社実証も並行する事業として'
-date: '2026-03-05'
+date: '2026-04-06'
 category: 'announcement'
 excerpt: '2026年4月6日、合同会社Optiensを設立しました。山梨県北杜市を拠点に、中小事業者向けのAI活用支援を中心軸として、IoT水耕栽培の自社実証も並行する事業として活動してまいります。'
 image: '/images/blog/optiens-company-founded-april-2026.webp'

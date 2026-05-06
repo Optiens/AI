@@ -1,6 +1,6 @@
 ---
 title: '経理・税理士事務所のAI業務自動化 ── 仕訳補助から月次レポート生成まで'
-date: '2026-04-05'
+date: '2026-04-22'
 category: 'business'
 excerpt: '経理処理・税理士業務の中でAIが本当に効く5領域を実務観点で整理。領収書からの仕訳補助、月次試算表の自動コメント生成、顧問先への問い合わせ初回応対、補助金/インボイス制度の最新情報整理、年次タスク管理。freee API・MoneyForward APIとの連携を含む実装例を紹介します。'
 image: '/images/blog/20260506-accounting-tax-ai-automation.webp'

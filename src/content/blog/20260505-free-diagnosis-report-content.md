@@ -1,6 +1,6 @@
 ---
 title: 'Optiensの無料AI診断レポートで実際に何が分かるか——内訳と活用事例'
-date: '2026-03-27'
+date: '2026-04-17'
 category: 'business'
 excerpt: '「無料診断と聞くと、結局営業されるのでは」と身構える方のために、Optiensの無料AI診断レポートの中身を実物に近い形で開示します。レポートの構成、業種別の回答イメージ、無料と有償（¥5,500税込）の境界、申込から納品までの流れまでを正直にまとめました。'
 image: '/images/blog/20260505-free-diagnosis-report-content.webp'

@@ -1,6 +1,6 @@
 ---
 title: '既存のSalesforce運用にAIエージェントを組み込む3つのパターン'
-date: '2026-04-01'
+date: '2026-04-20'
 category: 'business'
 excerpt: 'Salesforceは入っているが「現場の入力負荷」「商談の優先度判断」「問い合わせの一次対応」が属人化している——よく聞く課題です。本記事では既存SF運用を捨てずに、AIエージェントを"上に乗せる"3つの実装パターン（入力支援型・判断支援型・代行型）を、現状の手作業／実装後／構築のコツに分けて解説します。'
 image: '/images/blog/20260505-salesforce-ai-agent-3-patterns.webp'

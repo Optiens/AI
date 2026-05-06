@@ -1,6 +1,6 @@
 ---
 title: 'ホワイトカラー初級職が消える時代 ── 中小事業者の経営者が今やるべき3つのこと'
-date: '2026-05-07'
+date: '2026-05-06'
 category: 'business'
 excerpt: 'AI 業界のリーダーが揃って警鐘を鳴らしているのが、ホワイトカラー初級職の構造的減少です。本稿では、中小事業者にとって何を準備すべきかを「採用・配置・育成」の3観点で整理します。'
 image: '/images/blog/20260507-white-collar-entry-level-disappearing.webp'
