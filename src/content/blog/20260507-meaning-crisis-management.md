@@ -1,6 +1,6 @@
 ---
 title: '「意味の危機」の時代に経営者ができること ── AI が業務を担う社会で、人間の役割をどう設計するか'
-date: '2026-05-07'
+date: '2026-05-06'
 category: 'business'
 excerpt: 'AI が業務の相当部分を担うようになると、収入の問題だけでなく「働く意味」が問われる時代になります。AI 業界のリーダーが「意味の危機（meaning crisis）」と呼ぶ現象に、中小事業者の経営者はどう向き合えるかを整理します。'
 image: '/images/blog/20260507-meaning-crisis-management.webp'

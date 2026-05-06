@@ -1,6 +1,6 @@
 ---
 title: '「AIネイティブ経営」の三層構造 ── 経営者・オーケストレーター・AIで組織を再設計する'
-date: '2026-05-07'
+date: '2026-04-27'
 category: 'business'
 excerpt: 'AIを活用した経営は「経営者と AI の二項対立」ではなく、「経営者 ⇔ AIオーケストレーター ⇔ AI」の三層構造で機能します。本稿では、それぞれの役割と境界線、中小事業者が三層構造をどう実現できるかを整理します。'
 image: '/images/blog/20260507-ai-native-management-three-tier.webp'

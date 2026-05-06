@@ -1,8 +1,9 @@
 ---
 title: 'Salesforce 承認ワークフロー相当の仕組みを、ライセンス不要で実装する3パターン'
-date: '2026-05-05'
+date: '2026-03-24'
 category: 'technology'
 excerpt: '稟議・申請・上長承認をシステム化したいが、Salesforce Approval Process のライセンスは中小企業にとって重い——という相談が増えています。本記事では、Optiensがエンタープライズ向け大規模CRMで設計してきた承認ワークフローの考え方を踏まえ、ライセンス不要で実装できる3パターン（メールベース型／チャット型／専用UI型）を、対応・費用・適用条件で比較します。'
+image: '/images/blog/20260505-approval-workflow-license-free.webp'
 ---
 
 「稟議や申請の承認を、Excelやハンコ回しから卒業したい」——中小企業の管理者層からよくいただく相談です。

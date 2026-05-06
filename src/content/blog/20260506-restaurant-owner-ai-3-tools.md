@@ -1,6 +1,6 @@
 ---
 title: '飲食店オーナーが今日から使えるAI3選 ── 予約管理・SNS投稿・口コミ返信を自動化'
-date: '2026-05-06'
+date: '2026-04-23'
 category: 'business'
 excerpt: '個人経営の飲食店・小規模カフェ向けに、初期費用ほぼゼロで始められるAI活用3選を厳選。LINE公式アカウントによるAI予約応対、Instagram投稿の自動下書き生成、Google口コミへのAI返信案作成。月額3,000円以下から始められる現実的な構成と、3ヶ月で時短を実感するロードマップを共有します。'
 image: '/images/blog/20260506-restaurant-owner-ai-3-tools.webp'

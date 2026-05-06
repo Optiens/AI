@@ -1,6 +1,6 @@
 ---
 title: '「AIエージェント」とは何か ── チャット型AI・RAG・エージェントの違いを正確に区別する（2026年版）'
-date: '2026-05-06'
+date: '2026-04-10'
 category: 'technology'
 excerpt: '「AIエージェントを導入したい」という相談を受けたとき、最初に確認するのが用語の認識合わせです。チャット型AI・RAG・AIエージェントは似ているようで設計思想も適用領域もまったく異なります。Optiensが顧客提案で実際に使っている分類定義を、引用しやすい形で公開します。'
 image: '/images/blog/20260506-ai-agent-vs-chatbot-vs-rag-definition.webp'

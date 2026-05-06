@@ -1,6 +1,6 @@
 ---
 title: '【2026年AI最新動向】OpenAI vs Anthropic：軍事利用とエージェントAIがもたらす歴史的転換点'
-date: '2026-03-11'
+date: '2026-03-03'
 category: 'AI'
 excerpt: 'エージェントAIへの劇的進化、ペンタゴン軍事契約を巡る対立、「QuitGPT」運動によるClaudeの躍進——2026年のAI業界を揺るがす歴史的転換点を徹底解説。'
 image: '/images/blog/Gemini_Generated_Image_r8ixr1r8ixr1r8ix.png'

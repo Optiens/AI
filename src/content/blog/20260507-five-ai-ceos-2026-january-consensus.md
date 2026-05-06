@@ -1,6 +1,6 @@
 ---
 title: '2026年1月、5人のAI CEOが同じことを言い始めた ── 業界トップが揃って指し示した方向'
-date: '2026-05-07'
+date: '2026-05-03'
 category: 'business'
 excerpt: '激しく競合する5社のAI CEOが、2026年1月という同じ月に、ほぼ同じ予測を語ったと報じられています。Musk、Jensen Huang、Sam Altman、Zuckerberg、Dario Amodei── 利害が真逆のはずの5人が同じ方向を向いた事実は、私たちが何を準備すべきかを示唆しています。'
 image: '/images/blog/20260507-five-ai-ceos-2026-january-consensus.webp'

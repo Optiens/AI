@@ -1,6 +1,6 @@
 ---
 title: 'ChatGPT・Claude・Geminiの業務向け使い分け ── 2026年最新版・特性比較と実例'
-date: '2026-05-06'
+date: '2026-04-18'
 category: 'AI'
 excerpt: '「結局どれを選べば良いの？」とよく聞かれる主要LLM3つの違いを、中小企業の業務利用視点で整理。ChatGPT（汎用・プラグイン豊富）、Claude（長文・コーディング・倫理性）、Gemini（Google統合・マルチモーダル）の強みと、業務別の推奨組み合わせを実例つきで解説します。'
 image: '/images/blog/20260506-chatgpt-claude-gemini-business-usage.webp'

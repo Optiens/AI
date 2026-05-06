@@ -1,8 +1,9 @@
 ---
 title: 'AI活用支援を全国対応へ——SECURITY ACTION宣言と信頼性への取り組み'
-date: '2026-04-24'
+date: '2026-03-10'
 category: 'announcement'
 excerpt: '合同会社Optiensは、AI活用支援サービスの対応エリアを八ヶ岳エリアから全国に拡大しました。あわせてIPAのSECURITY ACTION（一つ星）を宣言し、情報セキュリティの基本方針を整備。無料診断レポートのPDF納品体制も整え、オンラインで全国の中小企業を支援する体制を構築しています。'
+image: '/images/blog/20260424-nationwide-ai-consulting-security-action.webp'
 ---
 
 ## 八ヶ岳エリアから、全国へ
