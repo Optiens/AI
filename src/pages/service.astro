@@ -17,30 +17,6 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- なぜ、いまAIなのか -->
-    <section class="ac-section light-section ac-why-section">
-      <div class="container">
-        <h2 class="section-title reveal">なぜ、いまAIなのか</h2>
-        <div class="why-grid reveal-stagger">
-          <div class="why-item">
-            <span class="why-num">01</span>
-            <h3>AIエージェントの台頭で、業務の在り方が変わる</h3>
-            <p>チャットに答えるだけでなく、業務を自律的にこなす<strong>AIエージェント</strong>が実用段階に到達しました。業務プロセスをAIが理解できる形に<strong>最適化</strong>することが、これからの設計思想です。</p>
-          </div>
-          <div class="why-item">
-            <span class="why-num">02</span>
-            <h3>中小企業でも、大企業の仕組みを持てる</h3>
-            <p>クラウド × AIエージェントの構成で、かつては大企業しか持てなかった業務システムが小規模事業者にも実装可能になりました。テクノロジーの恩恵が規模を超えて<strong>循環</strong>する時代です。</p>
-          </div>
-          <div class="why-item">
-            <span class="why-num">03</span>
-            <h3>人手だけで回す時代は終わった</h3>
-            <p>労働人口の減少が続く中、人とAIが<strong>調和</strong>しながら業務を回す形が新しいスタンダードです。「人がやるべきこと」と「AIに任せること」の境界を引き直す段階に来ています。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- サービスメニュー -->
     <section class="ac-section light-section ac-service-section">
       <div class="container">
@@ -239,59 +215,6 @@ import Layout from '../layouts/Layout.astro';
     color: var(--muted);
     font-size: 0.95rem;
     margin-bottom: 40px;
-  }
-
-  /* ===== なぜ、いまAIなのか ===== */
-  .ac-why-section {
-    background: #ffffff;
-  }
-  .ac-why-section .section-title {
-    margin-bottom: clamp(28px, 4vw, 44px);
-  }
-  .why-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: clamp(16px, 2vw, 22px);
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  .why-item {
-    background: var(--surface-card, #ffffff);
-    border: 1px solid var(--border, #e2e8f0);
-    border-radius: 12px;
-    padding: clamp(22px, 2.6vw, 30px);
-    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-  }
-  .why-item:hover {
-    transform: translateY(-2px);
-    border-color: rgba(162, 89, 255, .35);
-    box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
-  }
-  .why-num {
-    display: inline-block;
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--brand, #A259FF);
-    letter-spacing: -.02em;
-    line-height: 1;
-    margin-bottom: 14px;
-  }
-  .why-item h3 {
-    font-size: clamp(.98rem, 1.4vw, 1.08rem);
-    font-weight: 700;
-    color: var(--heading, #0f172a);
-    margin: 0 0 10px;
-    line-height: 1.5;
-  }
-  .why-item p {
-    font-size: .9rem;
-    color: var(--muted, #64748b);
-    line-height: 1.85;
-    margin: 0;
-  }
-  @media (max-width: 768px) {
-    .why-grid { grid-template-columns: 1fr; }
   }
 
   /* ===== 共通カード ===== */
