@@ -1,17 +1,27 @@
 /* ========== CSS Variables ========== */
+/* 和テック (Wa-Tech) パレット
+ * 朱赤 (vermillion) #D4453B — primary brand
+ * 金 (kin / gold)   #C9A227 — secondary / highlight
+ * 銀 (gin / silver) #9CA3AF — neutral accent
+ * 墨 (sumi)         #1a1a2e — heading / dark text
+ */
 :root {
-  /* Brand — Modern Vibrant (Figma inspired) */
-  --brand: #A259FF;
-  --brand-dim: #7B40CC;
-  --brand-2: #C794FF;
+  /* Brand — 朱赤 (vermillion / 朱) */
+  --brand: #D4453B;
+  --brand-dim: #A8332C;
+  --brand-2: #E8736A;
 
-  /* Secondary — Figma blue */
-  --titanium: #1ABCFE;
-  --titanium-dim: #0A99D6;
-  --titanium-light: #66D5FF;
+  /* Secondary — 金 (kin / gold) */
+  --titanium: #C9A227;
+  --titanium-dim: #9F7F1F;
+  --titanium-light: #DCB44C;
 
-  /* Gradient — Purple → Blue → Green (Figma風カラフル) */
-  --brand-gradient: linear-gradient(135deg, #A259FF 0%, #1ABCFE 50%, #0ACF83 100%);
+  /* Tertiary — 銀 (gin / silver) */
+  --silver: #9CA3AF;
+  --silver-dim: #6B7280;
+
+  /* Gradient — 朱赤 → 金 (vermillion → gold) */
+  --brand-gradient: linear-gradient(135deg, #D4453B 0%, #C9A227 100%);
 
   /* Surfaces & Text (dark theme) */
   --surface: #0a0a0a;
@@ -28,7 +38,7 @@
   --radius: 12px;
   --shadow-sm: 0 2px 6px rgba(0,0,0,.3);
   --shadow-md: 0 4px 12px rgba(0,0,0,.4);
-  --glow: 0 0 24px rgba(91, 127, 255, 0.12);
+  --glow: 0 0 24px rgba(212, 69, 59, 0.12);
 }
 
 /* ========== Minimal Reset ========== */
@@ -73,19 +83,19 @@ body {
 .ambient-blob--1 {
   width: 600px; height: 400px;
   top: 10%; left: 5%;
-  background: rgba(91, 127, 255, .07);
+  background: rgba(212, 69, 59, .05);  /* 朱赤 soft */
   animation: blob-drift-1 18s ease-in-out infinite alternate;
 }
 .ambient-blob--2 {
   width: 500px; height: 500px;
   bottom: 5%; right: 5%;
-  background: rgba(78, 139, 160, .07);
+  background: rgba(201, 162, 39, .05); /* 金 soft */
   animation: blob-drift-2 22s ease-in-out infinite alternate;
 }
 .ambient-blob--3 {
   width: 400px; height: 350px;
   top: 50%; left: 40%;
-  background: rgba(107, 171, 194, .04);
+  background: rgba(156, 163, 175, .04); /* 銀 soft */
   animation: blob-drift-3 26s ease-in-out infinite alternate;
 }
 
@@ -130,15 +140,15 @@ body {
   letter-spacing: .04em;
   cursor: pointer;
   color: #fff;
-  background: linear-gradient(135deg, #A259FF 0%, #1ABCFE 100%);
+  background: linear-gradient(135deg, #D4453B 0%, #C9A227 100%);
   border: none; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(162, 89, 255, .35);
+  box-shadow: 0 10px 30px rgba(212, 69, 59, .28);
   text-decoration: none;
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 36px rgba(162, 89, 255, .5);
+  box-shadow: 0 14px 36px rgba(212, 69, 59, .42);
 }
 .btn-primary:active { transform: translateY(0); }
 .btn-primary:focus-visible {
@@ -218,7 +228,7 @@ a:focus-visible {
   --muted: #6B7280;
   --border: #E5E7EB;
   --border-hover: #D1D5DB;
-  --glow: 0 4px 24px rgba(162, 89, 255, 0.10);
+  --glow: 0 4px 24px rgba(212, 69, 59, 0.10);
 
   background: var(--surface);
   color: var(--text);

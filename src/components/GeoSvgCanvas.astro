@@ -17,9 +17,9 @@ const { id = 'geo-bg' } = Astro.props;
   <svg viewBox="-200 -200 400 400" preserveAspectRatio="xMidYMid slice">
     <defs>
       <radialGradient id={`${id}-glow`} cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#A259FF" stop-opacity="0.18" />
-        <stop offset="60%" stop-color="#A259FF" stop-opacity="0.05" />
-        <stop offset="100%" stop-color="#A259FF" stop-opacity="0" />
+        <stop offset="0%" stop-color="#D4453B" stop-opacity="0.18" />
+        <stop offset="60%" stop-color="#D4453B" stop-opacity="0.05" />
+        <stop offset="100%" stop-color="#D4453B" stop-opacity="0" />
       </radialGradient>
     </defs>
 
@@ -31,19 +31,19 @@ const { id = 'geo-bg' } = Astro.props;
       <polygon
         points="180,0 127.28,127.28 0,180 -127.28,127.28 -180,0 -127.28,-127.28 0,-180 127.28,-127.28"
         fill="none"
-        stroke="#1ABCFE"
+        stroke="#C9A227"
         stroke-width="0.6"
         stroke-opacity="0.7"
       />
       <g class="dots">
-        <circle cx="180" cy="0" r="3" fill="#1ABCFE" />
-        <circle cx="127.28" cy="127.28" r="3" fill="#1ABCFE" />
-        <circle cx="0" cy="180" r="3" fill="#1ABCFE" />
-        <circle cx="-127.28" cy="127.28" r="3" fill="#1ABCFE" />
-        <circle cx="-180" cy="0" r="3" fill="#1ABCFE" />
-        <circle cx="-127.28" cy="-127.28" r="3" fill="#1ABCFE" />
-        <circle cx="0" cy="-180" r="3" fill="#1ABCFE" />
-        <circle cx="127.28" cy="-127.28" r="3" fill="#1ABCFE" />
+        <circle cx="180" cy="0" r="3" fill="#C9A227" />
+        <circle cx="127.28" cy="127.28" r="3" fill="#C9A227" />
+        <circle cx="0" cy="180" r="3" fill="#C9A227" />
+        <circle cx="-127.28" cy="127.28" r="3" fill="#C9A227" />
+        <circle cx="-180" cy="0" r="3" fill="#C9A227" />
+        <circle cx="-127.28" cy="-127.28" r="3" fill="#C9A227" />
+        <circle cx="0" cy="-180" r="3" fill="#C9A227" />
+        <circle cx="127.28" cy="-127.28" r="3" fill="#C9A227" />
       </g>
     </g>
 
@@ -52,17 +52,17 @@ const { id = 'geo-bg' } = Astro.props;
       <polygon
         points="120,0 60,103.92 -60,103.92 -120,0 -60,-103.92 60,-103.92"
         fill="none"
-        stroke="#0ACF83"
+        stroke="#9CA3AF"
         stroke-width="0.7"
         stroke-opacity="0.65"
       />
       <g class="dots">
-        <circle cx="120" cy="0" r="2.6" fill="#0ACF83" />
-        <circle cx="60" cy="103.92" r="2.6" fill="#0ACF83" />
-        <circle cx="-60" cy="103.92" r="2.6" fill="#0ACF83" />
-        <circle cx="-120" cy="0" r="2.6" fill="#0ACF83" />
-        <circle cx="-60" cy="-103.92" r="2.6" fill="#0ACF83" />
-        <circle cx="60" cy="-103.92" r="2.6" fill="#0ACF83" />
+        <circle cx="120" cy="0" r="2.6" fill="#9CA3AF" />
+        <circle cx="60" cy="103.92" r="2.6" fill="#9CA3AF" />
+        <circle cx="-60" cy="103.92" r="2.6" fill="#9CA3AF" />
+        <circle cx="-120" cy="0" r="2.6" fill="#9CA3AF" />
+        <circle cx="-60" cy="-103.92" r="2.6" fill="#9CA3AF" />
+        <circle cx="60" cy="-103.92" r="2.6" fill="#9CA3AF" />
       </g>
     </g>
 
@@ -71,29 +71,29 @@ const { id = 'geo-bg' } = Astro.props;
       <polygon
         points="60,0 18.54,57.06 -48.54,35.27 -48.54,-35.27 18.54,-57.06"
         fill="none"
-        stroke="#A259FF"
+        stroke="#D4453B"
         stroke-width="0.8"
         stroke-opacity="0.85"
       />
       <g class="dots">
-        <circle cx="60" cy="0" r="2.4" fill="#A259FF" />
-        <circle cx="18.54" cy="57.06" r="2.4" fill="#A259FF" />
-        <circle cx="-48.54" cy="35.27" r="2.4" fill="#A259FF" />
-        <circle cx="-48.54" cy="-35.27" r="2.4" fill="#A259FF" />
-        <circle cx="18.54" cy="-57.06" r="2.4" fill="#A259FF" />
+        <circle cx="60" cy="0" r="2.4" fill="#D4453B" />
+        <circle cx="18.54" cy="57.06" r="2.4" fill="#D4453B" />
+        <circle cx="-48.54" cy="35.27" r="2.4" fill="#D4453B" />
+        <circle cx="-48.54" cy="-35.27" r="2.4" fill="#D4453B" />
+        <circle cx="18.54" cy="-57.06" r="2.4" fill="#D4453B" />
       </g>
     </g>
 
     <!-- 中心から外八角形への放射線（脈動） -->
     <g class="rays">
-      <line x1="0" y1="0" x2="180" y2="0" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="127.28" y2="127.28" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="0" y2="180" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="-127.28" y2="127.28" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="-180" y2="0" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="-127.28" y2="-127.28" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="0" y2="-180" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
-      <line x1="0" y1="0" x2="127.28" y2="-127.28" stroke="#A259FF" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="180" y2="0" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="127.28" y2="127.28" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="0" y2="180" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-127.28" y2="127.28" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-180" y2="0" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="-127.28" y2="-127.28" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="0" y2="-180" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
+      <line x1="0" y1="0" x2="127.28" y2="-127.28" stroke="#D4453B" stroke-width="0.4" stroke-opacity="0.25" />
     </g>
 
     <!-- 中心ノード（脈動するコア） -->
