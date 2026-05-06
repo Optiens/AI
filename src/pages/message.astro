@@ -98,11 +98,11 @@ import founderPhoto from '../assets/founder-suit.png?url';
     <!-- 代表メッセージ -->
     <section class="msg-ceo-v2">
       <div class="container">
-        <header class="ceo-header">
-          <h2 class="ceo-title">代表メッセージ</h2>
-        </header>
-
         <article class="ceo-intro">
+          <header class="ceo-card-title-head">
+            <h2 class="ceo-title">代表メッセージ</h2>
+          </header>
+
           <header class="ceo-intro-head">
             <div class="ceo-portrait">
               <img src={founderPhoto} alt="髙橋 大地（合同会社Optiens 代表社員）" loading="lazy" />
@@ -116,12 +116,6 @@ import founderPhoto from '../assets/founder-suit.png?url';
           <div class="ceo-chapters">
 
             <section class="ceo-chapter">
-              <div class="ceo-chapter-mark">
-                <span class="ceo-chapter-num">01</span>
-                <div class="ceo-chapter-rule"></div>
-                <span class="ceo-chapter-en">Forward</span>
-              </div>
-              <h3 class="ceo-chapter-title">これから</h3>
               <div class="ceo-chapter-body">
                 <p>
                   AIエージェントの台頭で、業務の在り方そのものが変わろうとしています。
@@ -135,13 +129,7 @@ import founderPhoto from '../assets/founder-suit.png?url';
               </div>
             </section>
 
-            <section class="ceo-chapter ceo-chapter--alt">
-              <div class="ceo-chapter-mark">
-                <span class="ceo-chapter-num">02</span>
-                <div class="ceo-chapter-rule"></div>
-                <span class="ceo-chapter-en">Background</span>
-              </div>
-              <h3 class="ceo-chapter-title">これまでの経験</h3>
+            <section class="ceo-chapter">
               <div class="ceo-chapter-body">
                 <p>
                   Optiensは、エンタープライズ向け大規模CRMの設計・開発に
@@ -396,12 +384,10 @@ import founderPhoto from '../assets/founder-suit.png?url';
   .msg-ceo-v2 .container {
     max-width: 1140px;
   }
-  .ceo-header {
-    text-align: left;
-    margin-bottom: clamp(48px, 7vw, 88px);
-    max-width: 1140px;
-    margin-left: auto;
-    margin-right: auto;
+  .ceo-card-title-head {
+    margin-bottom: clamp(28px, 4vw, 40px);
+    padding-bottom: clamp(20px, 3vw, 28px);
+    border-bottom: 1px solid #e2e8f0;
   }
   .ceo-eyebrow {
     display: inline-block;
@@ -502,72 +488,6 @@ import founderPhoto from '../assets/founder-suit.png?url';
   }
   .ceo-chapter {
     position: relative;
-    padding-left: clamp(0px, 4vw, 56px);
-  }
-  .ceo-chapter--alt {
-    padding-left: 0;
-    padding-right: clamp(0px, 4vw, 56px);
-    text-align: left;
-  }
-  .ceo-chapter-mark {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 18px;
-  }
-  .ceo-chapter-num {
-    font-family: 'Inter', 'SF Pro Display', sans-serif;
-    font-size: clamp(2.4rem, 4.6vw, 3.6rem);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    background: linear-gradient(135deg, var(--brand) 0%, #4a7ba8 60%, var(--titanium) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-  }
-  .ceo-chapter--alt .ceo-chapter-num {
-    background: linear-gradient(135deg, var(--titanium) 0%, #4a7ba8 50%, #E48A95 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .ceo-chapter-rule {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(14, 42, 71, 0.25) 0%, rgba(14, 42, 71, 0) 100%);
-    max-width: 200px;
-  }
-  .ceo-chapter-en {
-    font-family: 'Inter', 'SF Pro Display', sans-serif;
-    font-size: clamp(0.78rem, 1.2vw, 0.92rem);
-    font-weight: 700;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: var(--muted, #64748b);
-  }
-  .ceo-chapter-title {
-    font-size: clamp(1.7rem, 3.6vw, 2.5rem);
-    font-weight: 900;
-    color: #0f172a;
-    margin: 0 0 28px;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
-    position: relative;
-  }
-  .ceo-chapter-title::before {
-    content: '';
-    position: absolute;
-    left: -28px;
-    top: 12px;
-    bottom: 12px;
-    width: 4px;
-    border-radius: 2px;
-    background: linear-gradient(180deg, var(--brand) 0%, var(--titanium) 100%);
-  }
-  .ceo-chapter--alt .ceo-chapter-title::before {
-    background: linear-gradient(180deg, var(--titanium) 0%, #E48A95 100%);
   }
   .ceo-chapter-body p {
     font-size: clamp(1rem, 1.6vw, 1.13rem);
@@ -593,17 +513,6 @@ import founderPhoto from '../assets/founder-suit.png?url';
     }
     .ceo-portrait {
       margin: 0 auto;
-    }
-    .ceo-chapter,
-    .ceo-chapter--alt {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    .ceo-chapter-title::before {
-      display: none;
-    }
-    .ceo-chapter-rule {
-      max-width: 60px;
     }
   }
 
