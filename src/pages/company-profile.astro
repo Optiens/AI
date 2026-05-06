@@ -19,34 +19,6 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- ハイライトカード -->
-    <section class="cp-highlight-section light-section">
-      <div class="container">
-        <div class="cp-highlight-grid">
-          <div class="cp-highlight-card">
-            <span class="cp-highlight-label">設立</span>
-            <p class="cp-highlight-value">2026.04.06</p>
-            <p class="cp-highlight-note">合同会社として登記</p>
-          </div>
-          <div class="cp-highlight-card">
-            <span class="cp-highlight-label">拠点</span>
-            <p class="cp-highlight-value">山梨県北杜市</p>
-            <p class="cp-highlight-note">全国オンライン対応</p>
-          </div>
-          <div class="cp-highlight-card">
-            <span class="cp-highlight-label">事業</span>
-            <p class="cp-highlight-value">AI 支援 / IoT 実証</p>
-            <p class="cp-highlight-note">自社で使い、自社で改善</p>
-          </div>
-          <div class="cp-highlight-card">
-            <span class="cp-highlight-label">体制</span>
-            <p class="cp-highlight-value">代表 1 名 + AI</p>
-            <p class="cp-highlight-note">AIエージェント連携で運営</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- 法人情報 -->
     <section class="cp-section light-section">
       <div class="container cp-container">
@@ -118,59 +90,6 @@ import Layout from '../layouts/Layout.astro';
     color: var(--muted);
     margin: 0;
     letter-spacing: .04em;
-  }
-
-  /* ===== Highlight ===== */
-  .cp-highlight-section {
-    padding: clamp(36px, 6vw, 56px) 0;
-    background: #ffffff;
-  }
-  .cp-highlight-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: clamp(12px, 1.6vw, 18px);
-    max-width: 980px;
-    margin: 0 auto;
-  }
-  .cp-highlight-card {
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: clamp(18px, 2.4vw, 24px) clamp(16px, 2vw, 22px);
-    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-  }
-  .cp-highlight-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(162, 89, 255, .35);
-    box-shadow: 0 10px 28px rgba(15, 23, 42, .06);
-  }
-  .cp-highlight-label {
-    display: inline-block;
-    font-size: .7rem;
-    font-weight: 700;
-    letter-spacing: .14em;
-    color: var(--brand);
-    margin-bottom: 10px;
-  }
-  .cp-highlight-value {
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    font-size: clamp(1.1rem, 1.9vw, 1.35rem);
-    font-weight: 700;
-    color: var(--heading);
-    margin: 0 0 6px;
-    letter-spacing: -.01em;
-    line-height: 1.3;
-  }
-  .cp-highlight-note {
-    font-size: .78rem;
-    color: var(--muted);
-    margin: 0;
-    line-height: 1.6;
-  }
-  @media (max-width: 768px) {
-    .cp-highlight-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
 
   /* ===== Section ===== */
@@ -251,8 +170,7 @@ import Layout from '../layouts/Layout.astro';
 
   @media print {
     .cp-section,
-    .cp-hero,
-    .cp-highlight-section {
+    .cp-hero {
       background: #fff;
     }
     .cp-block {

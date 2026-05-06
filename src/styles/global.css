@@ -33,7 +33,12 @@
 
 /* ========== Minimal Reset ========== */
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #ffffff; /* ページ遷移時の黒フラッシュ防止 */
+}
 :where(h1,h2,h3,h4,h5,h6,p,figure,blockquote,dl,dd) { margin: 0; }
 img, picture { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration: none; }
@@ -47,7 +52,7 @@ body {
   font-family: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   color: var(--text);
-  background: var(--surface);
+  background: #ffffff; /* 純白 — 個別ページのlight-section背景と統一 */
   -webkit-font-smoothing: antialiased;
 }
 
