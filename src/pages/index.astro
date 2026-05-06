@@ -69,10 +69,7 @@ const homeSchema = [
             MAKE AI NATIVE<br/>
             TO YOUR BUSINESS.
           </h1>
-          <p class="hero-sub">
-            定型業務の9割を自動化。<br/>
-            判断と創造に集中できる経営へ。
-          </p>
+          <p class="hero-sub">判断と創造に集中できる経営へ。</p>
         </div>
       </div>
     </section>
@@ -80,6 +77,7 @@ const homeSchema = [
     <!-- ===== MAIN: AI支援事業（リード+CTAのみ） ===== -->
     <section class="home-main-service light-section">
       <div class="container">
+        <p class="home-section-eyebrow">AIを事業の中心に。</p>
         <h2 class="home-section-heading home-section-heading--center">
           AXで、業務を再設計する
           <span class="home-section-heading-ax">AX = AI Transformation（AIによる業務変革）</span>
@@ -104,6 +102,7 @@ const homeSchema = [
     <section class="home-why-section light-section">
       <div class="container">
         <h2 class="home-section-heading home-section-heading--center">なぜ、いまAIなのか</h2>
+        <p class="home-why-lead">定型業務の9割を自動化できる時代が来ています。</p>
         <div class="home-why-grid">
           <div class="home-why-item">
             <span class="home-why-num">01</span>
@@ -241,6 +240,16 @@ const homeSchema = [
   text-align: center;
 }
 
+.home-section-eyebrow {
+  text-align: center;
+  font-size: clamp(13px, 1.4vw, 15px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--brand);
+  margin: 0 0 14px;
+  text-transform: none;
+}
+
 .home-section-heading {
   font-size: clamp(26px, 3.6vw, 38px);
   font-weight: 800;
@@ -251,6 +260,17 @@ const homeSchema = [
 }
 .home-section-heading--center {
   text-align: center;
+}
+
+.home-why-lead {
+  text-align: center;
+  font-size: clamp(15px, 1.7vw, 18px);
+  line-height: 1.8;
+  color: var(--home-heading);
+  font-weight: 600;
+  margin: -20px auto clamp(36px, 5vw, 48px);
+  max-width: 760px;
+  letter-spacing: .01em;
 }
 
 .home-lead {
