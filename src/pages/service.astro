@@ -11,8 +11,7 @@ import Layout from '../layouts/Layout.astro';
     <!-- ヒーロー -->
     <section class="ac-hero light-section">
       <div class="container text-center" style="position:relative;z-index:1;">
-        <h1>サービス</h1>
-        <p class="hero-sub">活用診断 → 導入支援 → 保守 の3ステップで伴走します。</p>
+        <h1 class="hero-headline">活用診断 → 導入支援 → 保守 の3ステップで伴走します。</h1>
         <a href="/free-diagnosis" class="btn-primary hero-cta">無料AI診断を受ける</a>
       </div>
     </section>
@@ -30,7 +29,7 @@ import Layout from '../layouts/Layout.astro';
             <div class="ac-img-wrap">
               <img src="/images/services/ai-diagnosis.png" alt="AI活用診断" loading="lazy" />
             </div>
-            <div class="ac-badge">STEP 1</div>
+            <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">01</span></div>
             <h3>AI活用診断</h3>
             <p class="ac-desc">業務にAIがどれだけ効くか、ROI（投資利益率）をレポートでお届けします。<strong>無料版</strong>と<strong>詳細版</strong>の2プランから選択可能。詳細版は<strong>AI事業者ガイドライン（経産省・総務省）整合性チェック</strong>付き。</p>
             <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
@@ -41,7 +40,7 @@ import Layout from '../layouts/Layout.astro';
             <div class="ac-img-wrap">
               <img src="/images/services/implementation.png" alt="導入支援" loading="lazy" />
             </div>
-            <div class="ac-badge">STEP 2</div>
+            <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">02</span></div>
             <h3>導入支援</h3>
             <p class="ac-desc">自動化システムの設計・構築・納品まで対応。御社の業務に合わせた仕組みごとお渡しします。</p>
             <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
@@ -52,7 +51,7 @@ import Layout from '../layouts/Layout.astro';
             <div class="ac-img-wrap">
               <img src="/images/services/maintenance.png" alt="保守" loading="lazy" />
             </div>
-            <div class="ac-badge">STEP 3</div>
+            <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">03</span></div>
             <h3>保守</h3>
             <p class="ac-desc">導入後の機能追加・トラブル対応・新規業務の自動化を月額制で継続サポート。<strong>ライト</strong>と<strong>スタンダード</strong>の2プラン。</p>
             <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
@@ -62,47 +61,47 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- 強み：カスタムUI構築力（左右交互レイアウト） -->
+    <!-- 強み：なぜOptiensを選ぶのか（左右交互レイアウト） -->
     <section class="ac-section light-section ac-custom-section">
       <div class="container">
-        <h2 class="section-title reveal">業務に合わせた、専用の仕組み</h2>
-        <p class="section-sub reveal">既製のサービスを契約するのではなく、御社の業務動線に沿った専用構成を設計・構築します。</p>
+        <h2 class="section-title reveal">なぜ、Optiensを選ぶのか</h2>
+        <p class="section-sub reveal">AI支援サービスは数あれど、Optiensには「<strong>エンタープライズで10年磨いた設計思想</strong>」と「<strong>自分たちで使い、改善してきた運用知見</strong>」の両輪があります。御社専用の仕組みを、規模に合った形で組み上げ、買い切りで御社の資産にしてお渡しします。</p>
 
         <div class="custom-stack">
 
-          <!-- 1. 既製の仕組みに、業務を合わせない -->
+          <!-- 1. エンタープライズの設計思想を、中小事業者の規模で -->
           <div class="custom-row reveal">
             <div class="custom-row-media">
-              <img src="/images/services/custom-fit.png" alt="業務動線に沿って組み上げる専用設計" loading="lazy" />
+              <img src="/images/services/custom-fit.png" alt="エンタープライズの設計思想を中小事業者の規模に最適化" loading="lazy" />
             </div>
             <div class="custom-row-body">
               <span class="custom-row-num">01</span>
-              <h3>既製の仕組みに、業務を合わせない</h3>
-              <p>市販の業務システムは多くが<strong>SaaS</strong><small>(Software as a Service：複数の利用企業で同じ画面・機能を共有するクラウド型サービス)</small>として提供されており、汎用的に作られているため御社の業務動線に完全には合いません。結果として「項目が多すぎて使われない」「複数サービスを行き来して二重入力」が発生しがちです。弊社は<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>で、業務動線に沿った画面と処理フローを一から設計します。</p>
+              <h3>エンタープライズの設計思想を、御社の規模で</h3>
+              <p>代表は大手向けCRM（<strong>Salesforce</strong>）で10年以上、業務動線の設計と運用改善に携わってきました。Optiensは、その設計知見を<strong>中小事業者の規模・予算・人員</strong>に最適化して提供します。汎用<strong>SaaS</strong><small>(Software as a Service：複数の利用企業で同じ画面・機能を共有するクラウド型サービス)</small>では合わせきれない業務動線も、<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>で一から組み上げ、「項目が多すぎて使われない」「複数ツールを行き来して二重入力」をなくします。<strong>過剰でも不足でもない、ちょうどいい仕組み</strong>を、御社の規模感で設計します。</p>
             </div>
           </div>
 
-          <!-- 2. 御社の所有物 -->
+          <!-- 2. 買い切り型・御社の資産 -->
           <div class="custom-row custom-row--reverse reveal">
             <div class="custom-row-media">
               <img src="/images/services/asset-ownership.png" alt="買い切り型で御社の資産になる仕組み" loading="lazy" />
             </div>
             <div class="custom-row-body">
               <span class="custom-row-num">02</span>
-              <h3>御社の所有物。月額ライセンス料は発生しません</h3>
-              <p>納品する仕組みは<strong>買い切り型</strong>の構築費用のみで、利用人数に応じたライセンス料は発生しません。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースをまとめて提供するクラウド基盤。代表例: Supabase)</small>に保管され、CSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。将来別の事業者に乗り換える場合も<strong>ベンダーロックイン</strong><small>(特定業者しか扱えなくなる状態)</small>が起こりません。</p>
+              <h3>買い切り型で、御社の資産になる</h3>
+              <p>納品する仕組みは<strong>買い切り型</strong>の構築費用のみ。利用人数に応じたライセンス料は発生しません。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースをまとめて提供するクラウド基盤。代表例: Supabase)</small>に保管され、CSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。将来別の事業者に乗り換える場合も<strong>ベンダーロックイン</strong><small>(特定業者しか扱えなくなる状態)</small>は起こりません。<strong>月額の固定支出を抑えたい中小事業者ほど、構造的に有利</strong>になる契約形態です。</p>
             </div>
           </div>
 
-          <!-- 3. 外部共有 -->
+          <!-- 3. 自分たちで使い、改善してきた運用知見 -->
           <div class="custom-row reveal">
             <div class="custom-row-media">
-              <img src="/images/services/easy-sharing.png" alt="外部メンバーとの共有もURLひとつ" loading="lazy" />
+              <img src="/images/services/easy-sharing.png" alt="自社で使い改善し続けてきた運用知見をそのまま提供" loading="lazy" />
             </div>
             <div class="custom-row-body">
               <span class="custom-row-num">03</span>
-              <h3>外部メンバーとの共有も簡単</h3>
-              <p>営業パートナー・外注先・現場スタッフとの情報共有は、URLと<strong>ロールベースの認証</strong><small>(役割ごとに閲覧・編集権限を切り分ける方式)</small>で完結します。<strong>レスポンシブデザイン</strong><small>(PC・スマホ・タブレットの画面サイズに自動最適化する設計)</small>で構築するため、デバイスごとに別画面を作る必要もありません。</p>
+              <h3>自分たちで使い、改善してきた運用知見</h3>
+              <p>Optiens自身が、<strong>Claude Code・Supabase・AIエージェント</strong>を組み合わせた仕組みで日々の経営を回しています。社内CRM・コンテンツ運用ツール・IoT水耕栽培の管理基盤── どれも自社運用で改善サイクルを回しているため、ご提案は<strong>机上の設計図ではなく、実装と運用の知見</strong>です。「導入後どこでつまずきやすいか」「半年後に何を見直すべきか」まで、自社で経験してきた知見をベースにお伝えします。<strong>自分が使いたくないものを、お客様にお勧めしない</strong>── それがOptiensのスタンスです。</p>
             </div>
           </div>
 
@@ -166,6 +165,15 @@ import Layout from '../layouts/Layout.astro';
     font-size: clamp(1.5rem, 4vw, 2.4rem);
     margin-bottom: 20px;
     line-height: 1.4;
+  }
+  .ac-hero .hero-headline {
+    color: var(--heading);
+    font-size: clamp(1.25rem, 2.8vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.7;
+    margin: 0 auto 36px;
+    max-width: 760px;
+    letter-spacing: 0.01em;
   }
   .hero-sub {
     font-size: clamp(0.9rem, 1.8vw, 1.1rem);
@@ -256,16 +264,52 @@ import Layout from '../layouts/Layout.astro';
 
   /* ===== Badge ===== */
   .ac-badge {
-    display: inline-block;
-    font-size: .7rem;
-    font-weight: 600;
-    letter-spacing: .1em;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 14px 5px 5px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, rgba(14, 42, 71, 0.04) 0%, rgba(192, 192, 192, 0.10) 100%);
+    position: relative;
+    isolation: isolate;
+  }
+  .ac-badge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--brand) 0%, #C0C0C0 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .ac-badge-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0E2A47 0%, #4a7ba8 60%, #C0C0C0 100%);
+    color: #fff;
+    font-family: 'Inter', 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    box-shadow: 0 4px 12px -3px rgba(14, 42, 71, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    flex: none;
+  }
+  .ac-badge-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
     color: var(--brand);
-    border: 1px solid rgba(14, 42, 71,.3);
-    background: rgba(14, 42, 71,.08);
-    padding: 4px 14px;
-    border-radius: 4px;
-    margin-bottom: 12px;
+    text-transform: uppercase;
+    padding-left: 6px;
   }
   /* ===== Subsidy Banner ===== */
   .subsidy-banner {

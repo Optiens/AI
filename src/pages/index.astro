@@ -414,31 +414,72 @@ const homeSchema = [
 .home-why-item {
   background: #fff;
   border: 1px solid var(--home-border);
-  border-radius: 14px;
-  padding: clamp(24px, 3vw, 32px);
+  border-radius: 16px;
+  padding: clamp(28px, 3.2vw, 36px);
   position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.home-why-item::before {
+  content: attr(data-num);
+  position: absolute;
+  top: -28px;
+  right: -8px;
+  font-family: 'Inter', 'SF Pro Display', sans-serif;
+  font-size: clamp(7rem, 12vw, 10rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: var(--home-brand);
+  opacity: 0.05;
+  pointer-events: none;
+  user-select: none;
+}
+.home-why-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -22px rgba(14, 42, 71, 0.28);
+  border-color: rgba(14, 42, 71, 0.2);
 }
 .home-why-num {
-  font-family: 'SF Mono', 'Consolas', monospace;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--home-brand);
-  letter-spacing: 0.1em;
-  display: block;
-  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  font-family: 'Inter', 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  font-size: clamp(2.6rem, 4.2vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--home-brand) 0%, #4a7ba8 60%, var(--home-brand-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.home-why-num::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--home-brand-2) 0%, rgba(192, 192, 192, 0) 100%);
+  align-self: center;
+  border-radius: 2px;
 }
 .home-why-item h3 {
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
   font-weight: 700;
   color: var(--home-heading);
-  margin: 0 0 14px;
-  line-height: 1.5;
+  margin: 0 0 16px;
+  line-height: 1.55;
+  position: relative;
+  z-index: 1;
 }
 .home-why-item p {
   color: var(--home-text);
-  font-size: 0.92rem;
+  font-size: 0.93rem;
   line-height: 1.95;
   margin: 0;
+  position: relative;
+  z-index: 1;
 }
 
 /* =========================================================
