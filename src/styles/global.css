@@ -1,32 +1,31 @@
 /* ========== CSS Variables ========== */
-/* 和テック (Wa-Tech) パレット #4 — 濃紺・銀・桜（強化版）
- * 濃紺 (noukon / dark navy)        #0E2A47 — primary brand
- * 銀 (gin / silver)                #C0C0C0 — secondary
- * 桜 (sakura / 薄紅梅・kobai pink) #E48A95 — accent（視認性確保のため強化）
- * 桜淡 (sakura soft)               #FFCED0 — ambient/decorative only
- * 墨 (sumi)                         #1A1A2E — heading / dark text
+/* Optiens ブランドカラー — チタンブルー × 桜（2色構成）
+ * チタンブルー (titanium blue)  #3D6FA0 — primary brand
+ * 桜 (sakura / 薄紅梅 kobai)    #E48A95 — accent
+ * 桜淡 (sakura soft)            #FFCED0 — ambient/decorative only
+ * 墨 (sumi)                      #1A1A2E — heading / dark text
  */
 :root {
-  /* Brand — 濃紺 (noukon / dark navy) */
-  --brand: #0E2A47;
-  --brand-dim: #061829;
-  --brand-2: #2D5680;
+  /* Brand — チタンブルー (titanium blue) */
+  --brand: #3D6FA0;
+  --brand-dim: #1F4D7A;
+  --brand-2: #5C8FBE;
 
-  /* Secondary — 銀 (gin / silver) */
-  --titanium: #C0C0C0;
-  --titanium-dim: #9A9A9A;
-  --titanium-light: #D6D6D6;
+  /* Titanium blue scale (for gradients & accents) */
+  --titanium: #3D6FA0;
+  --titanium-dim: #2C5985;
+  --titanium-light: #87B0D4;
 
-  /* Tertiary — 桜 (sakura / 薄紅梅 light kobai pink) */
+  /* Accent — 桜 (sakura / 薄紅梅 light kobai pink) */
   --sakura: #E48A95;
   --sakura-dim: #C76A77;
   --sakura-soft: #FFCED0; /* 装飾用淡桜（ambient blob・粒子等） */
-  /* 互換用エイリアス（旧 --silver は桜色を保持していた。徐々に --sakura に置換） */
+  /* 互換用エイリアス（既存コード対応） */
   --silver: #E48A95;
   --silver-dim: #C76A77;
 
-  /* Gradient — 濃紺 → 銀 (navy → silver) */
-  --brand-gradient: linear-gradient(135deg, #0E2A47 0%, #C0C0C0 100%);
+  /* Gradient — チタンブルー → 桜 */
+  --brand-gradient: linear-gradient(135deg, #3D6FA0 0%, #E48A95 100%);
 
   /* Surfaces & Text (dark theme) */
   --surface: #0a0a0a;
@@ -43,7 +42,7 @@
   --radius: 12px;
   --shadow-sm: 0 2px 6px rgba(0,0,0,.3);
   --shadow-md: 0 4px 12px rgba(0,0,0,.4);
-  --glow: 0 0 24px rgba(14, 42, 71, 0.14);
+  --glow: 0 0 24px rgba(61, 111, 160, 0.14);
 }
 
 /* ========== Minimal Reset ========== */
@@ -88,7 +87,7 @@ body {
 .ambient-blob--1 {
   width: 600px; height: 400px;
   top: 10%; left: 5%;
-  background: rgba(14, 42, 71, .07);   /* 濃紺 soft */
+  background: rgba(61, 111, 160, .07);   /* 濃紺 soft */
   animation: blob-drift-1 18s ease-in-out infinite alternate;
 }
 .ambient-blob--2 {
@@ -145,15 +144,15 @@ body {
   letter-spacing: .04em;
   cursor: pointer;
   color: #fff;
-  background: linear-gradient(135deg, #0E2A47 0%, #2D5680 100%);
+  background: linear-gradient(135deg, #3D6FA0 0%, #2D5680 100%);
   border: none; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(14, 42, 71, .30);
+  box-shadow: 0 10px 30px rgba(61, 111, 160, .30);
   text-decoration: none;
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 36px rgba(14, 42, 71, .45);
+  box-shadow: 0 14px 36px rgba(61, 111, 160, .45);
 }
 .btn-primary:active { transform: translateY(0); }
 .btn-primary:focus-visible {
@@ -233,7 +232,7 @@ a:focus-visible {
   --muted: #6B7280;
   --border: #E5E7EB;
   --border-hover: #D1D5DB;
-  --glow: 0 4px 24px rgba(14, 42, 71, 0.12);
+  --glow: 0 4px 24px rgba(61, 111, 160, 0.12);
 
   background: var(--surface);
   color: var(--text);

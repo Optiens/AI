@@ -188,8 +188,8 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     if (resend && MAIL_TO) {
       const htmlBody = `
 <h2>🔍 ${planLabel} AI診断 申し込み</h2>
-<p style="color:${plan === 'paid' ? '#0E2A47' : '#475569'};font-weight:bold;font-size:14px;">プラン: ${planLabel}${plan === 'paid' ? ' ／ ステータス: 入金待ち（自動検知）' : ''}</p>
-<p style="background:#EEF2FF;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:14px;">申込番号: <strong style="color:#0E2A47;font-size:16px;">${applicationId}</strong></p>
+<p style="color:${plan === 'paid' ? '#3D6FA0' : '#475569'};font-weight:bold;font-size:14px;">プラン: ${planLabel}${plan === 'paid' ? ' ／ ステータス: 入金待ち（自動検知）' : ''}</p>
+<p style="background:#EEF2FF;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:14px;">申込番号: <strong style="color:#3D6FA0;font-size:16px;">${applicationId}</strong></p>
 <table style="border-collapse:collapse;font-family:system-ui,sans-serif;">
   <tr><td style="padding:6px 12px;font-weight:bold;">企業・団体名</td><td style="padding:6px 12px;">${escapeHtml(companyName)}</td></tr>
   <tr><td style="padding:6px 12px;font-weight:bold;">ご担当者名</td><td style="padding:6px 12px;">${escapeHtml(personName)}</td></tr>
@@ -391,7 +391,7 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 <p>合同会社Optiensです。<br/>詳細AI診断（¥5,500・税込）のお申込を受け付けました。</p>
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#0E2A47;font-weight:bold;">${appId}</td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#3D6FA0;font-weight:bold;">${appId}</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">詳細レポート + 60分オンラインMTG</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">ご請求金額</td><td style="padding:8px 14px;"><strong>¥5,500（税込）</strong></td></tr>
 </table>
@@ -472,7 +472,7 @@ function buildFreeCustomerEmailHtml(companyName: string, personName: string, app
 <p>合同会社Optiensです。<br/>無料AI診断のお申込を受け付けました。</p>
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#0E2A47;font-weight:bold;">${appId}</td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#3D6FA0;font-weight:bold;">${appId}</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">無料・簡易版</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">レポートお届け</td><td style="padding:8px 14px;">1〜2営業日以内</td></tr>
 </table>
