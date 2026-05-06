@@ -9,45 +9,25 @@ import Layout from '../layouts/Layout.astro';
 >
   <main class="cp-main">
 
-    <!-- ヒーロー -->
-    <section class="cp-hero light-section">
-      <div class="container">
-        <p class="cp-eyebrow">COMPANY PROFILE</p>
-        <h1>会社概要</h1>
-        <p class="cp-sub">合同会社Optiens（オプティエンス）<br/>山梨県北杜市を拠点に、AI活用支援を全国オンラインで提供しています。</p>
-        <p class="cp-meta">最終更新日: 2026年5月5日</p>
-      </div>
-    </section>
-
     <!-- 法人情報 -->
     <section class="cp-section light-section">
       <div class="container cp-container">
-        <article class="cp-block">
-          <table class="cp-table">
-            <tbody>
-              <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
-              <tr><th>英字表記</th><td>Optiens LLC</td></tr>
-              <tr><th>設立</th><td>2026年4月6日</td></tr>
-              <tr><th>代表社員</th><td>髙橋 大地</td></tr>
-              <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
-              <tr><th>資本金</th><td>100,000円</td></tr>
-              <tr><th>法人番号</th><td>9090003003025</td></tr>
-              <tr><th>事業内容</th><td>AI活用支援、IoT水耕栽培の自社実証</td></tr>
-              <tr><th>インボイス登録</th><td>適格請求書発行事業者 申請中</td></tr>
-              <tr><th>取引銀行</th><td>GMOあおぞらネット銀行 フリー支店</td></tr>
-              <tr><th>連絡先</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
-            </tbody>
-          </table>
-
-          <p class="cp-related-links">
-            関連:
-            <a href="/message">メッセージ</a>
-            <span aria-hidden="true">·</span>
-            <a href="/service">サービス</a>
-            <span aria-hidden="true">·</span>
-            <a href="/contact">お問い合わせ</a>
-          </p>
-        </article>
+        <h1 class="cp-title">会社概要</h1>
+        <table class="cp-table">
+          <tbody>
+            <tr><th>商号</th><td>合同会社Optiens（オプティエンス）</td></tr>
+            <tr><th>英字表記</th><td>Optiens LLC</td></tr>
+            <tr><th>設立</th><td>2026年4月6日</td></tr>
+            <tr><th>代表社員</th><td>髙橋 大地</td></tr>
+            <tr><th>所在地</th><td>〒407-0301 山梨県北杜市高根町清里3545番地2483</td></tr>
+            <tr><th>資本金</th><td>100,000円</td></tr>
+            <tr><th>法人番号</th><td>9090003003025</td></tr>
+            <tr><th>事業内容</th><td>AI活用支援、IoT水耕栽培の自社実証</td></tr>
+            <tr><th>インボイス登録</th><td>適格請求書発行事業者 申請中</td></tr>
+            <tr><th>取引銀行</th><td>GMOあおぞらネット銀行 フリー支店</td></tr>
+            <tr><th>連絡先</th><td><a href="mailto:info@optiens.com">info@optiens.com</a></td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
@@ -60,48 +40,21 @@ import Layout from '../layouts/Layout.astro';
     background: #ffffff;
   }
 
-  /* ===== Hero ===== */
-  .cp-hero {
-    padding: clamp(110px, 14vw, 160px) 0 clamp(48px, 7vw, 72px);
-    background: #ffffff;
-    border-bottom: 1px solid var(--border);
-  }
-  .cp-eyebrow {
-    font-size: .75rem;
-    font-weight: 700;
-    letter-spacing: .25em;
-    color: var(--brand);
-    margin: 0 0 14px;
-  }
-  .cp-hero h1 {
-    color: var(--heading);
-    font-size: clamp(1.7rem, 4.4vw, 2.6rem);
-    margin: 0 0 18px;
-    letter-spacing: -.01em;
-  }
-  .cp-sub {
-    font-size: clamp(.94rem, 1.7vw, 1.05rem);
-    color: var(--muted);
-    line-height: 1.85;
-    margin: 0 0 12px;
-  }
-  .cp-meta {
-    font-size: .78rem;
-    color: var(--muted);
-    margin: 0;
-    letter-spacing: .04em;
-  }
-
   /* ===== Section ===== */
   .cp-section {
-    padding: clamp(48px, 7vw, 72px) 0 clamp(64px, 10vw, 100px);
+    padding: clamp(110px, 14vw, 160px) 0 clamp(64px, 10vw, 100px);
     background: #ffffff;
   }
   .cp-container {
     max-width: 760px;
   }
-  .cp-block {
-    background: transparent;
+
+  .cp-title {
+    font-size: clamp(1.5rem, 3.4vw, 2rem);
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 28px;
+    letter-spacing: -.01em;
   }
 
   /* ===== Table ===== */
@@ -137,25 +90,6 @@ import Layout from '../layouts/Layout.astro';
     text-decoration: underline;
   }
 
-  .cp-related-links {
-    margin: 28px 0 0;
-    font-size: .82rem;
-    color: var(--muted);
-    line-height: 1.8;
-  }
-  .cp-related-links a {
-    color: var(--brand);
-    text-decoration: none;
-    margin: 0 4px;
-  }
-  .cp-related-links a:hover {
-    text-decoration: underline;
-  }
-  .cp-related-links span {
-    color: var(--border);
-    margin: 0 2px;
-  }
-
   @media (max-width: 768px) {
     .cp-table th {
       width: 38%;
@@ -169,13 +103,8 @@ import Layout from '../layouts/Layout.astro';
   }
 
   @media print {
-    .cp-section,
-    .cp-hero {
+    .cp-section {
       background: #fff;
-    }
-    .cp-block {
-      break-inside: avoid;
-      page-break-inside: avoid;
     }
   }
 </style>
