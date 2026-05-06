@@ -11,19 +11,14 @@ import founderPhoto from '../assets/founder.jpg?url';
   <main class="msg-page">
     <!-- VISION (主役・ダークヒーロー) -->
     <section class="msg-vision-hero">
-      <div class="vision-grid">
-        <div class="vision-mark">
-          <span class="vision-eyebrow">Vision</span>
-          <h1 class="vision-jp">ビジョン</h1>
-          <span class="vision-accent-line"></span>
-        </div>
-        <div class="vision-content">
-          <p class="vision-statement">
-            人・自然・テクノロジーが<br/>
-            <span class="vision-emphasize">調和できる組織、社会</span>を<br/>
-            目指します。
-          </p>
-        </div>
+      <div class="vision-inner">
+        <span class="vision-eyebrow">Vision</span>
+        <h1 class="vision-jp">ビジョン</h1>
+        <span class="vision-accent-line"></span>
+        <p class="vision-statement">
+          人・自然・テクノロジーが、<br />
+          <span class="vision-emphasize">調和できる組織、社会</span>を目指します。
+        </p>
       </div>
     </section>
 
@@ -251,84 +246,77 @@ import founderPhoto from '../assets/founder.jpg?url';
     line-height: 1;
     white-space: nowrap;
   }
-  .vision-grid {
+  .vision-inner {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
-    gap: clamp(40px, 6vw, 96px);
-    max-width: 1200px;
+    max-width: 980px;
     margin: 0 auto;
     padding: 0 clamp(20px, 4vw, 40px);
-    align-items: center;
-  }
-  .vision-mark {
-    position: relative;
+    text-align: center;
+    isolation: isolate;
   }
   .vision-eyebrow {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
     font-family: 'Inter', 'SF Pro Display', sans-serif;
-    font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+    font-size: clamp(0.82rem, 1.2vw, 1rem);
     font-weight: 800;
     letter-spacing: 0.42em;
     text-transform: uppercase;
     color: #E48A95;
-    margin-bottom: 22px;
-    padding-left: 36px;
-    position: relative;
+    margin: 0 0 26px;
   }
-  .vision-eyebrow::before {
+  .vision-eyebrow::before,
+  .vision-eyebrow::after {
     content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 24px;
+    width: 28px;
     height: 1px;
-    background: #E48A95;
+    background: linear-gradient(90deg, transparent 0%, #E48A95 50%, transparent 100%);
+    flex: none;
   }
   .vision-jp {
-    font-size: clamp(3rem, 9vw, 6.5rem);
+    font-size: clamp(2.8rem, 8vw, 5.6rem);
     font-weight: 900;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin: 0 0 28px;
-    background: linear-gradient(135deg, #ffffff 0%, #C0C0C0 60%, #E48A95 100%);
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    margin: 0 0 26px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ffffff 0%, #d8e2ec 50%, #f4c4ca 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: transparent;
+    text-shadow: 0 0 60px rgba(228, 138, 149, 0.2);
+  }
+  @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+    .vision-jp {
+      background: none;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+    }
   }
   .vision-accent-line {
     display: block;
     width: 72px;
     height: 3px;
+    margin: 0 auto clamp(32px, 4vw, 48px);
     background: linear-gradient(90deg, #E48A95 0%, #C0C0C0 100%);
     border-radius: 2px;
   }
   .vision-statement {
-    font-size: clamp(1.3rem, 2.8vw, 2.1rem);
+    font-size: clamp(1.2rem, 2.6vw, 1.95rem);
     line-height: 1.85;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.94);
     margin: 0;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
   }
   .vision-emphasize {
     position: relative;
     color: #ffffff;
     font-weight: 800;
-    display: inline-block;
-  }
-  .vision-emphasize::after {
-    content: '';
-    position: absolute;
-    left: -4px;
-    right: -4px;
-    bottom: 4px;
-    height: 12px;
-    background: linear-gradient(90deg, rgba(228, 138, 149, 0.55) 0%, rgba(228, 138, 149, 0.10) 100%);
-    z-index: -1;
-    border-radius: 4px;
+    background: linear-gradient(180deg, transparent 62%, rgba(228, 138, 149, 0.45) 62%, rgba(228, 138, 149, 0.45) 88%, transparent 88%);
+    padding: 0 4px;
   }
 
   /* ============================================
@@ -418,7 +406,6 @@ import founderPhoto from '../assets/founder.jpg?url';
   }
 
   @media (max-width: 900px) {
-    .vision-grid,
     .mission-grid {
       grid-template-columns: 1fr;
       gap: 28px;
