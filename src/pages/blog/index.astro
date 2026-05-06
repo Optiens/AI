@@ -48,16 +48,8 @@ function categoryUrl(cat: BlogCategory | '') {
 
 <Layout title="ブログ | Optiens">
   <main>
-    <!-- Hero -->
-    <section class="blog-hero light-section">
-      <div class="container text-center" style="position:relative;z-index:1;">
-        <h1>ブログ</h1>
-        <p class="hero-sub">AI・テクノロジーの最新情報をお届けします</p>
-      </div>
-    </section>
-
     <!-- カテゴリフィルター -->
-    <section class="filter-section light-section">
+    <section class="filter-section filter-section--top light-section">
       <div class="container">
         <ul class="category-list" role="list">
           <li>
@@ -173,6 +165,9 @@ function categoryUrl(cat: BlogCategory | '') {
   /* ========== カテゴリフィルター ========== */
   .filter-section {
     padding: 28px 0 0;
+  }
+  .filter-section--top {
+    padding-top: clamp(110px, 14vw, 150px);
   }
   .category-list {
     display: flex;
