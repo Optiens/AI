@@ -32,6 +32,8 @@ type Role = {
   summary: string;
   metric: string;
   href: string;
+  comingSoon?: boolean;
+  icon?: string;
 };
 
 const commonCases: CommonCase[] = [
@@ -113,7 +115,11 @@ const industries: Industry[] = [
 ];
 
 const roles: Role[] = [
-  { id: 'role-executive', tag: 'FOR REPRESENTATIVES', title: '小規模事業者の経営者向けAIブリーフィング', shortTitle: '小規模事業者の経営者', summary: '朝10分で事業全体が見える、本来の時間が戻る仕組み', metric: '事業状況把握 5時間 → 30分', href: '/service/sample-executive' },
+  { id: 'role-executive', tag: 'FOR EXECUTIVES', title: '経営者・代表者向けAIブリーフィング', shortTitle: '経営者・代表者向け', summary: '朝10分で事業全体が見える、本来の時間が戻る仕組み', metric: '事業状況把握 5時間 → 30分', href: '/service/sample-executive', icon: 'fa-user-tie' },
+  { id: 'role-board', tag: 'FOR BOARD MEMBERS', title: '取締役・役員向けAI意思決定支援', shortTitle: '取締役・役員向け', summary: '取締役会・経営会議の論点整理と数値ブリーフィングをAIで自動化', metric: '会議準備 3時間 → 20分', href: '/service/sample-board', comingSoon: true, icon: 'fa-chess-king' },
+  { id: 'role-manager', tag: 'FOR MANAGERS', title: '管理職・マネージャー向けAI業務支援', shortTitle: '管理職向け', summary: 'メンバー稼働把握・週次レポート・1on1準備をAIエージェントに委譲', metric: 'マネジメント工数 月15時間削減', href: '/service/sample-manager', comingSoon: true, icon: 'fa-users-gear' },
+  { id: 'role-staff', tag: 'FOR STAFF', title: '一般社員・実務担当者向けAI業務効率化', shortTitle: '一般社員・担当者向け', summary: '日々の繰り返し業務をAIに任せ、本来集中すべき業務に時間を取り戻す', metric: '定型業務 月20時間削減', href: '/service/sample-staff', comingSoon: true, icon: 'fa-user-gear' },
+  { id: 'role-backoffice', tag: 'FOR BACK-OFFICE', title: 'バックオフィス（経理・労務・総務）向けAI業務自動化', shortTitle: 'バックオフィス向け', summary: '請求書処理・経費精算・勤怠集計・社内問い合わせ対応をAIで一気通貫化', metric: '月次締め作業 50% 削減', href: '/service/sample-backoffice', comingSoon: true, icon: 'fa-building-columns' },
 ];
 
 const totalCount = commonCases.length + industries.length + roles.length;
@@ -149,7 +155,7 @@ const totalCount = commonCases.length + industries.length + roles.length;
             <span class="ax-tab-count">{industries.length}</span>
           </button>
           <button class="ax-tab" data-cat="role" role="tab" aria-selected="false">
-            <span class="ax-tab-label">役職別</span>
+            <span class="ax-tab-label">対象者別</span>
             <span class="ax-tab-count">{roles.length}</span>
           </button>
         </div>
@@ -190,16 +196,19 @@ const totalCount = commonCases.length + industries.length + roles.length;
                 </li>
               ))}
             </ul>
-            <!-- 役職別 -->
+            <!-- 対象者別 -->
             <ul class="ax-selector-group hidden" data-cat-group="role">
               {roles.map((r) => (
                 <li>
                   <button class="ax-sel-item ax-sel-item--role" data-id={r.id}>
                     <span class="ax-sel-role-icon">
-                      <i class="fa-solid fa-user-tie"></i>
+                      <i class={`fa-solid ${r.icon ?? 'fa-user-tie'}`}></i>
                     </span>
                     <span class="ax-sel-body">
-                      <span class="ax-sel-title">{r.shortTitle}</span>
+                      <span class="ax-sel-title">
+                        {r.shortTitle}
+                        {r.comingSoon && <span class="ax-coming-soon">近日公開</span>}
+                      </span>
                       <span class="ax-sel-summary">{r.metric}</span>
                     </span>
                     <i class="fa-solid fa-chevron-right ax-sel-chevron"></i>
@@ -258,23 +267,33 @@ const totalCount = commonCases.length + industries.length + roles.length;
                 </a>
               </article>
             ))}
-            <!-- 役職別の詳細 -->
+            <!-- 対象者別の詳細 -->
             {roles.map((r) => (
               <article class="ax-detail-card" data-id={r.id} data-cat="role">
                 <header class="ax-detail-head">
-                  <span class="ax-detail-eyebrow">{r.tag}</span>
-                  <div class="ax-detail-icon ax-detail-icon--role"><i class="fa-solid fa-user-tie"></i></div>
+                  <span class="ax-detail-eyebrow">
+                    {r.tag}
+                    {r.comingSoon && <span class="ax-coming-soon ax-coming-soon--inline">近日公開</span>}
+                  </span>
+                  <div class="ax-detail-icon ax-detail-icon--role"><i class={`fa-solid ${r.icon ?? 'fa-user-tie'}`}></i></div>
                   <h2 class="ax-detail-title">{r.title}</h2>
                 </header>
-                <p class="ax-detail-desc">{r.summary}。準備時間ほぼゼロ、社員に負荷をかけずに会社の現実を毎日把握できる仕組みです。具体的な運用イメージ・導入ロードマップ・ROI試算はサンプルページでご覧いただけます。</p>
+                <p class="ax-detail-desc">{r.summary}。具体的な運用イメージ・導入ロードマップ・ROI試算はサンプルページでご覧いただけます。</p>
                 <div class="ax-detail-metric">
                   <span class="ax-metric-label">想定効果</span>
                   <span class="ax-metric-value">{r.metric}</span>
                 </div>
-                <a href={r.href} class="btn-primary ax-detail-cta">
-                  サンプルページを見る
-                  <i class="fa-solid fa-arrow-right"></i>
-                </a>
+                {r.comingSoon ? (
+                  <a href="/free-diagnosis" class="btn-secondary ax-detail-cta">
+                    サンプル準備中 — まずは無料診断で個別提案
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                ) : (
+                  <a href={r.href} class="btn-primary ax-detail-cta">
+                    サンプルページを見る
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                )}
               </article>
             ))}
           </div>
@@ -574,6 +593,28 @@ const totalCount = commonCases.length + industries.length + roles.length;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+  .ax-coming-soon {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #b45309;
+    background: #fef3c7;
+    border: 1px solid #fde68a;
+    border-radius: 999px;
+    vertical-align: middle;
+    -webkit-line-clamp: initial;
+  }
+  .ax-coming-soon--inline {
+    margin-left: 10px;
+    color: #b45309;
+    background: #fef3c7;
+    border-color: #fde68a;
+    text-transform: none;
+    letter-spacing: 0.05em;
   }
   .ax-sel-summary {
     font-size: .75rem;
