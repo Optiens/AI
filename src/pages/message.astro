@@ -102,77 +102,65 @@ import founderPhoto from '../assets/founder.jpg?url';
           <h2 class="ceo-title">代表メッセージ</h2>
         </header>
 
-        <div class="ceo-intro">
-          <div class="ceo-portrait">
-            <img src={founderPhoto} alt="髙橋 大地（合同会社Optiens 代表社員）" loading="lazy" />
+        <article class="ceo-intro">
+          <header class="ceo-intro-head">
+            <div class="ceo-portrait">
+              <img src={founderPhoto} alt="髙橋 大地（合同会社Optiens 代表社員）" loading="lazy" />
+            </div>
+            <div class="ceo-meta">
+              <p class="ceo-meta-name">髙橋 大地</p>
+              <p class="ceo-meta-role">合同会社Optiens 代表社員</p>
+            </div>
+          </header>
+
+          <div class="ceo-chapters">
+
+            <section class="ceo-chapter">
+              <div class="ceo-chapter-mark">
+                <span class="ceo-chapter-num">01</span>
+                <div class="ceo-chapter-rule"></div>
+                <span class="ceo-chapter-en">Forward</span>
+              </div>
+              <h3 class="ceo-chapter-title">これから</h3>
+              <div class="ceo-chapter-body">
+                <p>
+                  AIエージェントの台頭で、業務の在り方そのものが変わろうとしています。
+                  チャットに答えるだけでなく、業務を自律的にこなすAIが実用段階に到達した今、
+                  <strong>「AIに何を任せ、人は何に集中するか」</strong>を設計し直すタイミングです。
+                </p>
+                <p>
+                  定型業務をAIに任せ、判断と創造という、人間にしか出来ない仕事に時間を取り戻す。
+                  その仕組みづくりを、御社のペースで一緒に進めさせてください。
+                </p>
+              </div>
+            </section>
+
+            <section class="ceo-chapter ceo-chapter--alt">
+              <div class="ceo-chapter-mark">
+                <span class="ceo-chapter-num">02</span>
+                <div class="ceo-chapter-rule"></div>
+                <span class="ceo-chapter-en">Background</span>
+              </div>
+              <h3 class="ceo-chapter-title">これまでの経験</h3>
+              <div class="ceo-chapter-body">
+                <p>
+                  Optiensは、エンタープライズ向け大規模CRMの設計・開発に
+                  <strong>10年以上従事してきた経験</strong>を、
+                  小規模事業者の現場で動く形に翻訳します。
+                </p>
+                <p>
+                  「業務をAIに合わせる」のではなく、
+                  <strong>「AIを御社の業務に合わせる」</strong>。
+                  これが、私たちが一貫して大切にしている設計の姿勢です。
+                </p>
+              </div>
+            </section>
+
           </div>
-          <div class="ceo-meta">
-            <p class="ceo-meta-name">髙橋 大地</p>
-            <p class="ceo-meta-role">合同会社Optiens 代表社員</p>
-            <p class="ceo-meta-en">Daichi Takahashi / CEO</p>
-            <ul class="ceo-meta-tags">
-              <li>エンタープライズCRM 10年+</li>
-              <li>北杜市拠点</li>
-              <li>全国オンライン対応</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="ceo-chapters">
-
-          <article class="ceo-chapter">
-            <div class="ceo-chapter-mark">
-              <span class="ceo-chapter-num">01</span>
-              <div class="ceo-chapter-rule"></div>
-              <span class="ceo-chapter-en">Forward</span>
-            </div>
-            <h3 class="ceo-chapter-title">これから</h3>
-            <div class="ceo-chapter-body">
-              <p>
-                AIエージェントの台頭で、業務の在り方そのものが変わろうとしています。
-                チャットに答えるだけでなく、業務を自律的にこなすAIが実用段階に到達した今、
-                <strong>「AIに何を任せ、人は何に集中するか」</strong>を設計し直すタイミングです。
-              </p>
-              <p>
-                定型業務をAIに任せ、判断と創造という、人間にしか出来ない仕事に時間を取り戻す。
-                その仕組みづくりを、御社のペースで一緒に進めさせてください。
-              </p>
-            </div>
-          </article>
-
-          <article class="ceo-chapter ceo-chapter--alt">
-            <div class="ceo-chapter-mark">
-              <span class="ceo-chapter-num">02</span>
-              <div class="ceo-chapter-rule"></div>
-              <span class="ceo-chapter-en">Background</span>
-            </div>
-            <h3 class="ceo-chapter-title">これまでの経験</h3>
-            <div class="ceo-chapter-body">
-              <p>
-                Optiensは、エンタープライズ向け大規模CRMの設計・開発に
-                <strong>10年以上従事してきた経験</strong>を、
-                小規模事業者の現場で動く形に翻訳します。
-              </p>
-              <p>
-                「業務をAIに合わせる」のではなく、
-                <strong>「AIを御社の業務に合わせる」</strong>。
-                これが、私たちが一貫して大切にしている設計の姿勢です。
-              </p>
-            </div>
-          </article>
-
-        </div>
+        </article>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="msg-cta">
-      <div class="container text-center">
-        <h2>御社のAX、第一歩から伴走します</h2>
-        <p>無料AI診断で、業務のどこにAIが効くかをレポートでお届けします。</p>
-        <a href="/free-diagnosis" class="btn-primary msg-cta-btn">無料AI診断を受ける</a>
-      </div>
-    </section>
   </main>
 </Layout>
 
@@ -450,16 +438,11 @@ import founderPhoto from '../assets/founder.jpg?url';
 
   /* 代表者紹介ブロック */
   .ceo-intro {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: clamp(28px, 4vw, 48px);
-    align-items: center;
-    padding: clamp(32px, 4vw, 48px);
+    padding: clamp(40px, 5vw, 64px) clamp(32px, 5vw, 72px);
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     border: 1px solid #e2e8f0;
-    border-radius: 24px;
-    box-shadow: 0 24px 56px -28px rgba(14, 42, 71, 0.18);
-    margin-bottom: clamp(64px, 9vw, 112px);
+    border-radius: 28px;
+    box-shadow: 0 28px 64px -28px rgba(14, 42, 71, 0.20);
     position: relative;
     overflow: hidden;
   }
@@ -471,6 +454,15 @@ import founderPhoto from '../assets/founder.jpg?url';
     width: 6px;
     height: 100%;
     background: linear-gradient(180deg, var(--brand) 0%, var(--titanium) 60%, #E48A95 100%);
+  }
+  .ceo-intro-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(24px, 4vw, 40px);
+    align-items: center;
+    padding-bottom: clamp(28px, 4vw, 40px);
+    margin-bottom: clamp(36px, 5vw, 56px);
+    border-bottom: 1px solid #e2e8f0;
   }
   .ceo-portrait {
     width: clamp(120px, 16vw, 180px);
@@ -500,43 +492,11 @@ import founderPhoto from '../assets/founder.jpg?url';
     margin: 0 0 4px;
     font-weight: 500;
   }
-  .ceo-meta-en {
-    font-family: 'Inter', 'SF Pro Display', sans-serif;
-    font-size: clamp(0.75rem, 1.1vw, 0.85rem);
-    letter-spacing: 0.18em;
-    color: var(--brand);
-    margin: 0 0 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-  .ceo-meta-tags {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .ceo-meta-tags li {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 12px;
-    font-size: clamp(0.72rem, 1.1vw, 0.8rem);
-    font-weight: 600;
-    color: var(--brand);
-    background: rgba(14, 42, 71, 0.06);
-    border: 1px solid rgba(14, 42, 71, 0.12);
-    border-radius: 999px;
-    letter-spacing: 0.02em;
-  }
-
   /* チャプター（これから / これまでの経験） */
   .ceo-chapters {
     display: flex;
     flex-direction: column;
-    gap: clamp(56px, 8vw, 96px);
-    max-width: 920px;
-    margin: 0 auto;
+    gap: clamp(48px, 7vw, 72px);
   }
   .ceo-chapter {
     position: relative;
@@ -625,15 +585,12 @@ import founderPhoto from '../assets/founder.jpg?url';
   }
 
   @media (max-width: 768px) {
-    .ceo-intro {
+    .ceo-intro-head {
       grid-template-columns: 1fr;
       text-align: center;
     }
     .ceo-portrait {
       margin: 0 auto;
-    }
-    .ceo-meta-tags {
-      justify-content: center;
     }
     .ceo-chapter,
     .ceo-chapter--alt {
