@@ -8,18 +8,10 @@ import Layout from '../layouts/Layout.astro';
   canonical="https://optiens.com/service"
 >
   <main>
-    <!-- ヒーロー -->
-    <section class="ac-hero light-section">
-      <div class="container text-center" style="position:relative;z-index:1;">
-        <h1 class="hero-headline">活用診断 → 導入支援 → 保守 の3ステップで伴走します。</h1>
-        <a href="/free-diagnosis" class="btn-primary hero-cta">無料AI診断を受ける</a>
-      </div>
-    </section>
-
     <!-- サービスメニュー -->
-    <section class="ac-section light-section ac-service-section">
+    <section class="ac-section light-section ac-service-section ac-service-section--top">
       <div class="container">
-        <h2 class="section-title reveal">サービスメニュー</h2>
+        <h1 class="section-title reveal">サービスメニュー</h1>
         <p class="section-sub reveal">活用診断 → 導入支援 → 保守 の3ステップで伴走します。</p>
 
         <div class="service-grid service-grid-3 reveal-stagger">
@@ -211,6 +203,9 @@ import Layout from '../layouts/Layout.astro';
   /* ===== 共通 ===== */
   .ac-section {
     padding: clamp(64px, 10vw, 100px) 0;
+  }
+  .ac-service-section--top {
+    padding-top: clamp(80px, 12vw, 140px);
   }
   .section-title {
     text-align: center;
