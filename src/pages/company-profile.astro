@@ -69,40 +69,72 @@ import Layout from '../layouts/Layout.astro';
     background: #ffffff;
   }
   .cp-container {
-    max-width: 760px;
+    max-width: 920px;
   }
 
   .cp-title {
-    font-size: clamp(1.5rem, 3.4vw, 2rem);
-    font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    font-weight: 800;
     color: var(--heading);
-    margin: 0 0 28px;
-    letter-spacing: -.01em;
+    margin: 0 0 36px;
+    letter-spacing: -0.01em;
+    position: relative;
+    padding-bottom: 18px;
+  }
+  .cp-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 72px;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--brand) 0%, var(--titanium) 60%, var(--sakura) 100%);
   }
 
   /* ===== Table ===== */
   .cp-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px -16px rgba(14, 42, 71, 0.18);
+  }
+  .cp-table tr + tr th,
+  .cp-table tr + tr td {
     border-top: 1px solid var(--border);
   }
   .cp-table th,
   .cp-table td {
-    padding: 16px 18px;
-    border-bottom: 1px solid var(--border);
+    padding: clamp(20px, 2.4vw, 26px) clamp(20px, 2.6vw, 28px);
     text-align: left;
     vertical-align: top;
-    font-size: .92rem;
-    line-height: 1.7;
+    font-size: clamp(1rem, 1.5vw, 1.08rem);
+    line-height: 1.85;
   }
   .cp-table th {
-    width: 32%;
-    color: var(--muted);
-    font-weight: 600;
+    width: 30%;
+    color: var(--brand);
+    font-weight: 700;
     white-space: nowrap;
-    font-size: .85rem;
-    letter-spacing: .02em;
-    background: #fafbfc;
+    font-size: clamp(0.95rem, 1.4vw, 1.02rem);
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, rgba(14, 42, 71, 0.06) 0%, rgba(192, 192, 192, 0.08) 100%);
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .cp-table th::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 22px;
+    bottom: 22px;
+    width: 3px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--brand) 0%, var(--titanium) 100%);
   }
   .cp-table td {
     color: var(--text);
@@ -118,35 +150,48 @@ import Layout from '../layouts/Layout.astro';
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
   }
   .cp-business-list li {
     position: relative;
-    padding-left: 16px;
-    font-size: .92rem;
-    line-height: 1.7;
+    padding-left: 22px;
+    font-size: clamp(0.98rem, 1.5vw, 1.06rem);
+    line-height: 1.85;
     color: var(--text);
   }
   .cp-business-list li::before {
     content: '';
     position: absolute;
-    left: 2px;
-    top: 11px;
-    width: 5px;
-    height: 5px;
+    left: 4px;
+    top: 12px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: var(--brand);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--titanium) 100%);
+    box-shadow: 0 0 0 3px rgba(14, 42, 71, 0.06);
   }
 
   @media (max-width: 768px) {
+    .cp-table {
+      border-radius: 12px;
+    }
+    .cp-table th,
+    .cp-table td {
+      padding: 16px 18px;
+    }
     .cp-table th {
-      width: 38%;
-      font-size: .8rem;
-      padding: 12px 12px;
+      width: 36%;
+      font-size: 0.92rem;
     }
     .cp-table td {
-      font-size: .88rem;
-      padding: 12px 12px;
+      font-size: 0.95rem;
+    }
+    .cp-table th::before {
+      top: 18px;
+      bottom: 18px;
+    }
+    .cp-business-list li {
+      font-size: 0.95rem;
     }
   }
 
