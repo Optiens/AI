@@ -110,6 +110,7 @@ import founderPhoto from '../assets/founder-suit.png?url';
             <div class="ceo-meta">
               <p class="ceo-meta-name">髙橋 大地</p>
               <p class="ceo-meta-role">合同会社Optiens 代表社員</p>
+              <p class="ceo-meta-bio">エンタープライズ向け大規模CRMの設計・開発に10年以上従事</p>
             </div>
           </header>
 
@@ -132,9 +133,8 @@ import founderPhoto from '../assets/founder-suit.png?url';
             <section class="ceo-chapter">
               <div class="ceo-chapter-body">
                 <p>
-                  Optiensは、エンタープライズ向け大規模CRMの設計・開発に
-                  <strong>10年以上従事してきた経験</strong>を、
-                  小規模事業者の現場で動く形に翻訳します。
+                  Optiensは、エンタープライズ向けの設計・開発で培った経験を、
+                  <strong>小規模事業者の現場で動く形に翻訳</strong>します。
                 </p>
                 <p>
                   「業務をAIに合わせる」のではなく、
@@ -465,8 +465,20 @@ import founderPhoto from '../assets/founder-suit.png?url';
   .ceo-meta-role {
     font-size: clamp(0.9rem, 1.4vw, 1rem);
     color: #64748b;
-    margin: 0 0 4px;
+    margin: 0 0 10px;
     font-weight: 500;
+  }
+  .ceo-meta-bio {
+    font-size: clamp(0.82rem, 1.25vw, 0.92rem);
+    color: var(--brand);
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 6px 12px;
+    background: rgba(14, 42, 71, 0.06);
+    border-left: 3px solid var(--brand);
+    border-radius: 4px;
+    display: inline-block;
   }
   /* チャプター（これから / これまでの経験） */
   .ceo-chapters {
