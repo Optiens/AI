@@ -86,7 +86,7 @@ Deno.serve(async (req: Request) => {
 
     // 月次上限チェック
     const { count, error: countErr } = await supabase
-      .from('leads')
+      .from('diagnosis_leads')
       .select('*', { count: 'exact', head: true })
       .in('status', ['completed', 'manual_review'])
       .gte('created_at', getMonthStart())
@@ -120,7 +120,7 @@ Deno.serve(async (req: Request) => {
     await sendReportEmail(lead, slidesUrl)
 
     // Supabase 更新
-    await supabase.from('leads')
+    await supabase.from('diagnosis_leads')
       .update({
         status: 'completed',
         slides_url: slidesUrl,
@@ -383,7 +383,7 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 <p>合同会社Optiensです。<br/>無料AI活用診断のお申し込みありがとうございます。</p>
 <p>診断レポートが完成しましたので、下記URLよりご覧ください。</p>
 <p style="margin:24px 0;">
-  <a href="${slidesUrl}" style="display:inline-block;padding:12px 24px;background:#3D6FA0;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">レポートを開く</a>
+  <a href="${slidesUrl}" style="display:inline-block;padding:12px 24px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">レポートを開く</a>
 </p>
 <p style="font-size:13px;color:#666;">
   ※ レポートは Google Slides で表示されます。スマートフォン・PC のブラウザでご覧いただけます。<br/>
@@ -402,7 +402,7 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 
 // ===== ヘルパー =====
 async function markStatus(leadId: string, status: string) {
-  await supabase.from('leads').update({ status }).eq('id', leadId)
+  await supabase.from('diagnosis_leads').update({ status }).eq('id', leadId)
 }
 
 async function notifyAdmin(subject: string, body: string) {

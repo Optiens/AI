@@ -2,6 +2,15 @@ import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 import { generatePaymentToken } from '../../lib/payment-token'
+import { verifyTurnstile } from '../../lib/turnstile'
+import { checkRateLimit, logSubmission, getMonthlyVerifiedCount } from '../../lib/diagnosis-rate-limit'
+import {
+  generateVerificationToken,
+  buildVerificationUrl,
+  buildVerificationEmailHtml,
+} from '../../lib/diagnosis-verification'
+
+const MONTHLY_DIAGNOSIS_LIMIT = 30  // 無料診断の月次上限
 
 const SITE_URL = (import.meta.env.SITE_URL || 'https://optiens.com').replace(/\/$/, '')
 
@@ -48,17 +57,29 @@ const aiLevelLabels: Record<string, string> = {
   active: '組織的に活用中',
 }
 
-export const POST: APIRoute = async ({ request, redirect }) => {
+export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
   try {
     const form = await request.formData()
 
-    // ---- ハニーポット（botが自動入力するhidden field）----
-    const hp = String(form.get('website') || '')
-    if (hp) return json({ error: 'Bad request' }, 400)
+    // 送信元IP（Cloudflare 経由 or Vercel）
+    const ip =
+      request.headers.get('cf-connecting-ip') ||
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      clientAddress ||
+      'unknown'
+    const userAgent = request.headers.get('user-agent') || ''
 
-    // ---- タイムスタンプチェック（フォーム表示から3秒未満は bot 判定）----
+    // ---- 第1層: ハニーポット ----
+    const hp = String(form.get('website') || '')
+    if (hp) {
+      if (supabase) await logSubmission(supabase, { ip, userAgent, result: 'spam_honeypot' })
+      return json({ error: 'Bad request' }, 400)
+    }
+
+    // ---- 第2層: タイミングチェック ----
     const loadedAt = Number(form.get('_t') || 0)
     if (loadedAt > 0 && Date.now() - loadedAt < 3000) {
+      if (supabase) await logSubmission(supabase, { ip, userAgent, result: 'spam_timing' })
       return json({ error: 'Bad request' }, 400)
     }
 
@@ -97,6 +118,39 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     if (!emailRegex.test(email) || email.length > 254)
       return json({ error: 'メールアドレスの形式が正しくありません' }, 400)
 
+    // ---- 第3層: Cloudflare Turnstile 検証（free planのみ。paidは決済後の処理で別途）----
+    if (plan === 'free') {
+      const turnstileToken = String(form.get('cf-turnstile-response') || '')
+      const tsResult = await verifyTurnstile(turnstileToken, ip)
+      if (!tsResult.success) {
+        if (supabase) await logSubmission(supabase, { ip, email, userAgent, result: 'spam_turnstile' })
+        return json({ error: 'CAPTCHAの確認に失敗しました。再度お試しください。' }, 400)
+      }
+    }
+
+    // ---- 第4層: IPレート制限（free planのみ）----
+    if (plan === 'free' && supabase) {
+      const rl = await checkRateLimit(supabase, ip, { perHour: 1, perDay: 3 })
+      if (!rl.allowed) {
+        await logSubmission(supabase, { ip, email, userAgent, result: 'rate_limited' })
+        const retryHours = rl.retryAfterSeconds ? Math.ceil(rl.retryAfterSeconds / 3600) : 24
+        return json({
+          error: `送信が多すぎます。${retryHours}時間後に再度お試しください。`,
+        }, 429)
+      }
+    }
+
+    // ---- 第5層: 月次上限チェック（free planのみ）----
+    if (plan === 'free' && supabase) {
+      const monthlyCount = await getMonthlyVerifiedCount(supabase)
+      if (monthlyCount >= MONTHLY_DIAGNOSIS_LIMIT) {
+        await logSubmission(supabase, { ip, email, userAgent, result: 'rate_limited' })
+        return json({
+          error: '今月の無料診断枠は終了しました（毎月1日にリセット）。お急ぎの場合は詳細レポート（¥5,500税込）をご検討ください。',
+        }, 429)
+      }
+    }
+
     const industryName = industryLabels[industry] || industry
     const aiLevelName = aiLevelLabels[aiLevel] || aiLevel
     const challengeLabels: Record<string, string> = {
@@ -130,6 +184,9 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     }
     const interestsText = interests.map(i => interestLabels[i] || i).join('、')
 
+    // ---- メール認証トークン生成（free planのみ）----
+    const verificationToken = plan === 'free' ? generateVerificationToken() : null
+
     // ---- Supabase にリード保存 ----
     if (supabase) {
       const { error: dbError } = await supabase.from('diagnosis_leads').insert({
@@ -156,10 +213,17 @@ export const POST: APIRoute = async ({ request, redirect }) => {
         // プラン
         plan,
         amount_jpy: plan === 'paid' ? 5500 : 0,
-        status: plan === 'paid' ? 'pending_payment' : 'new',
+        // ステータス: paid=入金待ち / free=メール認証待ち
+        status: plan === 'paid' ? 'pending_payment' : 'pending_verification',
+        // セキュリティ関連
+        verification_token: verificationToken,
+        submission_ip: ip !== 'unknown' ? ip : null,
       })
       if (dbError) {
         console.error('[free-diagnosis] Supabase error:', dbError)
+      } else if (plan === 'free') {
+        // 送信ログ（成功）
+        await logSubmission(supabase, { ip, email, userAgent, result: 'success' })
       }
     } else {
       console.warn('[free-diagnosis] Supabase not configured, skipping DB insert')
@@ -188,8 +252,8 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     if (resend && MAIL_TO) {
       const htmlBody = `
 <h2>🔍 ${planLabel} AI診断 申し込み</h2>
-<p style="color:${plan === 'paid' ? '#3D6FA0' : '#475569'};font-weight:bold;font-size:14px;">プラン: ${planLabel}${plan === 'paid' ? ' ／ ステータス: 入金待ち（自動検知）' : ''}</p>
-<p style="background:#EEF2FF;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:14px;">申込番号: <strong style="color:#3D6FA0;font-size:16px;">${applicationId}</strong></p>
+<p style="color:${plan === 'paid' ? '#1F3A93' : '#475569'};font-weight:bold;font-size:14px;">プラン: ${planLabel}${plan === 'paid' ? ' ／ ステータス: 入金待ち（自動検知）' : ''}</p>
+<p style="background:#EEF2FF;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:14px;">申込番号: <strong style="color:#1F3A93;font-size:16px;">${applicationId}</strong></p>
 <table style="border-collapse:collapse;font-family:system-ui,sans-serif;">
   <tr><td style="padding:6px 12px;font-weight:bold;">企業・団体名</td><td style="padding:6px 12px;">${escapeHtml(companyName)}</td></tr>
   <tr><td style="padding:6px 12px;font-weight:bold;">ご担当者名</td><td style="padding:6px 12px;">${escapeHtml(personName)}</td></tr>
@@ -255,21 +319,32 @@ ${plan === 'paid' ? `<hr style="margin:20px 0;"/><p style="background:#D1FAE5;pa
     // ---- お客様への自動返信メール ----
     if (resend && MAIL_FROM) {
       try {
-        await resend.emails.send({
-          from: MAIL_FROM,
-          to: email,
-          subject: plan === 'paid'
-            ? `【Optiens】詳細AI診断のお申込ありがとうございます（申込番号: ${applicationId}）`
-            : `【Optiens】無料AI診断のお申込ありがとうございます（申込番号: ${applicationId}）`,
-          text: plan === 'paid' ? buildPaidCustomerEmail(companyName, personName, applicationId, buildNotifyUrl(applicationId)) : buildFreeCustomerEmail(companyName, personName, applicationId),
-          html: plan === 'paid' ? buildPaidCustomerEmailHtml(companyName, personName, applicationId, buildNotifyUrl(applicationId)) : buildFreeCustomerEmailHtml(companyName, personName, applicationId),
-        })
+        if (plan === 'paid') {
+          // 有償版: 入金案内メール
+          await resend.emails.send({
+            from: MAIL_FROM,
+            to: email,
+            subject: `【Optiens】詳細AI診断のお申込ありがとうございます（申込番号: ${applicationId}）`,
+            text: buildPaidCustomerEmail(companyName, personName, applicationId, buildNotifyUrl(applicationId)),
+            html: buildPaidCustomerEmailHtml(companyName, personName, applicationId, buildNotifyUrl(applicationId)),
+          })
+        } else {
+          // 無料版: メール認証リンク（ダブルオプトイン）
+          const verifyUrl = buildVerificationUrl(verificationToken!)
+          await resend.emails.send({
+            from: MAIL_FROM,
+            to: email,
+            subject: `【Optiens】無料AI診断のお申込確認（メールアドレスをご確認ください）`,
+            text: buildFreeVerificationEmailText(companyName, personName, verifyUrl),
+            html: buildVerificationEmailHtml({ companyName, personName, verificationUrl: verifyUrl }),
+          })
+        }
       } catch (mailErr) {
         console.error('[free-diagnosis] Customer auto-reply error:', mailErr)
       }
     }
 
-    return redirect(plan === 'paid' ? `/free-diagnosis-thanks?plan=paid&id=${encodeURIComponent(applicationId)}` : `/free-diagnosis-thanks?id=${encodeURIComponent(applicationId)}`)
+    return redirect(plan === 'paid' ? `/free-diagnosis-thanks?plan=paid&id=${encodeURIComponent(applicationId)}` : `/free-diagnosis-thanks?pending=verify&id=${encodeURIComponent(applicationId)}`)
   } catch (error: any) {
     console.error('[free-diagnosis] error:', error?.message ?? String(error))
     return json({ error: '送信に失敗しました。' }, 500)
@@ -391,7 +466,7 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 <p>合同会社Optiensです。<br/>詳細AI診断（¥5,500・税込）のお申込を受け付けました。</p>
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#3D6FA0;font-weight:bold;">${appId}</td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#1F3A93;font-weight:bold;">${appId}</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">詳細レポート + 60分オンラインMTG</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">ご請求金額</td><td style="padding:8px 14px;"><strong>¥5,500（税込）</strong></td></tr>
 </table>
@@ -439,54 +514,23 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 </div>`
 }
 
-function buildFreeCustomerEmail(companyName: string, personName: string, appId: string): string {
+function buildFreeVerificationEmailText(companyName: string, personName: string, verifyUrl: string): string {
   return `${companyName} ${personName} 様
 
 合同会社Optiensです。
-無料AI診断のお申込を受け付けました。
+無料AI活用診断のお申し込みありがとうございます。
 
-━━━━━━━━━━━━━━━━━━━━━━
-■ 申込番号: ${appId}
-■ ご利用プラン: 無料・簡易版
-■ レポートお届け: 1〜2営業日以内
-━━━━━━━━━━━━━━━━━━━━━━
+下記のURLをクリックしてメールアドレスをご確認ください。
+確認後、レポート作成を開始し、1〜2営業日以内にお届けします。
 
-ご入力いただいた業務情報をもとに、
-あなたの事業に合ったAI活用ポイントをまとめた簡易レポート（2〜3ページ）を
-1〜2営業日以内にメールでお届けします。
+▶ メールアドレスを確認する
+${verifyUrl}
 
-ご不明な点や、より詳しい提案（詳細レポート + 60分MTG ¥5,500税込）をご希望の場合は、
-お気軽に info@optiens.com までご連絡ください。
+※ このリンクは24時間有効です。
+※ お心当たりがない場合は本メールを破棄してください。
 
 合同会社Optiens
 〒407-0301 山梨県北杜市高根町清里3545番地2483
 https://optiens.com
 `
-}
-
-function buildFreeCustomerEmailHtml(companyName: string, personName: string, appId: string): string {
-  const safeCompany = escapeHtml(companyName)
-  const safePerson = escapeHtml(personName)
-  return `<div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
-<p>${safeCompany} ${safePerson} 様</p>
-<p>合同会社Optiensです。<br/>無料AI診断のお申込を受け付けました。</p>
-
-<table style="border-collapse:collapse;width:100%;margin:16px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#3D6FA0;font-weight:bold;">${appId}</td></tr>
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">無料・簡易版</td></tr>
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">レポートお届け</td><td style="padding:8px 14px;">1〜2営業日以内</td></tr>
-</table>
-
-<p>ご入力いただいた業務情報をもとに、あなたの事業に合ったAI活用ポイントをまとめた簡易レポート（2〜3ページ）を1〜2営業日以内にメールでお届けします。</p>
-
-<p style="margin:24px 0 0;padding-top:16px;border-top:1px solid #E2E8F0;font-size:13px;color:#64748b;">
-ご不明な点や、より詳しい提案（詳細レポート + 60分MTG ¥5,500税込）をご希望の場合は、お気軽に <a href="mailto:info@optiens.com">info@optiens.com</a> までご連絡ください。
-</p>
-
-<p style="margin-top:24px;font-size:12px;color:#64748b;">
-合同会社Optiens<br/>
-〒407-0301 山梨県北杜市高根町清里3545番地2483<br/>
-<a href="https://optiens.com">https://optiens.com</a>
-</p>
-</div>`
 }
