@@ -2,6 +2,8 @@
 dist/
 # generated types
 .astro/
+# 一時生成物（PPTX等）
+tmp/
 
 # dependencies
 node_modules/
