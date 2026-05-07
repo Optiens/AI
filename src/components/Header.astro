@@ -2,7 +2,7 @@
 ---
 <header class="main-header">
   <a href="/" class="header-logo-link" aria-label="Optiens トップへ">
-    <img src="/images/optiens-logo.png" alt="Optiens" class="header-logo" width="240" height="64" />
+    <img src="/images/optiens-logo.png" alt="Optiens" class="header-logo" width="1376" height="484" />
   </a>
 
   <nav class="desktop-nav">
@@ -78,9 +78,10 @@
 }
 .header-logo {
   height: 44px;
+  width: auto;
   max-width: none;
   display: block;
-  /* webm版は alpha チャンネル付き（chromakey で白を透明化済） */
+  object-fit: contain;
 }
 
 @media (min-width: 769px) {
@@ -198,7 +199,7 @@
     padding: 8px 16px;
   }
   .header-logo-link { position: static; display: block; }
-  .header-logo { height: 36px; }
+  .header-logo { height: 36px; width: auto; }
 
   .menu-button {
     position: static;

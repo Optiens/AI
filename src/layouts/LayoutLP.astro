@@ -73,7 +73,7 @@ const {
 
     <header class="lp-header">
       <a href={homeHref} class="lp-header-logo-link" aria-label="Optiens トップへ">
-        <img src="/images/optiens-logo.png" alt="Optiens" class="lp-header-logo" width="240" height="64" />
+        <img src="/images/optiens-logo.png" alt="Optiens" class="lp-header-logo" width="1376" height="484" />
       </a>
     </header>
 
@@ -125,7 +125,7 @@ const {
     align-items: center;
   }
   .lp-header-logo-link { display: block; }
-  .lp-header-logo { height: 50px; max-width: none; display: block; }
+  .lp-header-logo { height: 50px; width: auto; max-width: none; display: block; object-fit: contain; }
 
   /* LP Header のロゴ上線防止 */
   .lp-header::before {
@@ -142,7 +142,7 @@ const {
 
   @media (max-width: 768px) {
     .lp-header { padding: 8px 16px; }
-    .lp-header-logo { height: 40px; }
+    .lp-header-logo { height: 40px; width: auto; }
   }
 
   /* LP Footer: 最小限 */
