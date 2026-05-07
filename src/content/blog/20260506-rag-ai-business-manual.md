@@ -230,7 +230,7 @@ RAGは、
 
 OptiensではSupabase + pgvectorをベースに、中小企業向けRAGの設計・構築・運用支援を行っています。
 
-- **無料AI活用診断**: 御社の文書資産をヒアリングし、RAG適用範囲とコスト感をレポート化します → [/free-diagnosis](/free-diagnosis)
+- **無料AI活用診断**: フォーム入力をもとに、RAG 適用の方向性とコスト感の目安レンジをレポート化します → [/free-diagnosis](/free-diagnosis)。文書資産の詳細分析と個別 RAG 設計案は [詳細レポート（¥5,500税込）](/free-diagnosis?paid=1) でお届けします
 - **導入支援**: チャンク設計・取り込みパイプライン・社内UIまで一括構築。保守プランで継続運用もサポートします → [/implementation](/implementation)
 
 「マニュアルをAIに読ませたい」と一言いただければ、最小構成での見積もりをお出しします。お気軽にご相談ください。

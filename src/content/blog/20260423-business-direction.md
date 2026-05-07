@@ -3,7 +3,7 @@ title: 'なぜ一人法人でAI支援事業を始めたのか——Optiensの原
 date: '2026-04-08'
 category: 'announcement'
 excerpt: '大手企業向けシステム開発10年超の経験を持つエンジニアが、なぜ山梨県北杜市で一人法人を立ち上げ、小規模事業者向けのAI活用支援を始めたのか。Optiensの原点をお伝えします。'
-image: ''
+image: '/images/blog/20260423-business-direction.webp'
 ---
 
 ## 「AIって便利らしいけど、うちには関係ないよね？」
