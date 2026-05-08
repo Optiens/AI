@@ -158,10 +158,7 @@ const totalCount = commonCases.length + industries.length + roles.length;
             <ul class="ax-selector-group" data-cat-group="common">
               {commonCases.map((c, idx) => (
                 <li>
-                  <button class={`ax-sel-item ${idx === 0 ? 'active' : ''}`} data-id={c.id}>
-                    <span class="ax-sel-thumb ax-sel-thumb--common">
-                      <img src={`/images/common-cases/${c.id}.webp`} alt="" loading="lazy" />
-                    </span>
+                  <button class={`ax-sel-item ax-sel-item--common-no-icon ${idx === 0 ? 'active' : ''}`} data-id={c.id}>
                     <span class="ax-sel-body">
                       <span class="ax-sel-title">{c.title}</span>
                       <span class="ax-sel-summary">{c.summary}</span>
@@ -216,8 +213,6 @@ const totalCount = commonCases.length + industries.length + roles.length;
             {commonCases.map((c, idx) => (
               <article class={`ax-detail-card ${idx === 0 ? 'active' : ''}`} data-id={c.id} data-cat="common">
                 <header class="ax-detail-head">
-                  <span class="ax-detail-eyebrow">共通 / {c.num}</span>
-                  <div class="ax-detail-icon"><i class={`fa-solid ${c.icon}`}></i></div>
                   <h2 class="ax-detail-title">{c.title}</h2>
                 </header>
                 <p class="ax-detail-desc">{c.desc}</p>
