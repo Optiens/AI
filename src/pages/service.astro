@@ -15,7 +15,9 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="step-flow reveal-stagger">
           <a href="/free-diagnosis" class="step-card">
-            <span class="step-num">01</span>
+            <span class="step-illust" aria-hidden="true">
+              <img src="/images/service/step-01-diagnosis.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
+            </span>
             <h3 class="step-name">AI活用診断</h3>
             <p class="step-desc">業務に AI が効く領域を見極める</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
@@ -24,7 +26,9 @@ import Layout from '../layouts/Layout.astro';
             <i class="fa-solid fa-arrow-right"></i>
           </span>
           <a href="/implementation" class="step-card">
-            <span class="step-num">02</span>
+            <span class="step-illust" aria-hidden="true">
+              <img src="/images/service/step-02-implementation.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
+            </span>
             <h3 class="step-name">導入支援</h3>
             <p class="step-desc">御社専用の仕組みを設計・構築</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
@@ -33,7 +37,9 @@ import Layout from '../layouts/Layout.astro';
             <i class="fa-solid fa-arrow-right"></i>
           </span>
           <a href="/maintenance" class="step-card">
-            <span class="step-num">03</span>
+            <span class="step-illust" aria-hidden="true">
+              <img src="/images/service/step-03-maintenance.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
+            </span>
             <h3 class="step-name">保守</h3>
             <p class="step-desc">月額制で継続的に改善</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
@@ -276,15 +282,21 @@ import Layout from '../layouts/Layout.astro';
   .step-card:hover::before {
     transform: scale(1.15);
   }
-  .step-num {
-    display: inline-block;
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(2.4rem, 4.5vw, 3rem);
-    font-weight: 800;
-    line-height: 1;
-    color: #1F3A93;
-    letter-spacing: -.02em;
-    margin-bottom: 16px;
+  .step-illust {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(80px, 9vw, 110px);
+    height: clamp(80px, 9vw, 110px);
+    margin-bottom: 18px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(31, 58, 147, 0.06) 0%, rgba(228, 138, 149, 0.06) 100%);
+  }
+  .step-illust img {
+    width: 88%;
+    height: 88%;
+    object-fit: contain;
+    display: block;
   }
   .step-name {
     font-size: clamp(1.25rem, 2.4vw, 1.5rem);
