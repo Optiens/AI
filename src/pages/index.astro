@@ -80,6 +80,9 @@ const homeSchema = [
         <h2 class="home-section-heading home-section-heading--center">
           AXで業務を再設計しませんか？
         </h2>
+        <p class="home-ax-note">
+          <strong>AX</strong>（AI Transformation）— 業務プロセスを AI が理解できる形に再設計し、人と AI が協働する仕組みへ移行する取り組み。DX の次のフェーズとして注目されています。
+        </p>
 
         <div class="home-service-cta">
           <a href="/service" class="home-service-btn home-service-btn--primary">
@@ -96,12 +99,11 @@ const homeSchema = [
     <section class="home-why-section light-section">
       <div class="container">
         <h2 class="home-section-heading home-section-heading--center">なぜ、いまAIなのか</h2>
-        <p class="home-why-lead">低コストで自動化できる時代がきています。</p>
         <div class="home-why-grid">
           <div class="home-why-item">
             <span class="home-why-num">01</span>
             <h3>AIエージェントの台頭で、業務の在り方が変わる</h3>
-            <p>チャットに答えるだけでなく、業務を自律的にこなす<strong>AIエージェント</strong>が実用段階に到達しました。業務プロセスをAIが理解できる形に<strong>最適化</strong>することが、これからの設計思想です。</p>
+            <p>質問に答えるだけでなく、業務を自律的にこなす<strong>AIエージェント</strong>が実用段階に到達しました。業務プロセスをAIが理解できる形に<strong>最適化</strong>することが、これからの設計思想です。</p>
           </div>
           <div class="home-why-item">
             <span class="home-why-num">02</span>
@@ -264,6 +266,20 @@ const homeSchema = [
   letter-spacing: .01em;
 }
 
+.home-ax-note {
+  text-align: center;
+  font-size: clamp(12px, 1.2vw, 13px);
+  line-height: 1.8;
+  color: var(--muted, #64748b);
+  margin: -16px auto clamp(28px, 4vw, 36px);
+  max-width: 720px;
+  letter-spacing: .01em;
+}
+.home-ax-note strong {
+  color: var(--home-brand, #1F3A93);
+  font-weight: 700;
+}
+
 .home-lead {
   font-size: clamp(15px, 1.7vw, 17px);
   line-height: 1.9;
@@ -305,10 +321,10 @@ const homeSchema = [
   max-width: 100%;
   margin: 0 auto;
   padding: clamp(28px, 4vw, 48px) clamp(28px, 4vw, 56px);
-  background: rgba(255, 255, 255, 0.32);
-  backdrop-filter: blur(16px) saturate(125%);
-  -webkit-backdrop-filter: blur(16px) saturate(125%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 24px;
   box-shadow: 0 24px 60px -20px rgba(15, 23, 42, 0.18);
 }

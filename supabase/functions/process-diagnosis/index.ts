@@ -84,6 +84,14 @@ Deno.serve(async (req: Request) => {
       return new Response('Invalid payload', { status: 400 })
     }
 
+    // status === 'verified' のみ処理（誤発火防止）
+    if (lead.status !== 'verified') {
+      return new Response(`Skip: status is "${lead.status}" (only "verified" is processed)`, { status: 200 })
+    }
+
+    // processing にロック（再入防止）
+    await markStatus(lead.id, 'processing')
+
     // 月次上限チェック
     const { count, error: countErr } = await supabase
       .from('diagnosis_leads')
