@@ -96,31 +96,19 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- 事例集への導線バナー -->
-    <section class="ac-section light-section ac-examples-section" id="samples">
-      <div class="container">
-        <div class="examples-banner reveal">
-          <div class="examples-banner-icon"><i class="fa-solid fa-book-open"></i></div>
-          <div class="examples-banner-text">
-            <h2 class="examples-banner-title">業種別＋経営者向けの実例</h2>
-            <p class="examples-banner-desc">業種別のサンプルレポート、業種を問わず効く共通AI事例、経営者・役員向けAIブリーフィングを公開中。御社に近い業種・近い課題からご覧ください。</p>
-          </div>
-          <a href="/ai-examples" class="btn-primary examples-banner-btn">事例集を見る <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-    </section>
-
-
     <!-- CTA -->
-    <section class="ac-cta-section">
+    <section class="ac-cta-section" id="samples">
       <div class="container text-center">
-        <h2 class="reveal">まずは気軽にご相談ください</h2>
+        <h2 class="reveal">まずは無料の AI 活用診断から</h2>
         <p class="reveal">
           「うちの業務にAIって使えるの？」<br />
           「何から始めればいいか分からない」<br class="pc-only" />
-          そんな状態からで大丈夫です。初回相談は無料です。
+          そんな状態でも大丈夫です。業務をヒアリングし、AI が効く領域を診断レポートにまとめてお渡しします（無料）。
         </p>
-        <a href="/free-diagnosis" class="btn-primary reveal">無料AI診断を受ける</a>
+        <div class="cta-buttons reveal">
+          <a href="/ai-examples" class="btn-secondary">活用事例を見る</a>
+          <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける</a>
+        </div>
       </div>
     </section>
   </main>
@@ -917,68 +905,6 @@ import Layout from '../layouts/Layout.astro';
     .pc-only { display: none; }
   }
 
-  /* ===== Examples banner (link to /ai-examples) ===== */
-  .examples-banner {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    max-width: 880px;
-    margin: 0 auto;
-    padding: 28px 32px;
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: border-color .3s ease, box-shadow .3s ease;
-  }
-  .examples-banner:hover {
-    border-color: var(--border-hover);
-    box-shadow: var(--glow);
-  }
-  .examples-banner-icon {
-    flex-shrink: 0;
-    width: 52px; height: 52px;
-    border-radius: 12px;
-    background: rgba(31, 58, 147, .1);
-    color: var(--brand);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-  }
-  .examples-banner-text { flex: 1; }
-  .examples-banner-title {
-    font-size: 1.1rem;
-    color: var(--heading);
-    margin: 0 0 8px;
-  }
-  .examples-banner-desc {
-    font-size: 0.9rem;
-    line-height: 1.75;
-    color: var(--text);
-    margin: 0;
-  }
-  .examples-banner-btn {
-    flex-shrink: 0;
-    padding: .75rem 1.6rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .examples-banner-btn i {
-    font-size: 0.8rem;
-    transition: transform .2s ease;
-  }
-  .examples-banner-btn:hover i { transform: translateX(3px); }
-  @media (max-width: 720px) {
-    .examples-banner {
-      flex-direction: column;
-      align-items: stretch;
-      text-align: center;
-      padding: 24px;
-    }
-    .examples-banner-icon { margin: 0 auto; }
-  }
-
   /* ===== Custom UI section（左右交互） ===== */
   .custom-stack {
     display: flex;
@@ -1146,5 +1072,30 @@ import Layout from '../layouts/Layout.astro';
     transform: translateY(-1px);
     box-shadow: 0 14px 36px rgba(31, 58, 147, .45);
     filter: none;
+  }
+  .ac-cta-section .cta-buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .ac-cta-section .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 30px;
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--brand);
+    font-size: clamp(14px, 1.5vw, 15px);
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-decoration: none;
+    border: 1px solid var(--brand);
+    transition: background .2s ease, color .2s ease;
+  }
+  .ac-cta-section .btn-secondary:hover {
+    background: var(--brand);
+    color: #fff;
   }
 </style>
