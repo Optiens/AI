@@ -1,3 +1,8 @@
+---
+name: writing-guidelines
+description: Optiens公式文書のトーン・表記・禁止表現・実績語のルールに沿って文章を執筆する。煽り口調・確約表現・Phase A1/H1超えの実績語を使わない
+---
+
 # ライティングスキル — Optiens公式文書標準
 
 ## 文体・トーン

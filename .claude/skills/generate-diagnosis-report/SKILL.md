@@ -1,3 +1,8 @@
+---
+name: generate-diagnosis-report
+description: 無料AI活用診断フォームから受信した企業情報をもとに、診断レポート（Google Slides）を自動生成して納品する
+---
+
 # 無料AI診断レポート生成スキル
 
 フォームから受信した企業情報をもとに、無料AI診断レポートを生成するスキル。

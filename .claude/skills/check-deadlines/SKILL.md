@@ -1,3 +1,8 @@
+---
+name: check-deadlines
+description: Google Tasksから事業関連タスクの期限をチェックし、期限超過・近接タスクをCEOにレポートする
+---
+
 # 期限チェックSkill — /check-deadlines
 
 Google Tasksから事業関連タスクの期限をチェックし、CEOにレポートする。

@@ -1,3 +1,8 @@
+---
+name: write-blog-article
+description: Optiens公式ブログの記事を執筆する。テーマ選定→ファクトチェック→Astro Content Collection形式で記事作成→コミット・プッシュ・デプロイまで一貫実行
+---
+
 # ブログ記事自動生成スキル
 
 このスキルはOptiens公式ブログの記事を自動生成し、デプロイまで行います。

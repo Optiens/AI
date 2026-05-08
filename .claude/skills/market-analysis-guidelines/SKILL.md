@@ -1,3 +1,8 @@
+---
+name: market-analysis-guidelines
+description: Optiens標準の市場分析手法（PEST/5F/SWOT/ユニットエコノミクス）に基づき、市場機会・競合・参入リスクを構造化して分析する
+---
+
 # 市場分析スキル — Optiens用標準手法
 
 ## 分析フレームワーク
