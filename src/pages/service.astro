@@ -8,53 +8,15 @@ import Layout from '../layouts/Layout.astro';
   canonical="https://optiens.com/service"
 >
   <main>
-    <!-- 3ステップ伴走フロー（モダンなビジュアル告知） -->
-    <section class="ac-section light-section ac-service-section ac-service-section--top">
+    <!-- 強み：Optiensの強み（カード並列・アイコンなし） -->
+    <section class="ac-section light-section ac-custom-section ac-service-section--top">
       <div class="container">
-        <p class="step-flow-eyebrow reveal">SERVICE FLOW</p>
-        <h1 class="step-flow-title reveal">3 ステップで伴走します</h1>
-
-        <div class="step-flow reveal-stagger">
-          <a href="/free-diagnosis" class="step-card">
-            <span class="step-num">01</span>
-            <h3 class="step-name">活用診断</h3>
-            <p class="step-desc">業務に AI が効く領域を見極める</p>
-            <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
-          </a>
-          <span class="step-arrow" aria-hidden="true">
-            <i class="fa-solid fa-arrow-right"></i>
-          </span>
-          <a href="/implementation" class="step-card">
-            <span class="step-num">02</span>
-            <h3 class="step-name">導入支援</h3>
-            <p class="step-desc">御社専用の仕組みを設計・構築</p>
-            <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
-          </a>
-          <span class="step-arrow" aria-hidden="true">
-            <i class="fa-solid fa-arrow-right"></i>
-          </span>
-          <a href="/maintenance" class="step-card">
-            <span class="step-num">03</span>
-            <h3 class="step-name">保守</h3>
-            <p class="step-desc">月額制で継続的に改善</p>
-            <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- 強み：Optiensの3つの強み（カード並列） -->
-    <section class="ac-section light-section ac-custom-section">
-      <div class="container">
-        <h2 class="section-title reveal">Optiensの3つの強み</h2>
+        <h1 class="section-title reveal">Optiens の強み</h1>
 
         <div class="strength-grid reveal-stagger">
 
           <!-- 1. エンタープライズの設計思想を、中小事業者の規模で -->
           <article class="strength-card reveal" data-num="01">
-            <div class="strength-card-media">
-              <img src="/images/services/custom-fit.png" alt="エンタープライズの設計思想を中小事業者の規模に最適化" loading="lazy" />
-            </div>
             <span class="strength-card-num">01</span>
             <h3>エンタープライズの設計思想を、御社の規模で</h3>
             <p>代表は大手向けCRM（<strong>Salesforce</strong>）で10年以上、業務動線の設計と運用改善に携わってきました。Optiensは、その設計知見を<strong>中小事業者の規模・予算・人員</strong>に最適化して提供します。汎用<strong>SaaS</strong><small>(Software as a Service：複数の利用企業で同じ画面・機能を共有するクラウド型サービス)</small>では合わせきれない業務動線も、<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>で一から組み上げ、<strong>過剰でも不足でもない、ちょうどいい仕組み</strong>を御社の規模感で設計します。</p>
@@ -62,9 +24,6 @@ import Layout from '../layouts/Layout.astro';
 
           <!-- 2. 買い切り型・御社の資産 -->
           <article class="strength-card reveal" data-num="02">
-            <div class="strength-card-media">
-              <img src="/images/services/asset-ownership.png" alt="買い切り型で御社の資産になる仕組み" loading="lazy" />
-            </div>
             <span class="strength-card-num">02</span>
             <h3>買い切り型で、御社の資産になる</h3>
             <p>納品する仕組みは<strong>買い切り型</strong>の構築費用のみ。利用人数に応じたライセンス料は発生しません。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースをまとめて提供するクラウド基盤)</small>に保管され、CSVエクスポートやダンプでいつでも持ち出せます。<strong>月額の固定支出を抑えたい中小事業者ほど構造的に有利</strong>な契約形態です。</p>
@@ -72,9 +31,6 @@ import Layout from '../layouts/Layout.astro';
 
           <!-- 3. 自分たちで使い、改善してきた運用知見 -->
           <article class="strength-card reveal" data-num="03">
-            <div class="strength-card-media">
-              <img src="/images/services/easy-sharing.png" alt="自社で使い改善し続けてきた運用知見をそのまま提供" loading="lazy" />
-            </div>
             <span class="strength-card-num">03</span>
             <h3>自分たちで使い、改善してきた運用知見</h3>
             <p>Optiens自身が、<strong>AIエージェントを組み合わせた専用の仕組み</strong>で日々の経営を回しています。社内CRM・コンテンツ運用ツール・IoT水耕栽培の管理基盤── どれも自社運用で改善サイクルを回しているため、ご提案は<strong>机上の設計図ではなく、実装と運用の知見</strong>です。<strong>自分が使いたくないものを、お客様にお勧めしない</strong>── それがOptiensのスタンスです。</p>
