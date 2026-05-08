@@ -3,7 +3,7 @@ title: '社内ナレッジ AI ── NotebookLM と Supabase Free、どちらを
 date: '2026-05-08'
 category: 'technology'
 excerpt: '社内ドキュメントを AI に検索させる「ナレッジ AI」を構築するとき、NotebookLM を使う案と Supabase Free + OpenAI で自前構築する案がよく比較されます。本稿では 2026 年 5 月時点での両者の実情を整理し、「事業に乗せられるか」「コストはどう違うか」という実務観点で判断軸を提示します。結論先取り: 個人の調査用なら NotebookLM、事業に乗せるなら Supabase Free 一択です。'
-image: '/images/blog/notebooklm-vs-supabase-knowledge-ai.webp'
+image: '/images/blog/20260508-notebooklm-vs-supabase-knowledge-ai.webp'
 ---
 
 ## 「社内ドキュメントを AI で検索」── 2 つの選択肢

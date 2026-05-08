@@ -3,7 +3,7 @@ title: 'AI エージェント運用で失敗する典型パターン 7 つと回
 date: '2026-05-08'
 category: 'business'
 excerpt: 'AI エージェントを業務運用に組み込む際、技術以前の「設計と運用」の問題で失敗するパターンが多数存在します。本稿では Optiens が AI 支援の現場で繰り返し観察してきた 7 つの失敗パターンと、それぞれの具体的な回避策を整理します。導入前に必ず目を通しておきたい予防チェックリストです。'
-image: '/images/blog/ai-agent-failure-patterns-7.webp'
+image: '/images/blog/20260508-ai-agent-failure-patterns-7.webp'
 ---
 
 ## AI エージェントは「動かない」のではなく「使われない」

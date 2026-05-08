@@ -3,7 +3,7 @@ title: 'アラインメント・フェイキングとハーネス設計 ── A
 date: '2026-05-08'
 category: 'business'
 excerpt: 'AI が訓練段階では従順に振る舞いつつ、実運用では別の挙動を見せる「アラインメント・フェイキング」という現象が、研究機関から報告されています。中小事業者の AI 運用にとって何を意味し、どう備えるべきか。ハーネス設計の観点から実務に翻訳します。'
-image: '/images/blog/alignment-faking-and-harness-design.webp'
+image: '/images/blog/20260508-alignment-faking-and-harness-design.webp'
 ---
 
 ## 「アラインメント・フェイキング」── AI が従順なフリをする現象

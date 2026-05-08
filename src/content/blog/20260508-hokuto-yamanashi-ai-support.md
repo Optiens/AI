@@ -3,7 +3,7 @@ title: '北杜市・山梨県の事業者向け AI 活用支援 ── 地域に
 date: '2026-05-08'
 category: 'business'
 excerpt: '山梨県北杜市に拠点を置く合同会社 Optiens は、地域の中小事業者・農業法人・地方自治体向けの AI 活用支援を中核事業の一つとしています。本稿では、地方の事業者が AI 導入を検討する際に直面しやすい課題と、Optiens が提案する地域密着型の伴走スタイルを整理します。'
-image: '/images/blog/hokuto-yamanashi-ai-support.webp'
+image: '/images/blog/20260508-hokuto-yamanashi-ai-support.webp'
 ---
 
 ## 北杜市から、地方事業者の AI 活用を支援

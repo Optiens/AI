@@ -3,7 +3,7 @@ title: 'AI モデルから「仕事のオペレーティングシステム」へ
 date: '2026-05-08'
 category: 'business'
 excerpt: '2026 年初頭、AI 業界の競争軸は「どのモデルが賢いか」から「どの業務にどう組み込むか（ワークフロー）」へ移行しました。Anthropic が直近で展開する Claude Code・Claude for Work・Claude Design の 3 製品ラインを手掛かりに、業界が「仕事のオペレーティングシステム」を取りに行く戦略を読み解き、中小事業者の経営戦略への含意を整理します。'
-image: '/images/blog/from-ai-model-to-work-os.webp'
+image: '/images/blog/20260508-from-ai-model-to-work-os.webp'
 ---
 
 ## AI モデルの性能競争は終盤、次は「業務組込」

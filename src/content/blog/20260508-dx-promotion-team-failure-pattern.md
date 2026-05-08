@@ -3,7 +3,7 @@ title: 'DX 推進部主導の DX が失敗する理由 ── 中小事業者は
 date: '2026-05-08'
 category: 'business'
 excerpt: 'DX や AI 導入のプロジェクト体制として「DX 推進部・情報システム部主導」が一般化していますが、実務では失敗パターンが目立ちます。原因は業務理解の薄さ、現場との断絶、推進部側の評価軸のズレ。中小事業者が代わりに採用すべき「現場エース主導」の体制論を整理します。'
-image: '/images/blog/dx-promotion-team-failure-pattern.webp'
+image: '/images/blog/20260508-dx-promotion-team-failure-pattern.webp'
 ---
 
 ## 「DX 推進部」主導の DX が、なぜほぼ失敗するのか

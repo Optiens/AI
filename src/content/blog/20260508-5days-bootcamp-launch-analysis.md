@@ -3,7 +3,7 @@ title: '無料セミナー / 5days 型ローンチの構造分析 ── B2B 経
 date: '2026-05-08'
 category: 'business'
 excerpt: '2026 年に入って、AI 関連の「7 日連続コラボ祭り」「5days 無料ブートキャンプ」型のローンチが急増しています。煽り口調や強迫表現の部分は採用すべきではありませんが、その裏側にある集客導線の設計には B2B 経営者が学べる 3 つの普遍的な原理があります。本稿でその構造を分析します。'
-image: '/images/blog/5days-bootcamp-launch-analysis.webp'
+image: '/images/blog/20260508-5days-bootcamp-launch-analysis.webp'
 ---
 
 ## 「煽り口調は採用しない、構造は学ぶ」スタンス

@@ -3,7 +3,7 @@ title: '年商 1 億円の壁を「割算思考」で突破する 5 つの実務
 date: '2026-05-08'
 category: 'business'
 excerpt: '年商 1 億円の壁は「特別な才能」や「奇跡的なヒット」ではなく、5 つの実務原則を地味に押さえることで現実的に突破できる目標です。本稿ではクラウドソーシング企業の創業経営者が実体験で語った 5 原則を、中小事業者の現場視点で再構成します。出発点は「割算で考える」こと。'
-image: '/images/blog/divide-thinking-1oku-breakthrough.webp'
+image: '/images/blog/20260508-divide-thinking-1oku-breakthrough.webp'
 ---
 
 ## 1 億円の壁は「特別な才能」ではなく「実務の積み重ね」で超える

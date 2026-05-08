@@ -3,7 +3,7 @@ title: '「ホワイトカラー初級職の縮小」時代に、中小事業者
 date: '2026-05-08'
 category: 'business'
 excerpt: 'AI 業界の経営トップから、ホワイトカラーの初級職（エントリーレベル）の相当部分が今後数年で大きく縮小し得るという趣旨の発言が繰り返されています。これは大企業だけの話ではありません。中小事業者の経営者が、採用・育成・業務設計をどう変えるべきか、5 つの実務戦略として整理します。'
-image: '/images/blog/white-collar-entry-level-strategy.webp'
+image: '/images/blog/20260508-white-collar-entry-level-strategy.webp'
 ---
 
 ## 「初級職が消える」── 中小事業者には他人事ではない

@@ -3,7 +3,7 @@ title: '「AI 副業ブートキャンプ」乱発時代に、中小経営者が
 date: '2026-05-08'
 category: 'business'
 excerpt: '2026 年に入って、AI 関連の無料セミナー・ブートキャンプ・「○○日で稼げる」系コンテンツが急増しています。経営者として情報を吸収するのは大切ですが、玉石混交の情報を浴び続けると、判断軸そのものが歪みます。本稿では中小事業者の経営者が AI 情報の質を見抜くための 5 つの観点を整理します。'
-image: '/images/blog/ai-info-quality-5-checks.webp'
+image: '/images/blog/20260508-ai-info-quality-5-checks.webp'
 ---
 
 ## 「AI 副業」「AI で稼ぐ」コンテンツが日々量産される時代

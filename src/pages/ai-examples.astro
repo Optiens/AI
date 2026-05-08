@@ -159,7 +159,9 @@ const totalCount = commonCases.length + industries.length + roles.length;
               {commonCases.map((c, idx) => (
                 <li>
                   <button class={`ax-sel-item ${idx === 0 ? 'active' : ''}`} data-id={c.id}>
-                    <span class="ax-sel-num">{c.num}</span>
+                    <span class="ax-sel-thumb ax-sel-thumb--common">
+                      <img src={`/images/common-cases/${c.id}.webp`} alt="" loading="lazy" />
+                    </span>
                     <span class="ax-sel-body">
                       <span class="ax-sel-title">{c.title}</span>
                       <span class="ax-sel-summary">{c.summary}</span>
