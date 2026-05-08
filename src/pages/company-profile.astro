@@ -78,18 +78,6 @@ import Layout from '../layouts/Layout.astro';
     color: var(--heading);
     margin: 0 0 36px;
     letter-spacing: -0.01em;
-    position: relative;
-    padding-bottom: 18px;
-  }
-  .cp-title::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 72px;
-    height: 4px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, var(--brand) 0%, var(--lapis) 60%, var(--sakura) 100%);
   }
 
   /* ===== Table ===== */
@@ -124,17 +112,9 @@ import Layout from '../layouts/Layout.astro';
     letter-spacing: 0.04em;
     background: linear-gradient(135deg, rgba(31, 58, 147, 0.06) 0%, rgba(192, 192, 192, 0.08) 100%);
     border-right: 1px solid var(--border);
-    position: relative;
   }
-  .cp-table th::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 22px;
-    bottom: 22px;
-    width: 3px;
-    border-radius: 2px;
-    background: linear-gradient(180deg, var(--brand) 0%, var(--lapis) 100%);
+  .cp-table th--unused {
+    /* 旧: 左の縦線アクセント。CEO指示で削除 */
   }
   .cp-table td {
     color: var(--text);
@@ -185,10 +165,6 @@ import Layout from '../layouts/Layout.astro';
     }
     .cp-table td {
       font-size: 0.95rem;
-    }
-    .cp-table th::before {
-      top: 18px;
-      bottom: 18px;
     }
     .cp-business-list li {
       font-size: 0.95rem;
