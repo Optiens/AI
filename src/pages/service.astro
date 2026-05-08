@@ -8,53 +8,37 @@ import Layout from '../layouts/Layout.astro';
   canonical="https://optiens.com/service"
 >
   <main>
-    <!-- サービスメニュー -->
+    <!-- 3ステップ伴走フロー（モダンなビジュアル告知） -->
     <section class="ac-section light-section ac-service-section ac-service-section--top">
       <div class="container">
-        <h1 class="section-title reveal">サービスメニュー</h1>
-        <p class="section-sub reveal">活用診断 → 導入支援 → 保守 の3ステップで伴走します。</p>
+        <p class="step-flow-eyebrow reveal">SERVICE FLOW</p>
+        <h1 class="step-flow-title reveal">3 ステップで伴走します</h1>
 
-        <div class="service-stack reveal-stagger">
-
-          <!-- 1. AI活用診断（左画像 / 右説明） -->
-          <a href="/free-diagnosis" class="service-row">
-            <div class="service-row-media">
-              <img src="/images/services/ai-diagnosis.png" alt="AI活用診断" loading="lazy" />
-            </div>
-            <div class="service-row-body">
-              <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">01</span></div>
-              <h3>AI活用診断</h3>
-              <p class="ac-desc">業務にAIがどれだけ効くか、ROI（投資利益率）をレポートでお届けします。<strong>無料版</strong>と<strong>詳細版</strong>の2プランから選択可能。詳細版は<strong>AI事業者ガイドライン（経産省・総務省）整合性チェック</strong>付き。</p>
-              <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
+        <div class="step-flow reveal-stagger">
+          <a href="/free-diagnosis" class="step-card">
+            <span class="step-num">01</span>
+            <h3 class="step-name">活用診断</h3>
+            <p class="step-desc">業務に AI が効く領域を見極める</p>
+            <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
-
-          <!-- 2. 導入支援（左説明 / 右画像） -->
-          <a href="/implementation" class="service-row service-row--reverse">
-            <div class="service-row-media">
-              <img src="/images/services/implementation.png" alt="導入支援" loading="lazy" />
-            </div>
-            <div class="service-row-body">
-              <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">02</span></div>
-              <h3>導入支援</h3>
-              <p class="ac-desc">自動化システムの設計・構築・納品まで対応。御社の業務に合わせた仕組みごとお渡しします。シングルテナント構成で業務動線に沿った専用画面を一から組み上げ、買い切り型で御社の資産としてお渡しします。</p>
-              <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
+          <span class="step-arrow" aria-hidden="true">
+            <i class="fa-solid fa-arrow-right"></i>
+          </span>
+          <a href="/implementation" class="step-card">
+            <span class="step-num">02</span>
+            <h3 class="step-name">導入支援</h3>
+            <p class="step-desc">御社専用の仕組みを設計・構築</p>
+            <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
-
-          <!-- 3. 保守（左画像 / 右説明） -->
-          <a href="/maintenance" class="service-row">
-            <div class="service-row-media">
-              <img src="/images/services/maintenance.png" alt="保守" loading="lazy" />
-            </div>
-            <div class="service-row-body">
-              <div class="ac-badge"><span class="ac-badge-label">STEP</span><span class="ac-badge-num">03</span></div>
-              <h3>保守</h3>
-              <p class="ac-desc">導入後の機能追加・トラブル対応・新規業務の自動化を月額制で継続サポート。<strong>ライト</strong>と<strong>スタンダード</strong>の2プラン。導入したまま放置にならず、改善のサイクルが回り続ける運用体制をご提供します。</p>
-              <span class="ac-service-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
+          <span class="step-arrow" aria-hidden="true">
+            <i class="fa-solid fa-arrow-right"></i>
+          </span>
+          <a href="/maintenance" class="step-card">
+            <span class="step-num">03</span>
+            <h3 class="step-name">保守</h3>
+            <p class="step-desc">月額制で継続的に改善</p>
+            <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
-
         </div>
       </div>
     </section>
@@ -217,6 +201,136 @@ import Layout from '../layouts/Layout.astro';
     color: var(--muted);
     font-size: 0.95rem;
     margin-bottom: 40px;
+  }
+
+  /* ===== モダン3ステップフロー ===== */
+  .step-flow-eyebrow {
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: .25em;
+    color: #1F3A93;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+  }
+  .step-flow-title {
+    text-align: center;
+    font-size: clamp(1.6rem, 3.6vw, 2.2rem);
+    font-weight: 800;
+    color: var(--heading);
+    margin: 0 0 clamp(40px, 5vw, 56px);
+    letter-spacing: -.01em;
+  }
+  .step-flow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(12px, 2vw, 20px);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .step-card {
+    flex: 1 1 260px;
+    max-width: 320px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(28px, 3.5vw, 40px) clamp(24px, 3vw, 32px);
+    border-radius: 24px;
+    background:
+      linear-gradient(135deg, rgba(31, 58, 147, 0.04) 0%, rgba(255, 255, 255, 0) 50%, rgba(228, 138, 149, 0.05) 100%),
+      #ffffff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 20px 40px -28px rgba(31, 58, 147, 0.18);
+    overflow: hidden;
+    isolation: isolate;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+  .step-card::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(31, 58, 147, 0.10) 0%, rgba(31, 58, 147, 0) 65%);
+    border-radius: 50%;
+    z-index: -1;
+    pointer-events: none;
+    transition: transform 0.4s ease;
+  }
+  .step-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(31, 58, 147, 0.25);
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 28px 56px -32px rgba(31, 58, 147, 0.30);
+  }
+  .step-card:hover::before {
+    transform: scale(1.15);
+  }
+  .step-num {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2.4rem, 4.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1;
+    color: #1F3A93;
+    letter-spacing: -.02em;
+    margin-bottom: 16px;
+  }
+  .step-name {
+    font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 10px;
+    letter-spacing: -.01em;
+  }
+  .step-desc {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.7;
+    margin: 0 0 20px;
+    flex-grow: 1;
+  }
+  .step-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1F3A93;
+    transition: gap 0.25s ease;
+  }
+  .step-card:hover .step-link {
+    gap: 10px;
+  }
+  .step-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(31, 58, 147, 0.45);
+    font-size: 1.25rem;
+    flex: 0 0 auto;
+  }
+  @media (max-width: 768px) {
+    .step-flow {
+      flex-direction: column;
+      align-items: center;
+    }
+    .step-card {
+      width: 100%;
+      max-width: 420px;
+    }
+    .step-arrow {
+      transform: rotate(90deg);
+    }
   }
 
   /* ===== 共通カード ===== */

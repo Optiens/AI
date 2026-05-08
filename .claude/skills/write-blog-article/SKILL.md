@@ -82,8 +82,14 @@ image: '/images/blog/スラッグ名.webp'
 **正規スクリプト**: `scripts/generate-blog-openai.mjs`（gpt-image-2 / OpenAI）
 
 ```bash
-node scripts/generate-blog-openai.mjs "記事テーマに合わせた英語プロンプト" "public/images/blog/スラッグ名.webp"
+node scripts/generate-blog-openai.mjs "記事テーマに合わせた英語プロンプト" "public/images/blog/<記事ファイル名と同じスラッグ>.webp"
 ```
+
+**重要・パス命名ルール**（過去事故の再発防止）:
+- 画像ファイル名は **記事 md のファイル名（拡張子除く）と完全一致** させる
+- 例: `src/content/blog/20260508-foo-bar.md` → `public/images/blog/20260508-foo-bar.webp`
+- frontmatter `image:` も同じパスを書く: `image: '/images/blog/20260508-foo-bar.webp'`
+- 日付プレフィックスを **片方だけ落とす運用は厳禁**（参照不一致で本番表示が壊れる）
 
 仕様:
 - モデル: `gpt-image-2`

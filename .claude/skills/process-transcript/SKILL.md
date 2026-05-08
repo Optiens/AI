@@ -138,8 +138,13 @@ type: reference | feedback | project
 write-blog-article skill の Step 4 と同じ手順:
 
 ```bash
-node scripts/generate-blog-openai.mjs "英語プロンプト" "public/images/blog/<slug>.webp"
+node scripts/generate-blog-openai.mjs "英語プロンプト" "public/images/blog/<記事ファイル名と同一スラッグ>.webp"
 ```
+
+**パス命名ルール**（過去事故の再発防止）:
+- 画像ファイル名は **記事 md のファイル名（拡張子除く）と完全一致** させる
+- frontmatter `image:` も同じパスにする
+- 日付プレフィックスを片方だけ落とす運用は厳禁
 
 - モデル: `gpt-image-2`、サイズ 1536x1024、品質 high
 - `OPENAI_API_KEY` を `.env` から自動読込
