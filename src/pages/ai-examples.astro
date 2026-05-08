@@ -115,8 +115,8 @@ const totalCount = commonCases.length + industries.length + roles.length;
 ---
 
 <Layout
-  title="AI活用事例集 | 業種別11業種 + 共通6パターン | Optiens（中小企業向けAI業務自動化）"
-  description="中小企業・小規模事業者のAI活用事例集。士業・宿泊業・飲食・EC・建設・ワイナリー・アウトドア・ベーカリー・農家・酪農・自治体の11業種別レポートと、業種を問わず効く6つの共通AI自動化パターン、小規模事業者の経営者向けAIブリーフィング。御社に近い業種・課題からご覧ください。"
+  title={`AI活用事例集 | 業種別${industries.length}業種 + 共通${commonCases.length}パターン | Optiens（中小企業向けAI業務自動化）`}
+  description={`中小企業・小規模事業者のAI活用事例集。${industries.map(i => i.shortTitle).join('・')}の${industries.length}業種別レポートと、業種を問わず効く${commonCases.length}つの共通AI自動化パターン、小規模事業者の経営者向けAIブリーフィング。御社に近い業種・課題からご覧ください。`}
   canonical="https://optiens.com/ai-examples"
 >
   <main>
