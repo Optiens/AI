@@ -564,18 +564,18 @@ function addProposalSlide(slideNum, eyebrowText, titleText, startIdx, count) {
   addTitle(slide, 'コスト試算（フェーズ別）');
   addGradientLine(slide, 2.15);
 
-  // 3列: 初期 / ランニング / スケール時
+  // 2列: 初期費用 / ランニング （スケール時は提案フェーズ外のため除外）
   const phases = [
-    { label: '初期費用', sub: '導入時', key: 'init', color: COLORS.lapis },
+    { label: '初期費用', sub: '導入時（カスタム開発・バッファ込み）', key: 'init', color: COLORS.lapis },
     { label: 'ランニング', sub: '月額', key: 'monthly', color: COLORS.lapisLight },
-    { label: 'スケール時', sub: '月間1万件処理時', key: 'scale', color: COLORS.sakura },
   ];
 
-  const colW = 4.0;
+  const colW = 5.6;
   const colY = 2.65;
   const colH = 4.05;
-  const startX = 0.65;
-  const gap = 0.2;
+  const totalW = colW * phases.length + 0.3 * (phases.length - 1);
+  const startX = (W - totalW) / 2;
+  const gap = 0.3;
 
   phases.forEach((p, i) => {
     const x = startX + (colW + gap) * i;
@@ -587,30 +587,30 @@ function addProposalSlide(slideNum, eyebrowText, titleText, startIdx, count) {
       rectRadius: 0.15,
     });
     slide.addShape('rect', {
-      x, y: colY, w: colW, h: 0.6,
+      x, y: colY, w: colW, h: 0.75,
       fill: { color: p.color }, line: { width: 0 },
     });
     slide.addText(p.label, {
-      x: x + 0.2, y: colY + 0.05, w: colW - 0.4, h: 0.3,
-      fontSize: 14, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'top',
+      x: x + 0.25, y: colY + 0.05, w: colW - 0.5, h: 0.4,
+      fontSize: 20, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'top',
     });
     slide.addText(p.sub, {
-      x: x + 0.2, y: colY + 0.32, w: colW - 0.4, h: 0.25,
-      fontSize: 10, color: COLORS.white, fontFace: FONT_JP, valign: 'top',
+      x: x + 0.25, y: colY + 0.42, w: colW - 0.5, h: 0.3,
+      fontSize: 13, color: COLORS.white, fontFace: FONT_JP, valign: 'top',
     });
-    // 大金額
+    // 大金額（拡大）
     slide.addText(`{{paid_cost_${p.key}_total}}`, {
-      x: x + 0.2, y: colY + 0.75, w: colW - 0.4, h: 0.6,
-      fontSize: 22, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
+      x: x + 0.25, y: colY + 0.95, w: colW - 0.5, h: 0.85,
+      fontSize: 32, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
     });
-    // 内訳
+    // 内訳（拡大）
     slide.addText(`{{paid_cost_${p.key}_breakdown}}`, {
-      x: x + 0.2, y: colY + 1.45, w: colW - 0.4, h: 2.4,
-      fontSize: 10, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+      x: x + 0.3, y: colY + 1.95, w: colW - 0.6, h: 2.0,
+      fontSize: 14, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
     });
   });
 
-  addFooterNote(slide, '※ 具体的サービス名は構成により変動します');
+  addFooterNote(slide, '※ 初期費用は工数ベース＋バッファを含む概算。サービス構成により変動します');
 }
 
 // =================================================

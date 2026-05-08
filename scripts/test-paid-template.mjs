@@ -27,7 +27,7 @@ try {
   });
 } catch {}
 
-const TEMPLATE_ID = '1fjfYjM2S7ScrYYZdc-ydrU4h22uQlvgd';
+const TEMPLATE_ID = '1qsP-lL2yCRMVUdIQw4Y1ARlJ_e_rAqlV5Myfuf-83hI';
 const OUTPUT_FOLDER_ID = '0AP-9nfOx7k3HUk9PVA';
 const SA_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 const SA_PRIVATE_KEY = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n');
@@ -135,13 +135,12 @@ const SAMPLE = {
     ])
   ),
 
-  // コスト
-  paid_cost_init_total: '¥450,000',
-  paid_cost_init_breakdown: '・初期設定: ¥150,000\n・データ移行: ¥80,000\n・テンプレ開発: ¥120,000\n・教育研修: ¥100,000',
+  // コスト（2列構成: 初期 / ランニング。スケール時は提案フェーズ外のため除外）
+  // 初期費用は純工数の約1.7倍（バッファ込み）。要件定義・データ移行・テンプレ実装をカスタム開発として一括計上
+  paid_cost_init_total: '¥600,000',
+  paid_cost_init_breakdown: '・カスタム開発: ¥600,000\n  （要件定義・データ移行・テンプレ実装含む）\n  ※ 工数ベース ¥350,000 × 1.7（バッファ込み）',
   paid_cost_monthly_total: '¥18,000〜25,000',
   paid_cost_monthly_breakdown: '・データベース: ¥3,000\n・API利用: ¥8,000-12,000\n・クラウドサービス: ¥4,000\n・監視・運用: ¥3,000-6,000',
-  paid_cost_scale_total: '¥45,000〜60,000',
-  paid_cost_scale_breakdown: '・データベース増強: ¥8,000\n・API利用拡大: ¥25,000-35,000\n・追加サービス: ¥7,000-10,000\n・監視拡張: ¥5,000-7,000',
 
   // ベンダー比較
   ...Object.fromEntries(
