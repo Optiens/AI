@@ -66,7 +66,7 @@ const homeSchema = [
         <div class="hero-text-block">
           <p class="hero-eyebrow">NEXT STEP WITH AI</p>
           <h1 class="hero-title">
-            MAKE AI NATIVE<br/>
+            MAKE <span class="hero-title-accent">AI</span> NATIVE<br/>
             TO YOUR BUSINESS.
           </h1>
           <p class="hero-sub">判断と創造に集中できる経営へ。</p>
@@ -119,31 +119,19 @@ const homeSchema = [
       </div>
     </section>
 
-    <!-- ===== 中小企業にAXはなぜ大切か ===== -->
+    <!-- ===== なぜ、中小企業にAXか ===== -->
     <section class="home-ax-section light-section">
       <div class="container">
-        <h2 class="home-section-heading home-section-heading--center">中小企業にAXはなぜ大切か</h2>
-        <p class="home-lead home-ax-lead">
-          大企業と比べて人手や資金が限られている中小企業では、<br class="pc-only" />
-          毎日の業務を効率よく進める工夫が必要です。<br />
-          AXは、従来の業務を根本から変革および高度化するため、<br class="pc-only" />
-          限られたリソースの中でも成果を出すための効果的な手段になります。
-        </p>
-        <div class="home-ax-grid">
-          <div class="home-ax-card">
-            <div class="home-ax-icon"><i class="fa-solid fa-comments"></i></div>
-            <h3>問い合わせ対応の自動化</h3>
-            <p>顧客からの問い合わせが多い企業では、AIチャットボットを導入することで、よくある質問への対応を自動化できます。負担軽減により、担当者は個別対応や改善施策に集中できます。</p>
+        <h2 class="home-section-heading home-section-heading--center">なぜ、中小企業にAXか</h2>
+        <div class="home-ax-flow">
+          <div class="home-ax-flow-card home-ax-flow-card--issue">
+            <div class="home-ax-flow-label">中小企業の現実</div>
+            <p>大企業と比べて<strong>人手や資金が限られる</strong>中小企業では、毎日の業務を効率よく進める工夫が常に求められます。</p>
           </div>
-          <div class="home-ax-card">
-            <div class="home-ax-icon"><i class="fa-solid fa-receipt"></i></div>
-            <h3>事務作業の自動処理</h3>
-            <p>経費精算や勤怠管理などもAIを使って自動処理することで、事務作業にかかる時間を削減できます。本来やるべき業務に時間を取り戻せます。</p>
-          </div>
-          <div class="home-ax-card">
-            <div class="home-ax-icon"><i class="fa-solid fa-chart-line"></i></div>
-            <h3>データに基づく経営判断</h3>
-            <p>売上データや在庫情報をAIで分析すれば、「どの商品がよく売れているか」「どの時間帯に顧客が多いか」を視覚的に把握。経験や勘に頼らず、数字に基づく予測や判断ができます。</p>
+          <div class="home-ax-flow-arrow" aria-hidden="true">→</div>
+          <div class="home-ax-flow-card home-ax-flow-card--solution">
+            <div class="home-ax-flow-label">AXがもたらす変化</div>
+            <p>AXは従来の業務を<strong>根本から変革・高度化</strong>するため、限られたリソースの中でも成果を出す効果的な手段になります。</p>
           </div>
         </div>
       </div>
@@ -183,7 +171,7 @@ const homeSchema = [
           「うちの業務にAIって使えるの？」<br/>
           「何から始めればいいか分からない」<br/>
           そんな状態からで大丈夫です。<br class="pc-only" />
-          フォーム入力だけで、御社向けの簡易レポートをお届けします。
+          フォーム入力だけで、御社専用の簡易レポートをお届けします。
         </p>
         <div class="final-cta-row reveal">
           <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける</a>
@@ -347,6 +335,9 @@ const homeSchema = [
   margin: 0 0 1rem;
   text-align: left;
 }
+.home-hero .hero-title-accent {
+  color: #E48A95;
+}
 .home-hero .hero-sub {
   font-size: clamp(15px, 2vw, 18px);
   color: #0f172a;
@@ -504,80 +495,80 @@ const homeSchema = [
 }
 
 /* =========================================================
-   中小企業にAXはなぜ大切か
+   なぜ、中小企業にAXか（課題→解決の2カードフロー）
    ========================================================= */
 .home-ax-section {
   padding: clamp(60px, 8vw, 100px) 20px;
   background: var(--home-surface);
 }
-.home-ax-lead {
-  margin-bottom: clamp(36px, 5vw, 56px) !important;
-}
-.home-ax-grid {
+.home-ax-flow {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  max-width: 1100px;
-  margin: 0 auto clamp(36px, 5vw, 56px);
+  grid-template-columns: 1fr auto 1fr;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: stretch;
+  max-width: 1080px;
+  margin: clamp(36px, 5vw, 48px) auto 0;
 }
-.home-ax-card {
-  background: linear-gradient(180deg, var(--home-surface-2) 0%, #fff 100%);
+.home-ax-flow-card {
+  position: relative;
+  padding: clamp(28px, 3.5vw, 40px) clamp(24px, 3vw, 36px);
+  border-radius: 20px;
+  background: linear-gradient(180deg, #ffffff 0%, var(--home-surface-2) 100%);
   border: 1px solid var(--home-border);
-  border-radius: 18px;
-  padding: clamp(32px, 4vw, 44px) clamp(24px, 3vw, 32px);
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 8px 24px -16px rgba(15, 23, 42, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.home-ax-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 44px -22px rgba(31, 58, 147, 0.32);
-  border-color: rgba(31, 58, 147, 0.18);
+.home-ax-flow-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px -20px rgba(31, 58, 147, 0.28);
 }
-.home-ax-icon {
-  width: clamp(96px, 11vw, 120px);
-  height: clamp(96px, 11vw, 120px);
-  margin: 0 auto clamp(20px, 2.5vw, 28px);
-  border-radius: 26px;
-  background: linear-gradient(135deg, #152870 0%, #1F3A93 50%, #6B85C9 100%);
+.home-ax-flow-card--issue {
+  border-top: 4px solid var(--home-muted, #94a3b8);
+}
+.home-ax-flow-card--solution {
+  border-top: 4px solid #1F3A93;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(31, 58, 147, 0.04) 100%);
+}
+.home-ax-flow-label {
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+.home-ax-flow-card--solution .home-ax-flow-label {
+  color: #1F3A93;
+}
+.home-ax-flow-card p {
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.95;
+  color: var(--home-text);
+  margin: 0;
+}
+.home-ax-flow-card p strong {
+  color: var(--home-heading);
+  font-weight: 700;
+}
+.home-ax-flow-card--solution p strong {
+  color: #1F3A93;
+}
+.home-ax-flow-arrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  font-size: clamp(2.2rem, 3.4vw, 2.8rem);
-  position: relative;
-  box-shadow:
-    0 14px 36px -16px rgba(31, 58, 147, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 300;
+  color: #1F3A93;
+  user-select: none;
 }
-.home-ax-icon::before {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 32px;
-  background: linear-gradient(135deg, rgba(31, 58, 147, 0.08) 0%, rgba(192, 192, 192, 0.06) 100%);
-  z-index: -1;
-}
-.home-ax-card h3 {
-  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
-  font-weight: 700;
-  color: var(--home-heading);
-  margin: 0 0 16px;
-  letter-spacing: 0.01em;
-}
-.home-ax-card p {
-  color: var(--home-text);
-  font-size: 0.9rem;
-  line-height: 1.95;
-  margin: 0;
-  text-align: left;
-}
-.home-ax-closing {
-  text-align: center;
-  color: var(--home-muted);
-  font-size: clamp(13px, 1.5vw, 14px);
-  line-height: 1.95;
-  max-width: 760px;
-  margin: 0 auto;
+@media (max-width: 768px) {
+  .home-ax-flow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .home-ax-flow-arrow {
+    transform: rotate(90deg);
+  }
 }
 
 .home-section-heading-ax {
