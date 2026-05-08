@@ -73,7 +73,7 @@ image: '/images/blog/20260506-ai-agent-vs-chatbot-vs-rag-definition.webp'
 
 | 項目 | 内容 |
 |---|---|
-| 代表例 | Claude Code、AutoGPT、Cursor、社内向けカスタムエージェント |
+| 代表例 | Claude Code、Cursor、Devin、社内向けカスタムエージェント |
 | 主な用途 | 業務フローの実行・複数システムの連携・条件分岐を含む処理 |
 | 業務との接続 | API・データベース・メール・Slack等、複数ツールに接続 |
 | 月額コスト目安 | 30万〜数百万円（業務範囲・実行回数による） |
