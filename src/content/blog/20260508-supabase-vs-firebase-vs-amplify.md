@@ -80,7 +80,7 @@ image: '/images/blog/supabase-vs-firebase-vs-amplify.webp'
 - Firebase は独自仕様の部分があり、移行時の工夫が必要
 - AWS Amplify は AWS エコシステム内での移動は容易、外部移行は設計に依存
 
-**ベンダーロックインを避けたい場合 → Supabase**
+**将来の移行可能性を重視する場合 → Supabase**（標準 PostgreSQL ベースで移行容易）
 
 ### 基準 4: チームの技術スキル
 

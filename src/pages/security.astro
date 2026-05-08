@@ -47,6 +47,19 @@ import Layout from "../layouts/Layout.astro";
                 当社は IPA「SECURITY ACTION 一つ星」を宣言し、中小企業の情報セキュリティ対策ガイドラインに沿った基本対策を実践しています。
             </p>
 
+            <h3>4-1. AI 事業者ガイドラインへの整合性</h3>
+            <p>
+                経済産業省・総務省「AI 事業者ガイドライン」が定める主要 6 観点について、当社は以下のとおり整合的な運用を行っています。
+            </p>
+            <ul>
+                <li><strong>透明性の確保</strong>：生成物に AI 生成である旨を明示し、出典・引用を可能な限り記載します。</li>
+                <li><strong>人間中心の判断</strong>：最終判断は人間が行う体制を維持し、重要な判断を AI 単独で完結させません（Human in the Loop）。</li>
+                <li><strong>プライバシー保護</strong>：個人情報は必要に応じて匿名化・マスキングを行い、学習データへの送信を制御します。</li>
+                <li><strong>セキュリティの確保</strong>：認証・暗号化・監査ログを標準実装し、アクセス制御を徹底します。</li>
+                <li><strong>公平性</strong>：出力品質を継続的に評価し、バイアス検証を定期実施します。</li>
+                <li><strong>アカウンタビリティ</strong>：責任分担を契約書に明記し、インシデント時の連絡フローを整備します。</li>
+            </ul>
+
             <h2>5. 情報資産の管理</h2>
             <ul>
                 <li>機密度に応じて情報資産を分類し、保管・受け渡し・廃棄の方法を定めて運用します。</li>
@@ -63,6 +76,21 @@ import Layout from "../layouts/Layout.astro";
                 <li>お客様の機密情報を生成 AI に入力する場合は、契約および利用規約上の取り扱いを事前に確認し、必要に応じて匿名化・抽象化を行います。</li>
                 <li>AI が生成した提案・成果物は、人による確認（Human in the Loop）を経て納品・公開します。</li>
             </ul>
+
+            <h3>6-1. 認証情報の具体的な管理方法</h3>
+            <p>
+                上記の「環境変数およびシークレット管理機構」とは、以下のような仕組みを指します。
+            </p>
+            <ul>
+                <li><strong>ローカル開発環境</strong>：プロジェクト内の <code>.env</code> ファイルに <code>OPENAI_API_KEY=sk-...</code> の形式で記載し、<code>.gitignore</code> で Git 管理対象外とする運用。リポジトリにはダミー値の <code>.env.example</code> のみを公開し、実値は各端末ローカルで保持します。</li>
+                <li><strong>本番ホスティング環境</strong>：Vercel・Cloudflare 等のホスティングサービスが提供する Environment Variables 機能（暗号化保管・ビルド時注入）を利用します。</li>
+                <li><strong>サーバレス関数・バックエンド</strong>：Supabase Edge Function Secrets（<code>supabase secrets set</code> コマンド）等のクラウド側シークレット機構に登録します。</li>
+                <li><strong>CI/CD パイプライン</strong>：GitHub Actions 等の Repository Secrets に登録し、ワークフロー内では参照のみ可能（ログ出力時はマスキング）とします。</li>
+                <li><strong>禁止行為</strong>：ソースコードへの直接記載、Git へのコミット、チャットツール（Slack 等）・メール・スクリーンショット・AI 支援ツールへの貼り付けによる共有を禁止します。</li>
+            </ul>
+            <p>
+                過去に Firebase API キーの漏洩により高額な不正利用が発生した事例も報じられており、当社では上記運用を徹底することで同種のリスクを抑制しています。
+            </p>
 
             <h2>7. アクセス制御</h2>
             <ul>
@@ -149,6 +177,24 @@ import Layout from "../layouts/Layout.astro";
         padding-left: 12px;
         border-left: 4px solid #1F3A93;
         color: #0f172a;
+    }
+
+    h3 {
+        font-size: 1.1em;
+        font-weight: 700;
+        margin-top: 28px;
+        margin-bottom: 10px;
+        color: #1F3A93;
+    }
+
+    code {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 0.92em;
+        background: #f1f5f9;
+        color: #1F3A93;
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid #e2e8f0;
     }
 
     p, ul {

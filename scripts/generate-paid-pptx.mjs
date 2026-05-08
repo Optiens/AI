@@ -1,5 +1,5 @@
 /**
- * 有償版 詳細レポート PPTX テンプレ v1.0（17スライド）
+ * 有償版 詳細レポート PPTX テンプレ v1.4（18スライド・PoC/AI事業者ガイドライン削除版）
  *
  * 設計書: executive/ai-consulting/有償版_詳細レポート設計書_v1.0.md
  *
@@ -73,7 +73,7 @@ pres.author = 'Optiens';
 
 const W = 13.333;
 const H = 7.5;
-const TOTAL = 17;
+const TOTAL = 18;
 
 // ===== 共通要素 =====
 function addCommonElements(slide, pageNum) {
@@ -192,7 +192,7 @@ function addTitle(slide, text, y = 1.3) {
 }
 
 // =================================================
-// Slide 2: エグゼクティブサマリー（4ボックス）
+// Slide 2: エグゼクティブサマリー（実装施策3つ + 4ボックス）
 // =================================================
 {
   const slide = pres.addSlide();
@@ -202,18 +202,58 @@ function addTitle(slide, text, y = 1.3) {
   addTitle(slide, 'エグゼクティブサマリー');
   addGradientLine(slide, 2.15);
 
-  // 4つの数字ボックス（横並び）
-  const boxW = 3.0;
-  const boxH = 1.7;
-  const boxY = 2.7;
-  const startX = 0.45;
-  const gap = 0.16;
+  // ===== 上段: 実装する3つの施策 =====
+  slide.addText('実装する 3 つの施策', {
+    x: 0.6, y: 2.4, w: 12.1, h: 0.4,
+    fontSize: 14, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+  });
+
+  const initCards = [
+    { num: '01', titleKey: 'paid_initiative_1_title', descKey: 'paid_initiative_1_desc' },
+    { num: '02', titleKey: 'paid_initiative_2_title', descKey: 'paid_initiative_2_desc' },
+    { num: '03', titleKey: 'paid_initiative_3_title', descKey: 'paid_initiative_3_desc' },
+  ];
+
+  const initCardW = 4.06;
+  const initCardH = 1.35;
+  const initCardY = 2.85;
+  const initStartX = 0.45;
+  const initGap = 0.18;
+
+  initCards.forEach((c, i) => {
+    const x = initStartX + (initCardW + initGap) * i;
+    slide.addShape('roundRect', {
+      x, y: initCardY, w: initCardW, h: initCardH,
+      fill: { color: COLORS.cardBg },
+      line: { color: COLORS.lapisLight, width: 1 },
+      rectRadius: 0.1,
+    });
+    slide.addText(c.num, {
+      x: x + 0.2, y: initCardY + 0.1, w: 0.7, h: 0.3,
+      fontSize: 14, color: COLORS.sakura, fontFace: FONT_EN, bold: true,
+    });
+    slide.addText(`{{${c.titleKey}}}`, {
+      x: x + 0.2, y: initCardY + 0.4, w: initCardW - 0.4, h: 0.35,
+      fontSize: 13, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true,
+    });
+    slide.addText(`{{${c.descKey}}}`, {
+      x: x + 0.2, y: initCardY + 0.78, w: initCardW - 0.4, h: 0.5,
+      fontSize: 10, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    });
+  });
+
+  // ===== 下段: 3つの数字ボックス（初期費用は MTG 後の個別見積で別途提示） =====
+  const boxW = 4.0;
+  const boxH = 1.45;
+  const boxY = 4.45;
+  const gap = 0.2;
+  const totalBoxW = boxW * 3 + gap * 2;
+  const startX = (W - totalBoxW) / 2;
 
   const boxes = [
     { label: '月間効果額', value: '¥{{paid_summary_value_yen}}', sub: '想定削減コスト' },
     { label: '月間削減時間', value: '{{paid_summary_hours}} 時間', sub: '従業員工数換算' },
-    { label: '実装期間', value: '{{paid_summary_period}}', sub: '初期PoC〜本番' },
-    { label: '初期費用', value: '¥{{paid_summary_initial}}', sub: '本費用は充当可' },
+    { label: '実装期間', value: '{{paid_summary_period}}', sub: 'STEP 1 + STEP 2 想定' },
   ];
 
   boxes.forEach((b, i) => {
@@ -225,26 +265,26 @@ function addTitle(slide, text, y = 1.3) {
       rectRadius: 0.12,
     });
     slide.addText(b.label, {
-      x: x + 0.2, y: boxY + 0.15, w: boxW - 0.4, h: 0.3,
+      x: x + 0.2, y: boxY + 0.1, w: boxW - 0.4, h: 0.28,
       fontSize: 11, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center',
     });
     slide.addText(b.value, {
-      x: x + 0.2, y: boxY + 0.5, w: boxW - 0.4, h: 0.7,
-      fontSize: 24, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
+      x: x + 0.2, y: boxY + 0.4, w: boxW - 0.4, h: 0.65,
+      fontSize: 22, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
     });
     slide.addText(b.sub, {
-      x: x + 0.2, y: boxY + 1.25, w: boxW - 0.4, h: 0.3,
+      x: x + 0.2, y: boxY + 1.07, w: boxW - 0.4, h: 0.28,
       fontSize: 9, color: COLORS.caption, fontFace: FONT_JP, align: 'center',
     });
   });
 
-  // 要旨テキスト
+  // 要旨テキスト（短く下部に）
   slide.addText('{{paid_executive_summary}}', {
-    x: 0.6, y: 4.7, w: 12.1, h: 1.9,
-    fontSize: 14, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    x: 0.6, y: 6.05, w: 12.1, h: 0.7,
+    fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
   });
 
-  addFooterNote(slide, '※ 詳細な数値根拠と算式は次ページ以降をご参照ください');
+  addFooterNote(slide, '※ 各施策の詳細は SECTION 03 以降をご参照ください');
 }
 
 // =================================================
@@ -266,16 +306,16 @@ function addTitle(slide, text, y = 1.3) {
     rectRadius: 0.15,
   });
   slide.addShape('rect', {
-    x: 0.6, y: 2.65, w: 5.95, h: 0.5,
+    x: 0.6, y: 2.65, w: 5.95, h: 0.6,
     fill: { color: COLORS.lapis }, line: { width: 0 },
   });
   slide.addText('業務特性のサマリー', {
-    x: 0.8, y: 2.65, w: 5.55, h: 0.5,
-    fontSize: 16, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle',
+    x: 0.8, y: 2.65, w: 5.55, h: 0.6,
+    fontSize: 20, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle',
   });
   slide.addText('{{paid_current_analysis_left}}', {
-    x: 0.8, y: 3.3, w: 5.55, h: 3.2,
-    fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    x: 0.85, y: 3.4, w: 5.45, h: 3.15,
+    fontSize: 16, color: COLORS.text, fontFace: FONT_JP, valign: 'top', paraSpaceAfter: 6,
   });
 
   // ボトルネック詳細（右カラム）
@@ -286,16 +326,16 @@ function addTitle(slide, text, y = 1.3) {
     rectRadius: 0.15,
   });
   slide.addShape('rect', {
-    x: 6.75, y: 2.65, w: 5.95, h: 0.5,
+    x: 6.75, y: 2.65, w: 5.95, h: 0.6,
     fill: { color: COLORS.sakura }, line: { width: 0 },
   });
   slide.addText('ボトルネックと改善余地', {
-    x: 6.95, y: 2.65, w: 5.55, h: 0.5,
-    fontSize: 16, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle',
+    x: 6.95, y: 2.65, w: 5.55, h: 0.6,
+    fontSize: 20, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle',
   });
   slide.addText('{{paid_current_analysis_right}}', {
-    x: 6.95, y: 3.3, w: 5.55, h: 3.2,
-    fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    x: 7.0, y: 3.4, w: 5.45, h: 3.15,
+    fontSize: 16, color: COLORS.text, fontFace: FONT_JP, valign: 'top', paraSpaceAfter: 6,
   });
 
   addFooterNote(slide, '※ フォーム入力と業界動向データから生成された分析です');
@@ -313,8 +353,8 @@ function addProposalSlide(slideNum, eyebrowText, titleText, startIdx, count) {
   addGradientLine(slide, 2.15);
 
   const cardW = (W - 1.4 - 0.3 * (count - 1)) / count;
-  const cardH = 4.05;
-  const cardY = 2.65;
+  const cardH = 4.55;
+  const cardY = 2.4;
   const startX = 0.7;
   const gap = 0.3;
 
@@ -331,127 +371,274 @@ function addProposalSlide(slideNum, eyebrowText, titleText, startIdx, count) {
 
     // 番号バッジ
     slide.addShape('roundRect', {
-      x: x + 0.25, y: cardY + 0.25, w: 0.65, h: 0.45,
+      x: x + 0.25, y: cardY + 0.22, w: 0.7, h: 0.5,
       fill: { color: COLORS.lapis }, line: { width: 0 },
       rectRadius: 0.08,
     });
     slide.addText(`0${idx}`, {
-      x: x + 0.25, y: cardY + 0.25, w: 0.65, h: 0.45,
-      fontSize: 14, color: COLORS.white, fontFace: FONT_EN, bold: true, align: 'center', valign: 'middle',
+      x: x + 0.25, y: cardY + 0.22, w: 0.7, h: 0.5,
+      fontSize: 18, color: COLORS.white, fontFace: FONT_EN, bold: true, align: 'center', valign: 'middle',
     });
 
-    // 優先度バッジ（右上）
+    // 優先度バッジ（右上・大きく）
     slide.addText(`{{paid_proposal_priority_${idx}}}`, {
-      x: x + cardW - 1.1, y: cardY + 0.25, w: 0.85, h: 0.4,
-      fontSize: 10, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
+      x: x + cardW - 1.85, y: cardY + 0.27, w: 1.6, h: 0.4,
+      fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'right', valign: 'middle',
     });
 
-    // 業務名
+    // 業務名（タイトル）
     slide.addText(`{{paid_proposal_area_${idx}}}`, {
-      x: x + 0.25, y: cardY + 0.85, w: cardW - 0.5, h: 0.55,
-      fontSize: 14, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'top',
+      x: x + 0.25, y: cardY + 0.82, w: cardW - 0.5, h: 0.6,
+      fontSize: 17, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'top',
     });
 
-    // 効果（時間・金額）
+    // 削減時間（メイン値・強調）
     slide.addText(`{{paid_proposal_effect_${idx}}}`, {
-      x: x + 0.25, y: cardY + 1.45, w: cardW - 0.5, h: 0.4,
-      fontSize: 11, color: COLORS.sakura, fontFace: FONT_JP, bold: true, valign: 'top',
+      x: x + 0.25, y: cardY + 1.5, w: cardW - 0.5, h: 0.45,
+      fontSize: 16, color: COLORS.sakura, fontFace: FONT_JP, bold: true, valign: 'top',
+    });
+
+    // 削減根拠（新規・小さめ）
+    slide.addText(`削減根拠: {{paid_proposal_effect_basis_${idx}}}`, {
+      x: x + 0.25, y: cardY + 1.97, w: cardW - 0.5, h: 0.5,
+      fontSize: 11, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'top',
+    });
+
+    // 致命度（新規）
+    slide.addText(`致命度: {{paid_proposal_critical_${idx}}}`, {
+      x: x + 0.25, y: cardY + 2.5, w: cardW - 0.5, h: 0.35,
+      fontSize: 12, color: COLORS.text, fontFace: FONT_JP, bold: true, valign: 'top',
     });
 
     // 詳細
     slide.addText(`{{paid_proposal_detail_${idx}}}`, {
-      x: x + 0.25, y: cardY + 1.9, w: cardW - 0.5, h: 1.4,
-      fontSize: 10, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+      x: x + 0.25, y: cardY + 2.9, w: cardW - 0.5, h: 0.7,
+      fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    });
+
+    // 優先度根拠（新規・斜体）
+    slide.addText(`優先度根拠: {{paid_proposal_priority_basis_${idx}}}`, {
+      x: x + 0.25, y: cardY + 3.65, w: cardW - 0.5, h: 0.5,
+      fontSize: 11, color: COLORS.lapis, fontFace: FONT_JP, italic: true, valign: 'top',
     });
 
     // 前提条件
     slide.addText(`前提: {{paid_proposal_prereq_${idx}}}`, {
-      x: x + 0.25, y: cardY + cardH - 0.65, w: cardW - 0.5, h: 0.55,
-      fontSize: 9, color: COLORS.textMuted, fontFace: FONT_JP, italic: true, valign: 'top',
+      x: x + 0.25, y: cardY + cardH - 0.45, w: cardW - 0.5, h: 0.4,
+      fontSize: 11, color: COLORS.textMuted, fontFace: FONT_JP, italic: true, valign: 'top',
     });
   }
 
   return slide;
 }
 
-// Slide 4: 提案 1〜3
-{
-  const slide = addProposalSlide(4, 'SECTION 03 / AI活用提案 (1/2)', 'AI活用提案 — 優先度高', 1, 3);
-  addFooterNote(slide, '※ 優先度は実装容易度 × インパクトで判定');
-}
-
-// Slide 5: 提案 4〜7
-{
-  const slide = addProposalSlide(5, 'SECTION 03 / AI活用提案 (2/2)', 'AI活用提案 — 段階導入', 4, 4);
-  addFooterNote(slide, '※ Phase2 以降での実装を推奨する提案群');
-}
-
 // =================================================
-// Slide 6: フロー図（業務手順）— 画像プレースホルダ
+// 1 提案 = 1 ページの詳細スライド関数
+// includeFlowAndArch=true: 優先度A 用フル版（業務フロー + システム構成図）
+// includeFlowAndArch=false: 優先度B/C 用コンパクト版
 // =================================================
-{
+function addProposalDetailSlide(slideNum, idx, totalCount, includeFlowAndArch) {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
-  addCommonElements(slide, 6);
-  addEyebrow(slide, 'SECTION 04 / フロー図');
-  addTitle(slide, '想定される業務フロー');
-  addGradientLine(slide, 2.15);
+  addCommonElements(slide, slideNum);
+  addEyebrow(slide, `SECTION 03 / AI活用提案 (${idx}/${totalCount})`);
 
-  // 画像プレースホルダ（後で Edge Function が画像挿入）
+  // 番号バッジ + 業務名（タイトル位置）
   slide.addShape('roundRect', {
-    x: 1.0, y: 2.65, w: W - 2.0, h: 4.05,
-    fill: { color: COLORS.cardBg },
-    line: { color: COLORS.border, width: 1, dashType: 'dash' },
-    rectRadius: 0.15,
+    x: 0.6, y: 1.25, w: 1.0, h: 0.75,
+    fill: { color: COLORS.lapis }, line: { width: 0 },
+    rectRadius: 0.1,
   });
-  slide.addText('{{paid_flow_diagram_placeholder}}', {
-    x: 1.0, y: 2.65, w: W - 2.0, h: 4.05,
-    fontSize: 14, color: COLORS.caption, fontFace: FONT_JP, align: 'center', valign: 'middle',
+  slide.addText(`0${idx}`, {
+    x: 0.6, y: 1.25, w: 1.0, h: 0.75,
+    fontSize: 28, color: COLORS.white, fontFace: FONT_EN, bold: true, align: 'center', valign: 'middle',
+  });
+  slide.addText(`{{paid_proposal_area_${idx}}}`, {
+    x: 1.75, y: 1.25, w: W - 2.35, h: 0.75,
+    fontSize: 26, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'middle',
   });
 
-  addFooterNote(slide, '※ 業務手順をフロー図で可視化（経営者・現場担当向け）');
+  addGradientLine(slide, 2.1);
+
+  // KPI 3ボックス（優先度・削減時間・致命度）
+  const kpiY = 2.3;
+  const kpiH = 0.8;
+  const kpiW = 4.0;
+  const kpiGap = 0.2;
+  const kpiStartX = (W - kpiW * 3 - kpiGap * 2) / 2;
+  const kpis = [
+    { label: '優先度', valueKey: `paid_proposal_priority_${idx}` },
+    { label: '削減時間', valueKey: `paid_proposal_effect_${idx}` },
+    { label: '致命度', valueKey: `paid_proposal_critical_${idx}` },
+  ];
+  kpis.forEach((k, j) => {
+    const kx = kpiStartX + (kpiW + kpiGap) * j;
+    slide.addShape('roundRect', {
+      x: kx, y: kpiY, w: kpiW, h: kpiH,
+      fill: { color: COLORS.cardBg },
+      line: { color: COLORS.lapis, width: 1.5 },
+      rectRadius: 0.1,
+    });
+    slide.addText(k.label, {
+      x: kx + 0.2, y: kpiY + 0.08, w: kpiW - 0.4, h: 0.26,
+      fontSize: 12, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+    });
+    slide.addText(`{{${k.valueKey}}}`, {
+      x: kx + 0.2, y: kpiY + 0.36, w: kpiW - 0.4, h: 0.4,
+      fontSize: 15, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'top',
+    });
+  });
+
+  if (includeFlowAndArch) {
+    // ===== 優先度A: フル版（概要 + 業務フロー + システム構成 + 削減根拠） =====
+
+    // 概要
+    let secY = 3.25;
+    slide.addText('概要', {
+      x: 0.6, y: secY, w: W - 1.2, h: 0.28,
+      fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+    });
+    slide.addText(`{{paid_proposal_overview_${idx}}}`, {
+      x: 0.6, y: secY + 0.3, w: W - 1.2, h: 0.55,
+      fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    });
+
+    // 業務フロー（Before/After 2カラム）
+    secY = 4.2;
+    slide.addText('業務フロー', {
+      x: 0.6, y: secY, w: W - 1.2, h: 0.28,
+      fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+    });
+    const flowY = secY + 0.3;
+    const flowH = 1.25;
+    const flowW = (W - 1.2 - 0.45) / 2;
+    slide.addShape('roundRect', {
+      x: 0.6, y: flowY, w: flowW, h: flowH,
+      fill: { color: COLORS.cardBg },
+      line: { color: COLORS.textMuted, width: 1 },
+      rectRadius: 0.08,
+    });
+    slide.addText('現状', {
+      x: 0.75, y: flowY + 0.08, w: flowW - 0.3, h: 0.26,
+      fontSize: 10, color: COLORS.textMuted, fontFace: FONT_JP, bold: true,
+    });
+    slide.addText(`{{paid_proposal_flow_before_${idx}}}`, {
+      x: 0.75, y: flowY + 0.36, w: flowW - 0.3, h: flowH - 0.45,
+      fontSize: 10, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    });
+    slide.addText('→', {
+      x: 0.6 + flowW + 0.025, y: flowY, w: 0.4, h: flowH,
+      fontSize: 22, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
+    });
+    const afterX = 0.6 + flowW + 0.45;
+    slide.addShape('roundRect', {
+      x: afterX, y: flowY, w: flowW, h: flowH,
+      fill: { color: COLORS.cardBg },
+      line: { color: COLORS.lapis, width: 1.5 },
+      rectRadius: 0.08,
+    });
+    slide.addText('AI 導入後', {
+      x: afterX + 0.15, y: flowY + 0.08, w: flowW - 0.3, h: 0.26,
+      fontSize: 10, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+    });
+    slide.addText(`{{paid_proposal_flow_after_${idx}}}`, {
+      x: afterX + 0.15, y: flowY + 0.36, w: flowW - 0.3, h: flowH - 0.45,
+      fontSize: 10, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    });
+
+    // システム構成（画像プレースホルダ）
+    secY = flowY + flowH + 0.18;
+    slide.addText('システム構成', {
+      x: 0.6, y: secY, w: W - 1.2, h: 0.28,
+      fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+    });
+    slide.addShape('roundRect', {
+      x: 0.6, y: secY + 0.3, w: W - 1.2, h: 0.95,
+      fill: { color: COLORS.cardBg },
+      line: { color: COLORS.border, width: 1, dashType: 'dash' },
+      rectRadius: 0.08,
+    });
+    slide.addText(`{{paid_proposal_architecture_${idx}}}`, {
+      x: 0.7, y: secY + 0.3, w: W - 1.4, h: 0.95,
+      fontSize: 11, color: COLORS.text, fontFace: FONT_JP, align: 'center', valign: 'middle',
+    });
+
+    // 削減時間の根拠
+    secY = secY + 1.3;
+    slide.addText('削減時間の根拠', {
+      x: 0.6, y: secY, w: W - 1.2, h: 0.28,
+      fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+    });
+    slide.addText(`{{paid_proposal_effect_basis_${idx}}}`, {
+      x: 0.6, y: secY + 0.3, w: W - 1.2, h: 0.4,
+      fontSize: 11, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    });
+  } else {
+    // ===== 優先度B/C: コンパクト版（概要 + 削減根拠） =====
+
+    // 概要
+    let secY = 3.4;
+    slide.addText('概要', {
+      x: 0.6, y: secY, w: W - 1.2, h: 0.32,
+      fontSize: 14, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+    });
+    slide.addText(`{{paid_proposal_overview_${idx}}}`, {
+      x: 0.6, y: secY + 0.34, w: W - 1.2, h: 1.4,
+      fontSize: 13, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    });
+
+    // 削減時間の根拠
+    secY = 5.3;
+    slide.addText('削減時間の根拠', {
+      x: 0.6, y: secY, w: W - 1.2, h: 0.32,
+      fontSize: 14, color: COLORS.lapis, fontFace: FONT_JP, bold: true,
+    });
+    slide.addText(`{{paid_proposal_effect_basis_${idx}}}`, {
+      x: 0.6, y: secY + 0.34, w: W - 1.2, h: 1.3,
+      fontSize: 13, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    });
+  }
+
+  // フッター: 優先度根拠 + 前提
+  addFooterNote(slide, `優先度根拠: {{paid_proposal_priority_basis_${idx}}}　／　前提: {{paid_proposal_prereq_${idx}}}`);
+}
+
+// Slides 4-10: AI活用提案 7案を1ページずつ詳細展開
+// 優先度A（提案1-3）はフル版、優先度B/C（提案4-7）はコンパクト版
+const PROPOSAL_TOTAL = 7;
+const HIGH_PRIORITY_COUNT = 3;
+for (let i = 1; i <= PROPOSAL_TOTAL; i++) {
+  addProposalDetailSlide(3 + i, i, PROPOSAL_TOTAL, i <= HIGH_PRIORITY_COUNT);
 }
 
 // =================================================
-// Slide 7: アーキテクチャ図 — 画像プレースホルダ
+// Slide 11: 段階的導入ロードマップ
+// （旧「全体フロー図」「アーキテクチャ図」は優先度A 3提案ページに統合済のため削除）
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
-  addCommonElements(slide, 7);
-  addEyebrow(slide, 'SECTION 04 / アーキテクチャ図');
-  addTitle(slide, 'システム構成図');
-  addGradientLine(slide, 2.15);
-
-  slide.addShape('roundRect', {
-    x: 1.0, y: 2.65, w: W - 2.0, h: 4.05,
-    fill: { color: COLORS.cardBg },
-    line: { color: COLORS.border, width: 1, dashType: 'dash' },
-    rectRadius: 0.15,
-  });
-  slide.addText('{{paid_architecture_diagram_placeholder}}', {
-    x: 1.0, y: 2.65, w: W - 2.0, h: 4.05,
-    fontSize: 14, color: COLORS.caption, fontFace: FONT_JP, align: 'center', valign: 'middle',
-  });
-
-  addFooterNote(slide, '※ システム構成とデータの流れ（開発担当・IT担当向け）');
-}
-
-// =================================================
-// Slide 8: 段階的導入ロードマップ
-// =================================================
-{
-  const slide = pres.addSlide();
-  slide.background = { color: COLORS.white };
-  addCommonElements(slide, 8);
+  addCommonElements(slide, 11);
   addEyebrow(slide, 'SECTION 05 / 導入ロードマップ');
   addTitle(slide, '段階的導入ロードマップ');
   addGradientLine(slide, 2.15);
 
   const phases = [
-    { label: 'Phase 1', period: '1〜3ヶ月', name: 'PoC・最小実装', color: COLORS.lapis, key: 'p1' },
-    { label: 'Phase 2', period: '3〜6ヶ月', name: '本番展開', color: COLORS.lapisLight, key: 'p2' },
-    { label: 'Phase 3', period: '6〜12ヶ月', name: '拡張・最適化', color: COLORS.sakura, key: 'p3' },
+    {
+      label: 'STEP 1', period: '〜 4 週間', name: '最重要 1 件を実装',
+      color: COLORS.lapis, key: 'p1',
+      isCheckpoint: false,
+    },
+    {
+      label: 'STEP 2', period: '5〜8 週目', name: '2 件目を追加実装',
+      color: COLORS.lapisLight, key: 'p2',
+      isCheckpoint: false,
+    },
+    {
+      label: '判断ポイント', period: '9 週目以降', name: '3 件目を導入するか検討',
+      color: COLORS.sakura, key: 'p3',
+      isCheckpoint: true,
+    },
   ];
 
   const colW = 4.0;
@@ -466,60 +653,61 @@ function addProposalSlide(slideNum, eyebrowText, titleText, startIdx, count) {
     slide.addShape('roundRect', {
       x, y: colY, w: colW, h: colH,
       fill: { color: COLORS.cardBg },
-      line: { color: p.color, width: 2 },
+      line: { color: p.color, width: 2, dashType: p.isCheckpoint ? 'dash' : 'solid' },
       rectRadius: 0.15,
     });
     slide.addShape('rect', {
-      x, y: colY, w: colW, h: 0.7,
+      x, y: colY, w: colW, h: 0.75,
       fill: { color: p.color }, line: { width: 0 },
     });
     slide.addText(p.label, {
       x: x + 0.2, y: colY + 0.05, w: colW - 0.4, h: 0.35,
-      fontSize: 14, color: COLORS.white, fontFace: FONT_EN, bold: true, valign: 'top',
+      fontSize: 16, color: COLORS.white, fontFace: FONT_EN, bold: true, valign: 'top',
     });
     slide.addText(p.period, {
-      x: x + 0.2, y: colY + 0.4, w: colW - 0.4, h: 0.3,
-      fontSize: 11, color: COLORS.white, fontFace: FONT_JP, valign: 'top',
+      x: x + 0.2, y: colY + 0.42, w: colW - 0.4, h: 0.3,
+      fontSize: 12, color: COLORS.white, fontFace: FONT_JP, valign: 'top',
     });
     slide.addText(p.name, {
-      x: x + 0.2, y: colY + 0.85, w: colW - 0.4, h: 0.4,
+      x: x + 0.2, y: colY + 0.9, w: colW - 0.4, h: 0.5,
       fontSize: 16, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'top',
     });
-    // 主要施策
-    slide.addText(`【主要施策】\n{{paid_roadmap_${p.key}_actions}}`, {
-      x: x + 0.2, y: colY + 1.4, w: colW - 0.4, h: 1.4,
-      fontSize: 10, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    // 内容
+    slide.addText(`{{paid_roadmap_${p.key}_actions}}`, {
+      x: x + 0.2, y: colY + 1.5, w: colW - 0.4, h: 1.5,
+      fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
     });
-    // KPI
-    slide.addText(`【KPI】\n{{paid_roadmap_${p.key}_kpi}}`, {
-      x: x + 0.2, y: colY + 2.85, w: colW - 0.4, h: 1.0,
-      fontSize: 10, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'top',
+    // 判断/KPI
+    const kpiLabel = p.isCheckpoint ? '判断軸' : 'KPI / 確認事項';
+    slide.addText(`【${kpiLabel}】\n{{paid_roadmap_${p.key}_kpi}}`, {
+      x: x + 0.2, y: colY + 3.05, w: colW - 0.4, h: 0.95,
+      fontSize: 11, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'top',
     });
   });
 
-  addFooterNote(slide, '※ 期間・施策は御社状況に応じて調整可能です');
+  addFooterNote(slide, '※ STEP 1-2 で効果を確認してから 3 件目を判断する慎重な進め方。AI 駆動開発で短期サイクルを実現');
 }
 
 // =================================================
-// Slide 9: ROI 詳細試算
+// Slide 12: ROI 詳細試算
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
-  addCommonElements(slide, 9);
+  addCommonElements(slide, 12);
   addEyebrow(slide, 'SECTION 06 / ROI 詳細試算');
   addTitle(slide, '月間効果額の詳細試算');
   addGradientLine(slide, 2.15);
 
-  // 中央: 大数字
+  // 中央: 大数字（拡大）
   slide.addText('月 ¥{{paid_roi_total_yen}}', {
-    x: 0, y: 2.5, w: W, h: 0.9,
-    fontSize: 40, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center',
+    x: 0, y: 2.4, w: W, h: 0.95,
+    fontSize: 46, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center',
   });
 
   // 内訳テーブル（最大7項目）
-  const tableY = 3.6;
-  const tableH = 3.1;
+  const tableY = 3.5;
+  const tableH = 3.5;
   slide.addShape('roundRect', {
     x: 0.6, y: tableY, w: W - 1.2, h: tableH,
     fill: { color: COLORS.cardBg },
@@ -529,122 +717,131 @@ function addProposalSlide(slideNum, eyebrowText, titleText, startIdx, count) {
 
   // ヘッダ
   const headers = ['No.', '業務領域', '月間時間', '月間効果額', '算式根拠'];
-  const colXs = [0.85, 1.4, 6.5, 7.9, 9.5];
-  const colWs = [0.4, 5.0, 1.3, 1.5, 3.2];
+  const colXs = [0.85, 1.4, 6.3, 7.85, 9.55];
+  const colWs = [0.45, 4.85, 1.45, 1.65, 3.15];
   headers.forEach((h, i) => {
     slide.addText(h, {
-      x: colXs[i], y: tableY + 0.1, w: colWs[i], h: 0.3,
-      fontSize: 10, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle',
+      x: colXs[i], y: tableY + 0.12, w: colWs[i], h: 0.4,
+      fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle',
     });
   });
 
-  // 項目行（最大7行）
-  const rowY = tableY + 0.45;
-  const rowH = 0.32;
+  // 項目行（最大7行）── 文字拡大
+  const rowY = tableY + 0.6;
+  const rowH = 0.4;
   for (let i = 1; i <= 7; i++) {
     const y = rowY + (i - 1) * rowH;
-    slide.addText(`{{paid_roi_no_${i}}}`, { x: colXs[0], y, w: colWs[0], h: rowH, fontSize: 10, color: COLORS.lapis, fontFace: FONT_EN, bold: true, valign: 'middle' });
-    slide.addText(`{{paid_roi_area_${i}}}`, { x: colXs[1], y, w: colWs[1], h: rowH, fontSize: 10, color: COLORS.text, fontFace: FONT_JP, valign: 'middle' });
-    slide.addText(`{{paid_roi_hours_${i}}}`, { x: colXs[2], y, w: colWs[2], h: rowH, fontSize: 10, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'right', valign: 'middle' });
-    slide.addText(`{{paid_roi_yen_${i}}}`, { x: colXs[3], y, w: colWs[3], h: rowH, fontSize: 10, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'right', valign: 'middle' });
-    slide.addText(`{{paid_roi_basis_${i}}}`, { x: colXs[4], y, w: colWs[4], h: rowH, fontSize: 9, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle' });
+    slide.addText(`{{paid_roi_no_${i}}}`, { x: colXs[0], y, w: colWs[0], h: rowH, fontSize: 13, color: COLORS.lapis, fontFace: FONT_EN, bold: true, valign: 'middle' });
+    slide.addText(`{{paid_roi_area_${i}}}`, { x: colXs[1], y, w: colWs[1], h: rowH, fontSize: 13, color: COLORS.text, fontFace: FONT_JP, valign: 'middle' });
+    slide.addText(`{{paid_roi_hours_${i}}}`, { x: colXs[2], y, w: colWs[2], h: rowH, fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'right', valign: 'middle' });
+    slide.addText(`{{paid_roi_yen_${i}}}`, { x: colXs[3], y, w: colWs[3], h: rowH, fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'right', valign: 'middle' });
+    slide.addText(`{{paid_roi_basis_${i}}}`, { x: colXs[4], y, w: colWs[4], h: rowH, fontSize: 11, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle' });
   }
 
-  addFooterNote(slide, '※ 標準時給1,500円ベース・累計効果は12ヶ月で約 ¥{{paid_roi_total_yen_12mo}}');
+  addFooterNote(slide, '※ 標準時給 1,500 円ベース。月間効果額の試算（スケール時の累計試算は含めず）');
 }
 
 // =================================================
-// Slide 10: コスト試算（フェーズ別）
+// Slide 13: ランニングコスト試算
+// （初期導入費用は MTG ヒアリング後に個別見積として別途お渡しするため本スライドには含めない）
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
-  addCommonElements(slide, 10);
-  addEyebrow(slide, 'SECTION 07 / コスト試算');
-  addTitle(slide, 'コスト試算（フェーズ別）');
+  addCommonElements(slide, 13);
+  addEyebrow(slide, 'SECTION 07 / ランニングコスト');
+  addTitle(slide, 'ランニングコスト試算（月額）');
   addGradientLine(slide, 2.15);
 
-  // 2列: 初期費用 / ランニング （スケール時は提案フェーズ外のため除外）
-  const phases = [
-    { label: '初期費用', sub: '導入時（カスタム開発・バッファ込み）', key: 'init', color: COLORS.lapis },
-    { label: 'ランニング', sub: '月額', key: 'monthly', color: COLORS.lapisLight },
-  ];
+  // 中央の単一カード（ランニング月額）
+  const cardW = 9.0;
+  const cardH = 3.4;
+  const cardX = (W - cardW) / 2;
+  const cardY = 2.65;
 
-  const colW = 5.6;
-  const colY = 2.65;
-  const colH = 4.05;
-  const totalW = colW * phases.length + 0.3 * (phases.length - 1);
-  const startX = (W - totalW) / 2;
-  const gap = 0.3;
-
-  phases.forEach((p, i) => {
-    const x = startX + (colW + gap) * i;
-
-    slide.addShape('roundRect', {
-      x, y: colY, w: colW, h: colH,
-      fill: { color: COLORS.cardBg },
-      line: { color: p.color, width: 2 },
-      rectRadius: 0.15,
-    });
-    slide.addShape('rect', {
-      x, y: colY, w: colW, h: 0.75,
-      fill: { color: p.color }, line: { width: 0 },
-    });
-    slide.addText(p.label, {
-      x: x + 0.25, y: colY + 0.05, w: colW - 0.5, h: 0.4,
-      fontSize: 20, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'top',
-    });
-    slide.addText(p.sub, {
-      x: x + 0.25, y: colY + 0.42, w: colW - 0.5, h: 0.3,
-      fontSize: 13, color: COLORS.white, fontFace: FONT_JP, valign: 'top',
-    });
-    // 大金額（拡大）
-    slide.addText(`{{paid_cost_${p.key}_total}}`, {
-      x: x + 0.25, y: colY + 0.95, w: colW - 0.5, h: 0.85,
-      fontSize: 32, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
-    });
-    // 内訳（拡大）
-    slide.addText(`{{paid_cost_${p.key}_breakdown}}`, {
-      x: x + 0.3, y: colY + 1.95, w: colW - 0.6, h: 2.0,
-      fontSize: 14, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
-    });
+  slide.addShape('roundRect', {
+    x: cardX, y: cardY, w: cardW, h: cardH,
+    fill: { color: COLORS.cardBg },
+    line: { color: COLORS.lapis, width: 2 },
+    rectRadius: 0.15,
+  });
+  slide.addShape('rect', {
+    x: cardX, y: cardY, w: cardW, h: 0.8,
+    fill: { color: COLORS.lapis }, line: { width: 0 },
+  });
+  slide.addText('ランニング', {
+    x: cardX + 0.3, y: cardY + 0.05, w: cardW - 0.6, h: 0.42,
+    fontSize: 22, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'top',
+  });
+  slide.addText('月額（運用開始後）', {
+    x: cardX + 0.3, y: cardY + 0.45, w: cardW - 0.6, h: 0.32,
+    fontSize: 14, color: COLORS.white, fontFace: FONT_JP, valign: 'top',
+  });
+  // 大金額
+  slide.addText('{{paid_cost_monthly_total}}', {
+    x: cardX + 0.3, y: cardY + 1.0, w: cardW - 0.6, h: 0.9,
+    fontSize: 36, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
+  });
+  // 内訳
+  slide.addText('{{paid_cost_monthly_breakdown}}', {
+    x: cardX + 0.5, y: cardY + 2.05, w: cardW - 1.0, h: 1.25,
+    fontSize: 15, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
   });
 
-  addFooterNote(slide, '※ 初期費用は工数ベース＋バッファを含む概算。サービス構成により変動します');
+  // 注記カード（初期費用について）
+  const noteY = cardY + cardH + 0.25;
+  slide.addShape('roundRect', {
+    x: 0.6, y: noteY, w: W - 1.2, h: 0.55,
+    fill: { color: 'F8FAFC' },
+    line: { color: COLORS.border, width: 1 },
+    rectRadius: 0.08,
+  });
+  slide.addText('初期導入費用は、MTG で実施対象を確定後に個別見積としてお渡しします。本レポートには含まれません。', {
+    x: 0.8, y: noteY + 0.05, w: W - 1.6, h: 0.45,
+    fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle',
+  });
+
+  addFooterNote(slide, '※ サービス構成・利用量により変動します。詳細は MTG にてご相談ください');
 }
 
 // =================================================
-// Slide 11: ベンダー/サービスカテゴリ比較
+// Slide 14: 具体サービス比較（優先度A 3提案を実装するためのスタック）
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
-  addCommonElements(slide, 11);
-  addEyebrow(slide, 'SECTION 08 / カテゴリ比較');
-  addTitle(slide, 'ベンダー / サービスカテゴリ比較');
+  addCommonElements(slide, 14);
+  addEyebrow(slide, 'SECTION 08 / 具体サービス比較');
+  addTitle(slide, '優先度A 3提案を実装するためのサービス比較');
   addGradientLine(slide, 2.15);
 
   // ヘッダ
-  const headers = ['カテゴリ', '選択肢A（軽量）', '選択肢B（中堅）', '選択肢C（最上位）'];
-  const colXs = [0.6, 3.8, 7.0, 10.2];
-  const colWs = [3.1, 3.1, 3.1, 3.0];
+  const headers = ['カテゴリ / 用途', '推奨 A', '選択肢 B', '選択肢 C'];
+  const colXs = [0.6, 3.5, 6.8, 10.05];
+  const colWs = [2.85, 3.25, 3.2, 3.2];
 
   // ヘッダ行
   slide.addShape('rect', {
-    x: 0.6, y: 2.65, w: W - 1.2, h: 0.45,
+    x: 0.6, y: 2.5, w: W - 1.2, h: 0.5,
     fill: { color: COLORS.lapis }, line: { width: 0 },
   });
   headers.forEach((h, i) => {
     slide.addText(h, {
-      x: colXs[i] + 0.1, y: 2.65, w: colWs[i] - 0.2, h: 0.45,
-      fontSize: 11, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle', align: i === 0 ? 'left' : 'center',
+      x: colXs[i] + 0.1, y: 2.5, w: colWs[i] - 0.2, h: 0.5,
+      fontSize: 12, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle', align: i === 0 ? 'left' : 'center',
     });
   });
 
-  // 5行
-  const categories = ['データベース', 'AI推論モデル', '認証・管理', 'インフラ', '開発・運用'];
-  const rowY = 3.1;
-  const rowH = 0.7;
+  // 4行（カテゴリ + 用途明示）
+  const categories = [
+    { name: 'データベース\n＋ 認証', use: '提案 01-03 共通基盤' },
+    { name: 'LLM API', use: '提案 02 一次回答\n提案 03 議事録要約' },
+    { name: '文字起こし API', use: '提案 03 議事録要約' },
+    { name: 'ホスティング\n＋ サーバレス', use: '提案 01-03 共通' },
+  ];
+  const rowY = 3.0;
+  const rowH = 1.05;
+
   categories.forEach((cat, i) => {
     const y = rowY + i * rowH;
     if (i % 2 === 0) {
@@ -653,258 +850,165 @@ function addProposalSlide(slideNum, eyebrowText, titleText, startIdx, count) {
         fill: { color: COLORS.cardBg }, line: { width: 0 },
       });
     }
-    slide.addText(cat, {
-      x: colXs[0] + 0.1, y, w: colWs[0] - 0.2, h: rowH,
-      fontSize: 11, color: COLORS.text, fontFace: FONT_JP, bold: true, valign: 'middle',
+    // カテゴリ列
+    slide.addText(cat.name, {
+      x: colXs[0] + 0.12, y: y + 0.08, w: colWs[0] - 0.2, h: 0.5,
+      fontSize: 12, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'top',
     });
+    slide.addText(cat.use, {
+      x: colXs[0] + 0.12, y: y + 0.55, w: colWs[0] - 0.2, h: 0.5,
+      fontSize: 9, color: COLORS.textMuted, fontFace: FONT_JP, italic: true, valign: 'top',
+    });
+    // A/B/C 列（複数行可能なテキスト）
     ['a', 'b', 'c'].forEach((lvl, j) => {
+      const isRecommended = lvl === 'a';
       slide.addText(`{{paid_compare_${i + 1}_${lvl}}}`, {
-        x: colXs[j + 1] + 0.1, y, w: colWs[j + 1] - 0.2, h: rowH,
-        fontSize: 10, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle', align: 'center',
+        x: colXs[j + 1] + 0.12, y: y + 0.08, w: colWs[j + 1] - 0.2, h: rowH - 0.16,
+        fontSize: 10,
+        color: isRecommended ? COLORS.text : COLORS.textMuted,
+        fontFace: FONT_JP, valign: 'top',
+        bold: isRecommended,
       });
     });
   });
 
-  addFooterNote(slide, '※ サービス名は伏せ、カテゴリと相場感のみ提示');
+  addFooterNote(slide, '※ 推奨A は中小事業者向けに最適化された構成。実装範囲・利用量により最終構成は MTG にて決定');
 }
 
 // =================================================
-// Slide 12: PoC 計画案
+// Slide 15（旧 PoC 計画）── 削除済
+// 削除理由: 顧客は AI 導入意思が確定済の段階で Optiens に来る。
+// 検証フェーズではなく「導入＋効果計測」をロードマップ STEP 1-2 で実施するため、独立 PoC スライドは不要。
+// 後続スライドのページ番号を -1 シフトした。
 // =================================================
-{
-  const slide = pres.addSlide();
-  slide.background = { color: COLORS.white };
-  addCommonElements(slide, 12);
-  addEyebrow(slide, 'SECTION 09 / PoC計画');
-  addTitle(slide, 'PoC（仮説検証）計画案');
-  addGradientLine(slide, 2.15);
-
-  // 上部: 5項目グリッド
-  const items = [
-    { label: '目的', key: 'purpose' },
-    { label: '対象業務', key: 'target' },
-    { label: '期間', key: 'duration' },
-    { label: '成功基準', key: 'success_criteria' },
-    { label: '判断ポイント', key: 'decision' },
-  ];
-
-  const itemY = 2.65;
-  const itemH = 4.05;
-  const colW = (W - 1.2 - 0.15 * 4) / 5;
-
-  items.forEach((it, i) => {
-    const x = 0.6 + (colW + 0.15) * i;
-
-    slide.addShape('roundRect', {
-      x, y: itemY, w: colW, h: itemH,
-      fill: { color: COLORS.cardBg },
-      line: { color: COLORS.border, width: 1 },
-      rectRadius: 0.12,
-    });
-    slide.addShape('rect', {
-      x, y: itemY, w: colW, h: 0.5,
-      fill: { color: COLORS.lapis }, line: { width: 0 },
-    });
-    slide.addText(it.label, {
-      x: x + 0.1, y: itemY + 0.05, w: colW - 0.2, h: 0.4,
-      fontSize: 12, color: COLORS.white, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
-    });
-    slide.addText(`{{paid_poc_${it.key}}}`, {
-      x: x + 0.15, y: itemY + 0.6, w: colW - 0.3, h: itemH - 0.7,
-      fontSize: 10, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
-    });
-  });
-
-  addFooterNote(slide, '※ PoC は通常 4〜8 週間で実施します');
-}
 
 // =================================================
-// Slide 13: 業種別補助金の該当性チェック
-// =================================================
-{
-  const slide = pres.addSlide();
-  slide.background = { color: COLORS.white };
-  addCommonElements(slide, 13);
-  addEyebrow(slide, 'SECTION 10 / 補助金活用');
-  addTitle(slide, '業種別補助金の該当性チェック');
-  addGradientLine(slide, 2.15);
-
-  // ヘッダ
-  const headers = ['補助金名', '公募期間', '上限額', '補助率', '該当性'];
-  const colXs = [0.6, 5.0, 7.4, 8.8, 10.4];
-  const colWs = [4.3, 2.3, 1.3, 1.5, 2.3];
-
-  slide.addShape('rect', {
-    x: 0.6, y: 2.65, w: W - 1.2, h: 0.45,
-    fill: { color: COLORS.lapis }, line: { width: 0 },
-  });
-  headers.forEach((h, i) => {
-    slide.addText(h, {
-      x: colXs[i] + 0.1, y: 2.65, w: colWs[i] - 0.2, h: 0.45,
-      fontSize: 11, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle',
-    });
-  });
-
-  // 最大4行
-  const rowY = 3.1;
-  const rowH = 0.6;
-  for (let i = 1; i <= 4; i++) {
-    const y = rowY + (i - 1) * rowH;
-    if (i % 2 === 1) {
-      slide.addShape('rect', {
-        x: 0.6, y, w: W - 1.2, h: rowH,
-        fill: { color: COLORS.cardBg }, line: { width: 0 },
-      });
-    }
-    slide.addText(`{{paid_subsidy_name_${i}}}`, { x: colXs[0] + 0.1, y, w: colWs[0] - 0.2, h: rowH, fontSize: 10, color: COLORS.text, fontFace: FONT_JP, bold: true, valign: 'middle' });
-    slide.addText(`{{paid_subsidy_period_${i}}}`, { x: colXs[1] + 0.1, y, w: colWs[1] - 0.2, h: rowH, fontSize: 9, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle' });
-    slide.addText(`{{paid_subsidy_amount_${i}}}`, { x: colXs[2] + 0.1, y, w: colWs[2] - 0.2, h: rowH, fontSize: 9, color: COLORS.text, fontFace: FONT_JP, valign: 'middle' });
-    slide.addText(`{{paid_subsidy_rate_${i}}}`, { x: colXs[3] + 0.1, y, w: colWs[3] - 0.2, h: rowH, fontSize: 9, color: COLORS.text, fontFace: FONT_JP, valign: 'middle' });
-    slide.addText(`{{paid_subsidy_fit_${i}}}`, { x: colXs[4] + 0.1, y, w: colWs[4] - 0.2, h: rowH, fontSize: 9, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle' });
-  }
-
-  // 注記カード
-  slide.addShape('roundRect', {
-    x: 0.6, y: 5.7, w: W - 1.2, h: 1.0,
-    fill: { color: COLORS.sakuraBg },
-    line: { color: COLORS.sakura, width: 1 },
-    rectRadius: 0.1,
-  });
-  slide.addText(
-    '※ 補助金情報は AI による Web 検索（{{paid_subsidy_search_date}} 時点）に基づきます。最新の公募情報は各補助金事務局でご確認ください。\n※ 補助金の申請書作成・申請サポートは Optiens の業務範囲外です。社労士・行政書士へご相談ください。',
-    {
-      x: 0.8, y: 5.8, w: W - 1.6, h: 0.8,
-      fontSize: 10, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle',
-    }
-  );
-
-  addFooterNote(slide, '※ IT導入補助金は対象外（Optiens は IT導入支援事業者未登録のため）');
-}
-
-// =================================================
-// Slide 14: リスクアセスメント
-// =================================================
-{
-  const slide = pres.addSlide();
-  slide.background = { color: COLORS.white };
-  addCommonElements(slide, 14);
-  addEyebrow(slide, 'SECTION 11 / リスクアセスメント');
-  addTitle(slide, 'リスクと対策');
-  addGradientLine(slide, 2.15);
-
-  // ヘッダ
-  const headers = ['リスク', '影響', '発生可能性', '対策'];
-  const colXs = [0.6, 4.6, 6.0, 7.5];
-  const colWs = [3.9, 1.3, 1.4, 5.2];
-
-  slide.addShape('rect', {
-    x: 0.6, y: 2.65, w: W - 1.2, h: 0.45,
-    fill: { color: COLORS.lapis }, line: { width: 0 },
-  });
-  headers.forEach((h, i) => {
-    slide.addText(h, {
-      x: colXs[i] + 0.1, y: 2.65, w: colWs[i] - 0.2, h: 0.45,
-      fontSize: 11, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle',
-    });
-  });
-
-  // 5項目
-  const rowY = 3.1;
-  const rowH = 0.7;
-  for (let i = 1; i <= 5; i++) {
-    const y = rowY + (i - 1) * rowH;
-    if (i % 2 === 1) {
-      slide.addShape('rect', {
-        x: 0.6, y, w: W - 1.2, h: rowH,
-        fill: { color: COLORS.cardBg }, line: { width: 0 },
-      });
-    }
-    slide.addText(`{{paid_risk_name_${i}}}`, { x: colXs[0] + 0.1, y, w: colWs[0] - 0.2, h: rowH, fontSize: 11, color: COLORS.text, fontFace: FONT_JP, bold: true, valign: 'middle' });
-    slide.addText(`{{paid_risk_impact_${i}}}`, { x: colXs[1] + 0.1, y, w: colWs[1] - 0.2, h: rowH, fontSize: 10, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle' });
-    slide.addText(`{{paid_risk_likelihood_${i}}}`, { x: colXs[2] + 0.1, y, w: colWs[2] - 0.2, h: rowH, fontSize: 10, color: COLORS.sakura, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle' });
-    slide.addText(`{{paid_risk_mitigation_${i}}}`, { x: colXs[3] + 0.1, y, w: colWs[3] - 0.2, h: rowH, fontSize: 9, color: COLORS.text, fontFace: FONT_JP, valign: 'middle' });
-  }
-
-  addFooterNote(slide, '※ 影響度・発生可能性は 高/中/低 の3段階で評価');
-}
-
-// =================================================
-// Slide 15: AI事業者ガイドライン整合性
+// Slide 15: 業種別補助金の該当性チェック
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
   addCommonElements(slide, 15);
-  addEyebrow(slide, 'SECTION 12 / コンプライアンス');
-  addTitle(slide, 'AI事業者ガイドライン整合性');
+  addEyebrow(slide, 'SECTION 09 / 補助金活用');
+  addTitle(slide, '業種別補助金の該当性チェック');
   addGradientLine(slide, 2.15);
 
-  // 6項目チェックリスト（2列グリッド）
-  const items = [
-    { label: '透明性の確保', key: 'transparency' },
-    { label: '人間中心の判断', key: 'human_centric' },
-    { label: 'プライバシー保護', key: 'privacy' },
-    { label: 'セキュリティ確保', key: 'security' },
-    { label: '公平性', key: 'fairness' },
-    { label: 'アカウンタビリティ', key: 'accountability' },
-  ];
+  // ヘッダ
+  const headers = ['補助金名', '公募期間', '上限額', '補助率', '該当性'];
+  const colXs = [0.7, 5.0, 7.4, 8.8, 10.4];
+  const colWs = [4.2, 2.3, 1.3, 1.5, 2.3];
 
-  const colW = 6.0;
-  const itemH = 1.25;
-  const startY = 2.65;
-
-  items.forEach((it, i) => {
-    const col = i % 2;
-    const row = Math.floor(i / 2);
-    const x = 0.7 + col * (colW + 0.3);
-    const y = startY + row * (itemH + 0.15);
-
-    slide.addShape('roundRect', {
-      x, y, w: colW, h: itemH,
-      fill: { color: COLORS.cardBg },
-      line: { color: COLORS.lapis, width: 1 },
-      rectRadius: 0.1,
-    });
-    // チェックバッジ
-    slide.addText('✓', {
-      x: x + 0.15, y: y + 0.2, w: 0.6, h: 0.85,
-      fontSize: 32, color: COLORS.lapis, fontFace: FONT_EN, bold: true, align: 'center', valign: 'middle',
-    });
-    slide.addText(it.label, {
-      x: x + 0.85, y: y + 0.1, w: colW - 1.0, h: 0.4,
-      fontSize: 13, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'middle',
-    });
-    slide.addText(`{{paid_compliance_${it.key}}}`, {
-      x: x + 0.85, y: y + 0.5, w: colW - 1.0, h: 0.7,
-      fontSize: 9, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+  slide.addShape('rect', {
+    x: 0.6, y: 2.55, w: W - 1.2, h: 0.55,
+    fill: { color: COLORS.lapis }, line: { width: 0 },
+  });
+  headers.forEach((h, i) => {
+    slide.addText(h, {
+      x: colXs[i], y: 2.55, w: colWs[i], h: 0.55,
+      fontSize: 13, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle',
     });
   });
 
-  addFooterNote(slide, '※ 経産省・総務省「AI事業者ガイドライン」に基づく整合性チェック');
+  // 3行（カードスタイル・空行は描画しない方針：データを必ず 3 件入れる前提）
+  const rowY = 3.15;
+  const rowH = 0.95;
+  const rowGap = 0.12;
+  for (let i = 1; i <= 3; i++) {
+    const y = rowY + (i - 1) * (rowH + rowGap);
+    slide.addShape('roundRect', {
+      x: 0.6, y, w: W - 1.2, h: rowH,
+      fill: { color: COLORS.cardBg },
+      line: { color: COLORS.border, width: 1 },
+      rectRadius: 0.08,
+    });
+    slide.addText(`{{paid_subsidy_name_${i}}}`, { x: colXs[0], y, w: colWs[0], h: rowH, fontSize: 14, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'middle' });
+    slide.addText(`{{paid_subsidy_period_${i}}}`, { x: colXs[1], y, w: colWs[1], h: rowH, fontSize: 12, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle' });
+    slide.addText(`{{paid_subsidy_amount_${i}}}`, { x: colXs[2], y, w: colWs[2], h: rowH, fontSize: 12, color: COLORS.text, fontFace: FONT_JP, bold: true, valign: 'middle' });
+    slide.addText(`{{paid_subsidy_rate_${i}}}`, { x: colXs[3], y, w: colWs[3], h: rowH, fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'middle' });
+    slide.addText(`{{paid_subsidy_fit_${i}}}`, { x: colXs[4], y, w: colWs[4], h: rowH, fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle' });
+  }
+
+  addFooterNote(slide, '※ 補助金情報は {{paid_subsidy_search_date}} 時点。最新公募は各補助金事務局でご確認ください。申請書作成・申請サポートは Optiens の業務範囲外（社労士・行政書士へご相談ください）。IT 導入補助金は対象外（Optiens は IT 導入支援事業者未登録のため）');
 }
 
 // =================================================
-// Slide 16: 次のステップ
+// Slide 16: リスクアセスメント
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
   addCommonElements(slide, 16);
-  addEyebrow(slide, 'SECTION 13 / NEXT STEP');
+  addEyebrow(slide, 'SECTION 10 / リスクアセスメント');
+  addTitle(slide, 'リスクと対策');
+  addGradientLine(slide, 2.15);
+
+  // ヘッダ
+  const headers = ['リスク', '影響', '発生可能性', '対策'];
+  const colXs = [0.7, 4.6, 6.0, 7.5];
+  const colWs = [3.8, 1.3, 1.4, 5.1];
+
+  slide.addShape('rect', {
+    x: 0.6, y: 2.55, w: W - 1.2, h: 0.55,
+    fill: { color: COLORS.lapis }, line: { width: 0 },
+  });
+  headers.forEach((h, i) => {
+    slide.addText(h, {
+      x: colXs[i], y: 2.55, w: colWs[i], h: 0.55,
+      fontSize: 13, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'middle',
+      align: i === 1 || i === 2 ? 'center' : 'left',
+    });
+  });
+
+  // 4 項目（ベンダーロックインは Optiens 方針上リスクとして扱わないため削除）
+  const rowY = 3.15;
+  const rowH = 0.78;
+  const rowGap = 0.1;
+  for (let i = 1; i <= 4; i++) {
+    const y = rowY + (i - 1) * (rowH + rowGap);
+    slide.addShape('roundRect', {
+      x: 0.6, y, w: W - 1.2, h: rowH,
+      fill: { color: COLORS.cardBg },
+      line: { color: COLORS.border, width: 1 },
+      rectRadius: 0.06,
+    });
+    slide.addText(`{{paid_risk_name_${i}}}`, { x: colXs[0], y, w: colWs[0], h: rowH, fontSize: 13, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'middle' });
+    slide.addText(`{{paid_risk_impact_${i}}}`, { x: colXs[1], y, w: colWs[1], h: rowH, fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle' });
+    slide.addText(`{{paid_risk_likelihood_${i}}}`, { x: colXs[2], y, w: colWs[2], h: rowH, fontSize: 13, color: COLORS.sakura, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle' });
+    slide.addText(`{{paid_risk_mitigation_${i}}}`, { x: colXs[3], y, w: colWs[3], h: rowH, fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'middle' });
+  }
+
+  addFooterNote(slide, '※ 影響度・発生可能性は 高/中/低 の 3 段階で評価。機密情報の取扱が懸念される場合はローカル LLM 運用（高性能 PC への設備投資）も選択肢');
+}
+
+// =================================================
+// Slide 17（旧 AI事業者ガイドライン整合性）── 削除済
+// 削除理由: 有償版レポートに載せる内容として適切でない（コンプライアンス情報は会社情報の領域）
+// 統合先: ウェブサイト /security ページ（情報セキュリティ方針）に AI事業者ガイドライン整合性セクションを追加
+// 後続スライドのページ番号を -1 シフトした。
+// =================================================
+
+// =================================================
+// Slide 17: 次のステップ
+// =================================================
+{
+  const slide = pres.addSlide();
+  slide.background = { color: COLORS.white };
+  addCommonElements(slide, 17);
+  addEyebrow(slide, 'SECTION 11 / NEXT STEP');
   addTitle(slide, '導入支援への次のステップ');
   addGradientLine(slide, 2.15);
 
   // ステップ4列
   const steps = [
-    { num: '01', label: '60分 MTG', desc: '本レポートをもとに質疑応答・優先度すり合わせ' },
-    { num: '02', label: '導入支援契約', desc: '契約締結・体制構築・準備キックオフ' },
-    { num: '03', label: 'PoC・最小実装', desc: '1〜2業務に絞り効果検証（4〜8週間）' },
-    { num: '04', label: '本番展開', desc: '主要業務へ展開・運用最適化' },
+    { num: '01', label: '60 分 MTG', desc: '本レポートをもとに質疑応答・実施対象のすり合わせ・個別見積' },
+    { num: '02', label: '導入支援契約', desc: '準委任契約（業務委託）として契約締結・体制構築・キックオフ' },
+    { num: '03', label: '開発', desc: '優先度A の 1〜2 業務に絞り AI 駆動で短期実装（〜4 週間）' },
+    { num: '04', label: '本番展開', desc: '主要業務へ展開・運用最適化・継続改善' },
   ];
 
   const stepW = (W - 1.2 - 0.3 * 3) / 4;
-  const stepY = 2.65;
-  const stepH = 3.5;
+  const stepY = 2.55;
+  const stepH = 3.85;
 
   steps.forEach((s, i) => {
     const x = 0.6 + (stepW + 0.3) * i;
@@ -916,35 +1020,44 @@ function addProposalSlide(slideNum, eyebrowText, titleText, startIdx, count) {
       rectRadius: 0.15,
     });
     slide.addText(s.num, {
-      x: x + 0.2, y: stepY + 0.3, w: stepW - 0.4, h: 0.7,
-      fontSize: 32, color: COLORS.sakuraSoft, fontFace: FONT_EN, bold: true, valign: 'top',
+      x: x + 0.2, y: stepY + 0.3, w: stepW - 0.4, h: 0.85,
+      fontSize: 38, color: COLORS.sakuraSoft, fontFace: FONT_EN, bold: true, valign: 'top',
     });
     slide.addText(s.label, {
-      x: x + 0.2, y: stepY + 1.2, w: stepW - 0.4, h: 0.5,
-      fontSize: 16, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'top',
+      x: x + 0.2, y: stepY + 1.3, w: stepW - 0.4, h: 0.6,
+      fontSize: 19, color: COLORS.white, fontFace: FONT_JP, bold: true, valign: 'top',
     });
     slide.addText(s.desc, {
-      x: x + 0.2, y: stepY + 1.85, w: stepW - 0.4, h: stepH - 2.05,
-      fontSize: 11, color: COLORS.white, fontFace: FONT_JP, valign: 'top',
+      x: x + 0.2, y: stepY + 2.0, w: stepW - 0.4, h: stepH - 2.15,
+      fontSize: 13, color: COLORS.white, fontFace: FONT_JP, valign: 'top',
     });
   });
 
-  // 最下部メッセージ
-  slide.addText('まずは 60分 オンラインMTG で詳細をご相談ください', {
-    x: 0, y: 6.4, w: W, h: 0.4,
-    fontSize: 16, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center',
+  // 契約形態 + 補足カード
+  slide.addShape('roundRect', {
+    x: 0.6, y: 6.55, w: W - 1.2, h: 0.55,
+    fill: { color: 'F8FAFC' },
+    line: { color: COLORS.lapis, width: 1 },
+    rectRadius: 0.08,
   });
+  slide.addText(
+    '導入支援契約は「準委任契約（業務委託）」として締結します。請負ではなく、業務遂行に責任を持つ契約形態です。',
+    {
+      x: 0.8, y: 6.55, w: W - 1.6, h: 0.55,
+      fontSize: 13, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle',
+    }
+  );
 
-  addFooterNote(slide, '※ 本費用 ¥5,500 は導入支援契約の初期費用に全額充当');
+  addFooterNote(slide, '※ 本レポート費用 ¥5,500 は導入支援契約の初期費用に全額充当');
 }
 
 // =================================================
-// Slide 17: 裏表紙
+// Slide 18: 裏表紙
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
-  addCommonElements(slide, 17);
+  addCommonElements(slide, 18);
 
   slide.addText('ご質問・ご相談', {
     x: 0, y: 1.0, w: W, h: 0.8,
