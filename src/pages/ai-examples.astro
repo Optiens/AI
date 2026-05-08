@@ -172,10 +172,7 @@ const totalCount = commonCases.length + industries.length + roles.length;
             <ul class="ax-selector-group hidden" data-cat-group="industry">
               {industries.map((i) => (
                 <li>
-                  <button class="ax-sel-item ax-sel-item--industry" data-id={i.id}>
-                    <span class="ax-sel-thumb">
-                      <img src={i.image} alt="" loading="lazy" />
-                    </span>
+                  <button class="ax-sel-item" data-id={i.id}>
                     <span class="ax-sel-body">
                       <span class="ax-sel-title">{i.shortTitle}</span>
                       <span class="ax-sel-summary">{i.metric}</span>
@@ -189,10 +186,7 @@ const totalCount = commonCases.length + industries.length + roles.length;
             <ul class="ax-selector-group hidden" data-cat-group="role">
               {roles.map((r) => (
                 <li>
-                  <button class="ax-sel-item ax-sel-item--role" data-id={r.id}>
-                    <span class="ax-sel-role-icon">
-                      <i class={`fa-solid ${r.icon ?? 'fa-user-tie'}`}></i>
-                    </span>
+                  <button class="ax-sel-item" data-id={r.id}>
                     <span class="ax-sel-body">
                       <span class="ax-sel-title">
                         {r.shortTitle}
@@ -237,10 +231,6 @@ const totalCount = commonCases.length + industries.length + roles.length;
             {industries.map((i) => (
               <article class="ax-detail-card" data-id={i.id} data-cat="industry">
                 <header class="ax-detail-head">
-                  <span class="ax-detail-eyebrow">業種別事例</span>
-                  <div class="ax-detail-thumb-wrap">
-                    <img src={i.image} alt={i.title} loading="lazy" />
-                  </div>
                   <h2 class="ax-detail-title">{i.title}</h2>
                 </header>
                 <p class="ax-detail-desc">{i.summary}を含む業務全体を、御社の現場に合わせて再設計します。具体的な業務プロセスごとの自動化提案・想定削減時間・導入ロードマップは、サンプルレポートでご覧いただけます。</p>
@@ -258,12 +248,10 @@ const totalCount = commonCases.length + industries.length + roles.length;
             {roles.map((r) => (
               <article class="ax-detail-card" data-id={r.id} data-cat="role">
                 <header class="ax-detail-head">
-                  <span class="ax-detail-eyebrow">
-                    {r.tag}
+                  <h2 class="ax-detail-title">
+                    {r.title}
                     {r.comingSoon && <span class="ax-coming-soon ax-coming-soon--inline">近日公開</span>}
-                  </span>
-                  <div class="ax-detail-icon ax-detail-icon--role"><i class={`fa-solid ${r.icon ?? 'fa-user-tie'}`}></i></div>
-                  <h2 class="ax-detail-title">{r.title}</h2>
+                  </h2>
                 </header>
                 <p class="ax-detail-desc">{r.summary}。具体的な運用イメージ・導入ロードマップ・ROI試算はサンプルページでご覧いただけます。</p>
                 <div class="ax-detail-metric">
