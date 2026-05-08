@@ -77,21 +77,32 @@ image: '/images/blog/スラッグ名.webp'
 - **禁止事項**: CLAUDE.mdの禁止表現が含まれていないか確認
 - **日付・数値**: 矛盾がないか確認
 
-### Step 4: アイキャッチ画像生成
-`scripts/generate-blog.py` を使用してアイキャッチ画像を生成:
+### Step 4: アイキャッチ画像生成（必須・スキップ禁止）
+
+**正規スクリプト**: `scripts/generate-blog-openai.mjs`（gpt-image-2 / OpenAI）
 
 ```bash
-python scripts/generate-blog.py "記事テーマに合わせた英語プロンプト" "public/images/blog/スラッグ名.webp"
+node scripts/generate-blog-openai.mjs "記事テーマに合わせた英語プロンプト" "public/images/blog/スラッグ名.webp"
 ```
 
-内部でImagen 4.0（PNG生成→WebP変換）を使用。GEMINI_API_KEYは.envから自動読み込み。
+仕様:
+- モデル: `gpt-image-2`
+- サイズ: 1536x1024（16:9寄り）、品質 high
+- PNG → WebP 変換（sharp 使用）
+- `OPENAI_API_KEY` を `.env` から自動読込
 
 画像プロンプトのルール:
-- Optiensのブランドカラー（#2e574c, #5ea89a）を意識
-- テキストは含めない（画像のみ）
-- モダン・クリーン・プロフェッショナルなスタイル
-- AI支援: ビジネスシーン・デジタル化・効率化のビジュアル
-- 水耕栽培: 自然×テクノロジー・IoT・ハーブのビジュアル
+- 英語で記述
+- テキスト・文字・ロゴ・数字を含めない（`No text, no letters, no numbers`）
+- モダン・クリーン・プロフェッショナル（editorial business magazine）
+- ブランドカラー指定はしない（記事テーマに応じた自然な配色をAIに任せる）
+- AI支援系: 業務シーン・デジタル化・抽象的な情報フローのビジュアル
+- 水耕栽培系: 自然×テクノロジー・IoT・ハーブのビジュアル
+
+**必須運用ルール**:
+- 記事 md を作成したら **必ず同セッション内で画像も生成する**
+- 画像生成を後回しにしない（後でまとめてやろうとして忘れる事故の防止）
+- 生成失敗時は CEO に報告。スキップは可能だが必ず明示する
 
 ### Step 5: ファイル保存
 - 記事: `src/content/blog/{slug}.md`

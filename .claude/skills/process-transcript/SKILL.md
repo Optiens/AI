@@ -124,7 +124,7 @@ type: reference | feedback | project
 
 ### 4-1. write-blog-article スキルを呼び出す
 
-記事化候補ごとに、`.claude/skills/write-blog-article.md` の手順に従って記事を書く。
+記事化候補ごとに、`.claude/skills/write-blog-article/SKILL.md` の手順に従って記事を書く。
 特に以下を遵守:
 - ファクトチェック必須化（`feedback_blog-factcheck-mandatory.md` 参照）
 - `src/content/blog/_project-status.md` の禁止表現リストを確認
@@ -132,13 +132,29 @@ type: reference | feedback | project
 - 数値・固有名詞は出典明記または範囲表現
 - 煽り語彙・確約表現・確証バイアスを誘発する表現は使わない
 
-### 4-2. ブログ候補リストへの追記
+### 4-2. アイキャッチ画像生成（必須・スキップ禁止）
+
+記事 md を作成したら、**同セッション内で必ず** アイキャッチ画像を生成する。
+write-blog-article skill の Step 4 と同じ手順:
+
+```bash
+node scripts/generate-blog-openai.mjs "英語プロンプト" "public/images/blog/<slug>.webp"
+```
+
+- モデル: `gpt-image-2`、サイズ 1536x1024、品質 high
+- `OPENAI_API_KEY` を `.env` から自動読込
+- 後回しにしない（後でまとめてやろうとすると忘れる事故が起きる）
+- 失敗時は CEO に報告、必要なら md の `image:` フィールドを省略
+
+### 4-3. ブログ候補リストへの追記
 
 `C:\Users\blueb\.claude\projects\c--workspace-optiens-hydroponics\memory\project_blog-candidates.md` に該当記事を ✅ 付きで追加する（記事化前なら未マークで追加）。
 
-### 4-3. コミット・プッシュ
+### 4-4. コミット・プッシュ
 
 [feedback_commit-push-autonomy.md](C:\Users\blueb\.claude\projects\c--workspace-optiens-hydroponics\memory\feedback_commit-push-autonomy.md) に従い、可逆な記事追加は CEO の承認待ちなしで `git add → commit → push origin main` まで実行する。
+
+**画像ファイル（`public/images/blog/<slug>.webp`）も同コミットに含める**。
 
 コミットメッセージ例:
 ```

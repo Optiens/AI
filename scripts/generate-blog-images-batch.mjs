@@ -101,6 +101,107 @@ const articles = [
     slug: '20260507-business-visualization-prerequisite-for-ai',
     prompt: 'A business workflow being mapped from chaos to clarity: tangled lines on the left transforming into a clean structured flowchart on the right, bird and worm eye perspective concept',
   },
+  // 2026-05-08 追加 25本
+  {
+    slug: '20260508-5days-bootcamp-launch-analysis',
+    prompt: 'Abstract conceptual visualization of a multi-day learning program structure, layered timeline with sequential daily highlights ascending in clarity, business analytical perspective on a marketing funnel',
+  },
+  {
+    slug: '20260508-action-level-decomposition',
+    prompt: 'Detailed workflow breakdown into granular action steps, magnifying glass examining process details, hierarchical task decomposition concept with layered transparency',
+  },
+  {
+    slug: '20260508-ai-agent-failure-patterns-7',
+    prompt: 'Abstract concept of warning signals and checkpoints around AI agents, troubleshooting indicators in a tech environment, cautionary technical scene with seven distinct alert markers',
+  },
+  {
+    slug: '20260508-ai-automated-vs-failed-tasks-optiens',
+    prompt: 'Split-screen contrast: successful AI automation flowing smoothly on one side, failed automation hitting obstacles on the other, balanced honest evaluation concept',
+  },
+  {
+    slug: '20260508-ai-info-quality-5-checks',
+    prompt: 'Information quality assessment with a filter mechanism separating high-quality insights from noise, critical thinking visualization with five evaluation gates',
+  },
+  {
+    slug: '20260508-ai-native-management-definition',
+    prompt: 'Modern executive workspace with AI integrated into core business operations, clean transformation visualization, refined professional atmosphere',
+  },
+  {
+    slug: '20260508-ai-native-management-two-wheels',
+    prompt: 'Two interconnected gears representing left-brain efficiency and right-brain creativity working in harmony, balanced symmetric mechanical composition',
+  },
+  {
+    slug: '20260508-alignment-faking-and-harness-design',
+    prompt: 'Abstract concept of AI behavior monitoring with transparent guardrails around an AI core, sophisticated technical safety design, conceptual layers of oversight',
+  },
+  {
+    slug: '20260508-claude-code-vs-cursor-vs-copilot',
+    prompt: 'Three modern coding tool interfaces compared side by side as abstract glowing developer environments, professional comparison atmosphere',
+  },
+  {
+    slug: '20260508-design-system-driven-ai',
+    prompt: 'Brand design system components arranged in a clean grid: color palette swatches, typography samples, button shapes, abstract design rule visualization',
+  },
+  {
+    slug: '20260508-disappearing-vs-resilient-jobs',
+    prompt: 'Abstract layered tower with the bottom layer dissolving while upper layers remain solid, hierarchical job structure concept showing erosion from below',
+  },
+  {
+    slug: '20260508-divide-thinking-1oku-breakthrough',
+    prompt: 'Mathematical breakdown of a business goal into smaller daily increments, calculator and strategic planning chart blended, mountain peak in distance representing target',
+  },
+  {
+    slug: '20260508-dx-promotion-team-failure-pattern',
+    prompt: 'Disconnected boardroom and frontline teams visualization, organizational gap with broken bridge, business transformation challenge atmosphere',
+  },
+  {
+    slug: '20260508-fashion-dx-trap',
+    prompt: 'Trendy buzzword bubbles floating above a confused business landscape, contrast between superficial adoption and real transformation, conceptual editorial illustration',
+  },
+  {
+    slug: '20260508-from-ai-model-to-work-os',
+    prompt: 'Abstract operating system interface representing integrated work tools, layered software stack with an AI core, modern enterprise workflow infrastructure',
+  },
+  {
+    slug: '20260508-hokuto-yamanashi-ai-support',
+    prompt: 'Mountain landscape of rural Japanese countryside blended with subtle digital network elements, regional business support visualization, calm tranquil scene',
+  },
+  {
+    slug: '20260508-ma-fundamentals-smb',
+    prompt: 'Two business entities merging through abstract interlocking geometric pieces, professional acquisition consultation atmosphere, formal corporate transaction visualization',
+  },
+  {
+    slug: '20260508-not-100-percent-automation',
+    prompt: 'Progress visualization showing optimal automation level around 70 percent, balanced human-AI division concept, clean infographic-style composition',
+  },
+  {
+    slug: '20260508-openai-anthropic-gemini-api',
+    prompt: 'Three distinct AI service providers compared as abstract glowing tech nodes, sophisticated technical infrastructure landscape, parallel comparison',
+  },
+  {
+    slug: '20260508-rag-implementation-step-by-step',
+    prompt: 'Document database flowing through retrieval pipeline into AI generation, technical RAG architecture visualization with seven stage indicators',
+  },
+  {
+    slug: '20260508-single-vs-multi-tenant',
+    prompt: 'Two different building structures contrasted: a shared apartment block versus a private detached house, software tenancy architectural metaphor',
+  },
+  {
+    slug: '20260508-startup-idea-7-checks',
+    prompt: 'A lightbulb idea passing through seven evaluation filters, business idea validation funnel, entrepreneurship and decision-making concept',
+  },
+  {
+    slug: '20260508-supabase-vs-firebase-vs-amplify',
+    prompt: 'Three cloud database service stacks compared as abstract layered tech platforms, backend infrastructure visualization, technical comparison atmosphere',
+  },
+  {
+    slug: '20260508-three-perspectives-business-decomposition',
+    prompt: 'Three perspective icons (bird, insect, and human eye) layered over a business operations map, three layered analytical viewpoint concept',
+  },
+  {
+    slug: '20260508-white-collar-entry-level-strategy',
+    prompt: 'Modern office workforce composition with strategic restructuring indicators, business hierarchy adaptation visualization, organizational redesign atmosphere',
+  },
 ];
 
 const client = new OpenAI({ apiKey: API_KEY });
@@ -143,8 +244,8 @@ const results = [];
 for (const article of articles) {
   const result = await generate(article);
   results.push(result);
-  // 軽くスリープ（rate limit回避）
-  await new Promise(r => setTimeout(r, 500));
+  // スリープ（rate limit回避・接続安定化のため長めに）
+  await new Promise(r => setTimeout(r, 3000));
 }
 
 const ok = results.filter(r => r.status === 'ok').length;
