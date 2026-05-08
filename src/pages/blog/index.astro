@@ -14,7 +14,7 @@ const categoryLabel: Partial<Record<BlogCategory, string>> = {
 // 水耕栽培関連カテゴリはブログ一覧から除外（hydroponicsページで掲載）
 const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'social'];
 
-const DEFAULT_LIMIT = 18;
+const DEFAULT_LIMIT = 36;
 const showAll = Astro.url.searchParams.get('all') === '1';
 const limit = showAll ? Infinity : DEFAULT_LIMIT;
 const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
