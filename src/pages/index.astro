@@ -123,16 +123,11 @@ const homeSchema = [
     <section class="home-ax-section light-section">
       <div class="container">
         <h2 class="home-section-heading home-section-heading--center">なぜ、中小企業にAXか</h2>
-        <div class="home-ax-flow">
-          <div class="home-ax-flow-card home-ax-flow-card--issue">
-            <div class="home-ax-flow-label">中小企業の現実</div>
-            <p>大企業と比べて<strong>人手や資金が限られる</strong>中小企業では、毎日の業務を効率よく進める工夫が常に求められます。</p>
-          </div>
-          <div class="home-ax-flow-arrow" aria-hidden="true">→</div>
-          <div class="home-ax-flow-card home-ax-flow-card--solution">
-            <div class="home-ax-flow-label">AXがもたらす変化</div>
-            <p>AXは従来の業務を<strong>根本から変革・高度化</strong>するため、限られたリソースの中でも成果を出す効果的な手段になります。</p>
-          </div>
+        <div class="home-ax-statement">
+          <p>
+            大企業と比べて<strong>人手や資金が限られる</strong>中小企業では、毎日の業務を効率よく進める工夫が常に求められます。
+            AXは従来の業務を<strong>根本から変革・高度化</strong>するため、限られたリソースの中でも成果を出す効果的な手段になります。
+          </p>
         </div>
       </div>
     </section>
@@ -504,74 +499,26 @@ const homeSchema = [
   padding: clamp(60px, 8vw, 100px) 20px;
   background: var(--home-surface);
 }
-.home-ax-flow {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: clamp(20px, 3vw, 36px);
-  align-items: stretch;
-  max-width: 1080px;
+.home-ax-statement {
+  max-width: 920px;
   margin: clamp(36px, 5vw, 48px) auto 0;
-}
-.home-ax-flow-card {
-  position: relative;
-  padding: clamp(28px, 3.5vw, 40px) clamp(24px, 3vw, 36px);
+  padding: clamp(36px, 4.5vw, 56px) clamp(28px, 4vw, 56px);
   border-radius: 20px;
-  background: linear-gradient(180deg, #ffffff 0%, var(--home-surface-2) 100%);
-  border: 1px solid var(--home-border);
-  box-shadow: 0 8px 24px -16px rgba(15, 23, 42, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.home-ax-flow-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 40px -20px rgba(31, 58, 147, 0.28);
-}
-.home-ax-flow-card--issue {
-  border-top: 4px solid var(--home-muted, #94a3b8);
-}
-.home-ax-flow-card--solution {
-  border-top: 4px solid #1F3A93;
   background: linear-gradient(180deg, #ffffff 0%, rgba(31, 58, 147, 0.04) 100%);
+  border: 1px solid var(--home-border);
+  border-top: 4px solid #1F3A93;
+  box-shadow: 0 12px 32px -20px rgba(15, 23, 42, 0.12);
 }
-.home-ax-flow-label {
-  font-size: clamp(11px, 1.2vw, 13px);
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: #94a3b8;
-  margin-bottom: 12px;
-}
-.home-ax-flow-card--solution .home-ax-flow-label {
-  color: #1F3A93;
-}
-.home-ax-flow-card p {
-  font-size: clamp(14px, 1.5vw, 16px);
-  line-height: 1.95;
+.home-ax-statement p {
+  font-size: clamp(17px, 2vw, 22px);
+  line-height: 2.05;
   color: var(--home-text);
   margin: 0;
+  text-align: left;
 }
-.home-ax-flow-card p strong {
-  color: var(--home-heading);
+.home-ax-statement p strong {
+  color: #1F3A93;
   font-weight: 700;
-}
-.home-ax-flow-card--solution p strong {
-  color: #1F3A93;
-}
-.home-ax-flow-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(28px, 3vw, 36px);
-  font-weight: 300;
-  color: #1F3A93;
-  user-select: none;
-}
-@media (max-width: 768px) {
-  .home-ax-flow {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .home-ax-flow-arrow {
-    transform: rotate(90deg);
-  }
 }
 
 .home-section-heading-ax {
