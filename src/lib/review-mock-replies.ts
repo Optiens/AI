@@ -4,6 +4,12 @@
  * - 各レビュー × 言語(ja/en) × 口調(polite/standard/friendly) = 6 通り × 10 レビュー = 60 件
  * - 「AI で返信下書きを生成」ボタン押下時に API を呼ばず、ここから即座に返す
  * - デモ目的なので OpenAI API 利用料を消費しない構成
+ *
+ * トーン設計の原則（重要）:
+ *   friendly = 「明るく軽快」ではなく「言葉遣いがカジュアル寄り」
+ *   低評価レビューに対する friendly は、言葉遣いはやわらかいが
+ *   感謝・謝罪に「！」を付けず、過度に明るい結びを避ける
+ *   （クレームに対して元気すぎる返信は失礼になるため）
  */
 
 export type ReplyLang = 'ja' | 'en'
@@ -46,7 +52,7 @@ export const MOCK_REPLIES: ReviewReplyMap = {
         alert_priority: 'high',
       },
       friendly: {
-        text: 'ご来店いただきありがとうございました。\n\n土曜のお昼にお子様連れでお越しいただいたのに、オムライスのご提供まで 45 分もお待たせしてしまい、本当に申し訳ありませんでした！お子様もきっと飽きてしまいましたよね…。\n\nピーク時のオペレーション、しっかり見直していきます。料理を美味しいと言っていただけて、すごく励みになります。\n\nまたぜひお越しください！次回はもっとスムーズにご案内できるようにします。',
+        text: 'ご来店いただき、ありがとうございました。\n\n土曜のお昼にお子様連れでお越しいただいたのに、オムライスのご提供まで 45 分もお待たせしてしまい、本当に申し訳ありませんでした。お子様にも飽きてしまうほどのお時間をかけてしまい、ご家族にゆっくりお食事を楽しんでいただけなかったこと、心苦しい限りです。\n\nピーク時のオペレーション、しっかり見直してまいります。料理を美味しいと言っていただけて、それだけが救いです。\n\nまた機会がございましたら、お越しください。今度はもっとスムーズにお迎えできるよう改善します。',
         tone: 'low_rating',
         key_points: ['オムライス', 'お子様', 'ピーク時'],
         alert_priority: 'high',
@@ -66,7 +72,7 @@ export const MOCK_REPLIES: ReviewReplyMap = {
         alert_priority: 'high',
       },
       friendly: {
-        text: "Thanks so much for visiting and for being honest with us!\n\nWe are really sorry your omurice took 45 minutes on that busy Saturday — that's just way too long, especially with a little one in tow. We're working on tightening up the kitchen flow during peak hours.\n\nGlad the food itself hit the spot. Please give us another try — we promise a smoother experience next time!",
+        text: "Thank you for visiting us and for sharing your honest feedback.\n\nWe are truly sorry that your omurice took 45 minutes on that busy Saturday — far too long, especially with a small child waiting. We're working on tightening up the kitchen flow during peak hours.\n\nWe are glad you found the food itself enjoyable. We hope to have the chance to provide a much smoother experience next time.",
         tone: 'low_rating',
         key_points: ['omurice', 'wait time', 'kids'],
         alert_priority: 'high',
@@ -230,7 +236,7 @@ export const MOCK_REPLIES: ReviewReplyMap = {
         alert_priority: 'medium',
       },
       friendly: {
-        text: '率直な口コミ、ありがとうございました。\n\nハンバーグの味付け、お口に合わずにすみません！味の濃さはお好み分かれるところなので、貴重な意見として受け止めます。\n\nバスクチーズケーキを「絶品」と言ってもらえて、パティシエが大喜びです！立地と雰囲気で再訪してくださるとのこと、本当にうれしいです。\n\nまたぜひお越しください！',
+        text: '率直な口コミ、ありがとうございました。\n\nハンバーグの味付けがお口に合わなかったとのこと、申し訳ありませんでした。味の濃さはお好みが分かれるところですが、貴重なご意見として受け止めます。\n\nバスクチーズケーキを「絶品」と言っていただけて、パティシエがとても喜んでおりました。立地と雰囲気で再訪してくださるとのこと、本当にうれしいです。\n\nまた機会がございましたら、ぜひお越しください。',
         tone: 'mid_rating',
         key_points: ['ハンバーグ', 'チーズケーキ', '雰囲気'],
         alert_priority: 'medium',
@@ -250,7 +256,7 @@ export const MOCK_REPLIES: ReviewReplyMap = {
         alert_priority: 'medium',
       },
       friendly: {
-        text: "Thanks for the honest review!\n\nSorry the hamburger was a bit much in the seasoning department — flavor intensity is super personal, and we appreciate the heads-up. Stoked you loved the Basque cheesecake — our pastry chef will be over the moon!\n\nLooking forward to seeing you back for the view and vibe. Thanks again!",
+        text: "Thank you for the honest review.\n\nWe are sorry the hamburger seasoning was a bit too strong for your taste — flavor intensity is quite personal, and we genuinely appreciate the feedback. We are glad you enjoyed the Basque cheesecake — our pastry chef will be very pleased to hear that. Thank you for considering a return visit for the view and atmosphere.\n\nWe look forward to welcoming you back.",
         tone: 'mid_rating',
         key_points: ['hamburger', 'cheesecake', 'view'],
         alert_priority: 'medium',
@@ -322,7 +328,7 @@ export const MOCK_REPLIES: ReviewReplyMap = {
         alert_priority: 'high',
       },
       friendly: {
-        text: '予約をいただいていたのに、お席のご用意ができず 30 分もお待たせしてしまい、本当に申し訳ありませんでした。料理以前の問題で、完全に私たちの責任です。\n\n予約管理の仕組みを根本から見直して、ダブルブッキングが起きない運用に再構築します。よろしければ別途ご連絡いただけませんか。改善状況も含めてしっかり対応させてください。\n\nこのようなご迷惑、二度と起こさないよう徹底します。',
+        text: '予約をいただいていたのに、お席のご用意ができず 30 分もお待たせしてしまい、本当に申し訳ありませんでした。料理以前の問題で、完全に私たちの責任です。\n\n予約管理の仕組みを根本から見直し、ダブルブッキングが起きない運用に再構築いたします。よろしければ別途ご連絡をいただけませんでしょうか。改善状況も含めて、しっかり対応させていただきたく存じます。\n\nこのようなご迷惑、二度と起こさないよう改善してまいります。',
         tone: 'low_rating',
         key_points: ['予約', '30分'],
         alert_priority: 'high',
