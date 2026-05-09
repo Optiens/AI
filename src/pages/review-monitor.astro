@@ -170,6 +170,32 @@ const sourceIcon = {
 
     <section class="rm-section">
       <div class="container">
+
+        <!-- 透明性バナー -->
+        <div class="transparency-banner">
+          <div class="tb-item">
+            <i class="fa-solid fa-bolt"></i>
+            <div>
+              <strong>「AI で返信下書きを生成」は実際に OpenAI API を呼び出します</strong>
+              <p>1 回あたり数円（gpt-4o-mini）。本番運用時は御社の API キーを使う構成にできます。本デモは Optiens の API キーを使っており、<strong>1 IP あたり 1 時間 30 回まで</strong>に制限しています。</p>
+            </div>
+          </div>
+          <div class="tb-item">
+            <i class="fa-solid fa-database"></i>
+            <div>
+              <strong>口コミ・店舗・投稿者は架空のサンプルデータ</strong>
+              <p>食べログには公式 API がないため、実運用では「店舗管理画面の通知メールを IMAP 受信→AI 解析」の合法的な方式を採用します。Google Maps は公式 API、Instagram は Facebook Business 経由の Graph API で実装可能。<strong>本デモ画面からは実際の取得・投稿は行いません</strong>。</p>
+            </div>
+          </div>
+          <div class="tb-item">
+            <i class="fa-solid fa-vial"></i>
+            <div>
+              <strong>本番導入前のテスト環境（サンドボックス）も用意可能です</strong>
+              <p>御社専用版では、本番チャネルとは切り離した <strong>ステージング環境（Vercel Preview + Supabase の別 schema / branch）</strong> を立てて、実データの一部を流して挙動を確認した上で本番接続に切り替えます。Instagram Graph API はテストアプリモードでも動作可能。</p>
+            </div>
+          </div>
+        </div>
+
         <!-- 監視ヘッダ -->
         <div class="monitor-bar">
           <div class="monitor-status">
@@ -227,6 +253,25 @@ const sourceIcon = {
               {r.title && <h3 class="review-title">{r.title}</h3>}
               <p class="review-meta">投稿者: <strong>{r.reviewer}</strong></p>
               <p class="review-body">{r.body}</p>
+
+              <div class="review-settings">
+                <label class="setting-field">
+                  <span class="setting-label">口調</span>
+                  <select class="setting-select" data-setting="tone">
+                    <option value="polite">最も丁寧（高級店向け）</option>
+                    <option value="standard" selected>標準（丁寧でフレンドリー）</option>
+                    <option value="friendly">カジュアル（親しみ寄り）</option>
+                  </select>
+                </label>
+                <label class="setting-field">
+                  <span class="setting-label">返信言語</span>
+                  <select class="setting-select" data-setting="lang">
+                    <option value="auto" selected>自動（口コミと同じ言語）</option>
+                    <option value="ja">日本語固定</option>
+                    <option value="en">英語固定</option>
+                  </select>
+                </label>
+              </div>
 
               <div class="review-actions">
                 <button class="btn-reply" data-action="reply" data-review-id={r.id}>
@@ -390,6 +435,12 @@ async function handleReply(btn: HTMLButtonElement) {
     body: item.dataset.body || '',
   }
 
+  // 口調・言語の選択値を取得
+  const toneSelect = item.querySelector<HTMLSelectElement>('[data-setting="tone"]')
+  const langSelect = item.querySelector<HTMLSelectElement>('[data-setting="lang"]')
+  const tone = toneSelect?.value || 'standard'
+  const language = langSelect?.value || 'auto'
+
   const area = item.querySelector(`[data-reply-area="${id}"]`) as HTMLElement
   const loading = area.querySelector('.reply-loading') as HTMLElement
   const result = area.querySelector('.reply-result') as HTMLElement
@@ -405,7 +456,7 @@ async function handleReply(btn: HTMLButtonElement) {
     const res = await fetch('/api/review-reply-demo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ review }),
+      body: JSON.stringify({ review, tone, language }),
     })
     const data = await res.json()
     if (!res.ok) {
@@ -551,6 +602,92 @@ async function handleReply(btn: HTMLButtonElement) {
   .kpi-unit { font-size: 0.6em; font-weight: 600; margin-left: 4px; color: #94A3B8; }
   .kpi-sub { font-size: 0.74rem; color: #64748b; margin-top: 4px; }
   .kpi-sub--alert { color: #B91C1C; font-weight: 700; }
+
+  /* 透明性バナー */
+  .transparency-banner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .tb-item {
+    display: flex;
+    gap: 10px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(31, 58, 147, 0.05) 0%, rgba(228, 138, 149, 0.04) 100%);
+    border: 1px solid rgba(31, 58, 147, 0.15);
+    border-radius: 10px;
+    align-items: flex-start;
+  }
+  .tb-item i {
+    font-size: 1rem;
+    color: #1F3A93;
+    background: rgba(31, 58, 147, 0.10);
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tb-item strong {
+    display: block;
+    color: #0f172a;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .tb-item p {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: #475569;
+  }
+  .tb-item p strong {
+    display: inline;
+    font-size: inherit;
+    color: #1F3A93;
+  }
+  @media (max-width: 1024px) {
+    .transparency-banner { grid-template-columns: 1fr; }
+  }
+
+  /* 設定行（口調 / 言語） */
+  .review-settings {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    background: rgba(31, 58, 147, 0.04);
+    border-radius: 8px;
+  }
+  .setting-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .setting-label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #475569;
+  }
+  .setting-select {
+    padding: 4px 10px;
+    border: 1px solid rgba(31, 58, 147, 0.20);
+    border-radius: 6px;
+    background: #fff;
+    font-size: 0.78rem;
+    color: #0f172a;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .setting-select:focus {
+    outline: none;
+    border-color: #1F3A93;
+    box-shadow: 0 0 0 2px rgba(31, 58, 147, 0.15);
+  }
 
   /* レビュー */
   .review-list { display: flex; flex-direction: column; gap: 14px; }
