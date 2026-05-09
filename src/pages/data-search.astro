@@ -1,0 +1,611 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="自然言語データ検索（デモ） | Optiens"
+  description="社内データに自然な日本語で質問できる仕組みのデモ。Optiensの架空販売データ30件に対して、自由な質問でAIが回答します。"
+  noindex={true}
+>
+  <main class="ds-main">
+    <section class="ds-hero">
+      <div class="container">
+        <p class="ds-eyebrow">DEMO ／ Optiens 共通AI事例 #03</p>
+        <h1 class="ds-title">自然言語データ検索</h1>
+        <p class="ds-lede">社内データに、自然な日本語で質問できる仕組みのデモです。<br class="pc-only">Optiens の<strong>架空販売データ 30 件</strong>に対して質問してみてください。</p>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <div class="container ds-container">
+
+        <!-- 左：質問エリア -->
+        <div class="ds-query-panel">
+          <h2 class="ds-panel-title">質問する</h2>
+          <p class="ds-panel-desc">下のサンプルから選ぶか、自由に入力できます。</p>
+
+          <div class="ds-samples">
+            <button class="ds-sample" data-q="2026年 4 月の売上合計はいくら？">2026年 4 月の売上合計は？</button>
+            <button class="ds-sample" data-q="士業のお客様の合計売上と件数を教えて">士業のお客様の合計売上と件数</button>
+            <button class="ds-sample" data-q="リピート購入してくれた顧客（2回以上の取引）を教えて">リピート顧客（2回以上の取引）</button>
+            <button class="ds-sample" data-q="業種別の売上比率を教えて">業種別の売上比率</button>
+            <button class="ds-sample" data-q="保守プランを契約している顧客の一覧と月額合計">保守プラン契約顧客と月額合計</button>
+            <button class="ds-sample" data-q="山梨県以外のお客様の取引を一覧して">山梨県以外のお客様の取引</button>
+          </div>
+
+          <form id="ds-form" class="ds-form">
+            <textarea
+              id="ds-input"
+              class="ds-input"
+              rows="3"
+              placeholder="例: 先月の売上で一番大きな案件は？"
+              maxlength="200"
+            ></textarea>
+            <button type="submit" id="ds-submit" class="ds-submit">
+              <i class="fa-solid fa-magnifying-glass"></i> AI に質問
+            </button>
+            <span id="ds-status" class="ds-status"></span>
+          </form>
+        </div>
+
+        <!-- 右：回答エリア -->
+        <div class="ds-answer-panel">
+          <h2 class="ds-panel-title">AI の回答</h2>
+          <div id="ds-answer-box" class="ds-answer-box ds-answer-empty">
+            <p class="ds-answer-placeholder">左側で質問を入力すると、ここに AI の回答が表示されます。</p>
+          </div>
+
+          <h3 class="ds-section-sub" id="ds-matched-title" style="display:none;">該当データ</h3>
+          <div id="ds-matched-table" class="ds-matched-wrap"></div>
+        </div>
+
+      </div>
+
+      <!-- 注記 -->
+      <div class="container">
+        <div class="ds-footnote">
+          <p><strong>このデモについて</strong>: 表示しているデータはすべて<strong>サンプルデータ</strong>です。実際のお客様向けには、御社の業務データ（CRM・売上・在庫・問い合わせ履歴など）に対して、同じ仕組みで対話的に問い合わせできる画面をご提供します。</p>
+          <p><strong>弊社での運用</strong>: Optiens 社内では、水耕栽培の収穫データ・電力消費データに対して、同じ仕組みで対話分析しています。</p>
+          <a href="/ai-examples#case-03" class="ds-back">← 共通AI事例集に戻る</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- データプレビュー -->
+    <section class="ds-section">
+      <div class="container">
+        <details class="ds-data-preview">
+          <summary>サンプルデータをすべて見る（30件）</summary>
+          <div id="ds-all-table" class="ds-table-wrap"></div>
+        </details>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+type SalesRecord = {
+  id: string
+  date: string
+  client: string
+  service: string
+  industry: string
+  region: string
+  amount: number
+  status: 'completed' | 'in-progress' | 'cancelled'
+}
+
+const form = document.getElementById('ds-form') as HTMLFormElement
+const input = document.getElementById('ds-input') as HTMLTextAreaElement
+const submit = document.getElementById('ds-submit') as HTMLButtonElement
+const statusEl = document.getElementById('ds-status') as HTMLElement
+const answerBox = document.getElementById('ds-answer-box') as HTMLElement
+const matchedTitle = document.getElementById('ds-matched-title') as HTMLElement
+const matchedTable = document.getElementById('ds-matched-table') as HTMLElement
+const allTable = document.getElementById('ds-all-table') as HTMLElement
+
+let allRecords: SalesRecord[] = []
+
+// サンプルデータ取得
+async function loadAllRecords() {
+  try {
+    const res = await fetch('/api/data-search-demo')
+    if (!res.ok) return
+    const data = await res.json()
+    allRecords = data.records || []
+    renderAllTable()
+  } catch (err) {
+    console.error('Failed to load records:', err)
+  }
+}
+
+function fmtAmount(n: number) {
+  return '¥' + n.toLocaleString('ja-JP')
+}
+
+function statusLabel(s: string) {
+  if (s === 'completed') return '完了'
+  if (s === 'in-progress') return '進行中'
+  if (s === 'cancelled') return 'キャンセル'
+  return s
+}
+
+function renderTable(records: SalesRecord[], target: HTMLElement) {
+  if (records.length === 0) {
+    target.innerHTML = '<p class="ds-empty">該当する記録はありません。</p>'
+    return
+  }
+  const rows = records.map(r => `
+    <tr>
+      <td class="ds-cell-id">${r.id}</td>
+      <td>${r.date}</td>
+      <td class="ds-cell-client">${r.client}</td>
+      <td>${r.service}</td>
+      <td><span class="ds-tag">${r.industry}</span></td>
+      <td>${r.region}</td>
+      <td class="ds-cell-amount">${fmtAmount(r.amount)}</td>
+      <td><span class="ds-status-badge ds-status-${r.status}">${statusLabel(r.status)}</span></td>
+    </tr>
+  `).join('')
+  target.innerHTML = `
+    <table class="ds-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>日付</th><th>顧客</th><th>サービス</th>
+          <th>業種</th><th>地域</th><th class="ds-cell-amount">金額</th><th>状態</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `
+}
+
+function renderAllTable() {
+  renderTable(allRecords, allTable)
+}
+
+function escapeHtml(s: string) {
+  return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string))
+}
+
+// 簡易 Markdown レンダラ（見出し / 太字 / リスト / 表）
+function renderMarkdown(md: string): string {
+  let html = escapeHtml(md)
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+
+  // 表
+  const lines = html.split('\n')
+  const out: string[] = []
+  let i = 0
+  while (i < lines.length) {
+    const line = lines[i]
+    if (line.match(/^\|.+\|$/) && lines[i + 1]?.match(/^\|[\s\-:|]+\|$/)) {
+      // 表開始
+      const headers = line.split('|').slice(1, -1).map(s => s.trim())
+      i += 2
+      const tableRows: string[] = []
+      while (i < lines.length && lines[i].match(/^\|.+\|$/)) {
+        const cells = lines[i].split('|').slice(1, -1).map(s => s.trim())
+        tableRows.push('<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>')
+        i++
+      }
+      out.push(`<table class="ds-md-table"><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${tableRows.join('')}</tbody></table>`)
+      continue
+    }
+    if (line.match(/^- /)) {
+      // リスト
+      const items: string[] = []
+      while (i < lines.length && lines[i].match(/^- /)) {
+        items.push(`<li>${lines[i].replace(/^- /, '')}</li>`)
+        i++
+      }
+      out.push('<ul>' + items.join('') + '</ul>')
+      continue
+    }
+    if (line.trim() === '') {
+      i++
+      continue
+    }
+    out.push(`<p>${line}</p>`)
+    i++
+  }
+  return out.join('\n')
+}
+
+async function ask(query: string) {
+  if (!query.trim()) return
+  submit.disabled = true
+  statusEl.textContent = 'AI が考えています…'
+  answerBox.classList.remove('ds-answer-empty')
+  answerBox.innerHTML = '<p class="ds-loading"><i class="fa-solid fa-spinner fa-spin"></i> 回答を生成中…</p>'
+  matchedTitle.style.display = 'none'
+  matchedTable.innerHTML = ''
+
+  try {
+    const res = await fetch('/api/data-search-demo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+      answerBox.innerHTML = `<p class="ds-error">${escapeHtml(data?.error || 'エラーが発生しました')}</p>`
+      statusEl.textContent = ''
+      return
+    }
+
+    const answerHtml = renderMarkdown(data.answer || '')
+    let calc = ''
+    if (data.calculation_note) {
+      calc = `<details class="ds-calc"><summary>計算根拠</summary><pre>${escapeHtml(data.calculation_note)}</pre></details>`
+    }
+    let mockNote = ''
+    if (data.mock) {
+      mockNote = '<p class="ds-mock-note">※ モック応答です（API キー未設定環境）</p>'
+    }
+    answerBox.innerHTML = `${mockNote}<div class="ds-answer-content">${answerHtml}</div>${calc}`
+
+    // 該当データ表示
+    if (Array.isArray(data.matched_ids) && data.matched_ids.length > 0) {
+      const ids = new Set(data.matched_ids)
+      const matched = allRecords.filter(r => ids.has(r.id))
+      if (matched.length > 0) {
+        matchedTitle.style.display = 'block'
+        renderTable(matched, matchedTable)
+      }
+    }
+
+    statusEl.textContent = data.remaining !== undefined ? `残り ${data.remaining} 回 / 1時間` : ''
+  } catch (err) {
+    answerBox.innerHTML = '<p class="ds-error">通信エラーが発生しました。</p>'
+    statusEl.textContent = ''
+  } finally {
+    submit.disabled = false
+  }
+}
+
+// イベント
+form.addEventListener('submit', (e) => {
+  e.preventDefault()
+  ask(input.value)
+})
+
+document.querySelectorAll('.ds-sample').forEach((btn) => {
+  btn.addEventListener('click', (e) => {
+    const q = (e.currentTarget as HTMLButtonElement).getAttribute('data-q') || ''
+    input.value = q
+    ask(q)
+  })
+})
+
+loadAllRecords()
+</script>
+
+<style>
+  .ds-main {
+    background: #F8FAFD;
+  }
+  .ds-hero {
+    padding: clamp(96px, 12vw, 140px) 0 clamp(20px, 3vw, 32px);
+    background: #fff;
+    border-bottom: 1px solid rgba(31, 58, 147, 0.08);
+  }
+  .ds-eyebrow {
+    font-size: 0.78rem;
+    color: #6B85C9;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .ds-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+  }
+  .ds-lede {
+    color: #64748b;
+    font-size: clamp(0.9rem, 1.4vw, 1rem);
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .ds-section {
+    padding: clamp(28px, 4vw, 48px) 0;
+  }
+  .ds-section:last-of-type {
+    padding-bottom: clamp(80px, 10vw, 120px);
+  }
+
+  .ds-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .ds-panel-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px;
+  }
+  .ds-panel-desc {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 0 0 14px;
+  }
+
+  /* 質問パネル */
+  .ds-query-panel,
+  .ds-answer-panel {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .ds-samples {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .ds-sample {
+    text-align: left;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(31, 58, 147, 0.12);
+    background: #F8FAFD;
+    color: #0f172a;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .ds-sample:hover {
+    background: rgba(31, 58, 147, 0.06);
+    border-color: rgba(31, 58, 147, 0.30);
+  }
+  .ds-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ds-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(31, 58, 147, 0.20);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: vertical;
+    font-family: inherit;
+  }
+  .ds-input:focus {
+    outline: none;
+    border-color: #1F3A93;
+    box-shadow: 0 0 0 3px rgba(31, 58, 147, 0.10);
+  }
+  .ds-submit {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #1F3A93 0%, #6B85C9 100%);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .ds-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(31, 58, 147, 0.30);
+  }
+  .ds-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .ds-status {
+    font-size: 0.78rem;
+    color: #94A3B8;
+  }
+
+  /* 回答 */
+  .ds-answer-box {
+    min-height: 180px;
+    background: #F8FAFD;
+    border: 1px solid rgba(31, 58, 147, 0.06);
+    border-radius: 10px;
+    padding: 18px;
+    color: #0f172a;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    margin-bottom: 18px;
+  }
+  .ds-answer-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ds-answer-placeholder {
+    color: #94A3B8;
+    margin: 0;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+  .ds-loading {
+    color: #6B85C9;
+    margin: 0;
+  }
+  .ds-error {
+    color: #B91C1C;
+    margin: 0;
+  }
+  .ds-mock-note {
+    color: #94A3B8;
+    font-size: 0.78rem;
+    margin: 0 0 10px;
+  }
+  .ds-answer-content p { margin: 0 0 10px; }
+  .ds-answer-content p:last-child { margin-bottom: 0; }
+  .ds-answer-content ul {
+    margin: 8px 0;
+    padding-left: 20px;
+  }
+  .ds-answer-content li { margin-bottom: 4px; }
+  .ds-md-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 0.85rem;
+  }
+  .ds-md-table th, .ds-md-table td {
+    padding: 6px 10px;
+    border: 1px solid rgba(31, 58, 147, 0.15);
+    text-align: left;
+  }
+  .ds-md-table th {
+    background: rgba(31, 58, 147, 0.06);
+    font-weight: 700;
+  }
+  .ds-calc {
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: rgba(31, 58, 147, 0.04);
+    border-radius: 6px;
+  }
+  .ds-calc summary {
+    font-size: 0.78rem;
+    color: #6B85C9;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .ds-calc pre {
+    margin: 8px 0 0;
+    font-size: 0.78rem;
+    color: #475569;
+    white-space: pre-wrap;
+    font-family: inherit;
+  }
+
+  .ds-section-sub {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 10px;
+  }
+
+  /* テーブル */
+  .ds-matched-wrap, .ds-table-wrap {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 8px;
+  }
+  .ds-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+  .ds-table th, .ds-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(31, 58, 147, 0.08);
+    text-align: left;
+    white-space: nowrap;
+  }
+  .ds-table th {
+    background: rgba(31, 58, 147, 0.04);
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+  .ds-cell-id {
+    font-family: 'Inter', monospace;
+    color: #94A3B8;
+    font-size: 0.75rem;
+  }
+  .ds-cell-client { font-weight: 600; }
+  .ds-cell-amount { text-align: right; font-family: 'Inter', monospace; }
+  .ds-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(31, 58, 147, 0.08);
+    color: #1F3A93;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .ds-status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .ds-status-completed { background: rgba(16, 185, 129, 0.12); color: #047857; }
+  .ds-status-in-progress { background: rgba(31, 58, 147, 0.10); color: #1F3A93; }
+  .ds-status-cancelled { background: rgba(100, 116, 139, 0.15); color: #475569; }
+
+  .ds-data-preview {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 12px;
+    padding: 14px 18px;
+  }
+  .ds-data-preview summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1F3A93;
+    list-style: none;
+  }
+  .ds-data-preview summary::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+  }
+  .ds-data-preview[open] summary::before {
+    transform: rotate(90deg);
+  }
+  .ds-data-preview[open] summary {
+    margin-bottom: 12px;
+  }
+
+  .ds-empty {
+    color: #94A3B8;
+    font-size: 0.85rem;
+    margin: 0;
+    padding: 12px 0;
+  }
+
+  /* Footnote */
+  .ds-footnote {
+    background: #fff;
+    border: 1px dashed rgba(31, 58, 147, 0.20);
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+  .ds-footnote p {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.8;
+    margin: 0 0 10px;
+  }
+  .ds-footnote p:last-of-type { margin-bottom: 14px; }
+  .ds-footnote strong { color: #0f172a; }
+  .ds-back {
+    display: inline-block;
+    color: #1F3A93;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .ds-back:hover { text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .ds-container { grid-template-columns: 1fr; }
+    .pc-only { display: none; }
+  }
+</style>
