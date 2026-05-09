@@ -8,7 +8,7 @@ image: '/images/blog/20260506-ai-vs-rpa-smb-choice.webp'
 
 ## RPAブームから10年、選択肢が一気に増えた
 
-「事務作業の自動化」と聞いて、多くの中小企業が最初に検討してきたのがRPA（Robotic Process Automation）でした。2016年前後に一気に広がり、UiPath・Power Automate Desktop・WinActor・ロボパットといった製品が次々に普及。「人がやっているPC操作をそのままロボットに置き換える」というわかりやすさが受け、導入企業は数万社規模に達しました。
+「事務作業の自動化」と聞いて、多くの中小企業が最初に検討してきたのが RPA（Robotic Process Automation）でした。2016 年前後（日本では「RPA 元年」と呼ばれます）に一気に広がり、UiPath・Power Automate Desktop・WinActor・ロボパットといった製品が次々に普及。「人がやっている PC 操作をそのままロボットに置き換える」というわかりやすさが受け、WinActor 単体でも累計 8,500 社超（2024 年時点）、市場全体では累計万社規模の導入実績に達しています。
 
 しかし、現場で運用してきた方ほど、こう感じているはずです。
 
