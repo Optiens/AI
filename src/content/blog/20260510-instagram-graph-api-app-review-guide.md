@@ -28,9 +28,9 @@ Instagram Graph API のすべての機能が App Review を必要とするわけ
 | 用途 | 必要な権限 | App Review |
 |---|---|---|
 | 自社アカウントの検証・テスト | （Development mode）| **不要** |
-| 顧客アカウントのコメント取得 | `instagram_manage_comments` | **必要** |
-| 顧客アカウントのメンション取得 | `instagram_manage_mentions` | **必要** |
-| 顧客アカウントへ自動返信 | `instagram_manage_comments` | **必要** |
+| 顧客アカウントの基本情報取得 | `instagram_basic` | **必要** |
+| 顧客アカウントのコメント取得・返信 | `instagram_manage_comments` | **必要** |
+| 顧客アカウントへのメンション取得 | `instagram_manage_comments`（同権限）| **必要** |
 | Insights データ取得 | `instagram_manage_insights` | **必要** |
 | 自社の SaaS / B2B サービス提供 | 上記すべて | **必要** |
 
