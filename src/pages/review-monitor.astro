@@ -176,7 +176,7 @@ const sourceIcon = {
             <i class="fa-solid fa-circle-check"></i>
             <div>
               <strong>本デモは AI API を呼びません（事前用意のサンプル応答を表示）</strong>
-              <p>「AI で返信下書きを生成」ボタンを押すと、各レビュー × 口調 × 言語の組合せで <strong>事前用意した応答</strong> を表示します。実運用時は OpenAI などの AI API を呼び出して動的生成し、<strong>利用量に応じた従量課金</strong>が発生します（gpt-4o-mini で 1 件あたり約 0.1 円）。</p>
+              <p>「AI で返信下書きを生成」ボタンを押すと、各レビュー × 口調 × 言語の組合せで <strong>事前用意した応答</strong> を表示します。実運用時は <strong>Claude Sonnet 4.5</strong> または <strong>GPT-4o</strong> 等の最新モデルで動的生成し、<strong>利用量に応じた従量課金</strong>が発生します（1 件あたり約 ¥1〜2）。</p>
             </div>
           </div>
           <div class="tb-item">
@@ -190,7 +190,7 @@ const sourceIcon = {
             <i class="fa-solid fa-vial"></i>
             <div>
               <strong>本番導入前のテスト環境（サンドボックス）も用意可能です</strong>
-              <p>御社専用版では、本番チャネルとは切り離した <strong>ステージング環境（Vercel Preview + Supabase の別 schema / branch）</strong> を立てて、実データの一部を流して挙動を確認した上で本番接続に切り替えます。Instagram Graph API はテストアプリモードでも動作可能。</p>
+              <p>御社専用版では、本番チャネルとは切り離した <strong>ステージング環境（Vercel Preview + Supabase の別 schema / branch）</strong> を立てて、実データの一部を流して挙動を確認した上で本番接続に切り替えます。Instagram Graph API は <strong>Development mode</strong> での自社検証から始めることが可能です（実運用には Meta の <strong>App Review 承認（2〜4 週間）</strong>が別途必要）。</p>
             </div>
           </div>
         </div>
@@ -350,7 +350,7 @@ const sourceIcon = {
                 <strong>Google マップ</strong>
                 <span class="rm-tech-badge rm-tech-badge--ok">公式 API</span>
               </div>
-              <p>Google Business Profile API で 5〜30 分間隔の cron polling。自社店舗の新着口コミを合法的に取得・返信。</p>
+              <p>Google Business Profile API で 5〜30 分間隔の cron polling。自社店舗の新着口コミを合法的に取得・返信。<br /><small>※ Google への <strong>API アクセス申請（承認制）</strong>が必要。承認まで通常 1〜2 週間。</small></p>
             </div>
             <div class="rm-tech-card">
               <div class="rm-tech-head">
@@ -358,7 +358,7 @@ const sourceIcon = {
                 <strong>食べログ</strong>
                 <span class="rm-tech-badge rm-tech-badge--alt">メール解析</span>
               </div>
-              <p>公式 API は提供されていないため、店舗管理画面の通知メールを IMAP で受信→AI で内容抽出する合法的な代替方式を採用します。</p>
+              <p>公式 API は提供されていないため、店舗オーナーの管理画面通知メールを御社専用の受信ボックスに転送 → IMAP で AI が内容抽出する代替方式を採用します。<br /><small>※ 第三者スクレイピングではなく店舗オーナー本人の管理メールを使うため規約上問題なしですが、食べログ仕様変更による影響は避けられません。</small></p>
             </div>
             <div class="rm-tech-card">
               <div class="rm-tech-head">
@@ -366,7 +366,7 @@ const sourceIcon = {
                 <strong>Instagram コメント・メンション</strong>
                 <span class="rm-tech-badge rm-tech-badge--ok">公式 API</span>
               </div>
-              <p>Instagram Graph API（Facebook Business 経由）で公式に取得・返信が可能です。</p>
+              <p>Instagram Graph API（Facebook Business 経由）で公式に取得・返信が可能です。<br /><small>※ 実運用には Meta の <strong>App Review 承認</strong>が必要（通常 2〜4 週間）。</small></p>
             </div>
           </div>
         </div>
@@ -387,33 +387,33 @@ const sourceIcon = {
               <tbody>
                 <tr>
                   <td><strong>Google Business Profile API</strong><br /><small>取得・返信</small></td>
-                  <td>無料（リクエスト上限内）</td>
+                  <td>無料<br /><small>※ Google への <strong>API アクセス申請承認</strong>が必要（承認制）</small></td>
                   <td class="cost-amount cost-amount--free">¥0</td>
                 </tr>
                 <tr>
                   <td><strong>Instagram Graph API</strong><br /><small>コメント・メンション取得・返信</small></td>
-                  <td>無料（基本利用）<small>※ 高度な広告機能は別途</small></td>
+                  <td>無料（基本利用）<br /><small>※ 実運用には Meta の <strong>App Review 承認</strong>が必要（2〜4 週間）</small></td>
                   <td class="cost-amount cost-amount--free">¥0</td>
                 </tr>
                 <tr>
                   <td><strong>食べログ通知メール用 IMAP</strong><br /><small>専用メールアドレス・受信</small></td>
-                  <td>Google Workspace ライト等<br /><small>月 ¥800〜（既存契約があれば追加 ¥0）</small></td>
+                  <td>Google Workspace Business Starter<br /><small>月 ¥800〜（年契約・税抜。既存契約があれば追加 ¥0）</small></td>
                   <td class="cost-amount">¥0〜800</td>
                 </tr>
                 <tr>
-                  <td><strong>OpenAI API（gpt-4o-mini）</strong><br /><small>返信下書き生成 30 件想定</small></td>
-                  <td>従量課金<br /><small>1 件約 0.1 円（プロンプト＋応答 約 1,500 トークン）</small></td>
-                  <td class="cost-amount">¥3〜10</td>
+                  <td><strong>AI API（Claude Sonnet 4.5 または GPT-4o）</strong><br /><small>返信下書き生成 30 件想定</small></td>
+                  <td>従量課金<br /><small>1 件約 ¥1〜2（プロンプト＋応答 約 1,500 トークン・為替 ¥150/USD 想定）<br />※ コスト最優先なら gpt-4o-mini 等で 1 件 ¥0.05〜0.1 まで圧縮可能（精度はトレードオフ）</small></td>
+                  <td class="cost-amount">¥30〜60</td>
                 </tr>
                 <tr>
                   <td><strong>Supabase（DB・認証）</strong><br /><small>口コミ履歴・分析データ保管</small></td>
-                  <td>Free 〜 Pro $25/月</td>
+                  <td>Free 〜 Pro $25/月<br /><small>※ Free 枠: 8GB DB / 100K MAU / 100GB ストレージ</small></td>
                   <td class="cost-amount">¥0〜3,800</td>
                 </tr>
                 <tr>
                   <td><strong>Vercel（ホスティング）</strong><br /><small>cron polling 含む</small></td>
-                  <td>Hobby 無料 〜 Pro $20/月</td>
-                  <td class="cost-amount">¥0〜3,000</td>
+                  <td>Pro $20/月（必須）<br /><small>※ Hobby は cron 1 日 1 回のみ。5〜30 分 polling は <strong>Pro 必須</strong></small></td>
+                  <td class="cost-amount">¥3,000</td>
                 </tr>
                 <tr>
                   <td><strong>通知連携</strong><br /><small>Slack / メール / LINE 公式（任意）</small></td>
@@ -424,19 +424,19 @@ const sourceIcon = {
               <tfoot>
                 <tr>
                   <td colspan="2"><strong>合計目安（月額）</strong></td>
-                  <td class="cost-amount cost-amount--total">¥0〜7,610</td>
+                  <td class="cost-amount cost-amount--total">¥3,030〜7,660</td>
                 </tr>
               </tfoot>
             </table>
           </div>
           <div class="rm-cost-notes">
-            <p><strong>規模拡大時の試算例:</strong></p>
+            <p><strong>規模拡大時の試算例</strong>（Claude Sonnet 4.5 / GPT-4o 想定）:</p>
             <ul>
-              <li><strong>店舗 1 拠点・月 500 件処理</strong>: AI API ¥50〜100、その他は同等 → 合計 約 ¥3,000〜8,000/月</li>
-              <li><strong>店舗 5 拠点・月 2,000 件処理</strong>: AI API ¥200〜400、Supabase Pro 推奨 → 合計 約 ¥7,000〜12,000/月</li>
-              <li><strong>10 拠点超</strong>: AI API ¥500〜2,000、専用構成 → 約 ¥15,000〜30,000/月</li>
+              <li><strong>店舗 1 拠点・月 500 件処理</strong>: AI API ¥500〜1,000、その他同等 → 合計 約 ¥3,500〜8,600/月</li>
+              <li><strong>店舗 5 拠点・月 2,000 件処理</strong>: AI API ¥2,000〜4,000、Supabase Pro 推奨 → 合計 約 ¥9,000〜13,000/月</li>
+              <li><strong>10 拠点超</strong>: AI API ¥4,000〜10,000、専用構成 → 約 ¥18,000〜35,000/月</li>
             </ul>
-            <p class="rm-cost-disclaimer">※ 上記は基盤（API・DB・ホスティング）の<strong>ランニングコストのみ</strong>です。初期構築費・月額保守費は別途。為替変動で多少上下します（為替 ¥150/USD 想定）。</p>
+            <p class="rm-cost-disclaimer">※ 上記は基盤（API・DB・ホスティング）の<strong>ランニングコストのみ</strong>です。初期構築費・月額保守費は別途。為替変動で多少上下します（為替 ¥150/USD 想定）。<br />※ Supabase Pro は <strong>プロジェクト単位</strong>での課金。8GB DB・100K MAU・100GB ストレージ超過時は別途従量課金が発生します。<br />※ AI モデルは品質重視で Claude Sonnet 4.5 / GPT-4o を推奨。コスト最優先なら gpt-4o-mini 等の軽量モデルで上記の 1/15 程度まで圧縮可能（精度はトレードオフ）。</p>
           </div>
         </div>
 
