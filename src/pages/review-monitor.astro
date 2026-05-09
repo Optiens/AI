@@ -1,0 +1,817 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// モック口コミデータ（カフェ・レストラン業種特化デモ）
+type Review = {
+  id: string;
+  source: 'tabelog' | 'google_map' | 'instagram';
+  shop_name: string;
+  reviewer: string;
+  rating: number;
+  title?: string;
+  body: string;
+  posted_at: string;       // 表示用相対時刻
+  iso_at: string;          // 並べ替え用 ISO
+  category: 'high' | 'mid' | 'low';
+};
+
+const reviews: Review[] = [
+  {
+    id: 'R-2003',
+    source: 'tabelog',
+    shop_name: '清里カフェ Verde',
+    reviewer: 'k_takano',
+    rating: 2,
+    title: '料理は美味しいが提供が遅い',
+    body: '土曜の昼に伺いました。注文してからオムライスが出てくるまで45分。子供が飽きてしまい大変でした。料理自体は美味しかったので、ピーク時のオペレーションを改善してほしいです。',
+    posted_at: '8 分前',
+    iso_at: new Date(Date.now() - 8 * 60 * 1000).toISOString(),
+    category: 'low',
+  },
+  {
+    id: 'R-2002',
+    source: 'google_map',
+    shop_name: '清里カフェ Verde',
+    reviewer: 'Yuki S.',
+    rating: 5,
+    body: '八ヶ岳の眺めが最高でした！ハーブティーの香りに癒され、季節のサラダプレートも野菜の鮮度が抜群。スタッフの方の接客も気持ちよく、また絶対に行きたいです。',
+    posted_at: '34 分前',
+    iso_at: new Date(Date.now() - 34 * 60 * 1000).toISOString(),
+    category: 'high',
+  },
+  {
+    id: 'R-2001',
+    source: 'google_map',
+    shop_name: '清里カフェ Verde',
+    reviewer: 'Hannah K.',
+    rating: 4,
+    body: 'Lovely cafe with a great view of Mt. Yatsugatake! The basil pasta was fresh and aromatic. A bit busy on weekends but worth visiting.',
+    posted_at: '1 時間前',
+    iso_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    category: 'high',
+  },
+  {
+    id: 'R-1999',
+    source: 'instagram',
+    shop_name: '清里カフェ Verde',
+    reviewer: '@coffee_walker_jp',
+    rating: 4,
+    body: '清里に来たら必ず寄るカフェ。今日のキッシュ、しっかりめの塩味で美味しかった！次は朝の時間帯に行きたい。',
+    posted_at: '2 時間前',
+    iso_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    category: 'high',
+  },
+  {
+    id: 'R-1998',
+    source: 'tabelog',
+    shop_name: '清里カフェ Verde',
+    reviewer: 'morimoto_3',
+    rating: 3,
+    title: 'デザートは良かった',
+    body: 'メイン料理（ハンバーグ）はちょっと味付けが強めで好みではなかったですが、デザートのバスクチーズケーキは絶品でした。立地は最高なので雰囲気目当てで再訪します。',
+    posted_at: '5 時間前',
+    iso_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+    category: 'mid',
+  },
+  {
+    id: 'R-1997',
+    source: 'google_map',
+    shop_name: '清里カフェ Verde',
+    reviewer: 'まるちゃん',
+    rating: 5,
+    body: '駐車場から店内まで段差がほぼなく、ベビーカーでも入りやすかったです。お子様メニューもあり助かりました。',
+    posted_at: '8 時間前',
+    iso_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+    category: 'high',
+  },
+  {
+    id: 'R-1996',
+    source: 'tabelog',
+    shop_name: '清里カフェ Verde',
+    reviewer: 'gourmet_eye_99',
+    rating: 1,
+    title: '予約していたのに席がなかった',
+    body: '予約していたのに着いたら席がないと言われ、30分待たされました。予約システムをきちんと運用してほしい。料理云々の前に、お客様への対応がなっていないと感じました。',
+    posted_at: '13 時間前',
+    iso_at: new Date(Date.now() - 13 * 60 * 60 * 1000).toISOString(),
+    category: 'low',
+  },
+  {
+    id: 'R-1995',
+    source: 'google_map',
+    shop_name: '清里カフェ Verde',
+    reviewer: '田中 健一',
+    rating: 4,
+    body: '清里の自然に囲まれた素敵なカフェでした。コーヒーの香りも良く、ゆっくりとした時間を過ごせました。',
+    posted_at: '昨日',
+    iso_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    category: 'high',
+  },
+  {
+    id: 'R-1994',
+    source: 'instagram',
+    shop_name: '清里カフェ Verde',
+    reviewer: '@brunch_diary',
+    rating: 5,
+    body: '朝のテラス席が本当に気持ちよかった！コーヒーと焼きたてマフィンで完璧な朝食。',
+    posted_at: '昨日',
+    iso_at: new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString(),
+    category: 'high',
+  },
+  {
+    id: 'R-1993',
+    source: 'tabelog',
+    shop_name: '清里カフェ Verde',
+    reviewer: 'cafe_lover_2026',
+    rating: 4,
+    title: '雰囲気は最高',
+    body: '雰囲気は本当に良いカフェ。料理もハーブが効いていて美味しいです。値段はやや高めですが立地と眺めを考えれば妥当かな。',
+    posted_at: '2 日前',
+    iso_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    category: 'high',
+  },
+];
+
+const last24h = reviews.filter((r) => new Date(r.iso_at).getTime() > Date.now() - 24 * 60 * 60 * 1000);
+const stats = {
+  total24h: last24h.length,
+  low24h: last24h.filter((r) => r.category === 'low').length,
+  highAvgRating: (last24h.reduce((s, r) => s + r.rating, 0) / Math.max(last24h.length, 1)).toFixed(1),
+};
+
+const sourceLabel = {
+  tabelog: '食べログ',
+  google_map: 'Googleマップ',
+  instagram: 'Instagram',
+};
+const sourceIcon = {
+  tabelog: 'fa-utensils',
+  google_map: 'fa-map-location-dot',
+  instagram: 'fa-square-instagram',
+};
+---
+
+<Layout
+  title="口コミ自動監視 + AI返信下書き（デモ）| Optiens"
+  description="食べログ・Google マップ・Instagram の新着口コミを 24h 監視し、AI が分類・低評価アラート・返信下書きを行うデモ。中小カフェ・レストラン向け業種特化AI事例。"
+  noindex={true}
+>
+  <main class="rm-main">
+    <section class="rm-hero">
+      <div class="container">
+        <p class="rm-eyebrow">DEMO ／ Optiens 業種特化AI事例 ／ カフェ・レストラン</p>
+        <h1 class="rm-title">口コミ 24h 自動監視＋AI返信下書き</h1>
+        <p class="rm-lede">
+          食べログ・Google マップ・Instagram の新着口コミを<strong>裏で 24h 監視</strong>し、
+          内容を AI が分類、<strong>低評価は即時通知</strong>、<strong>返信下書きは即生成</strong>する仕組みのデモです。
+        </p>
+      </div>
+    </section>
+
+    <section class="rm-section">
+      <div class="container">
+        <!-- 監視ヘッダ -->
+        <div class="monitor-bar">
+          <div class="monitor-status">
+            <span class="status-dot"></span>
+            <span class="status-text"><strong>監視中</strong> ・ 最終チェック 2 分前</span>
+          </div>
+          <div class="monitor-channels">
+            <span class="ch-tag"><i class="fa-solid fa-utensils"></i> 食べログ</span>
+            <span class="ch-tag"><i class="fa-solid fa-map-location-dot"></i> Googleマップ</span>
+            <span class="ch-tag"><i class="fa-brands fa-square-instagram"></i> Instagram</span>
+          </div>
+        </div>
+
+        <!-- KPI -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">直近 24h 新着レビュー</div>
+            <div class="kpi-value">{stats.total24h}<span class="kpi-unit">件</span></div>
+          </div>
+          <div class={`kpi-card ${stats.low24h > 0 ? 'kpi-card--alert' : ''}`}>
+            <div class="kpi-label">直近 24h 低評価（★1〜2）</div>
+            <div class="kpi-value">{stats.low24h}<span class="kpi-unit">件</span></div>
+            {stats.low24h > 0 && <div class="kpi-sub kpi-sub--alert">即時返信を推奨</div>}
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">直近 24h 平均評価</div>
+            <div class="kpi-value">{stats.highAvgRating}<span class="kpi-unit">/ 5</span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">監視チャネル数</div>
+            <div class="kpi-value">3<span class="kpi-unit">本</span></div>
+            <div class="kpi-sub">食べログ / Maps / IG</div>
+          </div>
+        </div>
+
+        <!-- タイムライン -->
+        <h2 class="section-title">新着レビュー タイムライン</h2>
+        <div class="review-list">
+          {reviews.map((r) => (
+            <article class={`review-item review-${r.category}`} data-id={r.id} data-rating={r.rating} data-source={r.source} data-body={r.body} data-shop={r.shop_name} data-reviewer={r.reviewer} data-title={r.title || ''}>
+              <header class="review-head">
+                <span class={`review-source review-source--${r.source}`}>
+                  <i class={`fa-solid ${sourceIcon[r.source]}`}></i> {sourceLabel[r.source]}
+                </span>
+                <span class="review-rating">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <i class={`fa-solid fa-star ${i < r.rating ? 'star-filled' : 'star-empty'}`}></i>
+                  ))}
+                </span>
+                <span class="review-time">{r.posted_at}</span>
+                {r.category === 'low' && (
+                  <span class="review-alert"><i class="fa-solid fa-circle-exclamation"></i> 即時対応推奨</span>
+                )}
+              </header>
+              {r.title && <h3 class="review-title">{r.title}</h3>}
+              <p class="review-meta">投稿者: <strong>{r.reviewer}</strong></p>
+              <p class="review-body">{r.body}</p>
+
+              <div class="review-actions">
+                <button class="btn-reply" data-action="reply" data-review-id={r.id}>
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> AI で返信下書きを生成
+                </button>
+                <button class="btn-skip" data-action="skip" data-review-id={r.id}>
+                  <i class="fa-regular fa-circle"></i> スルー（対応不要）
+                </button>
+              </div>
+
+              <div class="reply-area" data-reply-area={r.id} hidden>
+                <div class="reply-loading" hidden>
+                  <i class="fa-solid fa-spinner fa-spin"></i> AI が返信を作成中...
+                </div>
+                <div class="reply-result" hidden>
+                  <div class="reply-meta">
+                    <span class="reply-tone-badge"></span>
+                    <span class="reply-key-points"></span>
+                  </div>
+                  <textarea class="reply-textarea" rows="5"></textarea>
+                  <div class="reply-action-row">
+                    <button class="btn-publish" data-action="publish">
+                      <i class="fa-solid fa-paper-plane"></i> このまま投稿（モック）
+                    </button>
+                    <button class="btn-regen" data-action="regen">
+                      <i class="fa-solid fa-rotate"></i> 再生成
+                    </button>
+                  </div>
+                  <p class="reply-status"></p>
+                </div>
+                <div class="reply-error" hidden></div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <!-- 拡張可能性ハイライト -->
+        <div class="rm-extension">
+          <div class="rm-extension-head">
+            <i class="fa-solid fa-arrows-turn-to-dots"></i>
+            <h3>御社専用版なら、ここまで全自動化</h3>
+          </div>
+          <p class="rm-extension-lede">
+            このデモは「監視→分類→返信下書き生成」までを画面で再現していますが、御社専用版では下記まで <strong>裏で動き続けて、必要な時だけ通知</strong> する構成にできます。
+          </p>
+          <div class="rm-extension-grid">
+            <div class="rm-ext-card">
+              <i class="fa-solid fa-bell"></i>
+              <h4>低評価即時通知</h4>
+              <p>★1〜2 の新着レビューを 5 分以内にオーナー LINE / Slack / メールへプッシュ通知。深夜帯も検知のみ、対応は朝。</p>
+            </div>
+            <div class="rm-ext-card">
+              <i class="fa-solid fa-paper-plane"></i>
+              <h4>高評価は予約自動投稿</h4>
+              <p>★4〜5 の口コミは AI 返信下書きを自動生成 → 営業時間内（例 18:00）に自動投稿。投稿前に承認も可。</p>
+            </div>
+            <div class="rm-ext-card">
+              <i class="fa-solid fa-chart-line"></i>
+              <h4>月次傾向レポート</h4>
+              <p>「どの料理が褒められたか」「どの時間帯にクレームが多いか」を月次集計し、改善の議論に使える資料を自動配信。</p>
+            </div>
+            <div class="rm-ext-card">
+              <i class="fa-solid fa-shield-halved"></i>
+              <h4>炎上検知アラート</h4>
+              <p>同一店舗への低評価が短時間に複数件続いた場合、SNS 拡散リスクの可能性を経営者に即時通知。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 仕組み・データソース -->
+        <div class="rm-tech">
+          <h2 class="section-title">仕組み・データソース（本番運用時）</h2>
+          <div class="rm-tech-grid">
+            <div class="rm-tech-card">
+              <div class="rm-tech-head">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <strong>Google マップ</strong>
+                <span class="rm-tech-badge rm-tech-badge--ok">公式 API</span>
+              </div>
+              <p>Google Business Profile API で 5〜30 分間隔の cron polling。自社店舗の新着口コミを合法的に取得・返信。</p>
+            </div>
+            <div class="rm-tech-card">
+              <div class="rm-tech-head">
+                <i class="fa-solid fa-utensils"></i>
+                <strong>食べログ</strong>
+                <span class="rm-tech-badge rm-tech-badge--alt">メール解析</span>
+              </div>
+              <p>公式 API は提供されていないため、店舗管理画面の通知メールを IMAP で受信→AI で内容抽出する合法的な代替方式を採用します。</p>
+            </div>
+            <div class="rm-tech-card">
+              <div class="rm-tech-head">
+                <i class="fa-brands fa-square-instagram"></i>
+                <strong>Instagram コメント・メンション</strong>
+                <span class="rm-tech-badge rm-tech-badge--ok">公式 API</span>
+              </div>
+              <p>Instagram Graph API（Facebook Business 経由）で公式に取得・返信が可能です。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 注記 -->
+        <div class="rm-footnote">
+          <p><strong>このデモについて</strong>: 表示している店舗・口コミ・投稿者はすべて<strong>架空のサンプルデータ</strong>です。実際のお客様向けには、御社の実店舗データ（Google ビジネスプロフィール / 食べログ管理画面 / Instagram Graph API）に接続して構築します。</p>
+          <p><strong>弊社での運用</strong>: 同型の「外部チャネル定期監視＋AI 一次対応」構成を、Optiens 社内では補助金公募モニタリング・市場ニュース定期チェックに使っています。</p>
+          <a href="/ai-examples?cat=industry" class="rm-back">← 業種別 活用シナリオに戻る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+type Review = {
+  id: string
+  source: 'tabelog' | 'google_map' | 'instagram'
+  shop_name: string
+  reviewer: string
+  rating: number
+  title?: string
+  body: string
+}
+
+document.addEventListener('click', async (e) => {
+  const target = e.target as HTMLElement
+  const replyBtn = target.closest<HTMLButtonElement>('[data-action="reply"]')
+  const skipBtn = target.closest<HTMLButtonElement>('[data-action="skip"]')
+  const regenBtn = target.closest<HTMLButtonElement>('[data-action="regen"]')
+  const publishBtn = target.closest<HTMLButtonElement>('[data-action="publish"]')
+
+  if (replyBtn) await handleReply(replyBtn)
+  if (regenBtn) {
+    const item = regenBtn.closest('.review-item')!
+    const replyBtnInItem = item.querySelector<HTMLButtonElement>('[data-action="reply"]')!
+    await handleReply(replyBtnInItem)
+  }
+  if (skipBtn) {
+    const item = skipBtn.closest('.review-item')!
+    item.classList.add('review-skipped')
+    skipBtn.disabled = true
+    skipBtn.innerHTML = '<i class="fa-solid fa-check"></i> スルー済み'
+  }
+  if (publishBtn) {
+    const status = publishBtn.closest('.reply-result')!.querySelector('.reply-status') as HTMLElement
+    status.textContent = '✓ 投稿予約しました（営業時間内 18:00 に自動投稿予定 / モック表示）'
+    status.classList.add('reply-status--success')
+    publishBtn.disabled = true
+  }
+})
+
+async function handleReply(btn: HTMLButtonElement) {
+  const item = btn.closest('.review-item') as HTMLElement
+  if (!item) return
+  const id = item.dataset.id!
+  const review: Review = {
+    id,
+    source: item.dataset.source as Review['source'],
+    shop_name: item.dataset.shop || '',
+    reviewer: item.dataset.reviewer || '',
+    rating: Number(item.dataset.rating || 0),
+    title: item.dataset.title || undefined,
+    body: item.dataset.body || '',
+  }
+
+  const area = item.querySelector(`[data-reply-area="${id}"]`) as HTMLElement
+  const loading = area.querySelector('.reply-loading') as HTMLElement
+  const result = area.querySelector('.reply-result') as HTMLElement
+  const errorBox = area.querySelector('.reply-error') as HTMLElement
+
+  area.hidden = false
+  loading.hidden = false
+  result.hidden = true
+  errorBox.hidden = true
+  btn.disabled = true
+
+  try {
+    const res = await fetch('/api/review-reply-demo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ review }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+      errorBox.textContent = data?.error || '生成に失敗しました'
+      errorBox.hidden = false
+      loading.hidden = true
+      return
+    }
+
+    const ta = result.querySelector('.reply-textarea') as HTMLTextAreaElement
+    ta.value = data.reply_text || ''
+    const toneBadge = result.querySelector('.reply-tone-badge') as HTMLElement
+    const toneMap: Record<string, string> = {
+      low_rating: '低評価対応',
+      mid_rating: '通常返信',
+      high_rating: '高評価返信',
+    }
+    toneBadge.textContent = toneMap[data.tone] || '通常返信'
+    toneBadge.className = `reply-tone-badge tone-${data.tone}`
+
+    const kpEl = result.querySelector('.reply-key-points') as HTMLElement
+    kpEl.textContent =
+      Array.isArray(data.key_points) && data.key_points.length
+        ? `触れた要素: ${data.key_points.join(' / ')}`
+        : ''
+
+    if (data.mock) {
+      const status = result.querySelector('.reply-status') as HTMLElement
+      status.textContent = '※ モック応答（API キー未設定環境）'
+      status.classList.add('reply-status--note')
+    }
+
+    loading.hidden = true
+    result.hidden = false
+    btn.innerHTML = '<i class="fa-solid fa-rotate"></i> 再生成（編集後も可）'
+    btn.disabled = false
+  } catch (err) {
+    errorBox.textContent = '通信エラーが発生しました'
+    errorBox.hidden = false
+    loading.hidden = true
+    btn.disabled = false
+  }
+}
+</script>
+
+<style>
+  .rm-main { background: #F8FAFD; }
+  .rm-hero {
+    padding: clamp(96px, 12vw, 140px) 0 clamp(20px, 3vw, 32px);
+    background: #fff;
+    border-bottom: 1px solid rgba(31, 58, 147, 0.08);
+  }
+  .rm-eyebrow {
+    font-size: 0.78rem;
+    color: #6B85C9;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .rm-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+  }
+  .rm-lede {
+    color: #64748b;
+    font-size: clamp(0.9rem, 1.4vw, 1rem);
+    line-height: 1.85;
+    margin: 0;
+  }
+
+  .rm-section {
+    padding: clamp(28px, 4vw, 48px) 0 clamp(80px, 10vw, 120px);
+  }
+  .section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 32px 0 14px;
+  }
+
+  /* 監視バー */
+  .monitor-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding: 14px 18px;
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+  .monitor-status { display: inline-flex; align-items: center; gap: 10px; font-size: 0.88rem; color: #475569; }
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+  }
+  .status-text strong { color: #0f172a; }
+  .monitor-channels { display: inline-flex; gap: 8px; flex-wrap: wrap; }
+  .ch-tag {
+    padding: 4px 11px;
+    background: rgba(31, 58, 147, 0.06);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    color: #475569;
+    font-weight: 600;
+  }
+
+  /* KPI */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .kpi-card--alert { border-color: rgba(239, 68, 68, 0.40); background: rgba(254, 242, 242, 0.6); }
+  .kpi-label { font-size: 0.74rem; color: #64748b; font-weight: 600; margin-bottom: 8px; }
+  .kpi-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+  }
+  .kpi-card--alert .kpi-value { color: #B91C1C; }
+  .kpi-unit { font-size: 0.6em; font-weight: 600; margin-left: 4px; color: #94A3B8; }
+  .kpi-sub { font-size: 0.74rem; color: #64748b; margin-top: 4px; }
+  .kpi-sub--alert { color: #B91C1C; font-weight: 700; }
+
+  /* レビュー */
+  .review-list { display: flex; flex-direction: column; gap: 14px; }
+  .review-item {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-left: 3px solid rgba(91, 127, 255, 0.4);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: opacity 0.2s ease;
+  }
+  .review-item.review-low { border-left-color: #ef4444; background: rgba(254, 242, 242, 0.4); }
+  .review-item.review-high { border-left-color: #10b981; }
+  .review-item.review-skipped { opacity: 0.55; }
+
+  .review-head {
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .review-source {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+  .review-source--tabelog { background: rgba(245, 158, 11, 0.15); color: #B45309; }
+  .review-source--google_map { background: rgba(31, 58, 147, 0.10); color: #1F3A93; }
+  .review-source--instagram { background: rgba(236, 72, 153, 0.10); color: #BE185D; }
+  .review-rating { display: inline-flex; gap: 2px; }
+  .star-filled { color: #F59E0B; font-size: 0.85rem; }
+  .star-empty { color: rgba(245, 158, 11, 0.20); font-size: 0.85rem; }
+  .review-time { font-size: 0.78rem; color: #94A3B8; margin-left: auto; }
+  .review-alert {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(239, 68, 68, 0.12);
+    color: #B91C1C;
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+  .review-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 4px;
+  }
+  .review-meta {
+    margin: 0 0 8px;
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+  .review-body {
+    margin: 0 0 14px;
+    font-size: 0.88rem;
+    line-height: 1.85;
+    color: #334155;
+  }
+
+  /* アクション */
+  .review-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-reply, .btn-skip {
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.15s;
+    font-family: inherit;
+    border: none;
+  }
+  .btn-reply {
+    background: linear-gradient(135deg, #1F3A93 0%, #6B85C9 100%);
+    color: #fff;
+  }
+  .btn-reply:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(31, 58, 147, 0.30); }
+  .btn-reply:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+  .btn-skip {
+    background: #fff;
+    color: #64748b;
+    border: 1px solid rgba(31, 58, 147, 0.18);
+  }
+  .btn-skip:hover { background: #F8FAFD; }
+  .btn-skip:disabled { opacity: 0.5; cursor: default; }
+
+  /* 返信エリア */
+  .reply-area {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: #F8FAFD;
+    border: 1px dashed rgba(31, 58, 147, 0.22);
+    border-radius: 8px;
+  }
+  .reply-loading, .reply-error { color: #6B85C9; font-size: 0.82rem; }
+  .reply-error { color: #B91C1C; }
+  .reply-meta {
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .reply-tone-badge {
+    padding: 2px 10px; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 700;
+  }
+  .tone-low_rating { background: rgba(239, 68, 68, 0.12); color: #B91C1C; }
+  .tone-mid_rating { background: rgba(245, 158, 11, 0.15); color: #B45309; }
+  .tone-high_rating { background: rgba(16, 185, 129, 0.15); color: #047857; }
+  .reply-key-points { font-size: 0.74rem; color: #94A3B8; }
+  .reply-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(31, 58, 147, 0.18);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #0f172a;
+    font-family: inherit;
+    resize: vertical;
+  }
+  .reply-action-row { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-publish, .btn-regen {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.78rem;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+  }
+  .btn-publish { background: linear-gradient(135deg, #10B981 0%, #34D399 100%); color: #fff; }
+  .btn-publish:hover { box-shadow: 0 4px 12px rgba(16, 185, 129, 0.30); }
+  .btn-publish:disabled { opacity: 0.5; cursor: default; }
+  .btn-regen { background: #fff; color: #1F3A93; border: 1px solid rgba(31, 58, 147, 0.20); }
+  .btn-regen:hover { background: #F8FAFD; }
+  .reply-status { margin: 8px 0 0; font-size: 0.78rem; color: #64748b; }
+  .reply-status--success { color: #047857; font-weight: 700; }
+  .reply-status--note { color: #94A3B8; }
+
+  /* 拡張ハイライト */
+  .rm-extension {
+    margin-top: 36px;
+    padding: 28px clamp(20px, 4vw, 36px);
+    background: linear-gradient(135deg, rgba(31, 58, 147, 0.06) 0%, rgba(107, 133, 201, 0.04) 60%, rgba(228, 138, 149, 0.05) 100%);
+    border: 1px solid rgba(31, 58, 147, 0.18);
+    border-radius: 16px;
+  }
+  .rm-extension-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .rm-extension-head i {
+    font-size: 1.35rem;
+    color: #1F3A93;
+    background: rgba(31, 58, 147, 0.10);
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .rm-extension-head h3 {
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.5;
+  }
+  .rm-extension-lede {
+    font-size: 0.9rem;
+    line-height: 1.85;
+    color: #475569;
+    margin: 0 0 22px;
+  }
+  .rm-extension-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .rm-ext-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.12);
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+  }
+  .rm-ext-card i { font-size: 1.1rem; color: #1F3A93; margin-bottom: 8px; }
+  .rm-ext-card h4 {
+    font-size: 0.92rem;
+    color: #0f172a;
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .rm-ext-card p {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* 仕組み */
+  .rm-tech { margin-top: 32px; }
+  .rm-tech-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .rm-tech-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .rm-tech-head {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .rm-tech-head i { color: #1F3A93; }
+  .rm-tech-head strong { color: #0f172a; font-size: 0.95rem; flex: 1; }
+  .rm-tech-badge {
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .rm-tech-badge--ok { background: rgba(16, 185, 129, 0.15); color: #047857; }
+  .rm-tech-badge--alt { background: rgba(245, 158, 11, 0.15); color: #B45309; }
+  .rm-tech-card p {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.75;
+    color: #64748b;
+  }
+
+  /* Footnote */
+  .rm-footnote {
+    margin-top: 32px;
+    background: #fff;
+    border: 1px dashed rgba(31, 58, 147, 0.20);
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+  .rm-footnote p {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.85;
+    margin: 0 0 10px;
+  }
+  .rm-footnote p:last-of-type { margin-bottom: 14px; }
+  .rm-footnote strong { color: #0f172a; }
+  .rm-back {
+    display: inline-block;
+    color: #1F3A93;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .rm-back:hover { text-decoration: underline; }
+
+  @media (max-width: 1024px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .rm-tech-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .rm-extension-grid { grid-template-columns: 1fr; }
+    .review-time { margin-left: 0; }
+  }
+</style>

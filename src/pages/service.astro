@@ -101,23 +101,23 @@ import Layout from '../layouts/Layout.astro';
             <div class="strength-wide-head">
               <span class="strength-card-num">07</span>
               <h3>資料ではなく、実物で確かめてから決められる</h3>
-              <p>業種別の活用シナリオ・機能デモ・共通 AI 事例を<strong>すべて公開</strong>しています。ご相談前から「自分の業種なら何ができるか」「実際に動かすとどう見えるか」を Web 上で確認できます。</p>
+              <p>共通 AI 事例（実機デモ）・業種別 活用シナリオ・対象者別 活用シナリオを順次 Web 上で公開しています。ご相談前から「自分の業種なら何ができるか」「実際に動かすとどう見えるか」を確認できます。</p>
             </div>
             <div class="strength-wide-stats">
-              <a href="/ai-examples?cat=industry" class="wide-stat-link">
-                <span class="wide-stat-num">11</span>
-                <span class="wide-stat-label">業種別 活用シナリオ</span>
-                <span class="wide-stat-sub">士業／宿泊／飲食／EC／建設／ワイナリー／アウトドア／ベーカリー／農家／酪農／自治体</span>
-              </a>
               <a href="/ai-examples?cat=common" class="wide-stat-link">
                 <span class="wide-stat-num">6</span>
                 <span class="wide-stat-label">機能デモ（実機操作可）</span>
                 <span class="wide-stat-sub">書類読み取り／業務管理画面／承認WF／自然言語検索／問合せ振り分け／稼働ダッシュボード</span>
               </a>
+              <a href="/ai-examples?cat=industry" class="wide-stat-link">
+                <span class="wide-stat-num">11</span>
+                <span class="wide-stat-label">業種別 活用シナリオ</span>
+                <span class="wide-stat-sub">士業／宿泊／飲食／EC／建設／ワイナリー／アウトドア／ベーカリー／農家／酪農／自治体</span>
+              </a>
               <a href="/ai-examples?cat=role" class="wide-stat-link">
-                <span class="wide-stat-num">5</span>
+                <span class="wide-stat-num">1<span class="wide-stat-pending">+ 4 順次公開</span></span>
                 <span class="wide-stat-label">対象者別 活用シナリオ</span>
-                <span class="wide-stat-sub">経営者／取締役／管理職／一般社員／バックオフィス</span>
+                <span class="wide-stat-sub">経営者（公開済）／取締役・管理職・一般社員・バックオフィス（準備中）</span>
               </a>
             </div>
           </article>
@@ -867,6 +867,16 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 800;
     color: #1F3A93;
     line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .wide-stat-pending {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #94A3B8;
+    letter-spacing: 0.02em;
   }
   .wide-stat-label {
     font-size: 0.92rem;

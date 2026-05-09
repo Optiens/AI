@@ -22,6 +22,7 @@ type Industry = {
   summary: string;
   metric: string;
   href: string;
+  demo?: { label: string; href: string; note?: string };
 };
 
 type Role = {
@@ -111,7 +112,7 @@ const commonCases: CommonCase[] = [
 const industries: Industry[] = [
   { id: 'ind-legal', image: '/images/industries/legal.png', title: '士業（税理士・行政書士）', shortTitle: '士業', summary: '月次報告自動生成・期限管理・FAQ対応', metric: '月30時間削減', href: '/service/sample-legal' },
   { id: 'ind-pension', image: '/images/industries/pension.png', title: 'ペンション・宿泊業', shortTitle: 'ペンション・宿泊', summary: '多言語対応・口コミ返信・SNS投稿の自動化', metric: '月25時間削減', href: '/service/sample-pension' },
-  { id: 'ind-restaurant', image: '/images/industries/restaurant.png', title: 'カフェ＆レストラン', shortTitle: 'カフェ・レストラン', summary: 'SNS毎日投稿・LINE配信・予約一元化', metric: '月18時間削減＋売上増', href: '/service/sample-restaurant' },
+  { id: 'ind-restaurant', image: '/images/industries/restaurant.png', title: 'カフェ＆レストラン', shortTitle: 'カフェ・レストラン', summary: 'SNS毎日投稿・LINE配信・予約一元化', metric: '月18時間削減＋売上増', href: '/service/sample-restaurant', demo: { label: '口コミ自動監視＋AI返信下書きデモを試す', href: '/review-monitor', note: '食べログ・Googleマップ・Instagram の新着レビューを 24h 監視し、低評価を即時アラート、返信下書きを AI が生成する業種特化デモです（モックデータで動作）。' } },
   { id: 'ind-ec', image: '/images/industries/ec.png', title: 'EC事業者・ネットショップ', shortTitle: 'EC・ネットショップ', summary: '商品登録・受注対応・SNS運用の自動化', metric: '月25時間削減', href: '/service/sample-ec' },
   { id: 'ind-construction', image: '/images/industries/construction.png', title: '工務店・建設業', shortTitle: '工務店・建設', summary: '見積自動生成・報告書効率化・別荘管理', metric: '月35時間削減', href: '/service/sample-construction' },
   { id: 'ind-winery', image: '/images/industries/winery.png', title: 'ワイナリー・醸造所', shortTitle: 'ワイナリー', summary: '醸造記録デジタル化・DtoC販売・卸先提案書', metric: '月30時間削減', href: '/service/sample-winery' },
@@ -258,6 +259,21 @@ const totalCount = commonCases.length + industries.length + roles.length;
                   活用シナリオを見る
                   <i class="fa-solid fa-arrow-right"></i>
                 </a>
+                {i.demo && (
+                  <>
+                    <a href={i.demo.href} class="btn-secondary ax-detail-cta ax-detail-cta--demo">
+                      <i class="fa-solid fa-circle-play"></i>
+                      {i.demo.label}
+                      <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    {i.demo.note && (
+                      <p class="ax-detail-demo-note">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>{i.demo.note}</span>
+                      </p>
+                    )}
+                  </>
+                )}
               </article>
             ))}
             <!-- 対象者別の詳細 -->
@@ -798,6 +814,9 @@ const totalCount = commonCases.length + industries.length + roles.length;
   }
   .ax-detail-cta i {
     font-size: .85rem;
+  }
+  .ax-detail-cta--demo {
+    margin-top: 10px;
   }
   .ax-detail-demo-note {
     display: flex;
