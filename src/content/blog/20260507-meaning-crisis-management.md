@@ -8,7 +8,7 @@ image: '/images/blog/20260507-meaning-crisis-management.webp'
 
 ## 「意味の危機」とは何か
 
-AI 業界のリーダー（Anthropic の Dario Amodei など）が、長文エッセイで論じている論点の一つに「**意味の危機（meaning crisis）**」があります。
+Anthropic の Dario Amodei が公開した長文エッセイ「Machines of Loving Grace」「The Adolescence of Technology」（2026 年 1 月）などで提起され、業界の議論で「**意味の危機（meaning crisis）**」という用語で総称されているのが、AI が経済的役割を担う時代における「仕事と意味」の問題です。
 
 要点はこうです:
 - 仕事は単に**収入を得る手段**ではない
