@@ -1,0 +1,880 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="承認ワークフロー（デモ）| Optiens"
+  description="申請者と承認者の画面を切り替えられる、社内承認ワークフローのデモ。経費精算・休暇申請・稟議など、Salesforce 型の承認フローを御社専用に構築できます。"
+  noindex={true}
+>
+  <main class="aw-main light-section">
+    <section class="aw-hero">
+      <div class="container">
+        <p class="aw-eyebrow">DEMO ／ Optiens 共通AI事例</p>
+        <h1 class="aw-title">承認ワークフロー</h1>
+        <p class="aw-lede">
+          申請者と承認者で<strong>画面・できる操作が切り替わる</strong>のが、業務システム型ワークフローの基本です。<br class="pc-only">
+          このデモではビュー切替で両方の体験を確認できます。
+        </p>
+      </div>
+    </section>
+
+    <section class="aw-section">
+      <div class="container">
+
+        <!-- ビュー切替 -->
+        <div class="view-switch" role="tablist" aria-label="ビュー切替">
+          <button type="button" class="view-btn is-active" data-view="submitter" role="tab" aria-selected="true">
+            <i class="fa-solid fa-user-pen"></i>
+            <span class="view-btn-name">申請者ビュー</span>
+            <span class="view-btn-sub">スタッフ・部長など</span>
+          </button>
+          <button type="button" class="view-btn" data-view="approver" role="tab" aria-selected="false">
+            <i class="fa-solid fa-user-shield"></i>
+            <span class="view-btn-name">承認者ビュー</span>
+            <span class="view-btn-sub">役員・経営者</span>
+          </button>
+          <button type="button" class="view-reset" id="reset-btn" title="サンプルデータに戻す">
+            <i class="fa-solid fa-rotate-left"></i> リセット
+          </button>
+        </div>
+
+        <!-- 申請者ビュー -->
+        <div class="view-panel" data-view-panel="submitter">
+          <div class="aw-grid">
+            <!-- 左: 新規申請フォーム -->
+            <div class="aw-card">
+              <h2 class="aw-card-title">新規申請</h2>
+              <form id="submit-form" class="submit-form">
+                <label>
+                  <span>申請種類</span>
+                  <select name="type" required>
+                    <option value="expense">経費精算</option>
+                    <option value="leave">休暇申請</option>
+                    <option value="proposal">稟議書</option>
+                    <option value="purchase">発注承認</option>
+                    <option value="other">その他</option>
+                  </select>
+                </label>
+                <label>
+                  <span>件名</span>
+                  <input type="text" name="title" required maxlength="60" placeholder="例: 出張旅費精算（5/3 大阪）" />
+                </label>
+                <label>
+                  <span>金額（任意）</span>
+                  <input type="number" name="amount" min="0" step="1" placeholder="例: 28500" />
+                </label>
+                <label>
+                  <span>内容・理由</span>
+                  <textarea name="body" rows="4" maxlength="500" placeholder="承認に必要な背景・理由を簡潔に記載"></textarea>
+                </label>
+                <label>
+                  <span>承認者</span>
+                  <select name="approver" required>
+                    <option value="ceo">代表取締役（最終承認）</option>
+                    <option value="cfo">CFO（経理・財務）</option>
+                    <option value="coo">COO（業務統括）</option>
+                  </select>
+                </label>
+                <button type="submit" class="aw-btn-primary">
+                  <i class="fa-solid fa-paper-plane"></i> 承認依頼を提出
+                </button>
+              </form>
+            </div>
+
+            <!-- 右: 自分の申請一覧 -->
+            <div class="aw-card">
+              <h2 class="aw-card-title">自分の申請一覧</h2>
+              <div id="submitter-list" class="req-list">
+                <p class="req-empty">まだ申請がありません。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 承認者ビュー -->
+        <div class="view-panel" data-view-panel="approver" hidden>
+          <div class="aw-card aw-card-full">
+            <div class="approver-head">
+              <h2 class="aw-card-title">承認待ち（自分宛）</h2>
+              <span class="approver-id-pill">承認者: <strong id="approver-label">代表取締役</strong></span>
+              <select id="approver-switch" class="approver-switch" aria-label="承認者切替">
+                <option value="ceo">代表取締役</option>
+                <option value="cfo">CFO（経理・財務）</option>
+                <option value="coo">COO（業務統括）</option>
+              </select>
+            </div>
+            <div id="approver-list" class="req-list">
+              <p class="req-empty">承認待ちの申請がありません。</p>
+            </div>
+          </div>
+
+          <div class="aw-card">
+            <h2 class="aw-card-title">処理済み（承認・却下）</h2>
+            <div id="approver-processed" class="req-list req-list-processed">
+              <p class="req-empty">処理済みの申請はまだありません。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 拡張可能性 -->
+        <div class="aw-extension">
+          <div class="aw-extension-head">
+            <i class="fa-solid fa-arrows-turn-to-dots"></i>
+            <h3>御社専用版なら、ここから先まで自動化できます</h3>
+          </div>
+          <p class="aw-extension-lede">
+            このデモは「申請」「承認／却下」「ステータス可視化」までですが、御社専用版では以下まで全自動化できます。
+          </p>
+          <div class="aw-extension-grid">
+            <div class="aw-extension-card">
+              <i class="fa-solid fa-bell"></i>
+              <h4>承認者へ即時通知</h4>
+              <p>申請が出されたら、承認者の Slack・メール・LINE に即時通知。スマホからワンタップで承認可能。</p>
+            </div>
+            <div class="aw-extension-card">
+              <i class="fa-solid fa-database"></i>
+              <h4>会計／人事システムへ自動連携</h4>
+              <p>承認後、freee 会計・人事労務 / kintone / スプレッドシート等に自動でレコード追加。二重入力撤廃。</p>
+            </div>
+            <div class="aw-extension-card">
+              <i class="fa-solid fa-list-check"></i>
+              <h4>多段承認フロー</h4>
+              <p>金額・部署・申請種類で承認ルートを自動切替（5万円未満は部長止め、5万円以上は CFO + CEO 等）。</p>
+            </div>
+            <div class="aw-extension-card">
+              <i class="fa-solid fa-robot"></i>
+              <h4>AI 自動レビュー</h4>
+              <p>申請内容を AI が事前チェックし、過去類似案件・規定との整合性・記載漏れを承認者に提示。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 注記 -->
+        <div class="aw-footnote">
+          <p><strong>このデモについて</strong>: 申請データはお使いのブラウザに保存されます（サーバーには送信されません）。「リセット」ボタンでサンプル状態に戻せます。</p>
+          <p><strong>弊社での運用</strong>: Optiens 社内では稟議・経費・発注の承認を Supabase + AI 駆動 UI で自動化しています。御社の業務に合わせたカスタム版をご相談いただけます。</p>
+          <a href="/ai-examples#case-07" class="aw-back">← 共通AI事例集に戻る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+type ApprovalRequest = {
+  id: string
+  type: 'expense' | 'leave' | 'proposal' | 'purchase' | 'other'
+  title: string
+  amount?: number
+  body: string
+  submitter: string
+  approver: 'ceo' | 'cfo' | 'coo'
+  status: 'pending' | 'approved' | 'rejected'
+  comment?: string
+  createdAt: number
+  decidedAt?: number
+}
+
+const STORAGE_KEY = 'optiens.approval.demo.v1'
+const DEFAULT_SUBMITTER = '田中 一郎（営業部）'
+
+const TYPE_LABELS: Record<ApprovalRequest['type'], string> = {
+  expense: '経費精算',
+  leave: '休暇申請',
+  proposal: '稟議書',
+  purchase: '発注承認',
+  other: 'その他',
+}
+const APPROVER_LABELS: Record<ApprovalRequest['approver'], string> = {
+  ceo: '代表取締役',
+  cfo: 'CFO（経理・財務）',
+  coo: 'COO（業務統括）',
+}
+
+const SAMPLE: ApprovalRequest[] = [
+  {
+    id: 'REQ-1001',
+    type: 'expense',
+    title: '出張旅費精算（5/3 大阪商談）',
+    amount: 28500,
+    body: '大阪エリアの新規パートナーとの商談に関する旅費精算です。新幹線往復・宿泊・先方手土産。',
+    submitter: '田中 一郎（営業部）',
+    approver: 'cfo',
+    status: 'pending',
+    createdAt: Date.now() - 2 * 60 * 60 * 1000,
+  },
+  {
+    id: 'REQ-1002',
+    type: 'purchase',
+    title: 'GPU PC 購入（ローカル LLM 検証用）',
+    amount: 380000,
+    body: 'ローカル LLM 運用検証のため RTX 4090 搭載 PC を 1 台購入。社内 AI 自動化の機密データ対応の検証目的。',
+    submitter: '佐藤 花子（開発部）',
+    approver: 'ceo',
+    status: 'pending',
+    createdAt: Date.now() - 24 * 60 * 60 * 1000,
+  },
+  {
+    id: 'REQ-1003',
+    type: 'leave',
+    title: '夏季休暇取得申請（8/12〜8/16）',
+    body: '夏季長期休暇 5 営業日の取得申請。引継ぎ事項は別添の通り。',
+    submitter: '田中 一郎（営業部）',
+    approver: 'coo',
+    status: 'approved',
+    comment: '了解です。よい休暇を。',
+    createdAt: Date.now() - 5 * 24 * 60 * 60 * 1000,
+    decidedAt: Date.now() - 4 * 24 * 60 * 60 * 1000,
+  },
+  {
+    id: 'REQ-1004',
+    type: 'proposal',
+    title: '広告予算追加（Q2 リスティング）',
+    amount: 250000,
+    body: 'Q2 のリスティング広告予算を追加。費用対効果の試算は別添。',
+    submitter: '田中 一郎（営業部）',
+    approver: 'ceo',
+    status: 'rejected',
+    comment: '今期は新サービス LP 整備を優先したい。来期再検討。',
+    createdAt: Date.now() - 10 * 24 * 60 * 60 * 1000,
+    decidedAt: Date.now() - 9 * 24 * 60 * 60 * 1000,
+  },
+]
+
+function loadRequests(): ApprovalRequest[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw) return JSON.parse(raw) as ApprovalRequest[]
+  } catch {}
+  return [...SAMPLE]
+}
+function saveRequests(items: ApprovalRequest[]) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+}
+
+let requests = loadRequests()
+
+function fmtAmount(n?: number) {
+  if (n == null || n === 0) return ''
+  return '¥' + n.toLocaleString('ja-JP')
+}
+function fmtRelative(ms: number) {
+  const diff = Date.now() - ms
+  const min = Math.floor(diff / 60000)
+  if (min < 1) return 'たった今'
+  if (min < 60) return `${min} 分前`
+  const hr = Math.floor(min / 60)
+  if (hr < 24) return `${hr} 時間前`
+  const day = Math.floor(hr / 24)
+  return `${day} 日前`
+}
+function statusBadge(s: ApprovalRequest['status']) {
+  if (s === 'pending') return '<span class="status-pill status-pending">承認待ち</span>'
+  if (s === 'approved') return '<span class="status-pill status-approved">承認済</span>'
+  return '<span class="status-pill status-rejected">却下</span>'
+}
+function escapeHtml(s: string) {
+  return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string))
+}
+
+function reqCard(r: ApprovalRequest, mode: 'submitter' | 'approver-pending' | 'approver-processed') {
+  const amt = fmtAmount(r.amount)
+  const decisionInfo = (r.status !== 'pending' && r.decidedAt)
+    ? `<div class="req-decision">${statusBadge(r.status)} <span class="req-decision-meta">${fmtRelative(r.decidedAt)}</span>${r.comment ? `<p class="req-comment">${escapeHtml(r.comment)}</p>` : ''}</div>`
+    : ''
+
+  const actions = mode === 'approver-pending'
+    ? `<div class="req-actions">
+         <button class="req-btn req-btn-approve" data-approve="${r.id}"><i class="fa-solid fa-check"></i> 承認</button>
+         <button class="req-btn req-btn-reject" data-reject="${r.id}"><i class="fa-solid fa-xmark"></i> 却下</button>
+       </div>`
+    : ''
+
+  return `
+    <article class="req-item req-${r.status}">
+      <header class="req-head">
+        <span class="req-id">${r.id}</span>
+        <span class="req-type">${TYPE_LABELS[r.type]}</span>
+        ${mode === 'submitter' ? statusBadge(r.status) : ''}
+        <time class="req-time">${fmtRelative(r.createdAt)}</time>
+      </header>
+      <h3 class="req-title">${escapeHtml(r.title)}${amt ? ` <span class="req-amount">${amt}</span>` : ''}</h3>
+      <div class="req-meta">
+        <span><i class="fa-solid fa-user"></i> 申請者: ${escapeHtml(r.submitter)}</span>
+        <span><i class="fa-solid fa-user-shield"></i> 承認者: ${APPROVER_LABELS[r.approver]}</span>
+      </div>
+      ${r.body ? `<p class="req-body">${escapeHtml(r.body)}</p>` : ''}
+      ${decisionInfo}
+      ${actions}
+    </article>
+  `
+}
+
+// ===== レンダー =====
+function renderSubmitter() {
+  const list = document.getElementById('submitter-list')!
+  const own = requests.filter(r => r.submitter === DEFAULT_SUBMITTER).sort((a, b) => b.createdAt - a.createdAt)
+  if (own.length === 0) {
+    list.innerHTML = '<p class="req-empty">まだ申請がありません。</p>'
+    return
+  }
+  list.innerHTML = own.map(r => reqCard(r, 'submitter')).join('')
+}
+
+let currentApprover: ApprovalRequest['approver'] = 'ceo'
+function renderApprover() {
+  const pendingList = document.getElementById('approver-list')!
+  const processedList = document.getElementById('approver-processed')!
+  const pending = requests.filter(r => r.approver === currentApprover && r.status === 'pending').sort((a, b) => b.createdAt - a.createdAt)
+  const processed = requests.filter(r => r.approver === currentApprover && r.status !== 'pending').sort((a, b) => (b.decidedAt || 0) - (a.decidedAt || 0))
+
+  pendingList.innerHTML = pending.length === 0
+    ? '<p class="req-empty">承認待ちの申請がありません。</p>'
+    : pending.map(r => reqCard(r, 'approver-pending')).join('')
+
+  processedList.innerHTML = processed.length === 0
+    ? '<p class="req-empty">処理済みの申請はまだありません。</p>'
+    : processed.map(r => reqCard(r, 'approver-processed')).join('')
+
+  document.getElementById('approver-label')!.textContent = APPROVER_LABELS[currentApprover]
+}
+
+function rerender() {
+  renderSubmitter()
+  renderApprover()
+}
+
+// ===== ビュー切替 =====
+document.querySelectorAll<HTMLButtonElement>('.view-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const view = btn.getAttribute('data-view')!
+    document.querySelectorAll('.view-btn').forEach(b => {
+      b.classList.toggle('is-active', b === btn)
+      b.setAttribute('aria-selected', b === btn ? 'true' : 'false')
+    })
+    document.querySelectorAll<HTMLElement>('.view-panel').forEach(p => {
+      p.hidden = p.getAttribute('data-view-panel') !== view
+    })
+  })
+})
+
+// ===== 申請フォーム =====
+const form = document.getElementById('submit-form') as HTMLFormElement
+form.addEventListener('submit', (e) => {
+  e.preventDefault()
+  const fd = new FormData(form)
+  const newId = 'REQ-' + Math.floor(1000 + Math.random() * 9000)
+  const amount = Number(fd.get('amount') || 0)
+  const newReq: ApprovalRequest = {
+    id: newId,
+    type: fd.get('type') as ApprovalRequest['type'],
+    title: String(fd.get('title') || '').slice(0, 60),
+    amount: amount > 0 ? amount : undefined,
+    body: String(fd.get('body') || '').slice(0, 500),
+    submitter: DEFAULT_SUBMITTER,
+    approver: fd.get('approver') as ApprovalRequest['approver'],
+    status: 'pending',
+    createdAt: Date.now(),
+  }
+  requests = [newReq, ...requests]
+  saveRequests(requests)
+  form.reset()
+  rerender()
+})
+
+// ===== 承認・却下 =====
+document.addEventListener('click', (e) => {
+  const target = e.target as HTMLElement
+  const approveBtn = target.closest<HTMLButtonElement>('[data-approve]')
+  const rejectBtn = target.closest<HTMLButtonElement>('[data-reject]')
+  if (approveBtn) {
+    const id = approveBtn.getAttribute('data-approve')!
+    const r = requests.find(x => x.id === id)
+    if (!r) return
+    const c = window.prompt('承認コメント（任意）', '承認します。')
+    r.status = 'approved'
+    r.decidedAt = Date.now()
+    if (c) r.comment = c
+    saveRequests(requests)
+    rerender()
+  }
+  if (rejectBtn) {
+    const id = rejectBtn.getAttribute('data-reject')!
+    const r = requests.find(x => x.id === id)
+    if (!r) return
+    const c = window.prompt('却下理由（必須）', '')
+    if (!c) return
+    r.status = 'rejected'
+    r.decidedAt = Date.now()
+    r.comment = c
+    saveRequests(requests)
+    rerender()
+  }
+})
+
+// ===== 承認者切替 =====
+const approverSwitch = document.getElementById('approver-switch') as HTMLSelectElement
+approverSwitch.addEventListener('change', () => {
+  currentApprover = approverSwitch.value as ApprovalRequest['approver']
+  renderApprover()
+})
+
+// ===== リセット =====
+document.getElementById('reset-btn')!.addEventListener('click', () => {
+  if (window.confirm('サンプルデータに戻しますか？（自分の申請内容は消えます）')) {
+    requests = [...SAMPLE]
+    saveRequests(requests)
+    rerender()
+  }
+})
+
+rerender()
+</script>
+
+<style>
+  .aw-main {
+    background: #F8FAFD;
+  }
+  .aw-hero {
+    padding: clamp(96px, 12vw, 140px) 0 clamp(20px, 3vw, 32px);
+    background: #fff;
+    border-bottom: 1px solid rgba(31, 58, 147, 0.08);
+  }
+  .aw-eyebrow {
+    font-size: 0.78rem;
+    color: #6B85C9;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .aw-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+  }
+  .aw-lede {
+    color: #64748b;
+    font-size: clamp(0.9rem, 1.4vw, 1rem);
+    line-height: 1.85;
+    margin: 0;
+  }
+
+  .aw-section {
+    padding: clamp(28px, 4vw, 48px) 0 clamp(80px, 10vw, 120px);
+  }
+
+  /* ビュー切替 */
+  .view-switch {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .view-btn {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+    border: 2px solid rgba(31, 58, 147, 0.12);
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s, transform 0.1s;
+    font-family: inherit;
+  }
+  .view-btn:hover { border-color: rgba(31, 58, 147, 0.30); }
+  .view-btn.is-active {
+    border-color: #1F3A93;
+    background: linear-gradient(135deg, rgba(31, 58, 147, 0.05) 0%, rgba(107, 133, 201, 0.04) 100%);
+  }
+  .view-btn i {
+    font-size: 1.4rem;
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: rgba(31, 58, 147, 0.10);
+    color: #1F3A93;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .view-btn-name {
+    display: block;
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 0.95rem;
+  }
+  .view-btn-sub {
+    display: block;
+    font-size: 0.74rem;
+    color: #64748b;
+    margin-top: 2px;
+  }
+  .view-reset {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px dashed rgba(31, 58, 147, 0.25);
+    border-radius: 8px;
+    color: #64748b;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    font-family: inherit;
+  }
+  .view-reset:hover { color: #1F3A93; border-color: #1F3A93; }
+
+  /* グリッド */
+  .aw-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    gap: 18px;
+  }
+  .aw-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+  .aw-card-full {
+    /* approver pending list が幅広 */
+  }
+  .aw-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 14px;
+  }
+
+  /* フォーム */
+  .submit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .submit-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .submit-form label span {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #475569;
+  }
+  .submit-form input,
+  .submit-form select,
+  .submit-form textarea {
+    padding: 9px 12px;
+    border: 1px solid rgba(31, 58, 147, 0.18);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: #0f172a;
+    font-family: inherit;
+    background: #fff;
+  }
+  .submit-form textarea { resize: vertical; }
+  .submit-form input:focus,
+  .submit-form select:focus,
+  .submit-form textarea:focus {
+    outline: none;
+    border-color: #1F3A93;
+    box-shadow: 0 0 0 3px rgba(31, 58, 147, 0.10);
+  }
+  .aw-btn-primary {
+    align-self: flex-start;
+    padding: 11px 22px;
+    background: linear-gradient(135deg, #1F3A93 0%, #6B85C9 100%);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+  }
+  .aw-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(31, 58, 147, 0.30);
+  }
+
+  /* 承認者ヘッダ */
+  .approver-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .approver-head .aw-card-title { margin: 0; }
+  .approver-id-pill {
+    margin-left: auto;
+    padding: 4px 12px;
+    background: rgba(31, 58, 147, 0.08);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: #475569;
+  }
+  .approver-id-pill strong { color: #1F3A93; }
+  .approver-switch {
+    padding: 7px 12px;
+    border: 1px solid rgba(31, 58, 147, 0.18);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    background: #fff;
+    color: #0f172a;
+    font-family: inherit;
+  }
+
+  /* リスト */
+  .req-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  .req-list-processed { opacity: 0.85; }
+  .req-empty {
+    text-align: center;
+    color: #94A3B8;
+    font-size: 0.85rem;
+    padding: 24px 0;
+    margin: 0;
+  }
+
+  /* 申請カード */
+  .req-item {
+    background: #F8FAFD;
+    border: 1px solid rgba(31, 58, 147, 0.06);
+    border-left: 3px solid rgba(91, 127, 255, 0.5);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .req-item.req-approved { border-left-color: rgba(16, 185, 129, 0.6); }
+  .req-item.req-rejected { border-left-color: rgba(239, 68, 68, 0.55); }
+  .req-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .req-id {
+    font-family: 'SF Mono', 'Consolas', monospace;
+    font-size: 0.74rem;
+    color: #94A3B8;
+  }
+  .req-type {
+    padding: 2px 8px;
+    background: rgba(31, 58, 147, 0.08);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    color: #1F3A93;
+    font-weight: 600;
+  }
+  .req-time {
+    margin-left: auto;
+    font-size: 0.74rem;
+    color: #94A3B8;
+  }
+  .req-title {
+    font-size: 0.95rem;
+    color: #0f172a;
+    margin: 0 0 8px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .req-amount {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 0.85rem;
+    color: #1F3A93;
+    font-family: 'Inter', sans-serif;
+  }
+  .req-meta {
+    display: flex;
+    gap: 14px;
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .req-meta i { color: #94A3B8; margin-right: 4px; }
+  .req-body {
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.7;
+    margin: 0 0 10px;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+  }
+  .req-decision {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(31, 58, 147, 0.15);
+    font-size: 0.78rem;
+    color: #475569;
+  }
+  .req-decision-meta {
+    margin-left: 8px;
+    color: #94A3B8;
+  }
+  .req-comment {
+    margin: 6px 0 0;
+    padding: 6px 10px;
+    background: rgba(31, 58, 147, 0.04);
+    border-radius: 4px;
+    color: #334155;
+    font-size: 0.82rem;
+  }
+  .req-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .req-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.15s;
+    font-family: inherit;
+  }
+  .req-btn-approve {
+    background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+    color: #fff;
+  }
+  .req-btn-approve:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  }
+  .req-btn-reject {
+    background: #fff;
+    color: #B91C1C;
+    border: 1px solid #FCA5A5;
+  }
+  .req-btn-reject:hover {
+    background: rgba(239, 68, 68, 0.08);
+  }
+
+  /* ステータス pill */
+  .status-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .status-pending  { background: rgba(245, 158, 11, 0.18); color: #B45309; }
+  .status-approved { background: rgba(16, 185, 129, 0.18); color: #047857; }
+  .status-rejected { background: rgba(239, 68, 68, 0.15); color: #B91C1C; }
+
+  /* 拡張 */
+  .aw-extension {
+    margin-top: 32px;
+    padding: 28px clamp(20px, 4vw, 36px);
+    background: linear-gradient(135deg, rgba(31, 58, 147, 0.06) 0%, rgba(107, 133, 201, 0.04) 60%, rgba(228, 138, 149, 0.05) 100%);
+    border: 1px solid rgba(31, 58, 147, 0.18);
+    border-radius: 16px;
+  }
+  .aw-extension-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .aw-extension-head i {
+    font-size: 1.35rem;
+    color: #1F3A93;
+    background: rgba(31, 58, 147, 0.10);
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .aw-extension-head h3 {
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.5;
+  }
+  .aw-extension-lede {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: #475569;
+    margin: 0 0 22px;
+  }
+  .aw-extension-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .aw-extension-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.12);
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+  }
+  .aw-extension-card i {
+    font-size: 1.1rem;
+    color: #1F3A93;
+    margin-bottom: 8px;
+  }
+  .aw-extension-card h4 {
+    font-size: 0.92rem;
+    color: #0f172a;
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .aw-extension-card p {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* Footnote */
+  .aw-footnote {
+    margin-top: 32px;
+    background: #fff;
+    border: 1px dashed rgba(31, 58, 147, 0.20);
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+  .aw-footnote p {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.8;
+    margin: 0 0 10px;
+  }
+  .aw-footnote p:last-of-type { margin-bottom: 14px; }
+  .aw-footnote strong { color: #0f172a; }
+  .aw-back {
+    display: inline-block;
+    color: #1F3A93;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .aw-back:hover { text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .aw-grid { grid-template-columns: 1fr; }
+    .aw-extension-grid { grid-template-columns: 1fr; }
+    .pc-only { display: none; }
+  }
+</style>
