@@ -159,7 +159,6 @@ const sourceIcon = {
   <main class="rm-main">
     <section class="rm-hero">
       <div class="container">
-        <p class="rm-eyebrow">DEMO ／ Optiens 業種特化AI事例 ／ カフェ・レストラン</p>
         <h1 class="rm-title">口コミ 24h 自動監視＋AI返信下書き</h1>
         <p class="rm-lede">
           食べログ・Google マップ・Instagram の新着口コミを<strong>裏で 24h 監視</strong>し、
@@ -174,10 +173,10 @@ const sourceIcon = {
         <!-- 透明性バナー -->
         <div class="transparency-banner">
           <div class="tb-item">
-            <i class="fa-solid fa-bolt"></i>
+            <i class="fa-solid fa-circle-check"></i>
             <div>
-              <strong>「AI で返信下書きを生成」は実際に OpenAI API を呼び出します</strong>
-              <p>1 回あたり数円（gpt-4o-mini）。本番運用時は御社の API キーを使う構成にできます。本デモは Optiens の API キーを使っており、<strong>1 IP あたり 1 時間 30 回まで</strong>に制限しています。</p>
+              <strong>本デモは AI API を呼びません（事前用意のサンプル応答を表示）</strong>
+              <p>「AI で返信下書きを生成」ボタンを押すと、各レビュー × 口調 × 言語の組合せで <strong>事前用意した応答</strong> を表示します。Optiens の API 利用料は消費しません。本番運用時は OpenAI 等で動的生成します（御社の API キーを使う構成も可）。</p>
             </div>
           </div>
           <div class="tb-item">
@@ -372,6 +371,75 @@ const sourceIcon = {
           </div>
         </div>
 
+        <!-- ランニングコスト試算 -->
+        <div class="rm-cost">
+          <h2 class="section-title">ランニングコスト試算（月額・本番運用時）</h2>
+          <p class="rm-cost-lede">店舗 1 拠点・月 100 件の口コミ取得・うち 30 件に AI 返信下書きを生成する想定での目安です。実数量に応じて変動します。</p>
+          <div class="rm-cost-table-wrap">
+            <table class="rm-cost-table">
+              <thead>
+                <tr>
+                  <th>項目</th>
+                  <th>料金体系</th>
+                  <th class="cost-amount-col">月額目安</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Google Business Profile API</strong><br /><small>取得・返信</small></td>
+                  <td>無料（リクエスト上限内）</td>
+                  <td class="cost-amount cost-amount--free">¥0</td>
+                </tr>
+                <tr>
+                  <td><strong>Instagram Graph API</strong><br /><small>コメント・メンション取得・返信</small></td>
+                  <td>無料（基本利用）<small>※ 高度な広告機能は別途</small></td>
+                  <td class="cost-amount cost-amount--free">¥0</td>
+                </tr>
+                <tr>
+                  <td><strong>食べログ通知メール用 IMAP</strong><br /><small>専用メールアドレス・受信</small></td>
+                  <td>Google Workspace ライト等<br /><small>月 ¥800〜（既存契約があれば追加 ¥0）</small></td>
+                  <td class="cost-amount">¥0〜800</td>
+                </tr>
+                <tr>
+                  <td><strong>OpenAI API（gpt-4o-mini）</strong><br /><small>返信下書き生成 30 件想定</small></td>
+                  <td>従量課金<br /><small>1 件約 0.1 円（プロンプト＋応答 約 1,500 トークン）</small></td>
+                  <td class="cost-amount">¥3〜10</td>
+                </tr>
+                <tr>
+                  <td><strong>Supabase（DB・認証）</strong><br /><small>口コミ履歴・分析データ保管</small></td>
+                  <td>Free 〜 Pro $25/月</td>
+                  <td class="cost-amount">¥0〜3,800</td>
+                </tr>
+                <tr>
+                  <td><strong>Vercel（ホスティング）</strong><br /><small>cron polling 含む</small></td>
+                  <td>Hobby 無料 〜 Pro $20/月</td>
+                  <td class="cost-amount">¥0〜3,000</td>
+                </tr>
+                <tr>
+                  <td><strong>通知連携</strong><br /><small>Slack / メール / LINE 公式（任意）</small></td>
+                  <td>各サービスの基本枠は無料</td>
+                  <td class="cost-amount cost-amount--free">¥0</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2"><strong>合計目安（月額）</strong></td>
+                  <td class="cost-amount cost-amount--total">¥0〜7,610</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="rm-cost-notes">
+            <p><strong>規模拡大時の試算例:</strong></p>
+            <ul>
+              <li><strong>店舗 1 拠点・月 500 件処理</strong>: AI API ¥50〜100、その他は同等 → 合計 約 ¥3,000〜8,000/月</li>
+              <li><strong>店舗 5 拠点・月 2,000 件処理</strong>: AI API ¥200〜400、Supabase Pro 推奨 → 合計 約 ¥7,000〜12,000/月</li>
+              <li><strong>10 拠点超</strong>: AI API ¥500〜2,000、専用構成 → 約 ¥15,000〜30,000/月</li>
+            </ul>
+            <p class="rm-cost-disclaimer">※ 上記は基盤（API・DB・ホスティング）の<strong>ランニングコストのみ</strong>です。初期構築費・月額保守費は別途。為替変動で多少上下します（為替 ¥150/USD 想定）。</p>
+          </div>
+        </div>
+
         <!-- 注記 -->
         <div class="rm-footnote">
           <p><strong>このデモについて</strong>: 表示している店舗・口コミ・投稿者はすべて<strong>架空のサンプルデータ</strong>です。実際のお客様向けには、御社の実店舗データ（Google ビジネスプロフィール / 食べログ管理画面 / Instagram Graph API）に接続して構築します。</p>
@@ -425,7 +493,7 @@ async function handleReply(btn: HTMLButtonElement) {
   const item = btn.closest('.review-item') as HTMLElement
   if (!item) return
   const id = item.dataset.id!
-  const review: Review = {
+  const review: Review & { id: string } = {
     id,
     source: item.dataset.source as Review['source'],
     shop_name: item.dataset.shop || '',
@@ -916,6 +984,105 @@ async function handleReply(btn: HTMLButtonElement) {
     font-size: 0.82rem;
     line-height: 1.75;
     color: #64748b;
+  }
+
+  /* ランニングコスト */
+  .rm-cost {
+    margin-top: 32px;
+  }
+  .rm-cost-lede {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.85;
+    margin: 0 0 14px;
+  }
+  .rm-cost-table-wrap {
+    overflow-x: auto;
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 12px;
+    margin-bottom: 18px;
+  }
+  .rm-cost-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+  .rm-cost-table th {
+    background: linear-gradient(135deg, #1F3A93 0%, #2B4FB0 100%);
+    color: #fff;
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .rm-cost-table th.cost-amount-col { text-align: right; }
+  .rm-cost-table td {
+    padding: 14px 14px;
+    border-bottom: 1px solid rgba(31, 58, 147, 0.06);
+    color: #334155;
+    vertical-align: top;
+    line-height: 1.7;
+  }
+  .rm-cost-table td small {
+    display: block;
+    color: #94A3B8;
+    font-size: 0.78em;
+    margin-top: 2px;
+  }
+  .rm-cost-table tbody tr:hover td {
+    background: rgba(31, 58, 147, 0.03);
+  }
+  .cost-amount {
+    font-family: 'Inter', sans-serif;
+    text-align: right;
+    font-weight: 700;
+    color: #1F3A93;
+    white-space: nowrap;
+  }
+  .cost-amount--free { color: #047857; }
+  .cost-amount--total {
+    font-size: 1.05rem;
+    color: #1F3A93;
+  }
+  .rm-cost-table tfoot td {
+    border-top: 2px solid rgba(31, 58, 147, 0.20);
+    border-bottom: none;
+    background: rgba(31, 58, 147, 0.03);
+    font-size: 0.95rem;
+  }
+  .rm-cost-notes {
+    padding: 16px 18px;
+    background: #fff;
+    border: 1px dashed rgba(31, 58, 147, 0.20);
+    border-radius: 10px;
+  }
+  .rm-cost-notes p {
+    font-size: 0.84rem;
+    color: #475569;
+    margin: 0 0 8px;
+    line-height: 1.75;
+  }
+  .rm-cost-notes p strong { color: #0f172a; }
+  .rm-cost-notes ul {
+    margin: 0 0 12px;
+    padding-left: 20px;
+  }
+  .rm-cost-notes li {
+    font-size: 0.84rem;
+    color: #334155;
+    line-height: 1.85;
+    margin-bottom: 4px;
+  }
+  .rm-cost-notes li strong { color: #1F3A93; }
+  .rm-cost-disclaimer {
+    color: #64748b !important;
+    font-size: 0.78rem !important;
+    line-height: 1.7 !important;
+    margin: 0 !important;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(31, 58, 147, 0.10);
   }
 
   /* Footnote */
