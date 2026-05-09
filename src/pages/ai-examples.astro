@@ -249,13 +249,13 @@ const totalCount = commonCases.length + industries.length + roles.length;
                 <header class="ax-detail-head">
                   <h2 class="ax-detail-title">{i.title}</h2>
                 </header>
-                <p class="ax-detail-desc">{i.summary}を含む業務全体を、御社の現場に合わせて再設計します。具体的な業務プロセスごとの自動化提案・想定削減時間・導入ロードマップは、サンプルレポートでご覧いただけます。</p>
+                <p class="ax-detail-desc">{i.summary}を含む業務全体を、御社の現場に合わせて再設計します。業種特化の活用シナリオ・想定削減時間・導入ロードマップを、活用シナリオページでご覧いただけます。</p>
                 <div class="ax-detail-metric">
                   <span class="ax-metric-label">想定削減時間</span>
                   <span class="ax-metric-value">{i.metric}</span>
                 </div>
                 <a href={i.href} class="btn-primary ax-detail-cta">
-                  サンプルレポートを見る
+                  活用シナリオを見る
                   <i class="fa-solid fa-arrow-right"></i>
                 </a>
               </article>
@@ -269,19 +269,19 @@ const totalCount = commonCases.length + industries.length + roles.length;
                     {r.comingSoon && <span class="ax-coming-soon ax-coming-soon--inline">近日公開</span>}
                   </h2>
                 </header>
-                <p class="ax-detail-desc">{r.summary}。具体的な運用イメージ・導入ロードマップ・ROI試算はサンプルページでご覧いただけます。</p>
+                <p class="ax-detail-desc">{r.summary}。具体的な運用イメージ・導入ロードマップ・想定効果を、活用シナリオページでご覧いただけます。</p>
                 <div class="ax-detail-metric">
                   <span class="ax-metric-label">想定効果</span>
                   <span class="ax-metric-value">{r.metric}</span>
                 </div>
                 {r.comingSoon ? (
                   <a href="/free-diagnosis" class="btn-secondary ax-detail-cta">
-                    サンプル準備中 — まずは無料診断で個別提案
+                    シナリオ準備中 — まずは無料診断で個別提案
                     <i class="fa-solid fa-arrow-right"></i>
                   </a>
                 ) : (
                   <a href={r.href} class="btn-primary ax-detail-cta">
-                    サンプルページを見る
+                    活用シナリオを見る
                     <i class="fa-solid fa-arrow-right"></i>
                   </a>
                 )}
