@@ -1,0 +1,484 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { supabase } from '../../lib/supabase';
+
+type Lead = {
+  id: string;
+  created_at: string;
+  plan?: string | null;
+  status?: string | null;
+  amount_jpy?: number | null;
+  paid_at?: string | null;
+  company_name?: string | null;
+  industry?: string | null;
+  application_id?: string | null;
+};
+
+let leads: Lead[] = [];
+let dbError = '';
+
+if (supabase) {
+  const { data, error } = await supabase
+    .from('diagnosis_leads')
+    .select('id, created_at, plan, status, amount_jpy, paid_at, company_name, industry, application_id')
+    .order('created_at', { ascending: false });
+  if (error) {
+    dbError = error.message;
+  } else {
+    leads = (data as Lead[]) || [];
+  }
+} else {
+  dbError = 'Supabase が設定されていません';
+}
+
+const now = Date.now();
+const ms24h = 24 * 60 * 60 * 1000;
+const ms30d = 30 * ms24h;
+
+const total = leads.length;
+const last24h = leads.filter(l => new Date(l.created_at).getTime() > now - ms24h).length;
+const last30d = leads.filter(l => new Date(l.created_at).getTime() > now - ms30d).length;
+
+const freeCount = leads.filter(l => (l.plan ?? 'free') === 'free').length;
+const paidCount = leads.filter(l => l.plan === 'paid').length;
+
+const completedCount = leads.filter(l => ['completed', 'mtg_scheduled'].includes(l.status || '')).length;
+const reportSentCount = leads.filter(l => ['report_sent', 'sent'].includes(l.status || '')).length;
+const inProgressCount = leads.filter(l => ['new', 'report_created'].includes(l.status || '')).length;
+const pendingPaymentCount = leads.filter(l => l.status === 'pending_payment').length;
+const paidStatusCount = leads.filter(l => l.status === 'paid').length;
+const manualReviewCount = leads.filter(l => l.status === 'manual_review').length;
+const cancelledCount = leads.filter(l => l.status === 'cancelled').length;
+
+const totalRevenuePaid = leads
+  .filter(l => l.paid_at && (l.amount_jpy || 0) > 0)
+  .reduce((s, l) => s + (l.amount_jpy || 0), 0);
+
+const stageRows = [
+  { label: '新規受付', count: leads.filter(l => l.status === 'new').length, color: '#5b7fff' },
+  { label: '入金待ち', count: pendingPaymentCount, color: '#f59e0b' },
+  { label: '入金確認済', count: paidStatusCount, color: '#06b6d4' },
+  { label: 'レポート作成済', count: leads.filter(l => l.status === 'report_created').length, color: '#8b5cf6' },
+  { label: '送付済', count: reportSentCount, color: '#facc15' },
+  { label: 'MTG / 完了', count: completedCount, color: '#34d399' },
+  { label: '手動確認', count: manualReviewCount, color: '#ef4444' },
+  { label: 'キャンセル', count: cancelledCount, color: '#94a3b8' },
+];
+const stageMax = Math.max(1, ...stageRows.map(s => s.count));
+
+// 過去30日の日次申込数（古い → 新しい）
+const trend: { day: string; count: number }[] = [];
+for (let i = 29; i >= 0; i--) {
+  const d = new Date(now - i * ms24h);
+  const dayKey = d.toISOString().slice(0, 10);
+  const count = leads.filter(l => l.created_at?.slice(0, 10) === dayKey).length;
+  trend.push({ day: dayKey, count });
+}
+const trendMax = Math.max(1, ...trend.map(t => t.count));
+const trendW = 600;
+const trendH = 140;
+const trendStep = trendW / (trend.length - 1);
+const trendPath = trend
+  .map((t, i) => `${i === 0 ? 'M' : 'L'} ${(i * trendStep).toFixed(1)} ${(trendH - (t.count / trendMax) * (trendH - 12) - 4).toFixed(1)}`)
+  .join(' ');
+const trendArea = `${trendPath} L ${trendW} ${trendH} L 0 ${trendH} Z`;
+
+const recentLeads = leads.slice(0, 10);
+
+function fmtDateTime(iso?: string | null) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${mm}/${dd} ${hh}:${mi}`;
+}
+
+function statusBadge(s?: string | null) {
+  const map: Record<string, { label: string; cls: string }> = {
+    new: { label: '新規', cls: 'badge-blue' },
+    pending_payment: { label: '入金待ち', cls: 'badge-amber' },
+    paid: { label: '入金確認済', cls: 'badge-cyan' },
+    report_created: { label: 'レポート作成済', cls: 'badge-purple' },
+    report_sent: { label: '送付済', cls: 'badge-yellow' },
+    sent: { label: '送付済', cls: 'badge-yellow' },
+    mtg_scheduled: { label: 'MTG予定', cls: 'badge-green' },
+    completed: { label: '完了', cls: 'badge-green' },
+    manual_review: { label: '手動確認', cls: 'badge-red' },
+    cancelled: { label: 'キャンセル', cls: 'badge-gray' },
+  };
+  const v = map[s || 'new'] || { label: s || '-', cls: 'badge-gray' };
+  return v;
+}
+---
+
+<AdminLayout title="ダッシュボード" active="dashboard">
+  <div class="dash-grid">
+
+    {dbError && (
+      <div class="dash-error">
+        <i class="fas fa-circle-exclamation"></i>
+        <span>{dbError}</span>
+      </div>
+    )}
+
+    <!-- KPI -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">過去 24h 申込</div>
+        <div class="kpi-value">{last24h}<span class="kpi-unit">件</span></div>
+        <div class="kpi-sub">直近 30 日: {last30d} 件</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">累計申込</div>
+        <div class="kpi-value">{total}<span class="kpi-unit">件</span></div>
+        <div class="kpi-sub">無料 {freeCount} / 有償 {paidCount}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">入金待ち</div>
+        <div class={`kpi-value ${pendingPaymentCount > 0 ? 'kpi-warn' : ''}`}>{pendingPaymentCount}<span class="kpi-unit">件</span></div>
+        <div class="kpi-sub">手動確認: {manualReviewCount} 件</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">有償 累計売上（入金済）</div>
+        <div class="kpi-value">¥{totalRevenuePaid.toLocaleString()}</div>
+        <div class="kpi-sub">入金確認済の合計</div>
+      </div>
+    </section>
+
+    <!-- 申込推移 -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2 class="panel-title">過去 30 日 申込推移</h2>
+        <span class="panel-legend"><span class="dot dot-brand"></span>1 日あたりの申込件数</span>
+      </div>
+      {trend.every(t => t.count === 0) ? (
+        <p class="panel-empty">この期間にはまだ申込がありません。</p>
+      ) : (
+        <div class="trend-chart">
+          <svg viewBox={`0 0 ${trendW} ${trendH}`} preserveAspectRatio="none" aria-label="申込推移">
+            <defs>
+              <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#5b7fff" stop-opacity="0.35" />
+                <stop offset="100%" stop-color="#5b7fff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path d={trendArea} fill="url(#trendGrad)" />
+            <path d={trendPath} fill="none" stroke="#5b7fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      )}
+    </section>
+
+    <!-- パイプライン -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2 class="panel-title">パイプライン分布</h2>
+        <a href="/admin/leads" class="panel-link">案件管理を開く →</a>
+      </div>
+      {stageRows.every(s => s.count === 0) ? (
+        <p class="panel-empty">該当する案件がありません。</p>
+      ) : (
+        <ul class="stage-list">
+          {stageRows.map((s) => (
+            <li class="stage-row">
+              <span class="stage-label">{s.label}</span>
+              <span class="stage-bar-wrap">
+                <span class="stage-bar" style={`width: ${(s.count / stageMax) * 100}%; background: ${s.color};`}></span>
+              </span>
+              <span class="stage-count">{s.count}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+
+    <!-- 直近申込 -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2 class="panel-title">直近の申込（最新 10 件）</h2>
+      </div>
+      {recentLeads.length === 0 ? (
+        <p class="panel-empty">申込データがまだありません。</p>
+      ) : (
+        <div class="table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>日時</th>
+                <th>申込番号</th>
+                <th>会社</th>
+                <th>業種</th>
+                <th>プラン</th>
+                <th>状態</th>
+                <th>詳細</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentLeads.map((l) => {
+                const sb = statusBadge(l.status);
+                return (
+                  <tr>
+                    <td class="td-meta">{fmtDateTime(l.created_at)}</td>
+                    <td class="td-id">{l.application_id || '-'}</td>
+                    <td>{l.company_name || '-'}</td>
+                    <td class="td-meta">{l.industry || '-'}</td>
+                    <td>
+                      <span class={`badge ${l.plan === 'paid' ? 'badge-cyan' : 'badge-gray'}`}>
+                        {l.plan === 'paid' ? '有償' : '無料'}
+                      </span>
+                    </td>
+                    <td><span class={`badge ${sb.cls}`}>{sb.label}</span></td>
+                    <td><a href={`/admin/leads/${l.id}`} class="row-link">開く</a></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+
+    <!-- 注記 -->
+    <section class="panel panel-note">
+      <p>
+        <i class="fas fa-circle-info"></i>
+        現在のデータソースは <code>diagnosis_leads</code> テーブルです。
+        今後、各 AI ワークフロー（補助金モニタリング・問い合わせ振り分け・freee 入金照合 cron 等）の
+        実行ログを <code>workflow_runs</code> テーブルに集約し、このダッシュボードに統合する予定です。
+      </p>
+    </section>
+  </div>
+</AdminLayout>
+
+<style>
+  .dash-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .dash-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(234, 67, 53, 0.10);
+    border: 1px solid rgba(234, 67, 53, 0.30);
+    border-radius: 8px;
+    color: #ea4335;
+    font-size: 0.85rem;
+  }
+
+  /* KPI */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .kpi-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .kpi-label {
+    font-size: 0.72rem;
+    color: var(--admin-muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+  .kpi-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .kpi-value.kpi-warn { color: #fbbf24; }
+  .kpi-unit {
+    font-size: 0.6em;
+    font-weight: 600;
+    margin-left: 4px;
+    color: var(--admin-muted);
+  }
+  .kpi-sub {
+    font-size: 0.74rem;
+    color: var(--admin-muted);
+  }
+
+  /* Panel */
+  .panel {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    padding: 18px 22px;
+  }
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .panel-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+  }
+  .panel-legend {
+    font-size: 0.74rem;
+    color: var(--admin-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .panel-link {
+    color: var(--admin-brand);
+    font-size: 0.78rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .panel-link:hover { text-decoration: underline; }
+  .panel-empty {
+    color: var(--admin-muted);
+    font-size: 0.85rem;
+    margin: 0;
+    padding: 12px 0;
+  }
+  .panel-note {
+    font-size: 0.78rem;
+    color: var(--admin-muted);
+    line-height: 1.7;
+  }
+  .panel-note p { margin: 0; }
+  .panel-note i { color: var(--admin-brand); margin-right: 4px; }
+  .panel-note code {
+    padding: 1px 6px;
+    background: var(--admin-surface-2);
+    border-radius: 4px;
+    color: #cdd9ff;
+    font-size: 0.85em;
+  }
+  .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .dot-brand { background: var(--admin-brand); }
+
+  /* Trend */
+  .trend-chart {
+    width: 100%;
+    height: 150px;
+  }
+  .trend-chart svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Stage list */
+  .stage-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stage-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 60px;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    font-size: 0.85rem;
+  }
+  .stage-label {
+    color: var(--admin-text);
+    font-weight: 500;
+  }
+  .stage-bar-wrap {
+    background: var(--admin-surface-2);
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .stage-bar {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.35s ease;
+  }
+  .stage-count {
+    text-align: right;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+  }
+  .dash-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .dash-table th {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--admin-border);
+    color: var(--admin-muted);
+    font-weight: 600;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .dash-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--admin-border);
+    color: var(--admin-text);
+    white-space: nowrap;
+  }
+  .td-meta { color: var(--admin-muted); }
+  .td-id { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.8em; color: #cdd9ff; }
+  .row-link {
+    color: var(--admin-brand);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .row-link:hover { text-decoration: underline; }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .badge-blue { background: rgba(91, 127, 255, 0.18); color: #9bb1ff; }
+  .badge-amber { background: rgba(245, 158, 11, 0.20); color: #fcd07b; }
+  .badge-cyan { background: rgba(6, 182, 212, 0.20); color: #7be7f5; }
+  .badge-purple { background: rgba(139, 92, 246, 0.20); color: #c1adfb; }
+  .badge-yellow { background: rgba(250, 204, 21, 0.20); color: #fbe06f; }
+  .badge-green { background: rgba(52, 211, 153, 0.20); color: #7be4be; }
+  .badge-red { background: rgba(239, 68, 68, 0.20); color: #fca5a5; }
+  .badge-gray { background: rgba(148, 163, 184, 0.18); color: #b8c0cc; }
+
+  @media (max-width: 1024px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .stage-row { grid-template-columns: 100px 1fr 50px; gap: 8px; }
+  }
+  @media (max-width: 600px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+  }
+</style>
