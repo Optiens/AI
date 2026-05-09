@@ -209,33 +209,34 @@ import Layout from '../../layouts/Layout.astro';
 
 <style>
   .hero-section {
-    /* 畜産 = 緑（Figma green） */
-    background: linear-gradient(135deg, #FFCED0 0%, #07956C 100%);
-    color: #fff;
-    padding: clamp(40px, 8vw, 72px) 0 clamp(32px, 6vw, 56px);
+    background: linear-gradient(180deg, #ffffff 0%, #F8FAFD 100%);
+    color: #0f172a;
+    padding: clamp(110px, 14vw, 150px) 0 clamp(32px, 6vw, 56px);
+  border-bottom: 1px solid rgba(31, 58, 147, 0.08);
   }
   .back-link {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: rgba(255,255,255,0.7);
+    color: #64748b;
     text-decoration: none;
     font-size: 0.85rem;
     margin-bottom: 20px;
   }
-  .back-link:hover { color: #fff; }
+  .back-link:hover { color: #1F3A93; }
   .hero-badge {
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.15em;
-    background: rgba(255,255,255,0.15);
+    background: rgba(31, 58, 147, 0.10);
+    color: #1F3A93;
     display: inline-block;
     padding: 4px 12px;
     border-radius: 4px;
     margin-bottom: 16px;
   }
-  .hero-section h1 { color: #fff; font-size: clamp(1.4rem, 3.5vw, 2rem); margin-bottom: 16px; line-height: 1.4; }
-  .hero-sub { opacity: 0.85; font-size: 0.95rem; }
+  .hero-section h1 { color: #0f172a; font-size: clamp(1.4rem, 3.5vw, 2rem); margin-bottom: 16px; line-height: 1.4; }
+  .hero-sub { color: #64748b; font-size: 0.95rem; line-height: 1.85; }
   .sp-only { display: none; }
   @media (max-width: 600px) { .sp-only { display: block; } }
 
@@ -245,20 +246,20 @@ import Layout from '../../layouts/Layout.astro';
   .report-section h2 {
     font-size: 1.3rem;
     padding-bottom: 8px;
-    border-bottom: 2px solid var(--color-primary, #2e574c);
+    border-bottom: 2px solid var(--brand, #1F3A93);
     margin-bottom: 20px;
   }
 
   /* Info table */
   .info-table { display: flex; flex-direction: column; gap: 8px; }
   .info-row { display: flex; gap: 16px; padding: 8px 0; border-bottom: 1px solid #eee; }
-  .info-label { font-weight: 600; min-width: 100px; color: var(--color-primary, #2e574c); font-size: 0.9rem; }
+  .info-label { font-weight: 600; min-width: 100px; color: var(--brand, #1F3A93); font-size: 0.9rem; }
   .info-value { font-size: 0.9rem; }
 
   /* Table */
   .table-wrapper { overflow-x: auto; margin: 16px 0; }
   table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  th { background: var(--color-primary, #2e574c); color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; }
+  th { background: var(--brand, #1F3A93); color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; }
   td { padding: 10px 12px; border-bottom: 1px solid #eee; }
   tr:hover td { background: #f9fafb; }
 
@@ -268,7 +269,7 @@ import Layout from '../../layouts/Layout.astro';
     border-radius: 8px;
     margin-top: 16px;
     font-size: 0.95rem;
-    color: var(--color-primary, #2e574c);
+    color: var(--brand, #1F3A93);
   }
 
   /* Priority labels */
@@ -304,7 +305,7 @@ import Layout from '../../layouts/Layout.astro';
   .meta-item {
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--color-primary, #2e574c);
+    color: var(--brand, #1F3A93);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -313,7 +314,7 @@ import Layout from '../../layouts/Layout.astro';
   /* IoT badge */
   .iot-badge {
     display: inline-block;
-    background: linear-gradient(135deg, #2e574c, #5ea89a);
+    background: linear-gradient(135deg, #1F3A93, #5ea89a);
     color: #fff;
     font-size: 0.72rem;
     font-weight: 700;
@@ -325,7 +326,7 @@ import Layout from '../../layouts/Layout.astro';
   /* IoT detail box */
   .iot-detail {
     background: #e8f2f0;
-    border-left: 4px solid var(--color-primary, #2e574c);
+    border-left: 4px solid var(--brand, #1F3A93);
     border-radius: 0 8px 8px 0;
     padding: 16px 20px;
     margin-top: 12px;
@@ -333,7 +334,7 @@ import Layout from '../../layouts/Layout.astro';
   .iot-detail-title {
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--color-primary, #2e574c);
+    color: var(--brand, #1F3A93);
     margin-bottom: 8px;
   }
   .iot-detail ul { padding-left: 20px; margin: 0; }
@@ -352,7 +353,7 @@ import Layout from '../../layouts/Layout.astro';
     padding: 20px;
     text-align: center;
   }
-  .roi-card.accent { background: var(--color-primary, #2e574c); color: #fff; }
+  .roi-card.accent { background: var(--brand, #1F3A93); color: #fff; }
   .roi-number { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
   .roi-card.accent .roi-number { color: #fff; }
   .roi-label { font-size: 0.8rem; color: var(--muted, #666); }
@@ -363,26 +364,22 @@ import Layout from '../../layouts/Layout.astro';
   .roadmap { display: flex; flex-direction: column; gap: 20px; }
   .roadmap-month {
     background: #f9fafb;
-    border-left: 4px solid var(--color-primary, #2e574c);
+    border-left: 4px solid var(--brand, #1F3A93);
     padding: 20px 24px;
     border-radius: 0 8px 8px 0;
   }
-  .roadmap-month h3 { font-size: 1rem; margin-bottom: 10px; color: var(--color-primary, #2e574c); }
+  .roadmap-month h3 { font-size: 1rem; margin-bottom: 10px; color: var(--brand, #1F3A93); }
   .roadmap-month ul { padding-left: 20px; margin: 0; }
   .roadmap-month li { font-size: 0.9rem; margin-bottom: 4px; line-height: 1.6; }
 
   /* CTA */
-  .cta-section {
-    background: var(--color-primary, #2e574c);
-    color: #fff;
-    padding: clamp(48px, 8vw, 72px) 0;
-  }
+  .cta-section { background: linear-gradient(135deg, #1F3A93 0%, #6B85C9 100%); color: #fff; padding: clamp(48px, 8vw, 72px) 0; }
   .cta-section h2 { color: #fff; margin-bottom: 12px; }
   .cta-section p { opacity: 0.9; margin-bottom: 24px; line-height: 1.8; }
   .cta-btn {
     display: inline-block;
     background: #fff;
-    color: var(--color-primary, #2e574c);
+    color: var(--brand, #1F3A93);
     font-weight: 700;
     padding: 14px 36px;
     border-radius: 8px;
