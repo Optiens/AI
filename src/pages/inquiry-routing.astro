@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout
   title="問い合わせ自動振り分け（デモ）| Optiens"
-  description="お客様からの問い合わせ内容をAIが自動で分類・優先度判定し、推奨対応者と一次応答テンプレートを生成するデモです。Salesforce Web-to-Case + Lead Routingに相当する機能を、ライセンス不要で構築できます。"
+  description="お客様からの問い合わせ内容をAIが自動で分類・優先度判定し、推奨対応者と一次応答テンプレートを生成するデモです。Webフォームからの自動受付と振り分けを、月額ライセンス料なしで御社専用に構築できます。"
   canonical="https://optiens.com/inquiry-routing"
 >
   <main class="ir-main light-section">
@@ -15,7 +15,7 @@ import Layout from '../layouts/Layout.astro';
         <h1>問い合わせ自動振り分け（デモ）</h1>
         <p class="hero-sub">
           お客様からの問い合わせ内容をAIが読み、<strong>業種分類・優先度・推奨対応者・応答テンプレート</strong>を自動生成します。<br />
-          Salesforce「Web-to-Case + Lead Routing」相当の機能を、ライセンス不要で構築できます。
+          Webフォームからの自動受付と振り分けを、<strong>月額ライセンス料なし</strong>で御社専用に構築できます。
         </p>
       </div>
     </section>
@@ -93,21 +93,48 @@ import Layout from '../layouts/Layout.astro';
 
         <!-- 説明 -->
         <div class="explanation">
-          <h3><i class="fa-solid fa-circle-info"></i> このデモが模した Salesforce 機能</h3>
+          <h3><i class="fa-solid fa-circle-info"></i> このデモで動いている 4 つの機能</h3>
           <ul>
-            <li><strong>Web-to-Case</strong>: Webフォームから受信した問い合わせをCase（案件）として自動登録する機能</li>
-            <li><strong>Case Routing</strong>: 内容に応じて担当者を自動振り分けする機能</li>
-            <li><strong>Lead Scoring</strong>: 問い合わせから優先度を自動算出する機能</li>
-            <li><strong>Email Templates</strong>: 状況に応じた応答テンプレートを使い分ける機能</li>
+            <li><strong>自動受付</strong>: Webフォームからの問い合わせを案件として自動登録</li>
+            <li><strong>自動振り分け</strong>: 内容を AI が読み、担当者を自動アサイン</li>
+            <li><strong>優先度判定</strong>: 緊急度・重要度を AI が算出して通知優先度を決定</li>
+            <li><strong>応答テンプレート生成</strong>: 状況に応じた一次返信文を AI が下書き</li>
           </ul>
-          <p class="explanation-note">
-            上記はSalesforce Sales Cloud / Service Cloud の標準機能です。御社専用版では、<strong>御社の業種カテゴリ・担当者一覧・応答テンプレート</strong>に合わせた振り分けロジックを実装し、Slack/メール通知やCRM登録までを自動化できます。
+        </div>
+
+        <!-- 御社専用版で出来ること（目立たせる） -->
+        <div class="custom-highlight">
+          <div class="custom-highlight-head">
+            <i class="fa-solid fa-arrows-turn-to-dots"></i>
+            <h3>御社専用版なら、振り分けた<strong>その後の自動化</strong>まで</h3>
+          </div>
+          <p class="custom-highlight-lede">
+            このデモは「振り分け結果を画面に表示するところ」までですが、御社専用版では<strong>振り分け後の通知・登録・返信送付まで全自動化</strong>できます。
+          </p>
+          <div class="custom-highlight-grid">
+            <div class="custom-highlight-card">
+              <i class="fa-solid fa-bell"></i>
+              <h4>担当者へ自動通知</h4>
+              <p>振り分け結果を担当者のチャット・メール・LINE 等に即時通知。優先度の高い問い合わせは即エスカレーション。</p>
+            </div>
+            <div class="custom-highlight-card">
+              <i class="fa-solid fa-database"></i>
+              <h4>社内システムへ自動登録</h4>
+              <p>御社の CRM・案件管理 DB・スプレッドシート等に、案件として自動でレコード追加。二重入力ゼロ。</p>
+            </div>
+            <div class="custom-highlight-card">
+              <i class="fa-solid fa-envelope-circle-check"></i>
+              <h4>一次返信を自動送信</h4>
+              <p>テンプレ＋AI 生成の本文で、お客様に即時の自動返信メールを送付。受信確認の手作業を撤廃。</p>
+            </div>
+          </div>
+          <p class="custom-highlight-note">
+            上記はすべて、御社の業務フロー・ツールに合わせて Optiens が一括で構築・組込みします。<strong>振り分けて終わり、ではなく、対応完了までを一気通貫で自動化</strong>するのがカスタム版の本来の価値です。
           </p>
         </div>
 
         <p class="disclaimer">
-          ※AIによる振り分けは1時間あたり10回までご利用いただけます。<br />
-          ※御社専用版では、SF Web-to-Case互換のフォーム・自動Slack通知・CRMへの自動登録・応答メール自動送信まで対応可能です。
+          ※AIによる振り分けは1時間あたり10回までご利用いただけます。
         </p>
       </div>
     </section>
@@ -117,7 +144,7 @@ import Layout from '../layouts/Layout.astro';
       <div class="container text-center">
         <h2>御社業務に合わせたカスタム版もご相談いただけます</h2>
         <p>
-          Salesforce相当の問い合わせ振り分け機能を、月額ライセンス料ゼロで構築できます。<br />
+          問い合わせ振り分け機能を、<strong>月額ライセンス料ゼロ</strong>で構築できます。<br />
           御社の業種カテゴリ・担当者一覧・応答ルールに合わせた設計が可能です。
         </p>
         <div class="cta-buttons">
@@ -532,6 +559,103 @@ import Layout from '../layouts/Layout.astro';
     margin: 0;
   }
   .explanation-note strong { color: var(--text); }
+
+  /* 御社専用版ハイライト（振り分け後の自動化） */
+  .custom-highlight {
+    margin-top: 32px;
+    padding: 32px clamp(20px, 4vw, 36px);
+    background: linear-gradient(135deg, rgba(31, 58, 147, 0.06) 0%, rgba(107, 133, 201, 0.04) 60%, rgba(228, 138, 149, 0.05) 100%);
+    border: 1px solid rgba(31, 58, 147, 0.18);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .custom-highlight::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(31, 58, 147, 0.10) 0%, transparent 65%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .custom-highlight-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .custom-highlight-head i {
+    font-size: 1.35rem;
+    color: var(--brand);
+    background: rgba(31, 58, 147, 0.10);
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .custom-highlight-head h3 {
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    color: var(--heading);
+    margin: 0;
+    line-height: 1.5;
+  }
+  .custom-highlight-head h3 strong { color: var(--brand); }
+  .custom-highlight-lede {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: var(--text);
+    margin: 0 0 22px;
+  }
+  .custom-highlight-lede strong {
+    color: var(--brand);
+    font-weight: 700;
+  }
+  .custom-highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .custom-highlight-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.12);
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+  .custom-highlight-card i {
+    font-size: 1.1rem;
+    color: var(--brand);
+    margin-bottom: 8px;
+  }
+  .custom-highlight-card h4 {
+    font-size: 0.92rem;
+    color: var(--heading);
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .custom-highlight-card p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin: 0;
+  }
+  .custom-highlight-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 0;
+    padding-top: 16px;
+    border-top: 1px dashed rgba(31, 58, 147, 0.20);
+  }
+  .custom-highlight-note strong { color: var(--text); }
+
+  @media (max-width: 768px) {
+    .custom-highlight-grid { grid-template-columns: 1fr; }
+  }
 
   /* 注意書き */
   .disclaimer {
