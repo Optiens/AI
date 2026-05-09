@@ -3,7 +3,7 @@ title: '世界における水耕栽培の自動化と商業的展望：地上利
 date: '2026-03-09'
 category: 'agriculture'
 excerpt: 'AI・IoT・ロボティクスが融合した水耕栽培自動化の最前線。倒産企業の教訓から読み解く収益化の条件、アジア・中東・欧州の市場動向、そして高付加価値作物へのシフト戦略を包括的に解説。'
-image: '/images/blog/hydroponics-automation-global-market.png'
+image: '/images/blog/hydroponics-automation-global-market-2026.webp'
 ---
 
 ## 1. 序論：世界的な農業危機の構図と水耕栽培の不可欠性

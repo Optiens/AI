@@ -3,10 +3,10 @@ title: '生成AIのビジネス活用：農業・食品業界での実践事例'
 date: '2026-01-26'
 category: 'agriculture'
 excerpt: 'ChatGPTをはじめとする生成AIが農業・食品サプライチェーンを変革しています。実際の活用事例と導入のポイントを紹介。'
-image: '/images/blog/generative-ai-business-2025.png'
+image: '/images/blog/generative-ai-business-2025.webp'
 ---
 
-2023年のChatGPT登場以来、生成AIはあらゆる産業に影響を与えていますが、農業・食品分野でも革新的な活用が始まっています。
+2022年11月のChatGPT登場以来、生成AIはあらゆる産業に影響を与えていますが、農業・食品分野でも革新的な活用が始まっています。
 
 ## 栽培管理レポートの自動生成
 
