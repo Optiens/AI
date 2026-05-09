@@ -1,7 +1,10 @@
 import type { APIRoute } from 'astro'
 
 const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
-const OPENAI_MODEL = 'gpt-4o-mini'
+// gpt-4o は Vision 対応・日本語精度の高いコスパ良モデル
+// （gpt-4o-mini より約 16x 高いが、フォーム自動入力の精度向上による
+//  ユーザー体験改善を優先。1 リクエスト約 ¥1〜3 の見込み）
+const OPENAI_MODEL = 'gpt-4o'
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()

@@ -5,8 +5,9 @@ import { getMockReply, type ToneStyle, type ReplyLang } from '../../lib/review-m
  * /review-monitor デモ用エンドポイント
  *
  * 実装方針:
- * - 本デモは OpenAI API を呼ばず、事前用意したサンプル応答を返す
- * - 実運用時は OpenAI gpt-4o-mini 等で動的生成する想定（参考実装は Git 履歴）
+ * - 本デモは AI API を呼ばず、事前用意したサンプル応答を返す
+ * - 実運用時は Claude Opus 4.7 / GPT-5.5 等の最新フラッグシップで動的生成
+ *   （バランス重視なら Sonnet 4.6 / GPT-5.4、コスト重視なら gpt-4o-mini）
  * - レート制限のみ維持（同一 IP からの過剰アクセス防止）
  */
 
