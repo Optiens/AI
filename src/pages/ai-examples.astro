@@ -368,8 +368,15 @@ const totalCount = commonCases.length + industries.length + roles.length;
       if (cat) {
         selectCategory(cat);
         selectItem(hash);
+        return;
       }
     }
+  }
+  // ?cat=industry|common|role でカテゴリ初期選択
+  const params = new URLSearchParams(window.location.search);
+  const catParam = params.get('cat');
+  if (catParam && ['common', 'industry', 'role'].includes(catParam)) {
+    selectCategory(catParam);
   }
 })();
 </script>
