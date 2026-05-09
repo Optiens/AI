@@ -11,7 +11,7 @@ type CommonCase = {
   desc: string;
   tags: string[];
   self: string;
-  demo?: { label: string; href: string };
+  demo?: { label: string; href: string; note?: string };
 };
 
 type Industry = {
@@ -46,7 +46,11 @@ const commonCases: CommonCase[] = [
     desc: '見積書・契約書・請求書・議事録・写真——日々たまっていく書類をフォームにアップロードすると、AIが自動で内容を読み取り、必要な情報だけ抜き出して台帳に整理します。手入力の転記時間がそのまま削減され、読み取り結果は人間が最終確認できる画面で表示するため、AI任せの誤りも防げます。請求書の金額・支払期日抽出、議事録からのToDo抽出、現場写真からの作業報告書下書きなど、紙とPDFが混じる現場ほど効果が出ます。',
     tags: ['工務店', '士業', '製造業', '宿泊業', '自治体'],
     self: '補助金公募要領のPDFを取り込み、要件を自動抽出する仕組みを社内で運用しています。',
-    demo: { label: '会社案内画像から自動入力するデモを試す', href: '/free-diagnosis' },
+    demo: {
+      label: 'AI活用診断フォームで実際に体験する',
+      href: '/free-diagnosis',
+      note: '本機能は専用デモではなく、Optiens の本番フォーム「AI 活用診断」内に組み込まれて稼働しています。会社案内画像のアップロード／自社サイト URL の貼り付けで、AI がフォーム項目を自動入力する挙動を実機でご確認いただけます。',
+    },
   },
   {
     id: 'case-02',
@@ -213,11 +217,19 @@ const totalCount = commonCases.length + industries.length + roles.length;
                   <p><strong>弊社での運用</strong>: {c.self}</p>
                 </div>
                 {c.demo ? (
-                  <a href={c.demo.href} class="btn-primary ax-detail-cta">
-                    <i class="fa-solid fa-circle-play"></i>
-                    {c.demo.label}
-                    <i class="fa-solid fa-arrow-right"></i>
-                  </a>
+                  <>
+                    <a href={c.demo.href} class="btn-primary ax-detail-cta">
+                      <i class="fa-solid fa-circle-play"></i>
+                      {c.demo.label}
+                      <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    {c.demo.note ? (
+                      <p class="ax-detail-demo-note">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>{c.demo.note}</span>
+                      </p>
+                    ) : null}
+                  </>
                 ) : null}
               </article>
             ))}
@@ -769,6 +781,24 @@ const totalCount = commonCases.length + industries.length + roles.length;
   }
   .ax-detail-cta i {
     font-size: .85rem;
+  }
+  .ax-detail-demo-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 12px 0 0;
+    padding: 10px 14px;
+    background: rgba(31, 58, 147, .04);
+    border-left: 3px solid rgba(31, 58, 147, .25);
+    border-radius: 6px;
+    font-size: .82rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .ax-detail-demo-note i {
+    color: rgba(31, 58, 147, .6);
+    margin-top: 3px;
+    flex-shrink: 0;
   }
 
   /* Bridge note */
