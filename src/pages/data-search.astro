@@ -165,11 +165,11 @@ import Layout from '../layouts/Layout.astro';
           <div class="ds-scale-monthly">
             <h3 class="ds-scale-monthly-title">月額ランニングコスト試算（参考）</h3>
             <ul class="ds-scale-monthly-list">
-              <li><strong>1 日 10 クエリ</strong>（小規模社内利用）: AI API 月額 <strong>¥300〜1,200</strong> 程度</li>
-              <li><strong>1 日 100 クエリ</strong>（部署単位で日常利用）: AI API 月額 <strong>¥3,000〜12,000</strong> 程度</li>
-              <li><strong>1 日 1,000 クエリ</strong>（全社・常用）: AI API 月額 <strong>¥30,000〜120,000</strong> 程度</li>
+              <li><strong>1 日 10 クエリ</strong>（小規模社内利用）: AI API 月額 <strong>¥300〜3,000</strong> 程度</li>
+              <li><strong>1 日 100 クエリ</strong>（部署単位で日常利用）: AI API 月額 <strong>¥3,000〜30,000</strong> 程度</li>
+              <li><strong>1 日 1,000 クエリ</strong>（全社・常用）: AI API 月額 <strong>¥30,000〜300,000</strong> 程度</li>
             </ul>
-            <p class="ds-scale-monthly-note">※ 上記は <strong>OpenAI API 利用料のみの試算</strong>です。Supabase 等の DB 利用料、月額保守費は別途。利用量に応じた従量制のため、利用が少ない月は費用も比例して下がります。<br />※ ローカル LLM 運用を選択された場合は API 利用料はかかりません（GPU 設備または GPU クラウドレンタル代が別途発生します）。</p>
+            <p class="ds-scale-monthly-note">※ 上記は <strong>AI API 利用料のみの試算</strong>です。下限は gpt-4o-mini 等の軽量モデル利用時、上限は <strong>Claude Opus 4.7 / GPT-5.5</strong> 等の最新フラッグシップ＋長文プロンプト時の目安。Supabase 等の DB 利用料、月額保守費は別途。<br />※ Text-to-SQL や RAG では精度が業務影響に直結するため、<strong>バランスモデル（Claude Sonnet 4.6 / GPT-5.4）以上を推奨</strong>。コストは中央値帯（¥3,000〜30,000/月）に収まることが多いです。<br />※ ローカル LLM 運用を選択された場合は API 利用料はかかりません（GPU 設備または GPU クラウドレンタル代が別途発生します）。<br />※ 2026-05 時点の料金。AI モデル料金は四半期単位で改定される可能性があります。</p>
           </div>
 
           <p class="ds-scale-cta">
@@ -370,14 +370,15 @@ function renderMarkdown(md: string): string {
   const out: string[] = []
   let i = 0
   while (i < lines.length) {
-    const line = lines[i]
+    const line = lines[i] ?? ''
     if (line.match(/^\|.+\|$/) && lines[i + 1]?.match(/^\|[\s\-:|]+\|$/)) {
       // 表開始
       const headers = line.split('|').slice(1, -1).map(s => s.trim())
       i += 2
       const tableRows: string[] = []
-      while (i < lines.length && lines[i].match(/^\|.+\|$/)) {
-        const cells = lines[i].split('|').slice(1, -1).map(s => s.trim())
+      while (i < lines.length && (lines[i] ?? '').match(/^\|.+\|$/)) {
+        const rowLine = lines[i] ?? ''
+        const cells = rowLine.split('|').slice(1, -1).map(s => s.trim())
         tableRows.push('<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>')
         i++
       }
@@ -387,8 +388,8 @@ function renderMarkdown(md: string): string {
     if (line.match(/^- /)) {
       // リスト
       const items: string[] = []
-      while (i < lines.length && lines[i].match(/^- /)) {
-        items.push(`<li>${lines[i].replace(/^- /, '')}</li>`)
+      while (i < lines.length && (lines[i] ?? '').match(/^- /)) {
+        items.push(`<li>${(lines[i] ?? '').replace(/^- /, '')}</li>`)
         i++
       }
       out.push('<ul>' + items.join('') + '</ul>')
