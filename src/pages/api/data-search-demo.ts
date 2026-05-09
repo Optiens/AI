@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro'
+import { INTERNAL_DOCS, SAMPLE_QA, getInternalDocAnswer } from '../../lib/internal-docs-mock'
 
 const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
 const OPENAI_MODEL = 'gpt-4o-mini'
@@ -131,10 +132,39 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       return json({ error: '時間内の利用制限に達しました。少し時間をおいてから再度お試しください。' }, 429)
     }
 
-    const body = await request.json().catch(() => null) as { query?: string } | null
+    const body = await request.json().catch(() => null) as { query?: string; category?: string } | null
     const query = String(body?.query || '').trim()
+    const category = String(body?.category || 'sales')
     if (!query) return json({ error: '質問を入力してください。' }, 400)
     if (query.length > 200) return json({ error: '質問は200文字以内でお願いします。' }, 400)
+
+    // 社内ドキュメント検索: 事前用意の Q&A を返す（API 消費なし）
+    if (category === 'docs') {
+      // 疑似ディレイ
+      await new Promise((r) => setTimeout(r, 350 + Math.floor(Math.random() * 350)))
+      const qa = getInternalDocAnswer(query)
+      if (qa) {
+        return json({
+          answer: qa.answer,
+          matched_ids: qa.matched_doc_ids,
+          calculation_note: '',
+          records: INTERNAL_DOCS,
+          category: 'docs',
+          remaining: rl.remaining,
+          mock: true,
+        })
+      }
+      return json({
+        answer: `**ご質問「${query.slice(0, 40)}」に該当する事前用意の応答が見つかりませんでした。**\n\n本デモはサンプル質問 8 件に対する事前応答のみ動作します。本番運用時は AI が御社の社内ドキュメント全件をベクトル検索して動的に回答します（OpenAI API の<strong>従量課金</strong>が発生）。\n\n左のサンプル質問からお試しください。`,
+        matched_ids: [],
+        calculation_note: '',
+        records: INTERNAL_DOCS,
+        category: 'docs',
+        remaining: rl.remaining,
+        mock: true,
+        no_match: true,
+      })
+    }
 
     if (!OPENAI_API_KEY) {
       return json({ ...buildMockResult(query), records: SAMPLE_DATA, remaining: rl.remaining })
@@ -211,6 +241,10 @@ ${query}
   }
 }
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ url }) => {
+  const category = url.searchParams.get('category') || 'sales'
+  if (category === 'docs') {
+    return json({ records: INTERNAL_DOCS, sample_questions: SAMPLE_QA.map((q) => q.question) })
+  }
   return json({ records: SAMPLE_DATA })
 }

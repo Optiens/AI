@@ -11,11 +11,29 @@ import Layout from '../layouts/Layout.astro';
     <section class="ds-hero">
       <div class="container">
         <h1 class="ds-title">自然言語データ検索</h1>
-        <p class="ds-lede">社内データに、自然な日本語で質問できる仕組みのデモです。<br class="pc-only">Optiens の<strong>架空販売データ 30 件</strong>に対して質問してみてください。</p>
+        <p class="ds-lede">社内データ・社内ドキュメントに、自然な日本語で質問できる仕組みのデモです。<br class="pc-only">下のタブで「販売データ検索」「社内ドキュメント検索」を切り替えられます。</p>
       </div>
     </section>
 
     <section class="ds-section">
+      <div class="container">
+
+        <!-- カテゴリ切替トグル -->
+        <div class="ds-category-toggle" role="tablist" aria-label="検索対象の切替">
+          <button type="button" class="ds-cat-btn is-active" data-cat="sales" role="tab" aria-selected="true">
+            <i class="fa-solid fa-chart-line"></i>
+            <span class="ds-cat-name">販売データ検索</span>
+            <span class="ds-cat-sub">売上・取引データに質問</span>
+          </button>
+          <button type="button" class="ds-cat-btn" data-cat="docs" role="tab" aria-selected="false">
+            <i class="fa-solid fa-folder-tree"></i>
+            <span class="ds-cat-name">社内ドキュメント検索</span>
+            <span class="ds-cat-sub">規程・マニュアル・連絡網に質問</span>
+          </button>
+        </div>
+
+      </div>
+
       <div class="container ds-container">
 
         <!-- 左：質問エリア -->
@@ -23,7 +41,8 @@ import Layout from '../layouts/Layout.astro';
           <h2 class="ds-panel-title">質問する</h2>
           <p class="ds-panel-desc">下のサンプルから選ぶか、自由に入力できます。</p>
 
-          <div class="ds-samples">
+          <!-- 販売データ用サンプル -->
+          <div class="ds-samples" data-cat-show="sales">
             <p class="ds-samples-group-label">集計</p>
             <button class="ds-sample" data-q="2026年 4 月の売上合計はいくら？">2026年 4 月の売上合計は？</button>
             <button class="ds-sample" data-q="士業のお客様の合計売上と件数を教えて">士業のお客様の合計売上と件数</button>
@@ -35,6 +54,23 @@ import Layout from '../layouts/Layout.astro';
             <button class="ds-sample" data-q="売上が伸びている領域はどこ？月次推移と業種から見てください">売上が伸びている領域は？</button>
             <button class="ds-sample" data-q="リピート購入してくれた顧客の傾向を教えて。共通点があれば指摘してください">リピート顧客の傾向と共通点</button>
             <button class="ds-sample" data-q="無料の簡易レポートから有償サービスへ繋がりやすい業種は？">有償化に繋がりやすい業種は？</button>
+          </div>
+
+          <!-- 社内ドキュメント用サンプル -->
+          <div class="ds-samples" data-cat-show="docs" hidden>
+            <p class="ds-samples-group-label">規程・手続き</p>
+            <button class="ds-sample" data-q="経費精算ってどうやるの？">経費精算ってどうやるの？</button>
+            <button class="ds-sample" data-q="有給って何日もらえる？">有給って何日もらえる？</button>
+            <button class="ds-sample" data-q="リモートワークしたい時の手続きは？">リモートワークの手続きは？</button>
+
+            <p class="ds-samples-group-label">業務マニュアル</p>
+            <button class="ds-sample" data-q="クレームが入った時の対応方法は？">クレーム対応の方法は？</button>
+            <button class="ds-sample" data-q="新人研修のスケジュールは？">新人研修のスケジュールは？</button>
+
+            <p class="ds-samples-group-label">連絡網・システム</p>
+            <button class="ds-sample" data-q="金田部長の連絡先教えて">金田部長の連絡先教えて</button>
+            <button class="ds-sample" data-q="freee のログイン情報どこ？">freee のログイン情報どこ？</button>
+            <button class="ds-sample" data-q="評価面談の準備は何をすればいい？">評価面談の準備は？</button>
           </div>
 
           <form id="ds-form" class="ds-form">
@@ -147,7 +183,7 @@ import Layout from '../layouts/Layout.astro';
     <section class="ds-section">
       <div class="container">
         <details class="ds-data-preview">
-          <summary>サンプルデータをすべて見る（30件）</summary>
+          <summary id="ds-all-table-label">サンプル販売データをすべて見る</summary>
           <div id="ds-all-table" class="ds-table-wrap"></div>
         </details>
       </div>
@@ -167,6 +203,17 @@ type SalesRecord = {
   status: 'completed' | 'in-progress' | 'cancelled'
 }
 
+type InternalDoc = {
+  id: string
+  title: string
+  category: string
+  excerpt: string
+  body: string
+  updatedAt: string
+}
+
+type Category = 'sales' | 'docs'
+
 const form = document.getElementById('ds-form') as HTMLFormElement
 const input = document.getElementById('ds-input') as HTMLTextAreaElement
 const submit = document.getElementById('ds-submit') as HTMLButtonElement
@@ -175,19 +222,35 @@ const answerBox = document.getElementById('ds-answer-box') as HTMLElement
 const matchedTitle = document.getElementById('ds-matched-title') as HTMLElement
 const matchedTable = document.getElementById('ds-matched-table') as HTMLElement
 const allTable = document.getElementById('ds-all-table') as HTMLElement
+const allTableLabel = document.getElementById('ds-all-table-label') as HTMLElement | null
 
+let currentCat: Category = 'sales'
 let allRecords: SalesRecord[] = []
+let allDocs: InternalDoc[] = []
 
-// サンプルデータ取得
+// サンプルデータ取得（販売）
 async function loadAllRecords() {
   try {
-    const res = await fetch('/api/data-search-demo')
+    const res = await fetch('/api/data-search-demo?category=sales')
     if (!res.ok) return
     const data = await res.json()
     allRecords = data.records || []
-    renderAllTable()
+    if (currentCat === 'sales') renderAllTable()
   } catch (err) {
-    console.error('Failed to load records:', err)
+    console.error('Failed to load sales records:', err)
+  }
+}
+
+// サンプルデータ取得（社内ドキュメント）
+async function loadAllDocs() {
+  try {
+    const res = await fetch('/api/data-search-demo?category=docs')
+    if (!res.ok) return
+    const data = await res.json()
+    allDocs = data.records || []
+    if (currentCat === 'docs') renderAllTable()
+  } catch (err) {
+    console.error('Failed to load docs:', err)
   }
 }
 
@@ -232,8 +295,65 @@ function renderTable(records: SalesRecord[], target: HTMLElement) {
   `
 }
 
+function renderDocsTable(records: InternalDoc[], target: HTMLElement) {
+  if (records.length === 0) {
+    target.innerHTML = '<p class="ds-empty">該当するドキュメントはありません。</p>'
+    return
+  }
+  const rows = records.map(d => `
+    <tr>
+      <td class="ds-cell-id">${d.id}</td>
+      <td class="ds-cell-client">${escapeHtml(d.title)}</td>
+      <td><span class="ds-tag">${escapeHtml(d.category)}</span></td>
+      <td>${escapeHtml(d.excerpt)}</td>
+      <td class="ds-cell-id">${d.updatedAt}</td>
+    </tr>
+  `).join('')
+  target.innerHTML = `
+    <table class="ds-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>タイトル</th><th>カテゴリ</th><th>概要</th><th>最終更新</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `
+}
+
 function renderAllTable() {
-  renderTable(allRecords, allTable)
+  if (currentCat === 'sales') {
+    if (allTableLabel) allTableLabel.textContent = `サンプル販売データをすべて見る（${allRecords.length}件）`
+    renderTable(allRecords, allTable)
+  } else {
+    if (allTableLabel) allTableLabel.textContent = `サンプル社内ドキュメントをすべて見る（${allDocs.length}件）`
+    renderDocsTable(allDocs, allTable)
+  }
+}
+
+function renderMatched(matchedIds: string[]) {
+  if (matchedIds.length === 0) {
+    matchedTitle.style.display = 'none'
+    matchedTable.innerHTML = ''
+    return
+  }
+  if (currentCat === 'sales') {
+    const ids = new Set(matchedIds)
+    const matched = allRecords.filter(r => ids.has(r.id))
+    if (matched.length > 0) {
+      matchedTitle.style.display = 'block'
+      matchedTitle.textContent = '該当する販売データ'
+      renderTable(matched, matchedTable)
+    }
+  } else {
+    const ids = new Set(matchedIds)
+    const matched = allDocs.filter(d => ids.has(d.id))
+    if (matched.length > 0) {
+      matchedTitle.style.display = 'block'
+      matchedTitle.textContent = '引用元ドキュメント'
+      renderDocsTable(matched, matchedTable)
+    }
+  }
 }
 
 function escapeHtml(s: string) {
@@ -297,7 +417,7 @@ async function ask(query: string) {
     const res = await fetch('/api/data-search-demo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query, category: currentCat }),
     })
     const data = await res.json()
     if (!res.ok) {
@@ -312,19 +432,19 @@ async function ask(query: string) {
       calc = `<details class="ds-calc"><summary>計算根拠</summary><pre>${escapeHtml(data.calculation_note)}</pre></details>`
     }
     let mockNote = ''
-    if (data.mock) {
+    if (data.mock && currentCat === 'docs') {
+      mockNote = '<p class="ds-mock-note">※ デモのため事前用意のサンプル応答を表示しています。本番運用時は AI が御社の社内文書全件をベクトル検索して動的に回答します（AI API の<strong>従量課金</strong>が発生）。</p>'
+    } else if (data.mock) {
       mockNote = '<p class="ds-mock-note">※ モック応答です（API キー未設定環境）</p>'
     }
     answerBox.innerHTML = `${mockNote}<div class="ds-answer-content">${answerHtml}</div>${calc}`
 
     // 該当データ表示
     if (Array.isArray(data.matched_ids) && data.matched_ids.length > 0) {
-      const ids = new Set(data.matched_ids)
-      const matched = allRecords.filter(r => ids.has(r.id))
-      if (matched.length > 0) {
-        matchedTitle.style.display = 'block'
-        renderTable(matched, matchedTable)
-      }
+      renderMatched(data.matched_ids)
+    } else {
+      matchedTitle.style.display = 'none'
+      matchedTable.innerHTML = ''
     }
 
     statusEl.textContent = data.remaining !== undefined ? `残り ${data.remaining} 回 / 1時間` : ''
@@ -335,6 +455,39 @@ async function ask(query: string) {
     submit.disabled = false
   }
 }
+
+// カテゴリ切替
+function switchCategory(cat: Category) {
+  currentCat = cat
+  document.querySelectorAll<HTMLButtonElement>('.ds-cat-btn').forEach((b) => {
+    const isActive = b.dataset.cat === cat
+    b.classList.toggle('is-active', isActive)
+    b.setAttribute('aria-selected', isActive ? 'true' : 'false')
+  })
+  document.querySelectorAll<HTMLElement>('.ds-samples').forEach((s) => {
+    s.hidden = s.dataset.catShow !== cat
+  })
+  // プレースホルダーと placeholder を変更
+  if (cat === 'docs') {
+    input.placeholder = '例: 経費精算ってどうやるの？'
+  } else {
+    input.placeholder = '例: 先月の売上で一番大きな案件は？'
+  }
+  // 回答エリアをリセット
+  answerBox.classList.add('ds-answer-empty')
+  answerBox.innerHTML = '<p class="ds-answer-placeholder">左側で質問を入力すると、ここに AI の回答が表示されます。</p>'
+  matchedTitle.style.display = 'none'
+  matchedTable.innerHTML = ''
+  input.value = ''
+  // テーブル再描画
+  renderAllTable()
+}
+
+document.querySelectorAll<HTMLButtonElement>('.ds-cat-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    switchCategory(btn.dataset.cat as Category)
+  })
+})
 
 // イベント
 form.addEventListener('submit', (e) => {
@@ -351,6 +504,7 @@ document.querySelectorAll('.ds-sample').forEach((btn) => {
 })
 
 loadAllRecords()
+loadAllDocs()
 </script>
 
 <style>
@@ -388,6 +542,58 @@ loadAllRecords()
   }
   .ds-section:last-of-type {
     padding-bottom: clamp(80px, 10vw, 120px);
+  }
+
+  /* カテゴリ切替トグル */
+  .ds-category-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .ds-cat-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 2px solid rgba(31, 58, 147, 0.12);
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s, transform 0.1s, background 0.2s;
+    font-family: inherit;
+  }
+  .ds-cat-btn:hover { border-color: rgba(31, 58, 147, 0.30); }
+  .ds-cat-btn.is-active {
+    border-color: #1F3A93;
+    background: linear-gradient(135deg, rgba(31, 58, 147, 0.05) 0%, rgba(228, 138, 149, 0.04) 100%);
+  }
+  .ds-cat-btn i {
+    font-size: 1.2rem;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(31, 58, 147, 0.10);
+    color: #1F3A93;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .ds-cat-name {
+    display: block;
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 0.95rem;
+  }
+  .ds-cat-sub {
+    display: block;
+    font-size: 0.74rem;
+    color: #64748b;
+    margin-top: 2px;
+  }
+  @media (max-width: 640px) {
+    .ds-category-toggle { grid-template-columns: 1fr; }
   }
 
   .ds-container {
