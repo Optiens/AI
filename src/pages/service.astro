@@ -106,15 +106,13 @@ import Layout from '../layouts/Layout.astro';
     <!-- CTA -->
     <section class="ac-cta-section" id="samples">
       <div class="container text-center">
-        <h2 class="reveal">まずは無料の AI 活用診断から</h2>
-        <p class="reveal cta-lede">
-          「うちの業務にAIって使えるの？」<br />
-          「何から始めればいいか分からない」<br />
-          ── そんな状態でも大丈夫です。
-        </p>
+        <h2 class="reveal">次は、御社の業務に当てはめて診断しませんか？</h2>
         <p class="reveal cta-body">
-          業務をヒアリングし、<br class="sp-only" />
-          AI が効く領域を診断レポートにまとめてお渡しします（無料）。
+          ここまでサービス内容をご覧いただき、ありがとうございました。<br class="pc-only" />
+          業務をヒアリングし、AI が効く領域を診断レポートにまとめます（無料）。
+        </p>
+        <p class="reveal cta-body cta-body--sub">
+          似た業種の事例を先に見たい方は、活用事例集もあわせてご覧ください。
         </p>
         <div class="cta-buttons reveal">
           <a href="/ai-examples" class="btn-secondary">活用事例を見る</a>
@@ -1069,12 +1067,12 @@ import Layout from '../layouts/Layout.astro';
     font-size: clamp(14px, 1.6vw, 16px);
     max-width: 680px;
   }
-  .ac-cta-section .cta-lede {
-    color: #0f172a;
-    font-weight: 600;
-    line-height: 2;
-  }
   .ac-cta-section .cta-body {
+    margin-bottom: 8px;
+  }
+  .ac-cta-section .cta-body--sub {
+    font-size: clamp(13px, 1.4vw, 14px);
+    color: #94A3B8;
     margin-bottom: 28px;
   }
   .ac-cta-section .btn-primary {
