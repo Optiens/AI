@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "node scripts/sync-novels.mjs && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "create:slides-template": "node scripts/create-free-diagnosis-slides-template.mjs",
+    "create:slides-template:check": "node scripts/create-free-diagnosis-slides-template.mjs --check"
   },
   "dependencies": {
     "@astrojs/vercel": "^8.2.6",
@@ -16,6 +18,7 @@
     "@types/three": "^0.184.0",
     "astro": "^5.13.3",
     "date-fns": "^3.6.0",
+    "google-auth-library": "^10.6.2",
     "microcms-js-sdk": "^2.7.0",
     "openai": "^6.35.0",
     "qrcode": "^1.5.4",
