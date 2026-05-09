@@ -29,30 +29,58 @@ export const GET: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
     })
 
-  if (!token) {
-    return htmlResponse(buildVerificationErrorPage('invalid'), 400)
-  }
-
+  // 環境変数チェック
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    return htmlResponse(buildVerificationErrorPage('invalid'), 500)
+    console.error('[verify-diagnosis] Missing env vars: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
+    return htmlResponse(
+      buildVerificationErrorPage('server', 'env: SUPABASE_URL/SERVICE_KEY not configured'),
+      500,
+    )
   }
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+  // token チェック
+  if (!token) {
+    return htmlResponse(buildVerificationErrorPage('invalid', 'no_token_param'), 400)
+  }
+
+  let supabase
+  try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+  } catch (err: any) {
+    console.error('[verify-diagnosis] supabase client init failed:', err)
+    return htmlResponse(
+      buildVerificationErrorPage('server', `client_init: ${err?.message || String(err)}`),
+      500,
+    )
+  }
 
   // token で検索
-  const { data: lead, error } = await supabase
-    .from('diagnosis_leads')
-    .select('id, status, created_at, verified_at')
-    .eq('verification_token', token)
-    .maybeSingle()
+  let lead: { id: string; status: string | null; created_at: string; verified_at: string | null } | null = null
+  try {
+    const { data, error } = await supabase
+      .from('diagnosis_leads')
+      .select('id, status, created_at, verified_at')
+      .eq('verification_token', token)
+      .maybeSingle()
 
-  if (error) {
-    console.error('[verify-diagnosis] db error:', error)
-    return htmlResponse(buildVerificationErrorPage('invalid'), 500)
+    if (error) {
+      console.error('[verify-diagnosis] select error:', error)
+      return htmlResponse(
+        buildVerificationErrorPage('server', `select: ${error.message} (code=${error.code})`),
+        500,
+      )
+    }
+    lead = data as typeof lead
+  } catch (err: any) {
+    console.error('[verify-diagnosis] select threw:', err)
+    return htmlResponse(
+      buildVerificationErrorPage('server', `select_throw: ${err?.message || String(err)}`),
+      500,
+    )
   }
 
   if (!lead) {
-    return htmlResponse(buildVerificationErrorPage('invalid'), 404)
+    return htmlResponse(buildVerificationErrorPage('invalid', 'token_not_found_or_used'), 404)
   }
 
   // 既に認証済み
@@ -68,18 +96,29 @@ export const GET: APIRoute = async ({ request }) => {
   }
 
   // 認証完了処理
-  const { error: updateErr } = await supabase
-    .from('diagnosis_leads')
-    .update({
-      status: 'verified',
-      verified_at: new Date().toISOString(),
-      verification_token: null, // 再利用防止
-    })
-    .eq('id', lead.id)
+  try {
+    const { error: updateErr } = await supabase
+      .from('diagnosis_leads')
+      .update({
+        status: 'verified',
+        verified_at: new Date().toISOString(),
+        verification_token: null, // 再利用防止
+      })
+      .eq('id', lead.id)
 
-  if (updateErr) {
-    console.error('[verify-diagnosis] update failed:', updateErr)
-    return htmlResponse(buildVerificationErrorPage('invalid'), 500)
+    if (updateErr) {
+      console.error('[verify-diagnosis] update failed:', updateErr)
+      return htmlResponse(
+        buildVerificationErrorPage('server', `update: ${updateErr.message} (code=${updateErr.code})`),
+        500,
+      )
+    }
+  } catch (err: any) {
+    console.error('[verify-diagnosis] update threw:', err)
+    return htmlResponse(
+      buildVerificationErrorPage('server', `update_throw: ${err?.message || String(err)}`),
+      500,
+    )
   }
 
   return htmlResponse(buildVerificationSuccessPage(), 200)

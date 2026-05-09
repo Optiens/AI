@@ -32,13 +32,18 @@ export function buildVerificationEmailHtml(params: {
 <div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${escapeHtml(companyName)} ${escapeHtml(personName)} 様</p>
 <p>合同会社Optiensです。<br/>無料AI活用診断のお申し込みありがとうございます。</p>
-<p>以下のボタンをクリックしてメールアドレスをご確認ください。<br/>
-   確認後、レポート作成を開始し、1〜2営業日以内にお届けします。</p>
+<div style="margin:18px 0;padding:14px 18px;background:#FEF3C7;border-left:4px solid #F59E0B;border-radius:4px;">
+  <p style="margin:0;font-weight:600;color:#92400E;">⚠️ お申し込みはまだ完了していません</p>
+  <p style="margin:6px 0 0;font-size:14px;color:#78350F;">下のボタンをクリックしてメールアドレスをご確認いただいた時点で、お申し込みが完了します。</p>
+</div>
+<p>確認が完了すると、自動でレポート作成が開始され、<strong>数分以内に Google Slides のリンクをメール</strong>でお送りします。</p>
 <p style="margin:24px 0;text-align:center;">
-  <a href="${verificationUrl}" style="display:inline-block;padding:14px 32px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">メールアドレスを確認する</a>
+  <a href="${verificationUrl}" style="display:inline-block;padding:14px 32px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">メールアドレスを確認して申込を完了する</a>
 </p>
 <p style="font-size:13px;color:#666;">
-  ※ このリンクは24時間有効です。<br/>
+  ※ このリンクは <strong>24時間有効</strong> です。<br/>
+  ※ ボタンを押せない場合は、以下の URL をブラウザに直接貼り付けてください：<br/>
+  <span style="word-break:break-all;color:#1F3A93;">${verificationUrl}</span><br/>
   ※ お心当たりがない場合は本メールを破棄してください。
 </p>
 <hr style="margin:32px 0;border:none;border-top:1px solid #ddd;"/>
@@ -70,9 +75,10 @@ export function buildVerificationSuccessPage(): string {
 </head>
 <body>
 <p style="text-align:center;"><span class="check">✓</span></p>
-<h1 style="text-align:center;">メールアドレスの確認が完了しました</h1>
-<p>無料AI活用診断レポートの作成を開始しました。<br/>
-1〜2営業日以内にメールでレポートをお届けします。</p>
+<h1 style="text-align:center;">お申し込みが完了しました</h1>
+<p>メールアドレスの確認が取れたため、AI 活用診断レポートの作成を自動で開始しました。<br/>
+<strong>数分以内に Google Slides のリンク</strong>を、ご登録のメールアドレスへお送りします。</p>
+<p style="font-size:14px;color:#666;">※ 万一 30 分経ってもメールが届かない場合は、迷惑メールフォルダをご確認のうえ、<a href="mailto:info@optiens.com">info@optiens.com</a> までお知らせください。</p>
 <p style="text-align:center;"><a class="btn" href="https://optiens.com">トップページへ戻る</a></p>
 </body>
 </html>`
@@ -81,7 +87,10 @@ export function buildVerificationSuccessPage(): string {
 /**
  * 認証エラー（無効・期限切れ）HTML
  */
-export function buildVerificationErrorPage(reason: 'invalid' | 'expired' | 'already'): string {
+export function buildVerificationErrorPage(
+  reason: 'invalid' | 'expired' | 'already' | 'server',
+  detail?: string,
+): string {
   const messages: Record<typeof reason, { title: string; body: string }> = {
     invalid: {
       title: '認証リンクが無効です',
@@ -95,8 +104,15 @@ export function buildVerificationErrorPage(reason: 'invalid' | 'expired' | 'alre
       title: 'すでに認証済みです',
       body: 'このメールアドレスはすでに認証済みです。レポートの送付をお待ちください。',
     },
+    server: {
+      title: 'サーバー側で問題が発生しました',
+      body: '一時的な不具合の可能性があります。少し時間をおいて再度お試しいただくか、下記までご連絡ください。',
+    },
   }
   const m = messages[reason]
+  const detailBlock = detail
+    ? `<details style="margin-top:18px;font-size:13px;color:#888;"><summary style="cursor:pointer;">技術情報（お問い合わせ時にお伝えください）</summary><pre style="margin-top:8px;padding:10px;background:#f5f5f5;border-radius:4px;overflow:auto;">${escapeHtml(detail)}</pre></details>`
+    : ''
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -107,11 +123,17 @@ export function buildVerificationErrorPage(reason: 'invalid' | 'expired' | 'alre
   body { font-family: 'Noto Sans JP', sans-serif; padding: 40px 20px; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.8; }
   h1 { color: #C76A77; font-size: 22px; }
   .btn { display: inline-block; padding: 12px 28px; background: #1F3A93; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; margin-top: 16px; }
+  .contact { margin-top: 24px; padding: 14px 18px; background: #F8FAFD; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; }
+  .contact a { color: #1F3A93; font-weight: 600; }
 </style>
 </head>
 <body>
 <h1>${m.title}</h1>
 <p>${m.body}</p>
+${detailBlock}
+<div class="contact">
+  解決しない場合は <a href="mailto:info@optiens.com">info@optiens.com</a> までお問い合わせください。
+</div>
 <p style="text-align:center;"><a class="btn" href="https://optiens.com/free-diagnosis">フォームへ戻る</a></p>
 </body>
 </html>`

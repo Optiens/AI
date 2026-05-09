@@ -15,6 +15,7 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="step-flow reveal-stagger">
           <a href="/free-diagnosis" class="step-card">
+            <span class="step-badge">STEP 1</span>
             <span class="step-illust" aria-hidden="true">
               <img src="/images/service/step-01-diagnosis.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
             </span>
@@ -22,10 +23,8 @@ import Layout from '../layouts/Layout.astro';
             <p class="step-desc">業務に AI が効く領域を見極める</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
-          <span class="step-arrow" aria-hidden="true">
-            <i class="fa-solid fa-arrow-right"></i>
-          </span>
           <a href="/implementation" class="step-card">
+            <span class="step-badge">STEP 2</span>
             <span class="step-illust" aria-hidden="true">
               <img src="/images/service/step-02-implementation.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
             </span>
@@ -33,10 +32,8 @@ import Layout from '../layouts/Layout.astro';
             <p class="step-desc">御社専用の仕組みを設計・構築</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
-          <span class="step-arrow" aria-hidden="true">
-            <i class="fa-solid fa-arrow-right"></i>
-          </span>
           <a href="/maintenance" class="step-card">
+            <span class="step-badge">STEP 3</span>
             <span class="step-illust" aria-hidden="true">
               <img src="/images/service/step-03-maintenance.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
             </span>
@@ -106,14 +103,7 @@ import Layout from '../layouts/Layout.astro';
     <!-- CTA -->
     <section class="ac-cta-section" id="samples">
       <div class="container text-center">
-        <h2 class="reveal">次は、御社の業務に当てはめて診断しませんか？</h2>
-        <p class="reveal cta-body">
-          ここまでサービス内容をご覧いただき、ありがとうございました。<br class="pc-only" />
-          業務をヒアリングし、AI が効く領域を診断レポートにまとめます（無料）。
-        </p>
-        <p class="reveal cta-body cta-body--sub">
-          似た業種の事例を先に見たい方は、活用事例集もあわせてご覧ください。
-        </p>
+        <h2 class="reveal">御社の業務に当てはめて診断しませんか？</h2>
         <div class="cta-buttons reveal">
           <a href="/ai-examples" class="btn-secondary">活用事例を見る</a>
           <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける</a>
@@ -326,25 +316,32 @@ import Layout from '../layouts/Layout.astro';
   .step-card:hover .step-link {
     gap: 10px;
   }
-  .step-arrow {
-    display: flex;
+  .step-badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    color: rgba(31, 58, 147, 0.45);
-    font-size: 1.25rem;
-    flex: 0 0 auto;
+    padding: 4px 12px 4px 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(31, 58, 147, 0.10) 0%, rgba(228, 138, 149, 0.10) 100%);
+    border: 1px solid rgba(31, 58, 147, 0.18);
+    color: #1F3A93;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1;
   }
   @media (max-width: 768px) {
     .step-flow {
       flex-direction: column;
       align-items: center;
+      gap: 16px;
     }
     .step-card {
       width: 100%;
       max-width: 420px;
-    }
-    .step-arrow {
-      transform: rotate(90deg);
     }
   }
 
