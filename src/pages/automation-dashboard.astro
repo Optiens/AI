@@ -1,0 +1,520 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// モック稼働データ
+const workflows = [
+  {
+    id: 'wf-invoice',
+    name: '請求書 OCR → 会計連携',
+    status: 'active',
+    lastRunAt: '3 分前',
+    runs24h: 47,
+    errors24h: 0,
+    costMonth: '¥1,820',
+    runtimeMs: 1240,
+    icon: 'fa-file-invoice-dollar',
+  },
+  {
+    id: 'wf-inquiry',
+    name: '問い合わせ振り分け',
+    status: 'active',
+    lastRunAt: '10 分前',
+    runs24h: 128,
+    errors24h: 2,
+    costMonth: '¥3,450',
+    runtimeMs: 820,
+    icon: 'fa-bell',
+  },
+  {
+    id: 'wf-summary',
+    name: '日次売上サマリー生成',
+    status: 'active',
+    lastRunAt: '1 時間前',
+    runs24h: 1,
+    errors24h: 0,
+    costMonth: '¥420',
+    runtimeMs: 4100,
+    icon: 'fa-chart-line',
+  },
+  {
+    id: 'wf-followup',
+    name: 'リード フォローアップ メール下書き',
+    status: 'warning',
+    lastRunAt: '5 時間前',
+    runs24h: 12,
+    errors24h: 1,
+    costMonth: '¥980',
+    runtimeMs: 2300,
+    icon: 'fa-envelope-open-text',
+  },
+  {
+    id: 'wf-monitor',
+    name: '補助金 公募モニタリング',
+    status: 'active',
+    lastRunAt: '12 時間前',
+    runs24h: 1,
+    errors24h: 0,
+    costMonth: '¥260',
+    runtimeMs: 5800,
+    icon: 'fa-magnifying-glass-chart',
+  },
+];
+
+const recentEvents = [
+  { time: '10:42', level: 'info', wf: '問い合わせ振り分け', message: '宿泊予約問い合わせを「予約担当」に振り分け（信頼度 0.94）' },
+  { time: '10:31', level: 'warn', wf: '問い合わせ振り分け', message: '振り分け先が判定不能のため、一次回答を保留（人手判断待ち）' },
+  { time: '09:58', level: 'info', wf: '請求書 OCR → 会計連携', message: '5 件の請求書を処理、freee 会計に登録完了' },
+  { time: '08:00', level: 'info', wf: '日次売上サマリー生成', message: '前日売上サマリーを Slack に投稿' },
+  { time: '06:12', level: 'warn', wf: 'リード フォローアップ メール下書き', message: 'メール下書きの生成で 1 件タイムアウト（再試行で成功）' },
+  { time: '昨日 22:15', level: 'info', wf: '補助金 公募モニタリング', message: '中小企業庁の新規公募 1 件を検出、Notion に登録' },
+];
+
+// 過去 30 日の処理件数（モック）
+const trendData = [
+  85, 92, 78, 105, 110, 98, 88, 120, 115, 125, 130, 108, 95, 102,
+  118, 122, 135, 140, 128, 132, 145, 150, 148, 138, 142, 155, 160, 158, 152, 165,
+];
+const trendMax = Math.max(...trendData);
+const trendW = 600;
+const trendH = 140;
+const trendStep = trendW / (trendData.length - 1);
+const trendPath = trendData
+  .map((v, i) => `${i === 0 ? 'M' : 'L'} ${(i * trendStep).toFixed(1)} ${(trendH - (v / trendMax) * (trendH - 12) - 4).toFixed(1)}`)
+  .join(' ');
+const trendArea = `${trendPath} L ${trendW} ${trendH} L 0 ${trendH} Z`;
+
+const totalRuns24h = workflows.reduce((s, w) => s + w.runs24h, 0);
+const totalErrors24h = workflows.reduce((s, w) => s + w.errors24h, 0);
+const totalCostMonth = workflows.reduce((s, w) => s + parseInt(w.costMonth.replace(/[^\d]/g, ''), 10), 0);
+---
+
+<Layout
+  title="稼働状況ダッシュボード（デモ） | Optiens"
+  description="AI 自動化の稼働状況を可視化するダッシュボードのデモ。直近の処理件数・エラー・コストを一画面で把握。Optiens 社内で運用中の構成を簡略化したサンプル表示です。"
+  noindex={true}
+>
+  <main class="ad-main">
+    <section class="ad-hero">
+      <div class="container">
+        <p class="ad-eyebrow">DEMO ／ Optiens 共通AI事例 #05</p>
+        <h1 class="ad-title">稼働状況ダッシュボード</h1>
+        <p class="ad-lede">AI 自動化が「ちゃんと動いているか」をひと目で把握できる画面です。<br class="pc-only">本デモは表示用のモックデータで動作しています。</p>
+      </div>
+    </section>
+
+    <section class="ad-section">
+      <div class="container">
+
+        <!-- KPI カード -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">直近 24 時間 処理件数</div>
+            <div class="kpi-value">{totalRuns24h.toLocaleString()}<span class="kpi-unit">件</span></div>
+            <div class="kpi-sub">前日比 +12%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">直近 24 時間 エラー件数</div>
+            <div class="kpi-value">{totalErrors24h}<span class="kpi-unit">件</span></div>
+            <div class="kpi-sub kpi-sub--ok">エラー率 {((totalErrors24h / totalRuns24h) * 100).toFixed(1)}%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">今月の AI 利用コスト</div>
+            <div class="kpi-value">¥{totalCostMonth.toLocaleString()}</div>
+            <div class="kpi-sub">予算 ¥10,000 内</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">稼働中ワークフロー</div>
+            <div class="kpi-value">{workflows.length}<span class="kpi-unit">本</span></div>
+            <div class="kpi-sub">{workflows.filter(w => w.status === 'active').length} 本 正常</div>
+          </div>
+        </div>
+
+        <!-- 推移グラフ -->
+        <div class="trend-card">
+          <div class="trend-head">
+            <h2 class="trend-title">過去 30 日 処理件数推移</h2>
+            <div class="trend-legend"><span class="trend-dot"></span>1 日あたりの処理件数</div>
+          </div>
+          <div class="trend-chart">
+            <svg viewBox={`0 0 ${trendW} ${trendH}`} preserveAspectRatio="none" aria-label="処理件数の推移グラフ">
+              <defs>
+                <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#1F3A93" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#1F3A93" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d={trendArea} fill="url(#trendGrad)" />
+              <path d={trendPath} fill="none" stroke="#1F3A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- ワークフロー一覧 -->
+        <div class="wf-card">
+          <h2 class="wf-title">ワークフロー一覧</h2>
+          <div class="wf-list">
+            {workflows.map((w) => (
+              <article class={`wf-item wf-status-${w.status}`}>
+                <div class="wf-icon"><i class={`fa-solid ${w.icon}`}></i></div>
+                <div class="wf-body">
+                  <h3 class="wf-name">{w.name}</h3>
+                  <div class="wf-meta">
+                    <span class={`wf-badge wf-badge-${w.status}`}>{w.status === 'active' ? '稼働中' : w.status === 'warning' ? '要確認' : '停止中'}</span>
+                    <span class="wf-meta-item">最終実行: {w.lastRunAt}</span>
+                    <span class="wf-meta-item">平均処理: {w.runtimeMs}ms</span>
+                  </div>
+                </div>
+                <div class="wf-stats">
+                  <div class="wf-stat">
+                    <div class="wf-stat-label">24h 処理</div>
+                    <div class="wf-stat-value">{w.runs24h}</div>
+                  </div>
+                  <div class="wf-stat">
+                    <div class="wf-stat-label">24h エラー</div>
+                    <div class={`wf-stat-value ${w.errors24h > 0 ? 'wf-stat-warn' : ''}`}>{w.errors24h}</div>
+                  </div>
+                  <div class="wf-stat">
+                    <div class="wf-stat-label">今月コスト</div>
+                    <div class="wf-stat-value">{w.costMonth}</div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <!-- 最近のイベント -->
+        <div class="events-card">
+          <h2 class="events-title">最近のイベント</h2>
+          <ul class="events-list">
+            {recentEvents.map((e) => (
+              <li class={`event-item event-${e.level}`}>
+                <span class="event-time">{e.time}</span>
+                <span class={`event-level event-level--${e.level}`}>{e.level === 'info' ? '正常' : e.level === 'warn' ? '警告' : 'エラー'}</span>
+                <span class="event-wf">{e.wf}</span>
+                <span class="event-msg">{e.message}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- 注記 + 戻る -->
+        <div class="ad-footnote">
+          <p><strong>このデモについて</strong>: 表示している数値・イベントはすべてサンプルデータです。実際のお客様向けには、業務に合わせて KPI 項目・グラフ・通知ルールをカスタマイズして納品します。</p>
+          <p><strong>弊社での運用</strong>: 同型のダッシュボードを Optiens 社内で運用し、IoT 水耕栽培の稼働監視と AI ワークフローの状態把握に使っています。保守プラン契約者向けに標準提供します。</p>
+          <a href="/ai-examples#case-06" class="ad-back">← 共通AI事例集に戻る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .ad-main {
+    background: #F8FAFD;
+  }
+  .ad-hero {
+    padding: clamp(96px, 12vw, 140px) 0 clamp(20px, 3vw, 32px);
+    background: #ffffff;
+    border-bottom: 1px solid rgba(31, 58, 147, 0.08);
+  }
+  .ad-eyebrow {
+    font-size: 0.78rem;
+    color: #6B85C9;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .ad-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+  }
+  .ad-lede {
+    color: #64748b;
+    font-size: clamp(0.9rem, 1.4vw, 1rem);
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .ad-section {
+    padding: clamp(28px, 4vw, 48px) 0 clamp(80px, 10vw, 120px);
+  }
+
+  /* KPI */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .kpi-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+  .kpi-label {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.6rem, 2.5vw, 2rem);
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .kpi-unit {
+    font-size: 0.7em;
+    font-weight: 600;
+    margin-left: 4px;
+    color: #64748b;
+  }
+  .kpi-sub {
+    font-size: 0.78rem;
+    color: #6B85C9;
+    font-weight: 600;
+  }
+  .kpi-sub--ok { color: #10B981; }
+
+  /* Trend */
+  .trend-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .trend-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .trend-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+  .trend-legend {
+    font-size: 0.78rem;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .trend-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    background: #1F3A93;
+    border-radius: 50%;
+  }
+  .trend-chart {
+    width: 100%;
+    height: 150px;
+  }
+  .trend-chart svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* WF list */
+  .wf-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .wf-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 14px;
+  }
+  .wf-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .wf-item {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    background: #F8FAFD;
+    border: 1px solid rgba(31, 58, 147, 0.06);
+    border-radius: 10px;
+  }
+  .wf-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(31, 58, 147, 0.08);
+    color: #1F3A93;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+  .wf-status-warning .wf-icon { background: rgba(228, 138, 149, 0.15); color: #C45A6E; }
+  .wf-name {
+    font-size: 0.95rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .wf-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+  .wf-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+  .wf-badge-active   { background: rgba(16, 185, 129, 0.12); color: #047857; }
+  .wf-badge-warning  { background: rgba(228, 138, 149, 0.18); color: #C45A6E; }
+  .wf-badge-paused   { background: rgba(100, 116, 139, 0.15); color: #475569; }
+  .wf-stats {
+    display: flex;
+    gap: 18px;
+  }
+  .wf-stat {
+    text-align: right;
+    min-width: 60px;
+  }
+  .wf-stat-label {
+    font-size: 0.7rem;
+    color: #94A3B8;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .wf-stat-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .wf-stat-warn {
+    color: #C45A6E;
+  }
+
+  /* Events */
+  .events-card {
+    background: #fff;
+    border: 1px solid rgba(31, 58, 147, 0.10);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .events-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 14px;
+  }
+  .events-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .event-item {
+    display: grid;
+    grid-template-columns: 70px 56px 200px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    background: #F8FAFD;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #475569;
+  }
+  .event-time {
+    font-family: 'Inter', sans-serif;
+    color: #94A3B8;
+    font-weight: 600;
+  }
+  .event-level {
+    display: inline-block;
+    text-align: center;
+    padding: 2px 0;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .event-level--info { background: rgba(31, 58, 147, 0.08); color: #1F3A93; }
+  .event-level--warn { background: rgba(228, 138, 149, 0.15); color: #C45A6E; }
+  .event-level--error { background: rgba(220, 38, 38, 0.12); color: #B91C1C; }
+  .event-wf {
+    font-weight: 600;
+    color: #0f172a;
+  }
+  .event-msg {
+    color: #475569;
+  }
+
+  /* Footnote */
+  .ad-footnote {
+    background: #fff;
+    border: 1px dashed rgba(31, 58, 147, 0.20);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-top: 8px;
+  }
+  .ad-footnote p {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.8;
+    margin: 0 0 10px;
+  }
+  .ad-footnote p:last-of-type { margin-bottom: 14px; }
+  .ad-footnote strong { color: #0f172a; }
+  .ad-back {
+    display: inline-block;
+    color: #1F3A93;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .ad-back:hover { text-decoration: underline; }
+
+  @media (max-width: 1024px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .wf-item { grid-template-columns: 44px 1fr; }
+    .wf-stats {
+      grid-column: 1 / -1;
+      justify-content: space-between;
+    }
+  }
+  @media (max-width: 640px) {
+    .event-item {
+      grid-template-columns: 70px 56px 1fr;
+      gap: 8px 10px;
+    }
+    .event-msg { grid-column: 1 / -1; padding-left: 4px; }
+    .pc-only { display: none; }
+  }
+</style>
