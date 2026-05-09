@@ -67,7 +67,7 @@ image: '/images/blog/20260508-supabase-vs-firebase-vs-amplify.webp'
 社内ドキュメント・FAQ を AI に参照させる **RAG 構成** を予定している場合、**ベクトル DB の組み込みやすさ** が選定軸になります。
 
 - Supabase は **pgvector** 拡張により、RAG 用ベクトル DB をそのまま統合できる
-- Firebase は外部のベクトル DB と連携する必要がある
+- Firebase（Firestore）も 2026 年 4 月にベクトル検索が一般提供（GA）になったが、PostgreSQL ネイティブの pgvector ほど成熟していない
 - AWS Amplify は Bedrock 等との統合が可能だが、設計が重め
 
 **AI ネイティブな業務システムを意識するなら Supabase が最も整合性が高い** 選択です。
