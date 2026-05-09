@@ -24,25 +24,25 @@ GitHub Copilot や Claude Code、Cursor といった AI コーディングエー
 
 ## 業界調査の数値
 
-### GitHub の開発者調査（2024）
+### GitHub の管理実験（2022）
 
-GitHub が公開した AI 開発ツール利用者の生産性調査では:
+GitHub が公開した Copilot の管理実験（被験者 95 名）では:
 
-- AI コーディングツール利用者の **生産性が約 55% 向上**（中央値）
-- コード品質も「向上した」と回答した割合が多数派
-- 新人立ち上げ速度の改善も観測
+- Copilot 利用者がタスクを **約 55% 速く完了**（1 時間 11 分 vs 対照群 2 時間 41 分）
+- 別途 2,000 人超のアンケートでは **88% が「生産性が向上した」と回答**
+- コード品質・学習曲線・新人立ち上げにも改善傾向
 
-55% 向上 ≒ 約 **1.5 倍** の速度。
+タスク完了速度 1.55 倍 ≒ 約 **1.5 倍** の速度。
 
-### McKinsey の生成 AI 調査（2024）
+### McKinsey の社内検証（2023）
 
-McKinsey の生成 AI 業務影響調査では:
+McKinsey が **社内エンジニア 40 名で実施した検証**では:
 
-- タスク単位で **約 2 倍** の生産性向上
-- 文書作成・コーディング・テストで顕著
-- 複雑な統合タスクや要件定義では効果限定的
+- コード生成・リファクタリング・ドキュメント作業で **最大 2 倍** 高速化
+- ただし複雑なタスク・既存コード理解が必要な作業ではほぼ効果なし
+- 現実的な業務全体では改善幅は小さくなる
 
-タスク単位 2 倍 ≒ **2 倍** の速度。
+タスク単位の最大値 2 倍 ≒ **2 倍** の速度（限定的な条件下）。
 
 ### 国内 SI ベンダーの公開事例
 
@@ -149,6 +149,7 @@ Optiens では、AI 駆動開発で **「半年〜1 年規模を 2〜4 ヶ月で
 ---
 
 **出典**:
-- GitHub「Survey: The AI wave continues to grow on software development teams」(2024)
-- McKinsey & Company 生成 AI 調査（2024）
+- GitHub Copilot 管理実験 (2022): https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/
+- arxiv: Impact of AI on Developer Productivity (2302.06590)
+- McKinsey「Unleashing developer productivity with generative AI」(2023): https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/unleashing-developer-productivity-with-generative-ai
 - 国内 SI ベンダー各社の公開事例

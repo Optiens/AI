@@ -12,7 +12,7 @@ image: '/images/blog/20260509-tabelog-no-public-api-review-monitoring.webp'
 
 しかし結論から言うと、**食べログには公式 API が現在提供されていません**。
 
-- 2010 年代前半に存在した食べログ API は **2014 年 6 月に提供終了**
+- 2010 年代前半に存在した食べログ API は **2014 年 6 月 30 日に提供終了**
 - 以降、サードパーティ向けの公開 API は存在しない
 - 利用規約・robots.txt で **スクレイピング（自動取得）は明示的に禁止**
 
@@ -75,7 +75,7 @@ image: '/images/blog/20260509-tabelog-no-public-api-review-monitoring.webp'
 
 - **Google Business Profile API**（公式）で自社店舗の口コミを取得・返信可能
 - 無料（リクエスト上限内）
-- ただし API アクセス申請の承認制（通常 1〜2 週間）
+- ただし API アクセス申請の承認制（公式非公表で数日〜数ヶ月の幅。**60 日以上アクティブな確認済プロフィール**が前提）
 
 ### Instagram コメント・メンション
 
@@ -112,7 +112,7 @@ image: '/images/blog/20260509-tabelog-no-public-api-review-monitoring.webp'
 | 食べログ通知メール用 IMAP | ¥0〜800（既存 Workspace あれば追加なし）|
 | AI API（Sonnet 4.6 / GPT-5.4 想定）| ¥150〜300 |
 | Supabase（DB） | ¥0〜3,800 |
-| Vercel Pro（cron polling 必須）| ¥3,000 |
+| Vercel Pro（cron polling 用 / **$20 per seat**）| ¥3,000〜 |
 | 通知連携（Slack/メール/LINE）| ¥0 |
 | **合計目安** | **¥3,150〜7,900/月** |
 
