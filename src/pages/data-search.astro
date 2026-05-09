@@ -433,7 +433,7 @@ async function ask(query: string) {
     }
     let mockNote = ''
     if (data.mock && currentCat === 'docs') {
-      mockNote = '<p class="ds-mock-note">※ デモのため事前用意のサンプル応答を表示しています。本番運用時は AI が御社の社内文書全件をベクトル検索して動的に回答します（AI API の<strong>従量課金</strong>が発生）。</p>'
+      mockNote = '<p class="ds-mock-note">※ デモのため事前用意のサンプル応答を表示しています。実運用時は AI が御社の社内文書全件をベクトル検索して動的に回答します（AI API の<strong>従量課金</strong>が発生）。</p>'
     } else if (data.mock) {
       mockNote = '<p class="ds-mock-note">※ モック応答です（API キー未設定環境）</p>'
     }

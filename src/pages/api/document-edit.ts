@@ -1,14 +1,18 @@
 import type { APIRoute } from 'astro'
 
-const ANTHROPIC_API_KEY = import.meta.env.ANTHROPIC_API_KEY
-const ANTHROPIC_MODEL = 'claude-sonnet-4-5-20250929'
-const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages'
+/**
+ * /document-edit デモ用エンドポイント
+ *
+ * 実装方針:
+ * - AI API を呼ばず、キーワードベースの簡易チェックで指摘を返す
+ * - 「実運用では AI が動的に回答」のフッタを併記
+ */
 
-// 入力サイズ制限（API コスト抑制）
+// 入力サイズ制限
 const MAX_INPUT_CHARS = 8000
 
 // 簡易レート制限（IPベース、メモリ内）
-// 本番運用では Supabase 等への移行を推奨
+// 実運用では Supabase 等への移行を推奨
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT_PER_HOUR = 10
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
@@ -67,13 +71,36 @@ function buildMockResult(text: string): EditResult {
       comment: '件名・タイトルとして結論が読み取りにくい可能性があります。「何を」「誰に」「いつまでに」が一目でわかる構成をご検討ください。',
     })
   }
+  // 追加チェック
+  if (text.length > 600 && !/\n\n/.test(text)) {
+    notes.push({
+      severity: 'low',
+      location: '段落構成',
+      comment: '長文ですが段落区切りが少なく、読み手が論点を追いにくい可能性があります。論点ごとに空行で段落を区切ると可読性が上がります。',
+    })
+  }
+  if (/(以上、よろしくお願いいたします|何卒よろしくお願いいたします)/.test(text) === false && /(メール|お知らせ)/.test(text)) {
+    notes.push({
+      severity: 'low',
+      location: '結びの挨拶',
+      comment: 'ビジネスメールの結びとして「何卒よろしくお願いいたします」等の定型句を入れることで、読み手が文末を判別しやすくなります。',
+    })
+  }
+
   if (notes.length === 0) {
     notes.push({
       severity: 'low',
       location: '全体',
-      comment: '簡易チェックでは目立った問題は検出されませんでした。本デモはAPI未設定時の簡易応答のため、本格的な添削は環境変数設定後にご利用ください。',
+      comment: '簡易チェックでは目立った問題は検出されませんでした。',
     })
   }
+
+  // 末尾に「実運用では AI が動的に回答」の注記を追加
+  notes.push({
+    severity: 'low',
+    location: 'デモについて',
+    comment: '本デモはキーワードベースの簡易チェックのみ行います。実運用では AI が文脈・業界慣習・法的リスクを読み取り、文書全体の構造改善まで提案します。',
+  })
 
   return {
     revised: text, // モック時は本文をそのまま返す
@@ -82,95 +109,6 @@ function buildMockResult(text: string): EditResult {
   }
 }
 
-const SYSTEM_PROMPT = `あなたは経営者向けの書類添削AIです。日本語のビジネス文書（メール・契約書ドラフト・社内通達・プレスリリース・求人票・挨拶文など）を添削します。
-
-添削方針:
-- 煽り口調（「圧倒的」「革命」「劇的」等）は事実ベースの表現に修正
-- 期日・範囲・金額等が曖昧な箇所は具体化を提案
-- 敬語の重複・冗長表現は簡潔に整理
-- 法的リスク（賠償上限なし・反社条項なし等）に気付いたら指摘
-- 修正後の文章は元の意図を保ち、自然な日本語にする
-- コメントは丁寧かつ具体的に。指摘の理由と代替表現を示す
-
-必ず以下のJSON形式のみで返答してください。マークダウンコードブロックや前置き説明は不要です。
-
-{
-  "revised": "（修正後の全文。元の改行構造を保持）",
-  "notes": [
-    {
-      "severity": "high" | "medium" | "low",
-      "location": "（該当箇所の説明。例: 第3条の業務範囲、リード3行目）",
-      "comment": "（指摘内容と代替案）"
-    }
-  ]
-}
-
-severity の基準:
-- high: 法的リスク・期日不明・金額不明・致命的な誤解を招く表現
-- medium: 内容が伝わりにくい・根拠不足・読み手への配慮不足
-- low: 冗長表現・敬語重複・表記ゆれ等の軽微な修正`
-
-async function callAnthropicAPI(text: string): Promise<EditResult> {
-  if (!ANTHROPIC_API_KEY) {
-    return buildMockResult(text)
-  }
-
-  const userMessage = `以下の書類を添削してください。\n\n---\n${text}\n---`
-
-  const res = await fetch(ANTHROPIC_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: ANTHROPIC_MODEL,
-      max_tokens: 4096,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userMessage }],
-    }),
-  })
-
-  if (!res.ok) {
-    const errBody = await res.text().catch(() => '')
-    console.error('[document-edit] Anthropic API error:', res.status, errBody)
-    throw new Error(`AI APIエラー (${res.status})`)
-  }
-
-  const data = await res.json()
-  const content = data?.content?.[0]?.text || ''
-
-  // JSON抽出（```json ブロックや前置きが混入する場合に備える）
-  let jsonStr = content.trim()
-  const codeBlockMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/)
-  if (codeBlockMatch) jsonStr = codeBlockMatch[1].trim()
-  const firstBrace = jsonStr.indexOf('{')
-  const lastBrace = jsonStr.lastIndexOf('}')
-  if (firstBrace >= 0 && lastBrace > firstBrace) {
-    jsonStr = jsonStr.slice(firstBrace, lastBrace + 1)
-  }
-
-  let parsed: any
-  try {
-    parsed = JSON.parse(jsonStr)
-  } catch (e) {
-    console.error('[document-edit] JSON parse error:', e, 'raw:', content)
-    throw new Error('AI応答の解析に失敗しました')
-  }
-
-  const revised = typeof parsed.revised === 'string' ? parsed.revised : text
-  const notesRaw = Array.isArray(parsed.notes) ? parsed.notes : []
-  const notes: EditNote[] = notesRaw
-    .filter((n: any) => n && typeof n === 'object')
-    .map((n: any) => ({
-      severity: ['high', 'medium', 'low'].includes(n.severity) ? n.severity : 'low',
-      location: typeof n.location === 'string' ? n.location : '',
-      comment: typeof n.comment === 'string' ? n.comment : '',
-    }))
-
-  return { revised, notes }
-}
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
@@ -202,7 +140,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       truncated = true
     }
 
-    const result = await callAnthropicAPI(text)
+    // 疑似ディレイ
+    await new Promise((r) => setTimeout(r, 350 + Math.floor(Math.random() * 350)))
+
+    const result = buildMockResult(text)
 
     return json({
       revised: result.revised,

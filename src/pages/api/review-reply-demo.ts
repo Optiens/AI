@@ -6,7 +6,7 @@ import { getMockReply, type ToneStyle, type ReplyLang } from '../../lib/review-m
  *
  * 実装方針:
  * - 本デモは OpenAI API を呼ばず、事前用意したサンプル応答を返す
- * - 本番運用時は OpenAI gpt-4o-mini 等で動的生成する想定（参考実装は Git 履歴）
+ * - 実運用時は OpenAI gpt-4o-mini 等で動的生成する想定（参考実装は Git 履歴）
  * - レート制限のみ維持（同一 IP からの過剰アクセス防止）
  */
 
@@ -80,7 +80,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
     if (!stored) {
       return json({
-        error: '事前用意の応答が見つかりません。本番運用時は AI が動的生成します。',
+        error: '事前用意の応答が見つかりません。実運用時は AI が動的生成します。',
       }, 404)
     }
 
@@ -91,7 +91,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       alert_priority: stored.alert_priority,
       remaining: rl.remaining,
       mock: true,
-      _note: 'デモのため事前用意のサンプル応答を表示しています。本番運用時は OpenAI API 等で動的生成します。',
+      _note: 'デモのため事前用意のサンプル応答を表示しています。実運用時は OpenAI API 等で動的生成します。',
     })
   } catch (e: any) {
     console.error('[review-reply-demo] error:', e)

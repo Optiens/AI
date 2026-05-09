@@ -1,9 +1,6 @@
 import type { APIRoute } from 'astro'
 import { INTERNAL_DOCS, SAMPLE_QA, getInternalDocAnswer } from '../../lib/internal-docs-mock'
-
-const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
-const OPENAI_MODEL = 'gpt-4o-mini'
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
+import { getSalesAnswer } from '../../lib/sales-search-mock'
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT_PER_HOUR = 20
@@ -68,55 +65,6 @@ const SAMPLE_DATA: SalesRecord[] = [
   { id: 'S030', date: '2026-05-08', client: '群馬 高崎酪農組合', service: '導入支援（飼養記録AI）', industry: '酪農・畜産', region: '群馬県', amount: 480000, status: 'in-progress' },
 ]
 
-const SYSTEM_PROMPT = `あなたは中小企業向けの社内データ分析アシスタントです。
-以下のサンプル販売データに対するユーザーの質問に、日本語で簡潔に回答してください。
-
-# データの説明
-- 全 30 件の販売記録（2026年1月〜5月）
-- フィールド: id, date(YYYY-MM-DD), client, service, industry, region, amount(円), status
-
-# 回答スタンス
-質問は大きく 3 種類あります。それぞれに合わせて回答してください:
-
-**(A) 単純検索・集計**（例: 「3月の売上合計は？」「士業の件数は？」）
-- データから直接計算し、必ず計算根拠を示す
-- 結果が表形式で見やすい場合は Markdown 表で示す
-- 該当件数を明示
-
-**(B) 解釈・分析**（例: 「改善が必要な業種は？」「売上が伸びている領域は？」「リピートしやすい顧客像は？」）
-- データから読み取れる傾向・偏り・パターンを分析する
-- 「○○の前提なら」と<strong>判断軸を最初に明示</strong>してから結論を出す
-- 例: 「『改善が必要』を『取引件数が少ない or 単価が低い』と定義すると…」のように仮置きする
-- 数値で裏付け（業種別の件数・平均単価・有償化率など）を示す
-- 観察事実と推論を分けて書く（事実→推論の順）
-- データだけでは判断できない要素があれば「これだけでは断定できない」「ヒアリングが必要」と明示する
-
-**(C) データに無い情報**（例: 顧客の連絡先・将来予測）
-- 「このデータには記載がありません」と伝え、何があれば答えられるかを補足する
-
-# 共通ルール
-- 「先月」「今月」のような相対表現はデータの最新日（2026-05-08）を基準に解釈する
-- 推測で具体名を作らない（データに無い顧客名・金額をでっち上げない）
-- 表形式での集計が分かりやすい場合は **Markdown表** で示す
-
-# 出力フォーマット
-{
-  "answer": "回答本文（Markdown可、改行は \\n）",
-  "matched_ids": ["該当する記録のID配列（例: S001, S005）。最大10件。分析系で全業種に言及する場合は省略可"],
-  "calculation_note": "計算・判定の根拠（数値・分析どちらでも、式や定義を文字列で）"
-}
-
-純粋な JSON オブジェクトのみで返してください。コードブロックや余分な装飾は不要です。`
-
-function buildMockResult(query: string) {
-  return {
-    answer: `モック応答（API キー未設定）です。実際の質問「${query.slice(0, 40)}」に対しては、AI がデータを分析して回答します。本デモ環境では OPENAI_API_KEY が必要です。`,
-    matched_ids: ['S001', 'S005', 'S009', 'S020'],
-    calculation_note: '',
-    mock: true,
-  }
-}
-
 function json(payload: any, status = 200) {
   return new Response(JSON.stringify(payload), {
     status,
@@ -155,7 +103,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         })
       }
       return json({
-        answer: `**ご質問「${query.slice(0, 40)}」に該当する事前用意の応答が見つかりませんでした。**\n\n本デモはサンプル質問 8 件に対する事前応答のみ動作します。本番運用時は AI が御社の社内ドキュメント全件をベクトル検索して動的に回答します（OpenAI API の<strong>従量課金</strong>が発生）。\n\n左のサンプル質問からお試しください。`,
+        answer: `**ご質問「${query.slice(0, 40)}」に該当する事前用意の応答が見つかりませんでした。**\n\n本デモはサンプル質問 8 件に対する事前応答のみ動作します。実運用時は AI が御社の社内ドキュメント全件をベクトル検索して動的に回答します（OpenAI API の<strong>従量課金</strong>が発生）。\n\n左のサンプル質問からお試しください。`,
         matched_ids: [],
         calculation_note: '',
         records: INTERNAL_DOCS,
@@ -166,74 +114,29 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       })
     }
 
-    if (!OPENAI_API_KEY) {
-      return json({ ...buildMockResult(query), records: SAMPLE_DATA, remaining: rl.remaining })
+    // 販売データ検索: 事前用意の Q&A を返す（API 消費なし）
+    await new Promise((r) => setTimeout(r, 400 + Math.floor(Math.random() * 400)))
+    const salesQA = getSalesAnswer(query)
+    if (salesQA) {
+      return json({
+        answer: salesQA.answer,
+        matched_ids: salesQA.matched_ids,
+        calculation_note: salesQA.calculation_note || '',
+        records: SAMPLE_DATA,
+        category: 'sales',
+        remaining: rl.remaining,
+        mock: true,
+      })
     }
-
-    const dataAsCsv = [
-      'id,date,client,service,industry,region,amount,status',
-      ...SAMPLE_DATA.map(r =>
-        `${r.id},${r.date},${r.client},${r.service},${r.industry},${r.region},${r.amount},${r.status}`
-      ),
-    ].join('\n')
-
-    const userMessage = `# 販売データ（CSV）
-
-${dataAsCsv}
-
-# ユーザーの質問
-${query}
-
-上記データに基づいて回答してください。`
-
-    const res = await fetch(OPENAI_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: OPENAI_MODEL,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: userMessage },
-        ],
-        max_tokens: 1200,
-        temperature: 0.1,
-        response_format: { type: 'json_object' },
-      }),
-    })
-
-    if (!res.ok) {
-      const errBody = await res.text().catch(() => '')
-      console.error('[data-search-demo] OpenAI API error:', res.status, errBody)
-      if (errBody && /insufficient_quota|exceeded your current quota/i.test(errBody)) {
-        return json({ error: 'AIサービスの利用残高が不足しています。' }, 503)
-      }
-      if (res.status === 429) return json({ error: 'AIサービスのレート制限に達しました。少し時間をおいてから再度お試しください。' }, 429)
-      return json({ error: `AIサービスでエラーが発生しました（${res.status}）。` }, 500)
-    }
-
-    const data = await res.json()
-    const content = String(data?.choices?.[0]?.message?.content || '').trim()
-
-    let parsed: any = {}
-    try {
-      const jsonStart = content.indexOf('{')
-      const jsonEnd = content.lastIndexOf('}')
-      const jsonText = content.substring(jsonStart, jsonEnd + 1)
-      parsed = JSON.parse(jsonText)
-    } catch (err) {
-      console.error('[data-search-demo] JSON parse error:', err, content)
-      parsed = { answer: content, matched_ids: [] }
-    }
-
     return json({
-      answer: parsed.answer || '',
-      matched_ids: Array.isArray(parsed.matched_ids) ? parsed.matched_ids : [],
-      calculation_note: parsed.calculation_note || '',
+      answer: `**ご質問「${query.slice(0, 40)}」に該当する事前用意の応答が見つかりませんでした。**\n\n本デモはサンプル質問 8 件に対する事前応答のみ動作します。**実運用では AI が動的に回答します**（御社の業務データに対し、自由な質問に対応可能）。\n\n左のサンプル質問からお試しください。`,
+      matched_ids: [],
+      calculation_note: '',
       records: SAMPLE_DATA,
+      category: 'sales',
       remaining: rl.remaining,
+      mock: true,
+      no_match: true,
     })
   } catch (e: any) {
     console.error('[data-search-demo] error:', e)
