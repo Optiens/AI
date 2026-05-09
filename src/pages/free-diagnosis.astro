@@ -328,13 +328,14 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
                 </label>
               </div>
             </div>
-            <div class="field">
+            <div class="field" data-plan-show="paid" hidden>
               <label for="free_text">その他、気になっていること</label>
               <textarea id="free_text" name="free_text" rows="3" placeholder="「AIで作った文章をそのまま使って大丈夫？」「月額いくらくらいかかる？」など"></textarea>
+              <p class="field-hint"><small>※ 詳細レポートでは <strong>1 ページの専用セクション</strong> でこのご質問・ご関心事に個別回答します。</small></p>
             </div>
           </fieldset>
 
-          <fieldset class="extra-fieldset">
+          <fieldset class="extra-fieldset" data-plan-show="paid" hidden>
             <legend>詳細レポート向けの追加情報（任意）</legend>
             <div class="detail-hint">
               <i class="fa-solid fa-stars"></i>

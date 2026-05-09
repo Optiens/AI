@@ -1,27 +1,28 @@
 /**
- * 有償版 詳細レポート PPTX テンプレ v1.4（18スライド・PoC/AI事業者ガイドライン削除版）
+ * 有償版 詳細レポート PPTX テンプレ v1.5（19スライド・Q&Aセクション追加版）
  *
  * 設計書: executive/ai-consulting/有償版_詳細レポート設計書_v1.0.md
  *
  * 構成:
- * 1. 表紙
- * 2. エグゼクティブサマリー
- * 3. 御社の現状分析
- * 4-5. AI活用提案 5〜7件（詳細版）
- * 6. フロー図（業務手順）
- * 7. アーキテクチャ図（システム構成）
- * 8. 段階的導入ロードマップ
- * 9. ROI 詳細試算
- * 10. コスト試算（フェーズ別）
- * 11. ベンダー/サービスカテゴリ比較
- * 12. PoC 計画案
- * 13. 業種別補助金の該当性チェック
- * 14. リスクアセスメント
- * 15. AI事業者ガイドライン整合性
- * 16. 次のステップ
- * 17. 裏表紙
+ *  1. 表紙
+ *  2. SECTION 01 エグゼクティブサマリー
+ *  3. SECTION 02 御社の現状分析
+ *  4. SECTION 03 提案概要（5〜7 件）
+ *  5-N. SECTION 04 提案詳細
+ *  N+1. SECTION 05 段階的導入ロードマップ
+ *  N+2. SECTION 06 ROI 詳細試算
+ *  N+3. SECTION 07 ランニングコスト試算（月額）
+ *  N+4. SECTION 08 具体サービス比較
+ *  N+5. SECTION 09 業種別補助金の該当性チェック
+ *  N+6. SECTION 10 リスクアセスメント
+ *  N+7. SECTION 11 ご質問・関心事への回答（NEW v1.5）
+ *  N+8. SECTION 12 NEXT STEP
+ *  N+9. 裏表紙
  *
  * プレースホルダー命名規則: {{paid_xxx}} （無料版と区別）
+ * 新規プレースホルダー（v1.5）:
+ *   - {{paid_user_concern_quote}}  : お客様のご質問引用
+ *   - {{paid_user_concern_answer}} : Optiensからの回答（業務分析を踏まえた具体的方向性）
  *
  * 出力: tmp/optiens-diagnosis-paid-template-v1.0.pptx
  */
@@ -73,7 +74,7 @@ pres.author = 'Optiens';
 
 const W = 13.333;
 const H = 7.5;
-const TOTAL = 18;
+const TOTAL = 19;
 
 // ===== 共通要素 =====
 function addCommonElements(slide, pageNum) {
@@ -981,6 +982,109 @@ for (let i = 1; i <= PROPOSAL_TOTAL; i++) {
 }
 
 // =================================================
+// Slide 17: ご質問・関心事への回答（フォーム自由記述「気になっていること」への個別回答）
+// =================================================
+{
+  const slide = pres.addSlide();
+  slide.background = { color: COLORS.white };
+  addCommonElements(slide, 17);
+  addEyebrow(slide, 'SECTION 11 / Q&A');
+  addTitle(slide, 'ご質問・関心事への回答');
+  addGradientLine(slide, 2.15);
+
+  // リード文
+  slide.addText(
+    'お申し込みフォーム「その他、気になっていること」にご記入いただいた内容に対する個別回答です。',
+    {
+      x: 0.7, y: 2.3, w: W - 1.4, h: 0.4,
+      fontSize: 13, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'top',
+    },
+  );
+
+  // ===== Q ブロック（お客様のご質問） =====
+  const qY = 2.85;
+  const qH = 1.5;
+
+  slide.addShape('roundRect', {
+    x: 0.6, y: qY, w: W - 1.2, h: qH,
+    fill: { color: COLORS.cardBg },
+    line: { color: COLORS.lapisLight, width: 1 },
+    rectRadius: 0.10,
+  });
+
+  // Q バッジ
+  slide.addShape('roundRect', {
+    x: 0.85, y: qY + 0.25, w: 0.55, h: 0.55,
+    fill: { color: COLORS.lapis },
+    line: { width: 0 },
+    rectRadius: 0.10,
+  });
+  slide.addText('Q', {
+    x: 0.85, y: qY + 0.25, w: 0.55, h: 0.55,
+    fontSize: 22, color: COLORS.white, fontFace: FONT_EN, bold: true, align: 'center', valign: 'middle',
+  });
+
+  slide.addText('お客様のご質問・ご関心事', {
+    x: 1.6, y: qY + 0.2, w: W - 2.5, h: 0.32,
+    fontSize: 11, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'top',
+  });
+  slide.addText('{{paid_user_concern_quote}}', {
+    x: 1.6, y: qY + 0.55, w: W - 2.5, h: qH - 0.7,
+    fontSize: 14, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+    italic: true,
+  });
+
+  // ===== A ブロック（Optiensからの回答） =====
+  const aY = qY + qH + 0.3;
+  const aH = 6.55 - aY - 0.1; // フッター余白を残す
+
+  slide.addShape('roundRect', {
+    x: 0.6, y: aY, w: W - 1.2, h: aH,
+    fill: { color: COLORS.white },
+    line: { color: COLORS.sakura, width: 1.5 },
+    rectRadius: 0.10,
+  });
+
+  // A バッジ
+  slide.addShape('roundRect', {
+    x: 0.85, y: aY + 0.25, w: 0.55, h: 0.55,
+    fill: { color: COLORS.sakura },
+    line: { width: 0 },
+    rectRadius: 0.10,
+  });
+  slide.addText('A', {
+    x: 0.85, y: aY + 0.25, w: 0.55, h: 0.55,
+    fontSize: 22, color: COLORS.white, fontFace: FONT_EN, bold: true, align: 'center', valign: 'middle',
+  });
+
+  slide.addText('Optiens からの回答', {
+    x: 1.6, y: aY + 0.2, w: W - 2.5, h: 0.32,
+    fontSize: 11, color: COLORS.sakura, fontFace: FONT_JP, bold: true, valign: 'top',
+  });
+  slide.addText('{{paid_user_concern_answer}}', {
+    x: 1.6, y: aY + 0.55, w: W - 2.5, h: aH - 1.05,
+    fontSize: 13, color: COLORS.text, fontFace: FONT_JP, valign: 'top',
+  });
+
+  // 補足（MTG誘導）
+  slide.addShape('roundRect', {
+    x: 1.6, y: aY + aH - 0.55, w: W - 2.5, h: 0.45,
+    fill: { color: 'F8FAFC' },
+    line: { color: COLORS.border, width: 1 },
+    rectRadius: 0.06,
+  });
+  slide.addText(
+    '🎯 さらに具体的なご相談は、レポート同梱の 60 分オンライン MTG にてお受けします。',
+    {
+      x: 1.7, y: aY + aH - 0.55, w: W - 2.7, h: 0.45,
+      fontSize: 12, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'middle',
+    },
+  );
+
+  addFooterNote(slide, '※ ご記入が任意のフィールドのため、自由記述がない場合は本ページは省略されます');
+}
+
+// =================================================
 // Slide 17（旧 AI事業者ガイドライン整合性）── 削除済
 // 削除理由: 有償版レポートに載せる内容として適切でない（コンプライアンス情報は会社情報の領域）
 // 統合先: ウェブサイト /security ページ（情報セキュリティ方針）に AI事業者ガイドライン整合性セクションを追加
@@ -988,13 +1092,13 @@ for (let i = 1; i <= PROPOSAL_TOTAL; i++) {
 // =================================================
 
 // =================================================
-// Slide 17: 次のステップ
+// Slide 18: 次のステップ
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
-  addCommonElements(slide, 17);
-  addEyebrow(slide, 'SECTION 11 / NEXT STEP');
+  addCommonElements(slide, 18);
+  addEyebrow(slide, 'SECTION 12 / NEXT STEP');
   addTitle(slide, '導入支援への次のステップ');
   addGradientLine(slide, 2.15);
 
@@ -1052,12 +1156,12 @@ for (let i = 1; i <= PROPOSAL_TOTAL; i++) {
 }
 
 // =================================================
-// Slide 18: 裏表紙
+// Slide 19: 裏表紙
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
-  addCommonElements(slide, 18);
+  addCommonElements(slide, 19);
 
   slide.addText('ご質問・ご相談', {
     x: 0, y: 1.0, w: W, h: 0.8,
