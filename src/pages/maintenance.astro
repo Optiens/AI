@@ -15,128 +15,167 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- プラン（時間制を廃止、内容範囲で区切るシンプル設計） -->
+    <!-- プラン（対応枠制） -->
     <section class="mt-section light-section mt-section--alt">
       <div class="container">
         <h2 class="section-title reveal">プラン</h2>
-        <p class="mt-lead reveal">時間カウントは行いません。「対応する内容の種類」で線引きするシンプルな運用です。</p>
+        <p class="mt-lead reveal">時間カウントは行いません。<strong>対応枠</strong>で、依頼内容の重さに応じて柔軟にご利用いただけます。</p>
         <div class="mt-plans reveal">
           <div class="mt-plan-card">
             <h3>ベーシック</h3>
             <p class="mt-price">月額¥33,000<span class="price-unit">（税込）</span></p>
+            <p class="mt-points">月 <strong>10 枠</strong></p>
             <p class="mt-plan-desc">日常運用を安定して回したい方向け</p>
             <ul>
               <li><i class="fa-solid fa-check"></i>メール・チャットでの相談対応</li>
-              <li><i class="fa-solid fa-check"></i>軽微な調整（プロンプト見直し・分岐追加・文言修正）</li>
-              <li><i class="fa-solid fa-check"></i>システムトラブル対応（不具合調査・暫定対応）</li>
-              <li><i class="fa-solid fa-check"></i>連携サービスの仕様変更への追従</li>
+              <li><i class="fa-solid fa-check"></i>軽微な調整・プロンプト微調整</li>
+              <li><i class="fa-solid fa-check"></i>トラブル調査・暫定対応</li>
+              <li><i class="fa-solid fa-check"></i>連携サービスの仕様変更追従</li>
             </ul>
           </div>
           <div class="mt-plan-card mt-plan-card--recommended">
             <span class="mt-recommended-badge">おすすめ</span>
             <h3>スタンダード</h3>
             <p class="mt-price">月額¥55,000<span class="price-unit">（税込）</span></p>
+            <p class="mt-points">月 <strong>30 枠</strong></p>
             <p class="mt-plan-desc">継続的に AI 活用範囲を広げていきたい方向け</p>
             <ul>
               <li><i class="fa-solid fa-check"></i>ベーシックの全内容</li>
-              <li><i class="fa-solid fa-check"></i>月次オンライン MTG（運用レビュー・改善方針すり合わせ）</li>
+              <li><i class="fa-solid fa-check"></i>月次オンライン MTG（運用レビュー）</li>
               <li><i class="fa-solid fa-check"></i>機能追加・ワークフロー改善</li>
               <li><i class="fa-solid fa-check"></i>新規業務の自動化検討・初期設計</li>
             </ul>
           </div>
         </div>
-        <p class="mt-note reveal">大幅な改修・新規システムの本格構築は、両プランとも別途お見積もりとなります（範囲が明確なため判断は単純です）。</p>
+        <p class="mt-note reveal">月次の対応枠は <strong>毎月リセット</strong>（繰越なし）。標準的な月額サービスと同様の運用です。<br/>不足時は <strong>追加対応枠の購入（1 枠 = ¥3,500・税込）</strong> または上位プランへの変更が可能です。</p>
       </div>
     </section>
 
-    <!-- 対応範囲 -->
+    <!-- 標準対応枠表 -->
     <section class="mt-section light-section">
       <div class="container">
-        <h2 class="section-title reveal">対応範囲の線引き</h2>
+        <h2 class="section-title reveal">標準対応枠表</h2>
+        <p class="mt-lead reveal">依頼受領時に「このご依頼は <strong>N 枠</strong> 消費します」と事前にお伝えします。承認いただいてから着手するため、想定外の消費は発生しません。</p>
         <div class="mt-scope reveal">
           <table class="mt-scope-table">
             <thead>
               <tr>
-                <th>対応内容</th>
-                <th>ベーシック</th>
-                <th>スタンダード</th>
+                <th>カテゴリ</th>
+                <th>対応枠</th>
+                <th>備考</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <strong>Optiens が構築した部分のバグ・設計ミス</strong>
+                  <strong>Optiens 構築部分のバグ・設計ミス</strong>
                   <span class="mt-scope-desc">当社の責任で発生した不具合の修正</span>
                 </td>
-                <td><span class="mt-free-badge">無償（瑕疵対応）</span></td>
-                <td><span class="mt-free-badge">無償（瑕疵対応）</span></td>
+                <td><span class="mt-free-badge">0 枠（瑕疵対応）</span></td>
+                <td>無償</td>
               </tr>
               <tr>
                 <td>
-                  <strong>相談・チャット応答</strong>
-                  <span class="mt-scope-desc">運用上の質問・確認のやり取り</span>
+                  <strong>軽微な質問・チャット相談</strong>
+                  <span class="mt-scope-desc">1 ラリーで完結する質問</span>
                 </td>
-                <td>含む</td>
-                <td>含む</td>
+                <td>1 枠</td>
+                <td>両プラン</td>
               </tr>
               <tr>
                 <td>
-                  <strong>軽微な調整</strong>
-                  <span class="mt-scope-desc">プロンプト見直し・分岐追加・文言修正</span>
+                  <strong>プロンプト・文言の微調整</strong>
+                  <span class="mt-scope-desc">出力の言い回しや細かい挙動の調整</span>
                 </td>
-                <td>含む</td>
-                <td>含む</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>トラブル調査・対応</strong>
-                  <span class="mt-scope-desc">不具合調査・原因切り分け・暫定対応</span>
-                </td>
-                <td>含む</td>
-                <td>含む</td>
+                <td>1 枠</td>
+                <td>両プラン</td>
               </tr>
               <tr>
                 <td>
                   <strong>連携サービスの仕様変更追従</strong>
-                  <span class="mt-scope-desc">API 仕様変更等に伴う修正</span>
+                  <span class="mt-scope-desc">API 仕様変更等への対応</span>
                 </td>
-                <td>含む</td>
-                <td>含む</td>
+                <td>2〜5 枠</td>
+                <td>両プラン</td>
               </tr>
               <tr>
                 <td>
-                  <strong>月次オンライン MTG</strong>
+                  <strong>トラブル調査・暫定対応</strong>
+                  <span class="mt-scope-desc">「動かなくなった」原因切り分け・暫定対応</span>
+                </td>
+                <td>2〜5 枠</td>
+                <td>両プラン</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>月次運用レポート作成</strong>
+                  <span class="mt-scope-desc">運用状況・改善提案のサマリ</span>
+                </td>
+                <td>3 枠</td>
+                <td>スタンダードのみ</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>月次オンライン MTG（60分）</strong>
                   <span class="mt-scope-desc">運用レビュー・改善方針のすり合わせ</span>
                 </td>
-                <td>—</td>
-                <td>含む</td>
+                <td>5 枠</td>
+                <td>スタンダードのみ</td>
               </tr>
               <tr>
                 <td>
-                  <strong>機能追加・ワークフロー改善</strong>
-                  <span class="mt-scope-desc">既存業務範囲内での機能拡張</span>
+                  <strong>軽微な機能追加</strong>
+                  <span class="mt-scope-desc">既存ワークフローへの分岐追加・小規模改修</span>
                 </td>
-                <td>—</td>
-                <td>含む</td>
+                <td>3〜8 枠</td>
+                <td>両プラン</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>中規模な機能追加</strong>
+                  <span class="mt-scope-desc">複数業務にまたがる機能拡張</span>
+                </td>
+                <td>10〜15 枠</td>
+                <td>スタンダードのみ</td>
               </tr>
               <tr>
                 <td>
                   <strong>新規業務の自動化検討・初期設計</strong>
-                  <span class="mt-scope-desc">「これも自動化したい」業務の整理・設計</span>
+                  <span class="mt-scope-desc">対象業務のヒアリング・設計・初期構築</span>
                 </td>
-                <td>—</td>
-                <td>含む</td>
+                <td>15〜20 枠</td>
+                <td>スタンダードのみ</td>
               </tr>
               <tr>
                 <td>
                   <strong>大幅改修・新規システムの本格構築</strong>
                   <span class="mt-scope-desc">スコープが大きい新規開発</span>
                 </td>
-                <td>別途お見積もり</td>
+                <td>—</td>
                 <td>別途お見積もり</td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <p class="mt-note reveal">※ 対応枠の数は「内容の重さ × 影響範囲」で決まります。1 枠はおおむね 30 分程度の作業を目安としていますが、時間ではなく「内容」で判定します。</p>
+
+        <!-- 瑕疵 vs 有償の判別が即座につかない場合の運用 -->
+        <div class="mt-callout reveal">
+          <h3><i class="fa-solid fa-circle-info"></i> ご依頼時に「瑕疵対応（無償）か有償対応か」が判別できない場合</h3>
+          <p>「以前は動いていたのに動かなくなった」など、原因が当社の構築ミスなのか、外部サービスの仕様変更や環境変化によるものか、依頼を受けた時点で即断できないケースがあります。この場合は次の流れで進めます。</p>
+          <ol class="mt-callout-list">
+            <li><strong>原因切り分け（最大 1 枠まで・事前承認なしで着手可）</strong><br/>
+              当社で短時間の初期調査を行い、原因の方向性を見極めます。30 分以内に判別可能と見込めるものは、対応枠を消費せず無償で実施します。</li>
+            <li><strong>判別後の取り扱い</strong>
+              <ul>
+                <li>当社の構築ミス・設計起因と判明 → <strong>0 枠（瑕疵対応・無償修正）</strong></li>
+                <li>仕様変更追従・運用起因・新規要件と判明 → <strong>「N 枠で対応します」を事前提示し、承認後に着手</strong></li>
+              </ul>
+            </li>
+            <li><strong>切り分けに時間を要する場合</strong><br/>
+              30 分超の調査が必要と判断した時点で一旦お知らせし、調査自体に対応枠を消費するか・打ち切るかをご相談します。「気付いたら大量消費していた」が起きない運用です。</li>
+          </ol>
+          <p class="mt-callout-foot">原則として <strong>事前合意なき対応枠の消費は行いません</strong>。判別がつかないまま勝手に有償対応へ流す、ということはいたしません。</p>
         </div>
       </div>
     </section>
@@ -151,11 +190,11 @@ import Layout from '../layouts/Layout.astro';
             <div class="mt-warranty-content">
               <h3>納品後3ヶ月間、不具合は無償で修正します</h3>
               <p>Optiensが設計・構築したシステムに起因するバグや設計ミスは、納品日から3ヶ月間、保守契約の有無にかかわらず無償で修正いたします。</p>
-              <p>保守工数からの差し引きも行いません。当社が構築したものの不具合は、当社の責任で対応します。</p>
+              <p>保守プランの対応枠からの差し引きも行いません。当社が構築したものの不具合は、当社の責任で対応します。</p>
               <ul class="mt-warranty-notes">
                 <li>対象: Optiensが構築した部分のバグ・設計ミス</li>
                 <li>期間: 納品日から3ヶ月間</li>
-                <li>費用: 無償（保守工数に含まない）</li>
+                <li>費用: 無償（保守プランの対応枠に含まない）</li>
                 <li>対象外: お客様による設定変更に起因するもの、外部サービスの仕様変更</li>
               </ul>
             </div>
@@ -172,19 +211,23 @@ import Layout from '../layouts/Layout.astro';
         <div class="mt-faq-list reveal">
           <details class="mt-faq-item">
             <summary>契約期間の縛りはありますか？</summary>
-            <p>保守は<strong>月単位の契約</strong>です。効果を感じられなければいつでも解約可能。導入支援で構築したシステムはそのままお使いいただけます。まずは無料活用診断から始めていただくことをお勧めしています。</p>
+            <p>保守は<strong>月単位の契約</strong>です。効果を感じられなければいつでも解約可能。導入支援で構築したシステムはそのままお使いいただけます。まずは AI 活用診断（無料）から始めていただくことをお勧めしています。</p>
           </details>
           <details class="mt-faq-item">
             <summary>保守プランはあとから変更できますか？</summary>
-            <p>はい、月単位で<strong>ライト ⇔ スタンダードの切り替え</strong>が可能です。新規業務の自動化を検討する月だけスタンダードに上げる、といった使い方もできます。</p>
+            <p>はい、月単位で<strong>ベーシック ⇔ スタンダードの切り替え</strong>が可能です。新規業務の自動化を検討する月だけスタンダードに上げる、といった使い方もできます。</p>
           </details>
           <details class="mt-faq-item">
             <summary>保守契約なしで運用を続けることはできますか？</summary>
             <p>可能です。Optiensは<strong>納品時点で「自走できる状態」</strong>を目指して設計しており、日常運用に保守契約は必須ではありません。納品後3ヶ月間は不具合修正を無償で行います。3ヶ月経過後に新たな修正・追加が必要になった場合のみ、保守契約またはスポット対応をご検討ください。</p>
           </details>
           <details class="mt-faq-item">
-            <summary>月の工数を超えた場合はどうなりますか？</summary>
-            <p>超過分はオーバー単価でお引き受けするか、翌月分の工数を前借りする形でも対応可能です。詳細はご契約時にご説明します。「気付いたら超過していた」が起きないよう、超過しそうな時点で事前にご相談する運用としています。</p>
+            <summary>月の対応枠を使い切った場合はどうなりますか？</summary>
+            <p>その月の対応枠を使い切った場合、追加対応は <strong>追加対応枠（1 枠 = ¥3,500・税込）</strong> または <strong>翌月以降からの上位プランへの変更</strong> で承ります。残枠が少なくなった時点で事前にお知らせするため、「気付いたら超過していた」は発生しません。月次の対応枠は<strong>毎月リセット（繰越なし）</strong>です。</p>
+          </details>
+          <details class="mt-faq-item">
+            <summary>依頼を出した時点で「無償の瑕疵対応か有償か」は分かりますか？</summary>
+            <p>明らかに当社の構築ミスとわかるものは即「0 枠（無償）」、明らかに新規要件・仕様変更追従とわかるものは事前に「N 枠で対応します」とお伝えします。判別がつかないご依頼は、<strong>当社で 30 分以内の初期調査（対応枠消費なし）</strong>を行った上で、結果に応じて 0 枠（瑕疵）か N 枠（有償）かを確定してご連絡します。事前合意なき対応枠の消費は行いません。</p>
           </details>
         </div>
       </div>
@@ -365,6 +408,76 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 700;
     padding: 4px 12px;
     border-radius: 4px;
+  }
+
+  /* 判別不能時の運用コールアウト */
+  .mt-callout {
+    max-width: 800px;
+    margin: 32px auto 0;
+    padding: 28px 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--brand);
+    border-radius: var(--radius);
+  }
+  .mt-callout h3 {
+    font-size: 1rem;
+    color: var(--heading);
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mt-callout h3 i {
+    color: var(--brand);
+    font-size: 1.05rem;
+  }
+  .mt-callout p {
+    font-size: .9rem;
+    color: var(--text);
+    line-height: 1.8;
+    margin: 0 0 12px;
+  }
+  .mt-callout-list {
+    margin: 12px 0 12px 1.2em;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mt-callout-list > li {
+    font-size: .9rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .mt-callout-list > li > strong {
+    color: var(--heading);
+  }
+  .mt-callout-list ul {
+    margin: 8px 0 0 1em;
+    padding: 0;
+    list-style: disc;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mt-callout-list ul li {
+    font-size: .88rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .mt-callout-list ul li strong {
+    color: var(--text);
+  }
+  .mt-callout-foot {
+    margin: 16px 0 0;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    font-size: .88rem;
+    color: var(--muted);
+  }
+  .mt-callout-foot strong {
+    color: var(--heading);
   }
 
   /* 瑕疵対応 */
