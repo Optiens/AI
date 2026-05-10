@@ -8,10 +8,10 @@ const applicationId = Astro.url.searchParams.get('id') || '';
 
 <Layout title={
   isPaid
-    ? "詳細診断のお申し込みを受け付けました | Optiens"
+    ? "【詳細版】AI活用診断のお申し込みを受け付けました | Optiens"
     : isPendingVerification
       ? "メールアドレスをご確認ください | Optiens"
-      : "診断を受け付けました | Optiens"
+      : "AI活用診断を受け付けました | Optiens"
 }>
   <main class="thanks-main">
     <section class="thanks-section">
@@ -23,7 +23,7 @@ const applicationId = Astro.url.searchParams.get('id') || '';
 
           {isPaid ? (
             <>
-              <h1>詳細診断のお申し込みを受け付けました</h1>
+              <h1>【詳細版】AI活用診断のお申し込みを受け付けました</h1>
               {applicationId && (
                 <div class="application-id-card">
                   <p class="application-id-label">申込番号</p>
@@ -63,7 +63,7 @@ const applicationId = Astro.url.searchParams.get('id') || '';
                     <span class="flow-num">4</span>
                     <div class="flow-text">
                       <strong>詳細レポート + 60分MTG（入金確認後 5営業日以内）</strong>
-                      <p>5〜8ページの詳細レポートと60分オンラインMTGの日程調整リンクをお届けします。</p>
+                      <p>詳細レポートと60分オンラインMTGの日程調整リンクをお届けします。</p>
                     </div>
                   </li>
                 </ol>
@@ -92,13 +92,13 @@ const applicationId = Astro.url.searchParams.get('id') || '';
                     <span class="pending-num">1</span>
                     <div>
                       <strong>メールを確認</strong>
-                      <p>件名「【Optiens】無料AI診断のお申込確認（メールアドレスをご確認ください）」</p>
+                      <p>件名「【Optiens】AI活用診断のお申込確認（メールアドレスをご確認ください）」</p>
                     </div>
                   </li>
                   <li>
                     <span class="pending-num">2</span>
                     <div>
-                      <strong>「メールアドレスを確認して申込を完了する」をクリック</strong>
+                      <strong>「認証する」ボタンをクリック</strong>
                       <p>クリックした時点でお申し込みが完了します（24時間以内・1回限り有効）。</p>
                     </div>
                   </li>
@@ -122,8 +122,7 @@ const applicationId = Astro.url.searchParams.get('id') || '';
               <div class="thanks-hint">
                 <i class="fa-solid fa-lightbulb"></i>
                 <p>
-                  より具体的な提案・アーキテクチャ図・60分のオンラインMTGをご希望の場合は、<strong>詳細レポート（¥5,500・税込）</strong>もお選びいただけます。
-                  <a href="/free-diagnosis">プランを切り替える →</a>
+                  より具体的な提案・アーキテクチャ図・60分のオンラインMTGをご希望の場合は、<strong>【詳細版】AI活用診断（¥5,500・税込）</strong>をお申込みください。
                 </p>
               </div>
             </>
@@ -140,8 +139,7 @@ const applicationId = Astro.url.searchParams.get('id') || '';
               <div class="thanks-hint">
                 <i class="fa-solid fa-lightbulb"></i>
                 <p>
-                  より具体的な提案・アーキテクチャ図・60分のオンラインMTGをご希望の場合は、<strong>詳細レポート（¥5,500・税込）</strong>もお選びいただけます。
-                  <a href="/free-diagnosis">プランを切り替える →</a>
+                  より具体的な提案・アーキテクチャ図・60分のオンラインMTGをご希望の場合は、<strong>【詳細版】AI活用診断（¥5,500・税込）</strong>をお申込みください。
                 </p>
               </div>
             </>
@@ -149,7 +147,9 @@ const applicationId = Astro.url.searchParams.get('id') || '';
 
           <div class="thanks-actions">
             <a href="/" class="thanks-cta thanks-cta--primary">トップページへ</a>
-            <a href="/blog" class="thanks-cta thanks-cta--ghost">ブログを読む</a>
+            {!isPaid && (
+              <a href="/free-diagnosis" class="thanks-cta thanks-cta--ghost">AI活用診断へ</a>
+            )}
           </div>
         </div>
       </div>

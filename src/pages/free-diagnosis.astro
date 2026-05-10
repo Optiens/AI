@@ -37,7 +37,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           <span id="diag-quota-text">今月の残り枠を確認中…</span>
         </div>
         <p class="diag-sub" data-plan-show="paid" hidden>
-          御社のIT環境に合わせた<strong>5〜8ページの詳細レポート</strong>と<br/>
+          御社のIT環境に合わせた<strong>詳細レポート</strong>と<br/>
           <strong>60分のオンラインMTG</strong>で、AI活用の道筋を具体的にお届けします。
         </p>
 
@@ -61,11 +61,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         <div class="diag-promise" data-plan-show="paid" hidden>
           <div class="diag-promise-item">
             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            <p><strong>5〜8ページの詳細レポート</strong>。御社のIT環境に合わせた個別提案・アーキテクチャ図・導入支援の具体額までを記載します。</p>
-          </div>
-          <div class="diag-promise-item">
-            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-            <p><strong>AI事業者ガイドライン整合性チェック</strong>付き。経産省・総務省のガイドラインに照らして、御社の現状と次の一手を整理します。</p>
+            <p><strong>詳細レポート</strong>。御社のIT環境に合わせた個別提案・アーキテクチャ図・導入支援の具体額までを記載します。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-comments" aria-hidden="true"></i>
@@ -353,6 +349,21 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
                   <input type="checkbox" name="interests" value="training" />
                   <span>社員教育・マニュアル</span>
                 </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="interests" value="other" id="interests-other-cb" />
+                  <span>その他</span>
+                </label>
+              </div>
+              <div class="other-input-wrap" id="interests-other-wrap" hidden>
+                <label for="interests_other" class="visually-hidden">その他の業務領域を入力</label>
+                <input
+                  type="text"
+                  id="interests_other"
+                  name="interests_other"
+                  placeholder="例：採用業務、契約書レビュー、議事録作成など"
+                  maxlength="200"
+                  disabled
+                />
               </div>
             </div>
             <div class="field" data-plan-show="paid" hidden>
@@ -454,14 +465,14 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 
           <!-- 月次上限到達時の代替案内（JSで切替） -->
           <div class="diag-limit-block" id="diag-limit-block" hidden>
-            <h3>今月の無料診断枠は終了しました</h3>
+            <h3>今月のAI活用診断（無料版）枠は終了しました</h3>
             <p>多くの方にご利用いただきありがとうございます。<br/>毎月1日にリセットされますので、来月以降に再度お申し込みください。</p>
             <p>お急ぎの場合は<strong>詳細レポート（¥5,500 税込）</strong>をご利用いただけます。月次上限の対象外で、5営業日以内にお届けします。</p>
             <button type="button" class="btn-primary" id="diag-switch-paid">詳細レポートに切替える</button>
           </div>
 
           <button type="submit" class="btn-primary diag-submit" id="diag-submit">
-            <span data-plan-show="free">無料診断を受ける</span>
+            <span data-plan-show="free">AI活用診断を受ける（無料）</span>
             <span data-plan-show="paid" hidden>詳細診断を申し込む（¥5,500 税込）</span>
           </button>
         </form>
@@ -501,14 +512,14 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             if (limitBlock) limitBlock.hidden = false;
             if (submitBtn) submitBtn.style.display = 'none';
           }
-          quotaText.textContent = '今月の無料診断枠は終了しました（毎月1日にリセット）';
+          quotaText.textContent = '今月のAI活用診断（無料版）枠は終了しました（毎月1日にリセット）';
           quotaWrap.classList.add('is-empty');
         } else if (remaining <= 5) {
           // 残りわずか
-          quotaText.textContent = '今月の無料診断は残り ' + remaining + ' 件です（毎月1日にリセット）';
+          quotaText.textContent = '今月のAI活用診断（無料版）は残り ' + remaining + ' 件です（毎月1日にリセット）';
           quotaWrap.classList.add('is-warn');
         } else {
-          quotaText.textContent = '今月の無料診断は受付中です（毎月1日にリセット）';
+          quotaText.textContent = '今月のAI活用診断（無料版）は受付中です（毎月1日にリセット）';
         }
         quotaWrap.hidden = false;
       })
@@ -553,6 +564,26 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     });
 
     applyPlan('free');
+  })();
+
+  // ===== interests「その他」連動 =====
+  (function() {
+    var cb = document.getElementById('interests-other-cb');
+    var wrap = document.getElementById('interests-other-wrap');
+    var input = document.getElementById('interests_other');
+    if (!cb || !wrap || !input) return;
+    function sync() {
+      var on = cb.checked;
+      wrap.hidden = !on;
+      input.disabled = !on;
+      if (on) {
+        setTimeout(function() { input.focus(); }, 50);
+      } else {
+        input.value = '';
+      }
+    }
+    cb.addEventListener('change', sync);
+    sync();
   })();
 
   // 二重送信防止
@@ -1590,6 +1621,40 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     border-color: var(--brand);
     background: rgba(31, 58, 147, .06);
     color: var(--text);
+  }
+  .other-input-wrap {
+    margin-top: 10px;
+  }
+  .other-input-wrap input[type="text"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--brand);
+    border-radius: 8px;
+    background: rgba(31, 58, 147, .04);
+    font-size: .92rem;
+    color: var(--text);
+    transition: border-color .2s, background .2s;
+  }
+  .other-input-wrap input[type="text"]:focus {
+    outline: none;
+    border-color: var(--brand);
+    background: rgba(31, 58, 147, .08);
+  }
+  .other-input-wrap input[type="text"]:disabled {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--muted);
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
   .checkbox-item input[type="checkbox"] {
     width: 16px;

@@ -145,7 +145,7 @@ export const POST: APIRoute = async ({ request }) => {
         await resend.emails.send({
           from: MAIL_FROM,
           to: lead.email,
-          subject: `【Optiens】詳細AI診断のご案内（申込番号: ${lead.application_id}）`,
+          subject: `【Optiens】【詳細版】AI活用診断のご案内（申込番号: ${lead.application_id}）`,
           text: buildReferralFreeEmail(lead, referralFrom),
           html: buildReferralFreeEmailHtml(lead, referralFrom),
         })
@@ -220,7 +220,7 @@ function buildReferralFreeEmail(lead: any, referralFrom: string): string {
   return `${lead.company_name} ${lead.person_name} 様
 
 合同会社Optiensです。
-詳細AI診断のお申込ありがとうございます${fromLine}。
+【詳細版】AI活用診断のお申込ありがとうございます${fromLine}。
 
 ご紹介経由のお申込のため、お支払いは不要です。
 これより詳細レポートの作成プロセスへ進みます。
@@ -232,7 +232,7 @@ function buildReferralFreeEmail(lead: any, referralFrom: string): string {
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ━━━ この後の流れ ━━━
-1. 5営業日以内に詳細レポート（5〜8ページ・PDF）をメールでお届け
+1. 5営業日以内に詳細レポート（PDF）をメールでお届け
 2. 同じメールで60分オンラインMTGの日程調整リンクをご案内
 
 レポート作成中、追加でヒアリングが必要な場合は別途ご連絡いたします。
@@ -249,7 +249,7 @@ function buildReferralFreeEmailHtml(lead: any, referralFrom: string): string {
   const fromTag = referralFrom ? `<span style="color:#C76A77;">（${escapeHtml(referralFrom)} よりご紹介）</span>` : ''
   return `<div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${safeCompany} ${safePerson} 様</p>
-<p>合同会社Optiensです。<br/>詳細AI診断のお申込ありがとうございます${fromTag}。</p>
+<p>合同会社Optiensです。<br/>【詳細版】AI活用診断のお申込ありがとうございます${fromTag}。</p>
 <p>ご紹介経由のお申込のため、<strong>お支払いは不要</strong>です。これより詳細レポートの作成プロセスへ進みます。</p>
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#D1FAE5;border:1px solid #6EE7B7;border-radius:8px;">
@@ -260,7 +260,7 @@ function buildReferralFreeEmailHtml(lead: any, referralFrom: string): string {
 
 <h3 style="margin:24px 0 8px;font-size:14px;color:#0f172a;">この後の流れ</h3>
 <ol style="margin:0 0 16px;padding-left:20px;font-size:14px;">
-  <li>5営業日以内に<strong>詳細レポート（5〜8ページ・PDF）</strong>をメールでお届け</li>
+  <li>5営業日以内に<strong>詳細レポート（PDF）</strong>をメールでお届け</li>
   <li>同じメールで<strong>60分オンラインMTGの日程調整リンク</strong>をご案内</li>
 </ol>
 
@@ -276,7 +276,7 @@ function buildPaymentConfirmedEmail(lead: any): string {
   return `${lead.company_name} ${lead.person_name} 様
 
 合同会社Optiensです。
-詳細AI診断のお振込を確認いたしました。
+【詳細版】AI活用診断のお振込を確認いたしました。
 ありがとうございます。
 
 申込番号: ${lead.application_id}
@@ -284,7 +284,7 @@ function buildPaymentConfirmedEmail(lead: any): string {
 
 これより詳細レポートの作成プロセスに入ります。
 5営業日以内に下記をお届けします。
-- 詳細レポート（5〜8ページ・PDF）
+- 詳細レポート（PDF）
 - 60分オンラインMTGの日程調整リンク
 
 合同会社Optiens
@@ -297,7 +297,7 @@ function buildPaymentConfirmedEmailHtml(lead: any): string {
   const safePerson = escapeHtml(lead.person_name || '')
   return `<div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${safeCompany} ${safePerson} 様</p>
-<p>合同会社Optiensです。<br/>詳細AI診断のお振込を確認いたしました。ありがとうございます。</p>
+<p>合同会社Optiensです。<br/>【詳細版】AI活用診断のお振込を確認いたしました。ありがとうございます。</p>
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#D1FAE5;border:1px solid #6EE7B7;border-radius:8px;">
   <tr><td style="padding:8px 14px;font-weight:bold;width:140px;">申込番号</td><td style="padding:8px 14px;font-family:monospace;color:#065F46;font-weight:bold;">${escapeHtml(lead.application_id || '')}</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;">ご請求金額</td><td style="padding:8px 14px;">¥${(lead.amount_jpy || 5500).toLocaleString()}（税込）</td></tr>

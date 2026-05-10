@@ -1,5 +1,5 @@
 /**
- * 無料診断のメール認証（ダブルオプトイン）ヘルパー
+ * AI 活用診断（無料版）のメール認証（ダブルオプトイン）ヘルパー
  */
 import { randomBytes } from 'node:crypto'
 
@@ -38,7 +38,7 @@ export function buildVerificationEmailHtml(params: {
 </div>
 <p>確認が完了すると、自動でレポート作成が開始され、<strong>数分以内に Google Slides のリンクをメール</strong>でお送りします。</p>
 <p style="margin:24px 0;text-align:center;">
-  <a href="${verificationUrl}" style="display:inline-block;padding:14px 32px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">メールアドレスを確認して申込を完了する</a>
+  <a href="${verificationUrl}" style="display:inline-block;padding:14px 32px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">認証する</a>
 </p>
 <p style="font-size:13px;color:#666;">
   ※ このリンクは <strong>24時間有効</strong> です。<br/>

@@ -144,6 +144,109 @@ Deno.serve(async (req: Request) => {
   }
 })
 
+// ===== ラベル変換マップ（フォーム値 → 日本語） =====
+const AI_LEVEL_LABELS: Record<string, string> = {
+  none: 'まだ使っていない',
+  interest: '興味はあるが未導入（旧選択肢）',
+  trial: '個人的に試している程度',
+  partial: '一部業務で活用中',
+  active: '組織的に活用中',
+}
+
+const INDUSTRY_LABELS: Record<string, string> = {
+  accommodation: '宿泊業（ペンション・旅館・ホテル）',
+  restaurant: '飲食業（カフェ・レストラン）',
+  construction: '建設業（工務店・リフォーム）',
+  winery: '醸造所（ワイナリー・ブルワリー）',
+  outdoor: 'アウトドア・観光ガイド',
+  bakery: 'パン屋・菓子製造',
+  agriculture: '農業・畜産業',
+  retail: '小売業',
+  service: 'サービス業',
+  manufacturing: '製造業',
+  municipality: '自治体・公共機関',
+  other: 'その他',
+}
+
+const CHALLENGE_LABELS: Record<string, string> = {
+  'no-idea': '何に使えるかわからない',
+  'cost': 'コストが心配',
+  'security': 'セキュリティが不安',
+  'no-skill': '社内にスキルがない',
+  'no-time': '導入する時間がない',
+  'no-effect': '効果が見えない',
+}
+
+const INTEREST_LABELS: Record<string, string> = {
+  'customer-support': '顧客対応・問い合わせ',
+  'marketing': '集客・マーケティング',
+  'accounting': '経理・事務作業',
+  'content': 'SNS・コンテンツ作成',
+  'inventory': '在庫・仕入れ管理',
+  'scheduling': '予約・スケジュール管理',
+  'analysis': 'データ分析・レポート',
+  'training': '社員教育・マニュアル',
+  'other': 'その他',
+}
+
+const BUDGET_LABELS: Record<string, string> = {
+  'under-30': '〜30万円（小さく試したい）',
+  '30-60': '30〜60万円（本格導入を検討）',
+  '60-100': '60〜100万円（複数業務を一括）',
+  '100-plus': '100万円以上（経営課題として取り組む）',
+  'undecided': 'まだ分からない・相談したい',
+}
+
+// ===== 課題ごとの「必ず触れるべき観点」を返す =====
+function challengeGuidance(challenges: string[]): string {
+  const c = new Set(challenges || [])
+  const lines: string[] = []
+  if (c.has('no-idea')) lines.push('- 「何に使えるかわからない」が選択されたため、業種に典型的な AI 活用シーン 2〜3 例を必ず提示してください')
+  if (c.has('cost')) lines.push('- 「コストが心配」が選択されたため、月額費用のレンジ（数千円〜数万円程度）と無料試用の範囲に必ず触れてください')
+  if (c.has('security')) lines.push('- 「セキュリティが不安」が選択されたため、機密情報の取り扱い指針（クラウド送信回避・ローカル LLM 等の選択肢）に必ず触れてください')
+  if (c.has('no-skill')) lines.push('- 「社内にスキルがない」が選択されたため、初期構築は外部支援前提・運用は伴走で内製化していく段階設計を提示してください')
+  if (c.has('no-time')) lines.push('- 「導入する時間がない」が選択されたため、最初の 1 ヶ月で着手できる小さな単位（1 業務・週 30 分削減等）から始める方針を提示してください')
+  if (c.has('no-effect')) lines.push('- 「効果が見えない」が選択されたため、ROI 試算（時間削減 × 時給換算）と 3 ヶ月後の評価指標を必ず提示してください')
+  return lines.length ? lines.join('\n') : '- 課題は未選択。汎用的な観点で構成してください'
+}
+
+// ===== 予算レンジに応じた提案上限の指針 =====
+function budgetGuidance(budget?: string): string {
+  switch (budget) {
+    case 'under-30':
+      return '初期費用 30 万円以内で実現可能な「1 業務 1 ツール導入」レベルの提案に絞ってください。複数業務統合・カスタム業務システムは提案外。'
+    case '30-60':
+      return '初期費用 30〜60 万円で実現可能な「1〜2 業務の本格導入＋簡易な運用設計」レベルで提案してください。'
+    case '60-100':
+      return '初期費用 60〜100 万円で実現可能な「複数業務の一括導入＋運用ルール整備」レベルで提案してください。'
+    case '100-plus':
+      return '初期費用 100 万円以上前提で、業務横断の本格 AI 活用基盤・専用業務システム構築を含めて提案して構いません。'
+    case 'undecided':
+    case '':
+    case undefined:
+      return '予算未定のため、3 段階（小さく試す／本格導入／経営課題として取り組む）でレンジ別の提案を併記してください。'
+    default:
+      return ''
+  }
+}
+
+// ===== AI 活用段階に応じた解説深度の指針 =====
+function aiLevelGuidance(level?: string): string {
+  switch (level) {
+    case 'none':
+    case 'interest':
+      return '初心者向けに、AI で何ができるかの基本概念から丁寧に解説してください。専門用語には必ず補足を入れる。'
+    case 'trial':
+      return '個人試用経験ありの想定で、業務適用にステップアップする際の注意点（情報セキュリティ・運用設計）を厚めに。'
+    case 'partial':
+      return '既に一部業務で活用中の想定で、組織展開・属人化解消・ROI 可視化の観点を厚めに。'
+    case 'active':
+      return '組織活用中の想定で、より高度な統合・自動化・社内ガバナンス観点を厚めに。基本概念の解説は最小限に。'
+    default:
+      return '汎用的な解説深度で構成してください。'
+  }
+}
+
 // ===== Claude API: レポート内容生成 =====
 async function generateDiagnosis(lead: any) {
   const systemPrompt = `
@@ -159,24 +262,43 @@ async function generateDiagnosis(lead: any) {
 - 「〜と考えられます」「〜が効きそうです」のような方向性表現を使う
 - 補助金は名称のみ（申請支援は業務範囲外と明示）
 - 出力は JSON Schema に厳密に従う
+- 提供される【課題別ガイダンス】【予算ガイダンス】【AI活用段階ガイダンス】を必ず反映する
 `.trim()
+
+  // ラベル変換
+  const industryLabel = INDUSTRY_LABELS[lead.industry] || lead.industry || '（未入力）'
+  const aiLevelLabel = AI_LEVEL_LABELS[lead.ai_level] || lead.ai_level || '（未入力）'
+  const challengesLabeled = (lead.challenges || []).map((c: string) => CHALLENGE_LABELS[c] || c).join('、') || '（未選択）'
+  const interestsLabeled = (lead.interests || []).map((i: string) => INTEREST_LABELS[i] || i).join('、') || '（未選択）'
+  const interestsOtherText = lead.interests_other ? `（その他自由記述: ${lead.interests_other}）` : ''
+  const budgetLabel = BUDGET_LABELS[lead.budget_range] || '（未入力）'
 
   const userPrompt = `
 以下のフォーム入力をもとに、JSON 形式で診断レポート内容を生成してください。
 
 【会社情報】
 会社名: ${lead.company_name}
-業種: ${lead.industry}
-従業員数: ${lead.employee_count}
-AI活用状況: ${lead.ai_level}
+業種: ${industryLabel}
+従業員数: ${lead.employee_count || '（未入力）'}
+AI活用状況: ${aiLevelLabel}
+想定予算: ${budgetLabel}
 
 【業務情報】
 事業内容: ${lead.business_description || '（未入力）'}
 日常業務: ${lead.daily_tasks || '（未入力）'}
 使用中ツール: ${lead.current_tools || '（未入力）'}
-課題: ${(lead.challenges || []).join(', ')}
-関心事: ${(lead.interests || []).join(', ')}
+課題: ${challengesLabeled}
+関心事: ${interestsLabeled}${interestsOtherText}
 自由記述: ${lead.free_text || '（未入力）'}
+
+【課題別ガイダンス（必ず反映）】
+${challengeGuidance(lead.challenges || [])}
+
+【予算ガイダンス（必ず反映）】
+${budgetGuidance(lead.budget_range)}
+
+【AI活用段階ガイダンス（必ず反映）】
+${aiLevelGuidance(lead.ai_level)}
 
 JSON Schema:
 ${JSON.stringify(DIAGNOSIS_SCHEMA, null, 2)}

@@ -291,7 +291,7 @@ function buildPaymentConfirmedEmail(app: PendingApplication): string {
   return `${app.company_name} ${app.person_name} 様
 
 合同会社Optiensです。
-詳細AI診断のお振込を確認いたしました。
+【詳細版】AI活用診断のお振込を確認いたしました。
 ありがとうございます。
 
 申込番号: ${app.application_id}
@@ -299,7 +299,7 @@ function buildPaymentConfirmedEmail(app: PendingApplication): string {
 
 これより詳細レポートの作成プロセスに入ります。
 5営業日以内に下記をお届けします。
-- 詳細レポート（5〜8ページ・PDF）
+- 詳細レポート（PDF）
 - 60分オンラインMTGの日程調整リンク
 
 レポート作成中、追加でヒアリングが必要な場合は別途ご連絡いたします。
@@ -315,7 +315,7 @@ function buildPaymentConfirmedEmailHtml(app: PendingApplication): string {
   const safePerson = escapeHtml(app.person_name)
   return `<div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${safeCompany} ${safePerson} 様</p>
-<p>合同会社Optiensです。<br/>詳細AI診断のお振込を確認いたしました。ありがとうございます。</p>
+<p>合同会社Optiensです。<br/>【詳細版】AI活用診断のお振込を確認いたしました。ありがとうございます。</p>
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#D1FAE5;border:1px solid #6EE7B7;border-radius:8px;">
   <tr><td style="padding:8px 14px;font-weight:bold;width:140px;">申込番号</td><td style="padding:8px 14px;font-family:monospace;color:#065F46;font-weight:bold;">${escapeHtml(app.application_id)}</td></tr>
@@ -325,7 +325,7 @@ function buildPaymentConfirmedEmailHtml(app: PendingApplication): string {
 
 <p>これより詳細レポートの作成プロセスに入ります。<br/>5営業日以内に下記をお届けします。</p>
 <ul style="margin:0 0 16px;padding-left:20px;">
-  <li>詳細レポート（5〜8ページ・PDF）</li>
+  <li>詳細レポート（PDF）</li>
   <li>60分オンラインMTGの日程調整リンク</li>
 </ul>
 <p style="font-size:13px;color:#64748b;">レポート作成中、追加でヒアリングが必要な場合は別途ご連絡いたします。</p>
