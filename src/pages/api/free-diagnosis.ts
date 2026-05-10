@@ -10,7 +10,7 @@ import {
   buildVerificationEmailHtml,
 } from '../../lib/diagnosis-verification'
 
-const MONTHLY_DIAGNOSIS_LIMIT = 30  // AI活用診断（無料版）の月次上限
+const MONTHLY_DIAGNOSIS_LIMIT = 30  // 【簡易版】AI活用診断 の月次上限
 
 const SITE_URL = (import.meta.env.SITE_URL || 'https://optiens.com').replace(/\/$/, '')
 
@@ -150,7 +150,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
       if (monthlyCount >= MONTHLY_DIAGNOSIS_LIMIT) {
         await logSubmission(supabase, { ip, email, userAgent, result: 'rate_limited' })
         return json({
-          error: '今月のAI活用診断（無料版）枠は終了しました（毎月1日にリセット）。お急ぎの場合は【詳細版】AI活用診断（¥5,500税込）をご検討ください。',
+          error: '今月の【簡易版】AI活用診断 枠は終了しました（毎月1日にリセット）。お急ぎの場合は【詳細版】AI活用診断（¥5,500税込）をご検討ください。',
         }, 429)
       }
     }
@@ -260,7 +260,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
     // ---- メール通知（CEOに届く） ----
     if (resend && MAIL_TO) {
       const htmlBody = `
-<h2>🔍 ${plan === 'paid' ? '【詳細版】AI活用診断' : 'AI活用診断（無料版）'} 申し込み</h2>
+<h2>🔍 ${plan === 'paid' ? '【詳細版】AI活用診断' : '【簡易版】AI活用診断'} 申し込み</h2>
 <p style="color:${plan === 'paid' ? '#1F3A93' : '#475569'};font-weight:bold;font-size:14px;">プラン: ${planLabel}${plan === 'paid' ? ' ／ ステータス: 入金待ち（自動検知）' : ''}</p>
 <p style="background:#EEF2FF;padding:8px 14px;border-radius:6px;font-family:monospace;font-size:14px;">申込番号: <strong style="color:#1F3A93;font-size:16px;">${applicationId}</strong></p>
 <table style="border-collapse:collapse;font-family:system-ui,sans-serif;">
@@ -287,7 +287,7 @@ ${plan === 'paid' ? `<hr style="margin:20px 0;"/><p style="background:#D1FAE5;pa
       `.trim()
 
       const textBody = [
-        `${plan === 'paid' ? '【詳細版】AI活用診断' : 'AI活用診断（無料版）'} 申し込み`,
+        `${plan === 'paid' ? '【詳細版】AI活用診断' : '【簡易版】AI活用診断'} 申し込み`,
         `申込番号: ${applicationId}`,
         plan === 'paid' ? '✅ 振込先案内メールは自動送信済み。入金検知後にレポート作成へ進んでください' : '',
         `企業名: ${companyName}`,

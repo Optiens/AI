@@ -16,22 +16,43 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { Resend } from 'https://esm.sh/resend@3'
 import Anthropic from 'https://esm.sh/@anthropic-ai/sdk@0.27'
 
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
-const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
-const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY')!
+// 環境変数（! を外して空文字を許容、初期化時に検証）
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || ''
+const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || ''
+const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY') || ''
 
-const GOOGLE_SLIDES_TEMPLATE_ID = Deno.env.get('GOOGLE_SLIDES_TEMPLATE_ID')!
-const GOOGLE_SERVICE_ACCOUNT_EMAIL = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_EMAIL')!
-const GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY')!
+const GOOGLE_SLIDES_TEMPLATE_ID = Deno.env.get('GOOGLE_SLIDES_TEMPLATE_ID') || ''
+const GOOGLE_SERVICE_ACCOUNT_EMAIL = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_EMAIL') || ''
+const GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY') || ''
 
 const ADMIN_EMAIL = 'admin@optiens.com'
 const FROM_EMAIL = 'no-reply@optiens.com'
 const MONTHLY_LIMIT = 30
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
-const resend = new Resend(RESEND_API_KEY)
-const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY })
+/**
+ * 環境変数の不足を検出して明示的なエラーを返す。
+ * 起動時ではなくリクエスト時に評価することで、
+ * 一部の env 不足で他の機能（Resend 経由の admin 通知など）まで死ぬのを防ぐ。
+ */
+function checkRequiredEnv(): string[] {
+  const missing: string[] = []
+  if (!SUPABASE_URL) missing.push('SUPABASE_URL')
+  if (!SUPABASE_SERVICE_KEY) missing.push('SUPABASE_SERVICE_ROLE_KEY')
+  if (!RESEND_API_KEY) missing.push('RESEND_API_KEY')
+  if (!ANTHROPIC_API_KEY) missing.push('ANTHROPIC_API_KEY')
+  if (!GOOGLE_SLIDES_TEMPLATE_ID) missing.push('GOOGLE_SLIDES_TEMPLATE_ID')
+  if (!GOOGLE_SERVICE_ACCOUNT_EMAIL) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL')
+  if (!GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY) missing.push('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY')
+  return missing
+}
+
+// クライアントは env が揃っている場合のみ初期化（不足時は null）
+const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
+  ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+  : null
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null
+const anthropic = ANTHROPIC_API_KEY ? new Anthropic({ apiKey: ANTHROPIC_API_KEY }) : null
 
 // ===== JSON Schema =====
 const DIAGNOSIS_SCHEMA = {
@@ -77,6 +98,30 @@ const DIAGNOSIS_SCHEMA = {
 // ===== Main Handler =====
 Deno.serve(async (req: Request) => {
   try {
+    // 環境変数の事前チェック（早期失敗 + 親切なエラーメッセージ）
+    const missing = checkRequiredEnv()
+    if (missing.length > 0) {
+      const errMsg = `Edge Function 環境変数が未設定: ${missing.join(', ')}\n\n` +
+        `修正手順:\n` +
+        `1. Supabase Dashboard → Project Settings → Edge Functions → Manage Secrets\n` +
+        `2. 上記の名前で値を設定（例: ANTHROPIC_API_KEY=sk-ant-... ）\n` +
+        `3. supabase functions deploy process-diagnosis または再デプロイ不要（次回実行から反映）\n\n` +
+        `参照: https://supabase.com/docs/guides/functions/secrets`
+      console.error('[process-diagnosis] env_missing:', missing.join(','))
+      // resend が使えるなら admin 通知
+      if (resend) {
+        try {
+          await resend!.emails.send({
+            from: `Optiens System <${FROM_EMAIL}>`,
+            to: [ADMIN_EMAIL],
+            subject: '[Optiens Auto-Diagnosis] 環境変数未設定（要対応）',
+            text: errMsg,
+          })
+        } catch {}
+      }
+      return new Response(errMsg, { status: 500 })
+    }
+
     const payload = await req.json()
     const lead = payload.record  // Supabase Database Webhook 形式
 
@@ -93,7 +138,7 @@ Deno.serve(async (req: Request) => {
     await markStatus(lead.id, 'processing')
 
     // 月次上限チェック
-    const { count, error: countErr } = await supabase
+    const { count, error: countErr } = await supabase!
       .from('diagnosis_leads')
       .select('*', { count: 'exact', head: true })
       .in('status', ['completed', 'manual_review'])
@@ -128,7 +173,7 @@ Deno.serve(async (req: Request) => {
     await sendReportEmail(lead, slidesUrl)
 
     // Supabase 更新
-    await supabase.from('diagnosis_leads')
+    await supabase!.from('diagnosis_leads')
       .update({
         status: 'completed',
         slides_url: slidesUrl,
@@ -304,7 +349,7 @@ JSON Schema:
 ${JSON.stringify(DIAGNOSIS_SCHEMA, null, 2)}
 `.trim()
 
-  const response = await anthropic.messages.create({
+  const response = await anthropic!.messages.create({
     model: 'claude-haiku-4-5-20251001',  // コスト重視（高品質が必要なら sonnet)
     max_tokens: 2000,
     system: systemPrompt,
@@ -498,7 +543,7 @@ async function createJWT(): Promise<string> {
 
 // ===== レポートメール送信 =====
 async function sendReportEmail(lead: any, slidesUrl: string) {
-  await resend.emails.send({
+  await resend!.emails.send({
     from: `Optiens <${FROM_EMAIL}>`,
     to: [lead.email],
     subject: `【Optiens】AI活用診断レポートが完成しました`,
@@ -532,12 +577,12 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 
 // ===== ヘルパー =====
 async function markStatus(leadId: string, status: string) {
-  await supabase.from('diagnosis_leads').update({ status }).eq('id', leadId)
+  await supabase!.from('diagnosis_leads').update({ status }).eq('id', leadId)
 }
 
 async function notifyAdmin(subject: string, body: string) {
   try {
-    await resend.emails.send({
+    await resend!.emails.send({
       from: `Optiens System <${FROM_EMAIL}>`,
       to: [ADMIN_EMAIL],
       subject: `[Optiens Auto-Diagnosis] ${subject}`,
