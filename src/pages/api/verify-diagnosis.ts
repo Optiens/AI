@@ -76,14 +76,21 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   if (!token) {
+    console.error('[verify-diagnosis][POST] no_token_in_post', {
+      contentType: request.headers.get('content-type'),
+    })
     return htmlResponse(buildVerificationErrorPage('invalid', 'no_token_in_post'), 400)
   }
+
+  // デバッグ用 token プレフィックス（生 token はログに出さない）
+  const tokenPrefix = token.length >= 8 ? token.slice(0, 8) : token
+  const tokenInfo = `len=${token.length},prefix=${tokenPrefix}`
 
   let supabase
   try {
     supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
   } catch (err: any) {
-    console.error('[verify-diagnosis][POST] supabase client init failed:', err)
+    console.error('[verify-diagnosis][POST] supabase client init failed:', err, tokenInfo)
     return htmlResponse(
       buildVerificationErrorPage('server', `client_init: ${err?.message || String(err)}`),
       500,
@@ -100,7 +107,7 @@ export const POST: APIRoute = async ({ request }) => {
       .maybeSingle()
 
     if (error) {
-      console.error('[verify-diagnosis][POST] select error:', error)
+      console.error('[verify-diagnosis][POST] select error:', error, tokenInfo)
       return htmlResponse(
         buildVerificationErrorPage('server', `select: ${error.message} (code=${error.code})`),
         500,
@@ -108,7 +115,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
     lead = data as typeof lead
   } catch (err: any) {
-    console.error('[verify-diagnosis][POST] select threw:', err)
+    console.error('[verify-diagnosis][POST] select threw:', err, tokenInfo)
     return htmlResponse(
       buildVerificationErrorPage('server', `select_throw: ${err?.message || String(err)}`),
       500,
@@ -116,7 +123,27 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   if (!lead) {
-    return htmlResponse(buildVerificationErrorPage('invalid', 'token_not_found_or_used'), 404)
+    // 根本原因切り分け用: 最近の token 持ち件数 + token NULL 件数を取得（個人情報なし）
+    let diagnostics = ''
+    try {
+      const sinceIso = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      const { count: activeTokenCount } = await supabase
+        .from('diagnosis_leads')
+        .select('*', { count: 'exact', head: true })
+        .not('verification_token', 'is', null)
+        .gte('created_at', sinceIso)
+      const { count: verifiedRecentCount } = await supabase
+        .from('diagnosis_leads')
+        .select('*', { count: 'exact', head: true })
+        .not('verified_at', 'is', null)
+        .gte('verified_at', new Date(Date.now() - 10 * 60 * 1000).toISOString())
+      diagnostics = `active_tokens_24h=${activeTokenCount ?? '?'},recently_verified_10min=${verifiedRecentCount ?? '?'}`
+    } catch {}
+    console.error('[verify-diagnosis][POST] token_not_found_or_used', tokenInfo, diagnostics)
+    return htmlResponse(
+      buildVerificationErrorPage('invalid', `token_not_found_or_used (${tokenInfo}; ${diagnostics})`),
+      404,
+    )
   }
 
   // 既に認証済み
