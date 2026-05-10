@@ -501,7 +501,7 @@ async function sendReportEmail(lead: any, slidesUrl: string) {
   await resend.emails.send({
     from: `Optiens <${FROM_EMAIL}>`,
     to: [lead.email],
-    subject: `【Optiens】無料AI活用診断レポートが完成しました`,
+    subject: `【Optiens】AI活用診断レポートが完成しました`,
     html: buildReportEmailHtml(lead, slidesUrl),
   })
 }
@@ -510,7 +510,7 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
   return `
 <div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${escapeHtml(lead.company_name)} ${escapeHtml(lead.person_name)} 様</p>
-<p>合同会社Optiensです。<br/>無料AI活用診断のお申し込みありがとうございます。</p>
+<p>合同会社Optiensです。<br/>AI活用診断のお申し込みありがとうございます。</p>
 <p>診断レポートが完成しましたので、下記URLよりご覧ください。</p>
 <p style="margin:24px 0;">
   <a href="${slidesUrl}" style="display:inline-block;padding:12px 24px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">レポートを開く</a>
@@ -518,7 +518,7 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 <p style="font-size:13px;color:#666;">
   ※ レポートは Google Slides で表示されます。スマートフォン・PC のブラウザでご覧いただけます。<br/>
   ※ より詳細な分析（アーキテクチャ図・個別自動化提案・導入見積など）をご希望の方は、
-  <a href="https://optiens.com/free-diagnosis?paid=1">詳細レポート（¥5,500税込）</a>もご検討ください。
+  <a href="https://optiens.com/free-diagnosis?paid=1">【詳細版】AI活用診断（¥5,500税込）</a>もご検討ください。
 </p>
 <hr style="margin:32px 0;border:none;border-top:1px solid #ddd;"/>
 <p style="font-size:12px;color:#999;">
