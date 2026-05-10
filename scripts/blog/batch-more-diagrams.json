@@ -1,0 +1,122 @@
+[
+  {
+    "slug": "diagrams/process-mapping",
+    "prompt": "Conceptual editorial illustration: an abstract flow chart with multiple connected process boxes and decision diamonds. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/value-stream-map",
+    "prompt": "Conceptual editorial illustration: a horizontal value stream with process boxes and time indicators. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/swot-matrix",
+    "prompt": "Conceptual editorial illustration: a 2x2 grid labeled with abstract markers in four quadrants. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/stakeholder-map",
+    "prompt": "Conceptual editorial illustration: concentric circles with abstract stakeholder dots positioned at varying distances from center. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/customer-journey",
+    "prompt": "Conceptual editorial illustration: a horizontal journey path with five touchpoint markers and emotion indicators. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/persona-card",
+    "prompt": "Conceptual editorial illustration: a clean abstract persona card with placeholder avatar circle and attribute bars. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/competitive-positioning",
+    "prompt": "Conceptual editorial illustration: a 2x2 quadrant chart with multiple positioned dots representing competitors. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/maturity-model-5-levels",
+    "prompt": "Conceptual editorial illustration: five ascending blocks of increasing height representing maturity levels. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/business-model-canvas",
+    "prompt": "Conceptual editorial illustration: a clean nine-section grid layout for business model canvas template. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/okr-tree",
+    "prompt": "Conceptual editorial illustration: a tree diagram with one objective at top branching to multiple key results. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/kpi-dashboard",
+    "prompt": "Conceptual editorial illustration: four large stat cards arranged in a 2x2 grid with abstract metric numbers. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/funnel-conversion-rates",
+    "prompt": "Conceptual editorial illustration: a stepped funnel with conversion rate percentages at each stage. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/cohort-heatmap",
+    "prompt": "Conceptual editorial illustration: a heat map matrix with cells in varying shades of color representing cohort retention. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/trend-line-with-target",
+    "prompt": "Conceptual editorial illustration: a line chart with an actual line and a dashed target line overlay. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/distribution-histogram",
+    "prompt": "Conceptual editorial illustration: a histogram bar chart with normal distribution bell shape. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/correlation-scatter",
+    "prompt": "Conceptual editorial illustration: a scatter plot with multiple dots showing positive correlation pattern. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/forecast-confidence",
+    "prompt": "Conceptual editorial illustration: a line chart with a forecast line surrounded by a shaded confidence interval band. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/benchmark-comparison",
+    "prompt": "Conceptual editorial illustration: a horizontal bar chart comparing your value vs benchmark line. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/pareto-chart",
+    "prompt": "Conceptual editorial illustration: a Pareto chart with bars in descending order and a cumulative percentage line. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/spider-radar-chart",
+    "prompt": "Conceptual editorial illustration: a radar spider chart with five axes and a polygon fill. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/three-horizon-strategy",
+    "prompt": "Conceptual editorial illustration: three horizontal bands stacked representing three time horizons of strategic planning. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/portfolio-matrix",
+    "prompt": "Conceptual editorial illustration: a 2x2 portfolio matrix with abstract circles of varying sizes in each quadrant. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/value-chain",
+    "prompt": "Conceptual editorial illustration: a horizontal value chain with primary activities boxes and support activities above. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/governance-pyramid",
+    "prompt": "Conceptual editorial illustration: a three-tier pyramid representing governance hierarchy. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/raci-matrix",
+    "prompt": "Conceptual editorial illustration: a clean grid matrix labeled with R/A/C/I cells in different colors. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/skill-matrix",
+    "prompt": "Conceptual editorial illustration: a grid matrix with skill levels indicated by colored cells. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/risk-heatmap",
+    "prompt": "Conceptual editorial illustration: a 5x5 heat map grid with risks plotted as dots in various cells. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/scenario-planning",
+    "prompt": "Conceptual editorial illustration: a 2x2 scenario quadrant with named future state markers. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/transformation-roadmap",
+    "prompt": "Conceptual editorial illustration: a horizontal roadmap with three phases and multiple workstream lanes. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/balanced-scorecard",
+    "prompt": "Conceptual editorial illustration: a four-quadrant balanced scorecard layout with perspectives and metrics. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber and cream palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  }
+]

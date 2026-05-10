@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "home/section-philosophy",
+    "prompt": "Editorial photographic illustration: a quiet zen-like minimal scene with a single stone balanced on a wooden surface, soft natural light. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "home/section-service",
+    "prompt": "Editorial photographic illustration: a clean wooden desk with three soft glowing service icons floating above. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "home/section-process",
+    "prompt": "Editorial photographic illustration: three connected wooden stepping stones leading toward a sunrise horizon. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "home/section-results",
+    "prompt": "Editorial photographic illustration: an abstract ascending arrow with three milestone glow markers. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "home/section-trust",
+    "prompt": "Editorial photographic illustration: two abstract human silhouettes meeting in a handshake gesture in soft warm light. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "service/banner-diagnosis",
+    "prompt": "Editorial photographic illustration: a clean wooden desk with an open notebook and a softly glowing tablet, sense of careful diagnosis. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "service/banner-implementation",
+    "prompt": "Editorial photographic illustration: careful hands placing a small wooden block onto a precision built tower (no faces), sense of careful build. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "service/banner-maintenance",
+    "prompt": "Editorial photographic illustration: a softly glowing gear icon being maintained by a single careful hand (no faces), sense of ongoing care. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "service/banner-consultation",
+    "prompt": "Editorial photographic illustration: two empty chairs facing each other with a softly glowing table lamp between them, warm welcoming consultation atmosphere. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "service/banner-success",
+    "prompt": "Editorial photographic illustration: a single softly glowing finish line ribbon with subtle confetti motion, sense of achievement. Wide horizontal banner composition, deep navy and warm amber and cream palette, minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  }
+]

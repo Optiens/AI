@@ -1,0 +1,34 @@
+[
+  {
+    "slug": "errors/error-404",
+    "prompt": "Editorial photographic illustration: an empty path with a small signpost pointing back, sense of lost direction but with hope of returning. Wide horizontal composition for error page banner, deep navy and warm amber and cream palette (no harsh red), minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "errors/error-500",
+    "prompt": "Editorial photographic illustration: a softly glowing wrench icon with subtle gears, sense of being under repair. Wide horizontal composition for error page banner, deep navy and warm amber and cream palette (no harsh red), minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "errors/error-403",
+    "prompt": "Editorial photographic illustration: a closed traditional Japanese gate with a soft warm light from behind, sense of restricted access. Wide horizontal composition for error page banner, deep navy and warm amber and cream palette (no harsh red), minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "errors/error-maintenance",
+    "prompt": "Editorial photographic illustration: a calm scene with a soft glowing maintenance icon and a tea cup, sense of brief pause. Wide horizontal composition for error page banner, deep navy and warm amber and cream palette (no harsh red), minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "errors/error-offline",
+    "prompt": "Editorial photographic illustration: a softly glowing lantern in a dim space, sense of waiting for connection to return. Wide horizontal composition for error page banner, deep navy and warm amber and cream palette (no harsh red), minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "errors/error-rate-limit",
+    "prompt": "Editorial photographic illustration: an hourglass with sand mid-flow, sense of a brief wait before retry. Wide horizontal composition for error page banner, deep navy and warm amber and cream palette (no harsh red), minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "errors/error-form-invalid",
+    "prompt": "Editorial photographic illustration: a clean form with a single highlighted field needing attention. Wide horizontal composition for error page banner, deep navy and warm amber and cream palette (no harsh red), minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  },
+  {
+    "slug": "errors/error-payment-failed",
+    "prompt": "Editorial photographic illustration: a softly glowing card with a gentle question mark, sense of needing attention. Wide horizontal composition for error page banner, deep navy and warm amber and cream palette (no harsh red), minimal Japanese aesthetic, no readable text, no logos, no faces, photorealistic editorial style with soft natural lighting, 16:9"
+  }
+]

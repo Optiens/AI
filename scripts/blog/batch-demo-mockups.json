@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "demo/dashboard-executive",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean modern executive dashboard with three large stat cards on top showing abstract metrics, two graph areas below, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-sales",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean sales dashboard with a pipeline funnel visualization on the left and a bar chart on the right, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-marketing",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean marketing dashboard with channel attribution donut chart and time series line chart, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-operations",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean operations dashboard with task completion progress bars and uptime indicator gauges, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-finance",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean finance dashboard with revenue chart and expense breakdown table, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-customer",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean customer dashboard with customer health score cards and engagement timeline, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-inventory",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean inventory dashboard with stock level indicators and reorder suggestions, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-quality",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean quality monitoring dashboard with defect rate trend and inspection results grid, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-hr",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean HR dashboard with employee count cards and recruitment funnel chart, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-iot-sensor",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean IoT sensor dashboard with multiple gauge readings and alert status indicators, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/chat-customer-support",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean customer support chat interface with bubbles in alternating blue and gray, AI assistant icon, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/chat-internal-helper",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean internal helper chat interface with quick reply suggestions, AI agent badge, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/chat-multi-agent",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean chat interface with three different colored agent avatars contributing to a conversation, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/agent-config-screen",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean agent configuration screen with skill toggle list and connection status indicators, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/prompt-template-library",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean prompt template library interface with category sidebar and template cards in a grid, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/ai-task-queue",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean AI task queue interface with running and completed task rows, status pills, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/agent-performance-monitor",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean agent performance monitoring screen with response time graph and accuracy meter, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/knowledge-base-search",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean knowledge base search interface with search bar and result cards, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/conversation-history",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean conversation history interface with timeline list of past chats, search filter, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/feedback-collection",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean feedback collection interface with rating stars and comment box, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/order-management",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean order management interface with order list table and status filter pills, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/customer-database",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean customer database interface with searchable list and detail panel on the right, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/document-editor",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean document editor interface with formatting toolbar and a document area with placeholder text blocks, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/approval-workflow",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean approval workflow interface with three-stage horizontal flow indicator and pending request list, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/calendar-scheduler",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean calendar scheduler interface with month grid view and event cards, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/task-board-kanban",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean kanban task board interface with three column lanes (todo / doing / done) and task cards, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/inventory-tracker",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean inventory tracker interface with item rows showing stock levels and reorder buttons, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/invoice-generator",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean invoice generator interface with line item editor and total amount panel, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/employee-shift",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean employee shift management interface with weekly grid and shift assignment cells, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/equipment-maintenance",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean equipment maintenance log interface with timeline of inspection records, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/sales-trend-analysis",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean sales trend analysis screen with line chart and YoY comparison bars, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/customer-segmentation",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean customer segmentation analysis screen with quadrant scatter plot, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/cohort-retention",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean cohort retention analysis screen with heat map matrix, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/funnel-conversion",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean funnel conversion analysis screen with stepped funnel visualization, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/ab-test-results",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean A/B test results screen with two variant cards and statistical significance indicator, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/forecast-projection",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean forecast projection screen with line chart extending into a faded future zone, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/anomaly-detection",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean anomaly detection screen with time series line chart and highlighted anomaly markers, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/text-sentiment-summary",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean text sentiment analysis summary screen with three colored bars, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/dashboard-builder",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean dashboard builder interface with drag-and-drop widget palette and grid canvas, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/scheduled-report-list",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean scheduled report list interface with report rows and next run time, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/mobile-app-home",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean mobile app home screen mockup in portrait orientation, with three feature cards and a primary action button, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/mobile-form-input",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean mobile form input screen mockup in portrait, with three text fields and a submit button, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/mobile-notification",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean mobile notification screen mockup with three notification cards, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/mobile-onboarding",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean mobile onboarding screen mockup with illustration area, title, description, and next button, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/mobile-chat",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean mobile chat interface mockup with chat bubbles and input area at bottom, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/login-screen",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean modern login screen mockup with logo placeholder, email and password fields, primary button, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/onboarding-tour",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean onboarding tour overlay mockup with step indicator and tooltip card, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/empty-state",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean empty state screen mockup with centered illustration placeholder and action button, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/error-state",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean error state screen mockup with centered icon, title, and retry button, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  },
+  {
+    "slug": "demo/settings-page",
+    "prompt": "Editorial photographic mockup illustration on a desk with subtle keyboard shadow at the corner: a clean settings page interface with grouped option rows and toggle switches, soft daylight, deep navy and warm cream palette, no readable text on screen elements (use placeholder shapes only), no logos, no faces, minimal Japanese aesthetic, photorealistic editorial style, 16:9 wide composition"
+  }
+]

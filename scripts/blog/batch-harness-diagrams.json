@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "harness/permission-minimization",
+    "prompt": "Conceptual editorial illustration: an abstract figure surrounded by glowing concentric rings showing permission boundaries narrowing inward. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/permission-config",
+    "prompt": "Conceptual editorial illustration: a clean control panel interface with toggle switches for permission settings. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/permission-deny",
+    "prompt": "Conceptual editorial illustration: a glowing red barrier blocking a path with a clear stop indicator. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/human-approval",
+    "prompt": "Conceptual editorial illustration: a human hand approving a glowing card with a check mark, sense of human-in-the-loop. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/approval-flow-3-stage",
+    "prompt": "Conceptual editorial illustration: three sequential boxes connected by arrows with the middle box showing a human icon. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/approval-pending",
+    "prompt": "Conceptual editorial illustration: a glowing notification badge over an inbox with a single pending request. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/structured-output",
+    "prompt": "Conceptual editorial illustration: an abstract JSON-like structure with clean nested boxes and consistent formatting. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/schema-validation",
+    "prompt": "Conceptual editorial illustration: a checkmark passing through a structured grid filter, suggesting schema validation. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/output-rejected",
+    "prompt": "Conceptual editorial illustration: a malformed shape being rejected by a clean filter grid. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/cost-budget",
+    "prompt": "Conceptual editorial illustration: a glowing budget gauge meter with a clear safe zone indicator. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/cost-alert",
+    "prompt": "Conceptual editorial illustration: a warning bell icon glowing softly above a rising cost line. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/hard-limit",
+    "prompt": "Conceptual editorial illustration: a circuit breaker icon with a clear cut-off indicator, abstract minimal. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/audit-log",
+    "prompt": "Conceptual editorial illustration: multiple stacked log entries with timestamps and clean status indicators. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/timeline-trace",
+    "prompt": "Conceptual editorial illustration: a horizontal timeline with multiple event markers and connecting lines. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "harness/anomaly-flag",
+    "prompt": "Conceptual editorial illustration: a single highlighted entry in a list of normal entries, glowing softly with attention indicator. Abstract minimal infographic design, no readable text, no logos, no faces, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  }
+]
