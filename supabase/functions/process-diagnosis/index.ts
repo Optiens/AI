@@ -14,13 +14,16 @@
  */
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { Resend } from 'https://esm.sh/resend@3'
-import Anthropic from 'https://esm.sh/@anthropic-ai/sdk@0.27'
+import OpenAI from 'https://esm.sh/openai@4'
+
+// LLM モデル（memory: feedback_default-llm-openai.md に準拠、最新モデルを使用）
+const OPENAI_MODEL = 'gpt-5.5'
 
 // 環境変数（! を外して空文字を許容、初期化時に検証）
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || ''
 const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || ''
-const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY') || ''
+const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY') || ''
 
 const GOOGLE_SLIDES_TEMPLATE_ID = Deno.env.get('GOOGLE_SLIDES_TEMPLATE_ID') || ''
 const GOOGLE_SERVICE_ACCOUNT_EMAIL = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_EMAIL') || ''
@@ -40,7 +43,7 @@ function checkRequiredEnv(): string[] {
   if (!SUPABASE_URL) missing.push('SUPABASE_URL')
   if (!SUPABASE_SERVICE_KEY) missing.push('SUPABASE_SERVICE_ROLE_KEY')
   if (!RESEND_API_KEY) missing.push('RESEND_API_KEY')
-  if (!ANTHROPIC_API_KEY) missing.push('ANTHROPIC_API_KEY')
+  if (!OPENAI_API_KEY) missing.push('OPENAI_API_KEY')
   if (!GOOGLE_SLIDES_TEMPLATE_ID) missing.push('GOOGLE_SLIDES_TEMPLATE_ID')
   if (!GOOGLE_SERVICE_ACCOUNT_EMAIL) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL')
   if (!GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY) missing.push('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY')
@@ -52,7 +55,7 @@ const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
   ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
   : null
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null
-const anthropic = ANTHROPIC_API_KEY ? new Anthropic({ apiKey: ANTHROPIC_API_KEY }) : null
+const openai = OPENAI_API_KEY ? new OpenAI({ apiKey: OPENAI_API_KEY }) : null
 
 // ===== JSON Schema =====
 const DIAGNOSIS_SCHEMA = {
@@ -104,8 +107,8 @@ Deno.serve(async (req: Request) => {
       const errMsg = `Edge Function 環境変数が未設定: ${missing.join(', ')}\n\n` +
         `修正手順:\n` +
         `1. Supabase Dashboard → Project Settings → Edge Functions → Manage Secrets\n` +
-        `2. 上記の名前で値を設定（例: ANTHROPIC_API_KEY=sk-ant-... ）\n` +
-        `3. supabase functions deploy process-diagnosis または再デプロイ不要（次回実行から反映）\n\n` +
+        `2. 上記の名前で値を設定（例: OPENAI_API_KEY=sk-... ）\n` +
+        `3. 再デプロイ不要（次回実行から反映）\n\n` +
         `参照: https://supabase.com/docs/guides/functions/secrets`
       console.error('[process-diagnosis] env_missing:', missing.join(','))
       // resend が使えるなら admin 通知
@@ -349,22 +352,27 @@ JSON Schema:
 ${JSON.stringify(DIAGNOSIS_SCHEMA, null, 2)}
 `.trim()
 
-  const response = await anthropic!.messages.create({
-    model: 'claude-haiku-4-5-20251001',  // コスト重視（高品質が必要なら sonnet)
-    max_tokens: 2000,
-    system: systemPrompt,
-    messages: [{ role: 'user', content: userPrompt }],
+  const response = await openai!.chat.completions.create({
+    model: OPENAI_MODEL,
+    max_completion_tokens: 2500,
+    response_format: { type: 'json_object' },
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
   })
 
-  const text = response.content
-    .filter((b: any) => b.type === 'text')
-    .map((b: any) => b.text)
-    .join('\n')
+  const text = response.choices[0]?.message?.content || ''
+  if (!text) throw new Error('Empty response from OpenAI')
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/)
-  if (!jsonMatch) throw new Error('No JSON found in Claude response')
-
-  return JSON.parse(jsonMatch[0])
+  // response_format=json_object なら基本そのまま JSON 文字列だが、フォールバックで regex 抽出
+  try {
+    return JSON.parse(text)
+  } catch {
+    const jsonMatch = text.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) throw new Error('No JSON found in OpenAI response')
+    return JSON.parse(jsonMatch[0])
+  }
 }
 
 // ===== バリデーション =====
