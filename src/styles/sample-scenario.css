@@ -13,7 +13,11 @@
 /* ========== Hero ========== */
 .hero-section {
   position: relative;
-  background: linear-gradient(180deg, #ffffff 0%, #F8FAFD 100%);
+  /* --hero-bg を inline style で渡すと背景画像 + 白オーバーレイで合成される */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 250, 253, 0.92) 100%),
+    var(--hero-bg, none) center/cover no-repeat,
+    linear-gradient(180deg, #ffffff 0%, #F8FAFD 100%);
   color: #0f172a;
   padding: clamp(110px, 14vw, 150px) 0 clamp(40px, 7vw, 64px);
   border-bottom: 1px solid rgba(31, 58, 147, 0.08);

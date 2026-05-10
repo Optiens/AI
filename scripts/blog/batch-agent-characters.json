@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "agents/agent-coo-portrait",
+    "prompt": "Stylized abstract portrait of a calm orchestra conductor figure standing in a warm light, minimal geometric shapes, no facial details, deep navy and warm amber palette, soft cream background, sense of organized leadership, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-coo-action",
+    "prompt": "Stylized abstract figure connecting multiple glowing nodes with thin light beams, suggesting orchestration of multiple agents, no facial details, deep navy and warm amber palette, soft cream background, sense of coordination, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cmo-portrait",
+    "prompt": "Stylized abstract portrait of a calm communicator figure with a soft glowing speech bubble motif, minimal geometric shapes, no facial details, deep navy and warm coral palette, soft cream background, sense of clear messaging, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cmo-action",
+    "prompt": "Stylized abstract figure surrounded by multiple soft floating speech bubbles and content cards, suggesting marketing communication, no facial details, deep navy and warm coral palette, soft cream background, sense of expressive reach, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cto-portrait",
+    "prompt": "Stylized abstract portrait of a thoughtful technical figure with subtle glowing circuit pattern in background, minimal geometric shapes, no facial details, deep navy and electric cyan palette, soft cream background, sense of careful technical thinking, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cto-action",
+    "prompt": "Stylized abstract figure assembling glowing geometric blocks into a structured tower, suggesting technical building, no facial details, deep navy and electric cyan palette, soft cream background, sense of careful engineering, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cfo-portrait",
+    "prompt": "Stylized abstract portrait of a precise analytical figure with a subtle ledger or grid motif in the background, minimal geometric shapes, no facial details, deep navy and warm gold palette, soft cream background, sense of disciplined finance, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cfo-action",
+    "prompt": "Stylized abstract figure stacking glowing coin-like discs into balanced columns, suggesting financial analysis, no facial details, deep navy and warm gold palette, soft cream background, sense of precise calculation, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cso-portrait",
+    "prompt": "Stylized abstract portrait of a strategic figure with a subtle compass and map motif in the background, minimal geometric shapes, no facial details, deep navy and warm sage green palette, soft cream background, sense of clear strategic vision, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cso-action",
+    "prompt": "Stylized abstract figure pointing toward a glowing horizon line with several path options branching outward, suggesting strategy planning, no facial details, deep navy and warm sage green palette, soft cream background, sense of forward thinking, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cro-portrait",
+    "prompt": "Stylized abstract portrait of a curious researcher figure with subtle magnifying glass motif and floating documents in background, minimal geometric shapes, no facial details, deep navy and warm violet palette, soft cream background, sense of careful investigation, square 1:1 composition, modern editorial illustration style, no text"
+  },
+  {
+    "slug": "agents/agent-cro-action",
+    "prompt": "Stylized abstract figure examining floating document cards with a glowing magnifying lens, suggesting research synthesis, no facial details, deep navy and warm violet palette, soft cream background, sense of analytical inquiry, square 1:1 composition, modern editorial illustration style, no text"
+  }
+]
