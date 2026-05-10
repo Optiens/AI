@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="ページが見つかりません | Optiens" description="お探しのページは見つかりませんでした。">
+  <main class="error-page light-section">
+    <div class="container">
+      <div class="error-inner">
+        <figure class="error-fig">
+          <img src="/images/errors/error-404.webp" alt="" loading="eager" />
+        </figure>
+        <p class="error-code">404</p>
+        <h1>お探しのページが見つかりませんでした</h1>
+        <p class="lead">
+          URL が変更されたか、削除された可能性があります。<br/>
+          下のリンクからお探しください。
+        </p>
+        <div class="error-actions">
+          <a href="/" class="btn-primary">トップページへ</a>
+          <a href="/blog" class="btn-ghost">ブログを見る</a>
+          <a href="/free-diagnosis" class="btn-ghost">AI活用診断へ</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .error-page {
+    padding: 100px 20px 60px;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+  }
+  .error-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .error-fig {
+    margin: 0 auto 24px;
+    max-width: 480px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface-card);
+  }
+  .error-fig img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+  .error-code {
+    font-family: 'SF Mono', 'Consolas', monospace;
+    font-size: 0.95rem;
+    color: var(--brand);
+    letter-spacing: .15em;
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .error-page h1 {
+    font-size: 1.6rem;
+    color: var(--brand);
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  .lead {
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.85;
+    margin-bottom: 32px;
+  }
+  .error-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary,
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--brand);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(31, 58, 147, .3);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--brand);
+    border: 1px solid var(--brand);
+  }
+  .btn-ghost:hover {
+    background: rgba(31, 58, 147, .06);
+  }
+  @media (max-width: 640px) {
+    .error-page h1 {
+      font-size: 1.3rem;
+    }
+    .error-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .error-actions a {
+      width: 100%;
+    }
+  }
+</style>

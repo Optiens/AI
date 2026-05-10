@@ -10,6 +10,45 @@
  *  - CTA: グラデ背景 + ピル形ボタン
  */
 
+/* ========== Before / After 図解 ========== */
+.ba-figure {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 0 0 28px;
+}
+.ba-figure figure {
+  margin: 0;
+  border: 1px solid rgba(31, 58, 147, 0.10);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.ba-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+}
+.ba-figure figcaption {
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1F3A93;
+  background: #F8FAFD;
+  border-top: 1px solid rgba(31, 58, 147, 0.08);
+}
+.ba-figure figure:first-child figcaption {
+  color: #C76A77;
+}
+@media (max-width: 640px) {
+  .ba-figure {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
 /* ========== Hero ========== */
 .hero-section {
   position: relative;
