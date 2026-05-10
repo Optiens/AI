@@ -61,38 +61,112 @@ export function buildVerificationEmailHtml(params: {
  *
  * 目的: メールセキュリティスキャナ（SafeLinks/Mimecast/Proofpoint等）が
  * リンクを先読みアクセスしてもtokenを消費しないよう、
- * ユーザーが画面のボタンをクリック（POST）するまでDBを変更しない。
+ * 人間のブラウザでのみ JavaScript で自動 POST して認証を完了させる。
+ *
+ * 動作:
+ * - JS 有効環境: ページ表示と同時に自動 POST → 同一画面で結果を表示（画面遷移なし）
+ * - JS 無効環境: <noscript> フォーム submit ボタンを表示（フォールバック）
+ * - メールスキャナ: JS 実行しないため token は消費されない
  */
 export function buildVerificationConfirmPage(token: string): string {
+  const safeToken = escapeHtml(token)
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>申込完了の確認 | Optiens</title>
+<title>認証中… | Optiens</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <style>
   body { font-family: 'Noto Sans JP', sans-serif; padding: 40px 20px; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.8; }
-  h1 { color: #1F3A93; font-size: 22px; }
-  .card { margin-top: 24px; padding: 18px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 4px; color: #78350F; }
+  h1 { color: #1F3A93; font-size: 22px; margin-top: 0; }
+  .center { text-align: center; }
+  .spinner {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(31, 58, 147, .15);
+    border-top-color: #1F3A93;
+    border-radius: 50%;
+    animation: optiens-spin 0.9s linear infinite;
+    margin: 32px 0 16px;
+  }
+  @keyframes optiens-spin { to { transform: rotate(360deg); } }
+  .check { display: inline-block; width: 64px; height: 64px; background: #1F3A93; color: #fff; border-radius: 50%; text-align: center; line-height: 64px; font-size: 32px; margin: 24px 0 8px; }
   .btn { display: inline-block; padding: 14px 32px; background: #1F3A93; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; border: 0; cursor: pointer; font-size: 16px; }
-  .center { text-align: center; margin-top: 28px; }
   .note { margin-top: 18px; font-size: 13px; color: #666; }
+  .err { color: #C76A77; }
+  #fallback { display: none; }
+  .noscript-card { margin-top: 24px; padding: 18px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 4px; color: #78350F; }
 </style>
 </head>
 <body>
-<h1>あと一歩で申込完了です</h1>
-<p>下のボタンを押すと、メールアドレスの確認が完了し、AI 活用診断レポートの作成が自動で開始されます。</p>
-<div class="card">
-  <strong>⚠️ 注意</strong><br/>
-  このボタンを押した時点でお申込が完了します。
+<div id="auto-state" class="center">
+  <div class="spinner" aria-hidden="true"></div>
+  <h1>メールアドレスを認証中…</h1>
+  <p class="note">数秒お待ちください。完了すると AI 活用診断レポートの作成が自動で開始されます。</p>
 </div>
-<form method="POST" action="/api/verify-diagnosis" class="center">
-  <input type="hidden" name="token" value="${escapeHtml(token)}"/>
-  <button type="submit" class="btn">申込を完了する</button>
-</form>
-<p class="note">※ ボタンを押すまではお申込は確定しません。<br/>
-※ お心当たりがない場合は、本ページを閉じてください。</p>
+
+<noscript>
+  <h1>あと一歩で申込完了です</h1>
+  <p>JavaScript が無効化されています。下のボタンを押すと申込が完了します。</p>
+  <div class="noscript-card">
+    <strong>⚠️ 注意</strong><br/>
+    このボタンを押した時点でお申込が完了します。
+  </div>
+  <form method="POST" action="/api/verify-diagnosis" class="center">
+    <input type="hidden" name="token" value="${safeToken}"/>
+    <button type="submit" class="btn">申込を完了する</button>
+  </form>
+</noscript>
+
+<div id="fallback" class="center">
+  <h1 class="err">認証に失敗しました</h1>
+  <p id="err-msg">通信エラーが発生しました。下のボタンで再試行してください。</p>
+  <form method="POST" action="/api/verify-diagnosis">
+    <input type="hidden" name="token" value="${safeToken}"/>
+    <button type="submit" class="btn">手動で認証する</button>
+  </form>
+</div>
+
+<script>
+(function() {
+  var token = ${JSON.stringify(token)};
+  var stateEl = document.getElementById('auto-state');
+  var fallbackEl = document.getElementById('fallback');
+  var errMsgEl = document.getElementById('err-msg');
+
+  function showError(msg) {
+    if (stateEl) stateEl.style.display = 'none';
+    if (errMsgEl && msg) errMsgEl.textContent = msg;
+    if (fallbackEl) fallbackEl.style.display = 'block';
+  }
+
+  function renderResult(html) {
+    // POST が返した HTML を body に差し替えて画面遷移なしで結果表示
+    document.open();
+    document.write(html);
+    document.close();
+  }
+
+  var body = new URLSearchParams();
+  body.set('token', token);
+
+  fetch('/api/verify-diagnosis', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+    credentials: 'same-origin'
+  }).then(function(res) {
+    return res.text().then(function(text) {
+      // 認証完了 / 既に認証済み / 期限切れ / 失敗 いずれも HTML が返る → そのまま表示
+      renderResult(text);
+    });
+  }).catch(function(err) {
+    showError('通信エラーが発生しました（' + (err && err.message ? err.message : 'unknown') + '）');
+  });
+})();
+</script>
 </body>
 </html>`
 }
