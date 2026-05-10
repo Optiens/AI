@@ -1,64 +1,190 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const updatedAt = "2026-05-10";
 ---
 
-<Layout title="SITE POLICY | Optiens" description="Optiensのサイトポリシーについてのページです。">
-  <main class="page-container">
+<Layout
+  title="サイトポリシー | Optiens"
+  description="合同会社Optiens のサイトポリシー（ご利用規約）。AI 活用診断・コンサルティング事業に関する情報提供・著作権・免責・推奨環境を明記しています。"
+>
+  <main class="page-container light-section">
     <div class="content-wrapper">
-      <h1>SITE POLICY</h1>
-      <p>このウェブサイト（以下「本サイト」）は、Optiens（以下「当社」）が運営しています。本サイトを利用される前に、以下のサイトポリシー（ご利用規約）（以下本規約）をお読みいただき、ご同意の上でご利用ください。本サイトをご利用された場合、本規約に同意したものとみなします。</p>
+      <h1>サイトポリシー</h1>
+      <p class="lead">
+        本サイト（<a href="https://optiens.com">https://optiens.com</a>、以下「本サイト」）は、合同会社Optiens（以下「当社」）が AI 活用診断・コンサルティングに関する情報発信および各種申込受付を目的として運営しています。本サイトをご利用いただく前に、以下のご利用条件をご確認ください。本サイトのご利用をもって、本ポリシーに同意いただいたものとみなします。
+      </p>
 
       <h2>1. 著作権</h2>
-      <p>本サイトに掲載されている文章、画像、動画、商標、デザイン等のすべてのコンテンツに関する著作権は、当社または正当な権利を有する第三者に帰属します。</p>
+      <p>
+        本サイトに掲載されているテキスト、図表、画像、動画、ソースコード、デザイン等のすべてのコンテンツに関する著作権は、当社または正当な権利を有する第三者に帰属します。
+      </p>
+      <p>
+        ブログ記事の引用は、出典として「合同会社Optiens」「該当記事の URL」を明記いただければ、引用元として常識的な範囲（ブログ・SNS・社内資料等）で自由にご利用いただけます。商用転載・大規模な複製は事前に <a href="mailto:info@optiens.com">info@optiens.com</a> までご相談ください。
+      </p>
 
-      <h2>2. 禁止事項</h2>
+      <h2>2. 商標および第三者サービス名</h2>
+      <p>
+        本サイトで言及している製品名・サービス名（Claude / ChatGPT / Gemini / Codex / Supabase / Vercel / GitHub / Cloudflare 等）は、各権利者の商標または登録商標です。本サイトでの言及は事実情報の整理・比較目的であり、各権利者からの推薦・提携・公式承認を示すものではありません。
+      </p>
+
+      <h2>3. ブログ記事・診断レポートの位置づけ</h2>
+      <p>
+        本サイトに掲載するブログ記事および AI 活用診断レポートは、執筆時点での公開情報・現場ヒアリング・当社運用知見に基づく一般的な情報提供を目的としています。
+      </p>
+      <ul>
+        <li>記載内容の正確性・最新性・完全性を保証するものではありません</li>
+        <li>各種サービスの料金・仕様は頻繁に変動するため、契約前に必ず公式サイトで最新情報をご確認ください</li>
+        <li>ブログ記事の内容は記事内に明記した時点の情報であり、後日変更される場合があります</li>
+        <li>診断レポートは経営判断・投資判断・契約判断の唯一の根拠とせず、参考情報としてご活用ください</li>
+      </ul>
+
+      <h2>4. 免責事項</h2>
+      <p>
+        当社は、本サイトに掲載する情報について細心の注意を払っていますが、以下について一切の責任を負いません。
+      </p>
+      <ul>
+        <li>本サイトの利用または利用不能により生じた損害（直接・間接・派生を問わず）</li>
+        <li>本サイトの情報に基づく判断・行動の結果生じた損害</li>
+        <li>本サイトからリンクされた第三者サイトの内容および利用により生じた損害</li>
+        <li>本サイトの動作環境差・通信障害・天災等による表示不具合</li>
+      </ul>
+      <p class="note">
+        ※ 当社が提供する有償サービス（AI 活用診断 詳細レポート、導入支援、保守サポート等）に関する責任範囲は、別途締結する契約書または注文書に定めるものとします。
+      </p>
+
+      <h2>5. リンクについて</h2>
+      <p>
+        本サイトへのリンクは原則自由です。リンク元の事前承諾は不要ですが、以下に該当するサイトからのリンクはお断りします。
+      </p>
+      <ul>
+        <li>違法なコンテンツを含むサイト</li>
+        <li>当社または第三者の名誉・信用を毀損するサイト</li>
+        <li>本サイトのコンテンツを誤認させるような掲載</li>
+      </ul>
+      <p>
+        本サイトから外部サイトへのリンクは情報提供を目的としており、リンク先の内容について当社は責任を負いません。
+      </p>
+
+      <h2>6. 禁止事項</h2>
       <p>本サイトのご利用にあたり、以下の行為を禁止します。</p>
       <ul>
         <li>法令または公序良俗に違反する行為</li>
-        <li>本サイトの運営を妨害する行為</li>
-        <li>本サイトのコンテンツを無断で複製、転載、再配布する行為</li>
+        <li>本サイトの運営・申込フォームを妨害する行為（過剰なアクセス・スクレイピング・自動投稿等）</li>
+        <li>本サイトのコンテンツを無断で大規模に複製、転載、再配布する行為</li>
+        <li>本サイトのセキュリティ機能（ボット対策・レート制限等）を回避する行為</li>
         <li>その他、当社が不適切と判断する行為</li>
       </ul>
 
-      <h2>3. 免責事項</h2>
-      <p>当社は、本サイトに掲載する情報について、細心の注意を払っていますが、その正確性、完全性、有用性を保証するものではありません。本サイトの利用により生じた、いかなる損害についても、当社は一切の責任を負いません。</p>
+      <h2>7. 推奨環境</h2>
+      <p>
+        本サイトは、PC・スマートフォン・タブレットに対応しています。最新版の主要ブラウザ（Chrome / Edge / Safari / Firefox）でのご利用を推奨します。古いブラウザバージョンや一部のセキュリティ拡張機能環境では、表示・申込フォームの動作に支障が出る場合があります。
+      </p>
 
-      <h2>4. リンクについて</h2>
-      <p>本サイトへのリンクは原則自由です。ただし、違法なコンテンツを含むサイトからのリンクはお断りします。</p>
+      <h2>8. 個人情報の取り扱い</h2>
+      <p>
+        本サイトでお預かりする個人情報の取り扱いについては、別途定める <a href="/privacy-policy">プライバシーポリシー</a> に従います。
+      </p>
 
-      <h2>5. 本規約の変更</h2>
-      <p>当社は、必要に応じて本規約の内容を変更できるものとします。変更後の本規約は、本サイトに掲載された時点から効力を生じるものとします。</p>
+      <h2>9. 本ポリシーの変更</h2>
+      <p>
+        当社は、必要に応じて本ポリシーの内容を変更することがあります。重要な変更がある場合はサイト上で告知します。変更後の本ポリシーは、本ページに掲載した時点から効力を生じます。
+      </p>
+
+      <p class="updated">最終更新日：{updatedAt}</p>
     </div>
   </main>
 </Layout>
 
 <style>
   .page-container {
-    padding: 80px 20px;
+    padding: 100px 20px 60px;
   }
+
   .content-wrapper {
     max-width: 800px;
     margin: 0 auto;
-    line-height: 1.8;
+    line-height: 1.85;
+    color: var(--text);
   }
+
   h1 {
-    font-size: 2.5em;
-    font-weight: bold;
-    margin-bottom: 30px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 24px;
     text-align: center;
+    color: var(--brand);
   }
+
+  .lead {
+    font-size: 1.02rem;
+    color: var(--text);
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
   h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-top: 40px;
-    margin-bottom: 10px;
-    border-left: 4px solid #2e574c;
-    padding-left: 10px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-top: 44px;
+    margin-bottom: 14px;
+    color: var(--brand);
+    border-left: 4px solid var(--brand);
+    padding-left: 14px;
+    line-height: 1.5;
   }
+
   p, ul {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    color: var(--text);
+    font-size: .96rem;
   }
+
   ul {
-    padding-left: 20px;
+    padding-left: 24px;
+  }
+
+  li {
+    margin-bottom: 6px;
+  }
+
+  .note {
+    font-size: .88rem;
+    color: var(--muted);
+    background: var(--surface-2);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: -8px;
+  }
+
+  a {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+
+  a:hover {
+    opacity: 0.8;
+  }
+
+  .updated {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    text-align: right;
+    font-size: .88rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 640px) {
+    .page-container {
+      padding: 80px 16px 40px;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+    h2 {
+      font-size: 1.18rem;
+    }
   }
 </style>
