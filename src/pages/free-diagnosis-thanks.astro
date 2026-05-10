@@ -76,9 +76,6 @@ const applicationId = Astro.url.searchParams.get('id') || '';
           ) : isPendingVerification ? (
             <>
               <h1>あと一歩でお申し込み完了です</h1>
-              {applicationId && (
-                <p class="application-id-inline">申込番号: <strong>{applicationId}</strong>（お問い合わせ時にご記入ください）</p>
-              )}
 
               <div class="pending-banner">
                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -133,9 +130,6 @@ const applicationId = Astro.url.searchParams.get('id') || '';
           ) : (
             <>
               <h1>お申し込みありがとうございます</h1>
-              {applicationId && (
-                <p class="application-id-inline">申込番号: <strong>{applicationId}</strong>（お問い合わせ時にご記入ください）</p>
-              )}
               <div class="pending-banner">
                 <i class="fa-solid fa-circle-exclamation"></i>
                 <div>
@@ -305,22 +299,6 @@ const applicationId = Astro.url.searchParams.get('id') || '';
     color: var(--heading);
     font-weight: 700;
   }
-  .application-id-inline {
-    display: inline-block;
-    margin: 0 auto 24px;
-    padding: 8px 18px;
-    background: rgba(31, 58, 147, .08);
-    border: 1px solid rgba(31, 58, 147, .25);
-    border-radius: 999px;
-    font-size: .9rem;
-    color: var(--text);
-  }
-  .application-id-inline strong {
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    color: var(--brand);
-    margin-left: 4px;
-  }
-
   /* ===== ヒント（無料版用） ===== */
   /* ===== 申込未完了バナー ===== */
   .pending-banner {

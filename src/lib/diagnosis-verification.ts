@@ -57,6 +57,47 @@ export function buildVerificationEmailHtml(params: {
 }
 
 /**
+ * 認証ボタン確認ページ（GET時のランディング）
+ *
+ * 目的: メールセキュリティスキャナ（SafeLinks/Mimecast/Proofpoint等）が
+ * リンクを先読みアクセスしてもtokenを消費しないよう、
+ * ユーザーが画面のボタンをクリック（POST）するまでDBを変更しない。
+ */
+export function buildVerificationConfirmPage(token: string): string {
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>申込完了の確認 | Optiens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<style>
+  body { font-family: 'Noto Sans JP', sans-serif; padding: 40px 20px; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.8; }
+  h1 { color: #1F3A93; font-size: 22px; }
+  .card { margin-top: 24px; padding: 18px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 4px; color: #78350F; }
+  .btn { display: inline-block; padding: 14px 32px; background: #1F3A93; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; border: 0; cursor: pointer; font-size: 16px; }
+  .center { text-align: center; margin-top: 28px; }
+  .note { margin-top: 18px; font-size: 13px; color: #666; }
+</style>
+</head>
+<body>
+<h1>あと一歩で申込完了です</h1>
+<p>下のボタンを押すと、メールアドレスの確認が完了し、AI 活用診断レポートの作成が自動で開始されます。</p>
+<div class="card">
+  <strong>⚠️ 注意</strong><br/>
+  このボタンを押した時点でお申込が完了します。
+</div>
+<form method="POST" action="/api/verify-diagnosis" class="center">
+  <input type="hidden" name="token" value="${escapeHtml(token)}"/>
+  <button type="submit" class="btn">申込を完了する</button>
+</form>
+<p class="note">※ ボタンを押すまではお申込は確定しません。<br/>
+※ お心当たりがない場合は、本ページを閉じてください。</p>
+</body>
+</html>`
+}
+
+/**
  * 認証完了後の表示HTML（成功）
  */
 export function buildVerificationSuccessPage(): string {

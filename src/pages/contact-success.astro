@@ -4,11 +4,15 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="送信完了 | Optiens">
   <main class="contact-success-page light-section">
-    <div class="container text-center">
-      <h1>お問い合わせを受け付けました</h1>
-      <p>お問い合わせいただき、誠にありがとうございます。</p>
-      <p>内容を確認後、担当者よりご連絡いたします。</p>
-      <a href="/" class="btn-primary mt-4">トップページに戻る</a>
+    <div class="container">
+      <div class="success-inner">
+        <h1>お問い合わせを受け付けました</h1>
+        <p>お問い合わせいただき、誠にありがとうございます。</p>
+        <p>内容を確認後、担当者よりご連絡いたします。</p>
+        <div class="cta-row">
+          <a href="/" class="btn-primary">トップページに戻る</a>
+        </div>
+      </div>
     </div>
   </main>
 </Layout>
@@ -17,13 +21,38 @@ import Layout from '../layouts/Layout.astro';
   .contact-success-page {
     padding: 120px 0 60px;
   }
+  .success-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
   .contact-success-page h1 {
     color: var(--brand);
+    text-align: center;
+    margin-bottom: 1.5rem;
   }
   .contact-success-page p {
-    font-size: 1.2em;
+    font-size: 1.1em;
+    text-align: left;
+    line-height: 1.8;
+    margin: 0 0 0.75rem;
+  }
+  .cta-row {
+    text-align: center;
+    margin-top: 2rem;
   }
   .contact-success-page .btn-primary {
     color: #fff;
+  }
+  @media (max-width: 640px) {
+    .contact-success-page {
+      padding: 100px 0 40px;
+    }
+    .contact-success-page h1 {
+      font-size: 1.6rem;
+      line-height: 1.4;
+    }
+    .contact-success-page p {
+      font-size: 1rem;
+    }
   }
 </style>

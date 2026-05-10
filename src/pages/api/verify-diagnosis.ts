@@ -2,16 +2,19 @@
  * 無料診断のメール認証エンドポイント
  * URL: /api/verify-diagnosis?token=xxx
  *
- * フロー:
- * 1. token を Supabase で検索
- * 2. 該当 lead を verified に更新（verified_at = now）
- * 3. token を NULL（再利用防止）
- * 4. ユーザーに認証完了ページを表示
- * 5. Database Webhook が process-diagnosis Edge Function を発火
+ * 2段階フロー（メールセキュリティスキャナ対策）:
+ * - GET:  token のみを受け取り、ユーザー向けに「申込を完了する」ボタンを表示。
+ *         DB は変更しない（SafeLinks/Mimecast/Proofpoint 等の先読みでも token を消費しない）。
+ * - POST: ユーザーがボタンを押した時にのみ token を消費し、verified に更新する。
+ *
+ * これにより、メール送信直後に発生していた
+ * 「セキュリティスキャナがリンクを先読みして token が消費 → ユーザークリック時に invalid」
+ * の事故を防止する。
  */
 import type { APIRoute } from 'astro'
 import { createClient } from '@supabase/supabase-js'
 import {
+  buildVerificationConfirmPage,
   buildVerificationSuccessPage,
   buildVerificationErrorPage,
 } from '../../lib/diagnosis-verification'
@@ -19,35 +22,68 @@ import {
 const SUPABASE_URL = import.meta.env.SUPABASE_URL
 const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_ROLE_KEY
 
+const htmlResponse = (body: string, status = 200) =>
+  new Response(body, {
+    status,
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+  })
+
+/**
+ * GET: 確認ボタン付きランディングページを表示するのみ。
+ * DB 操作なし。token がない場合のみエラー表示。
+ */
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url)
   const token = url.searchParams.get('token')
+  if (!token) {
+    return htmlResponse(buildVerificationErrorPage('invalid', 'no_token_param'), 400)
+  }
+  return htmlResponse(buildVerificationConfirmPage(token), 200)
+}
 
-  const htmlResponse = (body: string, status = 200) =>
-    new Response(body, {
-      status,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    })
+/**
+ * POST: 実際の認証処理。token を消費し verified に更新。
+ * フォームは GET ランディングページから submit される。
+ */
+export const POST: APIRoute = async ({ request }) => {
+  // token を form-encoded body から取得（フォームsubmit想定）
+  let token = ''
+  try {
+    const contentType = request.headers.get('content-type') || ''
+    if (contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data')) {
+      const form = await request.formData()
+      token = String(form.get('token') || '')
+    } else {
+      // JSON フォールバック
+      const body = await request.json().catch(() => ({}))
+      token = String(body?.token || '')
+    }
+  } catch (err: any) {
+    console.error('[verify-diagnosis][POST] body parse failed:', err)
+    return htmlResponse(
+      buildVerificationErrorPage('invalid', `body_parse: ${err?.message || String(err)}`),
+      400,
+    )
+  }
 
   // 環境変数チェック
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    console.error('[verify-diagnosis] Missing env vars: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
+    console.error('[verify-diagnosis][POST] Missing env vars: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
     return htmlResponse(
       buildVerificationErrorPage('server', 'env: SUPABASE_URL/SERVICE_KEY not configured'),
       500,
     )
   }
 
-  // token チェック
   if (!token) {
-    return htmlResponse(buildVerificationErrorPage('invalid', 'no_token_param'), 400)
+    return htmlResponse(buildVerificationErrorPage('invalid', 'no_token_in_post'), 400)
   }
 
   let supabase
   try {
     supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
   } catch (err: any) {
-    console.error('[verify-diagnosis] supabase client init failed:', err)
+    console.error('[verify-diagnosis][POST] supabase client init failed:', err)
     return htmlResponse(
       buildVerificationErrorPage('server', `client_init: ${err?.message || String(err)}`),
       500,
@@ -64,7 +100,7 @@ export const GET: APIRoute = async ({ request }) => {
       .maybeSingle()
 
     if (error) {
-      console.error('[verify-diagnosis] select error:', error)
+      console.error('[verify-diagnosis][POST] select error:', error)
       return htmlResponse(
         buildVerificationErrorPage('server', `select: ${error.message} (code=${error.code})`),
         500,
@@ -72,7 +108,7 @@ export const GET: APIRoute = async ({ request }) => {
     }
     lead = data as typeof lead
   } catch (err: any) {
-    console.error('[verify-diagnosis] select threw:', err)
+    console.error('[verify-diagnosis][POST] select threw:', err)
     return htmlResponse(
       buildVerificationErrorPage('server', `select_throw: ${err?.message || String(err)}`),
       500,
@@ -107,14 +143,14 @@ export const GET: APIRoute = async ({ request }) => {
       .eq('id', lead.id)
 
     if (updateErr) {
-      console.error('[verify-diagnosis] update failed:', updateErr)
+      console.error('[verify-diagnosis][POST] update failed:', updateErr)
       return htmlResponse(
         buildVerificationErrorPage('server', `update: ${updateErr.message} (code=${updateErr.code})`),
         500,
       )
     }
   } catch (err: any) {
-    console.error('[verify-diagnosis] update threw:', err)
+    console.error('[verify-diagnosis][POST] update threw:', err)
     return htmlResponse(
       buildVerificationErrorPage('server', `update_throw: ${err?.message || String(err)}`),
       500,
