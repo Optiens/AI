@@ -10,51 +10,12 @@
  *  - CTA: グラデ背景 + ピル形ボタン
  */
 
-/* ========== Before / After 図解 ========== */
-.ba-figure {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 0 0 28px;
-}
-.ba-figure figure {
-  margin: 0;
-  border: 1px solid rgba(31, 58, 147, 0.10);
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-}
-.ba-figure img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  aspect-ratio: 16 / 9;
-}
-.ba-figure figcaption {
-  padding: 10px 14px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #1F3A93;
-  background: #F8FAFD;
-  border-top: 1px solid rgba(31, 58, 147, 0.08);
-}
-.ba-figure figure:first-child figcaption {
-  color: #C76A77;
-}
-@media (max-width: 640px) {
-  .ba-figure {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-}
-
 /* ========== Hero ========== */
 .hero-section {
   position: relative;
   /* --hero-bg を inline style で渡すと背景画像 + 白オーバーレイで合成される */
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 250, 253, 0.92) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(248, 250, 253, 0.92) 100%),
     var(--hero-bg, none) center/cover no-repeat,
     linear-gradient(180deg, #ffffff 0%, #F8FAFD 100%);
   color: #0f172a;
@@ -62,44 +23,7 @@
   border-bottom: 1px solid rgba(31, 58, 147, 0.08);
   overflow: hidden;
 }
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: -120px;
-  right: -120px;
-  width: 360px;
-  height: 360px;
-  background: radial-gradient(circle, rgba(31, 58, 147, 0.10) 0%, rgba(31, 58, 147, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-}
-.hero-section::after {
-  content: '';
-  position: absolute;
-  bottom: -100px;
-  left: -100px;
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(228, 138, 149, 0.10) 0%, rgba(228, 138, 149, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-}
 .hero-section .container { position: relative; z-index: 1; }
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: #64748b;
-  text-decoration: none;
-  font-size: 0.85rem;
-  margin-bottom: 24px;
-  transition: color 0.15s;
-}
-.back-link:hover { color: #1F3A93; }
-.back-link i { font-size: 0.78em; }
 
 .hero-badge {
   display: inline-block;

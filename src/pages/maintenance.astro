@@ -10,146 +10,130 @@ import Layout from '../layouts/Layout.astro';
     <!-- ヒーロー -->
     <section class="mt-hero light-section">
       <div class="container text-center" style="position:relative;z-index:1;">
-        <p class="eyebrow">MAINTENANCE</p>
         <h1>保守</h1>
         <p class="hero-sub">導入後の機能追加やトラブルに対応。<br/>新しい業務の自動化もご相談いただけます。</p>
       </div>
     </section>
 
-    <!-- プラン比較 -->
-    <section class="mt-section light-section">
+    <!-- プラン（時間制を廃止、内容範囲で区切るシンプル設計） -->
+    <section class="mt-section light-section mt-section--alt">
       <div class="container">
         <h2 class="section-title reveal">プラン</h2>
+        <p class="mt-lead reveal">時間カウントは行いません。「対応する内容の種類」で線引きするシンプルな運用です。</p>
         <div class="mt-plans reveal">
           <div class="mt-plan-card">
-            <h3>ライト</h3>
+            <h3>ベーシック</h3>
             <p class="mt-price">月額¥33,000<span class="price-unit">（税込）</span></p>
+            <p class="mt-plan-desc">日常運用を安定して回したい方向け</p>
             <ul>
               <li><i class="fa-solid fa-check"></i>メール・チャットでの相談対応</li>
-              <li><i class="fa-solid fa-check"></i>軽微なワークフロー改善</li>
-              <li><i class="fa-solid fa-check"></i>システムトラブル対応</li>
-              <li><i class="fa-solid fa-check"></i>月3時間までの対応を含む</li>
+              <li><i class="fa-solid fa-check"></i>軽微な調整（プロンプト見直し・分岐追加・文言修正）</li>
+              <li><i class="fa-solid fa-check"></i>システムトラブル対応（不具合調査・暫定対応）</li>
+              <li><i class="fa-solid fa-check"></i>連携サービスの仕様変更への追従</li>
             </ul>
           </div>
           <div class="mt-plan-card mt-plan-card--recommended">
             <span class="mt-recommended-badge">おすすめ</span>
             <h3>スタンダード</h3>
             <p class="mt-price">月額¥55,000<span class="price-unit">（税込）</span></p>
+            <p class="mt-plan-desc">継続的に AI 活用範囲を広げていきたい方向け</p>
             <ul>
-              <li><i class="fa-solid fa-check"></i>ライトの全内容</li>
-              <li><i class="fa-solid fa-check"></i>MTGの実施・参加</li>
-              <li><i class="fa-solid fa-check"></i>ワークフローの機能追加・改善</li>
-              <li><i class="fa-solid fa-check"></i>新規業務の自動化検討・設計</li>
-              <li><i class="fa-solid fa-check"></i>月8時間までの対応を含む</li>
+              <li><i class="fa-solid fa-check"></i>ベーシックの全内容</li>
+              <li><i class="fa-solid fa-check"></i>月次オンライン MTG（運用レビュー・改善方針すり合わせ）</li>
+              <li><i class="fa-solid fa-check"></i>機能追加・ワークフロー改善</li>
+              <li><i class="fa-solid fa-check"></i>新規業務の自動化検討・初期設計</li>
             </ul>
           </div>
         </div>
-        <p class="mt-note reveal">いずれのプランも月単位の契約です。効果を感じられなければいつでも解約可能です。</p>
-      </div>
-    </section>
-
-    <!-- 工数の目安 -->
-    <section class="mt-section light-section mt-section--alt">
-      <div class="container">
-        <h2 class="section-title reveal">工数の目安</h2>
-        <p class="mt-section light-section-lead reveal">月の工数枠は、以下のような作業の組み合わせで使われます。実際の工数は内容により変動します。</p>
-        <div class="mt-scope reveal">
-          <table class="mt-scope-table">
-            <thead>
-              <tr>
-                <th>作業内容</th>
-                <th>標準工数</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <strong>ワークフロー調整・改善</strong>
-                  <span class="mt-scope-desc">既存の自動化フローの調整・分岐追加など</span>
-                </td>
-                <td>0.5〜2h</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>AIエージェントのプロンプト調整</strong>
-                  <span class="mt-scope-desc">出力品質や挙動の見直し</span>
-                </td>
-                <td>0.5〜1h</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>新規業務の自動化検討</strong>
-                  <span class="mt-scope-desc">対象業務のヒアリング・設計・小規模な構築</span>
-                </td>
-                <td>1〜3h</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>月次レポート作成</strong>
-                  <span class="mt-scope-desc">運用状況・改善提案のサマリ</span>
-                </td>
-                <td>1h</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>トラブル対応</strong>
-                  <span class="mt-scope-desc">不具合調査・原因切り分け・暫定対応（内容により変動）</span>
-                </td>
-                <td>0.5〜2h</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>チャット相談（応答含む）</strong>
-                  <span class="mt-scope-desc">運用上の質問・確認のやり取り</span>
-                </td>
-                <td>月内合計0.5〜2h</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <p class="mt-note reveal">大幅な改修・新規システムの本格構築は、両プランとも別途お見積もりとなります（範囲が明確なため判断は単純です）。</p>
       </div>
     </section>
 
     <!-- 対応範囲 -->
     <section class="mt-section light-section">
       <div class="container">
-        <h2 class="section-title reveal">対応範囲の考え方</h2>
+        <h2 class="section-title reveal">対応範囲の線引き</h2>
         <div class="mt-scope reveal">
           <table class="mt-scope-table">
             <thead>
               <tr>
                 <th>対応内容</th>
-                <th>費用</th>
+                <th>ベーシック</th>
+                <th>スタンダード</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <strong>Optiensが構築した部分のバグ・設計ミス</strong>
+                  <strong>Optiens が構築した部分のバグ・設計ミス</strong>
                   <span class="mt-scope-desc">当社の責任で発生した不具合の修正</span>
                 </td>
+                <td><span class="mt-free-badge">無償（瑕疵対応）</span></td>
                 <td><span class="mt-free-badge">無償（瑕疵対応）</span></td>
               </tr>
               <tr>
                 <td>
-                  <strong>機能追加・新しい業務の自動化</strong>
-                  <span class="mt-scope-desc">「こういう作業も自動化したい」などのご要望</span>
+                  <strong>相談・チャット応答</strong>
+                  <span class="mt-scope-desc">運用上の質問・確認のやり取り</span>
                 </td>
-                <td>保守工数内</td>
+                <td>含む</td>
+                <td>含む</td>
               </tr>
               <tr>
                 <td>
-                  <strong>利用サービスの仕様変更による修正</strong>
-                  <span class="mt-scope-desc">連携先サービスの仕様変更への追従対応</span>
+                  <strong>軽微な調整</strong>
+                  <span class="mt-scope-desc">プロンプト見直し・分岐追加・文言修正</span>
                 </td>
-                <td>保守工数内</td>
+                <td>含む</td>
+                <td>含む</td>
               </tr>
               <tr>
                 <td>
-                  <strong>トラブル調査・相談</strong>
-                  <span class="mt-scope-desc">「動かなくなった」「想定と違う動きをする」等</span>
+                  <strong>トラブル調査・対応</strong>
+                  <span class="mt-scope-desc">不具合調査・原因切り分け・暫定対応</span>
                 </td>
-                <td>保守工数内</td>
+                <td>含む</td>
+                <td>含む</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>連携サービスの仕様変更追従</strong>
+                  <span class="mt-scope-desc">API 仕様変更等に伴う修正</span>
+                </td>
+                <td>含む</td>
+                <td>含む</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>月次オンライン MTG</strong>
+                  <span class="mt-scope-desc">運用レビュー・改善方針のすり合わせ</span>
+                </td>
+                <td>—</td>
+                <td>含む</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>機能追加・ワークフロー改善</strong>
+                  <span class="mt-scope-desc">既存業務範囲内での機能拡張</span>
+                </td>
+                <td>—</td>
+                <td>含む</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>新規業務の自動化検討・初期設計</strong>
+                  <span class="mt-scope-desc">「これも自動化したい」業務の整理・設計</span>
+                </td>
+                <td>—</td>
+                <td>含む</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>大幅改修・新規システムの本格構築</strong>
+                  <span class="mt-scope-desc">スコープが大きい新規開発</span>
+                </td>
+                <td>別途お見積もり</td>
+                <td>別途お見積もり</td>
               </tr>
             </tbody>
           </table>
