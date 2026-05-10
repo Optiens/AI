@@ -50,8 +50,9 @@ const industryLabels: Record<string, string> = {
 }
 
 const aiLevelLabels: Record<string, string> = {
-  none: 'まったく使っていない',
-  interest: '興味はあるが未導入',
+  none: 'まだ使っていない',
+  // 旧選択肢「興味はあるが未導入」（none に統合済み、過去レコード表示用に残置）
+  interest: '興味はあるが未導入（旧選択肢）',
   trial: '個人的に試している程度',
   partial: '一部業務で活用中',
   active: '組織的に活用中',
