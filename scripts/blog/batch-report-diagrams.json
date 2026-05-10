@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "diagrams/before-after-workflow",
+    "prompt": "Conceptual editorial illustration of two parallel horizontal workflow lanes labeled BEFORE and AFTER, with abstract circular nodes connected by flowing curved lines, the AFTER lane glowing softly with fewer nodes suggesting simplification, no readable text, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/roi-projection-3-month",
+    "prompt": "Conceptual editorial illustration of an ascending bar chart with three stacked bars representing month 1, 2, 3, the third bar glowing brightly to suggest growing return on investment, abstract grid background, no readable text, deep navy and warm gold palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/architecture-overview",
+    "prompt": "Conceptual editorial illustration of an abstract three-layer architecture diagram with rounded rectangular blocks connected by glowing thin lines, top layer suggesting user interface, middle suggesting AI agents, bottom suggesting data storage, no readable text, deep navy and silver palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/implementation-roadmap-3-phases",
+    "prompt": "Conceptual editorial illustration of three milestone markers along a horizontal path with subtle progress indicator, each milestone slightly larger than the previous, abstract dotted timeline, no readable text, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/risk-impact-matrix",
+    "prompt": "Conceptual editorial illustration of a 2x2 matrix grid with four colored cells representing high/low impact and high/low likelihood, abstract dots scattered across cells suggesting risk distribution, no readable text, deep navy and warm coral palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/team-ai-collaboration",
+    "prompt": "Conceptual editorial illustration of three abstract human silhouettes connected to a central glowing AI orb via soft light beams, suggesting human-AI collaboration, no faces, no readable text, deep teal and warm gold palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/cost-comparison-3-tiers",
+    "prompt": "Conceptual editorial illustration of three stacked horizontal cost bars of decreasing height representing three pricing tiers, each tier with distinct color, abstract grid background, no readable text, deep navy and warm gold palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/monthly-time-savings",
+    "prompt": "Conceptual editorial illustration of a circular clock face split into a smaller saved time wedge glowing brightly and a larger remaining time wedge muted, abstract rays radiating outward, no readable text, deep navy and warm amber palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/data-flow-secure",
+    "prompt": "Conceptual editorial illustration of a flowing data path connecting multiple shielded nodes with glowing locks at each junction, suggesting secure data transmission, abstract dotted connections, no readable text, deep navy and warm green palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  },
+  {
+    "slug": "diagrams/decision-tree-branching",
+    "prompt": "Conceptual editorial illustration of a horizontal decision tree with three branches, each branch leading to two outcome nodes glowing softly, abstract minimalist node connections, no readable text, deep navy and warm sand palette, minimal Japanese aesthetic, soft cream background, photorealistic editorial style, 16:9"
+  }
+]

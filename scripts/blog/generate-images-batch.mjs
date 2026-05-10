@@ -50,7 +50,12 @@ const results = { success: [], failure: [] };
 
 for (let i = 0; i < batch.length; i++) {
   const t = batch[i];
-  const out = resolve(here, `../../public/images/blog/${t.slug}.webp`);
+  // slug に `samples/foo` のように `/` を含めると、その階層が public/images/ 配下に作成される。
+  // 階層なしのときは従来どおり public/images/blog/ 配下。
+  const baseDir = t.slug.includes('/')
+    ? `../../public/images/${t.slug}.webp`
+    : `../../public/images/blog/${t.slug}.webp`;
+  const out = resolve(here, baseDir);
   console.log(`\n[${i + 1}/${batch.length}] Generating: ${t.slug}`);
   try {
     await runGenerator(t.prompt, out);
