@@ -15,16 +15,16 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- プラン（対応枠制） -->
+    <!-- プラン（チケット制） -->
     <section class="mt-section light-section mt-section--alt">
       <div class="container">
         <h2 class="section-title reveal">プラン</h2>
-        <p class="mt-lead reveal">時間カウントは行いません。<strong>対応枠</strong>で、依頼内容の重さに応じて柔軟にご利用いただけます。</p>
+        <p class="mt-lead reveal">時間カウントは行いません。<strong>チケット制</strong>で、依頼内容の重さに応じて柔軟にご利用いただけます。</p>
         <div class="mt-plans reveal">
           <div class="mt-plan-card">
             <h3>ベーシック</h3>
             <p class="mt-price">月額¥33,000<span class="price-unit">（税込）</span></p>
-            <p class="mt-points">月 <strong>10 枠</strong></p>
+            <p class="mt-points">月 <strong>10 チケット</strong></p>
             <p class="mt-plan-desc">日常運用を安定して回したい方向け</p>
             <ul>
               <li><i class="fa-solid fa-check"></i>メール・チャットでの相談対応</li>
@@ -37,7 +37,7 @@ import Layout from '../layouts/Layout.astro';
             <span class="mt-recommended-badge">おすすめ</span>
             <h3>スタンダード</h3>
             <p class="mt-price">月額¥55,000<span class="price-unit">（税込）</span></p>
-            <p class="mt-points">月 <strong>30 枠</strong></p>
+            <p class="mt-points">月 <strong>30 チケット</strong></p>
             <p class="mt-plan-desc">継続的に AI 活用範囲を広げていきたい方向け</p>
             <ul>
               <li><i class="fa-solid fa-check"></i>ベーシックの全内容</li>
@@ -47,21 +47,21 @@ import Layout from '../layouts/Layout.astro';
             </ul>
           </div>
         </div>
-        <p class="mt-note reveal">月次の対応枠は <strong>毎月リセット</strong>（繰越なし）。標準的な月額サービスと同様の運用です。<br/>不足時は <strong>追加対応枠の購入（1 枠 = ¥3,500・税込）</strong> または上位プランへの変更が可能です。</p>
+        <p class="mt-note reveal">月次のチケットは <strong>毎月リセット</strong>（繰越なし）。標準的な月額サービスと同様の運用です。<br/>不足時は <strong>追加チケットの購入（1 チケット = ¥3,500・税込）</strong> または上位プランへの変更が可能です。</p>
       </div>
     </section>
 
-    <!-- 標準対応枠表 -->
+    <!-- 標準チケット表 -->
     <section class="mt-section light-section">
       <div class="container">
-        <h2 class="section-title reveal">標準対応枠表</h2>
-        <p class="mt-lead reveal">依頼受領時に「このご依頼は <strong>N 枠</strong> 消費します」と事前にお伝えします。承認いただいてから着手するため、想定外の消費は発生しません。</p>
+        <h2 class="section-title reveal">標準チケット表</h2>
+        <p class="mt-lead reveal">依頼受領時に「このご依頼は <strong>N チケット</strong> 消費します」と事前にお伝えします。承認いただいてから着手するため、想定外の消費は発生しません。</p>
         <div class="mt-scope reveal">
           <table class="mt-scope-table">
             <thead>
               <tr>
                 <th>カテゴリ</th>
-                <th>対応枠</th>
+                <th>チケット</th>
                 <th>備考</th>
               </tr>
             </thead>
@@ -71,7 +71,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>Optiens 構築部分のバグ・設計ミス</strong>
                   <span class="mt-scope-desc">当社の責任で発生した不具合の修正</span>
                 </td>
-                <td><span class="mt-free-badge">0 枠（瑕疵対応）</span></td>
+                <td><span class="mt-free-badge">0 チケット（瑕疵対応）</span></td>
                 <td>無償</td>
               </tr>
               <tr>
@@ -79,7 +79,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>軽微な質問・チャット相談</strong>
                   <span class="mt-scope-desc">1 ラリーで完結する質問</span>
                 </td>
-                <td>1 枠</td>
+                <td>1 チケット</td>
                 <td>両プラン</td>
               </tr>
               <tr>
@@ -87,7 +87,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>プロンプト・文言の微調整</strong>
                   <span class="mt-scope-desc">出力の言い回しや細かい挙動の調整</span>
                 </td>
-                <td>1 枠</td>
+                <td>1 チケット</td>
                 <td>両プラン</td>
               </tr>
               <tr>
@@ -95,7 +95,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>連携サービスの仕様変更追従</strong>
                   <span class="mt-scope-desc">API 仕様変更等への対応</span>
                 </td>
-                <td>2〜5 枠</td>
+                <td>2〜5 チケット</td>
                 <td>両プラン</td>
               </tr>
               <tr>
@@ -103,7 +103,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>トラブル調査・暫定対応</strong>
                   <span class="mt-scope-desc">「動かなくなった」原因切り分け・暫定対応</span>
                 </td>
-                <td>2〜5 枠</td>
+                <td>2〜5 チケット</td>
                 <td>両プラン</td>
               </tr>
               <tr>
@@ -111,7 +111,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>月次運用レポート作成</strong>
                   <span class="mt-scope-desc">運用状況・改善提案のサマリ</span>
                 </td>
-                <td>3 枠</td>
+                <td>3 チケット</td>
                 <td>スタンダードのみ</td>
               </tr>
               <tr>
@@ -119,7 +119,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>月次オンライン MTG（60分）</strong>
                   <span class="mt-scope-desc">運用レビュー・改善方針のすり合わせ</span>
                 </td>
-                <td>5 枠</td>
+                <td>5 チケット</td>
                 <td>スタンダードのみ</td>
               </tr>
               <tr>
@@ -127,7 +127,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>軽微な機能追加</strong>
                   <span class="mt-scope-desc">既存ワークフローへの分岐追加・小規模改修</span>
                 </td>
-                <td>3〜8 枠</td>
+                <td>3〜8 チケット</td>
                 <td>両プラン</td>
               </tr>
               <tr>
@@ -135,7 +135,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>中規模な機能追加</strong>
                   <span class="mt-scope-desc">複数業務にまたがる機能拡張</span>
                 </td>
-                <td>10〜15 枠</td>
+                <td>10〜15 チケット</td>
                 <td>スタンダードのみ</td>
               </tr>
               <tr>
@@ -143,7 +143,7 @@ import Layout from '../layouts/Layout.astro';
                   <strong>新規業務の自動化検討・初期設計</strong>
                   <span class="mt-scope-desc">対象業務のヒアリング・設計・初期構築</span>
                 </td>
-                <td>15〜20 枠</td>
+                <td>15〜20 チケット</td>
                 <td>スタンダードのみ</td>
               </tr>
               <tr>
@@ -157,25 +157,44 @@ import Layout from '../layouts/Layout.astro';
             </tbody>
           </table>
         </div>
-        <p class="mt-note reveal">※ 対応枠の数は「内容の重さ × 影響範囲」で決まります。1 枠はおおむね 30 分程度の作業を目安としていますが、時間ではなく「内容」で判定します。</p>
+        <p class="mt-note reveal">※ チケット枚数は「内容の重さ × 影響範囲」で決まります。1 チケットはおおむね 30 分程度の作業を目安としていますが、時間ではなく「内容」で判定します。</p>
+
+        <!-- チケット枚数の判定方針 -->
+        <div class="mt-callout reveal">
+          <h3><i class="fa-solid fa-scale-balanced"></i> チケット枚数の判定について（公平性の担保）</h3>
+          <p>「このご依頼が何チケットになるか」は、お客様にとって最も気になる点だと考えています。当社では次のルールに沿って判定し、判定根拠を必ず事前にお伝えします。</p>
+          <ol class="mt-callout-list">
+            <li><strong>事前提示は「枚数 + 根拠1行」をセットでお伝えします</strong><br/>
+              例：「<em>5 チケット消費します（既存ワークフローに分岐2本追加・テスト含む / 標準表「軽微な機能追加 3〜8」の中位）</em>」のように、なぜその枚数になるかを 1 行で明示します。</li>
+            <li><strong>レンジは中央値を基本とし、上振れ条件を先にお伝えします</strong><br/>
+              「3〜8 チケット」の場合は <em>5 で着手、想定外の依存関係が出れば +2 まで事前相談</em> のように、上振れの条件を着手前に合意します。</li>
+            <li><strong>判定基準は「時間」ではなく「内容（影響範囲・新規/既存・依存数）」</strong><br/>
+              「何時間かかるか」ではなく、お客様にも見える事実（変更箇所の数・連携先の数・テスト範囲）に基づいて判定します。</li>
+            <li><strong>過去のご依頼との一貫性を示します</strong><br/>
+              「前回の◯◯（3 チケット）と類似ですが、今回は連携先が 1 件多いので <em>4 チケット</em>」のように、過去事例を参照して判定根拠の一貫性を保ちます。</li>
+            <li><strong>判定が割れる境界では、お客様有利の側でご提示します</strong><br/>
+              「3 か 4 か」「8 か 10 か」と迷う境界では、当社判断で少ない側を採用します。営業判断ではなく明文化された運用ポリシーです。</li>
+          </ol>
+          <p class="mt-callout-foot">事前合意なきチケット消費は一切行いません。判定にご納得いただけない場合は、ご依頼自体をキャンセルいただけます（チケット消費ゼロ）。</p>
+        </div>
 
         <!-- 瑕疵 vs 有償の判別が即座につかない場合の運用 -->
         <div class="mt-callout reveal">
           <h3><i class="fa-solid fa-circle-info"></i> ご依頼時に「瑕疵対応（無償）か有償対応か」が判別できない場合</h3>
           <p>「以前は動いていたのに動かなくなった」など、原因が当社の構築ミスなのか、外部サービスの仕様変更や環境変化によるものか、依頼を受けた時点で即断できないケースがあります。この場合は次の流れで進めます。</p>
           <ol class="mt-callout-list">
-            <li><strong>原因切り分け（最大 1 枠まで・事前承認なしで着手可）</strong><br/>
-              当社で短時間の初期調査を行い、原因の方向性を見極めます。30 分以内に判別可能と見込めるものは、対応枠を消費せず無償で実施します。</li>
+            <li><strong>原因切り分け（最大 30 分まで・チケット消費なし・事前承認不要）</strong><br/>
+              当社で短時間の初期調査を行い、原因の方向性を見極めます。30 分以内に判別可能と見込めるものは、チケットを消費せず無償で実施します。</li>
             <li><strong>判別後の取り扱い</strong>
               <ul>
-                <li>当社の構築ミス・設計起因と判明 → <strong>0 枠（瑕疵対応・無償修正）</strong></li>
-                <li>仕様変更追従・運用起因・新規要件と判明 → <strong>「N 枠で対応します」を事前提示し、承認後に着手</strong></li>
+                <li>当社の構築ミス・設計起因と判明 → <strong>0 チケット（瑕疵対応・無償修正）</strong></li>
+                <li>仕様変更追従・運用起因・新規要件と判明 → <strong>「N チケットで対応します」を事前提示し、承認後に着手</strong></li>
               </ul>
             </li>
             <li><strong>切り分けに時間を要する場合</strong><br/>
-              30 分超の調査が必要と判断した時点で一旦お知らせし、調査自体に対応枠を消費するか・打ち切るかをご相談します。「気付いたら大量消費していた」が起きない運用です。</li>
+              30 分超の調査が必要と判断した時点で一旦お知らせし、調査自体にチケットを消費するか・打ち切るかをご相談します。「気付いたら大量消費していた」が起きない運用です。</li>
           </ol>
-          <p class="mt-callout-foot">原則として <strong>事前合意なき対応枠の消費は行いません</strong>。判別がつかないまま勝手に有償対応へ流す、ということはいたしません。</p>
+          <p class="mt-callout-foot">原則として <strong>事前合意なきチケット消費は行いません</strong>。判別がつかないまま勝手に有償対応へ流す、ということはいたしません。</p>
         </div>
       </div>
     </section>
@@ -190,11 +209,11 @@ import Layout from '../layouts/Layout.astro';
             <div class="mt-warranty-content">
               <h3>納品後3ヶ月間、不具合は無償で修正します</h3>
               <p>Optiensが設計・構築したシステムに起因するバグや設計ミスは、納品日から3ヶ月間、保守契約の有無にかかわらず無償で修正いたします。</p>
-              <p>保守プランの対応枠からの差し引きも行いません。当社が構築したものの不具合は、当社の責任で対応します。</p>
+              <p>保守プランのチケットからの差し引きも行いません。当社が構築したものの不具合は、当社の責任で対応します。</p>
               <ul class="mt-warranty-notes">
                 <li>対象: Optiensが構築した部分のバグ・設計ミス</li>
                 <li>期間: 納品日から3ヶ月間</li>
-                <li>費用: 無償（保守プランの対応枠に含まない）</li>
+                <li>費用: 無償（保守プランのチケットに含まない）</li>
                 <li>対象外: お客様による設定変更に起因するもの、外部サービスの仕様変更</li>
               </ul>
             </div>
@@ -222,12 +241,12 @@ import Layout from '../layouts/Layout.astro';
             <p>可能です。Optiensは<strong>納品時点で「自走できる状態」</strong>を目指して設計しており、日常運用に保守契約は必須ではありません。納品後3ヶ月間は不具合修正を無償で行います。3ヶ月経過後に新たな修正・追加が必要になった場合のみ、保守契約またはスポット対応をご検討ください。</p>
           </details>
           <details class="mt-faq-item">
-            <summary>月の対応枠を使い切った場合はどうなりますか？</summary>
-            <p>その月の対応枠を使い切った場合、追加対応は <strong>追加対応枠（1 枠 = ¥3,500・税込）</strong> または <strong>翌月以降からの上位プランへの変更</strong> で承ります。残枠が少なくなった時点で事前にお知らせするため、「気付いたら超過していた」は発生しません。月次の対応枠は<strong>毎月リセット（繰越なし）</strong>です。</p>
+            <summary>月のチケットを使い切った場合はどうなりますか？</summary>
+            <p>その月のチケットを使い切った場合、追加対応は <strong>追加チケット（1 チケット = ¥3,500・税込）</strong> または <strong>翌月以降からの上位プランへの変更</strong> で承ります。残チケットが少なくなった時点で事前にお知らせするため、「気付いたら超過していた」は発生しません。月次のチケットは<strong>毎月リセット（繰越なし）</strong>です。</p>
           </details>
           <details class="mt-faq-item">
             <summary>依頼を出した時点で「無償の瑕疵対応か有償か」は分かりますか？</summary>
-            <p>明らかに当社の構築ミスとわかるものは即「0 枠（無償）」、明らかに新規要件・仕様変更追従とわかるものは事前に「N 枠で対応します」とお伝えします。判別がつかないご依頼は、<strong>当社で 30 分以内の初期調査（対応枠消費なし）</strong>を行った上で、結果に応じて 0 枠（瑕疵）か N 枠（有償）かを確定してご連絡します。事前合意なき対応枠の消費は行いません。</p>
+            <p>明らかに当社の構築ミスとわかるものは即「0 チケット（無償）」、明らかに新規要件・仕様変更追従とわかるものは事前に「N チケットで対応します」とお伝えします。判別がつかないご依頼は、<strong>当社で 30 分以内の初期調査（チケット消費なし）</strong>を行った上で、結果に応じて 0 チケット（瑕疵）か N チケット（有償）かを確定してご連絡します。事前合意なきチケット消費は行いません。</p>
           </details>
         </div>
       </div>
