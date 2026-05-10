@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import { isPublished } from '../../lib/blog-filters';
 
 type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
 const categoryLabel: Record<BlogCategory, string> = {
@@ -21,6 +22,11 @@ const posts = await getCollection('blog');
 const post = posts.find((p) => p.id === slug || p.id === `${slug}.md`);
 
 if (!post) {
+  return Astro.redirect('/404');
+}
+
+// 未公開（draft / 未来日）は 404 として扱う
+if (!isPublished(post)) {
   return Astro.redirect('/404');
 }
 

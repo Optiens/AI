@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { filterPublishedPosts } from '../../lib/blog-filters';
 
 type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
 
@@ -20,7 +21,7 @@ const limit = showAll ? Infinity : DEFAULT_LIMIT;
 const currentPage = Number(Astro.url.searchParams.get('page') ?? 1);
 const selectedCategory = (Astro.url.searchParams.get('category') ?? '') as BlogCategory | '';
 
-const allPosts = await getCollection('blog');
+const allPosts = filterPublishedPosts(await getCollection('blog'));
 const mainPosts = allPosts.filter((p) => !hydroCategories.includes(p.data.category as BlogCategory));
 const sorted = mainPosts.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
