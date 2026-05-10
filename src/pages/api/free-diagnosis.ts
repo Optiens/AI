@@ -310,7 +310,7 @@ ${plan === 'paid' ? `<hr style="margin:20px 0;"/><p style="background:#D1FAE5;pa
         freeText ? `\n【自由記述】\n${freeText}` : '',
       ].filter(Boolean).join('\n')
 
-      const subjectPrefix = plan === 'paid' ? '【詳細版 AI活用診断 ¥5,500】' : '【AI活用診断 無料版】'
+      const subjectPrefix = plan === 'paid' ? '【AI活用診断 詳細版 ¥5,500】' : '【AI活用診断 簡易版】'
 
       const { error: mailError } = await resend.emails.send({
         from: MAIL_FROM,
