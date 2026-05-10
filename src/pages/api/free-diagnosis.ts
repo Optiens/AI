@@ -255,7 +255,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
       '12m': '1年以内',
       'undecided': '未定（情報収集中）',
     }
-    const planLabel = plan === 'paid' ? '【有償・詳細版 ¥5,500税込】' : '【無料・簡易版】'
+    const planLabel = plan === 'paid' ? '【詳細版】（¥5,500税込）' : '【簡易版】（無料）'
 
     // ---- メール通知（CEOに届く） ----
     if (resend && MAIL_TO) {

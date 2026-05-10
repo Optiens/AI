@@ -109,7 +109,7 @@ function fmt(s: any) {
         </div>
         <div class="detail-meta">
           <span class="detail-meta-item">
-            <i class="fas fa-tag"></i> プラン: <strong>{lead.plan === 'paid' ? '有償・詳細版' : '無料・簡易版'}</strong>
+            <i class="fas fa-tag"></i> プラン: <strong>{lead.plan === 'paid' ? '【詳細版】' : '【簡易版】'}</strong>
           </span>
           <span class="detail-meta-item">
             <i class="fas fa-yen-sign"></i> 金額: <strong>¥{(lead.amount_jpy || 0).toLocaleString()}（税込）</strong>

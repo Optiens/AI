@@ -1,5 +1,5 @@
 /**
- * AI 活用診断（無料版）のメール認証（ダブルオプトイン）ヘルパー
+ * AI 活用診断（簡易版）のメール認証（ダブルオプトイン）ヘルパー
  */
 import { randomBytes } from 'node:crypto'
 
@@ -31,7 +31,7 @@ export function buildVerificationEmailHtml(params: {
   return `
 <div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${escapeHtml(companyName)} ${escapeHtml(personName)} 様</p>
-<p>合同会社Optiensです。<br/>無料AI活用診断のお申し込みありがとうございます。</p>
+<p>合同会社Optiensです。<br/>【簡易版】AI活用診断のお申し込みありがとうございます。</p>
 <div style="margin:18px 0;padding:14px 18px;background:#FEF3C7;border-left:4px solid #F59E0B;border-radius:4px;">
   <p style="margin:0;font-weight:600;color:#92400E;">⚠️ お申し込みはまだ完了していません</p>
   <p style="margin:6px 0 0;font-size:14px;color:#78350F;">下のボタンをクリックしてメールアドレスをご確認いただいた時点で、お申し込みが完了します。</p>

@@ -17,11 +17,11 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         <!-- プラン切替トグル -->
         <div class="plan-switcher" role="tablist" aria-label="診断プランの切替">
           <button type="button" class="plan-switch-btn is-active" data-plan="free" role="tab" aria-selected="true">
-            <span class="plan-switch-name">無料・簡易版</span>
+            <span class="plan-switch-name">【簡易版】</span>
             <span class="plan-switch-price">0円</span>
           </button>
           <button type="button" class="plan-switch-btn" data-plan="paid" role="tab" aria-selected="false">
-            <span class="plan-switch-name">有償・詳細版</span>
+            <span class="plan-switch-name">【詳細版】</span>
             <span class="plan-switch-price">¥5,500 税込</span>
           </button>
         </div>
@@ -45,7 +45,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         <div class="diag-promise" data-plan-show="free">
           <div class="diag-promise-item">
             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            <p>テンプレートに沿った<strong>2〜3 ページの簡易レポート</strong>を、Google Slides のリンクでお届けします。</p>
+            <p>テンプレートに沿った<strong>2〜3 ページの簡易レポート</strong>をお届けします。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-list-check" aria-hidden="true"></i>
@@ -82,22 +82,22 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           <div class="step">
             <span class="step-badge">STEP 1</span>
             <span class="step-title">フォーム入力</span>
-            <span class="step-desc">かんたん</span>
+            <span class="step-desc">会社情報・業務内容を 5〜15 分で入力（任意項目あり）</span>
           </div>
           <div class="step">
             <span class="step-badge">STEP 2</span>
             <span class="step-title">メール認証</span>
-            <span class="step-desc">確認メール内のボタン</span>
+            <span class="step-desc">届いた確認メール内の「認証する」ボタンをクリック（24 時間以内）</span>
           </div>
           <div class="step">
             <span class="step-badge">STEP 3</span>
             <span class="step-title">レポート作成</span>
-            <span class="step-desc">自動・数分</span>
+            <span class="step-desc">業種・業務に合わせて AI が自動生成（通常数分）</span>
           </div>
           <div class="step">
             <span class="step-badge">STEP 4</span>
             <span class="step-title">レポート受信</span>
-            <span class="step-desc">メールでリンク共有</span>
+            <span class="step-desc">完成した Google Slides のリンクをメールでお届け</span>
           </div>
         </div>
 
@@ -106,22 +106,22 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           <div class="step">
             <span class="step-badge">STEP 1</span>
             <span class="step-title">申込フォーム</span>
-            <span class="step-desc">下記から</span>
+            <span class="step-desc">会社情報・業務内容・追加項目を入力して送信</span>
           </div>
           <div class="step">
             <span class="step-badge">STEP 2</span>
             <span class="step-title">お支払い</span>
-            <span class="step-desc">銀行振込</span>
+            <span class="step-desc">即時届く案内メールの口座へ ¥5,500（税込）を 7 日以内に銀行振込</span>
           </div>
           <div class="step">
             <span class="step-badge">STEP 3</span>
             <span class="step-title">業務分析・提案作成</span>
-            <span class="step-desc">5営業日以内</span>
+            <span class="step-desc">入金確認後、5 営業日以内に詳細レポートを作成</span>
           </div>
           <div class="step">
             <span class="step-badge">STEP 4</span>
             <span class="step-title">レポート + MTG</span>
-            <span class="step-desc">日程調整</span>
+            <span class="step-desc">詳細レポートと 60 分オンライン MTG の日程調整リンクをメールでお届け</span>
           </div>
         </div>
 
@@ -465,7 +465,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 
           <!-- 月次上限到達時の代替案内（JSで切替） -->
           <div class="diag-limit-block" id="diag-limit-block" hidden>
-            <h3>今月のAI活用診断（無料版）枠は終了しました</h3>
+            <h3>今月の【簡易版】AI活用診断枠は終了しました</h3>
             <p>多くの方にご利用いただきありがとうございます。<br/>毎月1日にリセットされますので、来月以降に再度お申し込みください。</p>
             <p>お急ぎの場合は<strong>詳細レポート（¥5,500 税込）</strong>をご利用いただけます。月次上限の対象外で、5営業日以内にお届けします。</p>
             <button type="button" class="btn-primary" id="diag-switch-paid">詳細レポートに切替える</button>
@@ -512,14 +512,14 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             if (limitBlock) limitBlock.hidden = false;
             if (submitBtn) submitBtn.style.display = 'none';
           }
-          quotaText.textContent = '今月のAI活用診断（無料版）枠は終了しました（毎月1日にリセット）';
+          quotaText.textContent = '今月の【簡易版】AI活用診断枠は終了しました（毎月1日にリセット）';
           quotaWrap.classList.add('is-empty');
         } else if (remaining <= 5) {
           // 残りわずか
-          quotaText.textContent = '今月のAI活用診断（無料版）は残り ' + remaining + ' 件です（毎月1日にリセット）';
+          quotaText.textContent = '今月の【簡易版】AI活用診断は残り ' + remaining + ' 件です（毎月1日にリセット）';
           quotaWrap.classList.add('is-warn');
         } else {
-          quotaText.textContent = '今月のAI活用診断（無料版）は受付中です（毎月1日にリセット）';
+          quotaText.textContent = '今月の【簡易版】AI活用診断は受付中です（毎月1日にリセット）';
         }
         quotaWrap.hidden = false;
       })

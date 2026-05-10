@@ -252,12 +252,25 @@ const homeSchema = [
 
 .home-ax-note {
   text-align: center;
+  /* 最終行がポツンと残らないようブラウザに行末バランス調整を任せる
+     （Chrome 117+ / Firefox 121+ / Safari 17.5+。非対応ブラウザはデフォルト動作） */
+  text-wrap: pretty;
   font-size: clamp(12px, 1.2vw, 13px);
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--muted, #64748b);
   margin: -16px auto clamp(28px, 4vw, 36px);
-  max-width: 720px;
+  max-width: 640px;
   letter-spacing: .01em;
+  /* 単語境界を意識した日本語折り返し（句読点が行頭に来るのを抑制） */
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .home-ax-note {
+    text-align: left;
+    max-width: 100%;
+    padding: 0 8px;
+  }
 }
 .home-ax-note strong {
   color: var(--home-brand, #1F3A93);
