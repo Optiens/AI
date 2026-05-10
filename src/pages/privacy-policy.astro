@@ -1,78 +1,227 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const updatedAt = "2026-05-10";
 ---
 
 <Layout
-    title="PRIVACY POLICY | Optiens"
-    description="Optiensのプライバシーポリシーについてのページです。"
+    title="プライバシーポリシー | Optiens"
+    description="合同会社Optiensのプライバシーポリシー。AI 活用診断・コンサルティング・水耕栽培事業における個人情報の取得・利用・委託・開示請求の方針を明記しています。"
 >
-    <main class="page-container">
+    <main class="page-container light-section">
         <div class="content-wrapper">
-            <h1>PRIVACY POLICY</h1>
-            <p>
-                Optiens（以下「当社」）は、当社の提供するサービス（以下「本サービス」）における、お客様の個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下「本ポリシー」）を定めます。
+            <h1>プライバシーポリシー</h1>
+            <p class="lead">
+                合同会社Optiens（以下「当社」）は、AI 活用診断・コンサルティング、室内 IoT 水耕栽培の自社実証事業を提供するにあたり、お客様の個人情報を以下のとおり適切に取り扱います。
             </p>
 
-            <h2>1. 取得する情報および利用目的</h2>
-            <p>
-                当社は、本サービスの運営にあたり、以下の目的のため、お客様から個人情報を取得することがあります。
-            </p>
-            <ul>
-                <li>お問い合わせへの対応のため</li>
-                <li>サービスの改善、新サービスの開発のため</li>
-                <li>当社からのご案内、お知らせの配信のため</li>
+            <h2>1. 事業者情報</h2>
+            <ul class="info-list">
+                <li><strong>事業者名</strong>：合同会社Optiens</li>
+                <li><strong>所在地</strong>：〒407-0301 山梨県北杜市高根町清里3545番地2483</li>
+                <li><strong>代表者</strong>：髙橋 大地</li>
+                <li><strong>連絡先</strong>：<a href="mailto:info@optiens.com">info@optiens.com</a></li>
             </ul>
 
-            <h2>2. 個人情報の管理</h2>
+            <h2>2. 取得する個人情報</h2>
+            <p>当社は、お問い合わせフォーム・AI 活用診断申込フォーム・メールでのご連絡を通じて、以下の個人情報を取得します。</p>
+            <ul>
+                <li>会社名・屋号、氏名、メールアドレス</li>
+                <li>業種、従業員規模、事業概要、業務内容、現在ご利用のツール</li>
+                <li>診断申込時にアップロードいただく業務資料（任意）</li>
+                <li>有償版申込の場合、振込人名義などのお支払い関連情報</li>
+                <li>サイト閲覧時の Cookie・アクセスログ（IP アドレス、ブラウザ情報等）</li>
+            </ul>
+
+            <h2>3. 利用目的</h2>
+            <p>取得した個人情報は以下の目的の範囲内で利用します。</p>
+            <ul>
+                <li>AI 活用診断レポートの作成・送付</li>
+                <li>有償版（詳細レポート＋オンラインミーティング）の提供および入金確認</li>
+                <li>お問い合わせへのご返信、契約・取引に関するご連絡</li>
+                <li>AI 活用情報・サービス案内のメール配信（オプトアウトされた方を除く）</li>
+                <li>サービス品質向上のための統計分析（個人を特定しない形式に加工した上で利用）</li>
+                <li>不正利用・スパム防止のためのアクセスログ解析</li>
+            </ul>
+
+            <h2>4. 個人情報の管理</h2>
             <p>
-                当社は、お客様の個人情報を正確かつ最新の状態に保ち、個人情報への不正アクセス、紛失、破損、改ざん、漏洩などを防止するため、セキュリティシステムの維持、社内管理体制の整備等の必要な措置を講じ、厳重な管理を行います。
+                当社は、取得した個人情報の漏洩・滅失・毀損を防止するため、以下の安全管理措置を講じます。
+            </p>
+            <ul>
+                <li>API キー・認証情報は AI エージェントから物理的に隔離した場所に保管</li>
+                <li>機密情報の暗号化通信（HTTPS）および保存時の暗号化</li>
+                <li>本番データベース（Supabase）へのアクセス権限は代表のみ</li>
+                <li>不要となった個人情報の速やかな削除</li>
+            </ul>
+
+            <h2>5. 業務委託先（外部サービス）</h2>
+            <p>
+                当社は、サービス提供のために必要な範囲で、以下の外部サービス事業者にデータ処理を委託します。委託先は、適切な情報セキュリティ水準を満たすことを確認の上で選定しています。
+            </p>
+            <ul>
+                <li><strong>データベース・認証基盤</strong>：Supabase（米国 Supabase Inc.）</li>
+                <li><strong>サイトホスティング</strong>：Vercel（米国 Vercel Inc.）</li>
+                <li><strong>メール配信</strong>：Resend（米国 Resend Inc.）</li>
+                <li><strong>ボット対策</strong>：Cloudflare Turnstile（米国 Cloudflare, Inc.）</li>
+                <li><strong>AI レポート生成</strong>：Anthropic Claude / OpenAI / Google Cloud（必要に応じて）</li>
+                <li><strong>画像生成</strong>：Google Cloud Vertex AI（Imagen 4 Ultra）</li>
+            </ul>
+            <p class="note">
+                上記サービスは海外（主に米国）にデータが保管・処理される可能性があります。各事業者は欧州 GDPR・米国主要州法等のグローバルなプライバシー基準に準拠しています。
             </p>
 
-            <h2>3. 第三者への提供</h2>
+            <h2>6. 第三者提供</h2>
             <p>
-                当社は、法令に基づき開示することが必要である場合を除き、あらかじめお客様の同意を得ることなく、第三者に個人情報を提供することはありません。
+                当社は、以下のいずれかに該当する場合を除き、お客様の個人情報を第三者に提供しません。
+            </p>
+            <ul>
+                <li>お客様の同意がある場合</li>
+                <li>法令に基づく開示要請がある場合</li>
+                <li>人の生命・身体・財産の保護に必要で、本人の同意取得が困難な場合</li>
+                <li>第 5 項の業務委託先に対し、利用目的の達成に必要な範囲で提供する場合</li>
+            </ul>
+
+            <h2>7. メール配信のオプトアウト</h2>
+            <p>
+                AI 活用情報・サービス案内のメール配信を希望されない場合、以下のいずれかの方法で停止できます。
+            </p>
+            <ul>
+                <li>AI 活用診断申込フォームの「配信を希望しない」チェックボックスにチェック</li>
+                <li>配信メール末尾の「配信停止」リンクをクリック</li>
+                <li><a href="mailto:info@optiens.com">info@optiens.com</a> までその旨をメールでご連絡</li>
+            </ul>
+            <p class="note">
+                診断レポート本体・メール認証メール・お申込内容に関する個別連絡は、上記オプトアウトの対象外として送信します。
             </p>
 
-            <h2>4. 本ポリシーの変更</h2>
+            <h2>8. 開示・訂正・削除等の請求</h2>
             <p>
-                当社は、法令の改正等に伴い、必要に応じて本ポリシーの内容を改定することがあります。変更後の本ポリシーは、本サイトに掲載された時点から効力を生じるものとします。
+                お客様は、当社が保有するご自身の個人情報について、開示・訂正・追加・削除・利用停止・第三者提供の停止を請求できます。<a href="mailto:info@optiens.com">info@optiens.com</a> までご連絡ください。本人確認の上、合理的な期間内に対応します。
             </p>
+
+            <h2>9. Cookie の利用</h2>
+            <p>
+                当サイトは、サイト動作の維持・利用状況の統計分析のために Cookie を使用することがあります。ブラウザ設定により Cookie の受け入れを拒否できますが、その場合一部機能が利用できなくなることがあります。
+            </p>
+
+            <h2>10. 本ポリシーの変更</h2>
+            <p>
+                当社は、法令の改正・サービスの変更等に応じて、本ポリシーを改定することがあります。重要な変更がある場合はサイト上で告知します。改定後の本ポリシーは、本ページに掲載した時点から効力を生じます。
+            </p>
+
+            <p class="updated">最終更新日：{updatedAt}</p>
         </div>
     </main>
 </Layout>
 
 <style>
   .page-container {
-    padding: 80px 20px;
+    padding: 100px 20px 60px;
   }
 
   .content-wrapper {
     max-width: 800px;
     margin: 0 auto;
-    line-height: 1.8;
+    line-height: 1.85;
+    color: var(--text);
   }
 
   h1 {
-    font-size: 2.5em;
-    font-weight: bold;
-    margin-bottom: 30px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 24px;
     text-align: center;
+    color: var(--brand);
+  }
+
+  .lead {
+    font-size: 1.02rem;
+    color: var(--text);
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
   }
 
   h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-top: 40px;
-    margin-bottom: 10px;
-    border-left: 4px solid #2e574c;
-    padding-left: 10px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-top: 44px;
+    margin-bottom: 14px;
+    color: var(--brand);
+    border-left: 4px solid var(--brand);
+    padding-left: 14px;
+    line-height: 1.5;
   }
 
   p, ul {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    color: var(--text);
+    font-size: .96rem;
   }
 
   ul {
-    padding-left: 20px;
+    padding-left: 24px;
+  }
+
+  li {
+    margin-bottom: 6px;
+  }
+
+  li strong {
+    color: var(--heading);
+    font-weight: 600;
+  }
+
+  .info-list {
+    list-style: none;
+    padding-left: 0;
+    background: var(--surface-2);
+    border-left: 3px solid var(--brand);
+    border-radius: 4px;
+    padding: 16px 18px;
+  }
+
+  .info-list li {
+    margin-bottom: 8px;
+  }
+
+  .note {
+    font-size: .88rem;
+    color: var(--muted);
+    background: var(--surface-2);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: -8px;
+  }
+
+  a {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+
+  a:hover {
+    opacity: 0.8;
+  }
+
+  .updated {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    text-align: right;
+    font-size: .88rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 640px) {
+    .page-container {
+      padding: 80px 16px 40px;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+    h2 {
+      font-size: 1.18rem;
+    }
   }
 </style>

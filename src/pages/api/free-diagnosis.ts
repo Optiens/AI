@@ -107,6 +107,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
 
     // ---- プラン（free / paid） ----
     const planRaw = sanitize(String(form.get('plan') || 'free'))
+    const marketingOptOut = form.get('marketing_opt_out') === '1'
     const plan: 'free' | 'paid' = planRaw === 'paid' ? 'paid' : 'free'
 
     // ---- 申込番号の自動採番（8桁ランダム英数字・一意性保証） ----
@@ -218,6 +219,8 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
         // セキュリティ関連
         verification_token: verificationToken,
         submission_ip: ip !== 'unknown' ? ip : null,
+        // マーケティング配信オプトアウト
+        marketing_opt_out: marketingOptOut,
       })
       if (dbError) {
         console.error('[free-diagnosis] Supabase error:', dbError)

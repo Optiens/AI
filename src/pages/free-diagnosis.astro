@@ -53,7 +53,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-handshake-simple" aria-hidden="true"></i>
-            <p>契約は不要です。お申し込み後は AI 活用情報・詳細レポート・導入支援のご案内をメールでお送りします（<strong>配信停止はいつでも可能</strong>）。</p>
+            <p>契約は不要です。診断レポートの納品をもって完了します。</p>
           </div>
         </div>
 
@@ -83,22 +83,50 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       <div class="container">
         <!-- 無料版ステップ -->
         <div class="diag-steps" data-plan-show="free">
-          <div class="step"><span class="step-num">1</span><span>フォーム入力<small>かんたん</small></span></div>
-          <div class="step-arrow" aria-hidden="true"></div>
-          <div class="step"><span class="step-num">2</span><span>レポート作成<small>自動・数分</small></span></div>
-          <div class="step-arrow" aria-hidden="true"></div>
-          <div class="step"><span class="step-num">3</span><span>レポート受信<small>メールでリンク共有</small></span></div>
+          <div class="step">
+            <span class="step-badge">STEP 1</span>
+            <span class="step-title">フォーム入力</span>
+            <span class="step-desc">かんたん</span>
+          </div>
+          <div class="step">
+            <span class="step-badge">STEP 2</span>
+            <span class="step-title">メール認証</span>
+            <span class="step-desc">確認メール内のボタン</span>
+          </div>
+          <div class="step">
+            <span class="step-badge">STEP 3</span>
+            <span class="step-title">レポート作成</span>
+            <span class="step-desc">自動・数分</span>
+          </div>
+          <div class="step">
+            <span class="step-badge">STEP 4</span>
+            <span class="step-title">レポート受信</span>
+            <span class="step-desc">メールでリンク共有</span>
+          </div>
         </div>
 
         <!-- 有償版ステップ -->
         <div class="diag-steps" data-plan-show="paid" hidden>
-          <div class="step"><span class="step-num">1</span><span>申込フォーム<small>下記から</small></span></div>
-          <div class="step-arrow" aria-hidden="true"></div>
-          <div class="step"><span class="step-num">2</span><span>お支払い<small>銀行振込</small></span></div>
-          <div class="step-arrow" aria-hidden="true"></div>
-          <div class="step"><span class="step-num">3</span><span>業務分析・提案作成<small>5営業日以内</small></span></div>
-          <div class="step-arrow" aria-hidden="true"></div>
-          <div class="step"><span class="step-num">4</span><span>レポート + MTG<small>日程調整</small></span></div>
+          <div class="step">
+            <span class="step-badge">STEP 1</span>
+            <span class="step-title">申込フォーム</span>
+            <span class="step-desc">下記から</span>
+          </div>
+          <div class="step">
+            <span class="step-badge">STEP 2</span>
+            <span class="step-title">お支払い</span>
+            <span class="step-desc">銀行振込</span>
+          </div>
+          <div class="step">
+            <span class="step-badge">STEP 3</span>
+            <span class="step-title">業務分析・提案作成</span>
+            <span class="step-desc">5営業日以内</span>
+          </div>
+          <div class="step">
+            <span class="step-badge">STEP 4</span>
+            <span class="step-title">レポート + MTG</span>
+            <span class="step-desc">日程調整</span>
+          </div>
         </div>
 
         <form method="POST" action="/api/free-diagnosis" class="diag-form" id="diag-form">
@@ -403,9 +431,18 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           </div>
 
           <div class="form-note">
-            <p>ご入力いただいた情報は診断レポート作成のみに使用します。</p>
-            <p>レポート送付後、ご検討の負担になるような連絡はいたしません。</p>
+            <p>ご入力いただいた情報は診断レポートの作成・送付および AI 活用に関するお知らせの配信に使用します。</p>
             <p><a href="/privacy-policy">プライバシーポリシー</a>をご確認ください。</p>
+          </div>
+
+          <div class="opt-out-block">
+            <label class="opt-out-label">
+              <input type="checkbox" name="marketing_opt_out" value="1" id="marketing-opt-out" />
+              <span class="opt-out-text">
+                <strong>AI 活用情報・サービス案内のメール配信を希望しない</strong>
+                <small>診断レポート本体および認証メールはチェックの有無に関わらずお送りします。</small>
+              </span>
+            </label>
           </div>
 
           <!-- Cloudflare Turnstile（free planのみ） -->
@@ -1118,34 +1155,48 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 
   /* ===== Steps ===== */
   .diag-steps {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
     margin-bottom: 48px;
   }
-  .step {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 20px;
+  .diag-steps[data-plan-show="paid"] {
+    grid-template-columns: repeat(4, 1fr);
   }
-  .step span {
+  .step {
+    position: relative;
     display: flex;
     flex-direction: column;
-    font-size: .88rem;
-    font-weight: 600;
-    color: var(--text);
+    gap: 6px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 16px 16px;
   }
-  .step small {
-    font-size: .75rem;
+  .step-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    color: #fff;
+    background: var(--brand);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .step-title {
+    font-size: .98rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .step-desc {
+    font-size: .78rem;
     font-weight: 400;
     color: var(--muted);
-    margin-top: 2px;
+    line-height: 1.4;
   }
+  /* 旧 step-num（ハイドロポニクス系で再利用される可能性に備え保持） */
   .step-num {
     width: 32px;
     height: 32px;
@@ -1158,22 +1209,6 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     font-size: .85rem;
     font-weight: 700;
     flex-shrink: 0;
-  }
-  .step-arrow {
-    width: 24px;
-    height: 2px;
-    background: var(--border);
-    position: relative;
-  }
-  .step-arrow::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: -3px;
-    border: solid var(--border);
-    border-width: 0 2px 2px 0;
-    padding: 3px;
-    transform: rotate(-45deg);
   }
 
   /* ===== Form ===== */
@@ -1193,6 +1228,16 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
   }
   .upload-fieldset legend {
     color: var(--brand, #1F3A93);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    padding: 4px 14px;
+    background: rgba(31, 58, 147, .08);
+    border-radius: 999px;
+  }
+  .upload-fieldset legend::before {
+    content: '✨ ';
+    margin-right: 2px;
   }
   .upload-hint {
     display: flex;
@@ -1589,6 +1634,44 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
   .form-note p { margin: 0; }
   .form-note a { color: var(--brand); text-decoration: underline; }
 
+  .opt-out-block {
+    margin: 0 auto 24px;
+    max-width: 640px;
+    padding: 14px 18px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .opt-out-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .opt-out-label input[type="checkbox"] {
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    cursor: pointer;
+    accent-color: var(--brand);
+  }
+  .opt-out-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    line-height: 1.5;
+  }
+  .opt-out-text strong {
+    font-size: .92rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .opt-out-text small {
+    font-size: .78rem;
+    color: var(--muted);
+  }
+
   .diag-submit {
     display: block;
     width: 100%;
@@ -1711,21 +1794,37 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     max-width: 640px;
   }
 
+  /* ===== Tablet ===== */
+  @media (max-width: 900px) {
+    .diag-steps,
+    .diag-steps[data-plan-show="paid"] {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   /* ===== Mobile ===== */
   @media (max-width: 640px) {
-    .diag-steps {
-      flex-direction: column;
-      gap: 8px;
+    .diag-steps,
+    .diag-steps[data-plan-show="paid"] {
+      grid-template-columns: 1fr;
+      gap: 10px;
     }
-    .step-arrow {
-      width: 2px;
-      height: 16px;
+    .step {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .step-arrow::after {
-      right: -3px;
-      top: auto;
-      bottom: 0;
-      transform: rotate(45deg);
+    .step-badge {
+      flex-shrink: 0;
+    }
+    .step-title {
+      font-size: 1rem;
+      flex: 1 1 auto;
+    }
+    .step-desc {
+      font-size: .8rem;
+      flex-basis: 100%;
     }
     .field-row {
       grid-template-columns: 1fr;
