@@ -3,10 +3,10 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { isPublished } from '../../lib/blog-filters';
 
-type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
+// 静的生成（ビルド時に全公開記事をプリレンダリング）
+export const prerender = true;
 
-// このページで扱うのは水耕栽培関連カテゴリのみ
-const hydroCategories: BlogCategory[] = ['agriculture', 'welfare', 'social'];
+type BlogCategory = 'AI' | 'agriculture' | 'business' | 'technology' | 'welfare' | 'social' | 'announcement';
 
 const categoryLabel: Record<BlogCategory, string> = {
   AI: 'AI・機械学習',
@@ -18,21 +18,20 @@ const categoryLabel: Record<BlogCategory, string> = {
   announcement: 'お知らせ',
 };
 
-const { slug } = Astro.params;
-const posts = await getCollection('blog');
-const post = posts.find((p) => p.id === slug || p.id === `${slug}.md`);
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const hydro = ['agriculture', 'welfare', 'social'] as const;
+  return posts
+    .filter((p) => isPublished(p))
+    .filter((p) => hydro.includes(p.data.category as any))
+    .map((p) => ({
+      params: { slug: p.id.replace(/\.md$/, '') },
+      props: { post: p },
+    }));
+}
 
-// 記事が存在しない、または水耕栽培カテゴリでない場合は /hydroponics に戻す
-if (!post) {
-  return Astro.redirect('/hydroponics');
-}
-// 未公開（draft / 未来日）は 404 として扱う
-if (!isPublished(post)) {
-  return Astro.redirect('/404');
-}
-if (!hydroCategories.includes(post.data.category as BlogCategory)) {
-  return Astro.redirect(`/blog/${slug}`);
-}
+const { post } = Astro.props as { post: any };
+const slug = post.id.replace(/\.md$/, '');
 
 const { Content } = await render(post);
 ---
