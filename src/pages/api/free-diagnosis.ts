@@ -454,6 +454,7 @@ function buildPaidCustomerEmail(companyName: string, personName: string, appId: 
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ※ 領収書・適格請求書（インボイス）の発行に対応しています
+　 適格請求書発行事業者登録番号: T9090003003025
 ※ 導入支援契約に進まれた場合、本費用は初期費用に全額充当します
 ━━━━━━━━━━━━━━━━━━━━━━
 
@@ -461,6 +462,7 @@ function buildPaidCustomerEmail(companyName: string, personName: string, appId: 
 
 合同会社Optiens
 〒407-0301 山梨県北杜市高根町清里3545番地2483
+適格請求書発行事業者登録番号: T9090003003025
 https://optiens.com
 `
 }
@@ -510,6 +512,7 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 
 <p style="margin:24px 0 0;padding-top:16px;border-top:1px solid #E2E8F0;font-size:12px;color:#64748b;">
 ※ 領収書・適格請求書（インボイス）の発行に対応しています<br/>
+　 適格請求書発行事業者登録番号: <strong>T9090003003025</strong><br/>
 ※ 導入支援契約に進まれた場合、本費用は初期費用に全額充当します<br/>
 ※ お振込手数料はお客様ご負担となります<br/><br/>
 ご不明な点は <a href="mailto:info@optiens.com">info@optiens.com</a> までお気軽にお問い合わせください。
@@ -518,6 +521,7 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 <p style="margin-top:24px;font-size:12px;color:#64748b;">
 合同会社Optiens<br/>
 〒407-0301 山梨県北杜市高根町清里3545番地2483<br/>
+適格請求書発行事業者登録番号: T9090003003025<br/>
 <a href="https://optiens.com">https://optiens.com</a>
 </p>
 </div>`
