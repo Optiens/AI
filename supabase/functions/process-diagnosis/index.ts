@@ -60,21 +60,35 @@ const openai = OPENAI_API_KEY ? new OpenAI({ apiKey: OPENAI_API_KEY }) : null
 // ===== JSON Schema（v2.0 テンプレ対応） =====
 const DIAGNOSIS_SCHEMA = {
   type: 'object',
-  required: ['current_summary', 'top3', 'automation_direction', 'ai_type_recommendation',
+  required: ['current_summary', 'summary_points', 'top3', 'automation_direction', 'ai_type_recommendation',
     'mechanism_description', 'automation_bullets', 'automation_reasoning',
     'human_bullets', 'human_reasoning', 'roi', 'cost_total_range', 'cost_breakdown', 'subsidies'],
   properties: {
-    current_summary: { type: 'string', maxLength: 200 },
+    // 現状サマリー（本文 + 箇条書きポイントの 2 段構成）
+    current_summary: { type: 'string', minLength: 180, maxLength: 360 },
+    summary_points: {
+      type: 'array', minItems: 3, maxItems: 4,
+      items: { type: 'string', minLength: 25, maxLength: 70 },
+    },
     top3: {
       type: 'array', minItems: 3, maxItems: 3,
       items: {
         type: 'object',
-        required: ['area', 'reason', 'hours_per_month', 'basis'],
+        required: ['area', 'reason', 'hours_per_month', 'basis', 'steps', 'expected_effect'],
         properties: {
           area: { type: 'string', maxLength: 40 },
-          reason: { type: 'string', maxLength: 80 },
-          hours_per_month: { type: 'number', minimum: 2, maximum: 60 },
+          // カードの空白を埋めるため詳細を増やす（80 → 180）
+          reason: { type: 'string', minLength: 80, maxLength: 180 },
+          // 経営インパクトのある大規模ワークフロー前提（小さすぎる提案は禁止）
+          hours_per_month: { type: 'number', minimum: 15, maximum: 80 },
           basis: { type: 'string', maxLength: 50 },
+          // 具体的な処理ステップ（カード下部の空白を埋める）
+          steps: {
+            type: 'array', minItems: 3, maxItems: 4,
+            items: { type: 'string', minLength: 12, maxLength: 45 },
+          },
+          // 時間削減以外の質的効果（属人化解消・対応漏れ防止 等）
+          expected_effect: { type: 'string', minLength: 30, maxLength: 80 },
         },
       },
     },
@@ -98,7 +112,8 @@ const DIAGNOSIS_SCHEMA = {
       required: ['monthly_hours_saved', 'monthly_value_yen'],
       properties: {
         monthly_hours_saved: { type: 'number', minimum: 10, maximum: 200 },
-        monthly_value_yen: { type: 'number', minimum: 15000, maximum: 300000 },
+        // 時給 3,500 円換算（中小事業者の事務系時間単価の上限近辺）
+        monthly_value_yen: { type: 'number', minimum: 35000, maximum: 700000 },
       },
     },
     // 想定コスト
@@ -387,25 +402,44 @@ Optiens は「AI エージェントを組み込んだ自動化ワークフロー
 - 補助金は名称のみ（申請支援は業務範囲外と明示）
 - 提供される【課題別ガイダンス】【予算ガイダンス】【AI活用段階ガイダンス】を必ず反映する
 
+【提案サイズ（最重要・厳守）】
+top3 の各ワークフローは「経営インパクトのある大きな業務単位」で提案してください。
+- 各ワークフローの hours_per_month は **15〜30 時間/月以上** を基本とする
+- 「1業務 5時間/月削減」のような小規模提案は禁止（顧客が導入コストに対して割に合わないと感じる）
+- 業務横断・複数ステップを含むワークフロー単位で構成する
+  例: 「予約受付〜顧客カルテ作成〜確認メール送信」を 1 ワークフローで扱う
+  悪い例: 「予約メールのテンプレ作成」のような単一タスク提案
+
 【出力フィールド説明（重要）】
-- top3: 自動化ワークフロー Top3
-  - area: ワークフロー名（例: 「問い合わせ自動振り分け＋一次返信下書き」）
-  - reason: なぜそのワークフローが効くか
-  - hours_per_month: そのワークフローで月次削減可能な時間（数値・実数）
-  - basis: 時間算出の根拠（例: 「1日10件×5分×20営業日 = 約16時間」）
+- current_summary: 現状の課題サマリー（180〜360文字・本文1〜2段落）
+  - フォーム入力から読み取れる事業特性・課題・AI 活用段階を踏まえて、現状認識を具体的に記述
+  - 抽象論ではなく、「業種特性 × 規模 × 課題 × 関心領域」のクロスで何が起きているかを描写
+- summary_points: 現状サマリーの要点を箇条書きで 3〜4 項目（各25〜70文字）
+  - current_summary 本文と重複しないよう、本文を補強する観点・データ・業種特性を出す
+- top3: 自動化ワークフロー Top3（経営インパクトのある大きな業務単位）
+  - area: ワークフロー名（例: 「問い合わせ自動振り分け＋一次返信下書き＋CRM 記録」）
+  - reason: なぜそのワークフローが効くか（80〜180文字・カードを埋める情報量で）
+    - 現状の業務フローのどこに非効率があるか / そこに AI を入れると何が変わるかを具体的に
+    - 抽象表現「効率化される」のみは禁止。属人化解消・対応漏れ防止・夜間対応可能化など具体的論点
+  - hours_per_month: 月次削減可能な時間（**15〜30 時間/月以上**を基本）
+  - basis: 時間算出の根拠（例: 「1日10件×8分×22営業日 = 約30時間」）
+  - steps: ワークフローの処理ステップを 3〜4 個（各12〜45文字）
+    例: ["予約サイトの新着予約を 5 分間隔で取得", "予約内容を AI が分類・カルテ自動作成", "確認メール下書きを担当者に通知", "担当者が承認 → 顧客へ自動送信"]
+  - expected_effect: 時間削減以外の質的効果（30〜80文字）
+    例: 「夜間・休日も自動応答できる体制になり、機会損失と対応漏れの両方を減らせます」
 - automation_bullets: AI エージェントに任せやすい業務（3〜5項目・各50文字以内）
 - automation_reasoning: なぜそれらを AI に任せられるか（200文字以内）
-- human_bullets: 人間に残すべき業務（3〜5項目・各50文字以内）
-- human_reasoning: なぜそれらを人間に残すか（200文字以内）
+- human_bullets: 人間が担当する業務（3〜5項目・各50文字以内）
+- human_reasoning: なぜそれらを人間が担当するか（200文字以内）
 - cost_total_range: 月額運用コストのレンジ（例: 「¥3,000〜¥15,000」）
 - cost_breakdown: コスト内訳 3〜5項目（category/amount/basis を含む）
   例: { category: "AI API 利用料", amount: "¥1,500〜¥5,000", basis: "月100リクエスト想定" }
 - roi.monthly_hours_saved: top3 の hours_per_month 合計（validateで自動補正されるので大まかでOK）
-- roi.monthly_value_yen: monthly_hours_saved × 1500（validateで自動補正）
+- roi.monthly_value_yen: monthly_hours_saved × 3500（validateで自動補正）
 
 【ROI 計算ルール】
 - top3 の hours_per_month の合計を monthly_hours_saved にする
-- monthly_value_yen = monthly_hours_saved × 1500（時給1500円換算）
+- monthly_value_yen = monthly_hours_saved × 3500（時給 3,500 円換算 / 事務職の時間単価＋機会損失）
 - 数値が大きすぎる場合（200時間/月以上）は現実的にスケールダウン
 `.trim()
 
@@ -498,7 +532,8 @@ function validate(diagnosis: any): string | null {
   if (totalHours > 200) totalHours = 200
   if (!diagnosis.roi) diagnosis.roi = {}
   diagnosis.roi.monthly_hours_saved = Math.round(totalHours)
-  diagnosis.roi.monthly_value_yen = diagnosis.roi.monthly_hours_saved * 1500
+  // 時給 3,500 円換算（事務職の時間単価＋機会損失込み）
+  diagnosis.roi.monthly_value_yen = diagnosis.roi.monthly_hours_saved * 3500
 
   // automation_bullets / human_bullets が配列でない場合に備えた防御
   if (!Array.isArray(diagnosis.automation_bullets) || diagnosis.automation_bullets.length < 1) {
@@ -581,6 +616,9 @@ async function createSlides(lead: any, diagnosis: any): Promise<string> {
 function buildReplacements(lead: any, d: any) {
   // 業務仕分け（箇条書きを 1 文字列に整形）
   const formatBullets = (arr: string[]) => (arr || []).map(b => '・ ' + b).join('\n')
+  // ステップ箇条書き（1. 2. 3. 形式）
+  const formatSteps = (arr: string[]) =>
+    (arr || []).map((s, i) => `${i + 1}. ${s}`).join('\n')
 
   // コスト内訳（配列の長さに応じて 5 行分まで埋め、足りない分は空文字）
   const breakdown = d.cost_breakdown || []
@@ -592,41 +630,69 @@ function buildReplacements(lead: any, d: any) {
     costFields[`{{cost_basis_${i}}}`] = item.basis || ''
   }
 
+  // ROI 年間・3 年累計（時給 3,500 円換算）
+  const monthlyYen = d.roi.monthly_value_yen
+  const annualYen = monthlyYen * 12
+  const threeYearYen = monthlyYen * 36
+  const monthlyHours = d.roi.monthly_hours_saved
+  const annualHours = monthlyHours * 12
+
+  // Top3 の総削減時間
+  const top3TotalHours = (d.top3 || []).reduce(
+    (sum: number, t: any) => sum + (Number(t.hours_per_month) || 0),
+    0,
+  )
+
+  // サマリー箇条書き
+  const summaryPoints = formatBullets(d.summary_points || [])
+
   const map: Record<string, string> = {
     // 共通
     '{{customer_name}}': lead.company_name,
     '{{diagnosis_date}}': formatDate(new Date()),
     '{{application_id}}': lead.application_id || '',
     '{{current_summary}}': d.current_summary,
+    '{{summary_points}}': summaryPoints,
 
     // Top3 自動化ワークフロー
     '{{top3_area_1}}': d.top3[0].area,
     '{{top3_reason_1}}': d.top3[0].reason,
     '{{top3_hours_1}}': String(d.top3[0].hours_per_month),
     '{{top3_basis_1}}': d.top3[0].basis,
+    '{{top3_steps_1}}': formatSteps(d.top3[0].steps),
+    '{{top3_effect_1}}': d.top3[0].expected_effect || '',
     '{{top3_area_2}}': d.top3[1].area,
     '{{top3_reason_2}}': d.top3[1].reason,
     '{{top3_hours_2}}': String(d.top3[1].hours_per_month),
     '{{top3_basis_2}}': d.top3[1].basis,
+    '{{top3_steps_2}}': formatSteps(d.top3[1].steps),
+    '{{top3_effect_2}}': d.top3[1].expected_effect || '',
     '{{top3_area_3}}': d.top3[2].area,
     '{{top3_reason_3}}': d.top3[2].reason,
     '{{top3_hours_3}}': String(d.top3[2].hours_per_month),
     '{{top3_basis_3}}': d.top3[2].basis,
+    '{{top3_steps_3}}': formatSteps(d.top3[2].steps),
+    '{{top3_effect_3}}': d.top3[2].expected_effect || '',
+    '{{top3_hours_total}}': String(Math.round(top3TotalHours)),
 
     // 自動化方針
     '{{automation_direction}}': d.automation_direction,
     '{{ai_type_recommendation}}': d.ai_type_recommendation,
     '{{mechanism_description}}': d.mechanism_description,
 
-    // 業務の仕分け
+    // 業務の仕分け（旧テンプレ「自動化と人間残しの方向性」→「AIと人間の役割分担」想定）
     '{{automation_bullets}}': formatBullets(d.automation_bullets),
     '{{automation_reasoning}}': d.automation_reasoning || '',
     '{{human_bullets}}': formatBullets(d.human_bullets),
     '{{human_reasoning}}': d.human_reasoning || '',
 
-    // ROI
-    '{{monthly_hours_saved}}': String(d.roi.monthly_hours_saved),
-    '{{monthly_value_yen}}': '¥' + d.roi.monthly_value_yen.toLocaleString(),
+    // ROI（時給 3,500 円換算 / 月次・年間・3 年累計）
+    '{{hourly_rate}}': '3,500',
+    '{{monthly_hours_saved}}': String(monthlyHours),
+    '{{monthly_value_yen}}': monthlyYen.toLocaleString(),
+    '{{annual_hours_saved}}': String(annualHours),
+    '{{annual_value_yen}}': annualYen.toLocaleString(),
+    '{{three_year_value_yen}}': threeYearYen.toLocaleString(),
 
     // 想定コスト
     '{{cost_total_range}}': d.cost_total_range || '',
