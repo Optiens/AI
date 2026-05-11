@@ -700,15 +700,24 @@ for (let i = 1; i <= PROPOSAL_TOTAL; i++) {
   addTitle(slide, '月間効果額の詳細試算');
   addGradientLine(slide, 2.15);
 
-  // 中央: 大数字（拡大）
+  // 中央: 大数字（拡大）— 月額
   slide.addText('月 ¥{{paid_roi_total_yen}}', {
-    x: 0, y: 2.4, w: W, h: 0.95,
-    fontSize: 46, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center',
+    x: 0, y: 2.3, w: W, h: 0.75,
+    fontSize: 42, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center',
+  });
+  // 年間・3 年累計（小数字・横並び）
+  slide.addText('年間効果額  ¥{{paid_roi_annual_yen}}', {
+    x: 0.6, y: 3.05, w: (W - 1.2) / 2, h: 0.4,
+    fontSize: 16, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center',
+  });
+  slide.addText('3 年累計  ¥{{paid_roi_three_year_yen}}', {
+    x: 0.6 + (W - 1.2) / 2, y: 3.05, w: (W - 1.2) / 2, h: 0.4,
+    fontSize: 16, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center',
   });
 
   // 内訳テーブル（最大7項目）
-  const tableY = 3.5;
-  const tableH = 3.5;
+  const tableY = 3.55;
+  const tableH = 3.45;
   slide.addShape('roundRect', {
     x: 0.6, y: tableY, w: W - 1.2, h: tableH,
     fill: { color: COLORS.cardBg },
@@ -739,7 +748,7 @@ for (let i = 1; i <= PROPOSAL_TOTAL; i++) {
     slide.addText(`{{paid_roi_basis_${i}}}`, { x: colXs[4], y, w: colWs[4], h: rowH, fontSize: 11, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle' });
   }
 
-  addFooterNote(slide, '※ 標準時給 1,500 円ベース。月間効果額の試算（スケール時の累計試算は含めず）');
+  addFooterNote(slide, '※ 標準時給 3,500 円ベース（事務職の時間単価＋機会損失込み）。月間効果額の試算（年間は月額×12、3年累計は×36）');
 }
 
 // =================================================
