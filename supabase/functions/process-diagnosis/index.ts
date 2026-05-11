@@ -100,6 +100,9 @@ const DIAGNOSIS_SCHEMA = {
 
 // ===== Main Handler =====
 Deno.serve(async (req: Request) => {
+  // catch 句で lead 情報を参照できるよう、try の外でスコープを宣言
+  let leadCache: any = null
+
   try {
     // 環境変数の事前チェック（早期失敗 + 親切なエラーメッセージ）
     const missing = checkRequiredEnv()
@@ -127,6 +130,7 @@ Deno.serve(async (req: Request) => {
 
     const payload = await req.json()
     const lead = payload.record  // Supabase Database Webhook 形式
+    leadCache = lead  // catch 句で参照可能にする
 
     if (!lead?.id) {
       return new Response('Invalid payload', { status: 400 })
@@ -191,16 +195,12 @@ Deno.serve(async (req: Request) => {
     // OpenAI クォータ超過（429 / insufficient_quota / rate limit）の検出
     const isQuotaError = /\b429\b|quota|insufficient_quota|rate[\s_-]?limit/i.test(errStr)
 
-    // payload.record を再取得（catch 句に lead が無いケースに備える）
-    let leadForNotify: any = null
-    try {
-      const body = await req.clone().json().catch(() => null)
-      leadForNotify = body?.record || null
-    } catch {}
+    // try 句で保存した lead を使用（req.json() は body 1 度しか読めないため）
+    const leadForNotify = leadCache
 
     if (isQuotaError && leadForNotify?.id) {
       // クォータ超過 → 翌朝の自動リトライ対象に変更
-      await markStatus(leadForNotify.id, 'quota_retry_pending')
+      await markStatus(leadForNotify.id, 'quota_retry_pending').catch(() => {})
       // 顧客に遅延通知を自動送信
       try {
         await sendDelayNoticeEmail(leadForNotify)
@@ -218,8 +218,13 @@ Deno.serve(async (req: Request) => {
     // それ以外の例外
     if (leadForNotify?.id) {
       await markStatus(leadForNotify.id, 'manual_review').catch(() => {})
+      await notifyAdmin(
+        'process-diagnosis 例外',
+        `lead_id=${leadForNotify.id}\napplication_id=${leadForNotify.application_id}\n会社名=${leadForNotify.company_name}\nstatus を manual_review に変更しました。\n\n元エラー:\n${errStr}`,
+      )
+    } else {
+      await notifyAdmin('process-diagnosis 例外（lead 未取得）', errStr)
     }
-    await notifyAdmin('process-diagnosis 例外', errStr)
     return new Response(`Error: ${errStr}`, { status: 500 })
   }
 })
