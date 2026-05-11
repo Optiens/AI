@@ -74,13 +74,16 @@ const DIAGNOSIS_SCHEMA = {
       type: 'array', minItems: 3, maxItems: 3,
       items: {
         type: 'object',
-        required: ['area', 'reason', 'hours_per_month', 'basis', 'steps', 'expected_effect'],
+        required: ['area', 'means', 'reason', 'hours_per_month', 'basis', 'steps', 'expected_effect'],
         properties: {
           area: { type: 'string', maxLength: 40 },
+          // 手段タグ：ai=AIエージェント / integration=システム連携・標準機能 / simple=定型化＋運用
+          //   AI を使わなくても解決できる業務は integration / simple を選ぶ
+          means: { type: 'string', enum: ['ai', 'integration', 'simple'] },
           // カードの空白を埋めるため詳細を増やす（80 → 180）
           reason: { type: 'string', minLength: 80, maxLength: 180 },
-          // 経営インパクトのある大規模ワークフロー前提（小さすぎる提案は禁止）
-          hours_per_month: { type: 'number', minimum: 15, maximum: 80 },
+          // 業務規模に応じた現実的な削減時間（小規模事業者では 3-10 時間/月でも価値あり）
+          hours_per_month: { type: 'number', minimum: 3, maximum: 80 },
           basis: { type: 'string', maxLength: 50 },
           // 具体的な処理ステップ（カード下部の空白を埋める）
           steps: {
@@ -111,9 +114,9 @@ const DIAGNOSIS_SCHEMA = {
       type: 'object',
       required: ['monthly_hours_saved', 'monthly_value_yen'],
       properties: {
-        monthly_hours_saved: { type: 'number', minimum: 10, maximum: 200 },
+        monthly_hours_saved: { type: 'number', minimum: 5, maximum: 200 },
         // 時給 3,500 円換算（中小事業者の事務系時間単価の上限近辺）
-        monthly_value_yen: { type: 'number', minimum: 35000, maximum: 700000 },
+        monthly_value_yen: { type: 'number', minimum: 17500, maximum: 700000 },
       },
     },
     // 想定コスト
@@ -377,21 +380,48 @@ async function generateDiagnosis(lead: any) {
 あなたは Optiens の AI 活用診断レポート生成アシスタントです。
 中小事業者向けの「無料診断レポート」の本文を、提供されるフォーム入力に基づいて生成します。
 
-【提案方針（最重要・厳守）】
-Optiens は「AI エージェントを組み込んだ自動化ワークフロー」を構築・納品する事業者です。
-そのため、提案は必ず以下の性質を満たす自動化ワークフローのみとしてください:
+【Optiens の事業ポジション（最重要・厳守）】
+Optiens は「業務を最適化する」ことを本業とする事業者です。AI はその手段の 1 つに過ぎません。
+そのため、診断は「AI を売りつける診断」ではなく「業務最適化のために AI が効くかを見極める診断」です。
+AI が不要・過剰な業務にまで無理やり AI を当てはめてはいけません。
+顧客の規模・業務実態を踏まえて、最も適した手段を正直に提案してください。
 
-✅ 提案して良いもの（エージェント型自動化）:
-- 複数システムを横断する自動化（例: 問い合わせメール → 内容分類 → 担当者振り分け → CRM 記録）
-- 定型業務の自動実行＋人間の最終確認の仕組み（例: 請求書 PDF 受領 → OCR → 会計ソフト登録 → 担当者通知）
-- 業務トリガー連動の自動化（例: 予約サイト新規予約 → 顧客カルテ作成 → 確認メール送信）
-- データ収集 → 分析 → 定例レポート自動生成
-- 社内データに対する自然言語問い合わせシステム（RAG）
+【提案の手段タグ（必ず付与）】
+top3 の各提案には means フィールドを付け、以下のいずれかを選んでください:
+- "ai"           = AI エージェント／LLM／OCR／RAG など AI が中核となる仕組み
+- "integration"  = 業務システムの標準機能・API 連携・Webhook・Zapier等のノーコード自動化（AI なし）
+- "simple"       = 定型メールテンプレ／チェックリスト／フォーム整備／運用ルール整備（AI なし）
 
-❌ 提案してはいけないもの（汎用 AI 利用レベル）:
-- 「SNS 投稿案を作成」「販促文を作成」「FAQ を整理」のような、ChatGPT で個別タスクを依頼するだけのもの
-- 業務との統合がない単発生成タスク
-- 「AI に聞いて使う」レベルの提案
+判断基準:
+- 「定型文・テンプレで済むか？」→ Yes なら simple
+- 「既存業務システム（予約・会計・CRM 等）の標準機能や API 連携で済むか？」→ Yes なら integration
+- 「分類・要約・自然言語理解・例外判断が必要か？」→ Yes なら ai
+
+AI を使う必要のない業務に AI を提案しないでください（顧客信頼の毀損につながります）。
+top3 のうち AI:integration:simple の比率は **業種と課題によって柔軟**に決めて構いません。
+（例: 既に予約システムがあるキャンプ場では simple/integration 中心、AI は 0〜1 件でも可）
+
+【業種ごとの現実的な業務規模感（hours_per_month 算出時に参照）】
+- accommodation（宿泊・キャンプ場・ペンション）: 問い合わせ 月20-60件 / 予約 月20-80件（平日閑散・週末繁忙）
+- restaurant（カフェ・レストラン）: 予約 月50-300件 / 問い合わせ 月20-100件
+- construction（工務店）: 見積依頼 月5-30件 / 進行案件 同時 3-10件
+- winery（醸造所）: 直販問い合わせ 月10-50件 / 出荷 月50-500件
+- outdoor（観光ガイド・アウトドア）: 体験予約 月20-150件（季節差大）
+- bakery（パン屋・菓子）: 受注・予約 月30-200件
+- agriculture（農業）: 出荷・顧客対応 季節依存（繁忙期 vs 閑散期で 10倍差）
+- retail（小売）: 店舗規模依存（個別ヒアリングが必要と明記）
+- service（サービス業）: 受注 月10-100件 / 業務内容依存
+- manufacturing（製造）: 受発注 月10-200件 / 工程管理依存
+- municipality（自治体）: 問い合わせ 月50-500件 / 業務多岐
+
+これら数値はあくまで目安。フォーム入力の「事業内容」「従業員数」「日常業務」から実態を読み取り、
+**過大評価しないこと**。月150件など根拠の薄い数値は絶対に使わないでください。
+従業員数が少ない（1-5人）場合、各業務量も小さくなる前提で算出してください。
+
+【小さい時間でも価値があるという姿勢】
+- 月 3-10 時間の削減でも、それが課題解決につながるなら立派な提案です
+- 「月 30 時間以上削減」を無理に作ろうとしないでください
+- 顧客が「割に合わない」と感じる過大提案より、現実的な提案の方が信頼を得られます
 
 【表現ルール（厳守）】
 - 業種×規模の汎用パターンに基づく方向性のみを示す（個別具体提案は禁止）
@@ -402,31 +432,25 @@ Optiens は「AI エージェントを組み込んだ自動化ワークフロー
 - 補助金は名称のみ（申請支援は業務範囲外と明示）
 - 提供される【課題別ガイダンス】【予算ガイダンス】【AI活用段階ガイダンス】を必ず反映する
 
-【提案サイズ（最重要・厳守）】
-top3 の各ワークフローは「経営インパクトのある大きな業務単位」で提案してください。
-- 各ワークフローの hours_per_month は **15〜30 時間/月以上** を基本とする
-- 「1業務 5時間/月削減」のような小規模提案は禁止（顧客が導入コストに対して割に合わないと感じる）
-- 業務横断・複数ステップを含むワークフロー単位で構成する
-  例: 「予約受付〜顧客カルテ作成〜確認メール送信」を 1 ワークフローで扱う
-  悪い例: 「予約メールのテンプレ作成」のような単一タスク提案
-
 【出力フィールド説明（重要）】
 - current_summary: 現状の課題サマリー（180〜360文字・本文1〜2段落）
   - フォーム入力から読み取れる事業特性・課題・AI 活用段階を踏まえて、現状認識を具体的に記述
   - 抽象論ではなく、「業種特性 × 規模 × 課題 × 関心領域」のクロスで何が起きているかを描写
 - summary_points: 現状サマリーの要点を箇条書きで 3〜4 項目（各25〜70文字）
   - current_summary 本文と重複しないよう、本文を補強する観点・データ・業種特性を出す
-- top3: 自動化ワークフロー Top3（経営インパクトのある大きな業務単位）
-  - area: ワークフロー名（例: 「問い合わせ自動振り分け＋一次返信下書き＋CRM 記録」）
-  - reason: なぜそのワークフローが効くか（80〜180文字・カードを埋める情報量で）
+- top3: 業務最適化提案 Top3（AI に限らず、最適な手段で提案）
+  - area: 提案名（例: 「問い合わせ自動振り分け＋一次返信下書き」「予約システム標準機能の活用と運用整備」）
+  - means: 'ai' / 'integration' / 'simple' のいずれか（上記判断基準に従う）
+  - reason: なぜそれが効くか（80〜180文字・カードを埋める情報量で）
     - 現状の業務フローのどこに非効率があるか / そこに AI を入れると何が変わるかを具体的に
     - 抽象表現「効率化される」のみは禁止。属人化解消・対応漏れ防止・夜間対応可能化など具体的論点
-  - hours_per_month: 月次削減可能な時間（**15〜30 時間/月以上**を基本）
-  - basis: 時間算出の根拠（例: 「1日10件×8分×22営業日 = 約30時間」）
+  - hours_per_month: 月次削減可能な時間（業種規模感に従い現実的な値で）
+  - basis: 時間算出の根拠（例: 「月40件×8分 = 約5時間」「土日のみ予約20件×5分 = 約2時間」）
   - steps: ワークフローの処理ステップを 3〜4 個（各12〜45文字）
     例: ["予約サイトの新着予約を 5 分間隔で取得", "予約内容を AI が分類・カルテ自動作成", "確認メール下書きを担当者に通知", "担当者が承認 → 顧客へ自動送信"]
   - expected_effect: 時間削減以外の質的効果（30〜80文字）
     例: 「夜間・休日も自動応答できる体制になり、機会損失と対応漏れの両方を減らせます」
+    AI を使わない提案でも、属人化解消・抜け漏れ防止などの効果を具体的に示してください
 - automation_bullets: AI エージェントに任せやすい業務（3〜5項目・各50文字以内）
 - automation_reasoning: なぜそれらを AI に任せられるか（200文字以内）
 - human_bullets: 人間が担当する業務（3〜5項目・各50文字以内）
@@ -527,8 +551,8 @@ function validate(diagnosis: any): string | null {
     if (typeof t.hours_per_month !== 'number') return `top3.hours_per_month must be number`
     totalHours += t.hours_per_month
   }
-  // 範囲制約
-  if (totalHours < 10) totalHours = 10
+  // 範囲制約（小規模事業者でも価値ある提案を許容するため下限緩和）
+  if (totalHours < 5) totalHours = 5
   if (totalHours > 200) totalHours = 200
   if (!diagnosis.roi) diagnosis.roi = {}
   diagnosis.roi.monthly_hours_saved = Math.round(totalHours)
@@ -620,6 +644,18 @@ function buildReplacements(lead: any, d: any) {
   const formatSteps = (arr: string[]) =>
     (arr || []).map((s, i) => `${i + 1}. ${s}`).join('\n')
 
+  // 手段タグ → ラベル付き area 表記
+  const meansLabel = (means: string): string => {
+    if (means === 'ai') return '[AIエージェント]'
+    if (means === 'integration') return '[システム連携]'
+    if (means === 'simple') return '[運用整備]'
+    return ''
+  }
+  const decorateArea = (item: any) => {
+    const label = meansLabel(item.means || '')
+    return label ? `${label} ${item.area}` : item.area
+  }
+
   // コスト内訳（配列の長さに応じて 5 行分まで埋め、足りない分は空文字）
   const breakdown = d.cost_breakdown || []
   const costFields: Record<string, string> = {}
@@ -654,20 +690,20 @@ function buildReplacements(lead: any, d: any) {
     '{{current_summary}}': d.current_summary,
     '{{summary_points}}': summaryPoints,
 
-    // Top3 自動化ワークフロー
-    '{{top3_area_1}}': d.top3[0].area,
+    // Top3 業務最適化提案（手段タグ付き area）
+    '{{top3_area_1}}': decorateArea(d.top3[0]),
     '{{top3_reason_1}}': d.top3[0].reason,
     '{{top3_hours_1}}': String(d.top3[0].hours_per_month),
     '{{top3_basis_1}}': d.top3[0].basis,
     '{{top3_steps_1}}': formatSteps(d.top3[0].steps),
     '{{top3_effect_1}}': d.top3[0].expected_effect || '',
-    '{{top3_area_2}}': d.top3[1].area,
+    '{{top3_area_2}}': decorateArea(d.top3[1]),
     '{{top3_reason_2}}': d.top3[1].reason,
     '{{top3_hours_2}}': String(d.top3[1].hours_per_month),
     '{{top3_basis_2}}': d.top3[1].basis,
     '{{top3_steps_2}}': formatSteps(d.top3[1].steps),
     '{{top3_effect_2}}': d.top3[1].expected_effect || '',
-    '{{top3_area_3}}': d.top3[2].area,
+    '{{top3_area_3}}': decorateArea(d.top3[2]),
     '{{top3_reason_3}}': d.top3[2].reason,
     '{{top3_hours_3}}': String(d.top3[2].hours_per_month),
     '{{top3_basis_3}}': d.top3[2].basis,
