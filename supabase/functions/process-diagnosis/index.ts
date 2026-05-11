@@ -451,7 +451,7 @@ async function createSlides(lead: any, diagnosis: any): Promise<string> {
 
   // 1. テンプレをコピー（共有ドライブ対応）
   const copyBody: any = {
-    name: `Optiens AI診断レポート - ${lead.company_name} - ${formatDate(new Date())}`,
+    name: `Optiens AI活用診断【簡易版】- ${lead.application_id || 'NO-APPID'} - ${lead.company_name} - ${formatDate(new Date())}`,
   }
   if (driveId) {
     // 共有ドライブ内にコピー（サービスアカウントは My Drive を持たないため必須）
@@ -603,22 +603,26 @@ async function sendReportEmail(lead: any, slidesUrl: string) {
   await resend!.emails.send({
     from: `Optiens <${FROM_EMAIL}>`,
     to: [lead.email],
-    subject: `【Optiens】AI活用診断レポートが完成しました`,
+    subject: `【Optiens】AI活用診断【簡易版】レポートが完成しました（申込番号: ${lead.application_id || ''}）`,
     html: buildReportEmailHtml(lead, slidesUrl),
   })
 }
 
 function buildReportEmailHtml(lead: any, slidesUrl: string): string {
+  const appId = String(lead.application_id || '')
+  // Gmail の自動プレビュー添付化を避けるため、リンクはテキスト形式で本文に直接記載
   return `
 <div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
-<p>${escapeHtml(lead.company_name)} ${escapeHtml(lead.person_name)} 様</p>
-<p>合同会社Optiensです。<br/>AI活用診断のお申し込みありがとうございます。</p>
+<p>${escapeHtml(lead.company_name)}<br/>${escapeHtml(lead.person_name)} 様</p>
+<p>合同会社Optiensです。<br/>AI活用診断【簡易版】のお申し込みありがとうございます。</p>
 <p>診断レポートが完成しましたので、下記URLよりご覧ください。</p>
-<p style="margin:24px 0;">
-  <a href="${slidesUrl}" style="display:inline-block;padding:12px 24px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">レポートを開く</a>
+<p style="margin:24px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-left:4px solid #1F3A93;padding:14px 18px;border-radius:4px;">
+  <strong style="color:#1F3A93;">▼ 診断レポート URL</strong><br/>
+  <a href="${slidesUrl}" style="color:#1F3A93;word-break:break-all;">${slidesUrl}</a>
 </p>
 <p style="font-size:13px;color:#666;">
   ※ レポートは Google Slides で表示されます。スマートフォン・PC のブラウザでご覧いただけます。<br/>
+  ※ 申込番号: <strong>${escapeHtml(appId)}</strong><br/>
   ※ より詳細な分析（アーキテクチャ図・個別自動化提案・導入見積など）をご希望の方は、
   <a href="https://optiens.com/free-diagnosis?paid=1">【詳細版】AI活用診断（¥5,500税込）</a>もご検討ください。
 </p>
@@ -626,6 +630,7 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 <p style="font-size:12px;color:#999;">
   合同会社Optiens<br/>
   〒407-0301 山梨県北杜市高根町清里3545番地2483<br/>
+  適格請求書発行事業者登録番号: T9090003003025<br/>
   https://optiens.com
 </p>
 </div>
