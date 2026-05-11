@@ -479,8 +479,204 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       </div>
     </section>
 
+    <!-- トースト通知（フォーム送信エラー時に表示） -->
+    <div id="diag-toast" class="diag-toast" role="status" aria-live="polite" hidden>
+      <div class="diag-toast__icon" aria-hidden="true">⚠</div>
+      <div class="diag-toast__body">
+        <div class="diag-toast__title" id="diag-toast-title">送信に失敗しました</div>
+        <div class="diag-toast__message" id="diag-toast-message"></div>
+      </div>
+      <button type="button" class="diag-toast__close" id="diag-toast-close" aria-label="閉じる">×</button>
+    </div>
+
   </main>
 </Layout>
+
+<style>
+  .diag-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 32px;
+    transform: translateX(-50%) translateY(20px);
+    z-index: 9999;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    max-width: min(540px, calc(100vw - 32px));
+    padding: 14px 18px;
+    background: #fff;
+    border-left: 4px solid #dc2626;
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+    font-size: 14px;
+    color: #1f2937;
+  }
+  .diag-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .diag-toast.is-success {
+    border-left-color: #16a34a;
+  }
+  .diag-toast__icon {
+    flex: 0 0 24px;
+    font-size: 20px;
+    line-height: 1;
+    color: #dc2626;
+    padding-top: 2px;
+  }
+  .diag-toast.is-success .diag-toast__icon {
+    color: #16a34a;
+  }
+  .diag-toast__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .diag-toast__title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  .diag-toast__message {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #374151;
+    word-break: break-word;
+  }
+  .diag-toast__close {
+    flex: 0 0 auto;
+    background: transparent;
+    border: 0;
+    color: #6b7280;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .diag-toast__close:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+  @media (max-width: 480px) {
+    .diag-toast {
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      transform: translateY(20px);
+      max-width: none;
+    }
+    .diag-toast.is-visible {
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const form = document.getElementById('diag-form');
+    if (!form) return;
+
+    const toast = document.getElementById('diag-toast');
+    const toastTitle = document.getElementById('diag-toast-title');
+    const toastMessage = document.getElementById('diag-toast-message');
+    const toastClose = document.getElementById('diag-toast-close');
+    let hideTimer = null;
+
+    function showToast(message, opts = {}) {
+      if (!toast || !toastMessage) return;
+      const isSuccess = !!opts.success;
+      toast.classList.toggle('is-success', isSuccess);
+      toast.querySelector('.diag-toast__icon').textContent = isSuccess ? '✓' : '⚠';
+      toastTitle.textContent = opts.title || (isSuccess ? '送信しました' : '送信できませんでした');
+      toastMessage.textContent = message;
+      toast.hidden = false;
+      // 次フレームで遷移クラス付与
+      requestAnimationFrame(() => toast.classList.add('is-visible'));
+      if (hideTimer) clearTimeout(hideTimer);
+      const autoHideMs = opts.persistent ? 0 : (isSuccess ? 5000 : 10000);
+      if (autoHideMs > 0) {
+        hideTimer = setTimeout(hideToast, autoHideMs);
+      }
+    }
+
+    function hideToast() {
+      if (!toast) return;
+      toast.classList.remove('is-visible');
+      // CSS の transition 終了後に hidden
+      setTimeout(() => { toast.hidden = true; }, 280);
+    }
+
+    toastClose && toastClose.addEventListener('click', hideToast);
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', async (e) => {
+      // Turnstile 必須エラーなど、ブラウザ標準のバリデーションは通常フローに任せる
+      if (!form.checkValidity()) return;
+
+      e.preventDefault();
+      hideToast();
+
+      const originalLabel = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.dataset.busy = '1';
+        const planField = document.getElementById('plan-field');
+        const plan = planField && planField.value === 'paid' ? 'paid' : 'free';
+        submitBtn.textContent = plan === 'paid' ? 'お申込中…' : '送信中…';
+      }
+
+      try {
+        const formData = new FormData(form);
+        const res = await fetch(form.action || '/api/free-diagnosis', {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' },
+        });
+
+        let data = null;
+        try { data = await res.json(); } catch { /* JSON 以外 */ }
+
+        if (res.ok && data && data.redirect) {
+          window.location.assign(data.redirect);
+          return;
+        }
+
+        // エラーパターン
+        const errMsg = (data && data.error) || `送信に失敗しました (${res.status})`;
+        let title = '送信できませんでした';
+        if (res.status === 429) {
+          title = '送信制限にかかっています';
+        } else if (res.status >= 500) {
+          title = 'サーバー側でエラーが発生しました';
+        } else if (res.status === 400) {
+          title = '入力内容を確認してください';
+        }
+        showToast(errMsg, { title });
+
+        // Turnstile の再描画（CAPTCHA は1度の検証で消費されるため）
+        if (window.turnstile && typeof window.turnstile.reset === 'function') {
+          try { window.turnstile.reset(); } catch {}
+        }
+      } catch (err) {
+        showToast('通信に失敗しました。電波状況をご確認のうえ、再度お試しください。', {
+          title: 'ネットワークエラー',
+        });
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          delete submitBtn.dataset.busy;
+          submitBtn.innerHTML = originalLabel;
+        }
+      }
+    });
+  })();
+</script>
 
 <!-- Cloudflare Turnstile loader -->
 {TURNSTILE_SITE_KEY && (
@@ -586,13 +782,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     sync();
   })();
 
-  // 二重送信防止
-  document.getElementById('diag-form').addEventListener('submit', function() {
-    var btn = document.getElementById('diag-submit');
-    btn.disabled = true;
-    var plan = (document.getElementById('plan-field') || {}).value || 'free';
-    btn.textContent = plan === 'paid' ? 'お申込中…' : '送信中…';
-  });
+  // 二重送信防止＆送信中表示はページ末尾の fetch ベースハンドラ側に統合
 
   // ===== 業務資料・URLからの自動入力 =====
   (function() {

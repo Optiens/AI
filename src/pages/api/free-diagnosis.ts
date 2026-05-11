@@ -353,10 +353,19 @@ ${plan === 'paid' ? `<hr style="margin:20px 0;"/><p style="background:#D1FAE5;pa
       }
     }
 
-    return redirect(plan === 'paid' ? `/free-diagnosis-thanks?plan=paid&id=${encodeURIComponent(applicationId)}` : `/free-diagnosis-thanks?pending=verify&id=${encodeURIComponent(applicationId)}`)
+    const redirectPath = plan === 'paid'
+      ? `/free-diagnosis-thanks?plan=paid&id=${encodeURIComponent(applicationId)}`
+      : `/free-diagnosis-thanks?pending=verify&id=${encodeURIComponent(applicationId)}`
+
+    // Accept: application/json なら JSON で返す（JS 側でトースト・自前遷移）
+    const wantsJson = request.headers.get('accept')?.includes('application/json')
+    if (wantsJson) {
+      return json({ ok: true, redirect: redirectPath })
+    }
+    return redirect(redirectPath)
   } catch (error: any) {
     console.error('[free-diagnosis] error:', error?.message ?? String(error))
-    return json({ error: '送信に失敗しました。' }, 500)
+    return json({ error: '送信に失敗しました。時間をおいて再度お試しください。' }, 500)
   }
 }
 
