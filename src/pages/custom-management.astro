@@ -1092,6 +1092,25 @@ import Layout from '../layouts/Layout.astro';
     justify-content: center;
     flex-wrap: wrap;
   }
+  .cm-cta-buttons .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 30px;
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--brand);
+    font-size: clamp(14px, 1.5vw, 15px);
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-decoration: none;
+    border: 1px solid var(--brand);
+    transition: background .2s ease, color .2s ease;
+  }
+  .cm-cta-buttons .btn-secondary:hover {
+    background: var(--brand);
+    color: #fff;
+  }
 
   /* 現場ビュー時はサイドバーを単純化 */
   .cm-app[data-role="field"] .cm-sidebar { background: #fff7ed; }
