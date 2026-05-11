@@ -1,0 +1,1100 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="カスタム業務管理画面（デモ）| Optiens"
+  description="既製のSaaSではなく、御社の業務フローに合わせて構築するシングルテナント業務管理画面のデモ。リード→案件→納品→保守を1画面で追える設計と、ロール別の画面切替を体験できます。"
+  noindex={true}
+>
+  <main class="cm-main light-section">
+    <!-- ヒーロー -->
+    <section class="cm-hero">
+      <div class="container">
+        <h1 class="cm-title">カスタム業務管理画面</h1>
+        <p class="cm-lede">
+          市販SaaSの「項目が多すぎて使われない」「複数サービスの行き来で二重入力」を解消する、<strong>御社専用設計</strong>の業務管理画面のデモです。<br class="pc-only">
+          ロール別ビュー（経営者／営業パートナー／現場）を切り替えながら、リード→案件→納品→保守の流れを 1 画面で追えるイメージをご確認ください。
+        </p>
+      </div>
+    </section>
+
+    <section class="cm-section">
+      <div class="container">
+
+        <!-- ロール切替 -->
+        <div class="role-switch" role="tablist" aria-label="ロールビュー切替">
+          <button type="button" class="role-btn is-active" data-role="executive" role="tab" aria-selected="true">
+            <i class="fa-solid fa-user-tie"></i>
+            <span class="role-btn-name">経営者ビュー</span>
+            <span class="role-btn-sub">全件・KPI・売上見込</span>
+          </button>
+          <button type="button" class="role-btn" data-role="partner" role="tab" aria-selected="false">
+            <i class="fa-solid fa-handshake"></i>
+            <span class="role-btn-name">営業パートナービュー</span>
+            <span class="role-btn-sub">担当案件のみ・コミッション</span>
+          </button>
+          <button type="button" class="role-btn" data-role="field" role="tab" aria-selected="false">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+            <span class="role-btn-name">現場ビュー</span>
+            <span class="role-btn-sub">スマホ最適・入力特化</span>
+          </button>
+        </div>
+
+        <!-- アプリ風レイアウト -->
+        <div class="cm-app">
+          <!-- サイドバー -->
+          <aside class="cm-sidebar">
+            <div class="cm-brand">
+              <i class="fa-solid fa-cube"></i>
+              <span>御社業務管理</span>
+            </div>
+            <nav class="cm-nav" aria-label="業務カテゴリ">
+              <button type="button" class="cm-nav-item is-active" data-stage="leads">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>リード</span>
+                <span class="cm-nav-count" data-count="leads">12</span>
+              </button>
+              <button type="button" class="cm-nav-item" data-stage="opportunities">
+                <i class="fa-solid fa-comments-dollar"></i>
+                <span>商談中</span>
+                <span class="cm-nav-count" data-count="opportunities">5</span>
+              </button>
+              <button type="button" class="cm-nav-item" data-stage="projects">
+                <i class="fa-solid fa-diagram-project"></i>
+                <span>進行中の案件</span>
+                <span class="cm-nav-count" data-count="projects">3</span>
+              </button>
+              <button type="button" class="cm-nav-item" data-stage="completed">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>完了案件</span>
+                <span class="cm-nav-count" data-count="completed">8</span>
+              </button>
+              <button type="button" class="cm-nav-item" data-stage="maintenance">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>保守契約</span>
+                <span class="cm-nav-count" data-count="maintenance">15</span>
+              </button>
+            </nav>
+            <div class="cm-sidebar-foot">
+              <p class="cm-sidebar-note">
+                <i class="fa-solid fa-circle-info"></i>
+                ロール別に表示・操作可能な項目が切り替わります
+              </p>
+            </div>
+          </aside>
+
+          <!-- メインビュー -->
+          <section class="cm-main-view">
+            <!-- KPI バー（経営者ビューのみ） -->
+            <div class="cm-kpi-bar" data-show="executive">
+              <div class="cm-kpi">
+                <span class="cm-kpi-label">今月の新規リード</span>
+                <span class="cm-kpi-value">12 <small>件</small></span>
+                <span class="cm-kpi-trend up">+33% <i class="fa-solid fa-arrow-up"></i></span>
+              </div>
+              <div class="cm-kpi">
+                <span class="cm-kpi-label">今月の売上見込</span>
+                <span class="cm-kpi-value">¥8.4M</span>
+                <span class="cm-kpi-trend up">+18%</span>
+              </div>
+              <div class="cm-kpi">
+                <span class="cm-kpi-label">受注確度（商談中）</span>
+                <span class="cm-kpi-value">62%</span>
+                <span class="cm-kpi-trend flat">±0%</span>
+              </div>
+              <div class="cm-kpi">
+                <span class="cm-kpi-label">保守契約 MRR</span>
+                <span class="cm-kpi-value">¥615K</span>
+                <span class="cm-kpi-trend up">+5%</span>
+              </div>
+            </div>
+
+            <!-- パートナー用バー -->
+            <div class="cm-kpi-bar" data-show="partner">
+              <div class="cm-kpi">
+                <span class="cm-kpi-label">今月の担当成約</span>
+                <span class="cm-kpi-value">2 <small>件</small></span>
+              </div>
+              <div class="cm-kpi">
+                <span class="cm-kpi-label">確定コミッション</span>
+                <span class="cm-kpi-value">¥240K</span>
+                <span class="cm-kpi-trend up">支払予定 5/末</span>
+              </div>
+              <div class="cm-kpi">
+                <span class="cm-kpi-label">商談中（自分担当）</span>
+                <span class="cm-kpi-value">3 <small>件</small></span>
+              </div>
+            </div>
+
+            <!-- 現場用ヘッダ -->
+            <div class="cm-field-header" data-show="field">
+              <i class="fa-solid fa-mobile-screen"></i>
+              <div>
+                <p class="cm-field-title">現場入力モード</p>
+                <p class="cm-field-sub">スマホ最適・入力フィールドのみ表示</p>
+              </div>
+            </div>
+
+            <!-- ステージ別データ -->
+            <div class="cm-stage-area">
+              <!-- リード -->
+              <article class="cm-stage" data-stage-panel="leads">
+                <header class="cm-stage-head">
+                  <h2><i class="fa-solid fa-user-plus"></i> リード（新規問い合わせ）</h2>
+                  <div class="cm-stage-actions">
+                    <button class="cm-btn cm-btn--ai" type="button" data-ai="leads">
+                      <i class="fa-solid fa-wand-magic-sparkles"></i> AI に次の打ち手を聞く
+                    </button>
+                  </div>
+                </header>
+                <div class="cm-table-wrap">
+                  <table class="cm-table">
+                    <thead>
+                      <tr>
+                        <th>会社名</th>
+                        <th data-show="executive partner">担当</th>
+                        <th>業種</th>
+                        <th>問い合わせ経路</th>
+                        <th data-show="executive">想定規模</th>
+                        <th>優先度</th>
+                        <th>次のアクション</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>(株) 山梨ペンション 八ヶ岳</strong></td>
+                        <td data-show="executive partner">田中（パートナー）</td>
+                        <td>宿泊業</td>
+                        <td><span class="cm-badge cm-badge--source">紹介</span></td>
+                        <td data-show="executive">¥2.5M</td>
+                        <td><span class="cm-pri high">高</span></td>
+                        <td>初回 MTG 設定（5/15）</td>
+                      </tr>
+                      <tr>
+                        <td><strong>清里森林組合</strong></td>
+                        <td data-show="executive partner">代表</td>
+                        <td>農業・林業</td>
+                        <td><span class="cm-badge cm-badge--source">サイト</span></td>
+                        <td data-show="executive">¥1.2M</td>
+                        <td><span class="cm-pri mid">中</span></td>
+                        <td>無料診断レポート送付</td>
+                      </tr>
+                      <tr>
+                        <td><strong>北杜ベーカリー協議会</strong></td>
+                        <td data-show="executive partner">田中（パートナー）</td>
+                        <td>食品製造</td>
+                        <td><span class="cm-badge cm-badge--source">商工会</span></td>
+                        <td data-show="executive">¥800K</td>
+                        <td><span class="cm-pri mid">中</span></td>
+                        <td>ヒアリング待ち</td>
+                      </tr>
+                      <tr>
+                        <td><strong>(有) 風と森ガイド</strong></td>
+                        <td data-show="executive partner">代表</td>
+                        <td>アウトドア観光</td>
+                        <td><span class="cm-badge cm-badge--source">SNS</span></td>
+                        <td data-show="executive">¥600K</td>
+                        <td><span class="cm-pri low">低</span></td>
+                        <td>資料 DL 後フォロー</td>
+                      </tr>
+                      <tr>
+                        <td><strong>甲府税理士事務所</strong></td>
+                        <td data-show="executive partner">代表</td>
+                        <td>士業</td>
+                        <td><span class="cm-badge cm-badge--source">セミナー</span></td>
+                        <td data-show="executive">¥1.5M</td>
+                        <td><span class="cm-pri high">高</span></td>
+                        <td>MTG 待ち（5/20）</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="cm-stage-note">
+                  <i class="fa-solid fa-info-circle"></i>
+                  ロールにより<strong>表示される列が変わります</strong>。経営者は規模・担当・全件、パートナーは自分担当のみ、現場は入力に必要な列のみ。
+                </p>
+              </article>
+
+              <!-- 商談中 -->
+              <article class="cm-stage hidden" data-stage-panel="opportunities">
+                <header class="cm-stage-head">
+                  <h2><i class="fa-solid fa-comments-dollar"></i> 商談中</h2>
+                </header>
+                <div class="cm-table-wrap">
+                  <table class="cm-table">
+                    <thead>
+                      <tr>
+                        <th>案件名</th>
+                        <th data-show="executive partner">担当</th>
+                        <th data-show="executive">確度</th>
+                        <th>金額</th>
+                        <th>次のステップ</th>
+                        <th>期日</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>八ヶ岳ペンション AI 受付システム</strong></td>
+                        <td data-show="executive partner">田中（パートナー）</td>
+                        <td data-show="executive"><span class="cm-conf high">90%</span></td>
+                        <td>¥1.8M</td>
+                        <td>見積書送付</td>
+                        <td>5/13</td>
+                      </tr>
+                      <tr>
+                        <td><strong>清里森林組合 業務管理画面</strong></td>
+                        <td data-show="executive partner">代表</td>
+                        <td data-show="executive"><span class="cm-conf mid">60%</span></td>
+                        <td>¥950K</td>
+                        <td>2 回目ヒアリング</td>
+                        <td>5/16</td>
+                      </tr>
+                      <tr>
+                        <td><strong>北杜ベーカリー仕込み計画 AI</strong></td>
+                        <td data-show="executive partner">田中（パートナー）</td>
+                        <td data-show="executive"><span class="cm-conf low">35%</span></td>
+                        <td>¥600K</td>
+                        <td>競合比較資料</td>
+                        <td>5/18</td>
+                      </tr>
+                      <tr>
+                        <td><strong>甲府税理士事務所 月次自動化</strong></td>
+                        <td data-show="executive partner">代表</td>
+                        <td data-show="executive"><span class="cm-conf high">85%</span></td>
+                        <td>¥1.2M</td>
+                        <td>契約書最終確認</td>
+                        <td>5/21</td>
+                      </tr>
+                      <tr>
+                        <td><strong>風と森ガイド 予約一元化</strong></td>
+                        <td data-show="executive partner">代表</td>
+                        <td data-show="executive"><span class="cm-conf mid">50%</span></td>
+                        <td>¥480K</td>
+                        <td>初回提案</td>
+                        <td>5/24</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <!-- 進行中の案件 -->
+              <article class="cm-stage hidden" data-stage-panel="projects">
+                <header class="cm-stage-head">
+                  <h2><i class="fa-solid fa-diagram-project"></i> 進行中の案件</h2>
+                </header>
+                <div class="cm-cards">
+                  <div class="cm-proj-card">
+                    <div class="cm-proj-head">
+                      <strong>南アルプス工務店 見積自動化</strong>
+                      <span class="cm-status in-progress">構築中</span>
+                    </div>
+                    <div class="cm-proj-progress">
+                      <span class="cm-proj-step done">設計 ✓</span>
+                      <span class="cm-proj-step done">構築 60%</span>
+                      <span class="cm-proj-step todo">納品</span>
+                      <span class="cm-proj-step todo">動作確認</span>
+                    </div>
+                    <div class="cm-proj-meta">
+                      <span><i class="fa-solid fa-yen-sign"></i> ¥1.5M（着手金 ¥750K 入金済）</span>
+                      <span><i class="fa-solid fa-calendar"></i> 納品予定: 5/30</span>
+                    </div>
+                  </div>
+                  <div class="cm-proj-card">
+                    <div class="cm-proj-head">
+                      <strong>諏訪ワイナリー DtoC 構築</strong>
+                      <span class="cm-status in-progress">構築中</span>
+                    </div>
+                    <div class="cm-proj-progress">
+                      <span class="cm-proj-step done">設計 ✓</span>
+                      <span class="cm-proj-step in">構築 30%</span>
+                      <span class="cm-proj-step todo">納品</span>
+                      <span class="cm-proj-step todo">動作確認</span>
+                    </div>
+                    <div class="cm-proj-meta">
+                      <span><i class="fa-solid fa-yen-sign"></i> ¥2.4M</span>
+                      <span><i class="fa-solid fa-calendar"></i> 納品予定: 6/15</span>
+                    </div>
+                  </div>
+                  <div class="cm-proj-card">
+                    <div class="cm-proj-head">
+                      <strong>甲斐市役所 観光多言語対応</strong>
+                      <span class="cm-status review">検証中</span>
+                    </div>
+                    <div class="cm-proj-progress">
+                      <span class="cm-proj-step done">設計 ✓</span>
+                      <span class="cm-proj-step done">構築 ✓</span>
+                      <span class="cm-proj-step in">納品 動作確認中</span>
+                      <span class="cm-proj-step todo">完了</span>
+                    </div>
+                    <div class="cm-proj-meta">
+                      <span><i class="fa-solid fa-yen-sign"></i> ¥3.2M</span>
+                      <span><i class="fa-solid fa-calendar"></i> 検収予定: 5/14</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- 完了案件 -->
+              <article class="cm-stage hidden" data-stage-panel="completed">
+                <header class="cm-stage-head">
+                  <h2><i class="fa-solid fa-circle-check"></i> 完了案件（保守移行候補含む）</h2>
+                </header>
+                <div class="cm-table-wrap">
+                  <table class="cm-table">
+                    <thead>
+                      <tr>
+                        <th>案件名</th>
+                        <th>納品日</th>
+                        <th>金額</th>
+                        <th>瑕疵対応期間</th>
+                        <th>保守状況</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>(株) 高根ペンション 多言語対応</td>
+                        <td>2026-04-22</td>
+                        <td>¥1.8M</td>
+                        <td>〜2026-07-22</td>
+                        <td><span class="cm-badge cm-badge--ok">スタンダード契約中</span></td>
+                      </tr>
+                      <tr>
+                        <td>白州ベーカリー SNS 自動化</td>
+                        <td>2026-04-15</td>
+                        <td>¥800K</td>
+                        <td>〜2026-07-15</td>
+                        <td><span class="cm-badge cm-badge--ok">ベーシック契約中</span></td>
+                      </tr>
+                      <tr>
+                        <td>須玉醸造 在庫管理画面</td>
+                        <td>2026-03-28</td>
+                        <td>¥2.2M</td>
+                        <td>〜2026-06-28</td>
+                        <td><span class="cm-badge cm-badge--warn">未契約・要営業</span></td>
+                      </tr>
+                      <tr>
+                        <td>長坂行政書士 契約書テンプレ AI</td>
+                        <td>2026-03-10</td>
+                        <td>¥950K</td>
+                        <td>終了</td>
+                        <td><span class="cm-badge cm-badge--ok">スタンダード契約中</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <!-- 保守契約 -->
+              <article class="cm-stage hidden" data-stage-panel="maintenance">
+                <header class="cm-stage-head">
+                  <h2><i class="fa-solid fa-shield-halved"></i> 保守契約</h2>
+                </header>
+                <div class="cm-mt-summary">
+                  <div>
+                    <span class="cm-mt-label">契約数</span>
+                    <span class="cm-mt-value">15 <small>社</small></span>
+                  </div>
+                  <div>
+                    <span class="cm-mt-label">月次 MRR</span>
+                    <span class="cm-mt-value">¥615K</span>
+                  </div>
+                  <div>
+                    <span class="cm-mt-label">今月のチケット消費</span>
+                    <span class="cm-mt-value">187 <small>/ 320</small></span>
+                  </div>
+                  <div>
+                    <span class="cm-mt-label">追加チケット販売</span>
+                    <span class="cm-mt-value">¥84K</span>
+                  </div>
+                </div>
+                <div class="cm-table-wrap">
+                  <table class="cm-table">
+                    <thead>
+                      <tr>
+                        <th>顧客</th>
+                        <th>プラン</th>
+                        <th>今月使用</th>
+                        <th>残チケット</th>
+                        <th>次回更新</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>(株) 高根ペンション</td>
+                        <td>スタンダード（30）</td>
+                        <td>22</td>
+                        <td>8</td>
+                        <td>2026-06-22</td>
+                      </tr>
+                      <tr>
+                        <td>白州ベーカリー</td>
+                        <td>ベーシック（10）</td>
+                        <td>3</td>
+                        <td>7</td>
+                        <td>2026-06-15</td>
+                      </tr>
+                      <tr>
+                        <td>長坂行政書士</td>
+                        <td>スタンダード（30）</td>
+                        <td>28</td>
+                        <td>2 <span class="cm-pri high">要連絡</span></td>
+                        <td>2026-06-10</td>
+                      </tr>
+                      <tr>
+                        <td>富士見デザイン事務所</td>
+                        <td>ベーシック（10）</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>2026-06-05</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <!-- AI レコメンドモーダル（簡易） -->
+        <div id="ai-modal" class="cm-modal" hidden>
+          <div class="cm-modal-content">
+            <button class="cm-modal-close" aria-label="閉じる" type="button">×</button>
+            <h3><i class="fa-solid fa-wand-magic-sparkles"></i> AI からの提案</h3>
+            <div id="ai-modal-body"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 設計ポイント -->
+    <section class="cm-points-section">
+      <div class="container">
+        <h2 class="cm-points-title">この画面の設計ポイント</h2>
+        <div class="cm-points-grid">
+          <div class="cm-point">
+            <i class="fa-solid fa-user-shield"></i>
+            <h3>ロール別の情報制御</h3>
+            <p>同じデータベースに対して、経営者は全件＋金額、営業パートナーは自分の担当と確定コミッション、現場は入力フィールドだけ、というように<strong>権限と表示を分離</strong>します。</p>
+          </div>
+          <div class="cm-point">
+            <i class="fa-solid fa-link"></i>
+            <h3>1 画面で業務全体が追える</h3>
+            <p>リード→商談→案件→納品→保守を <strong>同じシステム上で繋ぐ</strong>ことで、「リードはエクセル、案件は Salesforce、保守はスプレッドシート」のような分散を解消します。</p>
+          </div>
+          <div class="cm-point">
+            <i class="fa-solid fa-cube"></i>
+            <h3>シングルテナント構成</h3>
+            <p>御社専用環境で動作するため、月額ライセンス料は発生せず、データは御社の資産として残ります。退会・乗り換えの心配がありません。</p>
+          </div>
+          <div class="cm-point">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <h3>用途別の画面最適化</h3>
+            <p>現場用スマホ画面は入力に絞り、経営者画面は KPI ダッシュボード中心、パートナー画面は自分の成果に絞る。<strong>全員に同じ画面を見せない</strong>のが業務効率の鍵です。</p>
+          </div>
+          <div class="cm-point">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <h3>AI による次の打ち手提案</h3>
+            <p>ステージごとに「次に取るべきアクション」を AI が提案。判定根拠（過去の類似案件、顧客接触履歴）も併せて表示し、人間の判断材料として使えます。</p>
+          </div>
+          <div class="cm-point">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>納品後の育成前提</h3>
+            <p>納品時点で完成形ではなく、運用しながら判定基準・列・通知ルールをチューニングします。<a href="/maintenance">保守チケット制</a>でその工数を吸収します。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cm-cta-section">
+      <div class="container text-center">
+        <h2>御社の業務にあわせた専用画面、検討しませんか</h2>
+        <p>
+          このデモは弊社の業務管理画面の構造を簡易再現したものです。<br />
+          御社の業務フロー・既存ツール・ロール構成に合わせた設計提案を行います。
+        </p>
+        <div class="cm-cta-buttons">
+          <a href="/free-diagnosis" class="btn-primary">無料 AI 活用診断を受ける</a>
+          <a href="/implementation" class="btn-secondary">導入支援の詳細を見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script is:inline>
+(function() {
+  // ロール切替
+  const roleBtns = document.querySelectorAll('.role-btn');
+  const root = document.querySelector('.cm-app');
+
+  function setRole(role) {
+    roleBtns.forEach((b) => {
+      const active = b.dataset.role === role;
+      b.classList.toggle('is-active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    if (!root) return;
+    root.dataset.role = role;
+  }
+  roleBtns.forEach((b) => b.addEventListener('click', () => setRole(b.dataset.role)));
+  setRole('executive');
+
+  // ステージ切替
+  const navItems = document.querySelectorAll('.cm-nav-item');
+  const stagePanels = document.querySelectorAll('[data-stage-panel]');
+
+  function setStage(stage) {
+    navItems.forEach((n) => n.classList.toggle('is-active', n.dataset.stage === stage));
+    stagePanels.forEach((p) => p.classList.toggle('hidden', p.dataset.stagePanel !== stage));
+  }
+  navItems.forEach((n) => n.addEventListener('click', () => setStage(n.dataset.stage)));
+
+  // AI 提案モーダル
+  const modal = document.getElementById('ai-modal');
+  const modalBody = document.getElementById('ai-modal-body');
+  const modalClose = modal?.querySelector('.cm-modal-close');
+
+  const aiSuggestions = {
+    leads: `
+      <p><strong>提案 1: 八ヶ岳ペンション 八ヶ岳</strong> ── 過去 3 件の宿泊業案件はすべて 14 日以内の MTG 設定で受注しています。<strong>5/15 MTG を必ず確保</strong>してください。</p>
+      <p><strong>提案 2: 甲府税理士事務所</strong> ── セミナー経由のリードは平均受注金額が他経路の 1.4 倍。<strong>個別フォロー優先度を高に維持</strong>してください。</p>
+      <p><strong>提案 3: 風と森ガイド</strong> ── SNS 経由の小規模案件。リソースが逼迫している場合、<strong>無料診断レポート送付で自走を促す</strong>選択肢もあります。</p>
+      <p class="ai-source"><i class="fa-solid fa-quote-right"></i> 根拠: 過去 24 ヶ月の経路別受注率データ + 業種別 LTV 集計</p>
+    `,
+    opportunities: `
+      <p><strong>提案 1: 八ヶ岳ペンション AI 受付</strong> ── 確度 90%、見積書未送付。<strong>本日中の送付推奨</strong>。送付遅延が 3 日続くと過去データでは確度が 20% 低下。</p>
+      <p><strong>提案 2: 甲府税理士事務所</strong> ── 契約書最終確認段階。<strong>受注後の保守プラン提案を同時提示</strong>することで、過去 5 件中 4 件が即契約。</p>
+      <p><strong>提案 3: 北杜ベーカリー</strong> ── 確度 35% のまま 7 日経過。<strong>ステージダウンの判断時期</strong>。リソースを高確度案件に集中する判断も。</p>
+      <p class="ai-source"><i class="fa-solid fa-quote-right"></i> 根拠: 商談ステージ別の経過日数と受注率の相関分析</p>
+    `,
+  };
+
+  document.querySelectorAll('[data-ai]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.ai;
+      if (modal && modalBody && aiSuggestions[key]) {
+        modalBody.innerHTML = aiSuggestions[key];
+        modal.hidden = false;
+      }
+    });
+  });
+  modalClose?.addEventListener('click', () => { if (modal) modal.hidden = true; });
+  modal?.addEventListener('click', (e) => { if (e.target === modal) modal.hidden = true; });
+})();
+</script>
+
+<style>
+  .cm-main {
+    padding: clamp(110px, 14vw, 150px) 0 clamp(60px, 8vw, 100px);
+    background: #f8fafc;
+  }
+  .cm-hero { margin-bottom: clamp(28px, 4vw, 40px); }
+  .cm-title {
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    color: var(--heading);
+    margin: 0 0 16px;
+  }
+  .cm-lede {
+    font-size: clamp(.95rem, 1.8vw, 1.05rem);
+    color: var(--text);
+    line-height: 1.9;
+    margin: 0;
+  }
+  .cm-lede strong { color: var(--brand); }
+  .pc-only { display: none; }
+  @media (min-width: 768px) { .pc-only { display: inline; } }
+
+  .cm-section { padding-bottom: clamp(40px, 6vw, 60px); }
+
+  /* ロール切替 */
+  .role-switch {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: clamp(24px, 4vw, 36px);
+    background: rgba(31, 58, 147, .04);
+    padding: 8px;
+    border-radius: 16px;
+  }
+  .role-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 10px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all .2s;
+    color: var(--muted);
+  }
+  .role-btn i { font-size: 1.4rem; margin-bottom: 4px; }
+  .role-btn-name { font-weight: 700; font-size: .92rem; color: var(--heading); }
+  .role-btn-sub { font-size: .72rem; color: var(--muted); }
+  .role-btn:hover { background: rgba(31, 58, 147, .06); }
+  .role-btn.is-active {
+    background: linear-gradient(135deg, #1F3A93 0%, #6B85C9 100%);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(31, 58, 147, .3);
+  }
+  .role-btn.is-active i,
+  .role-btn.is-active .role-btn-name,
+  .role-btn.is-active .role-btn-sub { color: #fff; }
+  @media (max-width: 600px) {
+    .role-switch { grid-template-columns: 1fr; }
+  }
+
+  /* アプリレイアウト */
+  .cm-app {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(15, 23, 42, .08);
+    min-height: 600px;
+  }
+  @media (max-width: 768px) {
+    .cm-app { grid-template-columns: 1fr; }
+  }
+
+  /* サイドバー */
+  .cm-sidebar {
+    background: #f1f5f9;
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .cm-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .cm-brand i { color: var(--brand); }
+  .cm-nav { display: flex; flex-direction: column; gap: 2px; }
+  .cm-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all .2s;
+    color: var(--text);
+    font-size: .9rem;
+    text-align: left;
+    font-weight: 500;
+  }
+  .cm-nav-item i { color: var(--muted); width: 16px; }
+  .cm-nav-item:hover { background: rgba(31, 58, 147, .06); }
+  .cm-nav-item.is-active {
+    background: rgba(31, 58, 147, .12);
+    color: var(--brand);
+    font-weight: 700;
+    border-left: 3px solid var(--brand);
+    padding-left: 17px;
+  }
+  .cm-nav-item.is-active i { color: var(--brand); }
+  .cm-nav-count {
+    margin-left: auto;
+    background: rgba(31, 58, 147, .12);
+    color: var(--brand);
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .cm-sidebar-foot { margin-top: auto; padding: 16px 20px 0; }
+  .cm-sidebar-note {
+    font-size: .72rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .cm-sidebar-note i { margin-right: 4px; }
+
+  /* メインビュー */
+  .cm-main-view { padding: 24px 28px; min-width: 0; }
+
+  /* KPI バー */
+  .cm-kpi-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .cm-app[data-role="executive"] .cm-kpi-bar[data-show="executive"],
+  .cm-app[data-role="partner"] .cm-kpi-bar[data-show="partner"] { display: grid; }
+  .cm-kpi-bar { display: none; }
+  .cm-kpi {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cm-kpi-label { font-size: .72rem; color: var(--muted); }
+  .cm-kpi-value { font-size: 1.4rem; font-weight: 700; color: var(--heading); }
+  .cm-kpi-value small { font-size: .8rem; font-weight: 500; color: var(--muted); }
+  .cm-kpi-trend { font-size: .75rem; font-weight: 600; }
+  .cm-kpi-trend.up { color: #16a34a; }
+  .cm-kpi-trend.flat { color: var(--muted); }
+
+  /* 現場ヘッダ */
+  .cm-field-header {
+    display: none;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid #d97706;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+  }
+  .cm-app[data-role="field"] .cm-field-header { display: flex; }
+  .cm-field-header i { font-size: 1.6rem; color: #d97706; }
+  .cm-field-title { font-weight: 700; color: #92400e; margin: 0; font-size: .95rem; }
+  .cm-field-sub { font-size: .8rem; color: #b45309; margin: 0; }
+
+  /* ステージエリア */
+  .cm-stage-area { display: block; }
+  .cm-stage.hidden { display: none; }
+  .cm-stage-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .cm-stage-head h2 {
+    font-size: 1.15rem;
+    color: var(--heading);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cm-stage-head h2 i { color: var(--brand); }
+
+  .cm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--brand);
+    background: #fff;
+    color: var(--brand);
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .cm-btn:hover { background: var(--brand); color: #fff; }
+  .cm-btn--ai {
+    background: linear-gradient(135deg, #1F3A93 0%, #6B85C9 100%);
+    color: #fff;
+    border: none;
+  }
+  .cm-btn--ai:hover { opacity: .9; }
+
+  /* テーブル */
+  .cm-table-wrap { overflow-x: auto; }
+  .cm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .85rem;
+  }
+  .cm-table th, .cm-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .cm-table th {
+    background: #f8fafc;
+    color: var(--heading);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+  .cm-table tbody tr:hover { background: rgba(31, 58, 147, .03); }
+
+  /* ロール別表示制御 */
+  .cm-app[data-role="partner"] [data-show]:not([data-show*="partner"]) { display: none; }
+  .cm-app[data-role="executive"] [data-show]:not([data-show*="executive"]) { display: none; }
+  .cm-app[data-role="field"] [data-show] { display: none; }
+
+  .cm-pri {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: .72rem;
+    font-weight: 700;
+  }
+  .cm-pri.high { background: #fee2e2; color: #b91c1c; }
+  .cm-pri.mid { background: #fef3c7; color: #b45309; }
+  .cm-pri.low { background: #f1f5f9; color: var(--muted); }
+
+  .cm-conf {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 700;
+  }
+  .cm-conf.high { background: #d1fae5; color: #047857; }
+  .cm-conf.mid { background: #fef3c7; color: #b45309; }
+  .cm-conf.low { background: #fee2e2; color: #b91c1c; }
+
+  .cm-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: .72rem;
+    font-weight: 600;
+    background: #f1f5f9;
+    color: var(--text);
+  }
+  .cm-badge--source { background: #e0e7ff; color: #3730a3; }
+  .cm-badge--ok { background: #d1fae5; color: #047857; }
+  .cm-badge--warn { background: #fef3c7; color: #b45309; }
+
+  /* プロジェクトカード */
+  .cm-cards {
+    display: grid;
+    gap: 16px;
+  }
+  .cm-proj-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .cm-proj-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .cm-proj-head strong { color: var(--heading); font-size: .95rem; }
+  .cm-status {
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 700;
+  }
+  .cm-status.in-progress { background: #dbeafe; color: #1e40af; }
+  .cm-status.review { background: #fef3c7; color: #b45309; }
+
+  .cm-proj-progress {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .cm-proj-step {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: .75rem;
+    background: #f1f5f9;
+    color: var(--muted);
+  }
+  .cm-proj-step.done { background: #d1fae5; color: #047857; }
+  .cm-proj-step.in { background: #dbeafe; color: #1e40af; font-weight: 700; }
+  .cm-proj-step.todo { background: #f1f5f9; color: var(--muted); }
+
+  .cm-proj-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: .8rem;
+    color: var(--muted);
+  }
+  .cm-proj-meta i { margin-right: 4px; }
+
+  /* 保守サマリ */
+  .cm-mt-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .cm-mt-summary > div {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cm-mt-label { font-size: .72rem; color: var(--muted); }
+  .cm-mt-value { font-size: 1.2rem; font-weight: 700; color: var(--heading); }
+  .cm-mt-value small { font-size: .75rem; color: var(--muted); font-weight: 500; }
+
+  .cm-stage-note {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: rgba(31, 58, 147, .04);
+    border-left: 3px solid rgba(31, 58, 147, .25);
+    border-radius: 4px;
+    font-size: .82rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .cm-stage-note strong { color: var(--text); }
+
+  /* AI モーダル */
+  .cm-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, .6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+  }
+  .cm-modal[hidden] { display: none; }
+  .cm-modal-content {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    max-width: 560px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, .25);
+  }
+  .cm-modal-content h3 {
+    font-size: 1.1rem;
+    color: var(--heading);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cm-modal-content h3 i { color: var(--brand); }
+  .cm-modal-content p {
+    font-size: .9rem;
+    line-height: 1.8;
+    margin: 0 0 12px;
+    color: var(--text);
+  }
+  .cm-modal-content strong { color: var(--brand); }
+  .cm-modal-content .ai-source {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .cm-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #f1f5f9;
+    cursor: pointer;
+    font-size: 1.4rem;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .cm-modal-close:hover { background: #e2e8f0; }
+
+  /* 設計ポイント */
+  .cm-points-section {
+    background: #fff;
+    padding: clamp(60px, 8vw, 100px) 0;
+    border-top: 1px solid var(--border);
+  }
+  .cm-points-title {
+    text-align: center;
+    font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+    color: var(--heading);
+    margin: 0 0 clamp(28px, 4vw, 40px);
+  }
+  .cm-points-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .cm-point {
+    padding: 24px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .cm-point i {
+    font-size: 1.6rem;
+    color: var(--brand);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .cm-point h3 {
+    font-size: 1rem;
+    color: var(--heading);
+    margin: 0 0 10px;
+  }
+  .cm-point p {
+    font-size: .88rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin: 0;
+  }
+  .cm-point p strong { color: var(--text); }
+  .cm-point a {
+    color: var(--brand);
+    font-weight: 600;
+  }
+
+  /* CTA */
+  .cm-cta-section {
+    background: #f8fafc;
+    padding: clamp(60px, 8vw, 100px) 0;
+  }
+  .cm-cta-section h2 {
+    font-size: clamp(1.3rem, 2.6vw, 1.6rem);
+    color: var(--heading);
+    margin: 0 0 16px;
+  }
+  .cm-cta-section p {
+    color: var(--muted);
+    margin: 0 0 28px;
+    line-height: 1.8;
+  }
+  .cm-cta-buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* 現場ビュー時はサイドバーを単純化 */
+  .cm-app[data-role="field"] .cm-sidebar { background: #fff7ed; }
+  .cm-app[data-role="field"] .cm-table th:nth-child(n+4),
+  .cm-app[data-role="field"] .cm-table td:nth-child(n+4) { display: none; }
+</style>
