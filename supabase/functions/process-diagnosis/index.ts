@@ -441,24 +441,37 @@ function validate(diagnosis: any): string | null {
 async function createSlides(lead: any, diagnosis: any): Promise<string> {
   const accessToken = await getGoogleAccessToken()
 
-  // 1. テンプレをコピー
+  // 0. テンプレが所属する共有ドライブ ID を取得（コピー先指定に必要）
+  const tplMetaRes = await fetch(
+    `https://www.googleapis.com/drive/v3/files/${GOOGLE_SLIDES_TEMPLATE_ID}?fields=driveId&supportsAllDrives=true`,
+    { headers: { Authorization: `Bearer ${accessToken}` } },
+  )
+  if (!tplMetaRes.ok) throw new Error(`Template metadata failed: ${await tplMetaRes.text()}`)
+  const { driveId } = await tplMetaRes.json()
+
+  // 1. テンプレをコピー（共有ドライブ対応）
+  const copyBody: any = {
+    name: `Optiens AI診断レポート - ${lead.company_name} - ${formatDate(new Date())}`,
+  }
+  if (driveId) {
+    // 共有ドライブ内にコピー（サービスアカウントは My Drive を持たないため必須）
+    copyBody.parents = [driveId]
+  }
   const copyRes = await fetch(
-    `https://www.googleapis.com/drive/v3/files/${GOOGLE_SLIDES_TEMPLATE_ID}/copy`,
+    `https://www.googleapis.com/drive/v3/files/${GOOGLE_SLIDES_TEMPLATE_ID}/copy?supportsAllDrives=true`,
     {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name: `Optiens AI診断レポート - ${lead.company_name} - ${formatDate(new Date())}`,
-      }),
+      body: JSON.stringify(copyBody),
     },
   )
   if (!copyRes.ok) throw new Error(`Slides copy failed: ${await copyRes.text()}`)
   const { id: newSlidesId } = await copyRes.json()
 
-  // 2. プレースホルダー置換（batchUpdate）
+  // 2. プレースホルダー置換（batchUpdate）— Slides API は supportsAllDrives 不要
   const replacements = buildReplacements(lead, diagnosis)
   await fetch(
     `https://slides.googleapis.com/v1/presentations/${newSlidesId}:batchUpdate`,
@@ -472,9 +485,9 @@ async function createSlides(lead: any, diagnosis: any): Promise<string> {
     },
   )
 
-  // 3. 共有設定: anyone with link / viewer
+  // 3. 共有設定: anyone with link / viewer（共有ドライブ対応）
   await fetch(
-    `https://www.googleapis.com/drive/v3/files/${newSlidesId}/permissions`,
+    `https://www.googleapis.com/drive/v3/files/${newSlidesId}/permissions?supportsAllDrives=true`,
     {
       method: 'POST',
       headers: {
