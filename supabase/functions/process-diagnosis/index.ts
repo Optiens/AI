@@ -57,28 +57,42 @@ const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null
 const openai = OPENAI_API_KEY ? new OpenAI({ apiKey: OPENAI_API_KEY }) : null
 
-// ===== JSON Schema =====
+// ===== JSON Schema（v2.0 テンプレ対応） =====
 const DIAGNOSIS_SCHEMA = {
   type: 'object',
   required: ['current_summary', 'top3', 'automation_direction', 'ai_type_recommendation',
-    'mechanism_description', 'roi', 'cost_range', 'subsidies'],
+    'mechanism_description', 'automation_bullets', 'automation_reasoning',
+    'human_bullets', 'human_reasoning', 'roi', 'cost_total_range', 'cost_breakdown', 'subsidies'],
   properties: {
     current_summary: { type: 'string', maxLength: 200 },
     top3: {
       type: 'array', minItems: 3, maxItems: 3,
       items: {
         type: 'object',
-        required: ['area', 'reason', 'type'],
+        required: ['area', 'reason', 'hours_per_month', 'basis'],
         properties: {
-          area: { type: 'string', maxLength: 30 },
-          reason: { type: 'string', maxLength: 60 },
-          type: { type: 'string', enum: ['chat', 'RAG', 'agent'] },
+          area: { type: 'string', maxLength: 40 },
+          reason: { type: 'string', maxLength: 80 },
+          hours_per_month: { type: 'number', minimum: 2, maximum: 60 },
+          basis: { type: 'string', maxLength: 50 },
         },
       },
     },
     automation_direction: { type: 'string', maxLength: 300 },
     ai_type_recommendation: { type: 'string', maxLength: 200 },
     mechanism_description: { type: 'string', maxLength: 500 },
+    // 業務の仕分け
+    automation_bullets: {
+      type: 'array', minItems: 3, maxItems: 5,
+      items: { type: 'string', maxLength: 50 },
+    },
+    automation_reasoning: { type: 'string', maxLength: 200 },
+    human_bullets: {
+      type: 'array', minItems: 3, maxItems: 5,
+      items: { type: 'string', maxLength: 50 },
+    },
+    human_reasoning: { type: 'string', maxLength: 200 },
+    // ROI（top3.hours_per_month の合計を validate() で自動補正）
     roi: {
       type: 'object',
       required: ['monthly_hours_saved', 'monthly_value_yen'],
@@ -87,9 +101,19 @@ const DIAGNOSIS_SCHEMA = {
         monthly_value_yen: { type: 'number', minimum: 15000, maximum: 300000 },
       },
     },
-    cost_range: {
-      type: 'string',
-      enum: ['月額数千円程度', '月額1〜3万円程度', '月額3〜10万円程度'],
+    // 想定コスト
+    cost_total_range: { type: 'string', maxLength: 50 },
+    cost_breakdown: {
+      type: 'array', minItems: 3, maxItems: 5,
+      items: {
+        type: 'object',
+        required: ['category', 'amount', 'basis'],
+        properties: {
+          category: { type: 'string', maxLength: 30 },
+          amount: { type: 'string', maxLength: 30 },
+          basis: { type: 'string', maxLength: 50 },
+        },
+      },
     },
     subsidies: {
       type: 'array', maxItems: 3,
@@ -338,16 +362,51 @@ async function generateDiagnosis(lead: any) {
 あなたは Optiens の AI 活用診断レポート生成アシスタントです。
 中小事業者向けの「無料診断レポート」の本文を、提供されるフォーム入力に基づいて生成します。
 
-ルール（厳守）:
+【提案方針（最重要・厳守）】
+Optiens は「AI エージェントを組み込んだ自動化ワークフロー」を構築・納品する事業者です。
+そのため、提案は必ず以下の性質を満たす自動化ワークフローのみとしてください:
+
+✅ 提案して良いもの（エージェント型自動化）:
+- 複数システムを横断する自動化（例: 問い合わせメール → 内容分類 → 担当者振り分け → CRM 記録）
+- 定型業務の自動実行＋人間の最終確認の仕組み（例: 請求書 PDF 受領 → OCR → 会計ソフト登録 → 担当者通知）
+- 業務トリガー連動の自動化（例: 予約サイト新規予約 → 顧客カルテ作成 → 確認メール送信）
+- データ収集 → 分析 → 定例レポート自動生成
+- 社内データに対する自然言語問い合わせシステム（RAG）
+
+❌ 提案してはいけないもの（汎用 AI 利用レベル）:
+- 「SNS 投稿案を作成」「販促文を作成」「FAQ を整理」のような、ChatGPT で個別タスクを依頼するだけのもの
+- 業務との統合がない単発生成タスク
+- 「AI に聞いて使う」レベルの提案
+
+【表現ルール（厳守）】
 - 業種×規模の汎用パターンに基づく方向性のみを示す（個別具体提案は禁止）
 - 具体的な AI ツール名（Claude/ChatGPT/Gemini等）は禁止
 - アーキテクチャ図は生成しない（仕組みは文章説明のみ）
-- 導入支援の具体額は禁止（「月額数千円程度」等のレンジのみ）
 - 過度な煽り表現禁止（「淘汰」「乗り遅れる」等）
 - 「〜と考えられます」「〜が効きそうです」のような方向性表現を使う
 - 補助金は名称のみ（申請支援は業務範囲外と明示）
-- 出力は JSON Schema に厳密に従う
 - 提供される【課題別ガイダンス】【予算ガイダンス】【AI活用段階ガイダンス】を必ず反映する
+
+【出力フィールド説明（重要）】
+- top3: 自動化ワークフロー Top3
+  - area: ワークフロー名（例: 「問い合わせ自動振り分け＋一次返信下書き」）
+  - reason: なぜそのワークフローが効くか
+  - hours_per_month: そのワークフローで月次削減可能な時間（数値・実数）
+  - basis: 時間算出の根拠（例: 「1日10件×5分×20営業日 = 約16時間」）
+- automation_bullets: AI エージェントに任せやすい業務（3〜5項目・各50文字以内）
+- automation_reasoning: なぜそれらを AI に任せられるか（200文字以内）
+- human_bullets: 人間に残すべき業務（3〜5項目・各50文字以内）
+- human_reasoning: なぜそれらを人間に残すか（200文字以内）
+- cost_total_range: 月額運用コストのレンジ（例: 「¥3,000〜¥15,000」）
+- cost_breakdown: コスト内訳 3〜5項目（category/amount/basis を含む）
+  例: { category: "AI API 利用料", amount: "¥1,500〜¥5,000", basis: "月100リクエスト想定" }
+- roi.monthly_hours_saved: top3 の hours_per_month 合計（validateで自動補正されるので大まかでOK）
+- roi.monthly_value_yen: monthly_hours_saved × 1500（validateで自動補正）
+
+【ROI 計算ルール】
+- top3 の hours_per_month の合計を monthly_hours_saved にする
+- monthly_value_yen = monthly_hours_saved × 1500（時給1500円換算）
+- 数値が大きすぎる場合（200時間/月以上）は現実的にスケールダウン
 `.trim()
 
   // ラベル変換
@@ -425,14 +484,32 @@ function validate(diagnosis: any): string | null {
     return 'Placeholder text remains'
   }
 
-  // ROI 自動補正：AI 出力が計算ミスをすることがあるため、時給1500円換算で再計算
-  // monthly_hours_saved を正として、monthly_value_yen を再計算（破棄ではなく補正）
-  if (diagnosis.roi && typeof diagnosis.roi.monthly_hours_saved === 'number') {
-    diagnosis.roi.monthly_value_yen = diagnosis.roi.monthly_hours_saved * 1500
-  }
-
   // top3 件数
-  if (diagnosis.top3.length !== 3) return `top3 must be exactly 3 items`
+  if (!Array.isArray(diagnosis.top3) || diagnosis.top3.length !== 3) return `top3 must be exactly 3 items`
+
+  // ROI 自動補正：top3 の hours_per_month 合計を正として再計算
+  let totalHours = 0
+  for (const t of diagnosis.top3) {
+    if (typeof t.hours_per_month !== 'number') return `top3.hours_per_month must be number`
+    totalHours += t.hours_per_month
+  }
+  // 範囲制約
+  if (totalHours < 10) totalHours = 10
+  if (totalHours > 200) totalHours = 200
+  if (!diagnosis.roi) diagnosis.roi = {}
+  diagnosis.roi.monthly_hours_saved = Math.round(totalHours)
+  diagnosis.roi.monthly_value_yen = diagnosis.roi.monthly_hours_saved * 1500
+
+  // automation_bullets / human_bullets が配列でない場合に備えた防御
+  if (!Array.isArray(diagnosis.automation_bullets) || diagnosis.automation_bullets.length < 1) {
+    return 'automation_bullets must have at least 1 item'
+  }
+  if (!Array.isArray(diagnosis.human_bullets) || diagnosis.human_bullets.length < 1) {
+    return 'human_bullets must have at least 1 item'
+  }
+  if (!Array.isArray(diagnosis.cost_breakdown) || diagnosis.cost_breakdown.length < 1) {
+    return 'cost_breakdown must have at least 1 item'
+  }
 
   return null
 }
@@ -502,25 +579,60 @@ async function createSlides(lead: any, diagnosis: any): Promise<string> {
 }
 
 function buildReplacements(lead: any, d: any) {
+  // 業務仕分け（箇条書きを 1 文字列に整形）
+  const formatBullets = (arr: string[]) => (arr || []).map(b => '・ ' + b).join('\n')
+
+  // コスト内訳（配列の長さに応じて 5 行分まで埋め、足りない分は空文字）
+  const breakdown = d.cost_breakdown || []
+  const costFields: Record<string, string> = {}
+  for (let i = 1; i <= 5; i++) {
+    const item = breakdown[i - 1] || { category: '', amount: '', basis: '' }
+    costFields[`{{cost_category_${i}}}`] = item.category || ''
+    costFields[`{{cost_amount_${i}}}`] = item.amount || ''
+    costFields[`{{cost_basis_${i}}}`] = item.basis || ''
+  }
+
   const map: Record<string, string> = {
+    // 共通
     '{{customer_name}}': lead.company_name,
     '{{diagnosis_date}}': formatDate(new Date()),
+    '{{application_id}}': lead.application_id || '',
     '{{current_summary}}': d.current_summary,
+
+    // Top3 自動化ワークフロー
     '{{top3_area_1}}': d.top3[0].area,
     '{{top3_reason_1}}': d.top3[0].reason,
-    '{{top3_type_1}}': aiTypeLabel(d.top3[0].type),
+    '{{top3_hours_1}}': String(d.top3[0].hours_per_month),
+    '{{top3_basis_1}}': d.top3[0].basis,
     '{{top3_area_2}}': d.top3[1].area,
     '{{top3_reason_2}}': d.top3[1].reason,
-    '{{top3_type_2}}': aiTypeLabel(d.top3[1].type),
+    '{{top3_hours_2}}': String(d.top3[1].hours_per_month),
+    '{{top3_basis_2}}': d.top3[1].basis,
     '{{top3_area_3}}': d.top3[2].area,
     '{{top3_reason_3}}': d.top3[2].reason,
-    '{{top3_type_3}}': aiTypeLabel(d.top3[2].type),
+    '{{top3_hours_3}}': String(d.top3[2].hours_per_month),
+    '{{top3_basis_3}}': d.top3[2].basis,
+
+    // 自動化方針
     '{{automation_direction}}': d.automation_direction,
     '{{ai_type_recommendation}}': d.ai_type_recommendation,
     '{{mechanism_description}}': d.mechanism_description,
+
+    // 業務の仕分け
+    '{{automation_bullets}}': formatBullets(d.automation_bullets),
+    '{{automation_reasoning}}': d.automation_reasoning || '',
+    '{{human_bullets}}': formatBullets(d.human_bullets),
+    '{{human_reasoning}}': d.human_reasoning || '',
+
+    // ROI
     '{{monthly_hours_saved}}': String(d.roi.monthly_hours_saved),
-    '{{monthly_value_yen}}': String(d.roi.monthly_value_yen.toLocaleString()),
-    '{{cost_range}}': d.cost_range,
+    '{{monthly_value_yen}}': '¥' + d.roi.monthly_value_yen.toLocaleString(),
+
+    // 想定コスト
+    '{{cost_total_range}}': d.cost_total_range || '',
+    ...costFields,
+
+    // 補助金
     '{{subsidies}}': d.subsidies.length > 0 ? d.subsidies.join(' / ') : '該当なし',
   }
 
@@ -616,9 +728,8 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 <p>${escapeHtml(lead.company_name)}<br/>${escapeHtml(lead.person_name)} 様</p>
 <p>合同会社Optiensです。<br/>AI活用診断【簡易版】のお申し込みありがとうございます。</p>
 <p>診断レポートが完成しましたので、下記URLよりご覧ください。</p>
-<p style="margin:24px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-left:4px solid #1F3A93;padding:14px 18px;border-radius:4px;">
-  <strong style="color:#1F3A93;">▼ 診断レポート URL</strong><br/>
-  <a href="${slidesUrl}" style="color:#1F3A93;word-break:break-all;">${slidesUrl}</a>
+<p style="margin:24px 0;">
+  <a href="${slidesUrl}" style="display:inline-block;padding:12px 24px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">レポートを開く</a>
 </p>
 <p style="font-size:13px;color:#666;">
   ※ レポートは Google Slides で表示されます。スマートフォン・PC のブラウザでご覧いただけます。<br/>
