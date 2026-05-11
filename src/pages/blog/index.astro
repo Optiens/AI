@@ -88,6 +88,51 @@ function paginatedUrl() {
       </div>
     </section>
 
+    <!-- ページネーション（上部） -->
+    {(totalPages > 1 || showAll) && (
+      <nav class="pagination-container pagination-container--top" aria-label="ブログページネーション（上部）">
+        {showAll ? (
+          <div class="pagination-mode">
+            <span class="pagination-info">全 {filtered.length} 件を表示中</span>
+            <a href={paginatedUrl()} class="pagination-link pagination-link--mode">ページ表示に戻す</a>
+          </div>
+        ) : (
+          <div class="pagination-mode">
+            <ul class="pagination">
+              {hasPrev ? (
+                <li class="pagination-item">
+                  <a href={pageUrl(currentPage - 1)} class="pagination-link">前へ</a>
+                </li>
+              ) : (
+                <li class="pagination-item disabled">
+                  <span class="pagination-link">前へ</span>
+                </li>
+              )}
+              {pageNumbers.map((n) => (
+                <li class={`pagination-item pagination-item--num ${n === currentPage ? 'current' : ''}`}>
+                  {n === currentPage ? (
+                    <span class="pagination-link">{n}</span>
+                  ) : (
+                    <a href={pageUrl(n)} class="pagination-link">{n}</a>
+                  )}
+                </li>
+              ))}
+              {hasNext ? (
+                <li class="pagination-item">
+                  <a href={pageUrl(currentPage + 1)} class="pagination-link">次へ</a>
+                </li>
+              ) : (
+                <li class="pagination-item disabled">
+                  <span class="pagination-link">次へ</span>
+                </li>
+              )}
+            </ul>
+            <a href={showAllUrl()} class="pagination-link pagination-link--mode">全 {filtered.length} 件を一度に見る</a>
+          </div>
+        )}
+      </nav>
+    )}
+
     <!-- 記事一覧 -->
     <section class="blog-articles-section light-section">
       <div class="container blog-grid">
@@ -323,6 +368,9 @@ function paginatedUrl() {
     display: flex;
     justify-content: center;
     padding: 0 0 60px;
+  }
+  .pagination-container--top {
+    padding: 28px 0 0;
   }
   .pagination-mode {
     display: flex;
