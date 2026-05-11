@@ -3,6 +3,7 @@ title: 'Claude Code に「これやっといて」が失敗する理由 ── P
 date: '2026-05-11'
 category: 'technology'
 excerpt: '「Claude Code を試したがフォーマットを守ってくれない、想定通りのアウトプットが出ない」── この相談の原因はツール側ではなく依頼の仕方にあります。本稿ではエージェント型 AI に仕事を任せる際の PDCA サイクル設計を、企業リスト整形の実例で解説します。'
+image: '/images/blog/20260511-claude-code-vague-request-failure.webp'
 ---
 
 ## 「全然フォーマット守ってくれないんですよね」

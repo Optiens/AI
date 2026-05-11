@@ -3,6 +3,7 @@ title: 'マネージャー版 AI ダッシュボード ── 「新規営業に
 date: '2026-05-11'
 category: 'business'
 excerpt: '「新規受注が伸びない」課題の多くは、営業担当が新規業務に時間を使えていないことが原因です。本人も上司も気づいていないこの構造を、AI がファクトベースで可視化することで対話の起点を作る設計を解説します。'
+image: '/images/blog/20260511-manager-ai-dashboard-sales-time-5-percent.webp'
 ---
 
 ## 「うちの営業、新規が弱いんですよね」

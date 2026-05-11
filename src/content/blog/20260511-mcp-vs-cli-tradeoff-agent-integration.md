@@ -3,6 +3,7 @@ title: 'MCP vs CLI ── エージェント連携のスピードと安全性の
 date: '2026-05-11'
 category: 'technology'
 excerpt: 'AI エージェントから外部処理を呼び出す方法には、MCP（標準化されたプロトコル）と CLI（昔ながらのコマンドライン）があります。一見 MCP の方が便利そうに見えますが、実は速度・安全性の観点で CLI に軍配が上がる場面が増えています。本稿で両者のトレードオフを整理します。'
+image: '/images/blog/20260511-mcp-vs-cli-tradeoff-agent-integration.webp'
 ---
 
 ## 「MCP の方が新しいから良い」は本当か

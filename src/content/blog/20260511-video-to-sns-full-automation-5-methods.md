@@ -3,6 +3,7 @@ title: '動画 → SNS 配信を 5 方式組み合わせで完全自動化する
 date: '2026-05-11'
 category: 'technology'
 excerpt: '動画素材を SNS 用に分割し、文字起こしを添えて X に投稿、コメントを追加し、Notion に記録する。これら一連の業務を、Claude Code の 5 つの連携方式を組み合わせて完全自動化する実装例を解説します。'
+image: '/images/blog/20260511-video-to-sns-full-automation-5-methods.webp'
 ---
 
 ## 「YouTube は撮ったけど SNS への切り出しが面倒」

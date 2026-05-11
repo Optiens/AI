@@ -3,6 +3,7 @@ title: 'CLAUDE.md でセッション跨ぎの知識継承を作る ── AI エ
 date: '2026-05-11'
 category: 'technology'
 excerpt: 'Claude Code のセッションは閉じると記憶が消えます。同じ依頼を何度も最初から説明し直すストレスを解消するのが CLAUDE.md です。本稿ではこのファイルの正しい設計と、「育てる」運用方法を整理します。'
+image: '/images/blog/20260511-claude-md-session-knowledge-persistence.webp'
 ---
 
 ## 「同じことを何度も説明している気がする」
