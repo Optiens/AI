@@ -187,8 +187,40 @@ Deno.serve(async (req: Request) => {
     return new Response('OK', { status: 200 })
   } catch (err) {
     console.error('process-diagnosis error:', err)
-    await notifyAdmin('process-diagnosis 例外', String(err))
-    return new Response(`Error: ${err}`, { status: 500 })
+    const errStr = String(err)
+    // OpenAI クォータ超過（429 / insufficient_quota / rate limit）の検出
+    const isQuotaError = /\b429\b|quota|insufficient_quota|rate[\s_-]?limit/i.test(errStr)
+
+    // payload.record を再取得（catch 句に lead が無いケースに備える）
+    let leadForNotify: any = null
+    try {
+      const body = await req.clone().json().catch(() => null)
+      leadForNotify = body?.record || null
+    } catch {}
+
+    if (isQuotaError && leadForNotify?.id) {
+      // クォータ超過 → 翌朝の自動リトライ対象に変更
+      await markStatus(leadForNotify.id, 'quota_retry_pending')
+      // 顧客に遅延通知を自動送信
+      try {
+        await sendDelayNoticeEmail(leadForNotify)
+      } catch (mailErr) {
+        console.error('sendDelayNoticeEmail failed:', mailErr)
+      }
+      await notifyAdmin(
+        '[QUOTA] 顧客遅延通知を自動送信＋翌朝リトライ予約',
+        `lead_id=${leadForNotify.id}\napplication_id=${leadForNotify.application_id}\n会社名=${leadForNotify.company_name}\n` +
+        `顧客への遅延通知メールを送信し、status=quota_retry_pending に変更しました。\n翌朝 7:00 JST の cron で自動的に再処理されます。\n\n元エラー:\n${errStr}`,
+      )
+      return new Response('Quota error: scheduled for retry', { status: 200 })
+    }
+
+    // それ以外の例外
+    if (leadForNotify?.id) {
+      await markStatus(leadForNotify.id, 'manual_review').catch(() => {})
+    }
+    await notifyAdmin('process-diagnosis 例外', errStr)
+    return new Response(`Error: ${errStr}`, { status: 500 })
   }
 })
 
@@ -586,6 +618,79 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 // ===== ヘルパー =====
 async function markStatus(leadId: string, status: string) {
   await supabase!.from('diagnosis_leads').update({ status }).eq('id', leadId)
+}
+
+// 顧客向け遅延通知（OpenAI クォータ超過 等の一時的システム障害時）
+async function sendDelayNoticeEmail(lead: any) {
+  if (!resend || !lead?.email) return
+  const safeCompany = escapeHtml(lead.company_name || '')
+  const safePerson = escapeHtml(lead.person_name || '')
+  const appId = String(lead.application_id || '')
+  const text = `${lead.company_name || ''} ${lead.person_name || ''} 様
+
+平素より大変お世話になっております。
+合同会社Optiens でございます。
+
+このたびは AI 活用診断にお申し込みいただきありがとうございます。
+
+当社の自動化処理で一時的なシステム不具合が発生し、
+本来 1〜2 営業日以内にお届けすべき診断レポートのお届けが遅れております。
+心よりお詫び申し上げます。
+
+━━━━━━━━━━━━━━━━━━━━━━
+■ 申込番号: ${appId}
+━━━━━━━━━━━━━━━━━━━━━━
+
+問題は既に解消に向けて対応しており、
+復旧次第、自動的に再処理を行いレポートをお届けいたします。
+追加でご対応いただく必要はございません。
+
+通常、翌営業日の早い時間帯までにはお届けできる見込みです。
+
+ご不明な点がございましたら、本メールへの返信、または
+info@optiens.com までお問い合わせください。
+
+このたびはご迷惑をおかけして申し訳ございません。
+
+合同会社Optiens
+〒407-0301 山梨県北杜市高根町清里3545番地2483
+https://optiens.com
+`
+  const html = `<div style="font-family:'Noto Sans JP',sans-serif;line-height:1.85;color:#333;max-width:560px;">
+<p>${safeCompany} ${safePerson} 様</p>
+
+<p>平素より大変お世話になっております。<br/>合同会社Optiens でございます。</p>
+
+<p>このたびは AI 活用診断にお申し込みいただきありがとうございます。</p>
+
+<p>当社の自動化処理で一時的なシステム不具合が発生し、本来 1〜2 営業日以内にお届けすべき診断レポートのお届けが遅れております。<strong>心よりお詫び申し上げます。</strong></p>
+
+<table style="border-collapse:collapse;width:100%;margin:16px 0;background:#FEF3C7;border:1px solid #FDE68A;border-radius:8px;">
+  <tr><td style="padding:10px 14px;font-weight:bold;background:#FEF3C7;color:#92400E;">申込番号</td><td style="padding:10px 14px;font-family:monospace;font-size:1.1em;color:#92400E;font-weight:bold;">${escapeHtml(appId)}</td></tr>
+</table>
+
+<p>問題は既に解消に向けて対応しており、<strong>復旧次第、自動的に再処理を行いレポートをお届けいたします</strong>。追加でご対応いただく必要はございません。</p>
+
+<p>通常、<strong>翌営業日の早い時間帯までにはお届けできる見込み</strong>です。</p>
+
+<p style="margin:24px 0 0;padding-top:16px;border-top:1px solid #E2E8F0;font-size:13px;color:#64748b;">
+ご不明な点がございましたら、本メールへの返信、または <a href="mailto:info@optiens.com">info@optiens.com</a> までお問い合わせください。<br/>
+このたびはご迷惑をおかけして申し訳ございません。
+</p>
+
+<p style="margin-top:24px;font-size:12px;color:#94a3b8;">
+合同会社Optiens<br/>
+〒407-0301 山梨県北杜市高根町清里3545番地2483<br/>
+<a href="https://optiens.com">https://optiens.com</a>
+</p>
+</div>`
+  await resend.emails.send({
+    from: `Optiens <${FROM_EMAIL}>`,
+    to: [lead.email],
+    subject: `【Optiens】AI 活用診断レポート お届け遅延のお詫び（申込番号: ${appId}）`,
+    text,
+    html,
+  })
 }
 
 async function notifyAdmin(subject: string, body: string) {
