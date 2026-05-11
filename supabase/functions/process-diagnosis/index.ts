@@ -425,11 +425,10 @@ function validate(diagnosis: any): string | null {
     return 'Placeholder text remains'
   }
 
-  // ROI 整合性
-  const expectedYen = diagnosis.roi.monthly_hours_saved * 1500
-  const actualYen = diagnosis.roi.monthly_value_yen
-  if (Math.abs(expectedYen - actualYen) / expectedYen > 0.1) {
-    return `ROI mismatch: ${actualYen} != ${expectedYen} (±10%)`
+  // ROI 自動補正：AI 出力が計算ミスをすることがあるため、時給1500円換算で再計算
+  // monthly_hours_saved を正として、monthly_value_yen を再計算（破棄ではなく補正）
+  if (diagnosis.roi && typeof diagnosis.roi.monthly_hours_saved === 'number') {
+    diagnosis.roi.monthly_value_yen = diagnosis.roi.monthly_hours_saved * 1500
   }
 
   // top3 件数
