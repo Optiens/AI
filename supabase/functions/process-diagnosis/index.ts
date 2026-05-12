@@ -836,8 +836,8 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 <p style="font-size:13px;color:#666;">
   ※ レポートは Google Slides で表示されます。スマートフォン・PC のブラウザでご覧いただけます。<br/>
   ※ 申込番号: <strong>${escapeHtml(appId)}</strong><br/>
-  ※ より詳細な分析（アーキテクチャ図・個別自動化提案・導入見積など）をご希望の方は、
-  <a href="https://optiens.com/free-diagnosis?paid=1">【詳細版】AI活用診断（¥5,500税込）</a>もご検討ください。
+  ※ より詳細な分析（アーキテクチャ図・個別自動化提案・導入見積など）をご希望の場合は、
+  【詳細版】AI活用診断（¥5,500税込）を準備中です。公開までもうしばらくお待ちください。
 </p>
 <hr style="margin:32px 0;border:none;border-top:1px solid #ddd;"/>
 <p style="font-size:12px;color:#999;">

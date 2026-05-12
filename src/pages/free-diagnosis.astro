@@ -20,10 +20,24 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <span class="plan-switch-name">【簡易版】</span>
             <span class="plan-switch-price">0円</span>
           </button>
-          <button type="button" class="plan-switch-btn" data-plan="paid" role="tab" aria-selected="false">
+          <button type="button" class="plan-switch-btn is-coming-soon" data-plan="paid" role="tab" aria-selected="false" aria-disabled="true">
+            <span class="plan-switch-badge">準備中</span>
             <span class="plan-switch-name">【詳細版】</span>
             <span class="plan-switch-price">¥5,500 税込</span>
           </button>
+        </div>
+
+        <!-- 詳細版 準備中アナウンス -->
+        <div class="diag-paid-coming-soon" id="diag-paid-coming-soon" hidden>
+          <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+          <div>
+            <p class="diag-paid-coming-soon__title">【詳細版】AI活用診断は、現在準備中です。</p>
+            <p class="diag-paid-coming-soon__desc">
+              内容の最終調整を行っております。公開までもうしばらくお待ちください。<br/>
+              お急ぎの場合は、まず【簡易版】（無料）でお試しいただくか、
+              <a href="/contact">お問い合わせフォーム</a>からご相談ください。
+            </p>
+          </div>
         </div>
 
         <p class="diag-sub" data-plan-show="free">
@@ -620,6 +634,22 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       if (!form.checkValidity()) return;
 
       e.preventDefault();
+
+      // 詳細版は準備中（プレビュー時のみ送信可）
+      var planFieldEl = document.getElementById('plan-field');
+      var planVal = planFieldEl && planFieldEl.value === 'paid' ? 'paid' : 'free';
+      var previewOk = (function() {
+        try { return sessionStorage.getItem('optiens_paid_preview') === '1'; } catch (e) { return false; }
+      })();
+      if (planVal === 'paid' && !previewOk) {
+        showToast('【詳細版】AI活用診断は現在準備中です。【簡易版】（無料）からお申し込みください。', {
+          title: '【詳細版】は準備中です',
+        });
+        var paidComingSoon = document.getElementById('diag-paid-coming-soon');
+        if (paidComingSoon) paidComingSoon.hidden = false;
+        return;
+      }
+
       hideToast();
 
       const originalLabel = submitBtn ? submitBtn.innerHTML : '';
@@ -752,12 +782,52 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       document.body.setAttribute('data-plan', plan);
     }
 
+    // 詳細版プレビュー判定: ?preview=paid または sessionStorage.optiens_paid_preview=1
+    var paidPreviewEnabled = (function() {
+      try {
+        var q = new URLSearchParams(window.location.search);
+        if (q.get('preview') === 'paid') {
+          sessionStorage.setItem('optiens_paid_preview', '1');
+          return true;
+        }
+        return sessionStorage.getItem('optiens_paid_preview') === '1';
+      } catch (e) {
+        return false;
+      }
+    })();
+
+    var paidComingSoon = document.getElementById('diag-paid-coming-soon');
+
     planButtons.forEach(function(btn) {
       btn.addEventListener('click', function() {
         var plan = btn.getAttribute('data-plan');
-        if (plan) applyPlan(plan);
+        if (!plan) return;
+        if (plan === 'paid' && !paidPreviewEnabled) {
+          // 準備中アナウンスを表示（実際の切替は行わない）
+          if (paidComingSoon) {
+            paidComingSoon.hidden = false;
+            paidComingSoon.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+        if (paidComingSoon) paidComingSoon.hidden = true;
+        applyPlan(plan);
       });
     });
+
+    // プレビューモードでは coming-soon バッジを「PREVIEW」に変える
+    if (paidPreviewEnabled) {
+      var paidBtnEl = document.querySelector('.plan-switch-btn[data-plan="paid"]');
+      if (paidBtnEl) {
+        paidBtnEl.classList.remove('is-coming-soon');
+        paidBtnEl.removeAttribute('aria-disabled');
+        var badge = paidBtnEl.querySelector('.plan-switch-badge');
+        if (badge) {
+          badge.textContent = 'PREVIEW';
+          badge.classList.add('plan-switch-badge--preview');
+        }
+      }
+    }
 
     applyPlan('free');
   })();
@@ -1186,6 +1256,75 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     opacity: .85;
     letter-spacing: .04em;
   }
+  /* 準備中バッジ */
+  .plan-switch-btn {
+    position: relative;
+  }
+  .plan-switch-badge {
+    position: absolute;
+    top: -8px;
+    right: 8px;
+    background: #f59e0b;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: .04em;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, .3);
+    pointer-events: none;
+  }
+  .plan-switch-badge--preview {
+    background: #10b981;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, .3);
+  }
+  .plan-switch-btn.is-coming-soon {
+    opacity: .65;
+    cursor: not-allowed;
+  }
+  .plan-switch-btn.is-coming-soon:hover {
+    background: rgba(245, 158, 11, .08);
+    color: var(--muted, #64748b);
+  }
+
+  /* 詳細版 準備中アナウンス */
+  .diag-paid-coming-soon {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    max-width: 720px;
+    margin: 0 auto 28px;
+    padding: 18px 22px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-left: 4px solid #f59e0b;
+    border-radius: 10px;
+    text-align: left;
+    color: #78350f;
+  }
+  .diag-paid-coming-soon i {
+    flex: 0 0 24px;
+    font-size: 22px;
+    color: #d97706;
+    padding-top: 2px;
+  }
+  .diag-paid-coming-soon__title {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #92400e;
+  }
+  .diag-paid-coming-soon__desc {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #78350f;
+  }
+  .diag-paid-coming-soon__desc a {
+    color: #b45309;
+    text-decoration: underline;
+  }
+
   @media (max-width: 480px) {
     .plan-switcher {
       flex-direction: column;

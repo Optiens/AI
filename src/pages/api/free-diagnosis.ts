@@ -113,6 +113,20 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
     const marketingOptOut = form.get('marketing_opt_out') === '1'
     const plan: 'free' | 'paid' = planRaw === 'paid' ? 'paid' : 'free'
 
+    // ---- 詳細版（paid）は現在準備中のため、申し込みを停止 ----
+    // プレビュー（CEO検証）は X-Optiens-Preview: paid ヘッダー、または ?preview=paid クエリで通過可
+    if (plan === 'paid') {
+      const url = new URL(request.url)
+      const previewHeader = request.headers.get('x-optiens-preview')
+      const previewQuery = url.searchParams.get('preview')
+      const previewOk = previewHeader === 'paid' || previewQuery === 'paid'
+      if (!previewOk) {
+        return json({
+          error: '【詳細版】AI活用診断は現在準備中です。公開までもうしばらくお待ちください。お急ぎの場合は【簡易版】（無料）からお申し込みください。',
+        }, 503)
+      }
+    }
+
     // ---- 申込番号の自動採番（8桁ランダム英数字・一意性保証） ----
     const applicationId = await generateUniqueApplicationId()
 
