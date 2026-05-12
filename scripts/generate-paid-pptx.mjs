@@ -748,7 +748,7 @@ for (let i = 1; i <= PROPOSAL_TOTAL; i++) {
     slide.addText(`{{paid_roi_basis_${i}}}`, { x: colXs[4], y, w: colWs[4], h: rowH, fontSize: 11, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle' });
   }
 
-  addFooterNote(slide, '※ 標準時給 3,500 円ベース（事務職の時間単価＋機会損失込み）。月間効果額の試算（年間は月額×12、3年累計は×36）');
+  addFooterNote(slide, '※ 業務階層別時給で算出（パート¥1,300/h・一般¥2,000/h・経営者¥4,000/h、出典：厚労省・マイナビ・企業実務サポートクラブ）。年間は月額×12、3 年累計は×36');
 }
 
 // =================================================
