@@ -35,63 +35,127 @@ import Layout from '../layouts/Layout.astro';
             <h3>AI活用診断（簡易版）</h3>
             <p class="partners-service-price">無料</p>
             <p>フォーム入力 → AIが自動レポートを納品。リード獲得の入口として最適。</p>
+            <p class="partners-service-tag partners-service-tag--off">紹介料 対象外</p>
           </div>
           <div class="partners-service-card">
             <h3>AI活用診断（詳細版）</h3>
             <p class="partners-service-price">¥5,500 税込</p>
-            <p>個別提案 ＋ 60分オンラインMTG。<small>※ 現在準備中</small></p>
+            <p>詳細レポート ＋ 60分オンラインMTG。<small>※ 現在準備中</small></p>
+            <p class="partners-service-tag partners-service-tag--off">紹介料 対象外</p>
           </div>
           <div class="partners-service-card">
+            <h3>個別コンサル（スポット）</h3>
+            <p class="partners-service-price">¥40,000 / 回</p>
+            <p>経営判断・戦略相談の単発セッション。30 万円未満のニーズはこちらにご案内。</p>
+            <p class="partners-service-tag partners-service-tag--off">紹介料 対象外</p>
+          </div>
+          <div class="partners-service-card partners-service-card--target">
             <h3>導入支援</h3>
             <p class="partners-service-price">30〜200 万円</p>
             <p>AI ワークフロー・業務システムの構築。案件規模で見積。</p>
+            <p class="partners-service-tag partners-service-tag--on">紹介料 対象</p>
           </div>
-          <div class="partners-service-card">
+          <div class="partners-service-card partners-service-card--target">
             <h3>保守チケット</h3>
             <p class="partners-service-price">¥33,000〜¥55,000 / 月</p>
             <p>月額チケット制サポート。改修・運用支援を継続提供。</p>
+            <p class="partners-service-tag partners-service-tag--on">紹介料 対象</p>
           </div>
         </div>
         <p class="partners-section-note">業種は問いません。当社の得意領域：観光・宿泊・飲食・醸造・農業・工務店・小売・サービス業。</p>
       </div>
     </section>
 
-    <!-- 紹介の3タイプ -->
+    <!-- 紹介の2タイプ -->
     <section class="partners-section partners-section--alt">
       <div class="container">
-        <h2 class="partners-h2">紹介の 3 タイプとご報酬</h2>
+        <h2 class="partners-h2">紹介の 2 タイプ</h2>
+        <div class="partners-type-grid">
+          <div class="partners-type-card">
+            <h3>A. リード紹介</h3>
+            <p>顧客の連絡先を共有いただきます。提案・受注は当社が担当します。</p>
+          </div>
+          <div class="partners-type-card">
+            <h3>B. 同行紹介</h3>
+            <p>A に加え、初回打合せに同席または継続フォローいただきます。</p>
+          </div>
+        </div>
+        <p class="partners-section-note">
+          ※ 提案・受注の大半を担う代理営業は本制度の対象外です。希望される場合は別途「販売代理店契約」をご相談ください。
+        </p>
+      </div>
+    </section>
+
+    <!-- 紹介料レート -->
+    <section class="partners-section">
+      <div class="container">
+        <h2 class="partners-h2">紹介料レート</h2>
+
+        <h3 class="partners-h3">導入支援（初期構築費）</h3>
         <div class="partners-table-wrap">
           <table class="partners-table">
             <thead>
               <tr>
-                <th>タイプ</th>
-                <th>あなたの役割</th>
-                <th>初期費用に対する報酬</th>
-                <th>月額保守の報酬</th>
+                <th>案件規模（税抜）</th>
+                <th>A. リード紹介</th>
+                <th>B. 同行紹介</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>A. リード紹介</strong></td>
-                <td>顧客の連絡先を共有</td>
-                <td><span class="partners-rate">10%</span><br/><small>（初回のみ）</small></td>
-                <td><small>対象外</small></td>
+                <td>30 万円未満</td>
+                <td><span class="partners-rate-off">対象外</span></td>
+                <td><span class="partners-rate-off">対象外</span></td>
               </tr>
               <tr>
-                <td><strong>B. 同行紹介</strong></td>
-                <td>A + 初回打合せ同席</td>
-                <td><span class="partners-rate">15%</span><br/><small>（初回のみ）</small></td>
-                <td><span class="partners-rate">5%</span><br/><small>（最大 12 ヶ月）</small></td>
+                <td>30 〜 50 万円未満</td>
+                <td><span class="partners-rate">5%</span></td>
+                <td><span class="partners-rate">8%</span></td>
               </tr>
               <tr>
-                <td><strong>C. パートナー営業</strong></td>
-                <td>A・B + 提案・受注の大半を担う</td>
-                <td><span class="partners-rate">20%</span><br/><small>（初回のみ）</small></td>
-                <td><span class="partners-rate">10%</span><br/><small>（最大 24 ヶ月）</small></td>
+                <td>50 〜 100 万円</td>
+                <td><span class="partners-rate">10%</span></td>
+                <td><span class="partners-rate">15%</span></td>
+              </tr>
+              <tr>
+                <td>100 万円超</td>
+                <td>
+                  <span class="partners-rate">10%</span>
+                  <small class="partners-cap">（上限 ¥300,000）</small>
+                </td>
+                <td>
+                  <span class="partners-rate">15%</span>
+                  <small class="partners-cap">（上限 ¥500,000）</small>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
+        <p class="partners-section-note">※ 500 万円超案件は、別途協議のうえ定めます。</p>
+
+        <h3 class="partners-h3" style="margin-top:40px;">月額保守</h3>
+        <div class="partners-table-wrap">
+          <table class="partners-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>A. リード紹介</th>
+                <th>B. 同行紹介</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>月額保守料</td>
+                <td><span class="partners-rate-off">対象外</span></td>
+                <td>
+                  <span class="partners-rate">5%</span>
+                  <small class="partners-cap">（最大 12 ヶ月）</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="partners-section-note">※ 対象期間終了後は保守継続中でも紹介料は発生しません。</p>
 
         <div class="partners-example">
           <h3>ご報酬の試算例（タイプ B = 同行紹介）</h3>
@@ -103,14 +167,14 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <p class="partners-section-note">
-          ※ 詳細版診断（¥5,500）の紹介には、別途 1 件 ¥1,000〜¥1,500 をお支払いします。<br/>
-          ※ 報酬は税抜・実回収額ベースで算定します。
+          ※ 紹介料は税抜・実回収額ベースで算定します。<br/>
+          ※ 適格請求書発行事業者の方には消費税を加算してお支払いします。それ以外の方は税抜額のみのお支払いとなります。
         </p>
       </div>
     </section>
 
     <!-- 報酬発生のしくみ -->
-    <section class="partners-section">
+    <section class="partners-section partners-section--alt">
       <div class="container">
         <h2 class="partners-h2">ご報酬発生のしくみ</h2>
         <ol class="partners-steps">
@@ -131,8 +195,8 @@ import Layout from '../layouts/Layout.astro';
           <li>
             <span class="partners-step-num">3</span>
             <div>
-              <h3>初回入金を確認</h3>
-              <p>顧客から当社への初回入金完了をもって、ご報酬が確定します。</p>
+              <h3>入金完了</h3>
+              <p>顧客から当社への入金完了をもって、ご報酬が確定します。分割払いの場合は入金額に応じて比例配分で都度発生します。</p>
             </div>
           </li>
           <li>
@@ -147,19 +211,19 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <!-- お支払いされないケース -->
-    <section class="partners-section partners-section--alt">
+    <section class="partners-section">
       <div class="container">
         <h2 class="partners-h2">お支払いされないケース</h2>
         <ul class="partners-list-x">
           <li>紹介時点で、当社が既にその顧客と接触歴がある場合</li>
-          <li>紹介から <strong>6 ヶ月以内</strong>に契約に至らなかった場合</li>
+          <li>紹介から <strong>4 ヶ月以内</strong>に契約に至らなかった場合</li>
           <li>契約が解除・返金された場合（支払い済みのご報酬は返還いただきます）</li>
         </ul>
       </div>
     </section>
 
     <!-- 進め方 -->
-    <section class="partners-section">
+    <section class="partners-section partners-section--alt">
       <div class="container">
         <h2 class="partners-h2">進め方</h2>
         <ol class="partners-flow">
@@ -172,7 +236,7 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <!-- FAQ -->
-    <section class="partners-section partners-section--alt">
+    <section class="partners-section">
       <div class="container">
         <h2 class="partners-h2">よくあるご質問</h2>
         <dl class="partners-faq">
@@ -186,7 +250,10 @@ import Layout from '../layouts/Layout.astro';
           <dd>当社が提案・契約・サービス提供を担当します。あなたは関係維持の範囲で関わっていただければ大丈夫です（タイプ B 以上の場合）。</dd>
 
           <dt>インボイス未登録ですが、報酬は変わりますか？</dt>
-          <dd>報酬額は同じです。ただし当社が消費税仕入税額控除を受けられないため、年間紹介額が大きい場合は登録のご検討をお願いする場合があります。</dd>
+          <dd>紹介料はすべて税抜表示です。適格請求書発行事業者の方には消費税を加算してお支払いします。未登録の方は税抜額のみのお支払いとなります（消費税相当を一方的に減額する措置は行いません）。</dd>
+
+          <dt>30 万円未満の小規模案件を紹介したら？</dt>
+          <dd>30 万円未満の案件は紹介料の対象外です。スモールニーズの方には<strong>個別コンサル（スポット）¥40,000／回</strong>としてご対応する形になります。こちらは紹介料対象外ですので、必要に応じて当社へお繋ぎください。</dd>
         </dl>
       </div>
     </section>
@@ -209,7 +276,7 @@ import Layout from '../layouts/Layout.astro';
 
 <style>
   .partners-page {
-    color: var(--text, #0F172A);
+    color: #0F172A;
     font-family: 'Noto Sans JP', system-ui, sans-serif;
     line-height: 1.8;
   }
@@ -249,13 +316,13 @@ import Layout from '../layouts/Layout.astro';
   }
   .partners-lead {
     font-size: 16px;
-    color: #334155;
+    color: #1f2937;
     margin: 0 auto 16px;
     max-width: 720px;
   }
   .partners-note {
     font-size: 13px;
-    color: #64748b;
+    color: #475569;
     margin: 0;
     font-style: italic;
   }
@@ -275,17 +342,25 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 700;
     letter-spacing: .02em;
   }
+  .partners-h3 {
+    font-size: 17px;
+    color: #1F3A93;
+    margin: 0 0 16px;
+    font-weight: 700;
+    text-align: center;
+  }
   .partners-section-note {
     font-size: 13px;
-    color: #64748b;
+    color: #475569;
     text-align: center;
-    margin-top: 24px;
+    margin-top: 20px;
+    line-height: 1.8;
   }
 
   /* Service grid */
   .partners-service-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 18px;
   }
   .partners-service-card {
@@ -295,9 +370,17 @@ import Layout from '../layouts/Layout.astro';
     padding: 24px 20px;
     text-align: center;
     transition: box-shadow .2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .partners-service-card--target {
+    border-color: #1F3A93;
+    border-width: 2px;
+    box-shadow: 0 4px 14px rgba(31, 58, 147, .12);
   }
   .partners-service-card:hover {
-    box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .12);
   }
   .partners-service-card h3 {
     font-size: 15px;
@@ -313,19 +396,65 @@ import Layout from '../layouts/Layout.astro';
   }
   .partners-service-card p {
     font-size: 13px;
-    color: #475569;
-    margin: 0;
+    color: #334155;
+    margin: 0 0 10px;
     line-height: 1.7;
   }
   .partners-service-card small {
     color: #f59e0b;
     font-weight: 600;
   }
+  .partners-service-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: .04em;
+    margin: 6px 0 0;
+  }
+  .partners-service-tag--on {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+  }
+  .partners-service-tag--off {
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+  }
+
+  /* Type grid */
+  .partners-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .partners-type-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 22px 24px;
+  }
+  .partners-type-card h3 {
+    font-size: 16px;
+    color: #1F3A93;
+    margin: 0 0 10px;
+    font-weight: 700;
+  }
+  .partners-type-card p {
+    font-size: 14px;
+    color: #334155;
+    margin: 0;
+    line-height: 1.7;
+  }
 
   /* Rate table */
   .partners-table-wrap {
     overflow-x: auto;
-    margin-bottom: 36px;
+    margin-bottom: 16px;
   }
   .partners-table {
     width: 100%;
@@ -334,7 +463,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid #e5e7eb;
     border-radius: 12px;
     overflow: hidden;
-    min-width: 600px;
+    min-width: 540px;
   }
   .partners-table th,
   .partners-table td {
@@ -342,6 +471,8 @@ import Layout from '../layouts/Layout.astro';
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
     vertical-align: middle;
+    color: #1f2937;
+    font-size: 14px;
   }
   .partners-table th {
     background: #f9fafb;
@@ -353,14 +484,26 @@ import Layout from '../layouts/Layout.astro';
   .partners-table tr:last-child td {
     border-bottom: none;
   }
+  .partners-table td:first-child {
+    font-weight: 600;
+    color: #0f172a;
+  }
   .partners-rate {
     font-size: 22px;
     font-weight: 800;
     color: #1F3A93;
   }
-  .partners-table small {
+  .partners-rate-off {
+    font-size: 13px;
     color: #94a3b8;
+    font-weight: 600;
+  }
+  .partners-cap {
+    display: block;
+    margin-top: 4px;
+    color: #64748b;
     font-size: 11px;
+    font-weight: 500;
   }
 
   /* Example */
@@ -369,24 +512,29 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid #fed7aa;
     border-left: 4px solid #f59e0b;
     border-radius: 10px;
-    padding: 22px 26px;
+    padding: 24px 28px;
+    margin-top: 36px;
   }
   .partners-example h3 {
     font-size: 15px;
     color: #92400E;
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     font-weight: 700;
+    text-align: center;
   }
   .partners-example p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     margin: 0;
     color: #78350f;
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.8;
     text-align: center;
+  }
+  .partners-example-line {
+    line-height: 1.8;
   }
   .partners-example-arrow {
     color: #d97706;
@@ -394,7 +542,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .partners-example-total {
     color: #b45309;
-    font-size: 20px;
+    font-size: 22px;
   }
 
   /* Steps */
@@ -432,12 +580,12 @@ import Layout from '../layouts/Layout.astro';
   }
   .partners-steps p {
     font-size: 13px;
-    color: #475569;
+    color: #334155;
     margin: 0;
     line-height: 1.7;
   }
 
-  /* List X (お支払いされないケース) */
+  /* List X */
   .partners-list-x {
     max-width: 720px;
     margin: 0 auto;
@@ -451,7 +599,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     position: relative;
-    color: #475569;
+    color: #334155;
     font-size: 14px;
   }
   .partners-list-x li::before {
@@ -465,7 +613,7 @@ import Layout from '../layouts/Layout.astro';
     font-size: 18px;
   }
 
-  /* Flow (進め方) */
+  /* Flow */
   .partners-flow {
     max-width: 640px;
     margin: 0 auto;
@@ -482,7 +630,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     font-size: 14px;
-    color: #334155;
+    color: #1f2937;
   }
   .partners-flow li::before {
     content: counter(step-counter);
@@ -527,7 +675,7 @@ import Layout from '../layouts/Layout.astro';
     margin: 0 0 24px;
     padding-left: 22px;
     position: relative;
-    color: #475569;
+    color: #334155;
     font-size: 14px;
     line-height: 1.85;
   }
@@ -554,7 +702,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .partners-cta-desc {
     font-size: 14px;
-    opacity: .9;
+    opacity: .95;
     margin: 0 0 30px;
   }
   .partners-cta-contact {
