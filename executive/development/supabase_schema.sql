@@ -145,21 +145,21 @@ CREATE POLICY "Public read cycles" ON cycles FOR SELECT USING (true);
 
 -- 書き込みはサービスロールキーのみ（RPiからの書き込み）
 CREATE POLICY "Service write sensor_data" ON sensor_data FOR INSERT
-  WITH CHECK (auth.role() = 'service_role');
+  WITH CHECK ((SELECT auth.role()) = 'service_role');
 
 CREATE POLICY "Service write cycles" ON cycles FOR INSERT
-  WITH CHECK (auth.role() = 'service_role');
+  WITH CHECK ((SELECT auth.role()) = 'service_role');
 
 -- alertsとpower_logも同様
 ALTER TABLE alerts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read alerts" ON alerts FOR SELECT USING (true);
 CREATE POLICY "Service write alerts" ON alerts FOR INSERT
-  WITH CHECK (auth.role() = 'service_role');
+  WITH CHECK ((SELECT auth.role()) = 'service_role');
 
 ALTER TABLE power_log ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read power_log" ON power_log FOR SELECT USING (true);
 CREATE POLICY "Service write power_log" ON power_log FOR INSERT
-  WITH CHECK (auth.role() = 'service_role');
+  WITH CHECK ((SELECT auth.role()) = 'service_role');
 
 -- ========================================
 -- 8. Data API 明示GRANT
