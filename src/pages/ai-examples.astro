@@ -646,7 +646,7 @@ const industries: Industry[] = [
     color: #fff;
   }
   .ax-detail-thumb-wrap {
-    /* 共通AI事例・対象者別の .ax-detail-icon と同サイズに統一（64x64 ） */
+    /* 共通AI事例の .ax-detail-icon と同サイズに統一（64x64） */
     width: 64px;
     height: 64px;
     border-radius: 14px;
@@ -698,14 +698,14 @@ const industries: Industry[] = [
     align-items: flex-start;
     gap: 12px;
     padding: 16px 20px;
-    background: rgba(46, 87, 76, .06);
-    border-left: 3px solid #2e574c;
+    background: rgba(31, 58, 147, .06);
+    border-left: 3px solid var(--brand);
     border-radius: 0 10px 10px 0;
     margin-bottom: clamp(18px, 2.5vw, 24px);
   }
   .ax-detail-self i {
     flex-shrink: 0;
-    color: #2e574c;
+    color: var(--brand);
     font-size: 1rem;
     margin-top: 3px;
   }
