@@ -4,8 +4,9 @@ import { makeToken, COOKIE_NAME, getAdminPassword } from '../../middleware'
 const ADMIN_PASSWORD = getAdminPassword()
 let error = ''
 
-// クエリ ?config=missing が来た場合は環境変数未設定エラーを表示
-if (Astro.url.searchParams.get('config') === 'missing') {
+// クエリ ?config=missing が来た場合でも、実際に env が空のときだけエラー表示する
+// （古いリダイレクト URL が履歴に残っていても誤表示しないため）
+if (Astro.url.searchParams.get('config') === 'missing' && !ADMIN_PASSWORD) {
   error = 'ADMIN_PASSWORD が未設定です（Vercel 環境変数を確認してください）'
 }
 
