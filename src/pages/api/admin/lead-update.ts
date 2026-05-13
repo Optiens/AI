@@ -20,7 +20,7 @@
 import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
-import { makeToken, COOKIE_NAME, ADMIN_PASSWORD } from '../../../middleware'
+import { makeToken, COOKIE_NAME, getAdminPassword } from '../../../middleware'
 
 const RESEND_API_KEY = import.meta.env.RESEND_API_KEY
 const MAIL_FROM = import.meta.env.CONTACT_FROM ?? 'no-reply@optiens.com'
@@ -44,11 +44,12 @@ function json(data: unknown, status = 200) {
 }
 
 function isAuthed(req: Request): boolean {
-  if (!ADMIN_PASSWORD) return false
+  const adminPassword = getAdminPassword()
+  if (!adminPassword) return false
   const cookieHeader = req.headers.get('cookie') || ''
   const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${COOKIE_NAME}=([^;]+)`))
   if (!match) return false
-  return match[1] === makeToken(ADMIN_PASSWORD)
+  return match[1] === makeToken(adminPassword)
 }
 
 const ALLOWED_FIELDS = [

@@ -1,6 +1,18 @@
 import { defineMiddleware } from 'astro:middleware'
 
-const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || ''
+/**
+ * Vercel の Sensitive 環境変数はビルド時に埋め込まれず、runtime の process.env からのみ
+ * 取得可能。import.meta.env と process.env の両方を試す。
+ */
+function getAdminPassword(): string {
+  const fromImportMeta = import.meta.env.ADMIN_PASSWORD
+  if (fromImportMeta) return fromImportMeta
+  if (typeof process !== 'undefined' && process.env?.ADMIN_PASSWORD) {
+    return process.env.ADMIN_PASSWORD
+  }
+  return ''
+}
+
 const COOKIE_NAME = 'optiens_admin'
 
 function makeToken(password: string): string {
@@ -19,16 +31,18 @@ export const onRequest = defineMiddleware(async ({ url, cookies, redirect }, nex
     return next()
   }
 
-  if (!ADMIN_PASSWORD) {
-    return new Response('ADMIN_PASSWORD is not configured', { status: 500 })
+  const adminPassword = getAdminPassword()
+  if (!adminPassword) {
+    // 環境変数未設定でも 500 で止めず、ログイン画面側でエラー表示する
+    return redirect('/admin/login?config=missing')
   }
 
   const token = cookies.get(COOKIE_NAME)?.value
-  if (token !== makeToken(ADMIN_PASSWORD)) {
+  if (token !== makeToken(adminPassword)) {
     return redirect('/admin/login')
   }
 
   return next()
 })
 
-export { makeToken, COOKIE_NAME, ADMIN_PASSWORD }
+export { makeToken, COOKIE_NAME, getAdminPassword }

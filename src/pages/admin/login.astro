@@ -1,13 +1,21 @@
 ---
-import { makeToken, COOKIE_NAME, ADMIN_PASSWORD } from '../../middleware'
+import { makeToken, COOKIE_NAME, getAdminPassword } from '../../middleware'
 
+const ADMIN_PASSWORD = getAdminPassword()
 let error = ''
+
+// クエリ ?config=missing が来た場合は環境変数未設定エラーを表示
+if (Astro.url.searchParams.get('config') === 'missing') {
+  error = 'ADMIN_PASSWORD が未設定です（Vercel 環境変数を確認してください）'
+}
 
 if (Astro.request.method === 'POST') {
   const form = await Astro.request.formData()
   const password = String(form.get('password') || '')
 
-  if (password === ADMIN_PASSWORD) {
+  if (!ADMIN_PASSWORD) {
+    error = 'ADMIN_PASSWORD が未設定です（Vercel 環境変数を確認してください）'
+  } else if (password === ADMIN_PASSWORD) {
     Astro.cookies.set(COOKIE_NAME, makeToken(ADMIN_PASSWORD), {
       // path: '/' にすることで /admin/* と /api/admin/* の両方にクッキー送信される
       path: '/',
@@ -18,8 +26,9 @@ if (Astro.request.method === 'POST') {
       maxAge: 60 * 60 * 24 * 7, // 7 days
     })
     return Astro.redirect('/admin/leads')
+  } else {
+    error = 'パスワードが違います'
   }
-  error = 'パスワードが違います'
 }
 ---
 
