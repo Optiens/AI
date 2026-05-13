@@ -92,6 +92,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
     const employeeCount = sanitize(String(form.get('employee_count') || ''))
     const aiLevel = sanitize(String(form.get('ai_level') || ''))
     const challenges = form.getAll('challenges').map(c => String(c))
+    const challengesOther = clamp(String(form.get('challenges_other') || '').replace(/\r\n/g, ' ').trim(), 200)
     const businessDescription = clamp(String(form.get('business_description') || '').replace(/\r\n/g, '\n').trim(), 3000)
     const dailyTasks = clamp(String(form.get('daily_tasks') || '').replace(/\r\n/g, '\n').trim(), 3000)
     const currentTools = clamp(String(form.get('current_tools') || '').replace(/\r\n/g, '\n').trim(), 1000)
@@ -178,6 +179,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
       skill: '社内にスキルがない',
       time: '導入する時間がない',
       effect: '効果が見えない',
+      other: 'その他',
     }
     const employeeLabels: Record<string, string> = {
       '1': '1名（個人事業）',
@@ -188,7 +190,10 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
       '101+': '101名以上',
     }
     const employeeName = employeeLabels[employeeCount] || employeeCount
-    const challengesText = challenges.map(c => challengeLabels[c] || c).join('、')
+    const challengesBase = challenges.map(c => challengeLabels[c] || c).join('、')
+    const challengesText = challengesOther
+      ? `${challengesBase}（その他: ${challengesOther}）`
+      : challengesBase
 
     const interestLabels: Record<string, string> = {
       'customer-support': '顧客対応・問い合わせ',
@@ -216,6 +221,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
         employee_count: employeeCount || null,
         ai_level: aiLevel || null,
         challenges: challenges.length > 0 ? challenges : null,
+        challenges_other: challengesOther || null,
         business_description: businessDescription || null,
         daily_tasks: dailyTasks || null,
         current_tools: currentTools || null,

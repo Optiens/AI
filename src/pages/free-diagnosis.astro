@@ -306,6 +306,21 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
                   <input type="checkbox" name="challenges" value="effect" />
                   <span>効果が見えない</span>
                 </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="challenges" value="other" id="challenges-other-cb" />
+                  <span>その他</span>
+                </label>
+              </div>
+              <div class="other-input-wrap" id="challenges-other-wrap" hidden>
+                <label for="challenges_other" class="visually-hidden">その他の課題を入力</label>
+                <input
+                  type="text"
+                  id="challenges_other"
+                  name="challenges_other"
+                  placeholder="例：社内で合意が取れない、過去に失敗した経験がある、など"
+                  maxlength="200"
+                  disabled
+                />
               </div>
             </div>
           </fieldset>
@@ -837,6 +852,26 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     var cb = document.getElementById('interests-other-cb');
     var wrap = document.getElementById('interests-other-wrap');
     var input = document.getElementById('interests_other');
+    if (!cb || !wrap || !input) return;
+    function sync() {
+      var on = cb.checked;
+      wrap.hidden = !on;
+      input.disabled = !on;
+      if (on) {
+        setTimeout(function() { input.focus(); }, 50);
+      } else {
+        input.value = '';
+      }
+    }
+    cb.addEventListener('change', sync);
+    sync();
+  })();
+
+  // ===== challenges「その他」連動 =====
+  (function() {
+    var cb = document.getElementById('challenges-other-cb');
+    var wrap = document.getElementById('challenges-other-wrap');
+    var input = document.getElementById('challenges_other');
     if (!cb || !wrap || !input) return;
     function sync() {
       var on = cb.checked;
