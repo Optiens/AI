@@ -5,13 +5,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 export type RateLimitConfig = {
-  perHour?: number   // 1時間あたり同一IPからの上限（既定: 1）
-  perDay?: number    // 24時間あたり同一IPからの上限（既定: 3）
+  perHour?: number   // 1時間あたり同一IPからの上限（既定: 3）
+  perDay?: number    // 24時間あたり同一IPからの上限（既定: 10）
 }
 
 const DEFAULTS: Required<RateLimitConfig> = {
-  perHour: 1,
-  perDay: 3,
+  perHour: 3,
+  perDay: 10,
 }
 
 export type RateLimitResult = {

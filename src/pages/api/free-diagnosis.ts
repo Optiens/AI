@@ -11,6 +11,8 @@ import {
 } from '../../lib/diagnosis-verification'
 
 const MONTHLY_DIAGNOSIS_LIMIT = 30  // 【簡易版】AI活用診断 の月次上限
+const RATE_LIMIT_PER_HOUR = parsePositiveInt(import.meta.env.DIAGNOSIS_RATE_LIMIT_PER_HOUR, 3)
+const RATE_LIMIT_PER_DAY = parsePositiveInt(import.meta.env.DIAGNOSIS_RATE_LIMIT_PER_DAY, 10)
 
 const SITE_URL = (import.meta.env.SITE_URL || 'https://optiens.com').replace(/\/$/, '')
 
@@ -32,6 +34,11 @@ const escapeHtml = (s: string) =>
   s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
 const clamp = (s: string, max: number) =>
   s.length > max ? s.slice(0, max) + '…' : s
+
+function parsePositiveInt(value: unknown, fallback: number): number {
+  const parsed = Number(value)
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback
+}
 
 // 業種ラベル
 const industryLabels: Record<string, string> = {
@@ -149,7 +156,10 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
 
     // ---- 第4層: IPレート制限（free planのみ）----
     if (plan === 'free' && supabase) {
-      const rl = await checkRateLimit(supabase, ip, { perHour: 1, perDay: 3 })
+      const rl = await checkRateLimit(supabase, ip, {
+        perHour: RATE_LIMIT_PER_HOUR,
+        perDay: RATE_LIMIT_PER_DAY,
+      })
       if (!rl.allowed) {
         await logSubmission(supabase, { ip, email, userAgent, result: 'rate_limited' })
         const retryHours = rl.retryAfterSeconds ? Math.ceil(rl.retryAfterSeconds / 3600) : 24

@@ -27,9 +27,14 @@ export async function verifyTurnstile(
   remoteIp?: string,
 ): Promise<TurnstileVerifyResult> {
   const secretKey = import.meta.env.TURNSTILE_SECRET_KEY
+  const allowMissingSecret = import.meta.env.DIAGNOSIS_ALLOW_MISSING_TURNSTILE === 'true'
   if (!secretKey) {
-    console.warn('[turnstile] TURNSTILE_SECRET_KEY 未設定。検証スキップ（開発モード）')
-    return { success: true }
+    if (import.meta.env.PROD && !allowMissingSecret) {
+      console.error('[turnstile] TURNSTILE_SECRET_KEY is missing in production')
+      return { success: false, errorCodes: ['missing-secret-key'] }
+    }
+    console.warn('[turnstile] TURNSTILE_SECRET_KEY 未設定。検証スキップ（開発/テストモード）')
+    return { success: true, errorCodes: ['missing-secret-key-skipped'] }
   }
 
   if (!token) {

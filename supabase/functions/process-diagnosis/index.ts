@@ -187,7 +187,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // processing にロック（再入防止）
-    await markStatus(lead.id, 'processing')
+    await markStatus(lead.id, 'processing', null)
 
     // 月次上限チェック
     const { count, error: countErr } = await supabase!
@@ -199,7 +199,7 @@ Deno.serve(async (req: Request) => {
 
     if (countErr) throw new Error(`Count error: ${countErr.message}`)
     if ((count ?? 0) >= MONTHLY_LIMIT) {
-      await markStatus(lead.id, 'limit_exceeded')
+      await markStatus(lead.id, 'limit_exceeded', 'Monthly limit exceeded')
       await notifyAdmin('月次上限到達', `lead_id=${lead.id} の処理を見送りました。`)
       return new Response('Monthly limit exceeded', { status: 200 })
     }
@@ -210,7 +210,7 @@ Deno.serve(async (req: Request) => {
     // バリデーション
     const validationErr = validate(diagnosis)
     if (validationErr) {
-      await markStatus(lead.id, 'manual_review')
+      await markStatus(lead.id, 'manual_review', `validation: ${validationErr}`)
       await notifyAdmin(
         'バリデーション失敗',
         `lead_id=${lead.id}\n理由: ${validationErr}\n出力:\n${JSON.stringify(diagnosis, null, 2)}`,
@@ -230,6 +230,7 @@ Deno.serve(async (req: Request) => {
         status: 'completed',
         slides_url: slidesUrl,
         sent_at: new Date().toISOString(),
+        last_error: null,
       })
       .eq('id', lead.id)
 
@@ -245,7 +246,7 @@ Deno.serve(async (req: Request) => {
 
     if (isQuotaError && leadForNotify?.id) {
       // クォータ超過 → 翌朝の自動リトライ対象に変更
-      await markStatus(leadForNotify.id, 'quota_retry_pending').catch(() => {})
+      await markStatus(leadForNotify.id, 'quota_retry_pending', `quota: ${errStr}`).catch(() => {})
       // 顧客に遅延通知を自動送信
       try {
         await sendDelayNoticeEmail(leadForNotify)
@@ -262,7 +263,7 @@ Deno.serve(async (req: Request) => {
 
     // それ以外の例外
     if (leadForNotify?.id) {
-      await markStatus(leadForNotify.id, 'manual_review').catch(() => {})
+      await markStatus(leadForNotify.id, 'manual_review', `exception: ${errStr}`).catch(() => {})
       await notifyAdmin(
         'process-diagnosis 例外',
         `lead_id=${leadForNotify.id}\napplication_id=${leadForNotify.application_id}\n会社名=${leadForNotify.company_name}\nstatus を manual_review に変更しました。\n\n元エラー:\n${errStr}`,
@@ -889,8 +890,12 @@ function buildReportEmailHtml(lead: any, slidesUrl: string): string {
 }
 
 // ===== ヘルパー =====
-async function markStatus(leadId: string, status: string) {
-  await supabase!.from('diagnosis_leads').update({ status }).eq('id', leadId)
+async function markStatus(leadId: string, status: string, lastError?: string | null) {
+  const updates: Record<string, unknown> = { status }
+  if (lastError !== undefined) {
+    updates.last_error = lastError ? lastError.slice(0, 4000) : null
+  }
+  await supabase!.from('diagnosis_leads').update(updates).eq('id', leadId)
 }
 
 // 顧客向け遅延通知（OpenAI クォータ超過 等の一時的システム障害時）
