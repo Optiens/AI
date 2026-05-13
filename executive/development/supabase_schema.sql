@@ -160,3 +160,21 @@ ALTER TABLE power_log ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read power_log" ON power_log FOR SELECT USING (true);
 CREATE POLICY "Service write power_log" ON power_log FOR INSERT
   WITH CHECK (auth.role() = 'service_role');
+
+-- ========================================
+-- 8. Data API 明示GRANT
+-- ========================================
+-- Supabaseの2026年Data API変更に合わせ、publicスキーマの公開範囲を明示する。
+-- 公開ダッシュボード用データは読み取りのみ公開し、書き込みはservice_role経由に限定する。
+GRANT SELECT ON TABLE sensor_data, cycles, alerts, power_log, unit_economics TO anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE sensor_data, cycles, alerts, power_log TO service_role;
+
+-- 飲食店リード・デバイス管理はサーバー側のみから扱う。
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE devices ENABLE ROW LEVEL SECURITY;
+REVOKE ALL PRIVILEGES ON TABLE leads, devices FROM anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE leads, devices TO service_role;
+
+-- serial/bigserial IDの採番に必要。
+REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM anon, authenticated;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO service_role;
