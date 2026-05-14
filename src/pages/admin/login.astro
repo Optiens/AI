@@ -42,18 +42,30 @@ if (Astro.request.method === 'POST') {
   <title>Admin Login | Optiens</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --admin-primary: #1F3A93;
+      --admin-primary-dark: #152870;
+      --admin-secondary: #6B85C9;
+      --admin-accent: #E48A95;
+      --admin-accent-soft: #FFCED0;
+      --admin-bg: #0B1434;
+      --admin-surface: #111D49;
+      --admin-border: rgba(107, 133, 201, 0.32);
+      --admin-text: #F7F9FF;
+      --admin-muted: #B9C6EA;
+    }
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: #0f1117;
-      color: #e4e6eb;
+      background: var(--admin-bg);
+      color: var(--admin-text);
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100svh;
     }
     .login-card {
-      background: #1a1d27;
-      border: 1px solid #2a2d3a;
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
       border-radius: 12px;
       padding: 40px;
       width: min(400px, 90vw);
@@ -65,14 +77,14 @@ if (Astro.request.method === 'POST') {
     }
     .login-card p {
       font-size: 0.85rem;
-      color: #8b8fa3;
+      color: var(--admin-muted);
       margin-bottom: 24px;
     }
     label {
       display: block;
       font-size: 0.8rem;
       font-weight: 600;
-      color: #8b8fa3;
+      color: var(--admin-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 6px;
@@ -80,22 +92,22 @@ if (Astro.request.method === 'POST') {
     input[type="password"] {
       width: 100%;
       padding: 10px 14px;
-      background: #0f1117;
-      border: 1px solid #2a2d3a;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
       border-radius: 8px;
-      color: #e4e6eb;
+      color: var(--admin-text);
       font-size: 1rem;
       outline: none;
       transition: border-color 0.2s;
     }
     input[type="password"]:focus {
-      border-color: #5b7fff;
+      border-color: var(--admin-secondary);
     }
     button {
       width: 100%;
       margin-top: 20px;
       padding: 10px;
-      background: #5b7fff;
+      background: var(--admin-primary);
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -104,14 +116,14 @@ if (Astro.request.method === 'POST') {
       cursor: pointer;
       transition: background 0.2s;
     }
-    button:hover { background: #4a6de8; }
+    button:hover { background: var(--admin-primary-dark); }
     .error {
       margin-top: 12px;
       padding: 8px 12px;
-      background: rgba(234, 67, 53, 0.15);
-      border: 1px solid rgba(234, 67, 53, 0.3);
+      background: rgba(228, 138, 149, 0.16);
+      border: 1px solid rgba(228, 138, 149, 0.34);
       border-radius: 6px;
-      color: #ea4335;
+      color: var(--admin-accent-soft);
       font-size: 0.85rem;
     }
   </style>

@@ -1,13 +1,14 @@
 ---
 export interface Props {
   title: string;
-  active?: 'leads' | 'knowledge' | 'reports' | 'dashboard';
+  active?: 'leads' | 'api-status' | 'knowledge' | 'reports' | 'dashboard';
 }
 
 const { title, active = 'leads' } = Astro.props;
 
 const nav = [
-  { id: 'leads', label: '案件管理', icon: 'fa-briefcase', href: '/admin/leads' },
+  { id: 'leads', label: 'リード管理', icon: 'fa-users', href: '/admin/leads' },
+  { id: 'api-status', label: 'API稼働状況', icon: 'fa-heart-pulse', href: '/admin/api-status' },
   { id: 'knowledge', label: 'ナレッジ', icon: 'fa-book', href: '/admin/knowledge' },
   { id: 'reports', label: 'レポート', icon: 'fa-file-alt', href: '/admin/reports' },
   { id: 'dashboard', label: 'ダッシュボード', icon: 'fa-chart-bar', href: '/admin/dashboard' },
@@ -33,17 +34,22 @@ const nav = [
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --admin-bg: #0f1117;
-      --admin-surface: #1a1d27;
-      --admin-surface-2: #22252f;
-      --admin-border: #2a2d3a;
-      --admin-text: #e4e6eb;
-      --admin-muted: #8b8fa3;
-      --admin-brand: #5b7fff;
-      --admin-brand-hover: #4a6de8;
-      --admin-success: #34d399;
-      --admin-warning: #fbbf24;
-      --admin-danger: #ea4335;
+      --admin-primary: #1F3A93;
+      --admin-primary-dark: #152870;
+      --admin-secondary: #6B85C9;
+      --admin-accent: #E48A95;
+      --admin-accent-soft: #FFCED0;
+      --admin-bg: #0B1434;
+      --admin-surface: #111D49;
+      --admin-surface-2: #152870;
+      --admin-border: rgba(107, 133, 201, 0.32);
+      --admin-text: #F7F9FF;
+      --admin-muted: #B9C6EA;
+      --admin-brand: var(--admin-secondary);
+      --admin-brand-hover: var(--admin-primary);
+      --admin-success: var(--admin-secondary);
+      --admin-warning: var(--admin-accent);
+      --admin-danger: var(--admin-accent);
       --sidebar-w: 220px;
     }
     body {
@@ -105,7 +111,7 @@ const nav = [
       color: var(--admin-text);
     }
     .sidebar-nav a.active {
-      background: rgba(31, 58, 147, 0.12);
+      background: rgba(107, 133, 201, 0.18);
       color: var(--admin-brand);
     }
     .sidebar-nav a i { width: 18px; text-align: center; font-size: 0.9rem; }

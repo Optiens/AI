@@ -1,0 +1,408 @@
+---
+import { getCollection } from 'astro:content';
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => String(b.data.date).localeCompare(String(a.data.date)));
+
+const categoryLabels: Record<string, string> = {
+  AI: 'AI支援',
+  business: '経営',
+  technology: '技術',
+  agriculture: '水耕栽培',
+  welfare: '福祉',
+  social: '社会',
+  announcement: 'お知らせ',
+};
+
+const categoryRows = Object.entries(
+  posts.reduce<Record<string, number>>((acc, post) => {
+    const key = post.data.category || 'unknown';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {})
+)
+  .map(([id, count]) => ({ id, label: categoryLabels[id] || id, count }))
+  .sort((a, b) => b.count - a.count);
+
+const latestPosts = posts.slice(0, 12);
+
+const knowledgeSources = [
+  {
+    title: 'AI支援事業の案件運用',
+    status: '稼働中',
+    owner: 'CEO / COO',
+    source: 'diagnosis_leads, ai_api_events',
+    action: '案件、API障害、日次アラートへ接続済み',
+  },
+  {
+    title: '無料診断・詳細診断のSOP',
+    status: '整備中',
+    owner: 'CMO / CSO',
+    source: 'executive/ai-consulting, scripts/generate-*',
+    action: '見積、納品、メール文面、レポート生成手順をSOP化',
+  },
+  {
+    title: 'ブログ/公開ナレッジ',
+    status: '素材あり',
+    owner: 'CMO',
+    source: 'src/content/blog',
+    action: '業種別・論点別に営業資料へ再利用',
+  },
+  {
+    title: '水耕栽培H1/H2判断材料',
+    status: '未統合',
+    owner: 'CFO / CRO',
+    source: 'unit economics, sensor_data, cycles',
+    action: '1株コスト、CV、kWh/kgを別ダッシュボード化',
+  },
+  {
+    title: '補助金・期限・会計',
+    status: '未統合',
+    owner: 'CFO',
+    source: 'Google Tasks, freee, executive/research',
+    action: '月次/期限レポートとして日次メールに接続',
+  },
+];
+
+const buildItems = [
+  '業務SOP: 無料診断、詳細レポート、入金確認、手動レビュー、API障害対応を1ページ1手順にする',
+  '決定ログ: 価格、ターゲット、禁止方針、Phase移行条件を「いつ・なぜ決めたか」で残す',
+  'プロンプト/テンプレ台帳: 診断生成、メール、Slides、提案書のバージョンと変更理由を管理する',
+  '顧客別ナレッジ: 案件詳細に課題、提案、MTGメモ、次回アクションを紐づける',
+  '鮮度管理: ナレッジごとに最終更新日、責任者、次回見直し日を持たせる',
+];
+---
+
+<AdminLayout title="ナレッジ" active="knowledge">
+  <section class="hero-panel">
+    <div>
+      <span>Optiens Knowledge Base</span>
+      <h2>使えるナレッジにするには、記事ではなく「判断材料」と「手順」を管理する</h2>
+      <p>公開ブログ、営業資料、診断SOP、API障害対応、Phase判断材料を同じ棚に置き、日々の判断へ戻せる形にします。</p>
+    </div>
+    <strong>{posts.length}<small>公開記事</small></strong>
+  </section>
+
+  <div class="grid">
+    <section class="panel panel-wide">
+      <div class="panel-head">
+        <div>
+          <span>Inventory</span>
+          <h3>ナレッジ資産の現在地</h3>
+        </div>
+      </div>
+      <div class="source-list">
+        {knowledgeSources.map((source) => (
+          <article class="source-row">
+            <div>
+              <strong>{source.title}</strong>
+              <p>{source.source}</p>
+            </div>
+            <span>{source.status}</span>
+            <small>{source.owner}</small>
+            <em>{source.action}</em>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span>Categories</span>
+          <h3>公開ナレッジ分類</h3>
+        </div>
+      </div>
+      <ul class="bar-list">
+        {categoryRows.map((row) => (
+          <li>
+            <span>{row.label}</span>
+            <b>{row.count}</b>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Next Build</span>
+        <h3>実装すべきナレッジ機能</h3>
+      </div>
+    </div>
+    <div class="build-list">
+      {buildItems.map((item, index) => (
+        <div class="build-item">
+          <b>{index + 1}</b>
+          <p>{item}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Recent</span>
+        <h3>最近の公開記事</h3>
+      </div>
+      <a href="/blog" class="panel-link">サイト側で見る</a>
+    </div>
+    <div class="post-grid">
+      {latestPosts.map((post) => (
+        <a class="post-card" href={`/blog/${post.slug}`}>
+          <span>{categoryLabels[post.data.category] || post.data.category}</span>
+          <strong>{post.data.title}</strong>
+          <p>{post.data.excerpt}</p>
+          <small>{post.data.date}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+</AdminLayout>
+
+<style>
+  .hero-panel,
+  .panel {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-panel h2,
+  .panel-head h3 {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.2rem;
+  }
+
+  .hero-panel p {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.9rem;
+  }
+
+  .hero-panel strong {
+    display: grid;
+    place-items: center;
+    min-height: 110px;
+    border-radius: 8px;
+    background: var(--admin-surface-2);
+    color: #fff;
+    font-size: 2rem;
+  }
+
+  .hero-panel small {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .panel {
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .panel-head h3 {
+    margin: 3px 0 0;
+    font-size: 1rem;
+  }
+
+  .panel-link {
+    color: var(--admin-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .source-list,
+  .build-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .source-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) 82px 90px;
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .source-row strong,
+  .post-card strong {
+    color: #fff;
+  }
+
+  .source-row p,
+  .source-row small,
+  .source-row em,
+  .post-card p,
+  .post-card small {
+    color: var(--admin-muted);
+    font-size: 0.74rem;
+  }
+
+  .source-row p {
+    margin: 4px 0 0;
+  }
+
+  .source-row span {
+    display: inline-flex;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 999px;
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.18);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .source-row em {
+    grid-column: 1 / -1;
+    font-style: normal;
+  }
+
+  .bar-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .bar-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 7px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font-size: 0.84rem;
+  }
+
+  .bar-list b {
+    color: #fff;
+  }
+
+  .build-item {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .build-item b {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: #1F3A93;
+    color: #fff;
+  }
+
+  .build-item p {
+    margin: 0;
+    color: var(--admin-text);
+    font-size: 0.86rem;
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+
+  .post-card {
+    display: block;
+    min-height: 180px;
+    padding: 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .post-card:hover {
+    border-color: rgba(107, 133, 201, 0.45);
+  }
+
+  .post-card span {
+    color: var(--admin-secondary);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .post-card strong {
+    display: block;
+    margin: 7px 0;
+    font-size: 0.9rem;
+  }
+
+  .post-card p {
+    margin: 0 0 10px;
+  }
+
+  @media (max-width: 920px) {
+    .hero-panel,
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .source-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

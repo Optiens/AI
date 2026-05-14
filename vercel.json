@@ -3,7 +3,11 @@
   "crons": [
     {
       "path": "/api/payment-check",
-      "schedule": "0 9 * * *"
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/admin/daily-ops-email",
+      "schedule": "0 0 * * *"
     }
   ],
   "headers": [

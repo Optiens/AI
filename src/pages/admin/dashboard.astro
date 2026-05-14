@@ -54,15 +54,23 @@ const totalRevenuePaid = leads
   .filter(l => l.paid_at && (l.amount_jpy || 0) > 0)
   .reduce((s, l) => s + (l.amount_jpy || 0), 0);
 
+const adminColors = {
+  primary: '#1F3A93',
+  secondary: '#6B85C9',
+  accent: '#E48A95',
+  accentSoft: '#FFCED0',
+  muted: '#94a3b8',
+};
+
 const stageRows = [
-  { label: '新規受付', count: leads.filter(l => l.status === 'new').length, color: '#5b7fff' },
-  { label: '入金待ち', count: pendingPaymentCount, color: '#f59e0b' },
-  { label: '入金確認済', count: paidStatusCount, color: '#06b6d4' },
-  { label: 'レポート作成済', count: leads.filter(l => l.status === 'report_created').length, color: '#8b5cf6' },
-  { label: '送付済', count: reportSentCount, color: '#facc15' },
-  { label: 'MTG / 完了', count: completedCount, color: '#34d399' },
-  { label: '手動確認', count: manualReviewCount, color: '#ef4444' },
-  { label: 'キャンセル', count: cancelledCount, color: '#94a3b8' },
+  { label: '新規受付', count: leads.filter(l => l.status === 'new').length, color: adminColors.secondary },
+  { label: '入金待ち', count: pendingPaymentCount, color: adminColors.accent },
+  { label: '入金確認済', count: paidStatusCount, color: adminColors.secondary },
+  { label: 'レポート作成済', count: leads.filter(l => l.status === 'report_created').length, color: adminColors.primary },
+  { label: '送付済', count: reportSentCount, color: adminColors.accentSoft },
+  { label: 'MTG / 完了', count: completedCount, color: adminColors.secondary },
+  { label: '手動確認', count: manualReviewCount, color: adminColors.accent },
+  { label: 'キャンセル', count: cancelledCount, color: adminColors.muted },
 ];
 const stageMax = Math.max(1, ...stageRows.map(s => s.count));
 
@@ -160,12 +168,12 @@ function statusBadge(s?: string | null) {
           <svg viewBox={`0 0 ${trendW} ${trendH}`} preserveAspectRatio="none" aria-label="申込推移">
             <defs>
               <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#5b7fff" stop-opacity="0.35" />
-                <stop offset="100%" stop-color="#5b7fff" stop-opacity="0" />
+                <stop offset="0%" stop-color="#6B85C9" stop-opacity="0.35" />
+                <stop offset="100%" stop-color="#6B85C9" stop-opacity="0" />
               </linearGradient>
             </defs>
             <path d={trendArea} fill="url(#trendGrad)" />
-            <path d={trendPath} fill="none" stroke="#5b7fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d={trendPath} fill="none" stroke="#6B85C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
       )}
@@ -175,10 +183,10 @@ function statusBadge(s?: string | null) {
     <section class="panel">
       <div class="panel-head">
         <h2 class="panel-title">パイプライン分布</h2>
-        <a href="/admin/leads" class="panel-link">案件管理を開く →</a>
+        <a href="/admin/leads" class="panel-link">リード管理を開く →</a>
       </div>
       {stageRows.every(s => s.count === 0) ? (
-        <p class="panel-empty">該当する案件がありません。</p>
+        <p class="panel-empty">該当するリードがありません。</p>
       ) : (
         <ul class="stage-list">
           {stageRows.map((s) => (
@@ -245,8 +253,8 @@ function statusBadge(s?: string | null) {
       <p>
         <i class="fas fa-circle-info"></i>
         現在のデータソースは <code>diagnosis_leads</code> テーブルです。
-        今後、各 AI ワークフロー（補助金モニタリング・問い合わせ振り分け・freee 入金照合 cron 等）の
-        実行ログを <code>workflow_runs</code> テーブルに集約し、このダッシュボードに統合する予定です。
+        AI/API の実行ログは <code>ai_api_events</code> に集約し、<a href="/admin/api-status">API稼働状況</a> と
+        <a href="/admin/reports">レポート</a> で確認できます。
       </p>
     </section>
   </div>
@@ -264,10 +272,10 @@ function statusBadge(s?: string | null) {
     align-items: center;
     gap: 10px;
     padding: 12px 16px;
-    background: rgba(234, 67, 53, 0.10);
-    border: 1px solid rgba(234, 67, 53, 0.30);
+    background: rgba(228, 138, 149, 0.10);
+    border: 1px solid rgba(228, 138, 149, 0.30);
     border-radius: 8px;
-    color: #ea4335;
+    color: #E48A95;
     font-size: 0.85rem;
   }
 
@@ -298,7 +306,7 @@ function statusBadge(s?: string | null) {
     line-height: 1;
     margin-bottom: 6px;
   }
-  .kpi-value.kpi-warn { color: #fbbf24; }
+  .kpi-value.kpi-warn { color: var(--admin-accent-soft); }
   .kpi-unit {
     font-size: 0.6em;
     font-weight: 600;
@@ -358,11 +366,13 @@ function statusBadge(s?: string | null) {
   }
   .panel-note p { margin: 0; }
   .panel-note i { color: var(--admin-brand); margin-right: 4px; }
+  .panel-note a { color: var(--admin-secondary); text-decoration: none; }
+  .panel-note a:hover { text-decoration: underline; }
   .panel-note code {
     padding: 1px 6px;
     background: var(--admin-surface-2);
     border-radius: 4px;
-    color: #cdd9ff;
+    color: var(--admin-accent-soft);
     font-size: 0.85em;
   }
   .dot {
@@ -449,7 +459,7 @@ function statusBadge(s?: string | null) {
     white-space: nowrap;
   }
   .td-meta { color: var(--admin-muted); }
-  .td-id { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.8em; color: #cdd9ff; }
+  .td-id { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.8em; color: var(--admin-accent-soft); }
   .row-link {
     color: var(--admin-brand);
     text-decoration: none;
@@ -465,13 +475,22 @@ function statusBadge(s?: string | null) {
     font-size: 0.72rem;
     font-weight: 700;
   }
-  .badge-blue { background: rgba(91, 127, 255, 0.18); color: #9bb1ff; }
-  .badge-amber { background: rgba(245, 158, 11, 0.20); color: #fcd07b; }
-  .badge-cyan { background: rgba(6, 182, 212, 0.20); color: #7be7f5; }
-  .badge-purple { background: rgba(139, 92, 246, 0.20); color: #c1adfb; }
-  .badge-yellow { background: rgba(250, 204, 21, 0.20); color: #fbe06f; }
-  .badge-green { background: rgba(52, 211, 153, 0.20); color: #7be4be; }
-  .badge-red { background: rgba(239, 68, 68, 0.20); color: #fca5a5; }
+  .badge-blue,
+  .badge-cyan,
+  .badge-green {
+    background: rgba(107, 133, 201, 0.20);
+    color: var(--admin-accent-soft);
+  }
+  .badge-amber,
+  .badge-purple,
+  .badge-yellow {
+    background: rgba(31, 58, 147, 0.34);
+    color: #fff;
+  }
+  .badge-red {
+    background: rgba(228, 138, 149, 0.20);
+    color: var(--admin-accent-soft);
+  }
   .badge-gray { background: rgba(148, 163, 184, 0.18); color: #b8c0cc; }
 
   @media (max-width: 1024px) {

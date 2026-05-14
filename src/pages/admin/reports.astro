@@ -1,0 +1,754 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { supabase } from '../../lib/supabase';
+
+type Lead = {
+  id: string | number;
+  created_at: string;
+  updated_at?: string | null;
+  status?: string | null;
+  plan?: string | null;
+  amount_jpy?: number | null;
+  paid_at?: string | null;
+  verified_at?: string | null;
+  company_name?: string | null;
+  person_name?: string | null;
+  application_id?: string | null;
+  last_error?: string | null;
+};
+
+type AiApiEvent = {
+  id: number;
+  created_at: string;
+  workflow?: string | null;
+  provider?: string | null;
+  model?: string | null;
+  operation?: string | null;
+  status?: string | null;
+  input_tokens?: number | null;
+  output_tokens?: number | null;
+  total_tokens?: number | null;
+  latency_ms?: number | null;
+  error_type?: string | null;
+  error_message?: string | null;
+};
+
+const runtimeEnv = import.meta.env as Record<string, string | undefined>;
+const yen = new Intl.NumberFormat('ja-JP');
+const now = Date.now();
+const oneHour = 60 * 60 * 1000;
+const oneDay = 24 * oneHour;
+const tokyoDateTime = new Intl.DateTimeFormat('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+const tokyoMonthKeyFormatter = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+});
+
+let leads: Lead[] = [];
+let events: AiApiEvent[] = [];
+let dbError = '';
+let eventsError = '';
+
+if (supabase) {
+  const { data: leadData, error: leadError } = await supabase
+    .from('diagnosis_leads')
+    .select('id, created_at, updated_at, status, plan, amount_jpy, paid_at, verified_at, company_name, person_name, application_id, last_error')
+    .order('created_at', { ascending: false })
+    .limit(500);
+
+  if (leadError) {
+    dbError = leadError.message;
+  } else {
+    leads = (leadData as Lead[]) || [];
+  }
+
+  const { data: eventData, error: eventError } = await supabase
+    .from('ai_api_events')
+    .select('id, created_at, workflow, provider, model, operation, status, input_tokens, output_tokens, total_tokens, latency_ms, error_type, error_message')
+    .order('created_at', { ascending: false })
+    .limit(500);
+
+  if (eventError) {
+    eventsError = eventError.message;
+  } else {
+    events = (eventData as AiApiEvent[]) || [];
+  }
+} else {
+  dbError = 'Supabase が設定されていません';
+}
+
+function hasEnv(name: string) {
+  const value = runtimeEnv[name];
+  return Boolean(value && value !== 'undefined' && value !== 'null');
+}
+
+function envNumber(name: string) {
+  const value = Number(runtimeEnv[name] || '0');
+  return Number.isFinite(value) ? value : 0;
+}
+
+function parseTime(iso?: string | null) {
+  if (!iso) return 0;
+  const t = new Date(iso).getTime();
+  return Number.isFinite(t) ? t : 0;
+}
+
+function tokyoMonthKey(date: Date) {
+  return tokyoMonthKeyFormatter.format(date);
+}
+
+function formatDateTime(iso?: string | null) {
+  return iso ? tokyoDateTime.format(new Date(iso)) : '-';
+}
+
+function statusLabel(status?: string | null) {
+  if (status === 'success') return '成功';
+  if (status === 'retry') return '再試行';
+  if (status === 'error') return 'エラー';
+  if (status === 'skipped') return 'スキップ';
+  return status || '-';
+}
+
+function statusTone(status?: string | null) {
+  if (status === 'success') return 'ok';
+  if (status === 'retry') return 'warn';
+  if (status === 'error') return 'bad';
+  return 'muted';
+}
+
+function hasAiIssue(lead: Lead) {
+  const status = lead.status || 'new';
+  return Boolean(lead.last_error)
+    || ['manual_review', 'quota_retry_pending', 'limit_exceeded'].includes(status)
+    || (['verified', 'processing'].includes(status) && parseTime(lead.updated_at || lead.created_at) < now - 2 * oneHour);
+}
+
+const currentMonthKey = tokyoMonthKey(new Date());
+const monthEvents = events.filter((event) => {
+  const created = parseTime(event.created_at);
+  return created > 0 && tokyoMonthKey(new Date(created)) === currentMonthKey;
+});
+const openAiInputUsdPer1M = envNumber('OPENAI_INPUT_USD_PER_1M');
+const openAiOutputUsdPer1M = envNumber('OPENAI_OUTPUT_USD_PER_1M');
+const anthropicInputUsdPer1M = envNumber('ANTHROPIC_INPUT_USD_PER_1M');
+const anthropicOutputUsdPer1M = envNumber('ANTHROPIC_OUTPUT_USD_PER_1M');
+const usdJpyRate = envNumber('USD_JPY_RATE');
+const openAiLongContextThreshold = envNumber('OPENAI_LONG_CONTEXT_THRESHOLD_TOKENS');
+const openAiLongContextInputMultiplier = envNumber('OPENAI_LONG_CONTEXT_INPUT_MULTIPLIER') || 1;
+const openAiLongContextOutputMultiplier = envNumber('OPENAI_LONG_CONTEXT_OUTPUT_MULTIPLIER') || 1;
+const pricingConfigured = Boolean(
+  usdJpyRate
+  && (openAiInputUsdPer1M || openAiOutputUsdPer1M || anthropicInputUsdPer1M || anthropicOutputUsdPer1M)
+);
+function estimateEventCostUsd(event: AiApiEvent) {
+  const input = event.input_tokens || 0;
+  const output = event.output_tokens || 0;
+  if (event.provider === 'openai') {
+    const isLongContext = Boolean(openAiLongContextThreshold && input > openAiLongContextThreshold);
+    const inputRate = openAiInputUsdPer1M * (isLongContext ? openAiLongContextInputMultiplier : 1);
+    const outputRate = openAiOutputUsdPer1M * (isLongContext ? openAiLongContextOutputMultiplier : 1);
+    return (input / 1_000_000) * inputRate + (output / 1_000_000) * outputRate;
+  }
+  if (event.provider === 'anthropic') {
+    return (input / 1_000_000) * anthropicInputUsdPer1M + (output / 1_000_000) * anthropicOutputUsdPer1M;
+  }
+  return 0;
+}
+const estimatedApiCostJpy = pricingConfigured
+  ? Math.round(monthEvents.reduce((usd, event) => usd + estimateEventCostUsd(event), 0) * usdJpyRate)
+  : null;
+
+const new24h = leads.filter((lead) => parseTime(lead.created_at) > now - oneDay).length;
+const new7d = leads.filter((lead) => parseTime(lead.created_at) > now - 7 * oneDay).length;
+const pendingPayment = leads.filter((lead) => lead.status === 'pending_payment');
+const pendingRevenue = pendingPayment.reduce((sum, lead) => sum + (lead.amount_jpy || 0), 0);
+const confirmedRevenue = leads
+  .filter((lead) => lead.paid_at && (lead.amount_jpy || 0) > 0)
+  .reduce((sum, lead) => sum + (lead.amount_jpy || 0), 0);
+const aiIssueLeads = leads.filter(hasAiIssue);
+const apiIssues24h = events.filter((event) => parseTime(event.created_at) > now - oneDay && ['error', 'retry'].includes(event.status || ''));
+const monthlyTokens = monthEvents.reduce((sum, event) => sum + (event.total_tokens || 0), 0);
+const lastDailyEmail = events.find((event) => event.workflow === 'daily_ops_email');
+const lastHealthCheck = events.find((event) => event.workflow === 'ops_health_check');
+const alertRecipient = runtimeEnv.ADMIN_ALERT_EMAIL || runtimeEnv.CONTACT_TO || runtimeEnv.GMAIL_USER || '';
+const alertReady = hasEnv('RESEND_API_KEY') && Boolean(alertRecipient) && hasEnv('CRON_SECRET');
+
+const kpiRows = [
+  { label: '24h新規リード', value: `${new24h}件`, detail: `7日合計 ${new7d}件`, tone: 'ok' },
+  { label: '入金待ち', value: `${pendingPayment.length}件`, detail: `¥${yen.format(pendingRevenue)}`, tone: pendingPayment.length ? 'warn' : 'ok' },
+  { label: '入金済売上', value: `¥${yen.format(confirmedRevenue)}`, detail: '有料レポート・有償対応', tone: 'ok' },
+  { label: 'AI要確認', value: `${aiIssueLeads.length}件`, detail: '停滞・エラー・手動確認', tone: aiIssueLeads.length ? 'bad' : 'ok' },
+  { label: '24h API問題', value: `${apiIssues24h.length}件`, detail: 'error / retry', tone: apiIssues24h.length ? 'bad' : 'ok' },
+  { label: '当月API費用', value: estimatedApiCostJpy === null ? '単価未設定' : `約¥${yen.format(estimatedApiCostJpy)}`, detail: `${yen.format(monthlyTokens)} tokens`, tone: estimatedApiCostJpy === null ? 'muted' : 'ok' },
+];
+
+const envRows = [
+  { label: 'Cron認証', value: hasEnv('CRON_SECRET'), detail: 'Vercel Cronからの実行認証' },
+  { label: '送信元', value: hasEnv('CONTACT_FROM'), detail: runtimeEnv.CONTACT_FROM || 'CONTACT_FROM 未設定' },
+  { label: '通知先', value: Boolean(alertRecipient), detail: alertRecipient || 'ADMIN_ALERT_EMAIL / CONTACT_TO / GMAIL_USER 未設定' },
+  { label: 'Resend', value: hasEnv('RESEND_API_KEY'), detail: '日次メール送信' },
+  { label: 'OpenAI', value: hasEnv('OPENAI_API_KEY'), detail: '診断生成・ヘルスチェック' },
+  { label: 'Anthropic', value: hasEnv('ANTHROPIC_API_KEY'), detail: '予備AI接続・ヘルスチェック' },
+];
+
+const reportCatalog = [
+  {
+    name: '日次アラート',
+    cadence: '毎日 09:00 JST',
+    status: '実装済み',
+    detail: '新規リード、入金待ち、AI/API問題、当月トークン・費用をメール送信',
+  },
+  {
+    name: 'AI/API信頼性レポート',
+    cadence: '随時・週次',
+    status: '実装済み',
+    detail: 'OpenAI/Anthropic/Resend/Supabaseの接続、エラー、レイテンシ、トークンを確認',
+  },
+  {
+    name: '営業ファネルレポート',
+    cadence: '週次',
+    status: '一部実装',
+    detail: '申込、認証、有償化、入金、導入支援までの滞留を確認',
+  },
+  {
+    name: 'ナレッジ鮮度レポート',
+    cadence: '月次',
+    status: '設計済み',
+    detail: 'SOP、プロンプト、テンプレ、公開記事の最終更新日と責任者を管理',
+  },
+  {
+    name: '水耕栽培H1レポート',
+    cadence: '実証開始後',
+    status: '未接続',
+    detail: '1株コスト、kWh/kg、収穫CV、IoT停止時間をPhase判断材料にする',
+  },
+];
+
+const recentIssueRows = [
+  ...apiIssues24h.map((event) => ({
+    id: `event-${event.id}`,
+    title: `${event.provider || '-'} / ${event.operation || '-'}`,
+    status: statusLabel(event.status),
+    tone: statusTone(event.status),
+    detail: event.error_message || event.error_type || '詳細なし',
+    created_at: event.created_at,
+  })),
+  ...aiIssueLeads.slice(0, 8).map((lead) => ({
+    id: `lead-${lead.id}`,
+    title: lead.company_name || lead.application_id || String(lead.id),
+    status: lead.status || '-',
+    tone: 'bad',
+    detail: lead.last_error || 'AI処理の停滞または要確認ステータス',
+    created_at: lead.updated_at || lead.created_at,
+  })),
+].sort((a, b) => parseTime(b.created_at) - parseTime(a.created_at)).slice(0, 10);
+---
+
+<AdminLayout title="レポート" active="reports">
+  <section class="hero-panel">
+    <div>
+      <span>Reports & Alerts</span>
+      <h2>朝9時に見るべき内容をメール化し、管理画面では原因まで追える状態にする</h2>
+      <p>日次アラートはVercel Cronで09:00 JSTに送信します。画面上から手動送信とヘルスチェックも実行できます。</p>
+    </div>
+    <strong class={alertReady ? 'hero-ok' : 'hero-warn'}>{alertReady ? 'READY' : 'SETUP'}<small>{alertReady ? '日次メール設定済み' : '環境変数の確認が必要'}</small></strong>
+  </section>
+
+  {(dbError || eventsError) && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{dbError || eventsError}</span>
+    </div>
+  )}
+
+  <section class="kpi-grid">
+    {kpiRows.map((row) => (
+      <article class={`kpi-card kpi-card--${row.tone}`}>
+        <span>{row.label}</span>
+        <strong>{row.value}</strong>
+        <small>{row.detail}</small>
+      </article>
+    ))}
+  </section>
+
+  <div class="grid">
+    <section class="panel panel-wide">
+      <div class="panel-head">
+        <div>
+          <span>Daily Alert</span>
+          <h3>毎朝9時メール</h3>
+        </div>
+        <div class="panel-actions">
+          <button class="ghost-btn" id="send-daily-alert" type="button"><i class="fas fa-paper-plane"></i> 手動送信</button>
+          <button class="ghost-btn" id="run-health-check" type="button"><i class="fas fa-heart-pulse"></i> ヘルスチェック</button>
+        </div>
+      </div>
+      <div class="alert-grid">
+        <div>
+          <b>送信時刻</b>
+          <strong>09:00 JST</strong>
+          <small>Vercel Cron: 0 0 * * * UTC</small>
+        </div>
+        <div>
+          <b>通知先</b>
+          <strong>{alertRecipient || '未設定'}</strong>
+          <small>ADMIN_ALERT_EMAIL 優先</small>
+        </div>
+        <div>
+          <b>直近日次メール</b>
+          <strong>{lastDailyEmail ? statusLabel(lastDailyEmail.status) : 'ログなし'}</strong>
+          <small>{lastDailyEmail ? formatDateTime(lastDailyEmail.created_at) : '初回送信待ち'}</small>
+        </div>
+        <div>
+          <b>直近ヘルスチェック</b>
+          <strong>{lastHealthCheck ? statusLabel(lastHealthCheck.status) : 'ログなし'}</strong>
+          <small>{lastHealthCheck ? formatDateTime(lastHealthCheck.created_at) : '未実行'}</small>
+        </div>
+      </div>
+      <p class="result-line" id="ops-action-result">手動実行はまだ行っていません。</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span>Environment</span>
+          <h3>通知・API設定</h3>
+        </div>
+      </div>
+      <div class="env-list">
+        {envRows.map((row) => (
+          <div class="env-row">
+            <span>{row.label}</span>
+            <b class={row.value ? 'ok' : 'bad'}>{row.value ? 'OK' : '未設定'}</b>
+            <small>{row.detail}</small>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Catalog</span>
+        <h3>実装すべきレポート</h3>
+      </div>
+    </div>
+    <div class="report-list">
+      {reportCatalog.map((report) => (
+        <article class="report-row">
+          <div>
+            <strong>{report.name}</strong>
+            <p>{report.detail}</p>
+          </div>
+          <span>{report.cadence}</span>
+          <b>{report.status}</b>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Issues</span>
+        <h3>直近の要確認</h3>
+      </div>
+      <a href="/admin/leads" class="panel-link">リード管理へ</a>
+    </div>
+    {recentIssueRows.length === 0 ? (
+      <p class="empty-state">直近のAPI問題・AI要確認リードはありません。</p>
+    ) : (
+      <div class="issue-list">
+        {recentIssueRows.map((row) => (
+          <div class="issue-row">
+            <span class={`state state--${row.tone}`}>{row.status}</span>
+            <div>
+              <strong>{row.title}</strong>
+              <p>{row.detail}</p>
+            </div>
+            <small>{formatDateTime(row.created_at)}</small>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+</AdminLayout>
+
+<script is:inline>
+  (function() {
+    const result = document.getElementById('ops-action-result');
+    const sendBtn = document.getElementById('send-daily-alert');
+    const healthBtn = document.getElementById('run-health-check');
+    const buttons = [sendBtn, healthBtn].filter(Boolean);
+
+    async function run(url, label) {
+      if (!result) return;
+      buttons.forEach((button) => { button.disabled = true; });
+      result.textContent = `${label}を実行中...`;
+      try {
+        const res = await fetch(url, { method: 'POST' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+        if (url.includes('daily-ops-email')) {
+          result.textContent = `日次メールを送信しました: ${data.to || '通知先未取得'}`;
+        } else {
+          const detail = data.error_count > 0 ? `エラー ${data.error_count}件` : data.warn_count > 0 ? `警告 ${data.warn_count}件` : '正常';
+          result.textContent = `ヘルスチェック完了: ${detail}`;
+        }
+      } catch (error) {
+        result.textContent = error instanceof Error ? error.message : '実行に失敗しました';
+      } finally {
+        buttons.forEach((button) => { button.disabled = false; });
+      }
+    }
+
+    sendBtn?.addEventListener('click', () => run('/api/admin/daily-ops-email', '日次メール'));
+    healthBtn?.addEventListener('click', () => run('/api/admin/ops-health-check', 'ヘルスチェック'));
+  })();
+</script>
+
+<style>
+  .hero-panel,
+  .panel,
+  .kpi-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 170px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span,
+  .kpi-card span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-panel h2,
+  .panel-head h3 {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.2rem;
+  }
+
+  .hero-panel p,
+  .report-row p,
+  .issue-row p,
+  .empty-state {
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+  }
+
+  .hero-panel p,
+  .report-row p,
+  .issue-row p {
+    margin: 4px 0 0;
+  }
+
+  .hero-panel strong {
+    display: grid;
+    place-items: center;
+    min-height: 110px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1.45rem;
+    background: var(--admin-surface-2);
+  }
+
+  .hero-panel strong.hero-ok {
+    border: 1px solid rgba(107, 133, 201, 0.45);
+  }
+
+  .hero-panel strong.hero-warn {
+    border: 1px solid rgba(228, 138, 149, 0.42);
+  }
+
+  .hero-panel small {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .alert-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .kpi-card {
+    min-height: 112px;
+    padding: 16px;
+  }
+
+  .kpi-card strong {
+    display: block;
+    margin: 10px 0 6px;
+    color: #fff;
+    font-size: 1.34rem;
+    line-height: 1.1;
+  }
+
+  .kpi-card small {
+    color: var(--admin-muted);
+    font-size: 0.74rem;
+  }
+
+  .kpi-card--bad { border-color: rgba(228, 138, 149, 0.46); }
+  .kpi-card--warn { border-color: rgba(228, 138, 149, 0.42); }
+  .kpi-card--ok { border-color: rgba(107, 133, 201, 0.38); }
+  .kpi-card--muted { border-color: rgba(148, 163, 184, 0.26); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .panel {
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .panel-head h3 {
+    margin: 3px 0 0;
+    font-size: 1rem;
+  }
+
+  .panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 7px;
+    border: 1px solid var(--admin-border);
+    background: var(--admin-surface-2);
+    color: var(--admin-muted);
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+
+  .ghost-btn:hover {
+    color: var(--admin-text);
+    border-color: rgba(107, 133, 201, 0.5);
+  }
+
+  .ghost-btn:disabled {
+    cursor: wait;
+    opacity: 0.68;
+  }
+
+  .alert-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .alert-grid div,
+  .env-row,
+  .report-row,
+  .issue-row {
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .alert-grid div {
+    padding: 12px;
+  }
+
+  .alert-grid b,
+  .alert-grid small,
+  .env-row span,
+  .env-row small,
+  .report-row span,
+  .issue-row small {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .alert-grid strong {
+    display: block;
+    margin: 6px 0 3px;
+    color: #fff;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+
+  .result-line {
+    margin: 12px 0 0;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+  }
+
+  .env-list,
+  .report-list,
+  .issue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .env-row {
+    display: grid;
+    grid-template-columns: minmax(100px, 1fr) 58px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .env-row small {
+    grid-column: 1 / -1;
+  }
+
+  .env-row b,
+  .report-row b,
+  .state {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+  }
+
+  .env-row b.ok,
+  .state--ok {
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.18);
+  }
+
+  .env-row b.bad,
+  .state--bad {
+    color: var(--admin-accent-soft);
+    background: rgba(228, 138, 149, 0.18);
+  }
+
+  .state--warn {
+    color: var(--admin-accent-soft);
+    background: rgba(228, 138, 149, 0.16);
+  }
+
+  .state--muted {
+    color: #cbd5e1;
+    background: rgba(148, 163, 184, 0.14);
+  }
+
+  .report-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 120px 88px;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+  }
+
+  .report-row strong,
+  .issue-row strong {
+    color: #fff;
+  }
+
+  .report-row b {
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.18);
+  }
+
+  .issue-row {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) 80px;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .panel-link {
+    color: var(--admin-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 1200px) {
+    .kpi-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .alert-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero-panel,
+    .grid,
+    .kpi-grid,
+    .alert-grid,
+    .report-row,
+    .issue-row {
+      grid-template-columns: 1fr;
+    }
+
+    .panel-head {
+      flex-direction: column;
+    }
+
+    .panel-actions {
+      justify-content: flex-start;
+    }
+  }
+</style>

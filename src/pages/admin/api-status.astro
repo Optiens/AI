@@ -1,0 +1,587 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { supabase } from '../../lib/supabase';
+
+type AiApiEvent = {
+  id: number;
+  created_at: string;
+  workflow?: string | null;
+  provider?: string | null;
+  model?: string | null;
+  operation?: string | null;
+  status?: string | null;
+  http_status?: number | null;
+  latency_ms?: number | null;
+  input_tokens?: number | null;
+  output_tokens?: number | null;
+  total_tokens?: number | null;
+  context_remaining_tokens?: number | null;
+  error_type?: string | null;
+  error_message?: string | null;
+};
+
+const runtimeEnv = import.meta.env as Record<string, string | undefined>;
+const yen = new Intl.NumberFormat('ja-JP');
+const now = Date.now();
+const oneDay = 24 * 60 * 60 * 1000;
+const tokyoDateTime = new Intl.DateTimeFormat('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+const tokyoMonthKeyFormatter = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+});
+
+let events: AiApiEvent[] = [];
+let eventsError = '';
+
+if (supabase) {
+  const { data, error } = await supabase
+    .from('ai_api_events')
+    .select('id, created_at, workflow, provider, model, operation, status, http_status, latency_ms, input_tokens, output_tokens, total_tokens, context_remaining_tokens, error_type, error_message')
+    .order('created_at', { ascending: false })
+    .limit(200);
+
+  if (error) {
+    eventsError = error.message;
+  } else {
+    events = (data as AiApiEvent[]) || [];
+  }
+} else {
+  eventsError = 'Supabase が設定されていません';
+}
+
+function hasEnv(name: string) {
+  const value = runtimeEnv[name];
+  return Boolean(value && value !== 'undefined' && value !== 'null');
+}
+
+function envNumber(name: string) {
+  const value = Number(runtimeEnv[name] || '0');
+  return Number.isFinite(value) ? value : 0;
+}
+
+function parseTime(iso?: string | null) {
+  if (!iso) return 0;
+  const t = new Date(iso).getTime();
+  return Number.isFinite(t) ? t : 0;
+}
+
+function formatDateTime(iso?: string | null) {
+  return iso ? tokyoDateTime.format(new Date(iso)) : '-';
+}
+
+function formatMs(ms?: number | null) {
+  if (ms === null || ms === undefined) return '-';
+  return ms >= 1000 ? `${(ms / 1000).toFixed(1)}秒` : `${ms}ms`;
+}
+
+function statusLabel(status?: string | null) {
+  if (status === 'success') return '成功';
+  if (status === 'retry') return '再試行';
+  if (status === 'error') return 'エラー';
+  if (status === 'skipped') return 'スキップ';
+  return status || '-';
+}
+
+function statusTone(status?: string | null) {
+  if (status === 'success') return 'ok';
+  if (status === 'retry') return 'warn';
+  if (status === 'error') return 'bad';
+  return 'muted';
+}
+
+const providers = [
+  { id: 'openai', label: 'OpenAI', configured: hasEnv('OPENAI_API_KEY'), role: '診断生成' },
+  { id: 'anthropic', label: 'Anthropic', configured: hasEnv('ANTHROPIC_API_KEY'), role: '予備AI接続' },
+  { id: 'supabase', label: 'Supabase', configured: hasEnv('SUPABASE_URL') && hasEnv('SUPABASE_SERVICE_ROLE_KEY'), role: 'DB / ログ' },
+  { id: 'resend', label: 'Resend', configured: hasEnv('RESEND_API_KEY'), role: 'メール送信' },
+  { id: 'google', label: 'Google Slides', configured: hasEnv('GOOGLE_SLIDES_TEMPLATE_ID') && hasEnv('GOOGLE_SERVICE_ACCOUNT_EMAIL') && hasEnv('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY'), role: 'レポート生成' },
+];
+
+const providerRows = providers.map((provider) => {
+  const providerEvents = events.filter((event) => event.provider === provider.id);
+  const latest = providerEvents[0] || null;
+  const issues24h = providerEvents.filter((event) => parseTime(event.created_at) > now - oneDay && ['error', 'retry'].includes(event.status || '')).length;
+  return {
+    ...provider,
+    latest,
+    issues24h,
+    tone: !provider.configured ? 'bad' : issues24h > 0 ? 'warn' : latest ? statusTone(latest.status) : 'muted',
+  };
+});
+const recentRows = events.slice(0, 20);
+const issueRows = events
+  .filter((event) => event.status === 'error' || event.status === 'retry')
+  .slice(0, 12);
+const totalTokens24h = events
+  .filter((event) => parseTime(event.created_at) > now - oneDay)
+  .reduce((sum, event) => sum + (event.total_tokens || 0), 0);
+const currentMonthKey = tokyoMonthKeyFormatter.format(new Date());
+const monthEvents = events.filter((event) => {
+  const created = parseTime(event.created_at);
+  return created > 0 && tokyoMonthKeyFormatter.format(new Date(created)) === currentMonthKey;
+});
+const monthlyApiTokens = monthEvents.reduce((sum, event) => sum + (event.total_tokens || 0), 0);
+const usdJpyRate = envNumber('USD_JPY_RATE');
+const apiCostRates = {
+  openaiInput: envNumber('OPENAI_INPUT_USD_PER_1M'),
+  openaiOutput: envNumber('OPENAI_OUTPUT_USD_PER_1M'),
+  anthropicInput: envNumber('ANTHROPIC_INPUT_USD_PER_1M'),
+  anthropicOutput: envNumber('ANTHROPIC_OUTPUT_USD_PER_1M'),
+};
+const openAiLongContextThreshold = envNumber('OPENAI_LONG_CONTEXT_THRESHOLD_TOKENS');
+const openAiLongContextInputMultiplier = envNumber('OPENAI_LONG_CONTEXT_INPUT_MULTIPLIER') || 1;
+const openAiLongContextOutputMultiplier = envNumber('OPENAI_LONG_CONTEXT_OUTPUT_MULTIPLIER') || 1;
+const pricingConfigured = Boolean(
+  usdJpyRate
+  && (apiCostRates.openaiInput || apiCostRates.openaiOutput || apiCostRates.anthropicInput || apiCostRates.anthropicOutput)
+);
+function estimateEventCostUsd(event: AiApiEvent) {
+  const input = event.input_tokens || 0;
+  const output = event.output_tokens || 0;
+  if (event.provider === 'openai') {
+    const isLongContext = Boolean(openAiLongContextThreshold && input > openAiLongContextThreshold);
+    const inputRate = apiCostRates.openaiInput * (isLongContext ? openAiLongContextInputMultiplier : 1);
+    const outputRate = apiCostRates.openaiOutput * (isLongContext ? openAiLongContextOutputMultiplier : 1);
+    return (input / 1_000_000) * inputRate + (output / 1_000_000) * outputRate;
+  }
+  if (event.provider === 'anthropic') {
+    return (input / 1_000_000) * apiCostRates.anthropicInput + (output / 1_000_000) * apiCostRates.anthropicOutput;
+  }
+  return 0;
+}
+const estimatedApiCostJpy = pricingConfigured
+  ? Math.round(monthEvents.reduce((usd, event) => usd + estimateEventCostUsd(event), 0) * usdJpyRate)
+  : null;
+const dailyAlertReady = hasEnv('RESEND_API_KEY') && (hasEnv('ADMIN_ALERT_EMAIL') || hasEnv('CONTACT_TO') || hasEnv('GMAIL_USER')) && hasEnv('CRON_SECRET');
+const opsSummaryRows = [
+  {
+    label: '当月API費用',
+    value: estimatedApiCostJpy === null ? '単価未設定' : `約¥${yen.format(estimatedApiCostJpy)}`,
+    detail: `当月 ${yen.format(monthlyApiTokens)} tokens`,
+    tone: estimatedApiCostJpy === null ? 'muted' : 'ok',
+  },
+  {
+    label: '日次メール',
+    value: dailyAlertReady ? '設定済み' : '要設定',
+    detail: '毎日 09:00 JST / Vercel Cron',
+    tone: dailyAlertReady ? 'ok' : 'warn',
+  },
+];
+---
+
+<AdminLayout title="API稼働状況" active="api-status">
+  <Fragment slot="header-actions">
+    <button class="ghost-btn" id="run-health-check" type="button"><i class="fas fa-heart-pulse"></i> ヘルスチェック</button>
+  </Fragment>
+
+  <section class="hero-panel">
+    <div>
+      <span>API Operations</span>
+      <h2>AI処理の入口、通信、エラー、残りコンテキストを一箇所で確認する</h2>
+      <p>OpenAI、Anthropic、Supabase、Resend、Google Slidesの設定と直近ログを確認します。</p>
+    </div>
+    <strong>{yen.format(totalTokens24h)}<small>24h tokens</small></strong>
+  </section>
+
+  {eventsError && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{eventsError}</span>
+    </div>
+  )}
+
+  <p class="result-line" id="health-check-result">ヘルスチェックはまだ実行していません。</p>
+
+  <section class="summary-grid" aria-label="運用サマリー">
+    {opsSummaryRows.map((row) => (
+      <article class={`summary-card summary-card--${row.tone}`}>
+        <span>{row.label}</span>
+        <strong>{row.value}</strong>
+        <small>{row.detail}</small>
+      </article>
+    ))}
+  </section>
+
+  <section class="provider-grid">
+    {providerRows.map((provider) => (
+      <article class={`provider-card provider-card--${provider.tone}`}>
+        <div>
+          <span>{provider.role}</span>
+          <h3>{provider.label}</h3>
+        </div>
+        <b class={provider.configured ? 'ok' : 'bad'}>{provider.configured ? '設定済み' : '未設定'}</b>
+        <dl>
+          <div><dt>直近状態</dt><dd>{provider.latest ? statusLabel(provider.latest.status) : 'ログなし'}</dd></div>
+          <div><dt>24h問題</dt><dd>{provider.issues24h}件</dd></div>
+          <div><dt>直近</dt><dd>{provider.latest ? formatDateTime(provider.latest.created_at) : '-'}</dd></div>
+        </dl>
+      </article>
+    ))}
+  </section>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span>Issues</span>
+          <h3>エラー / 再試行</h3>
+        </div>
+      </div>
+      {issueRows.length === 0 ? (
+        <p class="empty-state">直近のAPIエラー・再試行はありません。</p>
+      ) : (
+        <div class="event-list">
+          {issueRows.map((event) => (
+            <article class="event-row">
+              <span class={`state state--${statusTone(event.status)}`}>{statusLabel(event.status)}</span>
+              <div>
+                <strong>{event.provider || '-'} / {event.operation || '-'}</strong>
+                <p>{event.error_message || event.error_type || '詳細なし'}</p>
+              </div>
+              <small>{formatDateTime(event.created_at)}</small>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span>Recent</span>
+          <h3>直近通信ログ</h3>
+        </div>
+      </div>
+      {recentRows.length === 0 ? (
+        <p class="empty-state">通信ログはまだありません。</p>
+      ) : (
+        <div class="event-list">
+          {recentRows.map((event) => (
+            <article class="event-row">
+              <span class={`state state--${statusTone(event.status)}`}>{statusLabel(event.status)}</span>
+              <div>
+                <strong>{event.provider || '-'} / {event.workflow || '-'}</strong>
+                <p>{event.operation || '-'} ・ {event.model || '-'} ・ {formatMs(event.latency_ms)}</p>
+              </div>
+              <small>{formatDateTime(event.created_at)}</small>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  </div>
+</AdminLayout>
+
+<script is:inline>
+  (function() {
+    const button = document.getElementById('run-health-check');
+    const result = document.getElementById('health-check-result');
+
+    button?.addEventListener('click', async () => {
+      if (!result) return;
+      button.disabled = true;
+      result.textContent = 'ヘルスチェックを実行中...';
+      try {
+        const res = await fetch('/api/admin/ops-health-check', { method: 'POST' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+        const detail = data.error_count > 0 ? `エラー ${data.error_count}件` : data.warn_count > 0 ? `警告 ${data.warn_count}件` : '正常';
+        result.textContent = `ヘルスチェック完了: ${detail}`;
+      } catch (error) {
+        result.textContent = error instanceof Error ? error.message : '実行に失敗しました';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 7px;
+    border: 1px solid var(--admin-border);
+    background: var(--admin-surface);
+    color: var(--admin-muted);
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+
+  .ghost-btn:hover {
+    color: var(--admin-text);
+    border-color: rgba(107, 133, 201, 0.5);
+  }
+
+  .ghost-btn:disabled {
+    cursor: wait;
+    opacity: 0.68;
+  }
+
+  .hero-panel,
+  .panel,
+  .provider-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 170px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span,
+  .provider-card span,
+  .provider-card dt {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-panel h2,
+  .panel-head h3,
+  .provider-card h3 {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.2rem;
+  }
+
+  .hero-panel p,
+  .event-row p,
+  .empty-state,
+  .result-line {
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+  }
+
+  .hero-panel p,
+  .event-row p,
+  .provider-card h3 {
+    margin: 4px 0 0;
+  }
+
+  .hero-panel strong {
+    display: grid;
+    place-items: center;
+    min-height: 110px;
+    border-radius: 8px;
+    background: var(--admin-surface-2);
+    color: #fff;
+    font-size: 1.35rem;
+  }
+
+  .hero-panel small {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .alert-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
+  }
+
+  .result-line {
+    margin: 0 0 18px;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .summary-card {
+    min-height: 96px;
+    padding: 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-surface);
+  }
+
+  .summary-card span {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .summary-card strong {
+    display: block;
+    margin: 8px 0 5px;
+    color: #fff;
+    font-size: 1.08rem;
+  }
+
+  .summary-card small {
+    color: var(--admin-muted);
+  }
+
+  .summary-card--ok { border-color: rgba(107, 133, 201, 0.42); }
+  .summary-card--warn { border-color: rgba(228, 138, 149, 0.42); }
+  .summary-card--muted { border-color: rgba(148, 163, 184, 0.28); }
+
+  .provider-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .provider-card {
+    padding: 14px;
+  }
+
+  .provider-card--ok { border-color: rgba(107, 133, 201, 0.42); }
+  .provider-card--warn { border-color: rgba(228, 138, 149, 0.42); }
+  .provider-card--bad { border-color: rgba(228, 138, 149, 0.46); }
+  .provider-card--muted { border-color: rgba(148, 163, 184, 0.28); }
+
+  .provider-card b,
+  .state {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    margin-top: 10px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+  }
+
+  .provider-card b.ok,
+  .state--ok {
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.18);
+  }
+
+  .provider-card b.bad,
+  .state--bad {
+    color: var(--admin-accent-soft);
+    background: rgba(228, 138, 149, 0.18);
+  }
+
+  .state--warn {
+    color: var(--admin-accent-soft);
+    background: rgba(228, 138, 149, 0.16);
+  }
+
+  .state--muted {
+    color: #cbd5e1;
+    background: rgba(148, 163, 184, 0.14);
+  }
+
+  .provider-card dl {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0 0;
+  }
+
+  .provider-card dd {
+    margin: 2px 0 0;
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .panel-head h3 {
+    margin: 3px 0 0;
+    font-size: 1rem;
+  }
+
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .event-row {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) 80px;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .event-row strong {
+    color: #fff;
+  }
+
+  .event-row small {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  @media (max-width: 1200px) {
+    .provider-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero-panel,
+    .summary-grid,
+    .provider-grid,
+    .grid,
+    .event-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
