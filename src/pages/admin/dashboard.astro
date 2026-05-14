@@ -3,7 +3,13 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 import { supabase } from '../../lib/supabase';
 import { getBusinessTaskSummary } from '../../lib/google-tasks';
 import { buildTodayActions } from '../../lib/ops-today';
-import { getAdminSettings } from '../../lib/admin-ops';
+import {
+  evaluateAdminAlerts,
+  getAdminSettings,
+  getAlertRulesWithDefaults,
+  listCustomersWithProjects,
+  listKnowledgeGaps,
+} from '../../lib/admin-ops';
 import { knowledgeDocs } from '../../lib/optiens-knowledge';
 
 type Lead = {
@@ -44,6 +50,11 @@ let eventsError = '';
 const runtimeEnv = import.meta.env as Record<string, string | undefined>;
 const taskSummary = await getBusinessTaskSummary(new Date(), 7);
 const { values: adminSettings } = await getAdminSettings();
+const [customerResult, gapResult, alertRuleResult] = await Promise.all([
+  listCustomersWithProjects(),
+  listKnowledgeGaps(),
+  getAlertRulesWithDefaults(),
+]);
 
 if (supabase) {
   const { data, error } = await supabase
@@ -103,6 +114,22 @@ const todayActions = buildTodayActions({ leads, events, tasks: taskSummary, now:
 const criticalActions = todayActions.filter(action => action.tone === 'critical');
 const highActions = todayActions.filter(action => action.tone === 'high');
 const apiIssues24h = events.filter(event => parseTime(event.created_at) > now - ms24h && ['error', 'retry'].includes(event.status || ''));
+const customerProjects = customerResult.customers.flatMap(customer => customer.projects || []);
+const openCustomerProjects = customerProjects.filter(project => !['done', 'cancelled'].includes(project.status));
+const activeCustomers = customerResult.customers.filter(customer => customer.status === 'active').length;
+const customerMrr = openCustomerProjects.reduce((sum, project) => sum + (project.monthly_amount_jpy || 0), 0);
+const openKnowledgeGaps = gapResult.gaps.filter(gap => gap.status === 'open');
+const evaluatedAlerts = evaluateAdminAlerts({
+  leads,
+  events,
+  tasks: taskSummary,
+  settings: adminSettings,
+  rules: alertRuleResult.rules,
+  projects: customerProjects,
+  knowledgeGaps: gapResult.gaps,
+  todayActionCount: todayActions.length,
+});
+const triggeredAlerts = evaluatedAlerts.filter(alert => alert.triggered);
 
 const adminColors = {
   primary: '#1F3A93',
@@ -212,19 +239,30 @@ const commandDetail = commandTone === 'bad'
     : '通常運用の範囲です。';
 
 const commandMetrics = [
-  { label: '異常/要対応', value: `${criticalActions.length + apiIssues24h.length}件`, detail: 'API・手動確認・期限超過', tone: criticalActions.length + apiIssues24h.length ? 'bad' : 'ok' },
+  { label: '異常/要対応', value: `${criticalActions.length + apiIssues24h.length + triggeredAlerts.length}件`, detail: 'API・手動確認・アラート', tone: criticalActions.length + apiIssues24h.length + triggeredAlerts.length ? 'bad' : 'ok' },
   { label: 'SLAリスク', value: `${slaRisks.length}件`, detail: '納品・返信・MTG案内', tone: slaRisks.length ? 'warn' : 'ok' },
   { label: '入金待ち', value: `¥${yen.format(pendingRevenue)}`, detail: `${pendingPaymentCount}件`, tone: pendingPaymentCount ? 'warn' : 'ok' },
   { label: '代表稼働', value: `${workloadScore}件`, detail: '今日/期限/納品待ち', tone: workloadScore >= workloadCriticalCount ? 'bad' : workloadScore >= workloadWarnCount ? 'warn' : 'ok' },
+  { label: '顧客案件', value: `${openCustomerProjects.length}件`, detail: `継続顧客 ${activeCustomers} / 月¥${yen.format(customerMrr)}`, tone: openCustomerProjects.length ? 'ok' : 'low' },
+  { label: 'ナレッジ不足', value: `${openKnowledgeGaps.length}件`, detail: '回答不能・未整備', tone: openKnowledgeGaps.length ? 'warn' : 'ok' },
 ];
 
-const alertInboxRows = todayActions.slice(0, 8).map(action => ({
-  title: action.title,
-  detail: action.detail,
-  meta: `${action.due} / ${action.owner}`,
-  tone: action.tone,
-  href: action.href || '/admin/reports',
-}));
+const alertInboxRows = [
+  ...triggeredAlerts.map(alert => ({
+    title: alert.title,
+    detail: alert.detail,
+    meta: `${alert.area} / ${alert.severity}`,
+    tone: alert.severity === 'critical' ? 'critical' : alert.severity === 'warn' ? 'high' : 'medium',
+    href: alert.target_href || '/admin/alerts',
+  })),
+  ...todayActions.map(action => ({
+    title: action.title,
+    detail: action.detail,
+    meta: `${action.due} / ${action.owner}`,
+    tone: action.tone,
+    href: action.href || '/admin/reports',
+  })),
+].slice(0, 8);
 
 const deliveryRows = [
   { label: 'AI診断生成停滞', value: `${leads.filter(l => ['verified', 'processing'].includes(l.status || '') && ageHours(l.updated_at || l.created_at) >= aiProcessingSlaHours).length}件`, detail: `${aiProcessingSlaHours}時間以上更新なし`, tone: 'warn' },
@@ -244,7 +282,14 @@ const knowledgeRows = [
   { label: '登録ナレッジ', value: `${knowledgeTotal}件`, detail: '社内DBの種', tone: 'ok' },
   { label: 'demo-safe', value: `${knowledgeDemoSafe}件`, detail: '将来デモ公開候補', tone: knowledgeDemoSafe ? 'ok' : 'warn' },
   { label: 'demo-ready', value: `${knowledgeDemoReady}件`, detail: '営業デモ即利用', tone: knowledgeDemoReady ? 'ok' : 'low' },
-  { label: 'SOP化/育成待ち', value: `${knowledgeSeed + knowledgeStale}件`, detail: 'seedまたは30日超', tone: knowledgeSeed + knowledgeStale ? 'warn' : 'ok' },
+  { label: '不足キュー', value: `${openKnowledgeGaps.length}件`, detail: '質問から追加候補化', tone: openKnowledgeGaps.length ? 'warn' : 'ok' },
+];
+
+const customerRows = [
+  { label: '登録顧客', value: `${customerResult.customers.length}件`, detail: `継続中 ${activeCustomers}件`, tone: customerResult.customers.length ? 'ok' : 'low' },
+  { label: '進行案件', value: `${openCustomerProjects.length}件`, detail: '完了・中止以外', tone: openCustomerProjects.length ? 'ok' : 'low' },
+  { label: '月額見込み', value: `¥${yen.format(customerMrr)}`, detail: '保守・継続支援', tone: customerMrr ? 'ok' : 'low' },
+  { label: '期限案件', value: `${openCustomerProjects.filter(project => project.due_date && project.due_date <= new Date().toISOString().slice(0, 10)).length}件`, detail: '今日以前の次アクション', tone: openCustomerProjects.some(project => project.due_date && project.due_date <= new Date().toISOString().slice(0, 10)) ? 'warn' : 'ok' },
 ];
 
 const capacityRows = [
@@ -316,10 +361,10 @@ function statusBadge(s?: string | null) {
 <AdminLayout title="ダッシュボード" active="dashboard">
   <div class="dash-grid">
 
-    {(dbError || eventsError || taskSummary.error) && (
+    {(dbError || eventsError || taskSummary.error || customerResult.error || gapResult.error || alertRuleResult.error) && (
       <div class="dash-error">
         <i class="fas fa-circle-exclamation"></i>
-        <span>{dbError || eventsError || taskSummary.error}</span>
+        <span>{dbError || eventsError || taskSummary.error || customerResult.error || gapResult.error || alertRuleResult.error}</span>
       </div>
     )}
 
@@ -403,8 +448,24 @@ function statusBadge(s?: string | null) {
 
       <article class="panel">
         <div class="panel-head">
+          <h2 class="panel-title">顧客・案件管理</h2>
+          <a href="/admin/customers" class="panel-link">顧客・案件 →</a>
+        </div>
+        <div class="ops-list">
+          {customerRows.map((row) => (
+            <div class={`ops-row ops-row--${row.tone}`}>
+              <span>{row.label}</span>
+              <strong>{row.value}</strong>
+              <small>{row.detail}</small>
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
           <h2 class="panel-title">ナレッジDB成長</h2>
-          <a href="/admin/knowledge" class="panel-link">ナレッジ →</a>
+          <a href="/admin/knowledge-gaps" class="panel-link">不足キュー →</a>
         </div>
         <div class="ops-list">
           {knowledgeRows.map((row) => (

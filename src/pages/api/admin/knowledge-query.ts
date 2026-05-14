@@ -6,7 +6,12 @@ import {
   knowledgeDocs,
   searchKnowledgeDocs,
 } from '../../../lib/optiens-knowledge'
-import { dbKnowledgeEntryToDoc, listKnowledgeEntries } from '../../../lib/admin-ops'
+import {
+  createKnowledgeGap,
+  dbKnowledgeEntryToDoc,
+  listKnowledgeEntries,
+  logAdminAudit,
+} from '../../../lib/admin-ops'
 
 const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
 const OPENAI_MODEL = import.meta.env.OPENAI_MODEL || 'gpt-5.5'
@@ -51,7 +56,7 @@ async function logKnowledgeEvent(input: {
   error?: string
 }) {
   if (!supabase) return
-  await supabase.from('ai_api_events').insert({
+  const { error } = await supabase.from('ai_api_events').insert({
     workflow: 'knowledge_query',
     provider: 'openai',
     model: OPENAI_MODEL,
@@ -63,9 +68,8 @@ async function logKnowledgeEvent(input: {
     total_tokens: input.usage?.total_tokens ?? null,
     error_type: input.status === 'error' ? 'knowledge_query' : null,
     error_message: input.error ? input.error.slice(0, 1000) : null,
-  }).catch((error) => {
-    console.warn('[knowledge-query] ai_api_events log skipped:', error?.message || error)
   })
+  if (error) console.warn('[knowledge-query] ai_api_events log skipped:', error.message)
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -92,6 +96,22 @@ export const POST: APIRoute = async ({ request }) => {
     const answer = sources.length
       ? `OpenAI APIが未設定のため、検索結果だけを返します。\n\n${sources.map((source) => `- ${source.title}: ${source.summary}`).join('\n')}`
       : 'OpenAI APIが未設定で、該当するナレッジも見つかりませんでした。'
+    if (!sources.length) {
+      await createKnowledgeGap({
+        question,
+        source: 'knowledge_query',
+        priority: 'medium',
+        answer_excerpt: answer,
+        metadata: { reason: 'openai_not_configured', sources: 0 },
+      }, 'admin', request)
+    }
+    await logAdminAudit({
+      action: 'knowledge_query.ask',
+      target_table: 'knowledge_entries',
+      summary: `ナレッジ質問: ${question.slice(0, 80)}`,
+      metadata: { fallback: true, sources: sources.length },
+      request,
+    })
     return json({ answer, sources, fallback: true })
   }
 
@@ -141,15 +161,62 @@ export const POST: APIRoute = async ({ request }) => {
     if (!res.ok) {
       const message = data.error?.message || `OpenAI HTTP ${res.status}`
       await logKnowledgeEvent({ status: 'error', startedAt, error: message })
+      await createKnowledgeGap({
+        question,
+        source: 'knowledge_query',
+        priority: 'high',
+        answer_excerpt: message,
+        metadata: { reason: 'openai_http_error', sources: sources.length, status: res.status },
+      }, 'admin', request)
+      await logAdminAudit({
+        action: 'knowledge_query.error',
+        target_table: 'knowledge_entries',
+        summary: `ナレッジ質問エラー: ${question.slice(0, 80)}`,
+        metadata: { error: message, sources: sources.length, status: res.status },
+        request,
+      })
       return json({ error: message, sources }, 500)
     }
 
     const answer = extractOutputText(data) || '回答を生成できませんでした。'
     await logKnowledgeEvent({ status: 'success', startedAt, usage: data.usage })
+    const hasKnowledgeGap = !sources.length
+      || answer.includes('現時点のナレッジには不足')
+      || answer.includes('ナレッジには不足')
+    if (hasKnowledgeGap) {
+      await createKnowledgeGap({
+        question,
+        source: 'knowledge_query',
+        priority: sources.length ? 'medium' : 'high',
+        answer_excerpt: answer,
+        metadata: { reason: sources.length ? 'insufficient_answer' : 'no_sources', sources: sources.length },
+      }, 'admin', request)
+    }
+    await logAdminAudit({
+      action: 'knowledge_query.ask',
+      target_table: 'knowledge_entries',
+      summary: `ナレッジ質問: ${question.slice(0, 80)}`,
+      metadata: { sources: sources.length, gap_created: hasKnowledgeGap, usage: data.usage },
+      request,
+    })
     return json({ answer, sources })
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
     await logKnowledgeEvent({ status: 'error', startedAt, error: message })
+    await createKnowledgeGap({
+      question,
+      source: 'knowledge_query',
+      priority: 'high',
+      answer_excerpt: message,
+      metadata: { reason: 'api_error', sources: sources.length },
+    }, 'admin', request)
+    await logAdminAudit({
+      action: 'knowledge_query.error',
+      target_table: 'knowledge_entries',
+      summary: `ナレッジ質問エラー: ${question.slice(0, 80)}`,
+      metadata: { error: message, sources: sources.length },
+      request,
+    })
     return json({ error: message, sources }, 500)
   }
 }

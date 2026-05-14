@@ -1,17 +1,20 @@
 ---
 export interface Props {
   title: string;
-  active?: 'leads' | 'funnel' | 'api-status' | 'knowledge' | 'reports' | 'dashboard' | 'settings' | 'audit';
+  active?: 'leads' | 'customers' | 'funnel' | 'api-status' | 'knowledge' | 'knowledge-gaps' | 'reports' | 'alerts' | 'dashboard' | 'settings' | 'audit';
 }
 
 const { title, active = 'leads' } = Astro.props;
 
 const nav = [
   { id: 'leads', label: 'リード管理', icon: 'fa-users', href: '/admin/leads' },
+  { id: 'customers', label: '顧客・案件', icon: 'fa-briefcase', href: '/admin/customers' },
   { id: 'funnel', label: '営業ファネル', icon: 'fa-filter-circle-dollar', href: '/admin/funnel' },
   { id: 'reports', label: '今日の対応', icon: 'fa-list-check', href: '/admin/reports' },
+  { id: 'alerts', label: 'アラート', icon: 'fa-bell', href: '/admin/alerts' },
   { id: 'api-status', label: 'API稼働状況', icon: 'fa-heart-pulse', href: '/admin/api-status' },
   { id: 'knowledge', label: 'ナレッジ', icon: 'fa-book', href: '/admin/knowledge' },
+  { id: 'knowledge-gaps', label: '不足キュー', icon: 'fa-circle-question', href: '/admin/knowledge-gaps' },
   { id: 'dashboard', label: 'ダッシュボード', icon: 'fa-chart-bar', href: '/admin/dashboard' },
   { id: 'settings', label: '管理設定', icon: 'fa-sliders', href: '/admin/settings' },
   { id: 'audit', label: '監査ログ', icon: 'fa-clock-rotate-left', href: '/admin/audit' },

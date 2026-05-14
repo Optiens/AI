@@ -1,0 +1,378 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { listKnowledgeGaps } from '../../lib/admin-ops';
+
+const result = await listKnowledgeGaps();
+const gaps = result.gaps;
+const openGaps = gaps.filter((gap) => gap.status === 'open');
+const convertedGaps = gaps.filter((gap) => gap.status === 'converted');
+const dismissedGaps = gaps.filter((gap) => gap.status === 'dismissed');
+const dateFmt = new Intl.DateTimeFormat('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+function formatDate(value?: string | null) {
+  return value ? dateFmt.format(new Date(value)) : '-';
+}
+
+const statusLabels = {
+  open: '未処理',
+  converted: 'ナレッジ化済み',
+  dismissed: '見送り',
+};
+
+const priorityLabels = {
+  low: '低',
+  medium: '中',
+  high: '高',
+};
+---
+
+<AdminLayout title="ナレッジ不足キュー" active="knowledge-gaps">
+  <section class="hero-panel">
+    <div>
+      <span>Knowledge Gaps</span>
+      <h2>答えられなかった質問を、販売できるナレッジ資産に変える</h2>
+      <p>社内メンバーやデモ利用者が質問したときに不足した情報を集め、業務手順・営業資料・FAQへ変換します。</p>
+    </div>
+    <a href="/admin/knowledge">ナレッジDBへ</a>
+  </section>
+
+  {result.error && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{result.error}</span>
+    </div>
+  )}
+
+  <section class="kpi-grid">
+    <article><span>未処理</span><strong>{openGaps.length}件</strong><small>ナレッジ化待ち</small></article>
+    <article><span>変換済み</span><strong>{convertedGaps.length}件</strong><small>運用ナレッジへ反映</small></article>
+    <article><span>見送り</span><strong>{dismissedGaps.length}件</strong><small>対象外・重複</small></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Add Gap</span>
+        <h3>不足項目を手動追加</h3>
+      </div>
+      <p id="gap-result">保存待ち</p>
+    </div>
+    <form class="gap-form" id="gap-create-form">
+      <input type="hidden" name="action" value="create" />
+      <label class="wide">
+        <span>質問・不足内容</span>
+        <input name="question" required placeholder="例: 有償レポート納品後のフォロー手順は？" />
+      </label>
+      <label>
+        <span>カテゴリ候補</span>
+        <input name="suggested_category" placeholder="operations / sales / ai..." />
+      </label>
+      <label>
+        <span>優先度</span>
+        <select name="priority">
+          <option value="medium">中</option>
+          <option value="high">高</option>
+          <option value="low">低</option>
+        </select>
+      </label>
+      <button type="submit"><i class="fas fa-plus"></i> 追加</button>
+    </form>
+  </section>
+
+  <section class="gap-list">
+    {gaps.length === 0 ? (
+      <p class="empty-state">ナレッジ不足はまだ登録されていません。</p>
+    ) : gaps.map((gap) => (
+      <article class={`gap-card gap-card--${gap.status}`}>
+        <header>
+          <span>{statusLabels[gap.status]}</span>
+          <small>{formatDate(gap.created_at)}</small>
+        </header>
+        <h3>{gap.question}</h3>
+        {gap.answer_excerpt && <p>{gap.answer_excerpt}</p>}
+        <div class="meta-row">
+          <b>優先度 {priorityLabels[gap.priority]}</b>
+          <b>{gap.suggested_category || 'カテゴリ未設定'}</b>
+          <b>{gap.source}</b>
+        </div>
+        <form class="gap-update-form">
+          <input type="hidden" name="action" value="update" />
+          <input type="hidden" name="id" value={String(gap.id)} />
+          <select name="status" aria-label="ステータス">
+            <option value="open" selected={gap.status === 'open'}>未処理</option>
+            <option value="converted" selected={gap.status === 'converted'}>ナレッジ化済み</option>
+            <option value="dismissed" selected={gap.status === 'dismissed'}>見送り</option>
+          </select>
+          <input name="linked_knowledge_id" placeholder="関連ナレッジID" value={gap.linked_knowledge_id || ''} />
+          <button type="submit"><i class="fas fa-check"></i> 更新</button>
+          <a href={`/admin/knowledge?draft=${encodeURIComponent(gap.question)}`}>ナレッジを書く</a>
+        </form>
+      </article>
+    ))}
+  </section>
+</AdminLayout>
+
+<script is:inline>
+  (function() {
+    const result = document.getElementById('gap-result');
+
+    async function submit(form) {
+      const data = Object.fromEntries(new FormData(form).entries());
+      const res = await fetch('/api/admin/knowledge-gaps', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok || body.error) throw new Error(body.error || `HTTP ${res.status}`);
+    }
+
+    document.getElementById('gap-create-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (result) result.textContent = '保存中...';
+      try {
+        await submit(event.currentTarget);
+        if (result) result.textContent = '追加しました。再読み込みします。';
+        location.reload();
+      } catch (error) {
+        if (result) result.textContent = error instanceof Error ? error.message : '保存に失敗しました';
+      }
+    });
+
+    document.querySelectorAll('.gap-update-form').forEach((form) => {
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        try {
+          await submit(form);
+          location.reload();
+        } catch (error) {
+          alert(error instanceof Error ? error.message : '更新に失敗しました');
+        }
+      });
+    });
+  })();
+</script>
+
+<style>
+  .hero-panel,
+  .panel,
+  .gap-card,
+  .kpi-grid article {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: center;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span,
+  .kpi-grid span,
+  .gap-card header span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3,
+  strong {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.18rem;
+  }
+
+  .hero-panel p,
+  .gap-card p,
+  .empty-state,
+  .panel-head p {
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+  }
+
+  .hero-panel a {
+    color: var(--admin-secondary);
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .alert-box {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .kpi-grid article,
+  .panel,
+  .gap-card {
+    padding: 16px;
+  }
+
+  .kpi-grid strong {
+    display: block;
+    margin: 8px 0 4px;
+    font-size: 1.32rem;
+  }
+
+  .kpi-grid small,
+  .gap-card small {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .panel {
+    margin-bottom: 18px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .gap-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) 220px 140px 110px;
+    gap: 10px;
+    align-items: end;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: var(--admin-muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+
+  input,
+  select {
+    width: 100%;
+    min-height: 38px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 0.86rem;
+  }
+
+  button,
+  .gap-update-form a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    min-height: 38px;
+    border: 0;
+    border-radius: 7px;
+    background: var(--admin-secondary);
+    color: #fff;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .gap-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .gap-card--open {
+    border-color: rgba(228, 138, 149, 0.42);
+  }
+
+  .gap-card header,
+  .meta-row,
+  .gap-update-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .gap-card header {
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .gap-card h3 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+  }
+
+  .meta-row {
+    margin: 12px 0;
+  }
+
+  .meta-row b {
+    display: inline-flex;
+    min-height: 24px;
+    align-items: center;
+    padding: 0 8px;
+    border-radius: 999px;
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.16);
+    font-size: 0.68rem;
+  }
+
+  .gap-update-form {
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr) 92px 120px;
+  }
+
+  @media (max-width: 980px) {
+    .kpi-grid,
+    .gap-form,
+    .gap-list,
+    .gap-update-form {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero-panel {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

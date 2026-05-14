@@ -424,6 +424,21 @@ function maturityLabel(value: string) {
       if (fields[name]) fields[name].value = value || '';
     }
 
+    const draftQuestion = new URLSearchParams(window.location.search).get('draft');
+    if (draftQuestion) {
+      const title = draftQuestion.length > 52 ? `${draftQuestion.slice(0, 52)}...` : draftQuestion;
+      setField('title', title);
+      setField('category', 'operations');
+      setField('owner', 'COO');
+      setField('visibility', 'internal');
+      setField('maturity', 'seed');
+      setField('tags', 'ナレッジ不足, 業務手順');
+      setField('summary', `未整備の質問: ${draftQuestion}`);
+      setField('body', `## 質問\n${draftQuestion}\n\n## 現時点の回答\n\n## 業務手順\n\n## デモ公開時の注意\n`);
+      entryResult.textContent = '不足キューから下書きを作成しました。内容を整えて保存してください。';
+      entryForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     document.querySelectorAll('.edit-knowledge-button').forEach((editButton) => {
       editButton.addEventListener('click', () => {
         setField('id', editButton.dataset.id);

@@ -28,6 +28,13 @@ const htmlResponse = (body: string, status = 200) =>
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
   })
 
+type VerificationLead = {
+  id: string
+  status: string | null
+  created_at: string
+  verified_at: string | null
+}
+
 /**
  * GET: 確認ボタン付きランディングページを表示するのみ。
  * DB 操作なし。token がない場合のみエラー表示。
@@ -98,7 +105,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // token で検索
-  let lead: { id: string; status: string | null; created_at: string; verified_at: string | null } | null = null
+  let lead: VerificationLead | null = null
   try {
     const { data, error } = await supabase
       .from('diagnosis_leads')
@@ -113,7 +120,7 @@ export const POST: APIRoute = async ({ request }) => {
         500,
       )
     }
-    lead = data as typeof lead
+    lead = data as VerificationLead | null
   } catch (err: any) {
     console.error('[verify-diagnosis][POST] select threw:', err, tokenInfo)
     return htmlResponse(

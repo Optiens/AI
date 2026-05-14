@@ -124,7 +124,7 @@ export async function getBusinessTaskSummary(now = new Date(), horizonDays = 7):
     }
 
     const data = await res.json().catch(() => ({}))
-    const tasks = Array.isArray(data.items) ? data.items.map((task) => normalizeGoogleTask(task, list)) : []
+    const tasks = Array.isArray(data.items) ? data.items.map((task: any) => normalizeGoogleTask(task, list)) : []
     listCounts.set(list.id, tasks.length)
     all.push(...tasks)
   }
@@ -149,4 +149,3 @@ export async function getBusinessTaskSummary(now = new Date(), horizonDays = 7):
     all,
   }
 }
-

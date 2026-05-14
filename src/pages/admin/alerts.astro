@@ -1,0 +1,483 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { supabase } from '../../lib/supabase';
+import { getBusinessTaskSummary } from '../../lib/google-tasks';
+import { buildTodayActions } from '../../lib/ops-today';
+import {
+  evaluateAdminAlerts,
+  getAdminSettings,
+  getAlertRulesWithDefaults,
+  listCustomersWithProjects,
+  listKnowledgeGaps,
+  type AlertRule,
+} from '../../lib/admin-ops';
+
+type Lead = {
+  id: string | number;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  paid_at?: string | null;
+  report_sent_at?: string | null;
+  last_error?: string | null;
+  amount_jpy?: number | null;
+};
+
+type ApiEvent = {
+  id: number;
+  created_at: string;
+  status?: string | null;
+};
+
+let leads: Lead[] = [];
+let events: ApiEvent[] = [];
+let dbError = '';
+
+if (supabase) {
+  const [{ data: leadData, error: leadError }, { data: eventData, error: eventError }] = await Promise.all([
+    supabase
+      .from('diagnosis_leads')
+      .select('id, status, created_at, updated_at, paid_at, report_sent_at, last_error, amount_jpy')
+      .order('created_at', { ascending: false })
+      .limit(500),
+    supabase
+      .from('ai_api_events')
+      .select('id, created_at, status')
+      .order('created_at', { ascending: false })
+      .limit(500),
+  ]);
+  if (leadError) dbError = leadError.message;
+  else leads = (leadData as Lead[]) || [];
+  if (eventError) dbError = dbError || eventError.message;
+  else events = (eventData as ApiEvent[]) || [];
+} else {
+  dbError = 'Supabase が設定されていません';
+}
+
+const [tasks, settings, ruleResult, customerResult, gapResult] = await Promise.all([
+  getBusinessTaskSummary(new Date(), 7),
+  getAdminSettings(),
+  getAlertRulesWithDefaults(),
+  listCustomersWithProjects(),
+  listKnowledgeGaps(),
+]);
+
+const todayActions = buildTodayActions({ leads, events, tasks, now: new Date() });
+const projects = customerResult.customers.flatMap((customer) => customer.projects || []);
+const evaluatedAlerts = evaluateAdminAlerts({
+  leads,
+  events,
+  tasks,
+  settings: settings.values,
+  rules: ruleResult.rules,
+  projects,
+  knowledgeGaps: gapResult.gaps,
+  todayActionCount: todayActions.length,
+});
+const activeAlerts = evaluatedAlerts.filter((alert) => alert.triggered);
+const inactiveAlerts = evaluatedAlerts.filter((alert) => !alert.triggered);
+
+const severityLabels: Record<AlertRule['severity'], string> = {
+  info: '情報',
+  warn: '警告',
+  critical: '重大',
+};
+---
+
+<AdminLayout title="アラート" active="alerts">
+  <section class="hero-panel">
+    <div>
+      <span>Alert Rules</span>
+      <h2>毎朝見るべき異常をルール化する</h2>
+      <p>APIエラー、期限超過、SLA停滞、入金待ち、ナレッジ不足、顧客案件の期限リスクをしきい値で管理します。</p>
+    </div>
+    <strong class={activeAlerts.some((alert) => alert.severity === 'critical') ? 'critical' : activeAlerts.length ? 'warn' : 'ok'}>
+      {activeAlerts.length}件
+      <small>発火中</small>
+    </strong>
+  </section>
+
+  {(dbError || ruleResult.error || customerResult.error || gapResult.error || settings.error || tasks.error) && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{dbError || ruleResult.error || customerResult.error || gapResult.error || settings.error || tasks.error}</span>
+    </div>
+  )}
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Triggered</span>
+        <h3>発火中のアラート</h3>
+      </div>
+      <a href="/admin/reports">今日の対応へ</a>
+    </div>
+    {activeAlerts.length === 0 ? (
+      <p class="empty-state">現在発火中のアラートはありません。</p>
+    ) : (
+      <div class="alert-list">
+        {activeAlerts.map((alert) => (
+          <a class={`alert-row alert-row--${alert.severity}`} href={alert.target_href || '/admin/dashboard'}>
+            <span>{severityLabels[alert.severity]}</span>
+            <div>
+              <strong>{alert.title}</strong>
+              <p>{alert.detail}</p>
+            </div>
+            <small>{alert.area}</small>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Rules</span>
+        <h3>アラートルール</h3>
+      </div>
+      <p id="alert-rule-result">保存待ち</p>
+    </div>
+    <div class="rule-grid">
+      {ruleResult.rules.map((rule) => {
+        const current = evaluatedAlerts.find((alert) => alert.rule_id === rule.id);
+        return (
+          <form class={`rule-card rule-card--${rule.severity}`} data-rule-form>
+            <input type="hidden" name="id" value={rule.id} />
+            <input type="hidden" name="title" value={rule.title} />
+            <input type="hidden" name="area" value={rule.area} />
+            <input type="hidden" name="condition_key" value={rule.condition_key} />
+            <input type="hidden" name="description" value={rule.description || ''} />
+            <header>
+              <span>{rule.area}</span>
+              <strong>{rule.title}</strong>
+              <p>{rule.description}</p>
+            </header>
+            <div class="rule-state">
+              <b class={current?.triggered ? 'bad' : 'ok'}>{current?.value ?? 0}件</b>
+              <small>{current?.triggered ? '発火中' : '正常'}</small>
+            </div>
+            <label>
+              <span>しきい値</span>
+              <input name="threshold" type="number" min="0" step="1" value={String(rule.threshold)} />
+            </label>
+            <label>
+              <span>重大度</span>
+              <select name="severity">
+                <option value="info" selected={rule.severity === 'info'}>情報</option>
+                <option value="warn" selected={rule.severity === 'warn'}>警告</option>
+                <option value="critical" selected={rule.severity === 'critical'}>重大</option>
+              </select>
+            </label>
+            <label>
+              <span>通知先</span>
+              <input name="notify_email" type="email" value={rule.notify_email || ''} placeholder="任意" />
+            </label>
+            <label class="switch">
+              <input name="enabled" type="checkbox" checked={rule.enabled} />
+              <span>有効</span>
+            </label>
+            <button type="submit"><i class="fas fa-floppy-disk"></i> 保存</button>
+          </form>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Quiet Rules</span>
+        <h3>未発火ルール</h3>
+      </div>
+    </div>
+    <div class="quiet-grid">
+      {inactiveAlerts.map((alert) => (
+        <div>
+          <strong>{alert.title}</strong>
+          <span>{alert.detail}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+</AdminLayout>
+
+<script is:inline>
+  (function() {
+    const result = document.getElementById('alert-rule-result');
+
+    document.querySelectorAll('[data-rule-form]').forEach((form) => {
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const data = Object.fromEntries(new FormData(form).entries());
+        data.enabled = form.querySelector('[name="enabled"]')?.checked || false;
+        if (result) result.textContent = '保存中...';
+        try {
+          const res = await fetch('/api/admin/alert-rules', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+          const body = await res.json().catch(() => ({}));
+          if (!res.ok || body.error) throw new Error(body.error || `HTTP ${res.status}`);
+          if (result) result.textContent = '保存しました。再読み込みします。';
+          location.reload();
+        } catch (error) {
+          if (result) result.textContent = error instanceof Error ? error.message : '保存に失敗しました';
+        }
+      });
+    });
+  })();
+</script>
+
+<style>
+  .hero-panel,
+  .panel,
+  .rule-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span,
+  .rule-card header span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3,
+  strong {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.18rem;
+  }
+
+  .hero-panel p,
+  .rule-card p,
+  .alert-row p,
+  .empty-state,
+  .quiet-grid span {
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+  }
+
+  .hero-panel > strong {
+    display: grid;
+    place-items: center;
+    min-height: 110px;
+    border-radius: 8px;
+    color: #fff;
+    background: var(--admin-surface-2);
+    font-size: 1.5rem;
+  }
+
+  .hero-panel > strong small {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .hero-panel > strong.ok { border: 1px solid rgba(107, 133, 201, 0.44); }
+  .hero-panel > strong.warn,
+  .hero-panel > strong.critical { border: 1px solid rgba(228, 138, 149, 0.48); }
+
+  .alert-box {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
+  }
+
+  .panel {
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .panel-head a,
+  .panel-head p {
+    color: var(--admin-secondary);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .alert-row {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) 96px;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .alert-row--critical,
+  .alert-row--warn {
+    border-color: rgba(228, 138, 149, 0.46);
+  }
+
+  .alert-row > span,
+  .rule-state b {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 26px;
+    border-radius: 999px;
+    color: var(--admin-accent-soft);
+    background: rgba(228, 138, 149, 0.16);
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
+  .alert-row small,
+  label span,
+  .rule-state small {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .rule-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .rule-card {
+    display: grid;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .rule-card--critical,
+  .rule-card--warn {
+    border-color: rgba(228, 138, 149, 0.34);
+  }
+
+  .rule-state {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rule-state b.ok {
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.16);
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  input,
+  select {
+    min-height: 36px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    padding: 7px 9px;
+    font: inherit;
+    font-size: 0.84rem;
+  }
+
+  .switch {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .switch input {
+    width: 18px;
+    min-height: auto;
+  }
+
+  button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    border: 0;
+    border-radius: 7px;
+    background: var(--admin-secondary);
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .quiet-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .quiet-grid div {
+    min-height: 88px;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .quiet-grid strong,
+  .quiet-grid span {
+    display: block;
+  }
+
+  @media (max-width: 1180px) {
+    .rule-grid,
+    .quiet-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .hero-panel,
+    .rule-grid,
+    .quiet-grid,
+    .alert-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

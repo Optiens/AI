@@ -1,0 +1,590 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { supabase } from '../../lib/supabase';
+import { listCustomersWithProjects, type Customer, type CustomerProject } from '../../lib/admin-ops';
+
+type LeadCandidate = {
+  id: string | number;
+  company_name?: string | null;
+  person_name?: string | null;
+  email?: string | null;
+  industry?: string | null;
+  status?: string | null;
+  amount_jpy?: number | null;
+  created_at?: string | null;
+};
+
+const yen = new Intl.NumberFormat('ja-JP');
+const dateFmt = new Intl.DateTimeFormat('ja-JP', { timeZone: 'Asia/Tokyo', month: '2-digit', day: '2-digit' });
+const result = await listCustomersWithProjects();
+const customers = result.customers;
+let leadCandidates: LeadCandidate[] = [];
+let leadError = '';
+
+if (supabase) {
+  const { data, error } = await supabase
+    .from('diagnosis_leads')
+    .select('id, company_name, person_name, email, industry, status, amount_jpy, created_at')
+    .order('created_at', { ascending: false })
+    .limit(10);
+  if (error) leadError = error.message;
+  else leadCandidates = (data as LeadCandidate[]) || [];
+}
+
+function isOpenProject(project: CustomerProject) {
+  return !['done', 'cancelled'].includes(project.status);
+}
+
+function formatDate(value?: string | null) {
+  return value ? dateFmt.format(new Date(value)) : '-';
+}
+
+const projects = customers.flatMap((customer) => customer.projects || []);
+const openProjects = projects.filter(isOpenProject);
+const activeCustomers = customers.filter((customer) => customer.status === 'active').length;
+const mrr = openProjects.reduce((sum, project) => sum + (project.monthly_amount_jpy || 0), 0);
+const pipeline = openProjects.reduce((sum, project) => sum + (project.contract_amount_jpy || 0), 0);
+
+const customerStatusLabels: Record<Customer['status'], string> = {
+  prospect: '見込み',
+  active: '継続中',
+  paused: '保留',
+  churned: '解約',
+  closed: '終了',
+};
+
+const projectStatusLabels: Record<CustomerProject['status'], string> = {
+  lead: 'リード',
+  proposal: '提案中',
+  active: '進行中',
+  waiting: '待ち',
+  done: '完了',
+  paused: '保留',
+  cancelled: '中止',
+};
+---
+
+<AdminLayout title="顧客・案件管理" active="customers">
+  <section class="hero-panel">
+    <div>
+      <span>Customer Operations</span>
+      <h2>営業後の対応を顧客単位で管理する</h2>
+      <p>リードから顧客・案件へ移したあと、次アクション、納期、契約金額、月額、接触履歴を追跡します。</p>
+    </div>
+    <a href="/admin/funnel">営業ファネルへ</a>
+  </section>
+
+  {(result.error || leadError) && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{result.error || leadError}</span>
+    </div>
+  )}
+
+  <section class="kpi-grid">
+    <article><span>顧客数</span><strong>{customers.length}件</strong><small>継続中 {activeCustomers}件</small></article>
+    <article><span>進行案件</span><strong>{openProjects.length}件</strong><small>完了・中止以外</small></article>
+    <article><span>案件金額</span><strong>¥{yen.format(pipeline)}</strong><small>契約・提案金額</small></article>
+    <article><span>月額見込み</span><strong>¥{yen.format(mrr)}</strong><small>保守・継続支援</small></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>New Customer</span>
+        <h3>顧客・案件を追加</h3>
+      </div>
+      <p id="customer-result">保存待ち</p>
+    </div>
+    <form class="customer-form" id="customer-create-form">
+      <input type="hidden" name="action" value="create_customer_with_project" />
+      <label>
+        <span>リードID</span>
+        <input name="lead_id" list="lead-candidates" placeholder="任意" />
+      </label>
+      <label>
+        <span>会社名</span>
+        <input name="company_name" required placeholder="株式会社..." />
+      </label>
+      <label>
+        <span>担当者</span>
+        <input name="contact_name" placeholder="氏名" />
+      </label>
+      <label>
+        <span>メール</span>
+        <input name="email" type="email" placeholder="name@example.com" />
+      </label>
+      <label>
+        <span>業種</span>
+        <input name="industry" placeholder="飲食 / 建設 / 士業..." />
+      </label>
+      <label>
+        <span>顧客状態</span>
+        <select name="status">
+          <option value="prospect">見込み</option>
+          <option value="active">継続中</option>
+          <option value="paused">保留</option>
+          <option value="closed">終了</option>
+          <option value="churned">解約</option>
+        </select>
+      </label>
+      <label class="wide">
+        <span>案件名</span>
+        <input name="project_title" required placeholder="AI活用診断 / 導入支援 / 保守対応" />
+      </label>
+      <label>
+        <span>種別</span>
+        <select name="project_type">
+          <option value="diagnosis">診断</option>
+          <option value="implementation">導入支援</option>
+          <option value="maintenance">保守</option>
+          <option value="support">個別支援</option>
+          <option value="other">その他</option>
+        </select>
+      </label>
+      <label>
+        <span>案件状態</span>
+        <select name="project_status">
+          <option value="lead">リード</option>
+          <option value="proposal">提案中</option>
+          <option value="active">進行中</option>
+          <option value="waiting">待ち</option>
+          <option value="done">完了</option>
+        </select>
+      </label>
+      <label>
+        <span>優先度</span>
+        <select name="priority">
+          <option value="medium">中</option>
+          <option value="high">高</option>
+          <option value="critical">最優先</option>
+          <option value="low">低</option>
+        </select>
+      </label>
+      <label>
+        <span>案件金額</span>
+        <input name="contract_amount_jpy" type="number" min="0" step="1000" value="0" />
+      </label>
+      <label>
+        <span>月額</span>
+        <input name="monthly_amount_jpy" type="number" min="0" step="1000" value="0" />
+      </label>
+      <label>
+        <span>次アクション日</span>
+        <input name="due_date" type="date" />
+      </label>
+      <label class="wide">
+        <span>次アクション</span>
+        <input name="next_action" placeholder="見積送付 / ヒアリング / 入金確認..." />
+      </label>
+      <label class="wide">
+        <span>メモ</span>
+        <textarea name="notes" rows="3" placeholder="顧客背景・決裁者・注意点"></textarea>
+      </label>
+      <button type="submit"><i class="fas fa-floppy-disk"></i> 保存</button>
+    </form>
+    <datalist id="lead-candidates">
+      {leadCandidates.map((lead) => (
+        <option value={String(lead.id)} label={`${lead.company_name || '会社名未設定'} / ${lead.status || '-'}`} />
+      ))}
+    </datalist>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Recent Leads</span>
+        <h3>顧客化候補</h3>
+      </div>
+      <a href="/admin/leads">リード管理へ</a>
+    </div>
+    <div class="lead-strip">
+      {leadCandidates.map((lead) => (
+        <article>
+          <strong>{lead.company_name || lead.person_name || `Lead #${lead.id}`}</strong>
+          <span>{lead.status || '-'} / {lead.industry || '業種未設定'}</span>
+          <small>{formatDate(lead.created_at)} / ¥{yen.format(lead.amount_jpy || 0)}</small>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="customer-list">
+    {customers.length === 0 ? (
+      <p class="empty-state">まだ顧客・案件が登録されていません。上のフォームから最初の顧客を追加してください。</p>
+    ) : customers.map((customer) => (
+      <article class="customer-card">
+        <header>
+          <div>
+            <span>{customerStatusLabels[customer.status]}</span>
+            <h3>{customer.company_name}</h3>
+            <p>{customer.contact_name || '担当者未設定'} / {customer.email || 'メール未設定'} / {customer.industry || '業種未設定'}</p>
+          </div>
+          <small>更新 {formatDate(customer.updated_at)}</small>
+        </header>
+        <div class="project-list">
+          {(customer.projects || []).length === 0 ? (
+            <p class="empty-state">案件は未登録です。</p>
+          ) : customer.projects?.map((project) => (
+            <div class={`project-row project-row--${project.priority}`}>
+              <span>{projectStatusLabels[project.status]}</span>
+              <div>
+                <strong>{project.title}</strong>
+                <p>{project.next_action || '次アクション未設定'} / 期限 {project.due_date || '-'}</p>
+              </div>
+              <small>¥{yen.format(project.contract_amount_jpy || 0)} / 月¥{yen.format(project.monthly_amount_jpy || 0)}</small>
+            </div>
+          ))}
+        </div>
+        <form class="inline-form customer-event-form">
+          <input type="hidden" name="action" value="add_event" />
+          <input type="hidden" name="customer_id" value={customer.id} />
+          <select name="event_type" aria-label="メモ種別">
+            <option value="note">メモ</option>
+            <option value="call">電話</option>
+            <option value="meeting">MTG</option>
+            <option value="email">メール</option>
+          </select>
+          <input name="summary" placeholder="接触履歴・決定事項を追加" required />
+          <button type="submit"><i class="fas fa-plus"></i></button>
+        </form>
+        {(customer.recent_events || []).length > 0 && (
+          <div class="event-list">
+            {customer.recent_events?.map((event) => (
+              <p><b>{event.event_type}</b>{event.summary}<small>{formatDate(event.occurred_at)}</small></p>
+            ))}
+          </div>
+        )}
+      </article>
+    ))}
+  </section>
+</AdminLayout>
+
+<script is:inline>
+  (function() {
+    const result = document.getElementById('customer-result');
+
+    function formToJson(form) {
+      return Object.fromEntries(new FormData(form).entries());
+    }
+
+    async function submitForm(form) {
+      const res = await fetch('/api/admin/customers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formToJson(form)),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
+      return data;
+    }
+
+    document.getElementById('customer-create-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      if (result) result.textContent = '保存中...';
+      try {
+        await submitForm(form);
+        if (result) result.textContent = '保存しました。再読み込みします。';
+        location.reload();
+      } catch (error) {
+        if (result) result.textContent = error instanceof Error ? error.message : '保存に失敗しました';
+      }
+    });
+
+    document.querySelectorAll('.customer-event-form').forEach((form) => {
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        try {
+          await submitForm(form);
+          location.reload();
+        } catch (error) {
+          alert(error instanceof Error ? error.message : '保存に失敗しました');
+        }
+      });
+    });
+  })();
+</script>
+
+<style>
+  .hero-panel,
+  .panel,
+  .customer-card,
+  .kpi-grid article {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: center;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span,
+  .kpi-grid span,
+  .customer-card header span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3,
+  strong {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.18rem;
+  }
+
+  .hero-panel p,
+  .customer-card p,
+  .project-row p,
+  .empty-state,
+  .lead-strip span,
+  .lead-strip small {
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+  }
+
+  .hero-panel a,
+  .panel-head a {
+    color: var(--admin-secondary);
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .alert-box {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .kpi-grid article,
+  .panel,
+  .customer-card {
+    padding: 16px;
+  }
+
+  .kpi-grid strong {
+    display: block;
+    margin: 8px 0 4px;
+    font-size: 1.28rem;
+  }
+
+  .kpi-grid small,
+  .project-row small,
+  .event-list small,
+  .panel-head p {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .panel {
+    margin-bottom: 18px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .customer-form {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: var(--admin-muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+
+  label.wide {
+    grid-column: span 2;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 38px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 0.86rem;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  button {
+    align-self: end;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    min-height: 38px;
+    border: 0;
+    border-radius: 7px;
+    background: var(--admin-secondary);
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .lead-strip {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .lead-strip article {
+    min-height: 92px;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .lead-strip strong,
+  .lead-strip span,
+  .lead-strip small {
+    display: block;
+    overflow-wrap: anywhere;
+  }
+
+  .customer-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .customer-card header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .project-list,
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 70px minmax(0, 1fr) 120px;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .project-row > span {
+    display: inline-flex;
+    justify-content: center;
+    min-height: 24px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.16);
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
+  .project-row--critical,
+  .project-row--high {
+    border-color: rgba(228, 138, 149, 0.45);
+  }
+
+  .inline-form {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) 42px;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .inline-form button {
+    min-width: 42px;
+  }
+
+  .event-list {
+    margin-top: 10px;
+  }
+
+  .event-list p {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) 48px;
+    gap: 8px;
+    padding: 8px 0;
+    border-top: 1px solid rgba(107, 133, 201, 0.18);
+  }
+
+  @media (max-width: 1180px) {
+    .kpi-grid,
+    .lead-strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .customer-form,
+    .customer-list {
+      grid-template-columns: 1fr;
+    }
+
+    label.wide {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero-panel,
+    .kpi-grid,
+    .lead-strip,
+    .project-row,
+    .inline-form {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

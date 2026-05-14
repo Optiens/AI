@@ -4,6 +4,16 @@ import { Resend } from 'resend'
 import { makeToken, COOKIE_NAME, getAdminPassword } from '../../../middleware'
 import { getBusinessTaskSummary, type BusinessTaskSummary } from '../../../lib/google-tasks'
 import { buildTodayActions, type TodayAction } from '../../../lib/ops-today'
+import {
+  evaluateAdminAlerts,
+  getAdminSettings,
+  getAlertRulesWithDefaults,
+  listCustomersWithProjects,
+  listKnowledgeGaps,
+  logAdminAudit,
+  recordTriggeredAlerts,
+  type EvaluatedAlert,
+} from '../../../lib/admin-ops'
 
 const CRON_SECRET = import.meta.env.CRON_SECRET
 const SUPABASE_URL = import.meta.env.SUPABASE_URL
@@ -129,7 +139,7 @@ function estimateCostJpy(events: AiApiEvent[]) {
 
 async function logEmailEvent(status: 'success' | 'error', message?: string) {
   if (!supabase) return
-  await supabase.from('ai_api_events').insert({
+  const { error } = await supabase.from('ai_api_events').insert({
     workflow: 'daily_ops_email',
     provider: 'resend',
     operation: 'emails.send',
@@ -137,9 +147,8 @@ async function logEmailEvent(status: 'success' | 'error', message?: string) {
     error_type: status === 'error' ? 'email' : null,
     error_message: message ? String(message).slice(0, 1000) : null,
     metadata: { to: MAIL_TO },
-  }).catch((error) => {
-    console.warn('[daily-ops-email] log skipped:', error?.message || error)
   })
+  if (error) console.warn('[daily-ops-email] log skipped:', error.message)
 }
 
 async function loadData() {
@@ -220,7 +229,7 @@ function actionLine(action: TodayAction) {
   return `- [${action.due}] ${action.title}: ${action.detail}（${action.owner}）`
 }
 
-function buildEmail(summary: ReturnType<typeof buildSummary>) {
+function buildEmail(summary: ReturnType<typeof buildSummary>, activeAlerts: EvaluatedAlert[] = []) {
   const title = `【Optiens日次アラート】${tokyoDateTime.format(new Date())}`
   const costText = summary.estimatedCostJpy === null
     ? '単価未設定'
@@ -229,6 +238,7 @@ function buildEmail(summary: ReturnType<typeof buildSummary>) {
     || summary.aiIssueLeads.length > 0
     || summary.apiIssues24h.length > 0
     || summary.tasks.overdue.length > 0
+    || activeAlerts.some((alert) => alert.severity === 'critical')
     || summary.eventsError
     || summary.tasks.error
     ? '要確認あり'
@@ -249,6 +259,9 @@ Google Tasks:
 - 今日が期限: ${summary.tasks.today.length}件
 - 7日以内: ${summary.tasks.upcoming.length}件
 ${summary.tasks.error ? `- Google Tasks: ${summary.tasks.error}` : ''}
+
+アラート:
+${activeAlerts.length ? activeAlerts.map((alert) => `- [${alert.severity}] ${alert.title}: ${alert.detail}`).join('\n') : '- 発火中のアラートはありません'}
 
 案件:
 - 24時間以内の新規: ${summary.new24h}件
@@ -291,6 +304,13 @@ ${summary.eventsError ? `- AI通信ログDB: ${summary.eventsError}` : ''}
       <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${esc((event.error_message || '').slice(0, 120))}</td>
     </tr>
   `).join('')
+  const alertRows = activeAlerts.slice(0, 10).map((alert) => `
+    <tr>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${esc(alert.severity)}</td>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${esc(alert.title)}</td>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${esc(alert.detail)}</td>
+    </tr>
+  `).join('')
 
   const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Noto Sans JP',sans-serif;line-height:1.7;color:#172033;max-width:720px;">
     <h1 style="font-size:20px;margin:0 0 12px;">${esc(title)}</h1>
@@ -308,6 +328,9 @@ ${summary.eventsError ? `- AI通信ログDB: ${summary.eventsError}` : ''}
       <li>7日以内: <strong>${summary.tasks.upcoming.length}</strong>件</li>
       ${summary.tasks.error ? `<li>取得状況: <strong>${esc(summary.tasks.error)}</strong></li>` : ''}
     </ul>
+
+    <h2 style="font-size:15px;margin:20px 0 8px;">アラート</h2>
+    ${activeAlerts.length ? `<table style="border-collapse:collapse;width:100%;font-size:13px;"><thead><tr><th align="left">重大度</th><th align="left">項目</th><th align="left">内容</th></tr></thead><tbody>${alertRows}</tbody></table>` : '<p>発火中のアラートはありません。</p>'}
 
     <h2 style="font-size:15px;margin:20px 0 8px;">案件</h2>
     <ul>
@@ -354,7 +377,24 @@ export const GET: APIRoute = async ({ request }) => {
   try {
     const { leads, events, eventsError, tasks } = await loadData()
     const summary = buildSummary(leads, events, eventsError, tasks)
-    const email = buildEmail(summary)
+    const [settings, rules, customers, gaps] = await Promise.all([
+      getAdminSettings(),
+      getAlertRulesWithDefaults(),
+      listCustomersWithProjects(),
+      listKnowledgeGaps(),
+    ])
+    const activeAlerts = evaluateAdminAlerts({
+      leads,
+      events,
+      tasks,
+      settings: settings.values,
+      rules: rules.rules,
+      projects: customers.customers.flatMap((customer) => customer.projects || []),
+      knowledgeGaps: gaps.gaps,
+      todayActionCount: summary.todayActions.length,
+    }).filter((alert) => alert.triggered)
+    await recordTriggeredAlerts(activeAlerts, isAdminCookie(request) ? 'admin' : 'cron', request)
+    const email = buildEmail(summary, activeAlerts)
     const result = await resend.emails.send({
       from: MAIL_FROM,
       to: MAIL_TO,
@@ -363,6 +403,14 @@ export const GET: APIRoute = async ({ request }) => {
       html: email.html,
     })
     await logEmailEvent('success')
+    await logAdminAudit({
+      actor: isAdminCookie(request) ? 'admin' : 'cron',
+      action: 'daily_ops_email.send',
+      target_table: 'ai_api_events',
+      summary: `日次アラートメールを送信: ${MAIL_TO}`,
+      metadata: { active_alerts: activeAlerts.length, today_actions: summary.todayActions.length },
+      request,
+    })
     return json({
       ok: true,
       to: MAIL_TO,
@@ -372,11 +420,20 @@ export const GET: APIRoute = async ({ request }) => {
         aiIssueLeads: summary.aiIssueLeads.length,
         apiIssues24h: summary.apiIssues24h.length,
         todayActions: summary.todayActions.length,
+        activeAlerts: activeAlerts.length,
       },
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
     await logEmailEvent('error', message)
+    await logAdminAudit({
+      actor: isAdminCookie(request) ? 'admin' : 'cron',
+      action: 'daily_ops_email.error',
+      target_table: 'ai_api_events',
+      summary: '日次アラートメール送信に失敗',
+      metadata: { error: message },
+      request,
+    })
     return json({ error: message }, 500)
   }
 }

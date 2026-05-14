@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro'
 import { createClient } from '@supabase/supabase-js'
 import { makeToken, COOKIE_NAME, getAdminPassword } from '../../../middleware'
+import { logAdminAudit } from '../../../lib/admin-ops'
 
 const SUPABASE_URL = import.meta.env.SUPABASE_URL
 const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_ROLE_KEY
@@ -52,7 +53,7 @@ function truncateText(value: unknown, max = 700) {
 
 async function logAiApiEvent(row: HealthCheckRow) {
   if (!supabase) return
-  await supabase.from('ai_api_events').insert({
+  const { error } = await supabase.from('ai_api_events').insert({
     workflow: 'ops_health_check',
     provider: row.provider,
     operation: 'health.check',
@@ -65,9 +66,8 @@ async function logAiApiEvent(row: HealthCheckRow) {
       configured: row.configured,
       label: row.label,
     },
-  }).catch((error) => {
-    console.warn('[ops-health-check] ai_api_events log skipped:', error?.message || error)
   })
+  if (error) console.warn('[ops-health-check] ai_api_events log skipped:', error.message)
 }
 
 async function checkHttp(
@@ -151,6 +151,24 @@ async function checkSupabase(): Promise<HealthCheckRow[]> {
     message: migrationError ? migrationError.message : 'ai_api_events 適用済み',
   })
 
+  const adminTables = ['admin_audit_logs', 'customers', 'customer_projects', 'alert_rules', 'alert_events', 'knowledge_gaps']
+  for (const table of adminTables) {
+    const tableStartedAt = Date.now()
+    const { error: tableError } = await supabase!
+      .from(table)
+      .select('*', { count: 'exact', head: true })
+
+    rows.push({
+      id: table,
+      label: table,
+      provider: 'supabase',
+      configured,
+      status: tableError ? 'error' : 'ok',
+      latency_ms: Date.now() - tableStartedAt,
+      message: tableError ? tableError.message : `${table} 適用済み`,
+    })
+  }
+
   return rows
 }
 
@@ -229,6 +247,13 @@ export const POST: APIRoute = async ({ request }) => {
 
   const errorCount = rows.filter((row) => row.status === 'error').length
   const warnCount = rows.filter((row) => row.status === 'warn').length
+  await logAdminAudit({
+    action: 'ops_health_check.run',
+    target_table: 'ai_api_events',
+    summary: `ヘルスチェック実行: error ${errorCount} / warn ${warnCount}`,
+    metadata: { elapsed_ms: Date.now() - startedAt, rows },
+    request,
+  })
 
   return json({
     ok: errorCount === 0,

@@ -26,6 +26,7 @@ import {
   buildPaidDiagnosisReceiptText,
   buildPaidDiagnosisReceiptHtml,
 } from '../../../lib/paid-billing'
+import { logAdminAudit } from '../../../lib/admin-ops'
 
 const RESEND_API_KEY = import.meta.env.RESEND_API_KEY
 const MAIL_FROM = import.meta.env.CONTACT_FROM ?? 'no-reply@optiens.com'
@@ -130,6 +131,14 @@ export const POST: APIRoute = async ({ request }) => {
       console.error('[lead-update] update_fields error:', updErr)
       return json({ error: 'Update failed' }, 500)
     }
+    await logAdminAudit({
+      action: 'diagnosis_leads.update_fields',
+      target_table: 'diagnosis_leads',
+      target_id: id,
+      summary: `リード ${lead.application_id || id} の項目を更新`,
+      metadata: { updated: Object.keys(updates), before_status: lead.status, after_status: updates.status || lead.status },
+      request,
+    })
     return json({ ok: true, updated: Object.keys(updates) })
   }
 
@@ -162,6 +171,14 @@ export const POST: APIRoute = async ({ request }) => {
         console.error('[lead-update] referral_free email error:', e)
       }
     }
+    await logAdminAudit({
+      action: 'diagnosis_leads.mark_referral_free',
+      target_table: 'diagnosis_leads',
+      target_id: id,
+      summary: `リード ${lead.application_id || id} を紹介経由・無料化`,
+      metadata: { referral_from: referralFrom, before_status: lead.status },
+      request,
+    })
     return json({ ok: true, action: 'mark_referral_free' })
   }
 
@@ -197,6 +214,14 @@ export const POST: APIRoute = async ({ request }) => {
     if (!reportGeneration.ok) {
       console.error('[lead-update] paid report generation trigger failed:', reportGeneration)
     }
+    await logAdminAudit({
+      action: 'diagnosis_leads.mark_paid',
+      target_table: 'diagnosis_leads',
+      target_id: id,
+      summary: `リード ${lead.application_id || id} の入金確認`,
+      metadata: { before_status: lead.status, report_generation: reportGeneration },
+      request,
+    })
     return json({ ok: true, action: 'mark_paid', report_generation: reportGeneration })
   }
 
@@ -211,6 +236,14 @@ export const POST: APIRoute = async ({ request }) => {
       console.error('[lead-update] mark_report_sent error:', updErr)
       return json({ error: 'Update failed' }, 500)
     }
+    await logAdminAudit({
+      action: 'diagnosis_leads.mark_report_sent',
+      target_table: 'diagnosis_leads',
+      target_id: id,
+      summary: `リード ${lead.application_id || id} をレポート送付済みに更新`,
+      metadata: { before_status: lead.status },
+      request,
+    })
     return json({ ok: true, action: 'mark_report_sent' })
   }
 
@@ -224,6 +257,14 @@ export const POST: APIRoute = async ({ request }) => {
       console.error('[lead-update] change_status error:', updErr)
       return json({ error: 'Update failed' }, 500)
     }
+    await logAdminAudit({
+      action: 'diagnosis_leads.change_status',
+      target_table: 'diagnosis_leads',
+      target_id: id,
+      summary: `リード ${lead.application_id || id} のステータスを ${body.status} に変更`,
+      metadata: { before_status: lead.status, after_status: body.status },
+      request,
+    })
     return json({ ok: true, action: 'change_status', status: body.status })
   }
 
