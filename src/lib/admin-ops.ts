@@ -753,7 +753,7 @@ export async function listAlertRules(): Promise<{ rules: AlertRule[]; error?: st
   if (!supabase) return { rules: defaultAlertRules, error: 'Supabase が設定されていません' }
 
   const { data, error } = await supabase
-    .from('alert_rules')
+    .from('admin_alert_rules')
     .select('*')
     .order('area', { ascending: true })
     .order('title', { ascending: true })
@@ -801,7 +801,7 @@ export async function saveAlertRule(
   }
 
   const { data, error } = await supabase
-    .from('alert_rules')
+    .from('admin_alert_rules')
     .upsert(row, { onConflict: 'id' })
     .select('*')
     .single()
@@ -810,8 +810,8 @@ export async function saveAlertRule(
 
   await logAdminAudit({
     actor,
-    action: 'alert_rules.upsert',
-    target_table: 'alert_rules',
+    action: 'admin_alert_rules.upsert',
+    target_table: 'admin_alert_rules',
     target_id: id,
     summary: `アラートルール「${row.title}」を保存`,
     metadata: { threshold: row.threshold, severity: row.severity, enabled: row.enabled },
@@ -938,13 +938,13 @@ export async function recordTriggeredAlerts(
 
   if (!rows.length) return { ok: true, inserted: 0 }
 
-  const { error } = await supabase.from('alert_events').insert(rows)
+  const { error } = await supabase.from('admin_alert_events').insert(rows)
   if (error) return { ok: false, error: error.message }
 
   await logAdminAudit({
     actor,
-    action: 'alert_events.insert',
-    target_table: 'alert_events',
+    action: 'admin_alert_events.insert',
+    target_table: 'admin_alert_events',
     summary: `${rows.length}件のアラート発火を記録`,
     metadata: { rule_ids: rows.map((row) => row.rule_id) },
     request,

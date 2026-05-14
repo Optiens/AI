@@ -48,7 +48,7 @@ create table if not exists public.customer_events (
   created_by text
 );
 
-create table if not exists public.alert_rules (
+create table if not exists public.admin_alert_rules (
   id text primary key,
   title text not null,
   area text not null,
@@ -62,9 +62,9 @@ create table if not exists public.alert_rules (
   updated_by text
 );
 
-create table if not exists public.alert_events (
+create table if not exists public.admin_alert_events (
   id bigserial primary key,
-  rule_id text references public.alert_rules(id) on delete set null,
+  rule_id text references public.admin_alert_rules(id) on delete set null,
   triggered_at timestamptz not null default now(),
   status text not null default 'open' check (status in ('open', 'acknowledged', 'resolved')),
   severity text not null default 'warn' check (severity in ('info', 'warn', 'critical')),
@@ -107,11 +107,11 @@ create index if not exists idx_customer_projects_due_date
 create index if not exists idx_customer_events_customer_id
   on public.customer_events (customer_id, occurred_at desc);
 
-create index if not exists idx_alert_rules_enabled
-  on public.alert_rules (enabled);
+create index if not exists idx_admin_alert_rules_enabled
+  on public.admin_alert_rules (enabled);
 
-create index if not exists idx_alert_events_status
-  on public.alert_events (status, triggered_at desc);
+create index if not exists idx_admin_alert_events_status
+  on public.admin_alert_events (status, triggered_at desc);
 
 create index if not exists idx_knowledge_gaps_status
   on public.knowledge_gaps (status, created_at desc);
@@ -119,8 +119,8 @@ create index if not exists idx_knowledge_gaps_status
 alter table public.customers enable row level security;
 alter table public.customer_projects enable row level security;
 alter table public.customer_events enable row level security;
-alter table public.alert_rules enable row level security;
-alter table public.alert_events enable row level security;
+alter table public.admin_alert_rules enable row level security;
+alter table public.admin_alert_events enable row level security;
 alter table public.knowledge_gaps enable row level security;
 
 drop policy if exists "customers_service_role_all" on public.customers;
@@ -141,15 +141,15 @@ create policy "customer_events_service_role_all"
   using (auth.role() = 'service_role')
   with check (auth.role() = 'service_role');
 
-drop policy if exists "alert_rules_service_role_all" on public.alert_rules;
-create policy "alert_rules_service_role_all"
-  on public.alert_rules for all
+drop policy if exists "admin_alert_rules_service_role_all" on public.admin_alert_rules;
+create policy "admin_alert_rules_service_role_all"
+  on public.admin_alert_rules for all
   using (auth.role() = 'service_role')
   with check (auth.role() = 'service_role');
 
-drop policy if exists "alert_events_service_role_all" on public.alert_events;
-create policy "alert_events_service_role_all"
-  on public.alert_events for all
+drop policy if exists "admin_alert_events_service_role_all" on public.admin_alert_events;
+create policy "admin_alert_events_service_role_all"
+  on public.admin_alert_events for all
   using (auth.role() = 'service_role')
   with check (auth.role() = 'service_role');
 
@@ -163,9 +163,9 @@ grant usage on schema public to service_role;
 grant all on table public.customers to service_role;
 grant all on table public.customer_projects to service_role;
 grant all on table public.customer_events to service_role;
-grant all on table public.alert_rules to service_role;
-grant all on table public.alert_events to service_role;
+grant all on table public.admin_alert_rules to service_role;
+grant all on table public.admin_alert_events to service_role;
 grant all on table public.knowledge_gaps to service_role;
 grant usage, select on sequence public.customer_events_id_seq to service_role;
-grant usage, select on sequence public.alert_events_id_seq to service_role;
+grant usage, select on sequence public.admin_alert_events_id_seq to service_role;
 grant usage, select on sequence public.knowledge_gaps_id_seq to service_role;
