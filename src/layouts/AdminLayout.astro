@@ -1,16 +1,17 @@
 ---
 export interface Props {
   title: string;
-  active?: 'leads' | 'api-status' | 'knowledge' | 'reports' | 'dashboard';
+  active?: 'leads' | 'funnel' | 'api-status' | 'knowledge' | 'reports' | 'dashboard';
 }
 
 const { title, active = 'leads' } = Astro.props;
 
 const nav = [
   { id: 'leads', label: 'リード管理', icon: 'fa-users', href: '/admin/leads' },
+  { id: 'funnel', label: '営業ファネル', icon: 'fa-filter-circle-dollar', href: '/admin/funnel' },
+  { id: 'reports', label: '今日の対応', icon: 'fa-list-check', href: '/admin/reports' },
   { id: 'api-status', label: 'API稼働状況', icon: 'fa-heart-pulse', href: '/admin/api-status' },
   { id: 'knowledge', label: 'ナレッジ', icon: 'fa-book', href: '/admin/knowledge' },
-  { id: 'reports', label: 'レポート', icon: 'fa-file-alt', href: '/admin/reports' },
   { id: 'dashboard', label: 'ダッシュボード', icon: 'fa-chart-bar', href: '/admin/dashboard' },
 ] as const;
 ---

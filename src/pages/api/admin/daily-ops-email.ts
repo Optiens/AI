@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 import { makeToken, COOKIE_NAME, getAdminPassword } from '../../../middleware'
+import { getBusinessTaskSummary, type BusinessTaskSummary } from '../../../lib/google-tasks'
+import { buildTodayActions, type TodayAction } from '../../../lib/ops-today'
 
 const CRON_SECRET = import.meta.env.CRON_SECRET
 const SUPABASE_URL = import.meta.env.SUPABASE_URL
@@ -43,8 +45,10 @@ type Lead = {
 type AiApiEvent = {
   id: number
   created_at: string
+  workflow?: string | null
   provider?: string | null
   model?: string | null
+  operation?: string | null
   status?: string | null
   input_tokens?: number | null
   output_tokens?: number | null
@@ -143,7 +147,7 @@ async function loadData() {
 
   const { data: leadsData, error: leadsError } = await supabase
     .from('diagnosis_leads')
-    .select('id, created_at, updated_at, status, plan, amount_jpy, paid_at, verified_at, company_name, person_name, application_id, last_error')
+    .select('*')
     .order('created_at', { ascending: false })
     .limit(500)
 
@@ -151,18 +155,21 @@ async function loadData() {
 
   const { data: eventsData, error: eventsError } = await supabase
     .from('ai_api_events')
-    .select('id, created_at, provider, model, status, input_tokens, output_tokens, total_tokens, latency_ms, error_type, error_message')
+    .select('id, created_at, workflow, provider, model, operation, status, input_tokens, output_tokens, total_tokens, latency_ms, error_type, error_message')
     .order('created_at', { ascending: false })
     .limit(500)
+
+  const tasks = await getBusinessTaskSummary(new Date(), 7)
 
   return {
     leads: (leadsData || []) as Lead[],
     events: ((eventsError ? [] : eventsData) || []) as AiApiEvent[],
     eventsError: eventsError?.message || '',
+    tasks,
   }
 }
 
-function buildSummary(leads: Lead[], events: AiApiEvent[], eventsError: string) {
+function buildSummary(leads: Lead[], events: AiApiEvent[], eventsError: string, tasks: BusinessTaskSummary) {
   const now = Date.now()
   const oneHour = 60 * 60 * 1000
   const oneDay = 24 * oneHour
@@ -189,6 +196,7 @@ function buildSummary(leads: Lead[], events: AiApiEvent[], eventsError: string) 
   const monthEvents = events.filter((event) => parseTime(event.created_at) >= monthStart.getTime())
   const monthlyTokens = monthEvents.reduce((sum, event) => sum + (event.total_tokens || 0), 0)
   const estimatedCostJpy = estimateCostJpy(monthEvents)
+  const todayActions = buildTodayActions({ leads, events, tasks, now: new Date() })
 
   return {
     total: leads.length,
@@ -203,7 +211,13 @@ function buildSummary(leads: Lead[], events: AiApiEvent[], eventsError: string) 
     monthlyTokens,
     estimatedCostJpy,
     eventsError,
+    tasks,
+    todayActions,
   }
+}
+
+function actionLine(action: TodayAction) {
+  return `- [${action.due}] ${action.title}: ${action.detail}（${action.owner}）`
 }
 
 function buildEmail(summary: ReturnType<typeof buildSummary>) {
@@ -211,13 +225,30 @@ function buildEmail(summary: ReturnType<typeof buildSummary>) {
   const costText = summary.estimatedCostJpy === null
     ? '単価未設定'
     : `約 ¥${yen.format(summary.estimatedCostJpy)}`
-  const overall = summary.aiIssueLeads.length > 0 || summary.apiIssues24h.length > 0 || summary.eventsError
+  const overall = summary.todayActions.some((action) => action.tone === 'critical')
+    || summary.aiIssueLeads.length > 0
+    || summary.apiIssues24h.length > 0
+    || summary.tasks.overdue.length > 0
+    || summary.eventsError
+    || summary.tasks.error
     ? '要確認あり'
     : '異常なし'
+  const actionText = summary.todayActions.length
+    ? summary.todayActions.slice(0, 10).map(actionLine).join('\n')
+    : '- 今日すぐ対応すべき項目はありません'
 
   const text = `${title}
 
 総合判定: ${overall}
+
+今日の対応:
+${actionText}
+
+Google Tasks:
+- 期限超過: ${summary.tasks.overdue.length}件
+- 今日が期限: ${summary.tasks.today.length}件
+- 7日以内: ${summary.tasks.upcoming.length}件
+${summary.tasks.error ? `- Google Tasks: ${summary.tasks.error}` : ''}
 
 案件:
 - 24時間以内の新規: ${summary.new24h}件
@@ -234,6 +265,15 @@ ${summary.eventsError ? `- AI通信ログDB: ${summary.eventsError}` : ''}
 
 管理画面: ${SITE_URL}/admin/leads
 `
+
+  const actionRows = summary.todayActions.slice(0, 10).map((action) => `
+    <tr>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${esc(action.due)}</td>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${esc(action.title)}</td>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${esc(action.detail.slice(0, 160))}</td>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${esc(action.owner)}</td>
+    </tr>
+  `).join('')
 
   const issueRows = summary.aiIssueLeads.slice(0, 8).map((lead) => `
     <tr>
@@ -257,6 +297,17 @@ ${summary.eventsError ? `- AI通信ログDB: ${summary.eventsError}` : ''}
     <p style="margin:0 0 18px;padding:10px 12px;border-radius:8px;background:${overall === '異常なし' ? '#ecfdf5' : '#fff7ed'};border:1px solid ${overall === '異常なし' ? '#a7f3d0' : '#fed7aa'};">
       総合判定: <strong>${esc(overall)}</strong>
     </p>
+
+    <h2 style="font-size:15px;margin:20px 0 8px;">今日の対応</h2>
+    ${summary.todayActions.length ? `<table style="border-collapse:collapse;width:100%;font-size:13px;"><thead><tr><th align="left">期限</th><th align="left">項目</th><th align="left">内容</th><th align="left">担当</th></tr></thead><tbody>${actionRows}</tbody></table>` : '<p>今日すぐ対応すべき項目はありません。</p>'}
+
+    <h2 style="font-size:15px;margin:20px 0 8px;">Google Tasks</h2>
+    <ul>
+      <li>期限超過: <strong>${summary.tasks.overdue.length}</strong>件</li>
+      <li>今日が期限: <strong>${summary.tasks.today.length}</strong>件</li>
+      <li>7日以内: <strong>${summary.tasks.upcoming.length}</strong>件</li>
+      ${summary.tasks.error ? `<li>取得状況: <strong>${esc(summary.tasks.error)}</strong></li>` : ''}
+    </ul>
 
     <h2 style="font-size:15px;margin:20px 0 8px;">案件</h2>
     <ul>
@@ -282,7 +333,7 @@ ${summary.eventsError ? `- AI通信ログDB: ${summary.eventsError}` : ''}
     <table style="border-collapse:collapse;width:100%;font-size:13px;"><thead><tr><th align="left">Provider</th><th align="left">状態</th><th align="left">種別</th><th align="left">内容</th></tr></thead><tbody>${apiRows}</tbody></table>` : ''}
 
     <p style="margin-top:24px;">
-      <a href="${SITE_URL}/admin/leads" style="display:inline-block;background:#1F3A93;color:#fff;text-decoration:none;padding:10px 16px;border-radius:7px;">管理画面を開く</a>
+      <a href="${SITE_URL}/admin/reports" style="display:inline-block;background:#1F3A93;color:#fff;text-decoration:none;padding:10px 16px;border-radius:7px;">今日の対応を開く</a>
     </p>
   </div>`
 
@@ -301,8 +352,8 @@ export const GET: APIRoute = async ({ request }) => {
   }
 
   try {
-    const { leads, events, eventsError } = await loadData()
-    const summary = buildSummary(leads, events, eventsError)
+    const { leads, events, eventsError, tasks } = await loadData()
+    const summary = buildSummary(leads, events, eventsError, tasks)
     const email = buildEmail(summary)
     const result = await resend.emails.send({
       from: MAIL_FROM,
@@ -312,7 +363,17 @@ export const GET: APIRoute = async ({ request }) => {
       html: email.html,
     })
     await logEmailEvent('success')
-    return json({ ok: true, to: MAIL_TO, result, summary: { ...summary, aiIssueLeads: summary.aiIssueLeads.length, apiIssues24h: summary.apiIssues24h.length } })
+    return json({
+      ok: true,
+      to: MAIL_TO,
+      result,
+      summary: {
+        ...summary,
+        aiIssueLeads: summary.aiIssueLeads.length,
+        apiIssues24h: summary.apiIssues24h.length,
+        todayActions: summary.todayActions.length,
+      },
+    })
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
     await logEmailEvent('error', message)

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import AdminLayout from '../../layouts/AdminLayout.astro';
+import { knowledgeDocs } from '../../lib/optiens-knowledge';
 
 const posts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -67,22 +68,121 @@ const knowledgeSources = [
 ];
 
 const buildItems = [
-  '業務SOP: 無料診断、詳細レポート、入金確認、手動レビュー、API障害対応を1ページ1手順にする',
-  '決定ログ: 価格、ターゲット、禁止方針、Phase移行条件を「いつ・なぜ決めたか」で残す',
-  'プロンプト/テンプレ台帳: 診断生成、メール、Slides、提案書のバージョンと変更理由を管理する',
-  '顧客別ナレッジ: 案件詳細に課題、提案、MTGメモ、次回アクションを紐づける',
-  '鮮度管理: ナレッジごとに最終更新日、責任者、次回見直し日を持たせる',
+  '質問して答えが不足した内容は、SOPまたはナレッジ本文へ追記する',
+  '顧客別の提案・MTGメモ・次回アクションは、リード詳細から紐づける',
+  '価格、ターゲット、禁止方針、Phase移行条件は決定ログとして残す',
+  'プロンプト、メール、Slides、提案書テンプレはバージョンと変更理由を管理する',
+  'ナレッジごとに責任者、最終更新日、次回見直し日を持たせる',
 ];
+
+const categoryDocRows = Object.entries(
+  knowledgeDocs.reduce<Record<string, number>>((acc, doc) => {
+    acc[doc.category] = (acc[doc.category] || 0) + 1;
+    return acc;
+  }, {})
+).map(([category, count]) => ({ category, count })).sort((a, b) => b.count - a.count);
+
+const demoSafeCount = knowledgeDocs.filter((doc) => doc.visibility === 'demo-safe').length;
+const demoReadyCount = knowledgeDocs.filter((doc) => doc.maturity === 'demo-ready').length;
+
+function visibilityLabel(value: string) {
+  return value === 'demo-safe' ? 'デモ可' : '社内限定';
+}
+
+function maturityLabel(value: string) {
+  if (value === 'demo-ready') return 'デモ準備済み';
+  if (value === 'operational') return '運用中';
+  return '追加中';
+}
 ---
 
 <AdminLayout title="ナレッジ" active="knowledge">
   <section class="hero-panel">
     <div>
       <span>Optiens Knowledge Base</span>
-      <h2>使えるナレッジにするには、記事ではなく「判断材料」と「手順」を管理する</h2>
-      <p>公開ブログ、営業資料、診断SOP、API障害対応、Phase判断材料を同じ棚に置き、日々の判断へ戻せる形にします。</p>
+      <h2>人が入った時に、Optiensの仕事を質問できる社内ナレッジにする</h2>
+      <p>事業方針、営業SOP、AI/API運用、毎朝の確認、水耕栽培KPI、禁止表現を同じ棚に置き、質問欄から回答できる形にします。</p>
     </div>
-    <strong>{posts.length}<small>公開記事</small></strong>
+    <strong>{knowledgeDocs.length}<small>社内ナレッジ</small></strong>
+  </section>
+
+  <section class="panel ask-panel">
+    <div class="panel-head">
+      <div>
+        <span>Ask Optiens</span>
+        <h3>業務について質問する</h3>
+      </div>
+    </div>
+    <div class="ask-grid">
+      <label>
+        <span>質問</span>
+        <textarea id="knowledge-question" rows="4" placeholder="例: 詳細レポートの入金後は何をすればいいですか？"></textarea>
+      </label>
+      <div class="ask-actions">
+        <button type="button" id="knowledge-ask-button"><i class="fas fa-message"></i> 質問する</button>
+        <small>回答は社内ナレッジを根拠に生成します。不足が出た内容はナレッジ化候補です。</small>
+      </div>
+    </div>
+    <div class="answer-box" id="knowledge-answer">まだ質問していません。</div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Internal DB</span>
+        <h3>Optiens標準業務ナレッジ</h3>
+      </div>
+    </div>
+    <div class="knowledge-stats">
+      <div>
+        <b>{knowledgeDocs.length}</b>
+        <span>登録ナレッジ</span>
+      </div>
+      <div>
+        <b>{demoSafeCount}</b>
+        <span>デモ公開候補</span>
+      </div>
+      <div>
+        <b>{demoReadyCount}</b>
+        <span>デモ準備済み</span>
+      </div>
+    </div>
+    <div class="doc-grid">
+      {knowledgeDocs.map((doc) => (
+        <article class="doc-card">
+          <div class="doc-badges">
+            <span>{doc.category}</span>
+            <span class={doc.visibility === 'demo-safe' ? 'badge-ok' : 'badge-warn'}>{visibilityLabel(doc.visibility)}</span>
+          </div>
+          <strong>{doc.title}</strong>
+          <p>{doc.summary}</p>
+          <small>{doc.owner} / {doc.updatedAt} / {maturityLabel(doc.maturity)}</small>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Sales Demo</span>
+        <h3>販売デモ化の方針</h3>
+      </div>
+    </div>
+    <div class="demo-roadmap">
+      <article>
+        <strong>1. 社内で使う</strong>
+        <p>毎日の質問、引き継ぎ、手順確認に使い、不足した回答をナレッジ化します。</p>
+      </article>
+      <article>
+        <strong>2. 公開可能な形へ分離する</strong>
+        <p>顧客情報、APIキー、未公開財務、内部メモを除き、業務SOPと判断基準だけをデモ候補にします。</p>
+      </article>
+      <article>
+        <strong>3. 主力販売ツールにする</strong>
+        <p>「質問すると会社の標準回答が返る」体験を、属人化解消・新人教育・問い合わせ対応の提案に使います。</p>
+      </article>
+    </div>
   </section>
 
   <div class="grid">
@@ -116,9 +216,9 @@ const buildItems = [
         </div>
       </div>
       <ul class="bar-list">
-        {categoryRows.map((row) => (
+        {categoryDocRows.map((row) => (
           <li>
-            <span>{row.label}</span>
+            <span>{row.category}</span>
             <b>{row.count}</b>
           </li>
         ))}
@@ -164,9 +264,45 @@ const buildItems = [
   </section>
 </AdminLayout>
 
+<script is:inline>
+  (function() {
+    const textarea = document.getElementById('knowledge-question');
+    const button = document.getElementById('knowledge-ask-button');
+    const answer = document.getElementById('knowledge-answer');
+
+    button?.addEventListener('click', async () => {
+      if (!textarea || !answer || !button) return;
+      const question = textarea.value.trim();
+      if (!question) {
+        answer.textContent = '質問を入力してください。';
+        return;
+      }
+
+      button.disabled = true;
+      answer.textContent = 'ナレッジを検索して回答を生成しています...';
+      try {
+        const res = await fetch('/api/admin/knowledge-query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+        const sourceText = (data.sources || []).map((source) => `・${source.title}`).join('\n');
+        answer.textContent = `${data.answer || '回答がありませんでした。'}${sourceText ? `\n\n参照:\n${sourceText}` : ''}`;
+      } catch (error) {
+        answer.textContent = error instanceof Error ? error.message : '回答生成に失敗しました。';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  })();
+</script>
+
 <style>
   .hero-panel,
-  .panel {
+  .panel,
+  .doc-card {
     background: var(--admin-surface);
     border: 1px solid var(--admin-border);
     border-radius: 8px;
@@ -205,6 +341,172 @@ const buildItems = [
     margin: 0;
     color: var(--admin-muted);
     font-size: 0.9rem;
+  }
+
+  .ask-panel {
+    margin-bottom: 18px;
+  }
+
+  .ask-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 14px;
+    align-items: end;
+  }
+
+  .ask-grid label span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--admin-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .ask-grid textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 110px;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font: inherit;
+  }
+
+  .ask-actions {
+    display: grid;
+    gap: 8px;
+  }
+
+  .ask-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-primary);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .ask-actions button:disabled {
+    cursor: wait;
+    opacity: 0.68;
+  }
+
+  .ask-actions small,
+  .answer-box,
+  .doc-card p,
+  .doc-card small {
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+  }
+
+  .answer-box {
+    margin-top: 14px;
+    padding: 14px;
+    min-height: 92px;
+    white-space: pre-wrap;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .knowledge-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .knowledge-stats div {
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .knowledge-stats b {
+    display: block;
+    color: #fff;
+    font-size: 1.35rem;
+  }
+
+  .knowledge-stats span {
+    color: var(--admin-muted);
+    font-size: 0.76rem;
+  }
+
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .doc-card {
+    padding: 14px;
+  }
+
+  .doc-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .doc-card span {
+    display: inline-flex;
+    min-height: 22px;
+    align-items: center;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: rgba(107, 133, 201, 0.16);
+    color: var(--admin-accent-soft);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .doc-card span.badge-warn {
+    background: rgba(228, 138, 149, 0.16);
+  }
+
+  .doc-card span.badge-ok {
+    background: rgba(107, 133, 201, 0.22);
+  }
+
+  .doc-card strong {
+    display: block;
+    margin: 8px 0 6px;
+    color: #fff;
+  }
+
+  .demo-roadmap {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .demo-roadmap article {
+    padding: 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .demo-roadmap strong {
+    color: #fff;
+  }
+
+  .demo-roadmap p {
+    margin: 7px 0 0;
+    color: var(--admin-muted);
+    font-size: 0.84rem;
   }
 
   .hero-panel strong {
@@ -397,11 +699,30 @@ const buildItems = [
 
   @media (max-width: 920px) {
     .hero-panel,
-    .grid {
+    .grid,
+    .ask-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .doc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .demo-roadmap {
       grid-template-columns: 1fr;
     }
 
     .source-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .doc-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .knowledge-stats {
       grid-template-columns: 1fr;
     }
   }

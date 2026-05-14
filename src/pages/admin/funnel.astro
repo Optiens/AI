@@ -1,0 +1,602 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { supabase } from '../../lib/supabase';
+
+type Lead = {
+  id: string | number;
+  created_at: string;
+  updated_at?: string | null;
+  status?: string | null;
+  plan?: string | null;
+  amount_jpy?: number | null;
+  paid_at?: string | null;
+  verified_at?: string | null;
+  report_sent_at?: string | null;
+  sent_at?: string | null;
+  company_name?: string | null;
+  person_name?: string | null;
+  application_id?: string | null;
+  industry?: string | null;
+  employee_count?: string | null;
+  decision_timeline?: string | null;
+  annual_revenue_range?: string | null;
+  last_error?: string | null;
+};
+
+const yen = new Intl.NumberFormat('ja-JP');
+const now = Date.now();
+const oneDay = 24 * 60 * 60 * 1000;
+const tokyoMonthKey = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+});
+const tokyoDate = new Intl.DateTimeFormat('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+let leads: Lead[] = [];
+let dbError = '';
+
+if (supabase) {
+  const { data, error } = await supabase
+    .from('diagnosis_leads')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(1000);
+
+  if (error) {
+    dbError = error.message;
+  } else {
+    leads = (data as Lead[]) || [];
+  }
+} else {
+  dbError = 'Supabase が設定されていません';
+}
+
+function statusOf(lead: Lead) {
+  return lead.status || 'new';
+}
+
+function parseTime(iso?: string | null) {
+  if (!iso) return 0;
+  const t = new Date(iso).getTime();
+  return Number.isFinite(t) ? t : 0;
+}
+
+function monthKey(iso?: string | null) {
+  const t = parseTime(iso);
+  return t ? tokyoMonthKey.format(new Date(t)) : '';
+}
+
+function safePct(numerator: number, denominator: number) {
+  if (!denominator) return 0;
+  return Math.round((numerator / denominator) * 100);
+}
+
+function isValidLead(lead: Lead) {
+  return !['rejected', 'cancelled'].includes(statusOf(lead));
+}
+
+function isFreeReportDone(lead: Lead) {
+  return Boolean(lead.verified_at)
+    || ['processing', 'completed', 'manual_review', 'quota_retry_pending', 'limit_exceeded', 'pending_payment', 'paid', 'report_created', 'report_sent', 'sent', 'mtg_scheduled', 'paid_report', 'implementation', 'maintenance'].includes(statusOf(lead));
+}
+
+function isPaidIntent(lead: Lead) {
+  return lead.plan === 'paid'
+    || (lead.amount_jpy || 0) > 0
+    || ['pending_payment', 'paid', 'report_created', 'report_sent', 'sent', 'mtg_scheduled', 'paid_report', 'implementation', 'maintenance'].includes(statusOf(lead));
+}
+
+function isPaidConfirmed(lead: Lead) {
+  return Boolean(lead.paid_at) && (lead.amount_jpy || 0) > 0;
+}
+
+function isReportSent(lead: Lead) {
+  return Boolean(lead.report_sent_at || lead.sent_at)
+    || ['report_sent', 'sent', 'mtg_scheduled', 'paid_report', 'implementation', 'maintenance'].includes(statusOf(lead));
+}
+
+function isMtgOrLater(lead: Lead) {
+  return ['mtg_scheduled', 'paid_report', 'implementation', 'maintenance'].includes(statusOf(lead));
+}
+
+function isDelivery(lead: Lead) {
+  return ['implementation', 'maintenance'].includes(statusOf(lead));
+}
+
+function leadTitle(lead: Lead) {
+  return lead.company_name || lead.person_name || lead.application_id || `Lead ${lead.id}`;
+}
+
+function leadPotentialScore(lead: Lead) {
+  let score = 0;
+  if (lead.plan === 'paid') score += 25;
+  if (isPaidConfirmed(lead)) score += 25;
+  if (lead.decision_timeline === 'asap') score += 18;
+  if (lead.decision_timeline === '3m') score += 12;
+  if (['21-50', '51-100', '101+'].includes(lead.employee_count || '')) score += 12;
+  if (['50-100m', '100-300m', '300-1000m', 'over-1000m'].includes(lead.annual_revenue_range || '')) score += 12;
+  if (isMtgOrLater(lead)) score += 18;
+  return Math.min(100, score);
+}
+
+const total = leads.length;
+const validLeads = leads.filter(isValidLead);
+const currentMonth = tokyoMonthKey.format(new Date());
+const monthLeads = leads.filter((lead) => monthKey(lead.created_at) === currentMonth);
+const paidConfirmedLeads = leads.filter(isPaidConfirmed);
+const confirmedRevenue = paidConfirmedLeads.reduce((sum, lead) => sum + (lead.amount_jpy || 0), 0);
+const pendingRevenue = leads
+  .filter((lead) => statusOf(lead) === 'pending_payment')
+  .reduce((sum, lead) => sum + (lead.amount_jpy || 0), 0);
+const avgPaidAmount = paidConfirmedLeads.length ? Math.round(confirmedRevenue / paidConfirmedLeads.length) : 0;
+
+const funnelSteps = [
+  { id: 'all', label: '申込', count: total, detail: '無料診断フォーム到達', leads },
+  { id: 'valid', label: '有効リード', count: validLeads.length, detail: '対象外・キャンセル除外', leads: validLeads },
+  { id: 'free_report', label: '無料診断処理', count: leads.filter(isFreeReportDone).length, detail: '認証・AI処理以降', leads: leads.filter(isFreeReportDone) },
+  { id: 'paid_intent', label: '詳細版申込', count: leads.filter(isPaidIntent).length, detail: '有償意向・入金待ち含む', leads: leads.filter(isPaidIntent) },
+  { id: 'paid', label: '入金済', count: paidConfirmedLeads.length, detail: '売上確定', leads: paidConfirmedLeads },
+  { id: 'report_sent', label: '詳細レポート送付', count: leads.filter(isReportSent).length, detail: 'MTG化の直前', leads: leads.filter(isReportSent) },
+  { id: 'mtg', label: 'MTG/提案', count: leads.filter(isMtgOrLater).length, detail: '導入支援候補', leads: leads.filter(isMtgOrLater) },
+  { id: 'delivery', label: '導入/保守', count: leads.filter(isDelivery).length, detail: '継続収益候補', leads: leads.filter(isDelivery) },
+];
+
+const maxFunnelCount = Math.max(1, ...funnelSteps.map((step) => step.count));
+const funnelRows = funnelSteps.map((step, index) => {
+  const previous = index === 0 ? step.count : funnelSteps[index - 1].count;
+  return {
+    ...step,
+    fromPrevious: index === 0 ? 100 : safePct(step.count, previous),
+    fromTotal: safePct(step.count, total),
+    width: Math.max(4, Math.round((step.count / maxFunnelCount) * 100)),
+  };
+});
+
+const leakageRows = funnelRows.slice(1).map((step, index) => {
+  const previous = funnelRows[index];
+  const lost = Math.max(0, previous.count - step.count);
+  return {
+    label: `${previous.label} → ${step.label}`,
+    lost,
+    rate: safePct(lost, previous.count),
+  };
+}).sort((a, b) => b.lost - a.lost);
+
+const statusRows = Object.entries(
+  leads.reduce<Record<string, number>>((acc, lead) => {
+    const key = statusOf(lead);
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {})
+).map(([status, count]) => ({ status, count })).sort((a, b) => b.count - a.count);
+
+const industryRows = Object.entries(
+  leads.reduce<Record<string, number>>((acc, lead) => {
+    const key = lead.industry || '未設定';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {})
+).map(([industry, count]) => ({ industry, count })).sort((a, b) => b.count - a.count).slice(0, 8);
+
+const hotLeads = leads
+  .filter((lead) => isPaidIntent(lead) || leadPotentialScore(lead) >= 45)
+  .map((lead) => ({
+    lead,
+    score: leadPotentialScore(lead),
+    value: lead.amount_jpy || 0,
+    age: Math.max(0, Math.floor((now - parseTime(lead.created_at)) / oneDay)),
+  }))
+  .sort((a, b) => b.score - a.score || b.value - a.value)
+  .slice(0, 10);
+
+const kpiRows = [
+  { label: '今月申込', value: `${monthLeads.length}件`, detail: '当月の新規流入' },
+  { label: '有償化率', value: `${safePct(funnelSteps[3].count, total)}%`, detail: `${funnelSteps[3].count}/${total}件` },
+  { label: '入金済売上', value: `¥${yen.format(confirmedRevenue)}`, detail: `平均 ¥${yen.format(avgPaidAmount)}` },
+  { label: '見込み売上', value: `¥${yen.format(pendingRevenue)}`, detail: '入金待ち合計' },
+];
+---
+
+<AdminLayout title="営業ファネル" active="funnel">
+  <section class="hero-panel">
+    <div>
+      <span>Sales Funnel</span>
+      <h2>無料診断から導入支援まで、どこで詰まっているかを見る</h2>
+      <p>レポート画面が「今日やること」なら、営業ファネルは「数字としてどこを改善するか」を決める画面です。</p>
+    </div>
+    <strong>{safePct(funnelSteps[7].count, total)}%<small>導入/保守 到達率</small></strong>
+  </section>
+
+  {dbError && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{dbError}</span>
+    </div>
+  )}
+
+  <section class="kpi-grid">
+    {kpiRows.map((row) => (
+      <article class="kpi-card">
+        <span>{row.label}</span>
+        <strong>{row.value}</strong>
+        <small>{row.detail}</small>
+      </article>
+    ))}
+  </section>
+
+  <div class="grid">
+    <section class="panel panel-wide">
+      <div class="panel-head">
+        <div>
+          <span>Conversion</span>
+          <h3>営業ファネル</h3>
+        </div>
+      </div>
+      <div class="funnel-list">
+        {funnelRows.map((step) => (
+          <article class="funnel-row">
+            <div class="funnel-main">
+              <div>
+                <strong>{step.label}</strong>
+                <small>{step.detail}</small>
+              </div>
+              <b>{step.count}件</b>
+            </div>
+            <div class="bar-track"><span style={`width:${step.width}%`}></span></div>
+            <div class="funnel-meta">
+              <span>前段階比 {step.fromPrevious}%</span>
+              <span>申込比 {step.fromTotal}%</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span>Leakage</span>
+          <h3>落ちている場所</h3>
+        </div>
+      </div>
+      <div class="leak-list">
+        {leakageRows.map((row) => (
+          <div class="leak-row">
+            <span>{row.label}</span>
+            <strong>{row.lost}件</strong>
+            <small>{row.rate}% 離脱</small>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span>Status</span>
+          <h3>ステータス別</h3>
+        </div>
+      </div>
+      <div class="mini-list">
+        {statusRows.map((row) => (
+          <div>
+            <span>{row.status}</span>
+            <strong>{row.count}件</strong>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span>Industry</span>
+          <h3>業種別流入</h3>
+        </div>
+      </div>
+      <div class="mini-list">
+        {industryRows.map((row) => (
+          <div>
+            <span>{row.industry}</span>
+            <strong>{row.count}件</strong>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Opportunities</span>
+        <h3>追うべき商談候補</h3>
+      </div>
+      <a href="/admin/leads" class="panel-link">リード管理へ</a>
+    </div>
+    {hotLeads.length === 0 ? (
+      <p class="empty-state">追うべき商談候補はまだありません。</p>
+    ) : (
+      <div class="lead-table">
+        <div class="lead-row lead-row--head">
+          <span>リード</span>
+          <span>状態</span>
+          <span>金額</span>
+          <span>スコア</span>
+          <span>経過</span>
+        </div>
+        {hotLeads.map(({ lead, score, value, age }) => (
+          <a class="lead-row" href={`/admin/leads/${lead.id}`}>
+            <span>
+              <strong>{leadTitle(lead)}</strong>
+              <small>{lead.application_id || lead.person_name || ''}</small>
+            </span>
+            <span>{statusOf(lead)}</span>
+            <span>{value ? `¥${yen.format(value)}` : '-'}</span>
+            <span>{score}</span>
+            <span>{age}日</span>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+</AdminLayout>
+
+<style>
+  .hero-panel,
+  .panel,
+  .kpi-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 160px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span,
+  .kpi-card span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-panel h2,
+  .panel-head h3 {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.22rem;
+  }
+
+  .hero-panel p,
+  .kpi-card small,
+  .funnel-row small,
+  .mini-list span,
+  .lead-row small,
+  .empty-state {
+    color: var(--admin-muted);
+  }
+
+  .hero-panel strong {
+    display: grid;
+    place-items: center;
+    min-height: 118px;
+    color: #fff;
+    background: rgba(107, 133, 201, 0.18);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    font-size: 2rem;
+  }
+
+  .hero-panel strong small {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .alert-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    background: rgba(228, 138, 149, 0.12);
+    border: 1px solid rgba(228, 138, 149, 0.34);
+    border-radius: 8px;
+    color: var(--admin-accent-soft);
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .kpi-card {
+    padding: 16px;
+  }
+
+  .kpi-card strong {
+    display: block;
+    margin: 8px 0 4px;
+    color: #fff;
+    font-size: 1.55rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.85fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .panel-wide {
+    min-width: 0;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .panel-link {
+    color: var(--admin-secondary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .funnel-list,
+  .leak-list,
+  .mini-list,
+  .lead-table {
+    display: grid;
+    gap: 10px;
+  }
+
+  .funnel-row {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .funnel-main,
+  .funnel-meta,
+  .leak-row,
+  .mini-list div,
+  .lead-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .funnel-main strong,
+  .lead-row strong {
+    color: #fff;
+  }
+
+  .funnel-main b,
+  .leak-row strong {
+    color: var(--admin-accent-soft);
+  }
+
+  .bar-track {
+    height: 9px;
+    margin: 10px 0 8px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .bar-track span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--admin-secondary), var(--admin-accent));
+  }
+
+  .funnel-meta {
+    color: var(--admin-muted);
+    font-size: 0.78rem;
+  }
+
+  .leak-row,
+  .mini-list div,
+  .lead-row {
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .leak-row span,
+  .mini-list span {
+    color: var(--admin-muted);
+  }
+
+  .leak-row small {
+    color: var(--admin-accent-soft);
+  }
+
+  .lead-row {
+    color: var(--admin-muted);
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: minmax(180px, 1.4fr) 120px 100px 70px 70px;
+  }
+
+  .lead-row--head {
+    color: var(--admin-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .lead-row small {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.75rem;
+  }
+
+  .empty-state {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-panel,
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .kpi-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .lead-row {
+      grid-template-columns: 1fr 80px;
+    }
+    .lead-row span:nth-child(3),
+    .lead-row span:nth-child(4),
+    .lead-row span:nth-child(5) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .kpi-grid {
+      grid-template-columns: 1fr;
+    }
+    .panel {
+      padding: 14px;
+    }
+  }
+</style>

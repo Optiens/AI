@@ -1,6 +1,14 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import { supabase } from '../../lib/supabase';
+import { getBusinessTaskSummary } from '../../lib/google-tasks';
+import { buildTodayActions } from '../../lib/ops-today';
+import {
+  adminReports,
+  areaLabel as reportAreaLabel,
+  statusLabel as reportStatusLabel,
+  statusTone as reportStatusTone,
+} from '../../lib/admin-report-catalog';
 
 type Lead = {
   id: string | number;
@@ -55,11 +63,12 @@ let leads: Lead[] = [];
 let events: AiApiEvent[] = [];
 let dbError = '';
 let eventsError = '';
+const taskSummary = await getBusinessTaskSummary(new Date(), 7);
 
 if (supabase) {
   const { data: leadData, error: leadError } = await supabase
     .from('diagnosis_leads')
-    .select('id, created_at, updated_at, status, plan, amount_jpy, paid_at, verified_at, company_name, person_name, application_id, last_error')
+    .select('*')
     .order('created_at', { ascending: false })
     .limit(500);
 
@@ -179,8 +188,11 @@ const lastDailyEmail = events.find((event) => event.workflow === 'daily_ops_emai
 const lastHealthCheck = events.find((event) => event.workflow === 'ops_health_check');
 const alertRecipient = runtimeEnv.ADMIN_ALERT_EMAIL || runtimeEnv.CONTACT_TO || runtimeEnv.GMAIL_USER || '';
 const alertReady = hasEnv('RESEND_API_KEY') && Boolean(alertRecipient) && hasEnv('CRON_SECRET');
+const todayActions = buildTodayActions({ leads, events, tasks: taskSummary, now: new Date() });
 
 const kpiRows = [
+  { label: '今日の対応', value: `${todayActions.length}件`, detail: 'リード・API・Google Tasks', tone: todayActions.some((row) => row.tone === 'critical') ? 'bad' : todayActions.length ? 'warn' : 'ok' },
+  { label: '期限超過タスク', value: `${taskSummary.overdue.length}件`, detail: `今日 ${taskSummary.today.length}件 / 7日以内 ${taskSummary.upcoming.length}件`, tone: taskSummary.overdue.length ? 'bad' : taskSummary.today.length ? 'warn' : 'ok' },
   { label: '24h新規リード', value: `${new24h}件`, detail: `7日合計 ${new7d}件`, tone: 'ok' },
   { label: '入金待ち', value: `${pendingPayment.length}件`, detail: `¥${yen.format(pendingRevenue)}`, tone: pendingPayment.length ? 'warn' : 'ok' },
   { label: '入金済売上', value: `¥${yen.format(confirmedRevenue)}`, detail: '有料レポート・有償対応', tone: 'ok' },
@@ -193,42 +205,10 @@ const envRows = [
   { label: 'Cron認証', value: hasEnv('CRON_SECRET'), detail: 'Vercel Cronからの実行認証' },
   { label: '送信元', value: hasEnv('CONTACT_FROM'), detail: runtimeEnv.CONTACT_FROM || 'CONTACT_FROM 未設定' },
   { label: '通知先', value: Boolean(alertRecipient), detail: alertRecipient || 'ADMIN_ALERT_EMAIL / CONTACT_TO / GMAIL_USER 未設定' },
+  { label: 'Google Tasks', value: taskSummary.configured && !taskSummary.error, detail: taskSummary.error || `${taskSummary.all.length}件の未完了タスク` },
   { label: 'Resend', value: hasEnv('RESEND_API_KEY'), detail: '日次メール送信' },
   { label: 'OpenAI', value: hasEnv('OPENAI_API_KEY'), detail: '診断生成・ヘルスチェック' },
   { label: 'Anthropic', value: hasEnv('ANTHROPIC_API_KEY'), detail: '予備AI接続・ヘルスチェック' },
-];
-
-const reportCatalog = [
-  {
-    name: '日次アラート',
-    cadence: '毎日 09:00 JST',
-    status: '実装済み',
-    detail: '新規リード、入金待ち、AI/API問題、当月トークン・費用をメール送信',
-  },
-  {
-    name: 'AI/API信頼性レポート',
-    cadence: '随時・週次',
-    status: '実装済み',
-    detail: 'OpenAI/Anthropic/Resend/Supabaseの接続、エラー、レイテンシ、トークンを確認',
-  },
-  {
-    name: '営業ファネルレポート',
-    cadence: '週次',
-    status: '一部実装',
-    detail: '申込、認証、有償化、入金、導入支援までの滞留を確認',
-  },
-  {
-    name: 'ナレッジ鮮度レポート',
-    cadence: '月次',
-    status: '設計済み',
-    detail: 'SOP、プロンプト、テンプレ、公開記事の最終更新日と責任者を管理',
-  },
-  {
-    name: '水耕栽培H1レポート',
-    cadence: '実証開始後',
-    status: '未接続',
-    detail: '1株コスト、kWh/kg、収穫CV、IoT停止時間をPhase判断材料にする',
-  },
 ];
 
 const recentIssueRows = [
@@ -251,20 +231,20 @@ const recentIssueRows = [
 ].sort((a, b) => parseTime(b.created_at) - parseTime(a.created_at)).slice(0, 10);
 ---
 
-<AdminLayout title="レポート" active="reports">
+<AdminLayout title="今日の対応" active="reports">
   <section class="hero-panel">
     <div>
-      <span>Reports & Alerts</span>
-      <h2>朝9時に見るべき内容をメール化し、管理画面では原因まで追える状態にする</h2>
-      <p>日次アラートはVercel Cronで09:00 JSTに送信します。画面上から手動送信とヘルスチェックも実行できます。</p>
+      <span>Today Report</span>
+      <h2>レポートは、必要な対応を見逃さないために増やしていく</h2>
+      <p>今日の対応を最上位に置きつつ、営業、API、期限、ナレッジ、会計、水耕KPIなど、見るべき切り口を追加できる形にします。</p>
     </div>
     <strong class={alertReady ? 'hero-ok' : 'hero-warn'}>{alertReady ? 'READY' : 'SETUP'}<small>{alertReady ? '日次メール設定済み' : '環境変数の確認が必要'}</small></strong>
   </section>
 
-  {(dbError || eventsError) && (
+  {(dbError || eventsError || taskSummary.error) && (
     <div class="alert-box">
       <i class="fas fa-circle-exclamation"></i>
-      <span>{dbError || eventsError}</span>
+      <span>{dbError || eventsError || taskSummary.error}</span>
     </div>
   )}
 
@@ -278,7 +258,62 @@ const recentIssueRows = [
     ))}
   </section>
 
-  <div class="grid">
+  <section class="panel today-panel" id="today-actions">
+    <div class="panel-head">
+      <div>
+        <span>Today Actions</span>
+        <h3>今日の対応</h3>
+      </div>
+      <a href="/admin/funnel" class="panel-link">営業ファネルへ</a>
+    </div>
+    {todayActions.length === 0 ? (
+      <p class="empty-state">今日すぐ対応すべき項目はありません。</p>
+    ) : (
+      <div class="today-action-list">
+        {todayActions.map((action) => (
+          <a class={`today-action today-action--${action.tone}`} href={action.href || '#'} aria-disabled={!action.href}>
+            <span class="action-badge">{action.category}</span>
+            <div>
+              <strong>{action.title}</strong>
+              <p>{action.detail}</p>
+            </div>
+            <small>
+              <b>{action.due}</b>
+              {action.owner}
+            </small>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <section class="panel report-hub">
+    <div class="panel-head">
+      <div>
+        <span>Report Hub</span>
+        <h3>対応レポート一覧</h3>
+      </div>
+    </div>
+    <div class="report-card-grid">
+      {adminReports.map((report) => (
+        <a class={`report-card report-card--${reportStatusTone(report.status)}`} href={report.href || '#'} aria-disabled={!report.href}>
+          <div>
+            <span class="report-meta">
+              <b>{reportAreaLabel(report.area)}</b>
+              <b>{reportStatusLabel(report.status)}</b>
+            </span>
+            <strong>{report.title}</strong>
+            <p>{report.purpose}</p>
+            <p class="report-decision">{report.decision}</p>
+          </div>
+          <small>{report.cadence} / {report.owner}</small>
+          <em>{report.checks.slice(0, 4).join(' / ')}</em>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <div class="grid" id="task-deadlines">
     <section class="panel panel-wide">
       <div class="panel-head">
         <div>
@@ -333,27 +368,6 @@ const recentIssueRows = [
       </div>
     </section>
   </div>
-
-  <section class="panel">
-    <div class="panel-head">
-      <div>
-        <span>Catalog</span>
-        <h3>実装すべきレポート</h3>
-      </div>
-    </div>
-    <div class="report-list">
-      {reportCatalog.map((report) => (
-        <article class="report-row">
-          <div>
-            <strong>{report.name}</strong>
-            <p>{report.detail}</p>
-          </div>
-          <span>{report.cadence}</span>
-          <b>{report.status}</b>
-        </article>
-      ))}
-    </div>
-  </section>
 
   <section class="panel">
     <div class="panel-head">
@@ -457,7 +471,8 @@ const recentIssueRows = [
   }
 
   .hero-panel p,
-  .report-row p,
+  .report-card p,
+  .today-action p,
   .issue-row p,
   .empty-state {
     color: var(--admin-muted);
@@ -465,7 +480,8 @@ const recentIssueRows = [
   }
 
   .hero-panel p,
-  .report-row p,
+  .report-card p,
+  .today-action p,
   .issue-row p {
     margin: 4px 0 0;
   }
@@ -509,7 +525,7 @@ const recentIssueRows = [
 
   .kpi-grid {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 18px;
   }
@@ -602,7 +618,8 @@ const recentIssueRows = [
 
   .alert-grid div,
   .env-row,
-  .report-row,
+  .report-card,
+  .today-action,
   .issue-row {
     border: 1px solid var(--admin-border);
     border-radius: 8px;
@@ -617,7 +634,8 @@ const recentIssueRows = [
   .alert-grid small,
   .env-row span,
   .env-row small,
-  .report-row span,
+  .report-card small,
+  .report-card em,
   .issue-row small {
     color: var(--admin-muted);
     font-size: 0.72rem;
@@ -638,12 +656,126 @@ const recentIssueRows = [
   }
 
   .env-list,
-  .report-list,
+  .today-action-list,
   .issue-list {
     display: flex;
     flex-direction: column;
     gap: 9px;
   }
+
+  .today-panel {
+    margin-bottom: 18px;
+  }
+
+  .today-action {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr) 120px;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .today-action[aria-disabled="true"] {
+    pointer-events: none;
+  }
+
+  .today-action strong {
+    color: #fff;
+  }
+
+  .today-action small {
+    color: var(--admin-muted);
+    font-size: 0.76rem;
+    text-align: right;
+  }
+
+  .today-action small b {
+    display: block;
+    color: var(--admin-accent-soft);
+    font-size: 0.78rem;
+  }
+
+  .action-badge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 26px;
+    border-radius: 999px;
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.18);
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .today-action--critical { border-color: rgba(228, 138, 149, 0.62); }
+  .today-action--high { border-color: rgba(228, 138, 149, 0.42); }
+  .today-action--medium { border-color: rgba(107, 133, 201, 0.42); }
+  .today-action--low { border-color: rgba(148, 163, 184, 0.28); }
+
+  .report-hub {
+    margin-bottom: 18px;
+  }
+
+  .report-card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .report-card {
+    display: flex;
+    min-height: 190px;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .report-card[aria-disabled="true"] {
+    pointer-events: none;
+  }
+
+  .report-card strong {
+    display: block;
+    margin: 7px 0 6px;
+    color: #fff;
+    font-size: 0.98rem;
+  }
+
+  .report-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .report-meta b {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+    color: var(--admin-muted);
+    background: rgba(148, 163, 184, 0.11);
+    font-size: 0.68rem;
+  }
+
+  .report-decision {
+    color: var(--admin-accent-soft);
+  }
+
+  .report-card em {
+    font-style: normal;
+    line-height: 1.45;
+  }
+
+  .report-card--ok { border-color: rgba(107, 133, 201, 0.44); }
+  .report-card--warn { border-color: rgba(228, 138, 149, 0.40); }
+  .report-card--muted { border-color: rgba(148, 163, 184, 0.28); }
 
   .env-row {
     display: grid;
@@ -657,7 +789,6 @@ const recentIssueRows = [
   }
 
   .env-row b,
-  .report-row b,
   .state {
     display: inline-flex;
     justify-content: center;
@@ -690,22 +821,8 @@ const recentIssueRows = [
     background: rgba(148, 163, 184, 0.14);
   }
 
-  .report-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 120px 88px;
-    gap: 12px;
-    align-items: center;
-    padding: 12px;
-  }
-
-  .report-row strong,
   .issue-row strong {
     color: #fff;
-  }
-
-  .report-row b {
-    color: var(--admin-accent-soft);
-    background: rgba(107, 133, 201, 0.18);
   }
 
   .issue-row {
@@ -728,6 +845,10 @@ const recentIssueRows = [
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .report-card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .alert-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -738,9 +859,17 @@ const recentIssueRows = [
     .grid,
     .kpi-grid,
     .alert-grid,
-    .report-row,
+    .report-card-grid,
     .issue-row {
       grid-template-columns: 1fr;
+    }
+
+    .today-action {
+      grid-template-columns: 1fr;
+    }
+
+    .today-action small {
+      text-align: left;
     }
 
     .panel-head {
