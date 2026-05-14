@@ -136,11 +136,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://optiens.com/service/sample-farmer</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://optiens.com/service/sample-dairy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

@@ -21,7 +21,10 @@ const checks = [
       'const roleDemos',
       'const nearbyIndustries',
       '外部AI API・第三者送信なし',
-      'AI API費用は発生しません',
+      '/service/sample-bakery',
+      '/service/sample-municipality',
+      '/service/sample-outdoor',
+      '/service/sample-dairy',
     ],
     forbidden: [
       {
@@ -39,6 +42,10 @@ const checks = [
       {
         label: 'inaccurate no-API wording on mixed demo page',
         pattern: /このページ上ではAPI通信・外部送信なし|公開デモはサンプルデータで動作し、このページ上ではAPI通信や外部送信は発生しません/,
+      },
+      {
+        label: 'internal demo cost wording',
+        pattern: /公開デモでAI API費用|繰り返し試されても|OpenAI等の従量課金/,
       },
     ],
   },
@@ -59,6 +66,33 @@ const checks = [
       {
         label: 'local brand variable override',
         pattern: /--brand\s*:/,
+      },
+    ],
+  },
+  {
+    file: 'public/sitemap.xml',
+    required: [
+      'https://optiens.com/service/sample-bakery',
+      'https://optiens.com/service/sample-municipality',
+      'https://optiens.com/service/sample-outdoor',
+      'https://optiens.com/service/sample-dairy',
+    ],
+    forbidden: [
+      {
+        label: 'retired farmer sample page in public sitemap',
+        pattern: /sample-farmer/,
+      },
+    ],
+  },
+  {
+    file: 'src/pages/service/sample-farmer.astro',
+    required: [
+      "return Astro.redirect('/service/sample-dairy', 301);",
+    ],
+    forbidden: [
+      {
+        label: 'retired farmer sample copy',
+        pattern: /個人農家|ハウス栽培|ビニールハウス|API を消費しない/,
       },
     ],
   },
