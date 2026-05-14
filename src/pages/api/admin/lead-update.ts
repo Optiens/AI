@@ -61,7 +61,9 @@ const ALLOWED_FIELDS = [
 ]
 
 const ALLOWED_STATUSES = [
-  'new', 'pending_payment', 'paid', 'report_created', 'sent',
+  'new', 'pending_verification', 'verified', 'processing', 'completed',
+  'quota_retry_pending', 'manual_review', 'limit_exceeded', 'rejected',
+  'pending_payment', 'paid', 'report_created', 'report_sent', 'sent',
   'mtg_scheduled', 'paid_report', 'implementation', 'maintenance',
   'cancelled',
 ]
@@ -81,8 +83,8 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: 'Invalid JSON' }, 400)
   }
 
-  const id = Number(body?.id)
-  if (!id || !Number.isFinite(id)) {
+  const id = String(body?.id || '').trim()
+  if (!id) {
     return json({ error: 'id is required' }, 400)
   }
 

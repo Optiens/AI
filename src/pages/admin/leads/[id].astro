@@ -3,12 +3,12 @@ import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { supabase } from '../../../lib/supabase';
 
 const { id } = Astro.params;
-const numericId = Number(id);
+const leadId = String(id || '').trim();
 
 let lead: any = null;
 let error = '';
 
-if (!Number.isFinite(numericId) || numericId <= 0) {
+if (!leadId) {
   error = 'IDが不正です';
 } else if (!supabase) {
   error = 'Supabaseが設定されていません';
@@ -16,7 +16,7 @@ if (!Number.isFinite(numericId) || numericId <= 0) {
   const { data, error: dbErr } = await supabase
     .from('diagnosis_leads')
     .select('*')
-    .eq('id', numericId)
+    .eq('id', leadId)
     .maybeSingle();
   if (dbErr) {
     error = dbErr.message;
@@ -74,13 +74,22 @@ const timelineOptions = [
 ];
 
 const statusOptions = [
-  ['new', '新規'],
+  ['new', '新規受付'],
+  ['pending_verification', 'メール認証待ち'],
+  ['verified', '認証完了・処理待ち'],
+  ['processing', '自動生成中'],
+  ['completed', '簡易レポート送付済'],
+  ['quota_retry_pending', 'クォータ再試行待ち'],
+  ['manual_review', '手動確認'],
+  ['limit_exceeded', '月次上限到達'],
+  ['rejected', 'スパム・対象外'],
   ['pending_payment', '入金待ち'],
   ['paid', '入金確認済み'],
-  ['report_created', 'レポート作成済'],
-  ['sent', '送付済'],
+  ['report_created', '詳細レポート作成済'],
+  ['report_sent', '詳細レポート送付済'],
+  ['sent', '詳細レポート送付済'],
   ['mtg_scheduled', 'MTG予定'],
-  ['paid_report', '有料レポート'],
+  ['paid_report', '有料レポート完了'],
   ['implementation', '導入支援'],
   ['maintenance', '保守契約'],
   ['cancelled', 'キャンセル'],
@@ -282,7 +291,7 @@ function fmt(s: any) {
   (function() {
     const form = document.getElementById('lead-form');
     if (!form) return;
-    const id = Number(form.dataset.id);
+    const id = String(form.dataset.id || '');
     const saveStatus = document.getElementById('save-status');
 
     function setStatus(text, kind) {

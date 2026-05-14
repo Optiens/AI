@@ -4,7 +4,7 @@
  * フロー:
  * 1. Database Webhook で leads テーブルの新規 INSERT 検知
  * 2. 月次上限チェック
- * 3. Claude API 呼び出し（構造化JSON出力）
+ * 3. OpenAI API 呼び出し（構造化JSON出力）
  * 4. JSON Schema バリデーション
  * 5. Google Slides API でテンプレコピー → プレースホルダー置換 → 共有設定
  * 6. Resend でレポートメール送信
@@ -24,6 +24,8 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || ''
 const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || ''
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY') || ''
+const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY') || ''
+const OPENAI_CONTEXT_WINDOW_TOKENS = Number(Deno.env.get('OPENAI_CONTEXT_WINDOW_TOKENS') || '0') || null
 
 const GOOGLE_SLIDES_TEMPLATE_ID = Deno.env.get('GOOGLE_SLIDES_TEMPLATE_ID') || ''
 const GOOGLE_SERVICE_ACCOUNT_EMAIL = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_EMAIL') || ''
@@ -56,6 +58,96 @@ const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
   : null
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null
 const openai = OPENAI_API_KEY ? new OpenAI({ apiKey: OPENAI_API_KEY }) : null
+
+type AiApiEventInput = {
+  workflow: string
+  provider: string
+  model?: string | null
+  operation: string
+  status: 'success' | 'error' | 'retry' | 'skipped'
+  http_status?: number | null
+  latency_ms?: number | null
+  input_tokens?: number | null
+  output_tokens?: number | null
+  total_tokens?: number | null
+  context_window_tokens?: number | null
+  context_remaining_tokens?: number | null
+  request_id?: string | null
+  lead_id?: string | null
+  application_id?: string | null
+  error_type?: string | null
+  error_message?: string | null
+  metadata?: Record<string, unknown>
+}
+
+function truncateText(value: unknown, max = 1000): string | null {
+  if (value === null || value === undefined) return null
+  const text = typeof value === 'string' ? value : String(value)
+  return text.length > max ? `${text.slice(0, max)}...` : text
+}
+
+function errorToText(err: unknown): string {
+  if (err instanceof Error) return `${err.name}: ${err.message}`
+  try {
+    return JSON.stringify(err)
+  } catch {
+    return String(err)
+  }
+}
+
+function errorHttpStatus(err: unknown): number | null {
+  if (!err || typeof err !== 'object') return null
+  const maybe = err as Record<string, unknown>
+  const status = maybe.status || maybe.statusCode || maybe.code
+  if (typeof status === 'number') return status
+  if (typeof status === 'string' && /^\d+$/.test(status)) return Number(status)
+  return null
+}
+
+function classifyAiError(err: unknown): string {
+  const status = errorHttpStatus(err)
+  const text = errorToText(err).toLowerCase()
+  if (status === 401 || status === 403 || /api key|auth|permission/.test(text)) return 'auth'
+  if (status === 429 || /quota|insufficient_quota/.test(text)) return 'quota'
+  if (/rate[\s_-]?limit|too many requests/.test(text)) return 'rate_limit'
+  if (/timeout|network|fetch failed|econnreset|socket/.test(text)) return 'network'
+  if (/json|parse|schema|validation/.test(text)) return 'response_format'
+  return 'exception'
+}
+
+function contextRemaining(totalTokens: number | null | undefined): number | null {
+  if (!OPENAI_CONTEXT_WINDOW_TOKENS || !totalTokens) return null
+  return Math.max(0, OPENAI_CONTEXT_WINDOW_TOKENS - totalTokens)
+}
+
+async function logAiApiEvent(event: AiApiEventInput) {
+  if (!supabase) return
+  const payload = {
+    workflow: event.workflow,
+    provider: event.provider,
+    model: event.model || null,
+    operation: event.operation,
+    status: event.status,
+    http_status: event.http_status ?? null,
+    latency_ms: event.latency_ms ?? null,
+    input_tokens: event.input_tokens ?? null,
+    output_tokens: event.output_tokens ?? null,
+    total_tokens: event.total_tokens ?? null,
+    context_window_tokens: event.context_window_tokens ?? null,
+    context_remaining_tokens: event.context_remaining_tokens ?? null,
+    request_id: truncateText(event.request_id, 200),
+    lead_id: truncateText(event.lead_id, 120),
+    application_id: truncateText(event.application_id, 120),
+    error_type: truncateText(event.error_type, 120),
+    error_message: truncateText(event.error_message, 1000),
+    metadata: event.metadata || {},
+  }
+
+  const { error } = await supabase.from('ai_api_events').insert(payload)
+  if (error) {
+    console.warn('[ai_api_events] log skipped:', error.message)
+  }
+}
 
 // ===== JSON Schema（v2.0 テンプレ対応） =====
 const DIAGNOSIS_SCHEMA = {
@@ -159,6 +251,18 @@ Deno.serve(async (req: Request) => {
         `3. 再デプロイ不要（次回実行から反映）\n\n` +
         `参照: https://supabase.com/docs/guides/functions/secrets`
       console.error('[process-diagnosis] env_missing:', missing.join(','))
+      await logAiApiEvent({
+        workflow: 'free_diagnosis',
+        provider: 'system',
+        operation: 'env.check',
+        status: 'error',
+        error_type: 'env_missing',
+        error_message: missing.join(', '),
+        metadata: {
+          missing,
+          anthropic_configured: Boolean(ANTHROPIC_API_KEY),
+        },
+      }).catch(() => {})
       // resend が使えるなら admin 通知
       if (resend) {
         try {
@@ -204,12 +308,22 @@ Deno.serve(async (req: Request) => {
       return new Response('Monthly limit exceeded', { status: 200 })
     }
 
-    // Claude API でレポート内容生成
+    // OpenAI API でレポート内容生成
     const diagnosis = await generateDiagnosis(lead)
 
     // バリデーション
     const validationErr = validate(diagnosis)
     if (validationErr) {
+      await logAiApiEvent({
+        workflow: 'free_diagnosis',
+        provider: 'internal',
+        operation: 'diagnosis.validate',
+        status: 'error',
+        lead_id: String(lead.id),
+        application_id: lead.application_id || null,
+        error_type: 'validation',
+        error_message: validationErr,
+      }).catch(() => {})
       await markStatus(lead.id, 'manual_review', `validation: ${validationErr}`)
       await notifyAdmin(
         'バリデーション失敗',
@@ -243,6 +357,19 @@ Deno.serve(async (req: Request) => {
 
     // try 句で保存した lead を使用（req.json() は body 1 度しか読めないため）
     const leadForNotify = leadCache
+    if (leadForNotify?.id) {
+      await logAiApiEvent({
+        workflow: 'free_diagnosis',
+        provider: 'system',
+        operation: 'process-diagnosis',
+        status: isQuotaError ? 'retry' : 'error',
+        http_status: errorHttpStatus(err),
+        lead_id: String(leadForNotify.id),
+        application_id: leadForNotify.application_id || null,
+        error_type: classifyAiError(err),
+        error_message: errorToText(err),
+      }).catch(() => {})
+    }
 
     if (isQuotaError && leadForNotify?.id) {
       // クォータ超過 → 翌朝の自動リトライ対象に変更
@@ -527,26 +654,72 @@ JSON Schema:
 ${JSON.stringify(DIAGNOSIS_SCHEMA, null, 2)}
 `.trim()
 
-  const response = await openai!.chat.completions.create({
-    model: OPENAI_MODEL,
-    max_completion_tokens: 2500,
-    response_format: { type: 'json_object' },
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt },
-    ],
-  })
+  const startedAt = Date.now()
+  let response: any = null
 
-  const text = response.choices[0]?.message?.content || ''
-  if (!text) throw new Error('Empty response from OpenAI')
-
-  // response_format=json_object なら基本そのまま JSON 文字列だが、フォールバックで regex 抽出
   try {
-    return JSON.parse(text)
-  } catch {
-    const jsonMatch = text.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) throw new Error('No JSON found in OpenAI response')
-    return JSON.parse(jsonMatch[0])
+    response = await openai!.chat.completions.create({
+      model: OPENAI_MODEL,
+      max_completion_tokens: 2500,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+    })
+
+    const usage = response.usage || {}
+    const totalTokens = typeof usage.total_tokens === 'number' ? usage.total_tokens : null
+    await logAiApiEvent({
+      workflow: 'free_diagnosis',
+      provider: 'openai',
+      model: OPENAI_MODEL,
+      operation: 'chat.completions.create',
+      status: 'success',
+      latency_ms: Date.now() - startedAt,
+      input_tokens: typeof usage.prompt_tokens === 'number' ? usage.prompt_tokens : null,
+      output_tokens: typeof usage.completion_tokens === 'number' ? usage.completion_tokens : null,
+      total_tokens: totalTokens,
+      context_window_tokens: OPENAI_CONTEXT_WINDOW_TOKENS,
+      context_remaining_tokens: contextRemaining(totalTokens),
+      request_id: response.id || null,
+      lead_id: String(lead.id || ''),
+      application_id: lead.application_id || null,
+      metadata: {
+        finish_reason: response.choices?.[0]?.finish_reason || null,
+        prompt_tokens_details: usage.prompt_tokens_details || null,
+        completion_tokens_details: usage.completion_tokens_details || null,
+      },
+    }).catch(() => {})
+
+    const text = response.choices[0]?.message?.content || ''
+    if (!text) throw new Error('Empty response from OpenAI')
+
+    // response_format=json_object なら基本そのまま JSON 文字列だが、フォールバックで regex 抽出
+    try {
+      return JSON.parse(text)
+    } catch {
+      const jsonMatch = text.match(/\{[\s\S]*\}/)
+      if (!jsonMatch) throw new Error('No JSON found in OpenAI response')
+      return JSON.parse(jsonMatch[0])
+    }
+  } catch (err) {
+    const errorType = classifyAiError(err)
+    await logAiApiEvent({
+      workflow: 'free_diagnosis',
+      provider: 'openai',
+      model: OPENAI_MODEL,
+      operation: 'chat.completions.create',
+      status: errorType === 'quota' || errorType === 'rate_limit' ? 'retry' : 'error',
+      http_status: errorHttpStatus(err),
+      latency_ms: Date.now() - startedAt,
+      request_id: response?.id || null,
+      lead_id: String(lead.id || ''),
+      application_id: lead.application_id || null,
+      error_type: errorType,
+      error_message: errorToText(err),
+    }).catch(() => {})
+    throw err
   }
 }
 

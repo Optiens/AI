@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro'
+import { supabase } from '../../lib/supabase'
 
 const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
 // gpt-4o は Vision 対応・日本語精度の高いコスパ良モデル
@@ -6,6 +7,7 @@ const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
 //  ユーザー体験改善を優先。1 リクエスト約 ¥1〜3 の見込み）
 const OPENAI_MODEL = 'gpt-4o'
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
+const OPENAI_CONTEXT_WINDOW_TOKENS = Number(import.meta.env.OPENAI_CONTEXT_WINDOW_TOKENS || '0') || null
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT_PER_HOUR = 10
@@ -82,6 +84,61 @@ const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024 // 5MB
 const MAX_URL_BYTES = 1 * 1024 * 1024 // 1MB
 const URL_FETCH_TIMEOUT_MS = 10_000
+
+function truncateText(value: unknown, max = 1000) {
+  if (value === null || value === undefined) return null
+  const text = typeof value === 'string' ? value : String(value)
+  return text.length > max ? `${text.slice(0, max)}...` : text
+}
+
+function classifyOpenAIError(status?: number | null, body = '') {
+  const text = body.toLowerCase()
+  if (status === 401 || status === 403 || /api key|auth|permission/.test(text)) return 'auth'
+  if (status === 429 || /quota|insufficient_quota/.test(text)) return 'quota'
+  if (/rate[\s_-]?limit|too many requests/.test(text)) return 'rate_limit'
+  if (/timeout|network|fetch failed/.test(text)) return 'network'
+  if (/json|parse|schema/.test(text)) return 'response_format'
+  return 'exception'
+}
+
+async function logAiApiEvent(event: {
+  provider: string
+  model?: string | null
+  operation: string
+  status: 'success' | 'error' | 'retry' | 'skipped'
+  http_status?: number | null
+  latency_ms?: number | null
+  input_tokens?: number | null
+  output_tokens?: number | null
+  total_tokens?: number | null
+  context_window_tokens?: number | null
+  context_remaining_tokens?: number | null
+  request_id?: string | null
+  error_type?: string | null
+  error_message?: string | null
+  metadata?: Record<string, unknown>
+}) {
+  if (!supabase) return
+  const { error } = await supabase.from('ai_api_events').insert({
+    workflow: 'file_extract',
+    provider: event.provider,
+    model: event.model || null,
+    operation: event.operation,
+    status: event.status,
+    http_status: event.http_status ?? null,
+    latency_ms: event.latency_ms ?? null,
+    input_tokens: event.input_tokens ?? null,
+    output_tokens: event.output_tokens ?? null,
+    total_tokens: event.total_tokens ?? null,
+    context_window_tokens: event.context_window_tokens ?? null,
+    context_remaining_tokens: event.context_remaining_tokens ?? null,
+    request_id: truncateText(event.request_id, 200),
+    error_type: truncateText(event.error_type, 120),
+    error_message: truncateText(event.error_message, 1000),
+    metadata: event.metadata || {},
+  })
+  if (error) console.warn('[file-extract][ai_api_events] log skipped:', error.message)
+}
 
 function buildMockResult(sourceType: 'file' | 'url'): ExtractResult {
   return {
@@ -176,7 +233,8 @@ function isPrivateOrUnsafeUrl(urlObj: URL): boolean {
   if (host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host === '::1') return true
   const ipv4 = host.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/)
   if (ipv4) {
-    const [, a, b] = ipv4.map(Number)
+    const a = Number(ipv4[1])
+    const b = Number(ipv4[2])
     if (a === 10) return true
     if (a === 172 && b >= 16 && b <= 31) return true
     if (a === 192 && b === 168) return true
@@ -281,7 +339,18 @@ async function fetchUrlText(url: string): Promise<string> {
 }
 
 async function callOpenAIWithFile(input: FileInput): Promise<ExtractResult> {
-  if (!OPENAI_API_KEY) return buildMockResult('file')
+  if (!OPENAI_API_KEY) {
+    await logAiApiEvent({
+      provider: 'openai',
+      model: OPENAI_MODEL,
+      operation: 'env.check',
+      status: 'skipped',
+      error_type: 'env_missing',
+      error_message: 'OPENAI_API_KEY is not configured',
+      metadata: { source_type: 'file' },
+    }).catch(() => {})
+    return buildMockResult('file')
+  }
 
   if (!ALLOWED_IMAGE_TYPES.includes(input.mediaType)) {
     throw new Error('対応していないファイル形式です。JPG/PNG/GIF/WebPの画像をご利用ください。')
@@ -292,27 +361,54 @@ async function callOpenAIWithFile(input: FileInput): Promise<ExtractResult> {
     { type: 'text', text: '添付の書類からAI活用診断フォームに必要な情報を抽出し、指定のJSON形式で返してください。' },
     { type: 'image_url', image_url: { url: dataUrl } },
   ]
-  const result = await callOpenAI(userMessage)
+  const result = await callOpenAI(userMessage, 'file')
   result.source_type = 'file'
   return result
 }
 
 async function callOpenAIWithUrl(input: UrlInput): Promise<ExtractResult> {
-  if (!OPENAI_API_KEY) return buildMockResult('url')
+  if (!OPENAI_API_KEY) {
+    await logAiApiEvent({
+      provider: 'openai',
+      model: OPENAI_MODEL,
+      operation: 'env.check',
+      status: 'skipped',
+      error_type: 'env_missing',
+      error_message: 'OPENAI_API_KEY is not configured',
+      metadata: { source_type: 'url' },
+    }).catch(() => {})
+    return buildMockResult('url')
+  }
 
-  const pageText = await fetchUrlText(input.url)
+  let pageText = ''
+  const fetchStartedAt = Date.now()
+  try {
+    pageText = await fetchUrlText(input.url)
+  } catch (err) {
+    await logAiApiEvent({
+      provider: 'external_url',
+      operation: 'fetch_url_text',
+      status: 'error',
+      latency_ms: Date.now() - fetchStartedAt,
+      error_type: 'url_fetch',
+      error_message: err instanceof Error ? err.message : String(err),
+      metadata: { source_type: 'url' },
+    }).catch(() => {})
+    throw err
+  }
   const userText = `以下は ${input.url} から取得したページ本文です。AI活用診断フォームに必要な情報を抽出し、指定のJSON形式で返してください。
 
 ---ページ本文ここから---
 ${pageText}
 ---ページ本文ここまで---`
   const userMessage = [{ type: 'text', text: userText }]
-  const result = await callOpenAI(userMessage)
+  const result = await callOpenAI(userMessage, 'url')
   result.source_type = 'url'
   return result
 }
 
-async function callOpenAI(userContent: any[]): Promise<ExtractResult> {
+async function callOpenAI(userContent: any[], sourceType: 'file' | 'url'): Promise<ExtractResult> {
+  const startedAt = Date.now()
   const res = await fetch(OPENAI_API_URL, {
     method: 'POST',
     headers: {
@@ -334,6 +430,18 @@ async function callOpenAI(userContent: any[]): Promise<ExtractResult> {
   if (!res.ok) {
     const errBody = await res.text().catch(() => '')
     console.error('[file-extract] OpenAI API error:', res.status, errBody)
+    const errorType = classifyOpenAIError(res.status, errBody)
+    await logAiApiEvent({
+      provider: 'openai',
+      model: OPENAI_MODEL,
+      operation: 'chat.completions.create',
+      status: errorType === 'quota' || errorType === 'rate_limit' ? 'retry' : 'error',
+      http_status: res.status,
+      latency_ms: Date.now() - startedAt,
+      error_type: errorType,
+      error_message: errBody || `HTTP ${res.status}`,
+      metadata: { source_type: sourceType },
+    }).catch(() => {})
     if (errBody && /insufficient_quota|exceeded your current quota/i.test(errBody)) {
       throw new Error('AIサービスの利用残高が不足しています。サイト管理者にお問い合わせください。')
     }
@@ -347,15 +455,49 @@ async function callOpenAI(userContent: any[]): Promise<ExtractResult> {
   }
 
   const data = await res.json()
+  const usage = data?.usage || {}
+  const totalTokens = typeof usage.total_tokens === 'number' ? usage.total_tokens : null
+  await logAiApiEvent({
+    provider: 'openai',
+    model: OPENAI_MODEL,
+    operation: 'chat.completions.create',
+    status: 'success',
+    http_status: res.status,
+    latency_ms: Date.now() - startedAt,
+    input_tokens: typeof usage.prompt_tokens === 'number' ? usage.prompt_tokens : null,
+    output_tokens: typeof usage.completion_tokens === 'number' ? usage.completion_tokens : null,
+    total_tokens: totalTokens,
+    context_window_tokens: OPENAI_CONTEXT_WINDOW_TOKENS,
+    context_remaining_tokens: OPENAI_CONTEXT_WINDOW_TOKENS && totalTokens
+      ? Math.max(0, OPENAI_CONTEXT_WINDOW_TOKENS - totalTokens)
+      : null,
+    request_id: data?.id || null,
+    metadata: {
+      source_type: sourceType,
+      finish_reason: data?.choices?.[0]?.finish_reason || null,
+    },
+  }).catch(() => {})
+
   const content = data?.choices?.[0]?.message?.content || ''
 
   let jsonText = String(content).trim()
   const codeBlockMatch = jsonText.match(/```(?:json)?\s*([\s\S]*?)```/)
-  if (codeBlockMatch) jsonText = codeBlockMatch[1].trim()
+  if (codeBlockMatch?.[1]) jsonText = codeBlockMatch[1].trim()
 
   const jsonStart = jsonText.indexOf('{')
   const jsonEnd = jsonText.lastIndexOf('}')
   if (jsonStart === -1 || jsonEnd === -1) {
+    await logAiApiEvent({
+      provider: 'internal',
+      model: OPENAI_MODEL,
+      operation: 'file_extract.parse',
+      status: 'error',
+      latency_ms: Date.now() - startedAt,
+      request_id: data?.id || null,
+      error_type: 'response_format',
+      error_message: 'No JSON object found in OpenAI response',
+      metadata: { source_type: sourceType },
+    }).catch(() => {})
     throw new Error('AIの応答形式が想定外でした。情報源を変更して再度お試しください。')
   }
   const cleanJson = jsonText.substring(jsonStart, jsonEnd + 1)
@@ -365,6 +507,17 @@ async function callOpenAI(userContent: any[]): Promise<ExtractResult> {
     parsed = JSON.parse(cleanJson)
   } catch (err) {
     console.error('[file-extract] JSON parse error:', err, cleanJson)
+    await logAiApiEvent({
+      provider: 'internal',
+      model: OPENAI_MODEL,
+      operation: 'file_extract.parse',
+      status: 'error',
+      latency_ms: Date.now() - startedAt,
+      request_id: data?.id || null,
+      error_type: 'response_format',
+      error_message: err instanceof Error ? err.message : String(err),
+      metadata: { source_type: sourceType },
+    }).catch(() => {})
     throw new Error('AIの応答をJSONに変換できませんでした。')
   }
 
