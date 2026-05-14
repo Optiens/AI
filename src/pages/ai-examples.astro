@@ -22,6 +22,7 @@ type Industry = {
   summary: string;
   metric: string;
   href: string;
+  relatedDemos: { label: string; href: string }[];
   demo?: { label: string; href: string; note?: string };
 };
 
@@ -119,12 +120,91 @@ const commonCases: CommonCase[] = [
 ];
 
 const industries: Industry[] = [
-  { id: 'ind-legal', image: '/images/industries/legal.png', title: '士業（税理士・行政書士）', shortTitle: '士業', summary: '期限管理・書類作成・顧客対応', metric: '月30時間削減', href: '/service/sample-legal' },
-  { id: 'ind-pension', image: '/images/industries/pension.png', title: 'ペンション・宿泊業', shortTitle: 'ペンション・宿泊', summary: '予約対応・口コミ返信・多言語対応', metric: '月25時間削減', href: '/service/sample-pension' },
-  { id: 'ind-restaurant', image: '/images/industries/restaurant.png', title: 'カフェ＆レストラン', shortTitle: 'カフェ・レストラン', summary: 'SNS投稿・口コミ対応・LINE配信', metric: '月18時間削減＋売上増', href: '/service/sample-restaurant', demo: { label: '口コミ監視＋返信下書きデモを試す', href: '/review-monitor', note: 'Googleマップ・食べログ・SNS の新着口コミを監視し、低評価アラートと返信下書きを確認できるデモです。' } },
-  { id: 'ind-ec', image: '/images/industries/ec.png', title: 'EC事業者・ネットショップ', shortTitle: 'EC・ネットショップ', summary: '商品登録・受注対応・問い合わせ分類', metric: '月25時間削減', href: '/service/sample-ec' },
-  { id: 'ind-construction', image: '/images/industries/construction.png', title: '工務店・建設業', shortTitle: '工務店・建設', summary: '見積書作成・報告書効率化・承認管理', metric: '月35時間削減', href: '/service/sample-construction' },
-  { id: 'ind-winery', image: '/images/industries/winery.png', title: 'ワイナリー・醸造所', shortTitle: 'ワイナリー', summary: '醸造記録・在庫管理・卸先提案書', metric: '月30時間削減', href: '/service/sample-winery' },
+  {
+    id: 'ind-legal',
+    image: '/images/industries/legal.png',
+    title: '士業（税理士・行政書士）',
+    shortTitle: '士業',
+    summary: '期限管理・書類作成・顧客対応',
+    metric: '月30時間削減',
+    href: '/service/sample-legal',
+    relatedDemos: [
+      { label: '文書レビュー', href: '/document-review' },
+      { label: '社内検索', href: '/data-search' },
+      { label: '承認ワークフロー', href: '/approval-workflow' },
+    ],
+  },
+  {
+    id: 'ind-pension',
+    image: '/images/industries/pension.png',
+    title: 'ペンション・宿泊業',
+    shortTitle: 'ペンション・宿泊',
+    summary: '予約対応・口コミ返信・多言語対応',
+    metric: '月25時間削減',
+    href: '/service/sample-pension',
+    relatedDemos: [
+      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
+      { label: '口コミ監視', href: '/review-monitor' },
+      { label: '社内検索', href: '/data-search' },
+    ],
+  },
+  {
+    id: 'ind-restaurant',
+    image: '/images/industries/restaurant.png',
+    title: 'カフェ＆レストラン',
+    shortTitle: 'カフェ・レストラン',
+    summary: 'SNS投稿・口コミ対応・LINE配信',
+    metric: '月18時間削減＋売上増',
+    href: '/service/sample-restaurant',
+    relatedDemos: [
+      { label: '口コミ監視', href: '/review-monitor' },
+      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
+      { label: '業務管理画面', href: '/custom-management' },
+    ],
+    demo: { label: '口コミ監視＋返信下書きデモを試す', href: '/review-monitor', note: 'Googleマップ・食べログ・SNS の新着口コミを監視し、低評価アラートと返信下書きを確認できるデモです。' },
+  },
+  {
+    id: 'ind-ec',
+    image: '/images/industries/ec.png',
+    title: 'EC事業者・ネットショップ',
+    shortTitle: 'EC・ネットショップ',
+    summary: '商品登録・受注対応・問い合わせ分類',
+    metric: '月25時間削減',
+    href: '/service/sample-ec',
+    relatedDemos: [
+      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
+      { label: '社内検索', href: '/data-search' },
+      { label: '業務管理画面', href: '/custom-management' },
+    ],
+  },
+  {
+    id: 'ind-construction',
+    image: '/images/industries/construction.png',
+    title: '工務店・建設業',
+    shortTitle: '工務店・建設',
+    summary: '見積書作成・報告書効率化・承認管理',
+    metric: '月35時間削減',
+    href: '/service/sample-construction',
+    relatedDemos: [
+      { label: '見積書ドラフト', href: '/quote-generator' },
+      { label: '承認ワークフロー', href: '/approval-workflow' },
+      { label: '文書レビュー', href: '/document-review' },
+    ],
+  },
+  {
+    id: 'ind-winery',
+    image: '/images/industries/winery.png',
+    title: 'ワイナリー・醸造所',
+    shortTitle: 'ワイナリー',
+    summary: '醸造記録・在庫管理・卸先提案書',
+    metric: '月30時間削減',
+    href: '/service/sample-winery',
+    relatedDemos: [
+      { label: '業務管理画面', href: '/custom-management' },
+      { label: '社内検索', href: '/data-search' },
+      { label: '見積書ドラフト', href: '/quote-generator' },
+    ],
+  },
 ];
 
 const roleDemos: RoleDemo[] = [
@@ -136,33 +216,57 @@ const roleDemos: RoleDemo[] = [
     shortTitle: '経営者・代表者向け',
     summary: 'KPI、稼働状況、重要アラートを朝の短時間で確認',
     metric: '事業状況把握 5時間 → 30分',
-    href: '/service/sample-executive',
+    href: '/role-demo/executive',
     cta: '経営者向けデモを見る',
-    note: '稼働状況ダッシュボード、自然言語データ検索、承認ワークフローの3つを経営者向け文脈で確認できます。',
+    note: '売上見込、未対応リスク、承認待ち、稼働状況を朝の確認画面としてまとめます。',
+  },
+  {
+    id: 'role-board',
+    tag: 'FOR BOARD MEMBERS',
+    icon: 'fa-chess-king',
+    title: '役員・取締役向けAI意思決定支援',
+    shortTitle: '役員・取締役向け',
+    summary: '会議前に論点、判断材料、未確認リスクを整理',
+    metric: '会議準備 3時間 → 20分',
+    href: '/role-demo/board',
+    cta: '役員向けデモを見る',
+    note: '議題、意思決定事項、数字の前提、確認先を会議前に揃えるデモです。',
   },
   {
     id: 'role-manager',
     tag: 'FOR MANAGERS',
     icon: 'fa-users-gear',
-    title: '管理職・承認者向け承認ワークフロー',
+    title: '管理職・マネージャー向けAI業務支援',
     shortTitle: '管理職・承認者向け',
-    summary: '自分が判断すべき申請だけを確認し、差し戻しや承認まで一画面で処理',
-    metric: '承認確認を一画面に集約',
-    href: '/approval-workflow',
-    cta: '承認者向けデモを見る',
-    note: '申請者と承認者の画面を切り替え、稟議・経費・契約確認の流れを確認できます。',
+    summary: 'チームの詰まり、1on1準備、承認待ちを一画面で確認',
+    metric: 'マネジメント工数 月15時間削減',
+    href: '/role-demo/manager',
+    cta: '管理職向けデモを見る',
+    note: 'メンバー別の状況、次に確認すべきこと、承認待ちを管理職向けに整理します。',
   },
   {
-    id: 'role-operator',
+    id: 'role-staff',
     tag: 'FOR OPERATORS',
     icon: 'fa-user-gear',
-    title: '現場・担当者向けロール別業務管理',
-    shortTitle: '現場・担当者向け',
-    summary: '担当案件と入力項目だけを表示し、二重入力や確認漏れを減らす',
-    metric: '役割ごとに表示項目を整理',
-    href: '/custom-management',
-    cta: '現場向けデモを見る',
-    note: '経営者、営業パートナー、現場の3ビューを切り替え、同じ業務データの見え方が変わることを確認できます。',
+    title: '一般社員・実務担当者向けAI業務効率化',
+    shortTitle: '一般社員・担当者向け',
+    summary: '今日やること、返信下書き、確認待ちを業務単位で整理',
+    metric: '定型業務 月20時間削減',
+    href: '/role-demo/staff',
+    cta: '担当者向けデモを見る',
+    note: '日々の問い合わせ、文書作成、確認依頼を担当者の画面に合わせて整理します。',
+  },
+  {
+    id: 'role-backoffice',
+    tag: 'FOR BACK-OFFICE',
+    icon: 'fa-building-columns',
+    title: 'バックオフィス向けAI業務自動化',
+    shortTitle: 'バックオフィス向け',
+    summary: '請求、経費、勤怠、社内問い合わせを月次締めの流れで整理',
+    metric: '月次締め作業 50% 削減',
+    href: '/role-demo/backoffice',
+    cta: 'バックオフィス向けデモを見る',
+    note: '処理漏れ、確認先、差し戻し理由を月次締めの作業順に確認できます。',
   },
 ];
 
@@ -191,6 +295,24 @@ const roleDemos: RoleDemo[] = [
             <span class="ax-tab-label">ロール別デモ</span>
             <span class="ax-tab-count">{roleDemos.length}</span>
           </button>
+        </div>
+
+        <div class="ax-choice-guide reveal" aria-label="デモの選び方">
+          <article>
+            <span class="ax-choice-kicker">業務から選ぶ</span>
+            <strong>すぐ試したい場合</strong>
+            <p>問い合わせ、見積書、社内検索など、課題が見えている場合は実用デモから確認できます。</p>
+          </article>
+          <article>
+            <span class="ax-choice-kicker">業種から選ぶ</span>
+            <strong>自社に近い例を見たい場合</strong>
+            <p>士業、宿泊、飲食、EC、建設、ワイナリーの業務文脈に近いデモへ進めます。</p>
+          </article>
+          <article>
+            <span class="ax-choice-kicker">役割から選ぶ</span>
+            <strong>誰が使うかを確認したい場合</strong>
+            <p>経営者、役員、管理職、実務担当、バックオフィスの画面イメージを確認できます。</p>
+          </article>
         </div>
 
         <!-- セレクタ + 詳細 -->
@@ -289,6 +411,14 @@ const roleDemos: RoleDemo[] = [
                   <span class="ax-metric-label">想定削減時間</span>
                   <span class="ax-metric-value">{i.metric}</span>
                 </div>
+                <div class="ax-related-demos" aria-label={`${i.shortTitle}で試しやすいデモ`}>
+                  <span class="ax-related-label">この業種で試しやすいデモ</span>
+                  <div class="ax-related-links">
+                    {i.relatedDemos.map((demo) => (
+                      <a href={demo.href}>{demo.label}</a>
+                    ))}
+                  </div>
+                </div>
                 <a href={i.href} class="btn-primary ax-detail-cta">
                   業種別デモを見る
                   <i class="fa-solid fa-arrow-right"></i>
@@ -346,6 +476,52 @@ const roleDemos: RoleDemo[] = [
     </section>
 
     <!-- ファイナルCTA -->
+    <section class="ax-decision-section">
+      <div class="container">
+        <div class="ax-decision-head reveal">
+          <h2>導入判断に必要な情報</h2>
+          <p>デモで動きを確認したあと、実際に検討する際に見られるポイントをまとめています。削減時間はモデルケースであり、実際の効果は無料診断で業務量を確認して算出します。</p>
+        </div>
+        <div class="ax-decision-grid">
+          <article class="reveal">
+            <i class="fa-solid fa-yen-sign"></i>
+            <h3>費用感</h3>
+            <p>簡易診断は0円、詳細診断は¥5,500税込です。導入支援は対象業務と既存環境を見て個別に見積もります。</p>
+          </article>
+          <article class="reveal">
+            <i class="fa-solid fa-calendar-check"></i>
+            <h3>導入期間</h3>
+            <p>小さな自動化は数週間、本格導入は要件範囲により数ヶ月を目安に、段階的に動かします。</p>
+          </article>
+          <article class="reveal">
+            <i class="fa-solid fa-folder-open"></i>
+            <h3>必要な資料</h3>
+            <p>業務フロー、帳票、マニュアル、よくある問い合わせ、既存ツールの項目があると精度を上げやすくなります。</p>
+          </article>
+          <article class="reveal">
+            <i class="fa-solid fa-plug-circle-bolt"></i>
+            <h3>API利用</h3>
+            <p>公開デモはサンプルデータで動作します。実案件ではAI APIや既存ツール連携の有無を業務ごとに設計します。</p>
+          </article>
+          <article class="reveal">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>セキュリティ</h3>
+            <p>外部送信したくない情報は、ローカルLLMや権限分離を含めて扱い方を分けます。</p>
+          </article>
+          <article class="reveal">
+            <i class="fa-solid fa-route"></i>
+            <h3>次の進め方</h3>
+            <p>まず無料診断で効果が出やすい業務と導入順を整理し、必要に応じて詳細レポートや導入支援へ進みます。</p>
+          </article>
+        </div>
+        <div class="ax-decision-links reveal">
+          <a href="/service">サービス内容を見る</a>
+          <a href="/security">情報セキュリティ方針を見る</a>
+          <a href="/free-diagnosis">無料診断へ進む</a>
+        </div>
+      </div>
+    </section>
+
     <section class="ax-cta-section">
       <div class="container text-center">
         <h2 class="reveal">御社で使うなら、どのデモから着手すべきかを診断します</h2>
@@ -517,6 +693,40 @@ const roleDemos: RoleDemo[] = [
   }
   .ax-tab.active .ax-tab-count {
     background: rgba(255, 255, 255, .25);
+  }
+
+  .ax-choice-guide {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 0 clamp(24px, 4vw, 36px);
+  }
+  .ax-choice-guide article {
+    background: #ffffff;
+    border: 1px solid rgba(31, 58, 147, .12);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 24px rgba(31, 58, 147, .05);
+  }
+  .ax-choice-kicker {
+    display: inline-flex;
+    color: var(--brand);
+    font-size: .74rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    margin-bottom: 8px;
+  }
+  .ax-choice-guide strong {
+    display: block;
+    color: var(--heading);
+    font-size: .98rem;
+    margin-bottom: 6px;
+  }
+  .ax-choice-guide p {
+    color: var(--muted);
+    font-size: .84rem;
+    line-height: 1.75;
+    margin: 0;
   }
 
   /* ===== Master-Detail Grid ===== */
@@ -839,6 +1049,41 @@ const roleDemos: RoleDemo[] = [
     font-weight: 700;
     color: var(--heading);
   }
+  .ax-related-demos {
+    margin: 0 0 clamp(20px, 3vw, 28px);
+    padding: 16px 18px;
+    border: 1px solid rgba(31, 58, 147, .14);
+    border-radius: 12px;
+    background: rgba(31, 58, 147, .035);
+  }
+  .ax-related-label {
+    display: block;
+    color: var(--heading);
+    font-size: .86rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .ax-related-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ax-related-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 1px solid rgba(31, 58, 147, .22);
+    border-radius: 999px;
+    color: var(--brand);
+    background: #ffffff;
+    font-size: .82rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .ax-related-links a:hover {
+    background: rgba(31, 58, 147, .07);
+  }
   .ax-detail-cta {
     display: inline-flex !important;
     align-items: center;
@@ -889,6 +1134,79 @@ const roleDemos: RoleDemo[] = [
     text-decoration: underline;
   }
 
+  .ax-decision-section {
+    background: linear-gradient(180deg, #ffffff 0%, rgba(31, 58, 147, .025) 100%);
+    padding: clamp(52px, 7vw, 84px) 0;
+    border-top: 1px solid var(--border);
+  }
+  .ax-decision-head {
+    max-width: 760px;
+    margin: 0 auto clamp(24px, 4vw, 34px);
+    text-align: center;
+  }
+  .ax-decision-head h2 {
+    color: var(--heading);
+    font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+    margin: 0 0 12px;
+  }
+  .ax-decision-head p {
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 0;
+  }
+  .ax-decision-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .ax-decision-grid article {
+    min-height: 184px;
+    padding: 20px;
+    border: 1px solid rgba(31, 58, 147, .12);
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(31, 58, 147, .05);
+  }
+  .ax-decision-grid i {
+    color: var(--brand);
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+  .ax-decision-grid h3 {
+    color: var(--heading);
+    font-size: 1rem;
+    margin: 0 0 8px;
+  }
+  .ax-decision-grid p {
+    color: var(--muted);
+    font-size: .88rem;
+    line-height: 1.78;
+    margin: 0;
+  }
+  .ax-decision-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .ax-decision-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(31, 58, 147, .2);
+    color: var(--brand);
+    background: #ffffff;
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 700;
+  }
+  .ax-decision-links a:hover {
+    background: rgba(31, 58, 147, .07);
+  }
+
   /* ===== CTA ===== */
   .ax-cta-section {
     background: #ffffff;
@@ -934,6 +1252,10 @@ const roleDemos: RoleDemo[] = [
   }
 
   @media (max-width: 600px) {
+    .ax-choice-guide,
+    .ax-decision-grid {
+      grid-template-columns: 1fr;
+    }
     .ax-tabs {
       gap: 4px;
       padding: 4px;

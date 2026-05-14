@@ -1,0 +1,701 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+type Scenario = {
+  id: string;
+  label: string;
+  title: string;
+  summary: string;
+  items: string[];
+  output: { label: string; value: string }[];
+  humanCheck: string;
+};
+
+type RoleDemo = {
+  role: string;
+  tag: string;
+  icon: string;
+  title: string;
+  description: string;
+  persona: string;
+  primaryMetric: string;
+  backHash: string;
+  scenarios: Scenario[];
+};
+
+export const roleDemos: Record<string, RoleDemo> = {
+  executive: {
+    role: '経営者・代表者',
+    tag: 'FOR EXECUTIVES',
+    icon: 'fa-user-tie',
+    title: '経営者向けAIブリーフィング',
+    description: '朝の短時間で、売上見込、未対応リスク、承認待ち、AI自動化の稼働状況を確認するデモです。',
+    persona: '代表者・事業責任者',
+    primaryMetric: '事業状況把握 5時間 → 30分',
+    backHash: 'role-executive',
+    scenarios: [
+      {
+        id: 'morning',
+        label: '朝の確認',
+        title: '本日見るべき経営情報',
+        summary: '複数ツールを開かず、今日判断が必要な項目だけを優先度順に並べます。',
+        items: ['今月の売上見込は計画比92%。大型案件1件の回答待ち', '未対応問い合わせ3件のうち、1件は本日中の回答推奨', 'AI自動化は5本中4本が正常稼働。1本は再試行済み'],
+        output: [
+          { label: '要確認', value: '3件' },
+          { label: '承認待ち', value: '2件' },
+          { label: '稼働率', value: '96%' },
+        ],
+        humanCheck: '金額判断、顧客への最終回答、優先順位の変更は代表者が確認します。',
+      },
+      {
+        id: 'risk',
+        label: 'リスク確認',
+        title: '放置すると影響が出る項目',
+        summary: '売上・顧客対応・運用エラーのうち、今日見ておくべきものを抽出します。',
+        items: ['見積提出から7日経過した案件が2件', '口コミ返信が未対応の低評価投稿が1件', '請求書OCRで金額欄の確認待ちが1件'],
+        output: [
+          { label: '営業リスク', value: '中' },
+          { label: '顧客対応', value: '高' },
+          { label: '運用停止', value: 'なし' },
+        ],
+        humanCheck: 'AIは優先度を提示し、連絡方針と対外対応は人が決めます。',
+      },
+      {
+        id: 'weekly',
+        label: '週次振り返り',
+        title: '次週に向けた改善候補',
+        summary: '処理件数、手戻り、問い合わせ傾向から、次に改善すると効きやすい業務を示します。',
+        items: ['問い合わせ分類の手戻りが先週比で増加', '見積書ドラフトの確認時間は平均18分短縮', '社内検索の利用は管理部門に偏り、営業利用が少ない'],
+        output: [
+          { label: '改善候補', value: '2件' },
+          { label: '削減傾向', value: '+18分/件' },
+          { label: '次アクション', value: '営業向け整備' },
+        ],
+        humanCheck: '改善に着手する順番は、事業上の優先度と合わせて判断します。',
+      },
+    ],
+  },
+  board: {
+    role: '役員・取締役',
+    tag: 'FOR BOARD MEMBERS',
+    icon: 'fa-chess-king',
+    title: '役員向けAI意思決定支援',
+    description: '会議前に論点、判断材料、数字の前提、未確認リスクを整理するデモです。',
+    persona: '役員・取締役・経営会議メンバー',
+    primaryMetric: '会議準備 3時間 → 20分',
+    backHash: 'role-board',
+    scenarios: [
+      {
+        id: 'agenda',
+        label: '議題整理',
+        title: '会議前の論点パック',
+        summary: '議事メモ、売上データ、未決事項から、会議で扱うべき順番に整理します。',
+        items: ['価格改定案は顧客説明文と解約リスクの確認が必要', '導入支援案件は人員制約により着手時期の判断が必要', '保守プランの範囲変更は契約文言の確認が必要'],
+        output: [
+          { label: '議題', value: '3件' },
+          { label: '決裁必要', value: '2件' },
+          { label: '事前確認', value: '4点' },
+        ],
+        humanCheck: '最終決裁、対外説明、契約変更は役員が判断します。',
+      },
+      {
+        id: 'numbers',
+        label: '数値確認',
+        title: '数字の前提と不足データ',
+        summary: '売上見込やコスト試算の根拠を並べ、足りない情報を明示します。',
+        items: ['月次売上見込は確度A案件を除くと計画比78%', 'AI API利用料は上限内だが、画像処理の増加で来月上振れ可能性', '外注費の実績反映が1件未完了'],
+        output: [
+          { label: '根拠確認済み', value: '7項目' },
+          { label: '未反映', value: '1件' },
+          { label: '追加確認', value: '2点' },
+        ],
+        humanCheck: 'AIの集計結果は、会議で使う前に元データと照合します。',
+      },
+      {
+        id: 'decision',
+        label: '決定事項',
+        title: '会議後に残すべき決定ログ',
+        summary: '決定事項、保留事項、担当者、期限を分けて記録します。',
+        items: ['価格改定は6月通知、7月適用で進める', '導入支援の新規受付は2件までに制限', 'セキュリティ説明資料を次回までに更新'],
+        output: [
+          { label: '決定', value: '3件' },
+          { label: '保留', value: '1件' },
+          { label: '担当割当', value: '4名' },
+        ],
+        humanCheck: '議事録として確定する前に、出席者が内容を確認します。',
+      },
+    ],
+  },
+  manager: {
+    role: '管理職・マネージャー',
+    tag: 'FOR MANAGERS',
+    icon: 'fa-users-gear',
+    title: '管理職向けAI業務支援',
+    description: 'チームの詰まり、承認待ち、1on1準備をまとめて確認するデモです。',
+    persona: '部門長・チームリーダー',
+    primaryMetric: 'マネジメント工数 月15時間削減',
+    backHash: 'role-manager',
+    scenarios: [
+      {
+        id: 'team',
+        label: 'チーム状況',
+        title: 'メンバー別の詰まり確認',
+        summary: 'タスク、問い合わせ、期限超過を横断し、声をかけるべき相手を示します。',
+        items: ['佐藤さんは顧客返信が3件滞留。テンプレ不足が原因候補', '田中さんは承認待ちで作業が止まっている案件が1件', '新人メンバーは社内検索の利用が多く、同じ質問が繰り返し発生'],
+        output: [
+          { label: '要フォロー', value: '2名' },
+          { label: '期限超過', value: '1件' },
+          { label: '手順化候補', value: '3件' },
+        ],
+        humanCheck: '人事評価や負荷判断は、AIの提示を材料に管理職が確認します。',
+      },
+      {
+        id: 'approval',
+        label: '承認待ち',
+        title: '自分が判断すべき申請',
+        summary: '金額、期限、影響範囲を整理し、承認・差し戻しの判断材料を出します。',
+        items: ['経費申請2件は規程内。領収書の添付あり', '契約書レビュー1件は責任範囲の確認が必要', '休暇申請1件はシフト調整済み'],
+        output: [
+          { label: '承認候補', value: '3件' },
+          { label: '差戻し候補', value: '1件' },
+          { label: '本日期限', value: '2件' },
+        ],
+        humanCheck: '承認・却下の最終操作は管理職が行います。',
+      },
+      {
+        id: 'oneonone',
+        label: '1on1準備',
+        title: '面談前に見るべき変化',
+        summary: '直近の成果、詰まり、相談されそうな論点を事前にまとめます。',
+        items: ['対応件数は安定しているが、顧客返信の修正回数が増加', '社内質問は減少。マニュアル検索の利用が定着', '来月の繁忙期に向けて担当範囲の見直し余地あり'],
+        output: [
+          { label: '確認質問', value: '5個' },
+          { label: '称賛候補', value: '2点' },
+          { label: '支援候補', value: '1点' },
+        ],
+        humanCheck: '面談内容は本人の状況を聞きながら調整します。',
+      },
+    ],
+  },
+  staff: {
+    role: '一般社員・実務担当者',
+    tag: 'FOR STAFF',
+    icon: 'fa-user-gear',
+    title: '実務担当者向けAI業務効率化',
+    description: '今日やること、返信下書き、文書作成、確認待ちを担当者目線で整理するデモです。',
+    persona: '営業・事務・現場担当者',
+    primaryMetric: '定型業務 月20時間削減',
+    backHash: 'role-staff',
+    scenarios: [
+      {
+        id: 'today',
+        label: '今日の作業',
+        title: '優先順位つきタスクリスト',
+        summary: 'メール、申請、見積、社内依頼をまとめ、先に処理すべき順に並べます。',
+        items: ['本日返信が必要な問い合わせ2件', '見積条件の確認待ち1件', '経費精算の領収書不足1件'],
+        output: [
+          { label: '今日の処理', value: '6件' },
+          { label: '下書き済み', value: '3件' },
+          { label: '確認待ち', value: '2件' },
+        ],
+        humanCheck: '送信、申請、金額確定は担当者が内容を見て実行します。',
+      },
+      {
+        id: 'draft',
+        label: '文面下書き',
+        title: '顧客返信と社内連絡の下書き',
+        summary: '定型的な連絡を、会社のトーンに合わせて下書きします。',
+        items: ['納期確認メールの返信案', '見積条件の確認依頼', '社内承認を依頼する短文'],
+        output: [
+          { label: '返信案', value: '3件' },
+          { label: '要修正', value: '1件' },
+          { label: '送信可', value: '2件' },
+        ],
+        humanCheck: '顧客名、金額、納期、約束表現を確認してから送信します。',
+      },
+      {
+        id: 'search',
+        label: '社内確認',
+        title: '規程・手順の確認',
+        summary: '先輩に聞く前に、社内文書から該当箇所を探して根拠つきで表示します。',
+        items: ['経費精算の締切は毎月25日', '社外送付前の見積書は上長確認が必要', '契約書のひな形は最新版を利用'],
+        output: [
+          { label: '引用元', value: '3文書' },
+          { label: '未解決', value: '0件' },
+          { label: '確認先', value: '管理部' },
+        ],
+        humanCheck: '規程が古い可能性がある場合は、管理部に確認します。',
+      },
+    ],
+  },
+  backoffice: {
+    role: 'バックオフィス',
+    tag: 'FOR BACK-OFFICE',
+    icon: 'fa-building-columns',
+    title: 'バックオフィス向けAI業務自動化',
+    description: '請求、経費、勤怠、社内問い合わせを月次締めの順番で整理するデモです。',
+    persona: '経理・労務・総務担当者',
+    primaryMetric: '月次締め作業 50% 削減',
+    backHash: 'role-backoffice',
+    scenarios: [
+      {
+        id: 'closing',
+        label: '月次締め',
+        title: '締め作業の進捗確認',
+        summary: '請求書、経費、勤怠、未処理問い合わせをまとめて進捗表示します。',
+        items: ['請求書OCRは18件中16件処理済み', '経費精算は3件が領収書確認待ち', '勤怠締めは1名の打刻漏れあり'],
+        output: [
+          { label: '処理済み', value: '89%' },
+          { label: '確認待ち', value: '4件' },
+          { label: '本日対応', value: '2件' },
+        ],
+        humanCheck: '会計登録、給与影響、社外送付は担当者が確認します。',
+      },
+      {
+        id: 'inquiry',
+        label: '社内問い合わせ',
+        title: 'よくある質問の一次回答',
+        summary: '経費、勤怠、申請手順の質問を分類し、根拠つきで回答案を出します。',
+        items: ['交通費精算の締切質問に規程を引用', '有休申請の手順をフォームURL付きで案内', '例外処理は担当者確認へ回す'],
+        output: [
+          { label: '自動回答案', value: '5件' },
+          { label: '要確認', value: '1件' },
+          { label: '引用元', value: '4文書' },
+        ],
+        humanCheck: '例外対応や個別事情を含む回答は担当者が判断します。',
+      },
+      {
+        id: 'audit',
+        label: '抜け漏れ確認',
+        title: '提出・承認・証憑のチェック',
+        summary: '締め前に、未提出、未承認、添付不足を横断チェックします。',
+        items: ['領収書添付不足が2件', '承認済みだが会計登録前の経費が1件', '請求書番号の重複疑いが1件'],
+        output: [
+          { label: '不足', value: '2件' },
+          { label: '重複疑い', value: '1件' },
+          { label: '確認先', value: '3名' },
+        ],
+        humanCheck: '証憑の真正性、仕訳、社内承認の扱いは担当者が確認します。',
+      },
+    ],
+  },
+};
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.entries(roleDemos).map(([role, demo]) => ({
+    params: { role },
+    props: { demo },
+  }));
+}
+
+const { demo } = Astro.props as { demo: RoleDemo };
+const initialScenario = demo.scenarios[0];
+---
+
+<Layout
+  title={`${demo.title}（デモ） | Optiens`}
+  description={`${demo.persona}向けに、AIが業務情報を整理して次の確認ポイントを提示するロール別デモです。`}
+  canonical={`https://optiens.com/role-demo/${demo.backHash.replace('role-', '')}`}
+>
+  <main class="rd-main light-section">
+    <section class="rd-hero">
+      <div class="container rd-hero-grid">
+        <div>
+          <p class="rd-eyebrow">{demo.tag}</p>
+          <h1>{demo.title}</h1>
+          <p class="rd-lede">{demo.description}</p>
+          <div class="rd-meta">
+            <span><i class="fa-solid fa-user"></i>{demo.persona}</span>
+            <span><i class="fa-solid fa-chart-line"></i>{demo.primaryMetric}</span>
+          </div>
+        </div>
+        <div class="rd-hero-card" aria-label="デモの前提">
+          <i class={`fa-solid ${demo.icon}`}></i>
+          <strong>サンプルデータで動く公開デモ</strong>
+          <p>このページ上ではAPI通信や外部送信は発生しません。実案件では、利用するデータと業務リスクに合わせてAPI利用、権限、確認フローを設計します。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="rd-section">
+      <div class="container rd-workbench">
+        <aside class="rd-scenarios" aria-label="確認シナリオ">
+          <h2>確認シナリオ</h2>
+          <div class="rd-scenario-buttons">
+            {demo.scenarios.map((scenario, index) => (
+              <button class={`rd-scenario-btn ${index === 0 ? 'active' : ''}`} type="button" data-scenario={scenario.id}>
+                <span>{scenario.label}</span>
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        <section class="rd-panel" aria-live="polite">
+          <header class="rd-panel-head">
+            <span id="scenario-label">{initialScenario.label}</span>
+            <h2 id="scenario-title">{initialScenario.title}</h2>
+            <p id="scenario-summary">{initialScenario.summary}</p>
+          </header>
+
+          <div class="rd-output-grid" id="scenario-output">
+            {initialScenario.output.map((item) => (
+              <article>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </article>
+            ))}
+          </div>
+
+          <div class="rd-item-list">
+            <h3>AIが整理した確認項目</h3>
+            <ul id="scenario-items">
+              {initialScenario.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+
+          <div class="rd-human-check">
+            <i class="fa-solid fa-user-check"></i>
+            <p><strong>人間の確認ポイント</strong><span id="scenario-human">{initialScenario.humanCheck}</span></p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="rd-section rd-next">
+      <div class="container">
+        <div class="rd-next-grid">
+          <article>
+            <h2>実案件で調整すること</h2>
+            <ul>
+              <li>見るべきデータ元、通知先、承認者、閲覧権限</li>
+              <li>AIが自動化してよい範囲と、人が必ず確認する範囲</li>
+              <li>既存ツールとの連携方法、API利用の有無、保守方法</li>
+            </ul>
+          </article>
+          <article>
+            <h2>次の進め方</h2>
+            <p>御社の業務で同じ画面が必要かは、業務量、既存ツール、扱う情報の機密性を見て判断します。無料診断で、どのロールから始めるべきかを整理できます。</p>
+            <div class="rd-actions">
+              <a href={`/ai-examples?cat=role#${demo.backHash}`} class="btn-secondary">ロール別一覧に戻る</a>
+              <a href="/free-diagnosis" class="btn-primary">無料診断を受ける</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script is:inline define:vars={{ scenarios: demo.scenarios }}>
+(function() {
+  const buttons = document.querySelectorAll('.rd-scenario-btn');
+  const label = document.getElementById('scenario-label');
+  const title = document.getElementById('scenario-title');
+  const summary = document.getElementById('scenario-summary');
+  const output = document.getElementById('scenario-output');
+  const items = document.getElementById('scenario-items');
+  const human = document.getElementById('scenario-human');
+
+  function renderScenario(id) {
+    const scenario = scenarios.find((item) => item.id === id) || scenarios[0];
+    label.textContent = scenario.label;
+    title.textContent = scenario.title;
+    summary.textContent = scenario.summary;
+    output.innerHTML = scenario.output.map((item) => (
+      `<article><span>${item.label}</span><strong>${item.value}</strong></article>`
+    )).join('');
+    items.innerHTML = scenario.items.map((item) => `<li>${item}</li>`).join('');
+    human.textContent = scenario.humanCheck;
+    buttons.forEach((button) => button.classList.toggle('active', button.dataset.scenario === scenario.id));
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => renderScenario(button.dataset.scenario));
+  });
+})();
+</script>
+
+<style>
+  .rd-main {
+    background: #ffffff;
+    color: var(--text);
+  }
+  .rd-hero {
+    padding: clamp(72px, 9vw, 112px) 0 clamp(28px, 5vw, 48px);
+    background: linear-gradient(180deg, rgba(31, 58, 147, .05) 0%, #ffffff 100%);
+  }
+  .rd-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+    gap: clamp(24px, 5vw, 56px);
+    align-items: center;
+  }
+  .rd-eyebrow {
+    color: var(--brand);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .18em;
+    margin: 0 0 12px;
+  }
+  .rd-hero h1 {
+    color: var(--heading);
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    line-height: 1.35;
+    margin: 0 0 16px;
+  }
+  .rd-lede {
+    color: var(--muted);
+    font-size: clamp(.98rem, 1.6vw, 1.08rem);
+    line-height: 1.9;
+    margin: 0;
+  }
+  .rd-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .rd-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid rgba(31, 58, 147, .16);
+    border-radius: 999px;
+    color: var(--brand);
+    background: #ffffff;
+    font-size: .84rem;
+    font-weight: 700;
+  }
+  .rd-hero-card {
+    padding: 24px;
+    border: 1px solid rgba(31, 58, 147, .14);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 16px 36px rgba(31, 58, 147, .08);
+  }
+  .rd-hero-card i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2, #6B85C9) 100%);
+    margin-bottom: 16px;
+  }
+  .rd-hero-card strong {
+    display: block;
+    color: var(--heading);
+    margin-bottom: 8px;
+  }
+  .rd-hero-card p {
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.75;
+    margin: 0;
+  }
+  .rd-section {
+    padding: clamp(36px, 6vw, 68px) 0;
+  }
+  .rd-workbench {
+    display: grid;
+    grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 34px);
+    align-items: start;
+  }
+  .rd-scenarios {
+    position: sticky;
+    top: 92px;
+    padding: 18px;
+    border: 1px solid rgba(31, 58, 147, .12);
+    border-radius: 16px;
+    background: #ffffff;
+  }
+  .rd-scenarios h2 {
+    color: var(--heading);
+    font-size: 1rem;
+    margin: 0 0 12px;
+  }
+  .rd-scenario-buttons {
+    display: grid;
+    gap: 8px;
+  }
+  .rd-scenario-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #ffffff;
+    color: var(--heading);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+  }
+  .rd-scenario-btn.active,
+  .rd-scenario-btn:hover {
+    border-color: var(--brand);
+    background: rgba(31, 58, 147, .06);
+    color: var(--brand);
+  }
+  .rd-panel {
+    padding: clamp(24px, 4vw, 38px);
+    border: 1px solid rgba(31, 58, 147, .12);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 12px 32px rgba(31, 58, 147, .06);
+  }
+  .rd-panel-head span {
+    color: var(--brand);
+    font-size: .78rem;
+    font-weight: 800;
+  }
+  .rd-panel-head h2 {
+    color: var(--heading);
+    font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+    margin: 8px 0 10px;
+  }
+  .rd-panel-head p {
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 0 0 22px;
+  }
+  .rd-output-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .rd-output-grid article {
+    padding: 16px;
+    border: 1px solid rgba(31, 58, 147, .14);
+    border-radius: 14px;
+    background: rgba(31, 58, 147, .035);
+  }
+  .rd-output-grid span {
+    display: block;
+    color: var(--muted);
+    font-size: .78rem;
+    margin-bottom: 6px;
+  }
+  .rd-output-grid strong {
+    color: var(--heading);
+    font-size: 1.2rem;
+  }
+  .rd-item-list {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 18px;
+  }
+  .rd-item-list h3 {
+    color: var(--heading);
+    font-size: 1rem;
+    margin: 0 0 12px;
+  }
+  .rd-item-list ul {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding-left: 1.2em;
+    color: var(--text);
+    line-height: 1.75;
+  }
+  .rd-human-check {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    border-left: 3px solid var(--brand);
+    border-radius: 0 12px 12px 0;
+    background: rgba(31, 58, 147, .06);
+  }
+  .rd-human-check i {
+    color: var(--brand);
+    margin-top: 3px;
+  }
+  .rd-human-check p {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    color: var(--text);
+    line-height: 1.75;
+  }
+  .rd-human-check strong {
+    color: var(--heading);
+  }
+  .rd-next {
+    border-top: 1px solid var(--border);
+    background: rgba(31, 58, 147, .025);
+  }
+  .rd-next-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .rd-next-grid article {
+    padding: 24px;
+    border: 1px solid rgba(31, 58, 147, .12);
+    border-radius: 16px;
+    background: #ffffff;
+  }
+  .rd-next-grid h2 {
+    color: var(--heading);
+    font-size: 1.15rem;
+    margin: 0 0 12px;
+  }
+  .rd-next-grid p,
+  .rd-next-grid li {
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .rd-next-grid ul {
+    margin: 0;
+    padding-left: 1.2em;
+  }
+  .rd-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--brand);
+    color: var(--brand);
+    background: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .btn-secondary:hover {
+    background: rgba(31, 58, 147, .07);
+  }
+  @media (max-width: 900px) {
+    .rd-hero-grid,
+    .rd-workbench,
+    .rd-next-grid {
+      grid-template-columns: 1fr;
+    }
+    .rd-scenarios {
+      position: static;
+    }
+  }
+  @media (max-width: 620px) {
+    .rd-output-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
