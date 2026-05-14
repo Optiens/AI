@@ -73,6 +73,19 @@ const timelineOptions = [
   ['undecided', '未定'],
 ];
 
+const leadSourceOptions = [
+  ['', '選択してください'],
+  ['url-file-demo', 'URL・資料からの自動入力デモ'],
+  ['public-demo', '実機デモ・サンプルツール'],
+  ['ai-examples', '業種別AI活用サンプル'],
+  ['role-demo', 'ロール別デモ'],
+  ['blog', 'ブログ記事'],
+  ['search', '検索'],
+  ['referral', '紹介・口コミ'],
+  ['business-group', '商工会・勉強会・地域団体'],
+  ['other', 'その他'],
+];
+
 const statusOptions = [
   ['new', '新規受付'],
   ['pending_verification', 'メール認証待ち'],
@@ -99,6 +112,12 @@ function fmt(s: any) {
   if (!s) return '';
   try { return new Date(s).toLocaleString('ja-JP'); } catch { return String(s); }
 }
+
+const leadStatus = String(lead?.status || '');
+const isPaidLead = Boolean(lead && (lead.plan === 'paid' || (lead.amount_jpy || 0) > 0));
+const isPendingPaymentLead = isPaidLead && leadStatus === 'pending_payment';
+const canGeneratePaidReport = isPaidLead && ['paid', 'report_created', 'manual_review'].includes(leadStatus);
+const canMarkReportSent = isPaidLead && ['report_created', 'report_sent', 'sent'].includes(leadStatus);
 ---
 
 <AdminLayout title={lead ? `案件詳細：${lead.company_name || '無題'}` : '案件詳細'} active="leads">
@@ -136,13 +155,16 @@ function fmt(s: any) {
 
       <!-- アクションボタン -->
       <div class="action-bar">
-        <button class="action-btn action-btn--success" data-action="mark_paid" disabled={lead.status === 'paid'}>
+        <button class="action-btn action-btn--success" data-action="mark_paid" hidden={!isPendingPaymentLead} disabled={!isPendingPaymentLead}>
           <i class="fas fa-check-circle"></i> 入金確認済みに変更
         </button>
-        <button class="action-btn action-btn--accent" data-action="mark_referral_free" disabled={lead.status === 'paid'}>
+        <button class="action-btn action-btn--accent" data-action="mark_referral_free" hidden={!isPendingPaymentLead} disabled={!isPendingPaymentLead}>
           <i class="fas fa-handshake"></i> 紹介経由・無料化
         </button>
-        <button class="action-btn action-btn--primary" data-action="mark_report_sent" disabled={lead.status === 'sent'}>
+        <button class="action-btn action-btn--primary" data-action="generate_paid_report" hidden={!canGeneratePaidReport} disabled={!canGeneratePaidReport}>
+          <i class="fas fa-wand-magic-sparkles"></i> 有償レポート生成・送付
+        </button>
+        <button class="action-btn action-btn--primary" data-action="mark_report_sent" hidden={!canMarkReportSent} disabled={lead.status === 'sent'}>
           <i class="fas fa-paper-plane"></i> レポート送付済みに変更
         </button>
       </div>
@@ -191,6 +213,28 @@ function fmt(s: any) {
                 ))}
               </select>
             </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="section">
+          <legend>流入・申し込みのきっかけ</legend>
+          <div class="grid-2">
+            <div class="field">
+              <label>申し込みのきっかけ</label>
+              <select name="lead_source">
+                {leadSourceOptions.map(([v, label]) => (
+                  <option value={v} selected={lead.lead_source === v}>{label}</option>
+                ))}
+              </select>
+            </div>
+            <div class="field">
+              <label>きっかけ詳細</label>
+              <input type="text" name="lead_source_detail" value={lead.lead_source_detail || ''} />
+            </div>
+          </div>
+          <div class="field">
+            <label>直前の参照元URL（自動取得）</label>
+            <input type="text" name="entry_referrer" value={lead.entry_referrer || ''} />
           </div>
         </fieldset>
 
@@ -279,8 +323,8 @@ function fmt(s: any) {
       <input type="text" id="referral-from" placeholder="例: 商工会 田中様" />
     </label>
     <div class="modal-actions">
-      <button class="action-btn action-btn--ghost" data-modal-close>キャンセル</button>
-      <button class="action-btn action-btn--accent" id="referral-confirm">
+      <button type="button" class="action-btn action-btn--ghost" data-modal-close>キャンセル</button>
+      <button type="button" class="action-btn action-btn--accent" id="referral-confirm">
         <i class="fas fa-handshake"></i> 無料化を実行
       </button>
     </div>
@@ -318,6 +362,15 @@ function fmt(s: any) {
       return res.json();
     }
 
+    async function postPaidReportGenerate() {
+      const res = await fetch('/api/admin/process-paid-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id, force: true }),
+      });
+      return res.json();
+    }
+
     // 保存
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -338,6 +391,7 @@ function fmt(s: any) {
     // アクションボタン
     document.querySelectorAll('[data-action]').forEach(function(btn) {
       btn.addEventListener('click', async function() {
+        if (btn.disabled || btn.hidden) return;
         const action = btn.dataset.action;
         if (action === 'mark_referral_free') {
           openReferralModal();
@@ -345,12 +399,15 @@ function fmt(s: any) {
         }
         const labels = {
           mark_paid: 'お振込確認済みに変更し、お客様に確認メールを送信します。よろしいですか？',
+          generate_paid_report: '有償レポートを生成し、お客様にGoogle Slides URLと60分MTG案内メールを送信します。よろしいですか？',
           mark_report_sent: 'レポート送付済みに変更します。よろしいですか？',
         };
         if (!confirm(labels[action] || '実行しますか？')) return;
         btn.disabled = true;
         try {
-          const data = await postUpdate({ action: action });
+          const data = action === 'generate_paid_report'
+            ? await postPaidReportGenerate()
+            : await postUpdate({ action: action });
           if (data.error) {
             alert('エラー: ' + data.error);
             btn.disabled = false;
@@ -368,17 +425,26 @@ function fmt(s: any) {
     const modal = document.getElementById('referral-modal');
     const referralFromInput = document.getElementById('referral-from');
     function openReferralModal() {
+      if (!modal || !referralFromInput) return;
       modal.hidden = false;
       referralFromInput.value = '';
       referralFromInput.focus();
     }
     function closeReferralModal() {
+      if (!modal) return;
       modal.hidden = true;
     }
-    modal.querySelectorAll('[data-modal-close]').forEach(function(el) {
-      el.addEventListener('click', closeReferralModal);
+    modal?.querySelectorAll('[data-modal-close]').forEach(function(el) {
+      el.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        closeReferralModal();
+      });
     });
-    document.getElementById('referral-confirm').addEventListener('click', async function() {
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && modal && !modal.hidden) closeReferralModal();
+    });
+    document.getElementById('referral-confirm')?.addEventListener('click', async function() {
       const referralFrom = (referralFromInput.value || '').trim();
       const btn = this;
       btn.disabled = true;
@@ -408,8 +474,8 @@ function fmt(s: any) {
 
   .admin-error {
     padding: 12px 16px;
-    background: rgba(234, 67, 53, 0.1);
-    border: 1px solid rgba(234, 67, 53, 0.3);
+    background: rgba(228, 138, 149, 0.12);
+    border: 1px solid rgba(228, 138, 149, 0.34);
     border-radius: 8px;
     color: var(--admin-danger);
     margin-bottom: 20px;
@@ -498,11 +564,11 @@ function fmt(s: any) {
   }
   .action-btn--primary:not(:disabled):hover { background: var(--admin-brand-hover); }
   .action-btn--success {
-    background: var(--admin-success);
-    color: #06291e;
+    background: var(--admin-secondary);
+    color: #fff;
   }
   .action-btn--accent {
-    background: #E48A95;
+    background: var(--admin-accent);
     color: #fff;
   }
   .action-btn--ghost {

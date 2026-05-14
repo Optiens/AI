@@ -18,6 +18,9 @@ type Lead = {
   business_description?: string | null;
   daily_tasks?: string | null;
   current_tools?: string | null;
+  lead_source?: string | null;
+  lead_source_detail?: string | null;
+  entry_referrer?: string | null;
   plan?: string | null;
   status?: string | null;
   amount_jpy?: number | null;
@@ -34,29 +37,6 @@ type Lead = {
   past_it_experience?: string | null;
   admin_notes?: string | null;
   last_error?: string | null;
-};
-
-type AiApiEvent = {
-  id: number;
-  created_at: string;
-  workflow?: string | null;
-  provider?: string | null;
-  model?: string | null;
-  operation?: string | null;
-  status?: 'success' | 'error' | 'retry' | 'skipped' | string | null;
-  http_status?: number | null;
-  latency_ms?: number | null;
-  input_tokens?: number | null;
-  output_tokens?: number | null;
-  total_tokens?: number | null;
-  context_window_tokens?: number | null;
-  context_remaining_tokens?: number | null;
-  request_id?: string | null;
-  lead_id?: string | null;
-  application_id?: string | null;
-  error_type?: string | null;
-  error_message?: string | null;
-  metadata?: Record<string, unknown> | null;
 };
 
 type StatusConfig = {
@@ -76,26 +56,35 @@ type NextAction = {
   score: number;
 };
 
+const adminColors = {
+  primary: '#1F3A93',
+  primaryDark: '#152870',
+  secondary: '#6B85C9',
+  accent: '#E48A95',
+  accentSoft: '#FFCED0',
+  muted: '#94a3b8',
+};
+
 const statusConfigs: StatusConfig[] = [
-  { id: 'new', label: '新規受付', shortLabel: '新規', color: '#5b7fff', group: 'intake', actionable: true },
-  { id: 'pending_verification', label: 'メール認証待ち', shortLabel: '認証待ち', color: '#94a3b8', group: 'intake' },
-  { id: 'verified', label: '認証完了・処理待ち', shortLabel: '処理待ち', color: '#38bdf8', group: 'automation' },
-  { id: 'processing', label: '自動生成中', shortLabel: '生成中', color: '#22c55e', group: 'automation' },
-  { id: 'completed', label: '簡易レポート送付済', shortLabel: '無料完了', color: '#34d399', group: 'automation' },
-  { id: 'quota_retry_pending', label: 'クォータ再試行待ち', shortLabel: '再試行', color: '#f97316', group: 'automation', actionable: true },
-  { id: 'manual_review', label: '手動確認', shortLabel: '要確認', color: '#ef4444', group: 'automation', actionable: true },
-  { id: 'limit_exceeded', label: '月次上限到達', shortLabel: '上限', color: '#f43f5e', group: 'automation', actionable: true },
-  { id: 'rejected', label: 'スパム・対象外', shortLabel: '対象外', color: '#64748b', group: 'closed' },
-  { id: 'pending_payment', label: '入金待ち', shortLabel: '入金待ち', color: '#f59e0b', group: 'sales', actionable: true },
-  { id: 'paid', label: '入金確認済み', shortLabel: '入金済', color: '#06b6d4', group: 'sales', actionable: true },
-  { id: 'report_created', label: '詳細レポート作成済', shortLabel: '作成済', color: '#8b5cf6', group: 'sales', actionable: true },
-  { id: 'report_sent', label: '詳細レポート送付済', shortLabel: '送付済', color: '#facc15', group: 'sales', actionable: true },
-  { id: 'sent', label: '詳細レポート送付済', shortLabel: '送付済', color: '#facc15', group: 'sales', actionable: true },
-  { id: 'mtg_scheduled', label: 'MTG予定', shortLabel: 'MTG', color: '#10b981', group: 'sales', actionable: true },
-  { id: 'paid_report', label: '有料レポート完了', shortLabel: '有料完了', color: '#14b8a6', group: 'sales', actionable: true },
-  { id: 'implementation', label: '導入支援', shortLabel: '導入', color: '#ea4335', group: 'delivery', actionable: true },
-  { id: 'maintenance', label: '保守契約', shortLabel: '保守', color: '#34d399', group: 'delivery', actionable: true },
-  { id: 'cancelled', label: 'キャンセル', shortLabel: '終了', color: '#64748b', group: 'closed' },
+  { id: 'new', label: '新規受付', shortLabel: '新規', color: adminColors.secondary, group: 'intake', actionable: true },
+  { id: 'pending_verification', label: 'メール認証待ち', shortLabel: '認証待ち', color: adminColors.muted, group: 'intake' },
+  { id: 'verified', label: '認証完了・処理待ち', shortLabel: '処理待ち', color: adminColors.secondary, group: 'automation' },
+  { id: 'processing', label: '自動生成中', shortLabel: '生成中', color: adminColors.primary, group: 'automation' },
+  { id: 'completed', label: '簡易レポート送付済', shortLabel: '無料完了', color: adminColors.secondary, group: 'automation' },
+  { id: 'quota_retry_pending', label: 'クォータ再試行待ち', shortLabel: '再試行', color: adminColors.accent, group: 'automation', actionable: true },
+  { id: 'manual_review', label: '手動確認', shortLabel: '要確認', color: adminColors.accent, group: 'automation', actionable: true },
+  { id: 'limit_exceeded', label: '月次上限到達', shortLabel: '上限', color: adminColors.accent, group: 'automation', actionable: true },
+  { id: 'rejected', label: 'スパム・対象外', shortLabel: '対象外', color: adminColors.muted, group: 'closed' },
+  { id: 'pending_payment', label: '入金待ち', shortLabel: '入金待ち', color: adminColors.accent, group: 'sales', actionable: true },
+  { id: 'paid', label: '入金確認済み', shortLabel: '入金済', color: adminColors.secondary, group: 'sales', actionable: true },
+  { id: 'report_created', label: '詳細レポート作成済', shortLabel: '作成済', color: adminColors.primary, group: 'sales', actionable: true },
+  { id: 'report_sent', label: '詳細レポート送付済', shortLabel: '送付済', color: adminColors.accentSoft, group: 'sales', actionable: true },
+  { id: 'sent', label: '詳細レポート送付済', shortLabel: '送付済', color: adminColors.accentSoft, group: 'sales', actionable: true },
+  { id: 'mtg_scheduled', label: 'MTG予定', shortLabel: 'MTG', color: adminColors.secondary, group: 'sales', actionable: true },
+  { id: 'paid_report', label: '有料レポート完了', shortLabel: '有料完了', color: adminColors.secondary, group: 'sales', actionable: true },
+  { id: 'implementation', label: '導入支援', shortLabel: '導入', color: adminColors.accent, group: 'delivery', actionable: true },
+  { id: 'maintenance', label: '保守契約', shortLabel: '保守', color: adminColors.secondary, group: 'delivery', actionable: true },
+  { id: 'cancelled', label: 'キャンセル', shortLabel: '終了', color: adminColors.muted, group: 'closed' },
 ];
 
 const statusMap = new Map(statusConfigs.map((s) => [s.id, s]));
@@ -105,8 +94,8 @@ const lanes = [
   { id: 'intake', label: '受付・認証', note: 'フォーム送信から診断開始まで', statuses: ['new', 'pending_verification'] },
   { id: 'automation', label: '自動生成・例外', note: '無料診断の処理状況', statuses: ['verified', 'processing', 'completed', 'quota_retry_pending', 'manual_review', 'limit_exceeded'] },
   { id: 'sales', label: '有償化・商談', note: '詳細版、MTG、提案化', statuses: ['pending_payment', 'paid', 'report_created', 'report_sent', 'sent', 'mtg_scheduled', 'paid_report'] },
-  { id: 'delivery', label: '導入・保守', note: '実案件と継続契約', statuses: ['implementation', 'maintenance'] },
-  { id: 'closed', label: '終了・対象外', note: '追わない案件', statuses: ['cancelled', 'rejected'] },
+  { id: 'delivery', label: '導入・保守', note: '導入案件と継続契約', statuses: ['implementation', 'maintenance'] },
+  { id: 'closed', label: '終了・対象外', note: '追わないリード', statuses: ['cancelled', 'rejected'] },
 ];
 
 const industryLabels: Record<string, string> = {
@@ -151,10 +140,20 @@ const revenueLabels: Record<string, string> = {
   'over-1000m': '10億円以上',
 };
 
+const leadSourceLabels: Record<string, string> = {
+  'url-file-demo': '自動入力デモ',
+  'public-demo': '実機デモ',
+  'ai-examples': '業種別サンプル',
+  'role-demo': 'ロール別デモ',
+  blog: 'ブログ',
+  search: '検索',
+  referral: '紹介',
+  'business-group': '商工会・勉強会',
+  other: 'その他',
+};
+
 let leads: Lead[] = [];
-let apiEvents: AiApiEvent[] = [];
 let error = '';
-let apiEventsError = '';
 
 if (supabase) {
   const { data, error: dbError } = await supabase
@@ -168,17 +167,6 @@ if (supabase) {
     leads = (data as Lead[]) || [];
   }
 
-  const { data: eventData, error: eventError } = await supabase
-    .from('ai_api_events')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(120);
-
-  if (eventError) {
-    apiEventsError = eventError.message;
-  } else {
-    apiEvents = (eventData as AiApiEvent[]) || [];
-  }
 } else {
   error = 'Supabase が設定されていません';
 }
@@ -187,18 +175,10 @@ const now = Date.now();
 const oneHour = 60 * 60 * 1000;
 const oneDay = 24 * oneHour;
 const yen = new Intl.NumberFormat('ja-JP');
-const runtimeEnv = import.meta.env as Record<string, string | undefined>;
 const tokyoDate = new Intl.DateTimeFormat('ja-JP', {
   timeZone: 'Asia/Tokyo',
   month: '2-digit',
   day: '2-digit',
-});
-const tokyoDateTime = new Intl.DateTimeFormat('ja-JP', {
-  timeZone: 'Asia/Tokyo',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
 });
 const tokyoDayKeyFormatter = new Intl.DateTimeFormat('sv-SE', {
   timeZone: 'Asia/Tokyo',
@@ -212,11 +192,6 @@ const tokyoMonthKeyFormatter = new Intl.DateTimeFormat('sv-SE', {
   month: '2-digit',
 });
 
-function hasEnv(name: string) {
-  const value = runtimeEnv[name];
-  return Boolean(value && value !== 'undefined' && value !== 'null');
-}
-
 function normalizeStatus(status?: string | null) {
   return status || 'new';
 }
@@ -227,7 +202,7 @@ function getStatus(status?: string | null): StatusConfig {
     id,
     label: id,
     shortLabel: id,
-    color: '#94a3b8',
+    color: adminColors.muted,
     group: 'closed',
   };
 }
@@ -254,49 +229,9 @@ function formatDate(iso?: string | null) {
   return iso ? tokyoDate.format(new Date(iso)) : '-';
 }
 
-function formatDateTime(iso?: string | null) {
-  return iso ? tokyoDateTime.format(new Date(iso)) : '-';
-}
-
-function formatMs(ms?: number | null) {
-  if (ms === null || ms === undefined) return '-';
-  return ms >= 1000 ? `${(ms / 1000).toFixed(1)}秒` : `${ms}ms`;
-}
-
-function formatTokens(value?: number | null) {
-  return value === null || value === undefined ? '-' : yen.format(value);
-}
-
 function truncate(value?: string | null, max = 90) {
   if (!value) return '';
   return value.length > max ? `${value.slice(0, max)}...` : value;
-}
-
-function providerLabel(provider?: string | null) {
-  if (provider === 'openai') return 'OpenAI';
-  if (provider === 'anthropic') return 'Anthropic';
-  if (provider === 'internal') return '内部処理';
-  if (provider === 'system') return 'システム';
-  if (provider === 'google') return 'Google API';
-  if (provider === 'resend') return 'Resend';
-  if (provider === 'supabase') return 'Supabase';
-  if (provider === 'external_url') return '外部URL';
-  return provider || '-';
-}
-
-function eventStatusLabel(status?: string | null) {
-  if (status === 'success') return '成功';
-  if (status === 'retry') return '再試行待ち';
-  if (status === 'error') return 'エラー';
-  if (status === 'skipped') return 'スキップ';
-  return status || '-';
-}
-
-function eventStatusTone(status?: string | null) {
-  if (status === 'success') return 'ok';
-  if (status === 'retry') return 'warn';
-  if (status === 'error') return 'bad';
-  return 'muted';
 }
 
 function tokyoDayKey(date: Date) {
@@ -580,6 +515,18 @@ const industryRows = Object.entries(
   .slice(0, 7);
 const maxIndustryCount = Math.max(1, ...industryRows.map((row) => row.count));
 
+const leadSourceRows = Object.entries(
+  leads.reduce<Record<string, number>>((acc, lead) => {
+    const key = lead.lead_source || 'unknown';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {})
+)
+  .map(([id, count]) => ({ id, label: leadSourceLabels[id] || (id === 'unknown' ? '未回答' : id), count }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 7);
+const maxLeadSourceCount = Math.max(1, ...leadSourceRows.map((row) => row.count));
+
 const recentTrend = Array.from({ length: 14 }, (_, i) => {
   const date = new Date(now - (13 - i) * oneDay);
   const key = tokyoDayKey(date);
@@ -592,147 +539,22 @@ const recentTrend = Array.from({ length: 14 }, (_, i) => {
 const maxTrendCount = Math.max(1, ...recentTrend.map((row) => row.count));
 
 const funnelSteps = [
-  { label: '申込', count: total, color: '#5b7fff' },
+  { label: '申込', count: total, color: adminColors.secondary },
   {
     label: '認証・有効',
     count: leads.filter((l) => Boolean(l.verified_at) || isPaidOpportunity(l)).length,
-    color: '#38bdf8',
+    color: adminColors.secondary,
   },
   {
     label: '納品済',
     count: leads.filter((l) => ['completed', 'sent', 'report_sent', 'mtg_scheduled', 'paid_report', 'implementation', 'maintenance'].includes(normalizeStatus(l.status))).length,
-    color: '#34d399',
+    color: adminColors.primary,
   },
-  { label: '有償接点', count: paidOpportunityCount, color: '#f59e0b' },
-  { label: '入金済', count: leads.filter(isRevenueConfirmed).length, color: '#06b6d4' },
-  { label: '導入・保守', count: implementationCount, color: '#ea4335' },
+  { label: '有償接点', count: paidOpportunityCount, color: adminColors.accent },
+  { label: '入金済', count: leads.filter(isRevenueConfirmed).length, color: adminColors.secondary },
+  { label: '導入・保守', count: implementationCount, color: adminColors.accent },
 ];
 const maxFunnelCount = Math.max(1, ...funnelSteps.map((step) => step.count));
-
-const serviceRows = [
-  {
-    id: 'openai',
-    label: 'OpenAI',
-    role: '無料診断レポート生成',
-    model: 'gpt-5.5',
-    configured: hasEnv('OPENAI_API_KEY'),
-    note: 'Edge Function process-diagnosis で使用',
-  },
-  {
-    id: 'anthropic',
-    label: 'Anthropic',
-    role: '予備AI接続',
-    model: '-',
-    configured: hasEnv('ANTHROPIC_API_KEY'),
-    note: '現行の診断自動生成では未使用',
-  },
-  {
-    id: 'supabase',
-    label: 'Supabase',
-    role: 'DB / Edge Function',
-    model: '-',
-    configured: hasEnv('SUPABASE_URL') && hasEnv('SUPABASE_SERVICE_ROLE_KEY'),
-    note: '案件・AI通信ログの保存',
-  },
-  {
-    id: 'resend',
-    label: 'Resend',
-    role: 'メール送信',
-    model: '-',
-    configured: hasEnv('RESEND_API_KEY'),
-    note: '認証・納品・障害通知',
-  },
-  {
-    id: 'google',
-    label: 'Google Slides',
-    role: '診断レポート生成',
-    model: '-',
-    configured: hasEnv('GOOGLE_SLIDES_TEMPLATE_ID') && hasEnv('GOOGLE_SERVICE_ACCOUNT_EMAIL') && hasEnv('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY'),
-    note: 'テンプレートコピーと置換',
-  },
-];
-
-const eventLast24h = apiEvents.filter((event) => parseTime(event.created_at) > now - oneDay);
-const openAiEvents = apiEvents.filter((event) => event.provider === 'openai');
-const latestOpenAiEvent = openAiEvents[0] || null;
-const apiIssueEvents = apiEvents.filter((event) => event.status === 'error' || event.status === 'retry');
-const apiIssues24h = apiIssueEvents.filter((event) => parseTime(event.created_at) > now - oneDay).length;
-const aiIssueLeadRows = leads
-  .filter(hasAiIssue)
-  .sort((a, b) => parseTime(b.updated_at || b.created_at) - parseTime(a.updated_at || a.created_at));
-const tokenEvents = apiEvents
-  .filter((event) => event.total_tokens || event.input_tokens || event.output_tokens)
-  .slice(0, 5);
-const latestTokenEvent = tokenEvents[0] || null;
-const contextUsedPct = latestTokenEvent?.context_window_tokens && latestTokenEvent?.total_tokens
-  ? Math.min(100, Math.round((latestTokenEvent.total_tokens / latestTokenEvent.context_window_tokens) * 100))
-  : 0;
-const contextRemainingText = latestTokenEvent?.context_remaining_tokens !== null && latestTokenEvent?.context_remaining_tokens !== undefined
-  ? `${formatTokens(latestTokenEvent.context_remaining_tokens)} tokens`
-  : latestTokenEvent
-    ? '上限未設定'
-    : 'ログ待ち';
-const apiHealthRows = [
-  {
-    label: 'OpenAI直近通信',
-    value: latestOpenAiEvent ? eventStatusLabel(latestOpenAiEvent.status) : 'ログなし',
-    detail: latestOpenAiEvent
-      ? `${formatDateTime(latestOpenAiEvent.created_at)} / ${formatMs(latestOpenAiEvent.latency_ms)}`
-      : '次回診断生成から記録',
-    tone: latestOpenAiEvent ? eventStatusTone(latestOpenAiEvent.status) : 'muted',
-  },
-  {
-    label: '24h APIイベント',
-    value: `${eventLast24h.length}件`,
-    detail: `エラー/再試行 ${apiIssues24h}件`,
-    tone: apiIssues24h > 0 ? 'warn' : 'ok',
-  },
-  {
-    label: 'AI要確認リード',
-    value: `${aiIssueLeadRows.length}件`,
-    detail: 'manual_review / quota_retry_pending / last_error',
-    tone: aiIssueLeadRows.length > 0 ? 'bad' : 'ok',
-  },
-  {
-    label: '推定残りコンテキスト',
-    value: contextRemainingText,
-    detail: latestTokenEvent?.context_window_tokens
-      ? `最新 ${formatTokens(latestTokenEvent.total_tokens)} / ${formatTokens(latestTokenEvent.context_window_tokens)} tokens`
-      : 'OPENAI_CONTEXT_WINDOW_TOKENS 設定で推定可能',
-    tone: latestTokenEvent?.context_remaining_tokens !== null && latestTokenEvent?.context_remaining_tokens !== undefined
-      ? (contextUsedPct >= 85 ? 'warn' : 'ok')
-      : 'muted',
-  },
-];
-const apiErrorRows = [
-  ...apiIssueEvents.map((event) => {
-    const relatedLead = leads.find((lead) => String(lead.id) === String(event.lead_id) || lead.application_id === event.application_id);
-    return {
-      id: `event-${event.id}`,
-      created_at: event.created_at,
-      provider: providerLabel(event.provider),
-      status: eventStatusLabel(event.status),
-      statusTone: eventStatusTone(event.status),
-      target: relatedLead?.company_name || event.application_id || event.lead_id || '-',
-      operation: event.operation || '-',
-      detail: truncate(event.error_message || event.error_type || '', 120),
-      href: relatedLead ? `/admin/leads/${relatedLead.id}` : '',
-    };
-  }),
-  ...aiIssueLeadRows
-    .filter((lead) => !apiIssueEvents.some((event) => String(event.lead_id) === String(lead.id) || event.application_id === lead.application_id))
-    .map((lead) => ({
-      id: `lead-${lead.id}`,
-      created_at: lead.updated_at || lead.created_at,
-      provider: 'リード状態',
-      status: getStatus(lead.status).shortLabel,
-      statusTone: 'bad',
-      target: lead.company_name || lead.application_id || String(lead.id),
-      operation: 'diagnosis_leads.last_error',
-      detail: truncate(lead.last_error || nextActionFor(lead).detail, 120),
-      href: `/admin/leads/${lead.id}`,
-    })),
-].sort((a, b) => parseTime(b.created_at) - parseTime(a.created_at)).slice(0, 8);
 
 const exportRows = leads.map((lead) => {
   const status = getStatus(lead.status);
@@ -745,6 +567,9 @@ const exportRows = leads.map((lead) => {
     person_name: lead.person_name || '',
     email: lead.email || '',
     industry: industryLabels[lead.industry || ''] || lead.industry || '',
+    lead_source: leadSourceLabels[lead.lead_source || ''] || lead.lead_source || '',
+    lead_source_detail: lead.lead_source_detail || '',
+    entry_referrer: lead.entry_referrer || '',
     plan: planLabel(lead.plan),
     status: status.label,
     amount_jpy: lead.amount_jpy || 0,
@@ -759,7 +584,7 @@ const exportRows = leads.map((lead) => {
 const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
 ---
 
-<AdminLayout title="案件管理" active="leads">
+<AdminLayout title="リード管理" active="leads">
   <Fragment slot="header-actions">
     <div class="header-actions">
       <button class="ghost-btn" id="export-csv" type="button"><i class="fas fa-download"></i> CSV</button>
@@ -772,7 +597,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   <section class="ops-hero">
     <div class="ops-hero__main">
       <span class="eyebrow">Optiens Operating Board</span>
-      <h2>今日見るべき案件と、次に動かす数字</h2>
+      <h2>今日見るべきリードと、次に動かす数字</h2>
       <p>無料診断の自動生成、有償レポート、導入支援、保守契約までを同じ画面で追います。</p>
     </div>
     <div class="ops-hero__goal">
@@ -815,114 +640,6 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     </article>
   </section>
 
-  <section class="panel ai-ops-panel">
-    <div class="panel-head">
-      <div>
-        <span class="section-kicker">AI / API Monitor</span>
-        <h3>AI処理と外部APIの状態</h3>
-      </div>
-      <span class="panel-count">環境設定 + 直近通信ログで判定</span>
-    </div>
-
-    <p class="panel-note">
-      ページ表示時にOpenAI/Anthropicへテスト送信は行いません。実際の診断処理で発生した通信ログ、環境変数、リードのエラー状態を集約しています。
-    </p>
-
-    {apiEventsError && (
-      <div class="monitor-alert">
-        <i class="fas fa-circle-exclamation"></i>
-        <span>AI通信ログテーブルを読めません: {apiEventsError}</span>
-      </div>
-    )}
-
-    <div class="api-health-strip">
-      {apiHealthRows.map((row) => (
-        <div class={`api-health api-health--${row.tone}`}>
-          <span>{row.label}</span>
-          <strong>{row.value}</strong>
-          <small>{row.detail}</small>
-        </div>
-      ))}
-    </div>
-
-    <div class="api-monitor-grid">
-      <div class="monitor-column">
-        <h4>接続設定</h4>
-        <div class="service-list">
-          {serviceRows.map((service) => (
-            <div class="service-row">
-              <div>
-                <strong>{service.label}</strong>
-                <span>{service.role}</span>
-              </div>
-              <small>{service.model}</small>
-              <b class={`service-state ${service.configured ? 'service-state--ok' : 'service-state--bad'}`}>
-                {service.configured ? '設定済み' : '未設定'}
-              </b>
-              <em>{service.note}</em>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div class="monitor-column">
-        <h4>エラー / 再試行</h4>
-        {apiErrorRows.length === 0 ? (
-          <p class="empty-state">直近のAPIエラー、AI要確認リードはありません。</p>
-        ) : (
-          <div class="api-log-list">
-            {apiErrorRows.map((row) => (
-              <a href={row.href || '#'} class="api-log-row">
-                <div>
-                  <span class={`event-state event-state--${row.statusTone}`}>{row.status}</span>
-                  <strong>{row.target}</strong>
-                </div>
-                <p>{row.provider} / {row.operation}</p>
-                <small>{row.detail || '詳細なし'} ・ {formatDateTime(row.created_at)}</small>
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div class="monitor-column">
-        <h4>トークン / コンテキスト</h4>
-        {tokenEvents.length === 0 ? (
-          <p class="empty-state">トークン使用量ログはまだありません。</p>
-        ) : (
-          <div class="token-list">
-            {tokenEvents.map((event) => {
-              const usedPct = event.context_window_tokens && event.total_tokens
-                ? Math.min(100, Math.round((event.total_tokens / event.context_window_tokens) * 100))
-                : 0;
-              return (
-                <div class="token-row">
-                  <div>
-                    <strong>{providerLabel(event.provider)} / {event.model || '-'}</strong>
-                    <span>{formatDateTime(event.created_at)} ・ {formatMs(event.latency_ms)}</span>
-                  </div>
-                  <dl>
-                    <div><dt>入力</dt><dd>{formatTokens(event.input_tokens)}</dd></div>
-                    <div><dt>出力</dt><dd>{formatTokens(event.output_tokens)}</dd></div>
-                    <div><dt>合計</dt><dd>{formatTokens(event.total_tokens)}</dd></div>
-                  </dl>
-                  <div class="context-meter">
-                    <span style={`width: ${usedPct}%`}></span>
-                  </div>
-                  <small>
-                    {event.context_remaining_tokens !== null && event.context_remaining_tokens !== undefined
-                      ? `残り ${formatTokens(event.context_remaining_tokens)} tokens`
-                      : 'コンテキスト上限未設定'}
-                  </small>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </div>
-  </section>
-
   <div class="dashboard-grid">
     <section class="panel panel--wide">
       <div class="panel-head">
@@ -933,7 +650,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
         <span class="panel-count">{actionRows.length}件表示</span>
       </div>
       {actionRows.length === 0 ? (
-        <p class="empty-state">緊急対応が必要な案件はありません。</p>
+        <p class="empty-state">緊急対応が必要なリードはありません。</p>
       ) : (
         <div class="action-list">
           {actionRows.map(({ lead, action, score }) => {
@@ -1012,7 +729,29 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
             <li>
               <span>{row.label}</span>
               <b>{row.count}</b>
-              <i style={`width: ${(row.count / maxIndustryCount) * 100}%; background:#5ea89a`}></i>
+              <i style={`width: ${(row.count / maxIndustryCount) * 100}%; background:#6B85C9`}></i>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span class="section-kicker">Lead Source</span>
+          <h3>申し込みのきっかけ</h3>
+        </div>
+      </div>
+      {leadSourceRows.length === 0 ? (
+        <p class="empty-state">きっかけデータがありません。</p>
+      ) : (
+        <ul class="bar-list">
+          {leadSourceRows.map((row) => (
+            <li>
+              <span>{row.label}</span>
+              <b>{row.count}</b>
+              <i style={`width: ${(row.count / maxLeadSourceCount) * 100}%; background:#E48A95`}></i>
             </li>
           ))}
         </ul>
@@ -1076,7 +815,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     <div class="panel-head panel-head--table">
       <div>
         <span class="section-kicker">Lead Table</span>
-        <h3>案件一覧</h3>
+        <h3>リード一覧</h3>
       </div>
       <span class="panel-count"><span id="visible-count">{total}</span> / {total}件</span>
     </div>
@@ -1130,6 +869,8 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
               lead.person_name,
               lead.email,
               industryLabels[lead.industry || ''] || lead.industry,
+              leadSourceLabels[lead.lead_source || ''] || lead.lead_source,
+              lead.lead_source_detail,
               status.label,
               action.label,
             ].filter(Boolean).join(' ').toLowerCase();
@@ -1154,6 +895,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
                 <td class="td-company">
                   <strong>{lead.company_name || '企業名未設定'}</strong>
                   <span>{lead.person_name || '担当者未設定'} / {industryLabels[lead.industry || ''] || '業種未設定'}</span>
+                  {lead.lead_source && <span>きっかけ: {leadSourceLabels[lead.lead_source] || lead.lead_source}</span>}
                   <em>{lead.application_id || '申込番号なし'}</em>
                 </td>
                 <td><span class="status-pill" style={`--pill:${status.color}`}>{status.label}</span></td>
@@ -1168,7 +910,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
               </tr>
             );
           })}
-          {leads.length === 0 && <tr><td colspan="8" class="td-empty">案件がありません</td></tr>}
+          {leads.length === 0 && <tr><td colspan="8" class="td-empty">リードがありません</td></tr>}
         </tbody>
       </table>
     </div>
@@ -1230,7 +972,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     function exportVisibleCsv() {
       const visibleIds = new Set(rows.filter((row) => !row.hidden).map((row) => row.dataset.id));
       const filtered = exportData.filter((row) => visibleIds.has(String(row.id)));
-      const headers = ['id', 'application_id', 'company_name', 'person_name', 'email', 'industry', 'plan', 'status', 'amount_jpy', 'paid_at', 'created_at', 'next_action', 'urgency', 'priority', 'last_error'];
+      const headers = ['id', 'application_id', 'company_name', 'person_name', 'email', 'industry', 'lead_source', 'lead_source_detail', 'entry_referrer', 'plan', 'status', 'amount_jpy', 'paid_at', 'created_at', 'next_action', 'urgency', 'priority', 'last_error'];
       const lines = [
         headers.join(','),
         ...filtered.map((row) => headers.map((key) => csvCell(row[key])).join(',')),
@@ -1298,13 +1040,13 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
 
   .ghost-btn:hover {
     color: var(--admin-text);
-    border-color: rgba(94, 168, 154, 0.5);
+    border-color: rgba(107, 133, 201, 0.5);
   }
 
   .admin-error {
     padding: 12px 16px;
-    background: rgba(234, 67, 53, 0.10);
-    border: 1px solid rgba(234, 67, 53, 0.32);
+    background: rgba(228, 138, 149, 0.10);
+    border: 1px solid rgba(228, 138, 149, 0.32);
     border-radius: 8px;
     color: var(--admin-danger);
     font-size: 0.88rem;
@@ -1383,7 +1125,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(90deg, #5ea89a, #f59e0b);
+    background: linear-gradient(90deg, #6B85C9, #E48A95);
   }
 
   .kpi-grid {
@@ -1399,7 +1141,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   }
 
   .kpi-card--attention {
-    border-color: rgba(234, 67, 53, 0.45);
+    border-color: rgba(228, 138, 149, 0.45);
     box-shadow: inset 3px 0 0 var(--admin-danger);
   }
 
@@ -1420,232 +1162,6 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   .kpi-card small {
     color: var(--admin-muted);
     font-size: 0.76rem;
-  }
-
-  .ai-ops-panel {
-    margin-bottom: 18px;
-  }
-
-  .panel-note {
-    margin: -4px 0 14px;
-    color: var(--admin-muted);
-    font-size: 0.82rem;
-  }
-
-  .monitor-alert {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    padding: 10px 12px;
-    border: 1px solid rgba(245, 158, 11, 0.32);
-    border-radius: 8px;
-    background: rgba(245, 158, 11, 0.08);
-    color: #fcd07b;
-    font-size: 0.82rem;
-  }
-
-  .api-health-strip {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-
-  .api-health {
-    min-height: 94px;
-    padding: 13px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.014);
-  }
-
-  .api-health span,
-  .api-health small,
-  .service-row span,
-  .service-row em,
-  .api-log-row p,
-  .api-log-row small,
-  .token-row span,
-  .token-row small,
-  .token-row dt {
-    color: var(--admin-muted);
-  }
-
-  .api-health span {
-    display: block;
-    font-size: 0.72rem;
-    font-weight: 700;
-  }
-
-  .api-health strong {
-    display: block;
-    margin: 8px 0 5px;
-    color: #fff;
-    font-size: 1.08rem;
-  }
-
-  .api-health--ok { border-color: rgba(94, 168, 154, 0.38); }
-  .api-health--warn { border-color: rgba(245, 158, 11, 0.42); }
-  .api-health--bad { border-color: rgba(234, 67, 53, 0.45); }
-
-  .api-monitor-grid {
-    display: grid;
-    grid-template-columns: minmax(250px, 0.9fr) minmax(300px, 1.15fr) minmax(300px, 1fr);
-    gap: 14px;
-  }
-
-  .monitor-column {
-    min-width: 0;
-  }
-
-  .monitor-column h4 {
-    margin: 0 0 10px;
-    color: #fff;
-    font-size: 0.86rem;
-    letter-spacing: 0;
-  }
-
-  .service-list,
-  .api-log-list,
-  .token-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .service-row,
-  .api-log-row,
-  .token-row {
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-bg);
-  }
-
-  .service-row {
-    display: grid;
-    grid-template-columns: minmax(120px, 1fr) 70px 74px;
-    gap: 8px;
-    align-items: center;
-    padding: 10px;
-  }
-
-  .service-row strong,
-  .api-log-row strong,
-  .token-row strong {
-    color: #fff;
-  }
-
-  .service-row span,
-  .service-row em,
-  .api-log-row p,
-  .api-log-row small,
-  .token-row span,
-  .token-row small {
-    display: block;
-    font-size: 0.72rem;
-  }
-
-  .service-row em {
-    grid-column: 1 / -1;
-    font-style: normal;
-  }
-
-  .service-row small {
-    color: #cbd5e1;
-    font-size: 0.72rem;
-    text-align: right;
-  }
-
-  .service-state,
-  .event-state {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 24px;
-    padding: 0 8px;
-    border-radius: 999px;
-    font-size: 0.68rem;
-    white-space: nowrap;
-  }
-
-  .service-state--ok,
-  .event-state--ok {
-    color: #a7f3d0;
-    background: rgba(94, 168, 154, 0.16);
-  }
-
-  .service-state--bad,
-  .event-state--bad {
-    color: #fca5a5;
-    background: rgba(234, 67, 53, 0.16);
-  }
-
-  .event-state--warn {
-    color: #fcd07b;
-    background: rgba(245, 158, 11, 0.16);
-  }
-
-  .event-state--muted {
-    color: #cbd5e1;
-    background: rgba(148, 163, 184, 0.14);
-  }
-
-  .api-log-row {
-    display: block;
-    padding: 10px;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .api-log-row:hover {
-    border-color: rgba(94, 168, 154, 0.42);
-  }
-
-  .api-log-row div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .api-log-row p {
-    margin: 7px 0 3px;
-  }
-
-  .token-row {
-    padding: 10px;
-  }
-
-  .token-row dl {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-    margin: 10px 0 8px;
-  }
-
-  .token-row dt {
-    font-size: 0.66rem;
-  }
-
-  .token-row dd {
-    margin: 2px 0 0;
-    color: #fff;
-    font-size: 0.8rem;
-    font-weight: 700;
-  }
-
-  .context-meter {
-    height: 7px;
-    overflow: hidden;
-    border-radius: 999px;
-    background: var(--admin-surface-2);
-  }
-
-  .context-meter span {
-    display: block;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #5ea89a, #f59e0b);
   }
 
   .dashboard-grid {
@@ -1715,16 +1231,16 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   }
 
   .action-item:hover {
-    border-color: rgba(94, 168, 154, 0.48);
-    background: rgba(94, 168, 154, 0.06);
+    border-color: rgba(107, 133, 201, 0.48);
+    background: rgba(107, 133, 201, 0.06);
   }
 
   .action-item--critical {
-    border-color: rgba(234, 67, 53, 0.48);
+    border-color: rgba(228, 138, 149, 0.48);
   }
 
   .action-item--high {
-    border-color: rgba(245, 158, 11, 0.38);
+    border-color: rgba(228, 138, 149, 0.32);
   }
 
   .action-rank {
@@ -1789,8 +1305,8 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
 
   .plan-pill--paid,
   .score-pill--高 {
-    color: #7be7f5;
-    background: rgba(6, 182, 212, 0.18);
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.22);
   }
 
   .plan-pill--free {
@@ -1799,8 +1315,8 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   }
 
   .score-pill--中 {
-    color: #fcd07b;
-    background: rgba(245, 158, 11, 0.18);
+    color: var(--admin-accent-soft);
+    background: rgba(228, 138, 149, 0.18);
   }
 
   .score-pill--低 {
@@ -1830,7 +1346,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     display: block;
     min-height: 8px;
     border-radius: 5px 5px 2px 2px;
-    background: linear-gradient(180deg, #5ea89a, #2e574c);
+    background: linear-gradient(180deg, #6B85C9, #1F3A93);
   }
 
   .trend-col small,
@@ -1948,7 +1464,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   }
 
   .lead-mini:hover {
-    border-color: rgba(94, 168, 154, 0.42);
+    border-color: rgba(107, 133, 201, 0.42);
   }
 
   .lead-mini div {
@@ -2131,7 +1647,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   }
 
   .lead-row:hover td {
-    background: rgba(94, 168, 154, 0.045);
+    background: rgba(107, 133, 201, 0.045);
   }
 
   .lead-row[hidden] {
@@ -2158,12 +1674,12 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   }
 
   .error-snippet {
-    color: #fca5a5 !important;
+    color: var(--admin-accent-soft) !important;
   }
 
   .td-company em {
     margin-top: 4px;
-    color: #cdd9ff;
+    color: var(--admin-accent-soft);
     font-family: 'SF Mono', 'Consolas', monospace;
     font-size: 0.7rem;
     font-style: normal;
@@ -2175,14 +1691,14 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     font-size: 0.82rem;
   }
 
-  .urgency--critical { color: #fca5a5; }
-  .urgency--high { color: #fcd07b; }
-  .urgency--medium { color: #a7f3d0; }
+  .urgency--critical { color: var(--admin-accent-soft); }
+  .urgency--high { color: var(--admin-accent); }
+  .urgency--medium { color: var(--admin-secondary); }
   .urgency--low,
   .urgency--none { color: #cbd5e1; }
 
   .row-link {
-    color: #7be7f5;
+    color: var(--admin-secondary);
     text-decoration: none;
     font-weight: 700;
   }
@@ -2200,15 +1716,6 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   @media (max-width: 1240px) {
     .kpi-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .api-health-strip,
-    .api-monitor-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .api-monitor-grid .monitor-column:last-child {
-      grid-column: 1 / -1;
     }
 
     .dashboard-grid {
@@ -2235,14 +1742,8 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     }
 
     .kpi-grid,
-    .api-health-strip,
-    .api-monitor-grid,
     .dashboard-grid {
       grid-template-columns: 1fr;
-    }
-
-    .api-monitor-grid .monitor-column:last-child {
-      grid-column: auto;
     }
 
     .lead-toolbar {

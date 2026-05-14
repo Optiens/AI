@@ -15,8 +15,9 @@ import Layout from '../layouts/Layout.astro';
       <p class="reveal">ご質問、ご意見、ご要望など、お気軽にお問い合わせください。</p>
 
       <p class="contact-tip reveal">
-        ※「業務にAIが使えるか診断してほしい」場合は、<a href="/free-diagnosis">無料AI診断</a>のフォームをご利用いただくと、より具体的なレポートをお届けできます。
+        ※「業務にAIが使えるか診断してほしい」場合は、<a href="/free-diagnosis">【簡易版】AI活用診断</a>のフォームをご利用いただくと、より具体的なレポートをお届けできます。
       </p>
+      <p class="contact-intent-note reveal" id="contact-intent-note" hidden></p>
 
       <form action="/api/contact" method="POST" class="contact-form reveal" id="contact-form">
         <!-- いたずら防止: ハニーポット -->
@@ -53,6 +54,8 @@ import Layout from '../layouts/Layout.astro';
           <label for="inquiry_type">お問い合わせ種別</label>
           <select id="inquiry_type" name="inquiry_type">
             <option value="">選択してください</option>
+            <option value="free-diagnosis-waitlist">【簡易版】AI活用診断の無料枠案内を受け取りたい</option>
+            <option value="consult-ticket">相談チケットの案内を受け取りたい</option>
             <option value="ai-consult">AI支援事業について</option>
             <option value="press">取材・メディア掲載</option>
             <option value="partner">業務提携・パートナーシップ</option>
@@ -85,6 +88,47 @@ import Layout from '../layouts/Layout.astro';
 (function() {
   const t = document.getElementById('_t');
   if (t) t.value = String(Date.now());
+})();
+
+// URLパラメータから問い合わせ意図を反映
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const topic = params.get('topic');
+  const presets = {
+    'free-diagnosis-waitlist': {
+      type: 'free-diagnosis-waitlist',
+      subject: '【簡易版】AI活用診断の無料枠案内を希望',
+      message: '【簡易版】AI活用診断の無料枠が再開した際に案内を希望します。',
+      note: '【簡易版】AI活用診断の無料枠案内として受付します。'
+    },
+    'consult-ticket': {
+      type: 'consult-ticket',
+      subject: '相談チケットの案内希望',
+      message: '30万円未満の相談・小規模なAI活用相談について、相談チケットの内容を知りたいです。',
+      note: '相談チケットの案内希望として受付します。'
+    },
+    'detail-diagnosis': {
+      type: 'consult-ticket',
+      subject: '詳細診断・相談チケットの案内希望',
+      message: '詳細診断または相談チケットの案内を希望します。',
+      note: '詳細診断・相談チケットの案内希望として受付します。'
+    }
+  };
+  const preset = presets[topic || ''];
+  if (!preset) return;
+
+  const inquiryType = document.getElementById('inquiry_type');
+  const subject = document.getElementById('subject');
+  const message = document.getElementById('message');
+  const note = document.getElementById('contact-intent-note');
+
+  if (inquiryType) inquiryType.value = preset.type;
+  if (subject && !subject.value) subject.value = preset.subject;
+  if (message && !message.value) message.value = preset.message;
+  if (note) {
+    note.textContent = preset.note;
+    note.hidden = false;
+  }
 })();
 
 // 二重送信防止
@@ -149,6 +193,18 @@ import Layout from '../layouts/Layout.astro';
   .contact-tip a {
     color: var(--brand);
     font-weight: 700;
+  }
+  .contact-intent-note {
+    max-width: 720px;
+    margin: -14px auto 22px !important;
+    padding: 10px 14px;
+    background: rgba(228, 138, 149, .08);
+    border: 1px solid rgba(228, 138, 149, .28);
+    border-radius: 6px;
+    color: var(--heading) !important;
+    font-size: .88rem !important;
+    line-height: 1.6;
+    text-align: left !important;
   }
   .form-row {
     display: grid;

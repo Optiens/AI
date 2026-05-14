@@ -67,6 +67,18 @@ const { Content } = await render(post);
   </main>
 </Layout>
 
+<script is:inline define:vars={{ leadSourceDetail: post.data.title }}>
+  (function() {
+    document.querySelectorAll('.post-body a[href^="/free-diagnosis"]').forEach(function(link) {
+      var raw = link.getAttribute('href') || '';
+      var url = new URL(raw, window.location.origin);
+      if (!url.searchParams.has('lead_source')) url.searchParams.set('lead_source', 'blog');
+      if (!url.searchParams.has('lead_source_detail')) url.searchParams.set('lead_source_detail', leadSourceDetail);
+      link.setAttribute('href', url.pathname + url.search + url.hash);
+    });
+  })();
+</script>
+
 <style>
   .blog-detail-container {
     padding: clamp(80px, 10vw, 120px) 20px 60px;

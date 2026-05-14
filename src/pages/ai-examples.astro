@@ -267,6 +267,66 @@ const industries: Industry[] = [
       { label: '見積書ドラフト', href: '/quote-generator' },
     ],
   },
+  {
+    id: 'ind-bakery',
+    image: '/images/samples/sample-bakery-hero.webp',
+    title: 'パン屋・ベーカリー',
+    shortTitle: 'ベーカリー',
+    summary: '仕込み計画・SNS投稿・通販受注',
+    metric: '月22時間削減',
+    basis: 'モデルケース: 仕込み計画・投稿・受注管理を月45件処理し、1件あたり約30分短縮。',
+    href: '/service/sample-bakery',
+    relatedDemos: [
+      { label: '社内検索', href: '/data-search' },
+      { label: '口コミ監視', href: '/review-monitor' },
+      { label: '業務管理画面', href: '/custom-management' },
+    ],
+  },
+  {
+    id: 'ind-municipality',
+    image: '/images/samples/sample-municipality-hero.webp',
+    title: '自治体・地域団体',
+    shortTitle: '自治体・地域団体',
+    summary: '広報文作成・議事録・問い合わせ対応',
+    metric: '月40時間削減',
+    basis: 'モデルケース: 広報、議事録、問い合わせ対応を月60件処理し、1件あたり約40分短縮。',
+    href: '/service/sample-municipality',
+    relatedDemos: [
+      { label: '社内検索', href: '/data-search' },
+      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
+      { label: '文書レビュー', href: '/document-review' },
+    ],
+  },
+  {
+    id: 'ind-outdoor',
+    image: '/images/samples/sample-outdoor-hero.webp',
+    title: '観光・アクティビティ',
+    shortTitle: '観光・アクティビティ',
+    summary: '予約管理・天候連絡・口コミ対応',
+    metric: '月20時間削減',
+    basis: 'モデルケース: 予約、催行連絡、ツアー後フォローを月40件処理し、1件あたり約30分短縮。',
+    href: '/service/sample-outdoor',
+    relatedDemos: [
+      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
+      { label: '口コミ監視', href: '/review-monitor' },
+      { label: '業務管理画面', href: '/custom-management' },
+    ],
+  },
+  {
+    id: 'ind-dairy',
+    image: '/images/samples/sample-dairy-hero.webp',
+    title: '酪農・畜産業',
+    shortTitle: '酪農・畜産',
+    summary: '飼養記録・環境確認・発注管理',
+    metric: '月28時間削減',
+    basis: 'モデルケース: 日次記録、環境確認、発注管理を月55件処理し、1件あたり約30分短縮。',
+    href: '/service/sample-dairy',
+    relatedDemos: [
+      { label: '社内検索', href: '/data-search' },
+      { label: '業務管理画面', href: '/custom-management' },
+      { label: '承認ワークフロー', href: '/approval-workflow' },
+    ],
+  },
 ];
 
 const roleDemos: RoleDemo[] = [
@@ -366,15 +426,6 @@ const nearbyIndustries: NearbyIndustry[] = [
     ],
   },
   {
-    title: '観光施設',
-    summary: '予約問い合わせ、口コミ対応、案内文の整備に近いデモを確認できます。',
-    demos: [
-      { label: '口コミ監視', href: '/review-monitor' },
-      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
-      { label: '社内検索', href: '/data-search' },
-    ],
-  },
-  {
     title: '就労支援・福祉事業所',
     summary: '日々の記録、請求前確認、社内文書の更新に近いデモを確認できます。',
     demos: [
@@ -435,7 +486,7 @@ const nearbyIndustries: NearbyIndustry[] = [
           <article>
             <span class="ax-choice-kicker">業種から選ぶ</span>
             <strong>自社に近い例を見たい場合</strong>
-            <p>士業、宿泊、飲食、EC、建設、ワイナリーの業務文脈に近いデモへ進めます。</p>
+            <p>士業、宿泊、飲食、EC、建設、ベーカリー、自治体、観光などの業務文脈に近いデモへ進めます。</p>
           </article>
           <article>
             <span class="ax-choice-kicker">役割から選ぶ</span>
@@ -646,7 +697,7 @@ const nearbyIndustries: NearbyIndustry[] = [
         <section class="ax-adjacent-industries reveal" aria-labelledby="ax-adjacent-title">
           <div class="ax-adjacent-head">
             <span>近い業種から探す</span>
-            <h2 id="ax-adjacent-title">掲載6業種以外でも、近いデモから確認できます</h2>
+            <h2 id="ax-adjacent-title">一覧にない業種でも、近いデモから確認できます</h2>
             <p>業種別資料をまだ用意していない業種でも、業務の構造が近いデモを組み合わせて導入イメージを確認できます。</p>
           </div>
           <div class="ax-adjacent-grid">
@@ -698,8 +749,8 @@ const nearbyIndustries: NearbyIndustry[] = [
           </article>
           <article class="reveal">
             <i class="fa-solid fa-plug-circle-bolt"></i>
-            <h3>公開デモのAPI費用</h3>
-            <p>公開デモでAI API費用は発生しません。一部は同一サイト内のデモAPIでサンプル応答を返しますが、外部AI APIや第三者送信は行いません。繰り返し試されてもOpenAI等の従量課金にはつながりません。</p>
+            <h3>デモの前提</h3>
+            <p>公開デモはサンプルデータで確認できます。実案件ではAI APIや既存ツール連携の有無を、扱う情報と業務リスクに合わせて設計します。</p>
           </article>
           <article class="reveal">
             <i class="fa-solid fa-shield-halved"></i>
@@ -1480,7 +1531,7 @@ const nearbyIndustries: NearbyIndustry[] = [
   }
   .ax-adjacent-grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     gap: 12px;
   }
   .ax-adjacent-grid article {

@@ -9,6 +9,13 @@ import {
   buildVerificationUrl,
   buildVerificationEmailHtml,
 } from '../../lib/diagnosis-verification'
+import {
+  PAID_DIAGNOSIS_TOTAL_JPY,
+  INVOICE_REGISTRATION_NUMBER,
+  buildPaidDiagnosisInvoiceText,
+  buildPaidDiagnosisInvoiceHtml,
+  formatYen,
+} from '../../lib/paid-billing'
 
 const MONTHLY_DIAGNOSIS_LIMIT = 30  // 【簡易版】AI活用診断 の月次上限
 const RATE_LIMIT_PER_HOUR = parsePositiveInt(import.meta.env.DIAGNOSIS_RATE_LIMIT_PER_HOUR, 3)
@@ -106,8 +113,11 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
     const interests = form.getAll('interests').map(i => String(i))
     const interestsOther = clamp(String(form.get('interests_other') || '').replace(/\r\n/g, ' ').trim(), 200)
     const freeText = clamp(String(form.get('free_text') || '').replace(/\r\n/g, '\n').trim(), 3000)
+    const leadSource = sanitize(String(form.get('lead_source') || ''))
+    const leadSourceDetail = clamp(String(form.get('lead_source_detail') || '').replace(/\r\n/g, ' ').trim(), 300)
+    const entryReferrer = clamp(sanitize(String(form.get('entry_referrer') || '')), 1000)
 
-    // ---- 詳細レポート向け追加項目（任意） ----
+    // ---- 詳細診断向け追加項目（任意） ----
     const budgetRange = sanitize(String(form.get('budget_range') || ''))
     const businessAge = clamp(String(form.get('business_age') || '').trim(), 200)
     const serviceArea = clamp(String(form.get('service_area') || '').trim(), 200)
@@ -175,7 +185,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
       if (monthlyCount >= MONTHLY_DIAGNOSIS_LIMIT) {
         await logSubmission(supabase, { ip, email, userAgent, result: 'rate_limited' })
         return json({
-          error: '今月の【簡易版】AI活用診断 枠は終了しました（毎月1日にリセット）。お急ぎの場合は【詳細版】AI活用診断（¥5,500税込）をご検討ください。',
+          error: '今月の【簡易版】AI活用診断 枠は終了しました（毎月1日にリセット）。お急ぎの場合は相談チケットまたは【詳細版】AI活用診断をご相談ください。',
         }, 429)
       }
     }
@@ -216,13 +226,25 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
       training: '社員教育・マニュアル',
     }
     const interestsText = interests.map(i => interestLabels[i] || i).join('、')
+    const leadSourceLabels: Record<string, string> = {
+      'url-file-demo': 'URL・資料からの自動入力デモ',
+      'public-demo': '実機デモ・サンプルツール',
+      'ai-examples': '業種別AI活用サンプル',
+      'role-demo': 'ロール別デモ',
+      blog: 'ブログ記事',
+      search: '検索',
+      referral: '紹介・口コミ',
+      'business-group': '商工会・勉強会・地域団体',
+      other: 'その他',
+    }
+    const leadSourceName = leadSourceLabels[leadSource] || leadSource
 
     // ---- メール認証トークン生成（free planのみ）----
     const verificationToken = plan === 'free' ? generateVerificationToken() : null
 
     // ---- Supabase にリード保存 ----
     if (supabase) {
-      const { error: dbError } = await supabase.from('diagnosis_leads').insert({
+      const leadPayload = {
         application_id: applicationId,
         company_name: companyName,
         person_name: personName,
@@ -238,9 +260,13 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
         interests: interests.length > 0 ? interests : null,
         interests_other: interestsOther || null,
         free_text: freeText || null,
+        // 流入・申し込みきっかけ
+        lead_source: leadSource || null,
+        lead_source_detail: leadSourceDetail || null,
+        entry_referrer: entryReferrer || null,
         // 想定予算
         budget_range: budgetRange || null,
-        // 詳細レポート向け追加項目
+        // 詳細診断向け追加項目
         business_age: businessAge || null,
         service_area: serviceArea || null,
         target_customer: targetCustomer || null,
@@ -249,7 +275,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
         past_it_experience: pastItExperience || null,
         // プラン
         plan,
-        amount_jpy: plan === 'paid' ? 5500 : 0,
+        amount_jpy: plan === 'paid' ? PAID_DIAGNOSIS_TOTAL_JPY : 0,
         // ステータス: paid=入金待ち / free=メール認証待ち
         status: plan === 'paid' ? 'pending_payment' : 'pending_verification',
         // セキュリティ関連
@@ -257,7 +283,18 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
         submission_ip: ip !== 'unknown' ? ip : null,
         // マーケティング配信オプトアウト
         marketing_opt_out: marketingOptOut,
-      })
+      }
+      let { error: dbError } = await supabase.from('diagnosis_leads').insert(leadPayload)
+      if (dbError && /(lead_source|lead_source_detail|entry_referrer)/i.test(dbError.message)) {
+        const {
+          lead_source: _leadSource,
+          lead_source_detail: _leadSourceDetail,
+          entry_referrer: _entryReferrer,
+          ...legacyPayload
+        } = leadPayload
+        const retry = await supabase.from('diagnosis_leads').insert(legacyPayload)
+        dbError = retry.error
+      }
       if (dbError) {
         console.error('[free-diagnosis] Supabase error:', dbError)
       } else if (plan === 'free') {
@@ -302,6 +339,9 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
   <tr><td style="padding:6px 12px;font-weight:bold;">AI活用度</td><td style="padding:6px 12px;">${escapeHtml(aiLevelName || '未回答')}</td></tr>
   <tr><td style="padding:6px 12px;font-weight:bold;">課題</td><td style="padding:6px 12px;">${escapeHtml(challengesText || '未選択')}</td></tr>
   <tr><td style="padding:6px 12px;font-weight:bold;">興味のある領域</td><td style="padding:6px 12px;">${escapeHtml(interestsText || '未選択')}</td></tr>
+  <tr><td style="padding:6px 12px;font-weight:bold;">申し込みのきっかけ</td><td style="padding:6px 12px;">${escapeHtml(leadSourceName || '未回答')}</td></tr>
+  ${leadSourceDetail ? `<tr><td style="padding:6px 12px;font-weight:bold;">きっかけ詳細</td><td style="padding:6px 12px;">${escapeHtml(leadSourceDetail)}</td></tr>` : ''}
+  ${entryReferrer ? `<tr><td style="padding:6px 12px;font-weight:bold;">直前の参照元URL</td><td style="padding:6px 12px;">${escapeHtml(entryReferrer)}</td></tr>` : ''}
   ${businessAge ? `<tr><td style="padding:6px 12px;font-weight:bold;">創業・設立</td><td style="padding:6px 12px;">${escapeHtml(businessAge)}</td></tr>` : ''}
   ${serviceArea ? `<tr><td style="padding:6px 12px;font-weight:bold;">営業エリア</td><td style="padding:6px 12px;">${escapeHtml(serviceArea)}</td></tr>` : ''}
   ${targetCustomer ? `<tr><td style="padding:6px 12px;font-weight:bold;">主要顧客層</td><td style="padding:6px 12px;">${escapeHtml(targetCustomer)}</td></tr>` : ''}
@@ -313,7 +353,7 @@ ${dailyTasks ? `<h3 style="margin:16px 0 4px;">時間がかかっている作業
 ${currentTools ? `<h3 style="margin:16px 0 4px;">使用中のツール</h3><pre style="white-space:pre-wrap;font-family:system-ui,sans-serif;">${escapeHtml(currentTools)}</pre>` : ''}
 ${pastItExperience ? `<h3 style="margin:16px 0 4px;">過去のIT導入経験</h3><pre style="white-space:pre-wrap;font-family:system-ui,sans-serif;">${escapeHtml(pastItExperience)}</pre>` : ''}
 ${freeText ? `<h3 style="margin:16px 0 4px;">自由記述</h3><pre style="white-space:pre-wrap;font-family:system-ui,sans-serif;">${escapeHtml(freeText)}</pre>` : ''}
-${plan === 'paid' ? `<hr style="margin:20px 0;"/><p style="background:#D1FAE5;padding:10px 14px;border-radius:6px;font-size:14px;"><strong>✅ 自動化済み:</strong> 振込先案内メールはお客様へ自動送信済み。入金検知も自動（freee API連携・要セットアップ）。入金確認後、5営業日以内に詳細レポート + MTG日程調整を実施してください。</p>` : ''}
+${plan === 'paid' ? `<hr style="margin:20px 0;"/><p style="background:#EEF2FF;padding:10px 14px;border-radius:6px;font-size:14px;"><strong>✅ 自動化済み:</strong> 振込先案内メールはお客様へ自動送信済み。入金検知も自動（freee API連携・要セットアップ）。入金確認後、レポート生成・送付まで自動で進みます。</p>` : ''}
       `.trim()
 
       const textBody = [
@@ -328,6 +368,9 @@ ${plan === 'paid' ? `<hr style="margin:20px 0;"/><p style="background:#D1FAE5;pa
         `AI活用度: ${aiLevelName || '未回答'}`,
         `課題: ${challengesText || '未選択'}`,
         `興味のある領域: ${interestsText || '未選択'}`,
+        `申し込みのきっかけ: ${leadSourceName || '未回答'}`,
+        leadSourceDetail ? `きっかけ詳細: ${leadSourceDetail}` : '',
+        entryReferrer ? `直前の参照元URL: ${entryReferrer}` : '',
         businessAge ? `創業・設立: ${businessAge}` : '',
         serviceArea ? `営業エリア: ${serviceArea}` : '',
         targetCustomer ? `主要顧客層: ${targetCustomer}` : '',
@@ -457,16 +500,23 @@ function buildNotifyUrl(applicationId: string): string {
 function buildPaidCustomerEmail(companyName: string, personName: string, appId: string, notifyUrl: string): string {
   const deadline = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const deadlineStr = `${deadline.getFullYear()}年${deadline.getMonth() + 1}月${deadline.getDate()}日`
+  const invoiceText = buildPaidDiagnosisInvoiceText({
+    customerName: companyName,
+    applicationId: appId,
+    dueDate: deadline,
+  })
   return `${companyName} ${personName} 様
 
 合同会社Optiensです。
-【詳細版】AI活用診断（¥5,500・税込）のお申込を受け付けました。
+【詳細版】AI活用診断（${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}・税込）のお申込を受け付けました。
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ■ 申込番号: ${appId}
-■ ご利用プラン: 詳細レポート ＋ 60分オンラインMTG
-■ ご請求金額: ¥5,500（税込）
+■ ご利用プラン: 詳細診断資料 ＋ 60分オンラインMTG
+■ ご請求金額: ${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}（税込）
 ━━━━━━━━━━━━━━━━━━━━━━
+
+${invoiceText}
 
 下記口座へお振込をお願いいたします。
 
@@ -476,7 +526,7 @@ function buildPaidCustomerEmail(companyName: string, personName: string, appId: 
 預金種別  : 普通
 口座番号  : 1211110
 口座名義  : ゴウドウガイシャオプティエンス
-振込金額  : ¥5,500（税込）
+振込金額  : ${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}（税込）
 振込期限  : ${deadlineStr}（お申込から7日以内）
 
 ━━━ お振込時のお願い ━━━
@@ -489,19 +539,20 @@ function buildPaidCustomerEmail(companyName: string, personName: string, appId: 
    ${notifyUrl}
    （クリックを忘れた場合も、毎朝9時に自動で入金確認しますのでご安心ください）
 3. 入金確認後「入金を確認しました」メールを自動送信
-4. 5営業日以内に詳細レポート + 60分MTG日程調整リンクをお届け
+4. 5営業日以内に詳細診断資料 + 60分MTG日程調整リンクをお届け
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ※ 領収書・適格請求書（インボイス）の発行に対応しています
-　 適格請求書発行事業者登録番号: T9090003003025
+　 適格請求書発行事業者登録番号: ${INVOICE_REGISTRATION_NUMBER}
 ※ 導入支援契約に進まれた場合、本費用は初期費用に全額充当します
+※ 納品前のキャンセル、または納品後7日以内に内容不備・ご不満の申し出がある場合は返金に応じます
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ご不明な点は info@optiens.com までお気軽にお問い合わせください。
 
 合同会社Optiens
 〒407-0301 山梨県北杜市高根町清里3545番地2483
-適格請求書発行事業者登録番号: T9090003003025
+適格請求書発行事業者登録番号: ${INVOICE_REGISTRATION_NUMBER}
 https://optiens.com
 `
 }
@@ -511,15 +562,22 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
   const deadlineStr = `${deadline.getFullYear()}年${deadline.getMonth() + 1}月${deadline.getDate()}日`
   const safeCompany = escapeHtml(companyName)
   const safePerson = escapeHtml(personName)
+  const invoiceHtml = buildPaidDiagnosisInvoiceHtml({
+    customerName: companyName,
+    applicationId: appId,
+    dueDate: deadline,
+  })
   return `<div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${safeCompany} ${safePerson} 様</p>
-<p>合同会社Optiensです。<br/>【詳細版】AI活用診断（¥5,500・税込）のお申込を受け付けました。</p>
+<p>合同会社Optiensです。<br/>【詳細版】AI活用診断（${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}・税込）のお申込を受け付けました。</p>
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#1F3A93;font-weight:bold;">${appId}</td></tr>
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">詳細レポート + 60分オンラインMTG</td></tr>
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">ご請求金額</td><td style="padding:8px 14px;"><strong>¥5,500（税込）</strong></td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">詳細診断資料 + 60分オンラインMTG</td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">ご請求金額</td><td style="padding:8px 14px;"><strong>${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}（税込）</strong></td></tr>
 </table>
+
+${invoiceHtml}
 
 <h3 style="margin:24px 0 8px;font-size:14px;color:#0f172a;">お振込先</h3>
 <table style="border-collapse:collapse;width:100%;font-size:14px;">
@@ -528,11 +586,11 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
   <tr><td style="padding:6px 12px;color:#64748b;">預金種別</td><td style="padding:6px 12px;">普通</td></tr>
   <tr><td style="padding:6px 12px;color:#64748b;">口座番号</td><td style="padding:6px 12px;font-family:monospace;font-size:1.1em;">1211110</td></tr>
   <tr><td style="padding:6px 12px;color:#64748b;">口座名義</td><td style="padding:6px 12px;">ゴウドウガイシャオプティエンス</td></tr>
-  <tr><td style="padding:6px 12px;color:#64748b;">振込金額</td><td style="padding:6px 12px;"><strong>¥5,500（税込）</strong></td></tr>
+  <tr><td style="padding:6px 12px;color:#64748b;">振込金額</td><td style="padding:6px 12px;"><strong>${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}（税込）</strong></td></tr>
   <tr><td style="padding:6px 12px;color:#64748b;">振込期限</td><td style="padding:6px 12px;">${deadlineStr}（お申込から7日以内）</td></tr>
 </table>
 
-<div style="margin:20px 0;padding:14px 16px;background:#EEF2FF;border-left:4px solid #5B7FFF;border-radius:4px;">
+<div style="margin:20px 0;padding:14px 16px;background:#EEF2FF;border-left:4px solid #1F3A93;border-radius:4px;">
 <p style="margin:0 0 6px;font-weight:bold;color:#1e3a8a;">お振込時のお願い</p>
 <p style="margin:0;font-size:14px;color:#1e40af;">振込人名義は、お申込時にご入力いただいた <strong>${escapeHtml(companyName)}</strong> でお振込ください。<br/>
 お振込確認後、自動で入金検知し、迅速にレポート作成プロセスへ進みます。</p>
@@ -542,17 +600,18 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 <ol style="margin:0 0 16px;padding-left:20px;font-size:14px;">
   <li>上記口座へお振込</li>
   <li>お振込み後、下記ボタンをクリックいただくと即座に入金確認を試みます<br/>
-    <a href="${notifyUrl}" style="display:inline-block;margin:10px 0 6px;padding:12px 24px;background:#5B7FFF;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;font-size:14px;">▶ 振込完了を通知する</a><br/>
+    <a href="${notifyUrl}" style="display:inline-block;margin:10px 0 6px;padding:12px 24px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;font-size:14px;">▶ 振込完了を通知する</a><br/>
     <span style="font-size:12px;color:#64748b;">クリックを忘れた場合も、毎朝9時に自動で入金確認します</span>
   </li>
   <li>入金確認後「入金を確認しました」メールを自動送信</li>
-  <li>5営業日以内に<strong>詳細レポート + 60分MTG日程調整リンク</strong>をお届け</li>
+  <li>5営業日以内に<strong>詳細診断資料 + 60分MTG日程調整リンク</strong>をお届け</li>
 </ol>
 
 <p style="margin:24px 0 0;padding-top:16px;border-top:1px solid #E2E8F0;font-size:12px;color:#64748b;">
 ※ 領収書・適格請求書（インボイス）の発行に対応しています<br/>
-　 適格請求書発行事業者登録番号: <strong>T9090003003025</strong><br/>
+　 適格請求書発行事業者登録番号: <strong>${INVOICE_REGISTRATION_NUMBER}</strong><br/>
 ※ 導入支援契約に進まれた場合、本費用は初期費用に全額充当します<br/>
+※ 納品前のキャンセル、または納品後7日以内に内容不備・ご不満の申し出がある場合は返金に応じます<br/>
 ※ お振込手数料はお客様ご負担となります<br/><br/>
 ご不明な点は <a href="mailto:info@optiens.com">info@optiens.com</a> までお気軽にお問い合わせください。
 </p>
@@ -560,7 +619,7 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 <p style="margin-top:24px;font-size:12px;color:#64748b;">
 合同会社Optiens<br/>
 〒407-0301 山梨県北杜市高根町清里3545番地2483<br/>
-適格請求書発行事業者登録番号: T9090003003025<br/>
+適格請求書発行事業者登録番号: ${INVOICE_REGISTRATION_NUMBER}<br/>
 <a href="https://optiens.com">https://optiens.com</a>
 </p>
 </div>`

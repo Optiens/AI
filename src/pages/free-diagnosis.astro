@@ -5,8 +5,8 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 ---
 
 <Layout
-  title="無料AI活用診断 | 中小企業・小規模事業者向けROIレポート | Optiens"
-  description="かんたんなフォーム入力で、御社の事業のどこに AI が効くか、ROI（投資利益率）を含む簡易レポートを無料でお届け（Google Slides リンクをメール送付）。全国オンライン対応・契約不要・配信停止いつでも可能。"
+  title="【簡易版】AI活用診断 | 中小企業・小規模事業者向け一次診断 | Optiens"
+  description="かんたんなフォーム入力で、御社の事業のどこに AI が効くか、月間効果額とざっくり費用帯を含む簡易レポートを無料でお届け（Google Slides リンクをメール送付）。全国オンライン対応・契約不要・配信停止いつでも可能。"
   canonical="https://optiens.com/free-diagnosis"
 >
   <main>
@@ -34,15 +34,15 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <p class="diag-paid-coming-soon__title">【詳細版】AI活用診断は、現在準備中です。</p>
             <p class="diag-paid-coming-soon__desc">
               内容の最終調整を行っております。公開までもうしばらくお待ちください。<br/>
-              お急ぎの場合は、まず【簡易版】（無料）でお試しいただくか、
-              <a href="/contact">お問い合わせフォーム</a>からご相談ください。
+              公開案内や相談チケットの案内をご希望の場合は、
+              <a href="/contact">お問い合わせフォーム</a>からご連絡ください。
             </p>
           </div>
         </div>
 
         <p class="diag-sub" data-plan-show="free">
-          AIで業務最適化が効くかを見極める診断です。<br/>
-          ご事業を伺った上で、AI が有効な業務／AI を使わずに済む業務まで含めて、最適な方向性を提示します。
+          月間効果額・ざっくり費用帯・最初に見るべき業務がわかります。<br/>
+          URLや資料からの自動入力、AI分析、Google Slides自動生成までを体験できます。
         </p>
 
         <!-- 月次残枠表示（free plan のみ・JSで描画） -->
@@ -51,15 +51,15 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           <span id="diag-quota-text">今月の残り枠を確認中…</span>
         </div>
         <p class="diag-sub" data-plan-show="paid" hidden>
-          御社のIT環境に合わせた<strong>詳細レポート</strong>と<br/>
-          <strong>60分のオンラインMTG</strong>で、AI活用の道筋を具体的にお届けします。
+          御社の業務量・データ状態・IT環境を確認し、<br/>
+          <strong>60分のオンラインMTG</strong>で導入可否と次の進め方を整理します。
         </p>
 
         <!-- 無料版のお約束 -->
         <div class="diag-promise" data-plan-show="free">
           <div class="diag-promise-item">
             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            <p>テンプレートに沿った<strong>2〜3 ページの簡易レポート</strong>をお届けします。</p>
+            <p><strong>月間効果額・ざっくり費用帯</strong>を含むスライド型の簡易レポートをお届けします。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-list-check" aria-hidden="true"></i>
@@ -67,7 +67,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-handshake-simple" aria-hidden="true"></i>
-            <p>契約は不要です。診断レポートの納品をもって完了します。</p>
+            <p>30万円未満のご相談は<strong>相談チケット</strong>、導入支援は<strong>30万円以上</strong>を目安に切り分けます。</p>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         <div class="diag-promise" data-plan-show="paid" hidden>
           <div class="diag-promise-item">
             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            <p><strong>詳細レポート</strong>。御社のIT環境に合わせた個別提案・アーキテクチャ図・導入支援の具体額までを記載します。</p>
+            <p><strong>詳細診断</strong>。御社の状況に合わせて、導入可否・実施範囲・ざっくり費用帯・相談チケット/導入支援の切り分けを整理します。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-comments" aria-hidden="true"></i>
@@ -130,12 +130,12 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           <div class="step">
             <span class="step-badge">STEP 3</span>
             <span class="step-title">業務分析・提案作成</span>
-            <span class="step-desc">入金確認後、5 営業日以内に詳細レポートを作成</span>
+            <span class="step-desc">入金確認後、5 営業日以内に詳細診断資料を作成</span>
           </div>
           <div class="step">
             <span class="step-badge">STEP 4</span>
             <span class="step-title">レポート + MTG</span>
-            <span class="step-desc">詳細レポートと 60 分オンライン MTG の日程調整リンクをメールでお届け</span>
+            <span class="step-desc">詳細診断資料と 60 分オンライン MTG の日程調整リンクをメールでお届け</span>
           </div>
         </div>
 
@@ -145,8 +145,9 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <label for="website">ウェブサイト</label>
             <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
           </div>
-          <!-- いたずら防止: タイムスタンプ -->
-          <input type="hidden" name="_t" id="_t" />
+        <!-- いたずら防止: タイムスタンプ -->
+        <input type="hidden" name="_t" id="_t" />
+        <input type="hidden" name="entry_referrer" id="entry_referrer" />
           <!-- 選択中プラン（free / paid） -->
           <input type="hidden" name="plan" id="plan-field" value="free" />
 
@@ -268,16 +269,16 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
               </select>
             </div>
             <div class="field">
-              <label for="budget_range">想定予算（導入支援の初期費用）</label>
+              <label for="budget_range">検討している進め方・予算感</label>
               <select id="budget_range" name="budget_range">
                 <option value="">選択してください</option>
-                <option value="under-30">〜30万円（小さく試したい）</option>
-                <option value="30-60">30〜60万円（本格導入を検討）</option>
-                <option value="60-100">60〜100万円（複数業務を一括）</option>
-                <option value="100-plus">100万円以上（経営課題として取り組む）</option>
-                <option value="undecided">まだ分からない・相談したい</option>
+                <option value="under-30">30万円未満（相談チケットで小さく相談したい）</option>
+                <option value="30-60">30〜60万円（1業務から導入検討）</option>
+                <option value="60-100">60〜100万円（1〜2業務の導入検討）</option>
+                <option value="100-plus">100万円以上（複数業務・経営課題として検討）</option>
+                <option value="undecided">まだ分からない・費用帯から相談したい</option>
               </select>
-              <p class="field-hint">予算をお知らせいただくと、レポートで「予算内で実現可能な範囲」を具体的にご提案できます。</p>
+              <p class="field-hint">無料版では正式見積ではなく、相談チケット・導入支援・月額保守のどの進め方が近いかをざっくり整理します。</p>
             </div>
             <div class="field">
               <p class="field-label">AI導入で感じている課題（複数可）</p>
@@ -330,6 +331,32 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <div class="detail-hint">
               <i class="fa-solid fa-lightbulb"></i>
               <p>以下の項目にご回答いただくほど、より具体的で精度の高い診断レポートをお届けできます。</p>
+            </div>
+            <div class="field">
+              <label for="lead_source">お申し込みのきっかけ</label>
+              <select id="lead_source" name="lead_source">
+                <option value="">選択してください</option>
+                <option value="url-file-demo">URL・資料からの自動入力デモを見た</option>
+                <option value="public-demo">実機デモ・サンプルツールを見た</option>
+                <option value="ai-examples">業種別AI活用サンプルを見た</option>
+                <option value="role-demo">ロール別デモを見た</option>
+                <option value="blog">ブログ記事を読んだ</option>
+                <option value="search">Google等の検索で見つけた</option>
+                <option value="referral">紹介・口コミ</option>
+                <option value="business-group">商工会・勉強会・地域団体から知った</option>
+                <option value="other">その他</option>
+              </select>
+              <p class="field-hint">どのデモやページが参考になったか、差し支えない範囲で選択してください。</p>
+            </div>
+            <div class="field">
+              <label for="lead_source_detail">印象に残ったデモ・記事・紹介元など</label>
+              <input
+                type="text"
+                id="lead_source_detail"
+                name="lead_source_detail"
+                placeholder="例: ロール別デモの経営者向け画面 / 商工会で紹介された / ブログ記事名など"
+                maxlength="300"
+              />
             </div>
             <div class="field">
               <label for="business_description">事業内容・主なサービス</label>
@@ -398,15 +425,15 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <div class="field" data-plan-show="paid" hidden>
               <label for="free_text">その他、気になっていること</label>
               <textarea id="free_text" name="free_text" rows="3" placeholder="「AIで作った文章をそのまま使って大丈夫？」「月額いくらくらいかかる？」など"></textarea>
-              <p class="field-hint"><small>※ 詳細レポートでは <strong>1 ページの専用セクション</strong> でこのご質問・ご関心事に個別回答します。</small></p>
+              <p class="field-hint"><small>※ 詳細診断では <strong>1 ページの専用セクション</strong> でこのご質問・ご関心事に個別回答します。</small></p>
             </div>
           </fieldset>
 
           <fieldset class="extra-fieldset" data-plan-show="paid" hidden>
-            <legend>詳細レポート向けの追加情報（任意）</legend>
+            <legend>詳細診断向けの追加情報（任意）</legend>
             <div class="detail-hint">
               <i class="fa-solid fa-stars"></i>
-              <p>以下は<strong>詳細レポートをご希望の場合に役立つ情報</strong>です。記入が多いほど、ROI試算や提案の精度が向上します。すべて任意です。</p>
+              <p>以下は<strong>詳細診断をご希望の場合に役立つ情報</strong>です。記入が多いほど、ROI試算や提案の精度が向上します。すべて任意です。</p>
             </div>
             <div class="field-row">
               <div class="field">
@@ -464,9 +491,9 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
               <li>このフォーム送信時に<strong>申込番号</strong>を自動採番し、振込先口座と併せて<strong>確認メールを即時お送り</strong>します。</li>
               <li>メール記載の銀行口座へ<strong>銀行振込</strong>（お振込期限：申込から7日以内）。<strong>振込人名義はご入力いただいた会社名のみでOK</strong>です（特別な番号併記は不要）。</li>
               <li>入金が<strong>自動検知</strong>され（通常1営業日以内）、「入金を確認しました」メールが自動送信されます。</li>
-              <li>入金確認後 <strong>5営業日以内に詳細レポート＋60分MTG日程調整リンク</strong>をお届けします。</li>
+              <li>入金確認後 <strong>5営業日以内に詳細診断資料＋60分MTG日程調整リンク</strong>をお届けします。</li>
             </ol>
-            <p class="payment-note-foot">※ お振込手数料はお客様ご負担となります。<br />※ 領収書・適格請求書（インボイス）の発行に対応しています。<br />※ 導入支援契約に進まれた場合、本費用 ¥5,500（税込）は<strong>初期費用に全額充当</strong>します。</p>
+            <p class="payment-note-foot">※ お振込手数料はお客様ご負担となります。<br />※ 領収書・適格請求書（インボイス）の発行に対応しています。<br />※ 納品前のキャンセル、または納品後7日以内に内容不備・ご不満の申し出がある場合は返金に応じます。<br />※ 導入支援契約に進まれた場合、本費用 ¥5,500（税込）は<strong>初期費用に全額充当</strong>します。</p>
           </div>
 
           <div class="form-note">
@@ -496,8 +523,11 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           <div class="diag-limit-block" id="diag-limit-block" hidden>
             <h3>今月の【簡易版】AI活用診断枠は終了しました</h3>
             <p>多くの方にご利用いただきありがとうございます。<br/>毎月1日にリセットされますので、来月以降に再度お申し込みください。</p>
-            <p>お急ぎの場合は<strong>詳細レポート（¥5,500 税込）</strong>をご利用いただけます。月次上限の対象外で、5営業日以内にお届けします。</p>
-            <button type="button" class="btn-primary" id="diag-switch-paid">詳細レポートに切替える</button>
+            <p>お急ぎの場合は<strong>相談チケット</strong>または<strong>詳細診断</strong>をご案内できます。30万円未満の小さなご相談は相談チケットで対応します。</p>
+            <div class="diag-limit-actions">
+              <a class="btn-primary" href="/contact?topic=free-diagnosis-waitlist">無料枠の案内を受け取る</a>
+              <a class="btn-secondary" href="/contact?topic=consult-ticket">相談チケットを問い合わせる</a>
+            </div>
           </div>
 
           <button type="submit" class="btn-primary diag-submit" id="diag-submit">
@@ -678,7 +708,13 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 
       try {
         const formData = new FormData(form);
-        const res = await fetch(form.action || '/api/free-diagnosis', {
+        var submitUrl = form.action || '/api/free-diagnosis';
+        if (planVal === 'paid' && previewOk) {
+          var u = new URL(submitUrl, window.location.origin);
+          u.searchParams.set('preview', 'paid');
+          submitUrl = u.toString();
+        }
+        const res = await fetch(submitUrl, {
           method: 'POST',
           body: formData,
           headers: { 'Accept': 'application/json' },
@@ -732,13 +768,66 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
   // タイムスタンプ設定（いたずら防止）
   document.getElementById('_t').value = String(Date.now());
 
+  // 流入元の自動補助（任意項目の初期値）
+  (function() {
+    var referrerField = document.getElementById('entry_referrer');
+    var leadSource = document.getElementById('lead_source');
+    var leadSourceDetail = document.getElementById('lead_source_detail');
+    if (referrerField) referrerField.value = document.referrer || '';
+    if (!leadSource || leadSource.value) return;
+
+    var params = new URLSearchParams(window.location.search);
+    var sourceParam = params.get('lead_source') || params.get('source');
+    var detailParam = params.get('lead_source_detail') || params.get('source_detail');
+    var allowed = ['url-file-demo', 'public-demo', 'ai-examples', 'role-demo', 'blog', 'search', 'referral', 'business-group', 'other'];
+    function setDetail(value) {
+      if (leadSourceDetail && value && !leadSourceDetail.value) {
+        leadSourceDetail.value = String(value).slice(0, 300);
+      }
+    }
+    if (sourceParam && allowed.indexOf(sourceParam) !== -1) {
+      leadSource.value = sourceParam;
+      setDetail(detailParam);
+      return;
+    }
+
+    var ref = document.referrer || '';
+    var demoPaths = ['/data-search', '/document-editor', '/document-review', '/approval-workflow', '/inquiry-routing', '/quote-generator', '/review-monitor', '/custom-management'];
+    try {
+      var refUrl = ref ? new URL(ref) : null;
+      var path = refUrl ? refUrl.pathname : '';
+      if (path.indexOf('/role-demo/') === 0) {
+        leadSource.value = 'role-demo';
+        setDetail(path.replace('/role-demo/', 'ロール別デモ: '));
+      } else if (path.indexOf('/ai-examples') === 0) {
+        leadSource.value = 'ai-examples';
+        setDetail('AI活用サンプル一覧');
+      } else if (path.indexOf('/service/sample-') === 0) {
+        leadSource.value = 'ai-examples';
+        setDetail('業種別サンプル: ' + path.replace('/service/sample-', ''));
+      } else if (path.indexOf('/blog/') === 0) {
+        leadSource.value = 'blog';
+        setDetail('ブログ: ' + path.replace('/blog/', '').replace(/\/$/, ''));
+      } else if (demoPaths.some(function(p) { return path.indexOf(p) === 0; })) {
+        leadSource.value = 'public-demo';
+        setDetail('公開デモ: ' + path.replace('/', ''));
+      } else if (/google\.|bing\.|yahoo\./i.test(ref)) {
+        leadSource.value = 'search';
+      }
+    } catch (_) {
+      if (ref.indexOf('/role-demo/') !== -1) leadSource.value = 'role-demo';
+      else if (ref.indexOf('/ai-examples') !== -1) leadSource.value = 'ai-examples';
+      else if (ref.indexOf('/blog/') !== -1) leadSource.value = 'blog';
+      else if (/google\.|bing\.|yahoo\./i.test(ref)) leadSource.value = 'search';
+    }
+  })();
+
   // ===== 月次残枠の取得・表示 =====
   (function() {
     var quotaWrap = document.getElementById('diag-quota');
     var quotaText = document.getElementById('diag-quota-text');
     var limitBlock = document.getElementById('diag-limit-block');
     var submitBtn = document.getElementById('diag-submit');
-    var switchToPaid = document.getElementById('diag-switch-paid');
     if (!quotaWrap || !quotaText) return;
 
     fetch('/api/diagnosis-quota', { method: 'GET' })
@@ -765,16 +854,6 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         quotaWrap.hidden = false;
       })
       .catch(function() { /* fail silent */ });
-
-    if (switchToPaid) {
-      switchToPaid.addEventListener('click', function() {
-        var paidBtn = document.querySelector('.plan-switch-btn[data-plan="paid"]');
-        if (paidBtn) paidBtn.click();
-        if (limitBlock) limitBlock.hidden = true;
-        if (submitBtn) submitBtn.style.display = '';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    }
   })();
 
   // ===== プラン切替（free / paid） =====
@@ -1000,7 +1079,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       setIf('business_description', fields.business_description);
       setIf('daily_tasks', fields.daily_tasks);
       setIf('current_tools', fields.current_tools);
-      // 詳細レポート向け追加項目
+      // 詳細診断向け追加項目
       setIf('business_age', fields.business_age);
       setIf('service_area', fields.service_area);
       setIf('target_customer', fields.target_customer);
@@ -1182,6 +1261,37 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     color: #475569;
     font-size: .95rem;
     line-height: 1.7;
+  }
+  .diag-limit-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .diag-limit-actions .btn-primary,
+  .diag-limit-actions .btn-secondary {
+    width: auto;
+    min-width: 220px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
+  .diag-limit-actions .btn-secondary {
+    padding: 12px 22px;
+    border: 1px solid var(--brand);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--brand);
+    font-weight: 700;
+  }
+  @media (max-width: 560px) {
+    .diag-limit-actions .btn-primary,
+    .diag-limit-actions .btn-secondary {
+      width: 100%;
+      min-width: 0;
+    }
   }
 
   .turnstile-wrap {
@@ -1880,7 +1990,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     word-break: break-all;
   }
 
-  /* ===== 詳細レポート向け追加項目（任意） ===== */
+  /* ===== 詳細診断向け追加項目（任意） ===== */
   .extra-fieldset {
     border: 1px solid var(--border);
     background: linear-gradient(180deg, #ffffff 0%, rgba(31, 58, 147, .025) 100%);
@@ -2113,7 +2223,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     cursor: not-allowed;
   }
 
-  /* ===== 次のステップ：詳細レポート vs 直接導入支援 ===== */
+  /* ===== 次のステップ：詳細診断 vs 直接導入支援 ===== */
   .diag-next-section {
     padding: clamp(56px, 8vw, 80px) 0;
     background: var(--surface-2, #0c1424);

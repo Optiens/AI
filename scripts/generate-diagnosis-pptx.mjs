@@ -102,21 +102,26 @@ function addTitle(slide, text, y = 1.3) {
 
   slide.addImage({ path: LOGO_PATH, x: (W - 4) / 2, y: 1.5, w: 4, h: 1.4 });
 
-  slide.addText('AI活用診断 レポート', {
+  slide.addText('【簡易版】AI活用診断', {
     x: 0, y: 3.3, w: W, h: 0.9,
     fontSize: 40, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center',
   });
 
-  slide.addShape('rect', { x: (W - 6) / 2, y: 4.3, w: 3, h: 0.05, fill: { color: COLORS.lapis }, line: { width: 0 } });
-  slide.addShape('rect', { x: W / 2, y: 4.3, w: 3, h: 0.05, fill: { color: COLORS.sakura }, line: { width: 0 } });
+  slide.addText('入力内容をもとにAIが一次分析し、スライドを自動生成した診断レポートです', {
+    x: 0.8, y: 4.52, w: W - 1.6, h: 0.28,
+    fontSize: 12, color: COLORS.textMuted, fontFace: FONT_JP, align: 'center',
+  });
+
+  slide.addShape('rect', { x: (W - 6) / 2, y: 4.32, w: 3, h: 0.05, fill: { color: COLORS.lapis }, line: { width: 0 } });
+  slide.addShape('rect', { x: W / 2, y: 4.32, w: 3, h: 0.05, fill: { color: COLORS.sakura }, line: { width: 0 } });
 
   slide.addText('{{customer_name}} 様', {
-    x: 0, y: 4.8, w: W, h: 0.7,
+    x: 0, y: 4.9, w: W, h: 0.7,
     fontSize: 28, color: COLORS.text, fontFace: FONT_JP, align: 'center',
   });
 
   slide.addText('発行日: {{diagnosis_date}}', {
-    x: 0, y: 5.7, w: W, h: 0.4,
+    x: 0, y: 5.72, w: W, h: 0.4,
     fontSize: 16, color: COLORS.textMuted, fontFace: FONT_JP, align: 'center',
   });
 
@@ -147,7 +152,7 @@ function addTitle(slide, text, y = 1.3) {
     paraSpaceBefore: 6, paraSpaceAfter: 6, valign: 'top',
   });
 
-  addFooterNote(slide, '※ 本レポートはフォーム入力をもとに、業種・規模に応じた汎用パターンから生成しています');
+  addFooterNote(slide, '※ 本レポートは自動生成デモを兼ねた一次診断です。詳細確認前のため、内容は方向性の提示に留めています');
 }
 
 // =================================================
@@ -158,7 +163,7 @@ function addTitle(slide, text, y = 1.3) {
   slide.background = { color: COLORS.white };
   addCommonElements(slide, 3);
   addEyebrow(slide, 'SECTION 02 / AI活用ポイント');
-  addTitle(slide, 'AI活用が効果的な業務 TOP3');
+  addTitle(slide, 'AI活用の候補業務 TOP3');
   addGradientLine(slide, 2.15);
 
   const cardW = 3.9;
@@ -202,7 +207,7 @@ function addTitle(slide, text, y = 1.3) {
     });
   }
 
-  addFooterNote(slide, '具体的な自動化提案は 詳細レポート（¥5,500税込） でお届けします');
+  addFooterNote(slide, '具体的な導入可否・手順・連携先は、詳細診断で確認してからご提案します');
 }
 
 // =================================================
@@ -213,7 +218,7 @@ function addTitle(slide, text, y = 1.3) {
   slide.background = { color: COLORS.white };
   addCommonElements(slide, 4);
   addEyebrow(slide, 'SECTION 03 / 業務の仕分け');
-  addTitle(slide, '自動化と人間残しの方向性');
+  addTitle(slide, '自動化と人間判断の方向性');
   addGradientLine(slide, 2.15);
 
   const colW = 5.95;
@@ -296,29 +301,55 @@ function addTitle(slide, text, y = 1.3) {
     fontSize: 11, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'top',
   });
 
-  addFooterNote(slide, '※ 個別業務の具体的な仕分け案は詳細レポートで');
+  addFooterNote(slide, '※ 簡易版では方向性のみを提示します。実施範囲は詳細診断または個別相談で確認します');
 }
 
 // =================================================
-// Slide 5: ROI 試算（項目別分解＋算式根拠）
+// Slide 5: ROI 試算（項目別分解＋導入判断）
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
   addCommonElements(slide, 5);
   addEyebrow(slide, 'SECTION 04 / 想定効果');
-  addTitle(slide, '月間効果額の試算');
+  addTitle(slide, '一次試算と次の判断');
   addGradientLine(slide, 2.15);
 
-  // 中央: 大数字（合計）
-  slide.addText('月 ¥{{monthly_value_yen}}', {
-    x: 0, y: 2.55, w: W, h: 1.1,
-    fontSize: 48, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center',
+  // 上段: 効果額と導入判断を並べる
+  const metricCards = [
+    ['月間効果額', '¥{{monthly_value_yen}}', '時間削減 × 担当者区分別時給'],
+    ['年間効果額', '¥{{annual_value_yen}}', '月間効果額 × 12ヶ月'],
+    ['次の判断', '{{implementation_judgement}}', '{{implementation_guidance_short}}'],
+  ];
+  const metricY = 2.45;
+  const metricW = 3.85;
+  const metricGap = 0.25;
+  const metricX = 0.8;
+  metricCards.forEach(([label, value, sub], i) => {
+    const x = metricX + (metricW + metricGap) * i;
+    slide.addShape('roundRect', {
+      x, y: metricY, w: metricW, h: 1.05,
+      fill: { color: i === 2 ? 'FFF7ED' : COLORS.cardBg },
+      line: { color: i === 2 ? 'FDBA74' : COLORS.border, width: 1 },
+      rectRadius: 0.12,
+    });
+    slide.addText(label, {
+      x: x + 0.18, y: metricY + 0.12, w: metricW - 0.36, h: 0.22,
+      fontSize: 10.5, color: i === 2 ? 'C2410C' : COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center',
+    });
+    slide.addText(value, {
+      x: x + 0.18, y: metricY + 0.36, w: metricW - 0.36, h: 0.42,
+      fontSize: i === 2 ? 22 : 24, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'center', valign: 'middle',
+    });
+    slide.addText(sub, {
+      x: x + 0.18, y: metricY + 0.78, w: metricW - 0.36, h: 0.2,
+      fontSize: 8.5, color: COLORS.textMuted, fontFace: FONT_JP, align: 'center',
+    });
   });
 
   // 内訳テーブル（カード）
-  const tableY = 3.85;
-  const tableH = 2.85;
+  const tableY = 3.78;
+  const tableH = 2.9;
   slide.addShape('roundRect', {
     x: 1.0, y: tableY, w: W - 2.0, h: tableH,
     fill: { color: COLORS.cardBg },
@@ -326,32 +357,44 @@ function addTitle(slide, text, y = 1.3) {
     rectRadius: 0.15,
   });
 
-  // ヘッダ
-  slide.addText('内訳', {
-    x: 1.3, y: tableY + 0.15, w: 3, h: 0.3,
+  slide.addText('計算内訳', {
+    x: 1.3, y: tableY + 0.14, w: 3, h: 0.3,
     fontSize: 12, color: COLORS.lapis, fontFace: FONT_JP, bold: true, charSpacing: 4,
   });
+  slide.addText('業務', { x: 1.75, y: tableY + 0.48, w: 3.6, h: 0.2, fontSize: 8, color: COLORS.caption, fontFace: FONT_JP });
+  slide.addText('時間', { x: 5.5, y: tableY + 0.48, w: 0.9, h: 0.2, fontSize: 8, color: COLORS.caption, fontFace: FONT_JP, align: 'right' });
+  slide.addText('単価区分', { x: 6.7, y: tableY + 0.48, w: 2.1, h: 0.2, fontSize: 8, color: COLORS.caption, fontFace: FONT_JP });
+  slide.addText('小計', { x: 9.0, y: tableY + 0.48, w: 1.6, h: 0.2, fontSize: 8, color: COLORS.caption, fontFace: FONT_JP, align: 'right' });
+  slide.addText('算定根拠', { x: 10.9, y: tableY + 0.48, w: 1.2, h: 0.2, fontSize: 8, color: COLORS.caption, fontFace: FONT_JP });
 
-  // 各項目: 横3行
-  const itemY = tableY + 0.55;
-  const itemH = 0.6;
+  // 各項目: 時間・単価・小計まで明示
+  const itemY = tableY + 0.74;
+  const itemH = 0.52;
   for (let i = 1; i <= 3; i++) {
     const y = itemY + (i - 1) * itemH;
     slide.addText(`0${i}`, {
-      x: 1.3, y, w: 0.5, h: itemH,
-      fontSize: 16, color: COLORS.lapis, fontFace: FONT_EN, bold: true, valign: 'middle',
+      x: 1.3, y, w: 0.38, h: itemH,
+      fontSize: 13, color: COLORS.lapis, fontFace: FONT_EN, bold: true, valign: 'middle',
     });
     slide.addText(`{{top3_area_${i}}}`, {
-      x: 1.85, y, w: 4.5, h: itemH,
-      fontSize: 12, color: COLORS.text, fontFace: FONT_JP, bold: true, valign: 'middle',
+      x: 1.75, y, w: 3.65, h: itemH,
+      fontSize: 10.5, color: COLORS.text, fontFace: FONT_JP, bold: true, valign: 'middle',
     });
     slide.addText(`{{top3_hours_${i}}} 時間/月`, {
-      x: 6.4, y, w: 1.6, h: itemH,
-      fontSize: 12, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle', align: 'right',
+      x: 5.45, y, w: 0.95, h: itemH,
+      fontSize: 10.5, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle', align: 'right',
+    });
+    slide.addText(`{{top3_rate_label_${i}}}`, {
+      x: 6.7, y, w: 2.05, h: itemH,
+      fontSize: 10.5, color: COLORS.text, fontFace: FONT_JP, valign: 'middle',
+    });
+    slide.addText(`¥{{top3_value_yen_${i}}}`, {
+      x: 8.95, y, w: 1.65, h: itemH,
+      fontSize: 10.5, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'middle', align: 'right',
     });
     slide.addText(`{{top3_basis_${i}}}`, {
-      x: 8.1, y, w: 4.4, h: itemH,
-      fontSize: 9, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle',
+      x: 10.85, y, w: 1.25, h: itemH,
+      fontSize: 7.5, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle',
     });
   }
 
@@ -362,36 +405,40 @@ function addTitle(slide, text, y = 1.3) {
     line: { color: COLORS.border, width: 1 },
   });
   slide.addText('合計', {
-    x: 1.3, y: totalY, w: 5, h: 0.3,
+    x: 1.3, y: totalY, w: 4.1, h: 0.3,
     fontSize: 12, color: COLORS.text, fontFace: FONT_JP, bold: true, valign: 'middle',
   });
   slide.addText('{{monthly_hours_saved}} 時間/月', {
-    x: 6.4, y: totalY, w: 1.6, h: 0.3,
+    x: 5.45, y: totalY, w: 0.95, h: 0.3,
     fontSize: 12, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, align: 'right', valign: 'middle',
   });
-  slide.addText('× ¥1,500 = ¥{{monthly_value_yen}}', {
-    x: 8.1, y: totalY, w: 4.4, h: 0.3,
+  slide.addText('各行小計の合算', {
+    x: 6.7, y: totalY, w: 2.05, h: 0.3,
+    fontSize: 10.5, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle',
+  });
+  slide.addText('¥{{monthly_value_yen}}', {
+    x: 8.95, y: totalY, w: 1.65, h: 0.3,
     fontSize: 11, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'middle',
   });
 
-  addFooterNote(slide, '※ 標準時給1,500円ベースの目安です');
+  addFooterNote(slide, '※ 簡易版の効果額は一次試算です。導入判断・正式見積は、詳細診断または個別相談で確認します');
 }
 
 // =================================================
-// Slide 6: コスト試算（項目別分解＋根拠・サービス名禁止）
+// Slide 6: 費用確認ポイント（無料版では導入支援見積を出さない）
 // =================================================
 {
   const slide = pres.addSlide();
   slide.background = { color: COLORS.white };
   addCommonElements(slide, 6);
-  addEyebrow(slide, 'SECTION 05 / 想定コスト');
-  addTitle(slide, '導入後の運用コスト目安');
+  addEyebrow(slide, 'SECTION 05 / 費用確認');
+  addTitle(slide, '費用確認の進め方');
   addGradientLine(slide, 2.15);
 
   // 中央: 大数字
-  slide.addText('月額 {{cost_total_range}}', {
+  slide.addText('{{cost_total_range}}', {
     x: 0, y: 2.55, w: W, h: 1.0,
-    fontSize: 36, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center',
+    fontSize: 29, color: COLORS.lapis, fontFace: FONT_JP, bold: true, align: 'center',
   });
 
   // 内訳テーブル
@@ -414,20 +461,20 @@ function addTitle(slide, text, y = 1.3) {
   for (let i = 1; i <= 5; i++) {
     const y = itemY + (i - 1) * itemH;
     slide.addText(`{{cost_category_${i}}}`, {
-      x: 1.3, y, w: 4.5, h: itemH,
+      x: 1.3, y, w: 3.15, h: itemH,
       fontSize: 12, color: COLORS.text, fontFace: FONT_JP, valign: 'middle',
     });
     slide.addText(`{{cost_amount_${i}}}`, {
-      x: 5.8, y, w: 2.0, h: itemH,
-      fontSize: 12, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle', align: 'right',
+      x: 4.55, y, w: 3.0, h: itemH,
+      fontSize: 10.5, color: COLORS.lapis, fontFace: FONT_JP, bold: true, valign: 'middle', align: 'right',
     });
     slide.addText(`{{cost_basis_${i}}}`, {
-      x: 7.9, y, w: 4.6, h: itemH,
+      x: 7.8, y, w: 4.7, h: itemH,
       fontSize: 9, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'middle',
     });
   }
 
-  addFooterNote(slide, '※ 具体的サービス名は構成により変動します。詳細レポートで個別試算をお届けします');
+  addFooterNote(slide, '※ 上記はざっくりした費用帯です。正式見積は、対象範囲を確認してから提示します');
 }
 
 // =================================================
@@ -438,7 +485,7 @@ function addTitle(slide, text, y = 1.3) {
   slide.background = { color: COLORS.white };
   addCommonElements(slide, 7);
   addEyebrow(slide, 'SECTION 06 / 次のステップ');
-  addTitle(slide, 'より詳しいご提案をご希望の場合');
+  addTitle(slide, '導入を検討する前の詳細確認');
   addGradientLine(slide, 2.15);
 
   // CTAカード（ラピス背景）
@@ -450,7 +497,7 @@ function addTitle(slide, text, y = 1.3) {
   });
 
   // タイトル
-  slide.addText('詳細レポート（¥5,500税込）', {
+  slide.addText('詳細診断 + 60分MTG（¥5,500税込）', {
     x: 1.0, y: 2.75, w: W - 2.0, h: 0.7,
     fontSize: 32, color: COLORS.white, fontFace: FONT_JP, bold: true, align: 'center',
   });
@@ -463,18 +510,18 @@ function addTitle(slide, text, y = 1.3) {
 
   // 内容リスト（2列グリッド・大きいフォント）
   const features = [
-    '10〜15ページの詳細レポート',
-    '具体的な自動化提案 5〜7件',
-    'アーキテクチャ図（システム構成）',
-    'フロー図（業務手順）',
-    '段階的導入ロードマップ',
-    'ベンダー/サービスカテゴリ比較',
-    'PoC 計画案（仮説検証ステップ）',
-    '業種別補助金の該当性チェック',
-    '導入支援の費用見積',
-    'AI事業者ガイドライン整合性',
+    'URL・添付資料を含めた追加確認',
+    '業務量とデータ状態の整理',
+    '導入可否の見極め',
+    '自動化候補の優先順位づけ',
+    '業務フローの確認',
+    '連携先・制約条件の洗い出し',
+    '実施範囲のたたき台',
+    '費用前提の整理',
+    'PoC 実施の要否確認',
+    '導入支援に進むかの判断',
     '60分オンラインMTG',
-    '質疑・次の判断のすり合わせ',
+    '質問・不安点の整理',
   ];
   const colItemsCount = 6;
   const startY = 3.85;
@@ -488,7 +535,7 @@ function addTitle(slide, text, y = 1.3) {
     });
   });
 
-  addFooterNote(slide, '※ 導入支援契約に進まれた場合、本費用は初期費用に全額充当します');
+  addFooterNote(slide, '※ 詳細診断は単体で稼ぐ商品ではなく、導入支援に進む前の確認枠です。本費用は導入支援の初期費用に全額充当します');
 }
 
 // =================================================
@@ -535,9 +582,9 @@ function addTitle(slide, text, y = 1.3) {
 
   slide.addText(
     [
-      { text: '本レポートは AI による自動生成です。\n', options: { fontSize: 14, bold: true, color: COLORS.text } },
-      { text: '人間が作業する場合は2日、AIなら2分で完結します。\n\n', options: { fontSize: 14, color: COLORS.text } },
-      { text: '同じ仕組みを御社に合わせた内容でご提供できますので、お気軽にご相談ください。', options: { fontSize: 13, color: COLORS.textMuted } },
+      { text: '本レポートは、AIによる自動入力・自動分析・スライド自動生成のデモを兼ねています。\n', options: { fontSize: 14, bold: true, color: COLORS.text } },
+      { text: '同じ考え方で、御社の問い合わせ・見積・報告書・社内資料作成にも自動化を組み込めます。\n\n', options: { fontSize: 14, color: COLORS.text } },
+      { text: '導入可否・実施範囲・費用は、詳細診断または個別相談で確認します。', options: { fontSize: 13, color: COLORS.textMuted } },
     ],
     {
       x: 2.3, y: 4.25, w: W - 4.6, h: 1.3,

@@ -20,6 +20,9 @@ type Lead = {
   employee_count?: string | null;
   decision_timeline?: string | null;
   annual_revenue_range?: string | null;
+  lead_source?: string | null;
+  lead_source_detail?: string | null;
+  entry_referrer?: string | null;
   last_error?: string | null;
 };
 
@@ -112,6 +115,19 @@ function leadTitle(lead: Lead) {
   return lead.company_name || lead.person_name || lead.application_id || `Lead ${lead.id}`;
 }
 
+const leadSourceLabels: Record<string, string> = {
+  'url-file-demo': '自動入力デモ',
+  'public-demo': '実機デモ',
+  'ai-examples': '業種別サンプル',
+  'role-demo': 'ロール別デモ',
+  blog: 'ブログ',
+  search: '検索',
+  referral: '紹介',
+  'business-group': '商工会・勉強会',
+  other: 'その他',
+  unknown: '未回答',
+};
+
 function leadPotentialScore(lead: Lead) {
   let score = 0;
   if (lead.plan === 'paid') score += 25;
@@ -182,6 +198,32 @@ const industryRows = Object.entries(
     return acc;
   }, {})
 ).map(([industry, count]) => ({ industry, count })).sort((a, b) => b.count - a.count).slice(0, 8);
+
+const leadSourceRows = Object.entries(
+  leads.reduce<Record<string, Lead[]>>((acc, lead) => {
+    const key = lead.lead_source || 'unknown';
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(lead);
+    return acc;
+  }, {})
+).map(([source, rows]) => {
+  const valid = rows.filter(isValidLead);
+  const paidIntent = rows.filter(isPaidIntent);
+  const paid = rows.filter(isPaidConfirmed);
+  const delivery = rows.filter(isDelivery);
+  return {
+    source,
+    label: leadSourceLabels[source] || source,
+    count: rows.length,
+    valid: valid.length,
+    paidIntent: paidIntent.length,
+    paid: paid.length,
+    delivery: delivery.length,
+    validRate: safePct(valid.length, rows.length),
+    paidIntentRate: safePct(paidIntent.length, rows.length),
+    deliveryRate: safePct(delivery.length, rows.length),
+  };
+}).sort((a, b) => b.count - a.count || b.paidIntentRate - a.paidIntentRate);
 
 const hotLeads = leads
   .filter((lead) => isPaidIntent(lead) || leadPotentialScore(lead) >= 45)
@@ -311,6 +353,38 @@ const kpiRows = [
       </div>
     </section>
   </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>Lead Source</span>
+        <h3>流入元別ファネル</h3>
+      </div>
+      <a href="/admin/leads" class="panel-link">詳細を見る</a>
+    </div>
+    {leadSourceRows.length === 0 ? (
+      <p class="empty-state">流入元データがありません。</p>
+    ) : (
+      <div class="source-table">
+        <div class="source-row source-row--head">
+          <span>流入元</span>
+          <span>申込</span>
+          <span>有効</span>
+          <span>有償意向</span>
+          <span>導入/保守</span>
+        </div>
+        {leadSourceRows.map((row) => (
+          <div class="source-row">
+            <span><strong>{row.label}</strong></span>
+            <span>{row.count}件</span>
+            <span>{row.valid}件 <small>{row.validRate}%</small></span>
+            <span>{row.paidIntent}件 <small>{row.paidIntentRate}%</small></span>
+            <span>{row.delivery}件 <small>{row.deliveryRate}%</small></span>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
 
   <section class="panel">
     <div class="panel-head">
@@ -476,6 +550,7 @@ const kpiRows = [
   .funnel-list,
   .leak-list,
   .mini-list,
+  .source-table,
   .lead-table {
     display: grid;
     gap: 10px;
@@ -561,6 +636,37 @@ const kpiRows = [
     letter-spacing: 0.06em;
   }
 
+  .source-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 1.4fr) repeat(4, minmax(92px, .8fr));
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    color: var(--admin-muted);
+  }
+
+  .source-row strong {
+    color: #fff;
+  }
+
+  .source-row small {
+    display: block;
+    margin-top: 2px;
+    color: var(--admin-accent-soft);
+    font-size: 0.72rem;
+  }
+
+  .source-row--head {
+    color: var(--admin-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
   .lead-row small {
     display: block;
     margin-top: 2px;
@@ -583,6 +689,13 @@ const kpiRows = [
     }
     .lead-row {
       grid-template-columns: 1fr 80px;
+    }
+    .source-row {
+      grid-template-columns: 1fr 72px 72px;
+    }
+    .source-row span:nth-child(4),
+    .source-row span:nth-child(5) {
+      display: none;
     }
     .lead-row span:nth-child(3),
     .lead-row span:nth-child(4),
