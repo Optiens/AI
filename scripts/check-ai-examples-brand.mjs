@@ -10,6 +10,9 @@ const checks = [
       'class="ax-detail"',
       'data-cat="common"',
       'data-cat="industry"',
+      'data-cat="role"',
+      'data-cat-group="role"',
+      'const roleDemos',
     ],
     forbidden: [
       {
@@ -19,10 +22,6 @@ const checks = [
       {
         label: 'full replacement demo layout from the 2026-05 regression',
         pattern: /\bdemo-(main|hero|grid|card|policy)\b/,
-      },
-      {
-        label: 'removed role/target tab',
-        pattern: /data-cat="role"|data-cat-group="role"|対象者別|const roles\b|type Role\b/,
       },
       {
         label: 'local brand variable override',

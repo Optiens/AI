@@ -25,6 +25,19 @@ type Industry = {
   demo?: { label: string; href: string; note?: string };
 };
 
+type RoleDemo = {
+  id: string;
+  tag: string;
+  icon: string;
+  title: string;
+  shortTitle: string;
+  summary: string;
+  metric: string;
+  href: string;
+  cta: string;
+  note: string;
+};
+
 const commonCases: CommonCase[] = [
   {
     id: 'case-inquiry',
@@ -114,11 +127,50 @@ const industries: Industry[] = [
   { id: 'ind-winery', image: '/images/industries/winery.png', title: 'ワイナリー・醸造所', shortTitle: 'ワイナリー', summary: '醸造記録・在庫管理・卸先提案書', metric: '月30時間削減', href: '/service/sample-winery' },
 ];
 
+const roleDemos: RoleDemo[] = [
+  {
+    id: 'role-executive',
+    tag: 'FOR EXECUTIVES',
+    icon: 'fa-user-tie',
+    title: '経営者・代表者向けAIブリーフィング',
+    shortTitle: '経営者・代表者向け',
+    summary: 'KPI、稼働状況、重要アラートを朝の短時間で確認',
+    metric: '事業状況把握 5時間 → 30分',
+    href: '/service/sample-executive',
+    cta: '経営者向けデモを見る',
+    note: '稼働状況ダッシュボード、自然言語データ検索、承認ワークフローの3つを経営者向け文脈で確認できます。',
+  },
+  {
+    id: 'role-manager',
+    tag: 'FOR MANAGERS',
+    icon: 'fa-users-gear',
+    title: '管理職・承認者向け承認ワークフロー',
+    shortTitle: '管理職・承認者向け',
+    summary: '自分が判断すべき申請だけを確認し、差し戻しや承認まで一画面で処理',
+    metric: '承認確認を一画面に集約',
+    href: '/approval-workflow',
+    cta: '承認者向けデモを見る',
+    note: '申請者と承認者の画面を切り替え、稟議・経費・契約確認の流れを確認できます。',
+  },
+  {
+    id: 'role-operator',
+    tag: 'FOR OPERATORS',
+    icon: 'fa-user-gear',
+    title: '現場・担当者向けロール別業務管理',
+    shortTitle: '現場・担当者向け',
+    summary: '担当案件と入力項目だけを表示し、二重入力や確認漏れを減らす',
+    metric: '役割ごとに表示項目を整理',
+    href: '/custom-management',
+    cta: '現場向けデモを見る',
+    note: '経営者、営業パートナー、現場の3ビューを切り替え、同じ業務データの見え方が変わることを確認できます。',
+  },
+];
+
 ---
 
 <Layout
-  title={`AI業務自動化デモ | 実用デモ${commonCases.length}件 + 業種別${industries.length}業種 | Optiens`}
-  description={`問い合わせ振り分け、見積書作成、社内データ検索、承認ワークフローなど、実際に操作できるAI業務自動化デモを${commonCases.length}件公開しています。業種別シナリオと合わせてご覧ください。`}
+  title={`AI業務自動化デモ | 実用デモ${commonCases.length}件 + 業種別${industries.length}業種 + ロール別${roleDemos.length}件 | Optiens`}
+  description={`問い合わせ振り分け、見積書作成、社内データ検索、承認ワークフローなど、実際に操作できるAI業務自動化デモを${commonCases.length}件公開しています。業種別デモとロール別デモも合わせてご覧ください。`}
   canonical="https://optiens.com/ai-examples"
 >
   <main>
@@ -132,8 +184,12 @@ const industries: Industry[] = [
             <span class="ax-tab-count">{commonCases.length}</span>
           </button>
           <button class="ax-tab" data-cat="industry" role="tab" aria-selected="false">
-            <span class="ax-tab-label">業種別資料</span>
+            <span class="ax-tab-label">業種別デモ</span>
             <span class="ax-tab-count">{industries.length}</span>
+          </button>
+          <button class="ax-tab" data-cat="role" role="tab" aria-selected="false">
+            <span class="ax-tab-label">ロール別デモ</span>
+            <span class="ax-tab-count">{roleDemos.length}</span>
           </button>
         </div>
 
@@ -163,6 +219,23 @@ const industries: Industry[] = [
                     <span class="ax-sel-body">
                       <span class="ax-sel-title">{i.shortTitle}</span>
                       <span class="ax-sel-summary">{i.metric}</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-right ax-sel-chevron"></i>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <!-- ロール別 -->
+            <ul class="ax-selector-group hidden" data-cat-group="role">
+              {roleDemos.map((r) => (
+                <li>
+                  <button class="ax-sel-item" data-id={r.id}>
+                    <span class="ax-sel-role-icon">
+                      <i class={`fa-solid ${r.icon}`}></i>
+                    </span>
+                    <span class="ax-sel-body">
+                      <span class="ax-sel-title">{r.shortTitle}</span>
+                      <span class="ax-sel-summary">{r.metric}</span>
                     </span>
                     <i class="fa-solid fa-chevron-right ax-sel-chevron"></i>
                   </button>
@@ -211,13 +284,13 @@ const industries: Industry[] = [
                 <header class="ax-detail-head">
                   <h2 class="ax-detail-title">{i.title}</h2>
                 </header>
-                <p class="ax-detail-desc">{i.summary}を含む業務全体を、御社の現場に合わせて再設計します。業種特化の活用シナリオ・想定削減時間・導入ロードマップを、活用シナリオページでご覧いただけます。</p>
+                <p class="ax-detail-desc">{i.summary}を含む業務全体を、御社の現場に合わせて再設計します。業種別ページでは、課題、導入手順、想定削減時間に加えて、関連する実機デモも確認できます。</p>
                 <div class="ax-detail-metric">
                   <span class="ax-metric-label">想定削減時間</span>
                   <span class="ax-metric-value">{i.metric}</span>
                 </div>
                 <a href={i.href} class="btn-primary ax-detail-cta">
-                  活用シナリオを見る
+                  業種別デモを見る
                   <i class="fa-solid fa-arrow-right"></i>
                 </a>
                 {i.demo && (
@@ -237,11 +310,37 @@ const industries: Industry[] = [
                 )}
               </article>
             ))}
+            <!-- ロール別の詳細 -->
+            {roleDemos.map((r) => (
+              <article class="ax-detail-card" data-id={r.id} data-cat="role">
+                <header class="ax-detail-head">
+                  <span class="ax-detail-eyebrow">{r.tag}</span>
+                  <div class="ax-detail-icon ax-detail-icon--role">
+                    <i class={`fa-solid ${r.icon}`}></i>
+                  </div>
+                  <h2 class="ax-detail-title">{r.title}</h2>
+                </header>
+                <p class="ax-detail-desc">{r.summary}。役割ごとに必要な情報、操作権限、確認ポイントを分けた状態で、実際の画面遷移を確認できます。</p>
+                <div class="ax-detail-metric">
+                  <span class="ax-metric-label">想定効果</span>
+                  <span class="ax-metric-value">{r.metric}</span>
+                </div>
+                <a href={r.href} class="btn-primary ax-detail-cta">
+                  <i class="fa-solid fa-circle-play"></i>
+                  {r.cta}
+                  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <p class="ax-detail-demo-note">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>{r.note}</span>
+                </p>
+              </article>
+            ))}
           </div>
         </div>
 
         <p class="ax-bridge-note reveal">
-          掲載デモはすべて、入力・判定・出力・人間の確認ポイントを確認できるものに絞っています。サービス内容は <a href="/service">AI支援ページ</a> をご確認ください。
+          掲載デモはすべて、入力・判定・出力・人間の確認ポイントを確認できるものに絞っています。業種別・ロール別の入り口からも、実際に触れるデモへ進めます。サービス内容は <a href="/service">AI支援ページ</a> をご確認ください。
         </p>
       </div>
     </section>
@@ -322,10 +421,10 @@ const industries: Industry[] = [
       }
     }
   }
-  // ?cat=industry|common でカテゴリ初期選択
+  // ?cat=industry|common|role でカテゴリ初期選択
   const params = new URLSearchParams(window.location.search);
   const catParam = params.get('cat');
-  if (catParam && ['common', 'industry'].includes(catParam)) {
+  if (catParam && ['common', 'industry', 'role'].includes(catParam)) {
     selectCategory(catParam);
   }
 })();
@@ -375,7 +474,7 @@ const industries: Industry[] = [
     background: rgba(31, 58, 147, .04);
     padding: 6px;
     border-radius: 999px;
-    max-width: 580px;
+    max-width: 760px;
     margin-left: auto;
     margin-right: auto;
   }
