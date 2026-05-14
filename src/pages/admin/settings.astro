@@ -1,0 +1,292 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import {
+  adminSettingDefinitions,
+  adminSettingGroups,
+  getAdminSettings,
+  type AdminSettingGroup,
+} from '../../lib/admin-ops';
+
+const settingsState = await getAdminSettings();
+const grouped = Object.entries(
+  adminSettingDefinitions.reduce<Record<AdminSettingGroup, typeof adminSettingDefinitions>>((acc, definition) => {
+    acc[definition.group] = acc[definition.group] || [];
+    acc[definition.group].push(definition);
+    return acc;
+  }, {} as Record<AdminSettingGroup, typeof adminSettingDefinitions>)
+) as Array<[AdminSettingGroup, typeof adminSettingDefinitions]>;
+
+function valueFor(key: string) {
+  return settingsState.values[key] ?? '';
+}
+---
+
+<AdminLayout title="管理設定" active="settings">
+  <section class="hero-panel">
+    <div>
+      <span>Admin Settings</span>
+      <h2>運用のしきい値を、コード編集なしで管理する</h2>
+      <p>通知先、SLA、API費用単価、アラート基準、Google Tasks運用メモをここに集約します。</p>
+    </div>
+    <strong>{settingsState.configured ? 'DB' : 'ENV'}<small>{settingsState.configured ? '設定保存可能' : 'Supabase未接続'}</small></strong>
+  </section>
+
+  {settingsState.error && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{settingsState.error}</span>
+    </div>
+  )}
+
+  <form class="settings-form" id="admin-settings-form">
+    {grouped.map(([group, definitions]) => (
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <span>{group}</span>
+            <h3>{adminSettingGroups[group]}</h3>
+          </div>
+        </div>
+        <div class="field-grid">
+          {definitions.map((definition) => (
+            <label class={definition.type === 'textarea' ? 'field field-wide' : 'field'}>
+              <span>{definition.label}</span>
+              {definition.type === 'textarea' ? (
+                <textarea name={definition.key} rows="4">{String(valueFor(definition.key))}</textarea>
+              ) : (
+                <input
+                  name={definition.key}
+                  type={definition.type === 'number' ? 'number' : definition.type === 'time' ? 'time' : definition.type === 'email' ? 'email' : 'text'}
+                  step={definition.type === 'number' ? '0.000001' : undefined}
+                  value={String(valueFor(definition.key))}
+                />
+              )}
+              <small>{definition.description}{definition.unit ? ` / ${definition.unit}` : ''}</small>
+            </label>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <section class="panel save-panel">
+      <button type="submit" id="settings-save-button">
+        <i class="fas fa-floppy-disk"></i>
+        保存する
+      </button>
+      <p id="settings-save-result">まだ保存していません。</p>
+      <a href="/admin/audit">監査ログを見る</a>
+    </section>
+  </form>
+</AdminLayout>
+
+<script is:inline>
+  (function() {
+    const form = document.getElementById('admin-settings-form');
+    const button = document.getElementById('settings-save-button');
+    const result = document.getElementById('settings-save-result');
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form || !button || !result) return;
+
+      const formData = new FormData(form);
+      const payload = {};
+      for (const [key, value] of formData.entries()) {
+        payload[key] = value;
+      }
+
+      button.disabled = true;
+      result.textContent = '保存中...';
+      try {
+        const res = await fetch('/api/admin/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.ok === false) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+        result.textContent = `保存しました: ${(data.updated || []).length}項目`;
+      } catch (error) {
+        result.textContent = error instanceof Error ? error.message : '保存に失敗しました。';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .hero-panel,
+  .panel {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span,
+  .field span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-panel h2,
+  .panel-head h3 {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.2rem;
+  }
+
+  .hero-panel p {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.9rem;
+  }
+
+  .hero-panel strong {
+    display: grid;
+    place-items: center;
+    min-height: 110px;
+    border-radius: 8px;
+    background: var(--admin-surface-2);
+    color: #fff;
+    font-size: 1.6rem;
+  }
+
+  .hero-panel small {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .alert-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 12px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
+  }
+
+  .settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .panel-head {
+    margin-bottom: 14px;
+  }
+
+  .panel-head h3 {
+    margin: 3px 0 0;
+    font-size: 1rem;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .field {
+    display: grid;
+    gap: 7px;
+  }
+
+  .field-wide {
+    grid-column: 1 / -1;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font: inherit;
+  }
+
+  .field textarea {
+    resize: vertical;
+  }
+
+  .field small,
+  .save-panel p,
+  .save-panel a {
+    color: var(--admin-muted);
+    font-size: 0.78rem;
+  }
+
+  .save-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .save-panel button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-primary);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .save-panel button:disabled {
+    opacity: 0.68;
+    cursor: wait;
+  }
+
+  .save-panel p {
+    margin: 0;
+  }
+
+  .save-panel a {
+    color: var(--admin-secondary);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  @media (max-width: 860px) {
+    .hero-panel,
+    .field-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

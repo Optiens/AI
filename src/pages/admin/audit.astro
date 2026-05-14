@@ -1,0 +1,239 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { listAdminAuditLogs } from '../../lib/admin-ops';
+
+const { logs, error } = await listAdminAuditLogs(160);
+const formatter = new Intl.DateTimeFormat('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+function formatDateTime(iso?: string | null) {
+  return iso ? formatter.format(new Date(iso)) : '-';
+}
+
+function metadataText(metadata: unknown) {
+  if (!metadata || typeof metadata !== 'object') return '-';
+  const text = JSON.stringify(metadata);
+  return text.length > 180 ? `${text.slice(0, 180)}...` : text;
+}
+---
+
+<AdminLayout title="監査ログ" active="audit">
+  <section class="hero-panel">
+    <div>
+      <span>Audit Log</span>
+      <h2>管理画面で行った変更を、後から追えるようにする</h2>
+      <p>設定変更、ナレッジ追加、将来のリード操作や顧客対応をここに集約します。</p>
+    </div>
+    <strong>{logs.length}<small>直近ログ</small></strong>
+  </section>
+
+  {error && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{error}</span>
+    </div>
+  )}
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <span>History</span>
+        <h3>操作履歴</h3>
+      </div>
+      <a href="/admin/settings" class="panel-link">管理設定へ</a>
+    </div>
+
+    {logs.length === 0 ? (
+      <p class="empty-state">まだ監査ログがありません。設定保存やナレッジ追加を行うと記録されます。</p>
+    ) : (
+      <div class="table-wrap">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>日時</th>
+              <th>操作</th>
+              <th>対象</th>
+              <th>概要</th>
+              <th>詳細</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((log) => (
+              <tr>
+                <td>{formatDateTime(log.created_at)}</td>
+                <td><span class="action-pill">{log.action}</span></td>
+                <td>
+                  <strong>{log.target_table || '-'}</strong>
+                  <small>{log.target_id || '-'}</small>
+                </td>
+                <td>{log.summary || '-'}</td>
+                <td><code>{metadataText(log.metadata)}</code></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </section>
+</AdminLayout>
+
+<style>
+  .hero-panel,
+  .panel {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  .hero-panel span,
+  .panel-head span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-panel h2,
+  .panel-head h3 {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .hero-panel h2 {
+    margin: 8px 0;
+    font-size: 1.2rem;
+  }
+
+  .hero-panel p,
+  .empty-state {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.88rem;
+  }
+
+  .hero-panel strong {
+    display: grid;
+    place-items: center;
+    min-height: 110px;
+    border-radius: 8px;
+    background: var(--admin-surface-2);
+    color: #fff;
+    font-size: 1.8rem;
+  }
+
+  .hero-panel small {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .alert-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 12px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .panel-head h3 {
+    margin: 3px 0 0;
+    font-size: 1rem;
+  }
+
+  .panel-link {
+    color: var(--admin-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  .audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+  }
+
+  .audit-table th,
+  .audit-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--admin-border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .audit-table th {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .audit-table td {
+    color: var(--admin-text);
+  }
+
+  .audit-table small {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+  }
+
+  .action-pill {
+    display: inline-flex;
+    min-height: 24px;
+    align-items: center;
+    padding: 0 9px;
+    border-radius: 999px;
+    background: rgba(107, 133, 201, 0.18);
+    color: var(--admin-accent-soft);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  code {
+    white-space: pre-wrap;
+    color: var(--admin-muted);
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 820px) {
+    .hero-panel {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

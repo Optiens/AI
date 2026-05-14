@@ -207,11 +207,11 @@ function tokenize(input: string) {
     .filter(Boolean)
 }
 
-export function searchKnowledge(query: string, limit = 5) {
+export function searchKnowledgeDocs(docs: KnowledgeDoc[], query: string, limit = 5) {
   const terms = tokenize(query)
-  if (!terms.length) return knowledgeDocs.slice(0, limit).map((doc) => ({ doc, score: 0 }))
+  if (!terms.length) return docs.slice(0, limit).map((doc) => ({ doc, score: 0 }))
 
-  return knowledgeDocs
+  return docs
     .map((doc) => {
       const haystack = `${doc.title} ${doc.summary} ${doc.body} ${doc.tags.join(' ')}`.toLowerCase()
       const score = terms.reduce((sum, term) => sum + (haystack.includes(term) ? 1 : 0), 0)
@@ -222,9 +222,13 @@ export function searchKnowledge(query: string, limit = 5) {
     .slice(0, limit)
 }
 
-export function buildKnowledgeContext(query: string) {
-  const rows = searchKnowledge(query, 6)
-  const selected = rows.length ? rows : knowledgeDocs.slice(0, 5).map((doc) => ({ doc, score: 0 }))
+export function searchKnowledge(query: string, limit = 5) {
+  return searchKnowledgeDocs(knowledgeDocs, query, limit)
+}
+
+export function buildKnowledgeContextFromDocs(docs: KnowledgeDoc[], query: string) {
+  const rows = searchKnowledgeDocs(docs, query, 6)
+  const selected = rows.length ? rows : docs.slice(0, 5).map((doc) => ({ doc, score: 0 }))
   return selected.map(({ doc }) => [
     `# ${doc.title}`,
     `category: ${doc.category}`,
@@ -233,4 +237,8 @@ export function buildKnowledgeContext(query: string) {
     doc.summary,
     doc.body,
   ].join('\n')).join('\n\n')
+}
+
+export function buildKnowledgeContext(query: string) {
+  return buildKnowledgeContextFromDocs(knowledgeDocs, query)
 }

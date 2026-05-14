@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import { knowledgeDocs } from '../../lib/optiens-knowledge';
+import { dbKnowledgeEntryToDoc, listKnowledgeEntries } from '../../lib/admin-ops';
 
 const posts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -28,6 +29,9 @@ const categoryRows = Object.entries(
   .sort((a, b) => b.count - a.count);
 
 const latestPosts = posts.slice(0, 12);
+const { entries: editableKnowledgeEntries, error: editableKnowledgeError } = await listKnowledgeEntries();
+const editableKnowledgeDocs = editableKnowledgeEntries.map(dbKnowledgeEntryToDoc);
+const allKnowledgeDocs = [...knowledgeDocs, ...editableKnowledgeDocs];
 
 const knowledgeSources = [
   {
@@ -76,14 +80,14 @@ const buildItems = [
 ];
 
 const categoryDocRows = Object.entries(
-  knowledgeDocs.reduce<Record<string, number>>((acc, doc) => {
+  allKnowledgeDocs.reduce<Record<string, number>>((acc, doc) => {
     acc[doc.category] = (acc[doc.category] || 0) + 1;
     return acc;
   }, {})
 ).map(([category, count]) => ({ category, count })).sort((a, b) => b.count - a.count);
 
-const demoSafeCount = knowledgeDocs.filter((doc) => doc.visibility === 'demo-safe').length;
-const demoReadyCount = knowledgeDocs.filter((doc) => doc.maturity === 'demo-ready').length;
+const demoSafeCount = allKnowledgeDocs.filter((doc) => doc.visibility === 'demo-safe').length;
+const demoReadyCount = allKnowledgeDocs.filter((doc) => doc.maturity === 'demo-ready').length;
 
 function visibilityLabel(value: string) {
   return value === 'demo-safe' ? 'デモ可' : '社内限定';
@@ -103,8 +107,15 @@ function maturityLabel(value: string) {
       <h2>人が入った時に、Optiensの仕事を質問できる社内ナレッジにする</h2>
       <p>事業方針、営業SOP、AI/API運用、毎朝の確認、水耕栽培KPI、禁止表現を同じ棚に置き、質問欄から回答できる形にします。</p>
     </div>
-    <strong>{knowledgeDocs.length}<small>社内ナレッジ</small></strong>
+    <strong>{allKnowledgeDocs.length}<small>社内ナレッジ</small></strong>
   </section>
+
+  {editableKnowledgeError && (
+    <div class="alert-box">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{editableKnowledgeError}</span>
+    </div>
+  )}
 
   <section class="panel ask-panel">
     <div class="panel-head">
@@ -135,7 +146,7 @@ function maturityLabel(value: string) {
     </div>
     <div class="knowledge-stats">
       <div>
-        <b>{knowledgeDocs.length}</b>
+        <b>{allKnowledgeDocs.length}</b>
         <span>登録ナレッジ</span>
       </div>
       <div>
@@ -148,7 +159,7 @@ function maturityLabel(value: string) {
       </div>
     </div>
     <div class="doc-grid">
-      {knowledgeDocs.map((doc) => (
+      {allKnowledgeDocs.map((doc) => (
         <article class="doc-card">
           <div class="doc-badges">
             <span>{doc.category}</span>
@@ -159,6 +170,102 @@ function maturityLabel(value: string) {
           <small>{doc.owner} / {doc.updatedAt} / {maturityLabel(doc.maturity)}</small>
         </article>
       ))}
+    </div>
+  </section>
+
+  <section class="panel edit-panel">
+    <div class="panel-head">
+      <div>
+        <span>Editable DB</span>
+        <h3>ナレッジを追加・編集する</h3>
+      </div>
+      <a href="/admin/audit" class="panel-link">監査ログへ</a>
+    </div>
+    <form class="knowledge-form" id="knowledge-entry-form">
+      <input type="hidden" name="id" id="knowledge-entry-id" />
+      <label>
+        <span>タイトル</span>
+        <input name="title" id="knowledge-entry-title" required />
+      </label>
+      <label>
+        <span>カテゴリ</span>
+        <select name="category" id="knowledge-entry-category">
+          <option value="business">business</option>
+          <option value="sales">sales</option>
+          <option value="operations" selected>operations</option>
+          <option value="ai">ai</option>
+          <option value="hydroponics">hydroponics</option>
+          <option value="brand">brand</option>
+          <option value="governance">governance</option>
+        </select>
+      </label>
+      <label>
+        <span>責任者</span>
+        <input name="owner" id="knowledge-entry-owner" value="COO" />
+      </label>
+      <label>
+        <span>公開区分</span>
+        <select name="visibility" id="knowledge-entry-visibility">
+          <option value="internal">internal</option>
+          <option value="demo-safe">demo-safe</option>
+        </select>
+      </label>
+      <label>
+        <span>成熟度</span>
+        <select name="maturity" id="knowledge-entry-maturity">
+          <option value="seed">seed</option>
+          <option value="operational">operational</option>
+          <option value="demo-ready">demo-ready</option>
+        </select>
+      </label>
+      <label>
+        <span>タグ</span>
+        <input name="tags" id="knowledge-entry-tags" placeholder="SOP, 営業, 引き継ぎ" />
+      </label>
+      <label class="field-wide">
+        <span>要約</span>
+        <textarea name="summary" id="knowledge-entry-summary" rows="3" required></textarea>
+      </label>
+      <label class="field-wide">
+        <span>本文</span>
+        <textarea name="body" id="knowledge-entry-body" rows="7" required></textarea>
+      </label>
+      <div class="form-actions">
+        <button type="submit" id="knowledge-entry-save"><i class="fas fa-floppy-disk"></i> 保存する</button>
+        <button type="button" id="knowledge-entry-reset" class="ghost-button">新規入力に戻す</button>
+        <small id="knowledge-entry-result">保存すると監査ログにも記録されます。</small>
+      </div>
+    </form>
+
+    <div class="editable-list">
+      {editableKnowledgeEntries.length === 0 ? (
+        <p class="empty-state">DB管理ナレッジはまだありません。上のフォームから追加できます。</p>
+      ) : (
+        editableKnowledgeEntries.map((entry) => (
+          <article class="editable-row">
+            <div>
+              <strong>{entry.title}</strong>
+              <p>{entry.summary}</p>
+              <small>{entry.category} / {entry.visibility} / {entry.maturity}</small>
+            </div>
+            <button
+              type="button"
+              class="edit-knowledge-button"
+              data-id={entry.id}
+              data-title={entry.title}
+              data-category={entry.category}
+              data-owner={entry.owner}
+              data-visibility={entry.visibility}
+              data-maturity={entry.maturity}
+              data-summary={entry.summary}
+              data-body={entry.body}
+              data-tags={(entry.tags || []).join(', ')}
+            >
+              編集
+            </button>
+          </article>
+        ))
+      )}
     </div>
   </section>
 
@@ -296,6 +403,78 @@ function maturityLabel(value: string) {
         button.disabled = false;
       }
     });
+
+    const entryForm = document.getElementById('knowledge-entry-form');
+    const entryResult = document.getElementById('knowledge-entry-result');
+    const entrySave = document.getElementById('knowledge-entry-save');
+    const entryReset = document.getElementById('knowledge-entry-reset');
+    const fields = {
+      id: document.getElementById('knowledge-entry-id'),
+      title: document.getElementById('knowledge-entry-title'),
+      category: document.getElementById('knowledge-entry-category'),
+      owner: document.getElementById('knowledge-entry-owner'),
+      visibility: document.getElementById('knowledge-entry-visibility'),
+      maturity: document.getElementById('knowledge-entry-maturity'),
+      tags: document.getElementById('knowledge-entry-tags'),
+      summary: document.getElementById('knowledge-entry-summary'),
+      body: document.getElementById('knowledge-entry-body'),
+    };
+
+    function setField(name, value) {
+      if (fields[name]) fields[name].value = value || '';
+    }
+
+    document.querySelectorAll('.edit-knowledge-button').forEach((editButton) => {
+      editButton.addEventListener('click', () => {
+        setField('id', editButton.dataset.id);
+        setField('title', editButton.dataset.title);
+        setField('category', editButton.dataset.category);
+        setField('owner', editButton.dataset.owner);
+        setField('visibility', editButton.dataset.visibility);
+        setField('maturity', editButton.dataset.maturity);
+        setField('summary', editButton.dataset.summary);
+        setField('body', editButton.dataset.body);
+        setField('tags', editButton.dataset.tags);
+        entryResult.textContent = '既存ナレッジを編集中です。';
+        entryForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    entryReset?.addEventListener('click', () => {
+      entryForm?.reset();
+      setField('id', '');
+      entryResult.textContent = '新規入力に戻しました。';
+    });
+
+    entryForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!entryForm || !entrySave || !entryResult) return;
+      const formData = new FormData(entryForm);
+      const payload = {};
+      for (const [key, value] of formData.entries()) {
+        payload[key] = value;
+      }
+
+      entrySave.disabled = true;
+      entryResult.textContent = '保存中...';
+      try {
+        const res = await fetch('/api/admin/knowledge-docs', {
+          method: payload.id ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.ok === false) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+        entryResult.textContent = '保存しました。画面を更新します...';
+        window.location.reload();
+      } catch (error) {
+        entryResult.textContent = error instanceof Error ? error.message : '保存に失敗しました。';
+      } finally {
+        entrySave.disabled = false;
+      }
+    });
   })();
 </script>
 
@@ -415,6 +594,129 @@ function maturityLabel(value: string) {
     border: 1px solid var(--admin-border);
     border-radius: 8px;
     background: var(--admin-bg);
+  }
+
+  .alert-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 12px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
+  }
+
+  .knowledge-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .knowledge-form label {
+    display: grid;
+    gap: 7px;
+  }
+
+  .knowledge-form label span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .knowledge-form input,
+  .knowledge-form select,
+  .knowledge-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font: inherit;
+  }
+
+  .knowledge-form textarea {
+    resize: vertical;
+  }
+
+  .field-wide,
+  .form-actions {
+    grid-column: 1 / -1;
+  }
+
+  .form-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .form-actions button,
+  .editable-row button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 0 13px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-primary);
+    color: #fff;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .form-actions button:disabled {
+    cursor: wait;
+    opacity: 0.68;
+  }
+
+  .form-actions .ghost-button,
+  .editable-row button {
+    background: var(--admin-surface-2);
+    color: var(--admin-muted);
+  }
+
+  .form-actions small,
+  .editable-row p,
+  .editable-row small,
+  .empty-state {
+    color: var(--admin-muted);
+    font-size: 0.8rem;
+  }
+
+  .editable-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .editable-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 78px;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .editable-row strong {
+    color: #fff;
+  }
+
+  .editable-row p {
+    margin: 4px 0;
   }
 
   .knowledge-stats {
@@ -700,7 +1002,8 @@ function maturityLabel(value: string) {
   @media (max-width: 920px) {
     .hero-panel,
     .grid,
-    .ask-grid {
+    .ask-grid,
+    .knowledge-form {
       grid-template-columns: 1fr;
     }
 

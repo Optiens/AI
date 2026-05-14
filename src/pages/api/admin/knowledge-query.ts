@@ -1,7 +1,12 @@
 import type { APIRoute } from 'astro'
 import { createClient } from '@supabase/supabase-js'
 import { makeToken, COOKIE_NAME, getAdminPassword } from '../../../middleware'
-import { buildKnowledgeContext, searchKnowledge } from '../../../lib/optiens-knowledge'
+import {
+  buildKnowledgeContextFromDocs,
+  knowledgeDocs,
+  searchKnowledgeDocs,
+} from '../../../lib/optiens-knowledge'
+import { dbKnowledgeEntryToDoc, listKnowledgeEntries } from '../../../lib/admin-ops'
 
 const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
 const OPENAI_MODEL = import.meta.env.OPENAI_MODEL || 'gpt-5.5'
@@ -70,7 +75,9 @@ export const POST: APIRoute = async ({ request }) => {
   const question = String(body.question || '').trim()
   if (!question) return json({ error: 'question is required' }, 400)
 
-  const matches = searchKnowledge(question, 5)
+  const { entries } = await listKnowledgeEntries()
+  const docs = [...knowledgeDocs, ...entries.map(dbKnowledgeEntryToDoc)]
+  const matches = searchKnowledgeDocs(docs, question, 5)
   const sources = matches.map(({ doc }) => ({
     id: doc.id,
     title: doc.title,
@@ -89,7 +96,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const startedAt = Date.now()
-  const context = buildKnowledgeContext(question)
+  const context = buildKnowledgeContextFromDocs(docs, question)
 
   try {
     const res = await fetch('https://api.openai.com/v1/responses', {

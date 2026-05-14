@@ -1,10 +1,15 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import { supabase } from '../../lib/supabase';
+import { getBusinessTaskSummary } from '../../lib/google-tasks';
+import { buildTodayActions } from '../../lib/ops-today';
+import { getAdminSettings } from '../../lib/admin-ops';
+import { knowledgeDocs } from '../../lib/optiens-knowledge';
 
 type Lead = {
-  id: string;
+  id: string | number;
   created_at: string;
+  updated_at?: string | null;
   plan?: string | null;
   status?: string | null;
   amount_jpy?: number | null;
@@ -12,20 +17,54 @@ type Lead = {
   company_name?: string | null;
   industry?: string | null;
   application_id?: string | null;
+  person_name?: string | null;
+  last_error?: string | null;
+};
+
+type AiApiEvent = {
+  id: number;
+  created_at: string;
+  workflow?: string | null;
+  provider?: string | null;
+  model?: string | null;
+  operation?: string | null;
+  status?: string | null;
+  input_tokens?: number | null;
+  output_tokens?: number | null;
+  total_tokens?: number | null;
+  latency_ms?: number | null;
+  error_type?: string | null;
+  error_message?: string | null;
 };
 
 let leads: Lead[] = [];
+let events: AiApiEvent[] = [];
 let dbError = '';
+let eventsError = '';
+const runtimeEnv = import.meta.env as Record<string, string | undefined>;
+const taskSummary = await getBusinessTaskSummary(new Date(), 7);
+const { values: adminSettings } = await getAdminSettings();
 
 if (supabase) {
   const { data, error } = await supabase
     .from('diagnosis_leads')
-    .select('id, created_at, plan, status, amount_jpy, paid_at, company_name, industry, application_id')
+    .select('*')
     .order('created_at', { ascending: false });
   if (error) {
     dbError = error.message;
   } else {
     leads = (data as Lead[]) || [];
+  }
+
+  const { data: eventData, error: eventError } = await supabase
+    .from('ai_api_events')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(500);
+  if (eventError) {
+    eventsError = eventError.message;
+  } else {
+    events = (eventData as AiApiEvent[]) || [];
   }
 } else {
   dbError = 'Supabase が設定されていません';
@@ -34,6 +73,8 @@ if (supabase) {
 const now = Date.now();
 const ms24h = 24 * 60 * 60 * 1000;
 const ms30d = 30 * ms24h;
+const oneHour = 60 * 60 * 1000;
+const yen = new Intl.NumberFormat('ja-JP');
 
 const total = leads.length;
 const last24h = leads.filter(l => new Date(l.created_at).getTime() > now - ms24h).length;
@@ -53,6 +94,15 @@ const cancelledCount = leads.filter(l => l.status === 'cancelled').length;
 const totalRevenuePaid = leads
   .filter(l => l.paid_at && (l.amount_jpy || 0) > 0)
   .reduce((s, l) => s + (l.amount_jpy || 0), 0);
+const pendingRevenue = leads
+  .filter(l => l.status === 'pending_payment')
+  .reduce((s, l) => s + (l.amount_jpy || 0), 0);
+const reportBacklog = leads.filter(l => ['paid', 'report_created'].includes(l.status || ''));
+const followupBacklog = leads.filter(l => ['sent', 'report_sent'].includes(l.status || ''));
+const todayActions = buildTodayActions({ leads, events, tasks: taskSummary, now: new Date() });
+const criticalActions = todayActions.filter(action => action.tone === 'critical');
+const highActions = todayActions.filter(action => action.tone === 'high');
+const apiIssues24h = events.filter(event => parseTime(event.created_at) > now - ms24h && ['error', 'retry'].includes(event.status || ''));
 
 const adminColors = {
   primary: '#1F3A93',
@@ -61,6 +111,148 @@ const adminColors = {
   accentSoft: '#FFCED0',
   muted: '#94a3b8',
 };
+
+function parseTime(iso?: string | null) {
+  if (!iso) return 0;
+  const t = new Date(iso).getTime();
+  return Number.isFinite(t) ? t : 0;
+}
+
+function ageHours(iso?: string | null) {
+  const t = parseTime(iso);
+  return t ? Math.max(0, Math.floor((now - t) / oneHour)) : 0;
+}
+
+function ageDays(iso?: string | null) {
+  const t = parseTime(iso);
+  return t ? Math.max(0, Math.floor((now - t) / ms24h)) : 0;
+}
+
+function envNumber(name: string) {
+  const value = Number(runtimeEnv[name] || '0');
+  return Number.isFinite(value) ? value : 0;
+}
+
+function settingNumber(key: string, envName?: string) {
+  const settingValue = Number(adminSettings[key] || 0);
+  if (Number.isFinite(settingValue) && settingValue > 0) return settingValue;
+  return envName ? envNumber(envName) : 0;
+}
+
+const tokyoMonthKeyFormatter = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+});
+function tokyoMonthKey(date: Date) {
+  return tokyoMonthKeyFormatter.format(date);
+}
+
+const currentMonthKey = tokyoMonthKey(new Date());
+const monthEvents = events.filter(event => {
+  const created = parseTime(event.created_at);
+  return created > 0 && tokyoMonthKey(new Date(created)) === currentMonthKey;
+});
+const openAiInputUsdPer1M = settingNumber('openai_input_usd_per_1m', 'OPENAI_INPUT_USD_PER_1M');
+const openAiOutputUsdPer1M = settingNumber('openai_output_usd_per_1m', 'OPENAI_OUTPUT_USD_PER_1M');
+const anthropicInputUsdPer1M = settingNumber('anthropic_input_usd_per_1m', 'ANTHROPIC_INPUT_USD_PER_1M');
+const anthropicOutputUsdPer1M = settingNumber('anthropic_output_usd_per_1m', 'ANTHROPIC_OUTPUT_USD_PER_1M');
+const usdJpyRate = settingNumber('usd_jpy_rate', 'USD_JPY_RATE');
+const pricingConfigured = Boolean(
+  usdJpyRate
+  && (openAiInputUsdPer1M || openAiOutputUsdPer1M || anthropicInputUsdPer1M || anthropicOutputUsdPer1M)
+);
+function estimateEventCostUsd(event: AiApiEvent) {
+  const input = event.input_tokens || 0;
+  const output = event.output_tokens || 0;
+  if (event.provider === 'openai') {
+    return (input / 1_000_000) * openAiInputUsdPer1M + (output / 1_000_000) * openAiOutputUsdPer1M;
+  }
+  if (event.provider === 'anthropic') {
+    return (input / 1_000_000) * anthropicInputUsdPer1M + (output / 1_000_000) * anthropicOutputUsdPer1M;
+  }
+  return 0;
+}
+const estimatedApiCostJpy = pricingConfigured
+  ? Math.round(monthEvents.reduce((usd, event) => usd + estimateEventCostUsd(event), 0) * usdJpyRate)
+  : null;
+
+const aiProcessingSlaHours = settingNumber('sla_ai_processing_hours') || 2;
+const paidReportSlaDays = settingNumber('sla_paid_report_business_days') || 5;
+const workloadWarnCount = settingNumber('alert_workload_warn_count') || 6;
+const workloadCriticalCount = settingNumber('alert_workload_critical_count') || 12;
+
+const slaRisks = leads.filter(l => {
+  const status = l.status || 'new';
+  const hours = ageHours(l.updated_at || l.created_at);
+  const days = ageDays(l.paid_at || l.updated_at || l.created_at);
+  return (['verified', 'processing'].includes(status) && hours >= aiProcessingSlaHours)
+    || (status === 'paid' && days >= Math.max(1, paidReportSlaDays - 2))
+    || status === 'report_created'
+    || (['sent', 'report_sent'].includes(status) && ageDays(l.updated_at || l.created_at) >= 2);
+});
+
+const knowledgeTotal = knowledgeDocs.length;
+const knowledgeDemoSafe = knowledgeDocs.filter(doc => doc.visibility === 'demo-safe').length;
+const knowledgeDemoReady = knowledgeDocs.filter(doc => doc.maturity === 'demo-ready').length;
+const knowledgeSeed = knowledgeDocs.filter(doc => doc.maturity === 'seed').length;
+const knowledgeStale = knowledgeDocs.filter(doc => ageDays(doc.updatedAt) >= 30).length;
+const openTaskCount = taskSummary.overdue.length + taskSummary.today.length + taskSummary.upcoming.length;
+const workloadScore = todayActions.length + reportBacklog.length + taskSummary.overdue.length + taskSummary.today.length;
+const commandTone = criticalActions.length || apiIssues24h.some(event => event.status === 'error')
+  ? 'bad'
+  : highActions.length || slaRisks.length || taskSummary.overdue.length
+    ? 'warn'
+    : 'ok';
+const commandLabel = commandTone === 'bad' ? '要対応' : commandTone === 'warn' ? '確認あり' : '安定';
+const commandDetail = commandTone === 'bad'
+  ? '今日の赤信号があります。上から順に処理してください。'
+  : commandTone === 'warn'
+    ? '期限・納品・フォローに確認対象があります。'
+    : '通常運用の範囲です。';
+
+const commandMetrics = [
+  { label: '異常/要対応', value: `${criticalActions.length + apiIssues24h.length}件`, detail: 'API・手動確認・期限超過', tone: criticalActions.length + apiIssues24h.length ? 'bad' : 'ok' },
+  { label: 'SLAリスク', value: `${slaRisks.length}件`, detail: '納品・返信・MTG案内', tone: slaRisks.length ? 'warn' : 'ok' },
+  { label: '入金待ち', value: `¥${yen.format(pendingRevenue)}`, detail: `${pendingPaymentCount}件`, tone: pendingPaymentCount ? 'warn' : 'ok' },
+  { label: '代表稼働', value: `${workloadScore}件`, detail: '今日/期限/納品待ち', tone: workloadScore >= workloadCriticalCount ? 'bad' : workloadScore >= workloadWarnCount ? 'warn' : 'ok' },
+];
+
+const alertInboxRows = todayActions.slice(0, 8).map(action => ({
+  title: action.title,
+  detail: action.detail,
+  meta: `${action.due} / ${action.owner}`,
+  tone: action.tone,
+  href: action.href || '/admin/reports',
+}));
+
+const deliveryRows = [
+  { label: 'AI診断生成停滞', value: `${leads.filter(l => ['verified', 'processing'].includes(l.status || '') && ageHours(l.updated_at || l.created_at) >= aiProcessingSlaHours).length}件`, detail: `${aiProcessingSlaHours}時間以上更新なし`, tone: 'warn' },
+  { label: '詳細レポート作成待ち', value: `${leads.filter(l => l.status === 'paid').length}件`, detail: '入金確認済', tone: leads.some(l => l.status === 'paid') ? 'warn' : 'ok' },
+  { label: 'レポート送付待ち', value: `${leads.filter(l => l.status === 'report_created').length}件`, detail: 'MTG案内含む', tone: leads.some(l => l.status === 'report_created') ? 'warn' : 'ok' },
+  { label: 'MTGフォロー', value: `${followupBacklog.length}件`, detail: '送付済リード', tone: followupBacklog.length ? 'low' : 'ok' },
+];
+
+const financeRows = [
+  { label: '入金済売上', value: `¥${yen.format(totalRevenuePaid)}`, detail: 'paid_atあり', tone: 'ok' },
+  { label: '入金待ち', value: `¥${yen.format(pendingRevenue)}`, detail: `${pendingPaymentCount}件`, tone: pendingPaymentCount ? 'warn' : 'ok' },
+  { label: '当月API費用', value: estimatedApiCostJpy === null ? '未設定' : `約¥${yen.format(estimatedApiCostJpy)}`, detail: `${yen.format(monthEvents.reduce((s, e) => s + (e.total_tokens || 0), 0))} tokens`, tone: estimatedApiCostJpy === null ? 'low' : 'ok' },
+  { label: '有償化候補', value: `${paidCount + pendingPaymentCount + reportBacklog.length}件`, detail: 'paid系リード', tone: 'ok' },
+];
+
+const knowledgeRows = [
+  { label: '登録ナレッジ', value: `${knowledgeTotal}件`, detail: '社内DBの種', tone: 'ok' },
+  { label: 'demo-safe', value: `${knowledgeDemoSafe}件`, detail: '将来デモ公開候補', tone: knowledgeDemoSafe ? 'ok' : 'warn' },
+  { label: 'demo-ready', value: `${knowledgeDemoReady}件`, detail: '営業デモ即利用', tone: knowledgeDemoReady ? 'ok' : 'low' },
+  { label: 'SOP化/育成待ち', value: `${knowledgeSeed + knowledgeStale}件`, detail: 'seedまたは30日超', tone: knowledgeSeed + knowledgeStale ? 'warn' : 'ok' },
+];
+
+const capacityRows = [
+  { label: '今日の対応', value: `${todayActions.length}件`, detail: '優先順で処理', tone: todayActions.length ? 'warn' : 'ok' },
+  { label: '期限タスク', value: `${openTaskCount}件`, detail: `超過 ${taskSummary.overdue.length} / 今日 ${taskSummary.today.length}`, tone: taskSummary.overdue.length ? 'bad' : openTaskCount ? 'warn' : 'ok' },
+  { label: '納品待ち', value: `${reportBacklog.length}件`, detail: 'paid / report_created', tone: reportBacklog.length ? 'warn' : 'ok' },
+  { label: '期限なしタスク', value: `${taskSummary.noDue.length}件`, detail: '棚卸対象', tone: taskSummary.noDue.length >= 8 ? 'warn' : 'low' },
+];
 
 const stageRows = [
   { label: '新規受付', count: leads.filter(l => l.status === 'new').length, color: adminColors.secondary },
@@ -124,12 +316,123 @@ function statusBadge(s?: string | null) {
 <AdminLayout title="ダッシュボード" active="dashboard">
   <div class="dash-grid">
 
-    {dbError && (
+    {(dbError || eventsError || taskSummary.error) && (
       <div class="dash-error">
         <i class="fas fa-circle-exclamation"></i>
-        <span>{dbError}</span>
+        <span>{dbError || eventsError || taskSummary.error}</span>
       </div>
     )}
+
+    <!-- Command center -->
+    <section class={`command-panel command-panel--${commandTone}`}>
+      <div>
+        <span>Command Center</span>
+        <h2>管理トップは、今日まず見る司令塔です</h2>
+        <p>{commandDetail}</p>
+      </div>
+      <strong>
+        {commandLabel}
+        <small>{criticalActions.length}件の最優先 / {highActions.length}件の高優先</small>
+      </strong>
+    </section>
+
+    <section class="command-metrics">
+      {commandMetrics.map((metric) => (
+        <article class={`command-card command-card--${metric.tone}`}>
+          <span>{metric.label}</span>
+          <strong>{metric.value}</strong>
+          <small>{metric.detail}</small>
+        </article>
+      ))}
+    </section>
+
+    <section class="ops-grid">
+      <article class="panel alert-inbox">
+        <div class="panel-head">
+          <h2 class="panel-title">異常検知インボックス</h2>
+          <a href="/admin/reports" class="panel-link">今日の対応へ →</a>
+        </div>
+        {alertInboxRows.length === 0 ? (
+          <p class="panel-empty">今すぐ処理すべき赤信号はありません。</p>
+        ) : (
+          <div class="alert-list">
+            {alertInboxRows.map((row) => (
+              <a class={`alert-item alert-item--${row.tone}`} href={row.href}>
+                <div>
+                  <strong>{row.title}</strong>
+                  <p>{row.detail}</p>
+                </div>
+                <small>{row.meta}</small>
+              </a>
+            ))}
+          </div>
+        )}
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">納品SLA・顧客待ち</h2>
+          <a href="/admin/leads" class="panel-link">リード管理 →</a>
+        </div>
+        <div class="ops-list">
+          {deliveryRows.map((row) => (
+            <div class={`ops-row ops-row--${row.tone}`}>
+              <span>{row.label}</span>
+              <strong>{row.value}</strong>
+              <small>{row.detail}</small>
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">売上・キャッシュ要約</h2>
+          <a href="/admin/funnel" class="panel-link">営業ファネル →</a>
+        </div>
+        <div class="ops-list">
+          {financeRows.map((row) => (
+            <div class={`ops-row ops-row--${row.tone}`}>
+              <span>{row.label}</span>
+              <strong>{row.value}</strong>
+              <small>{row.detail}</small>
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">ナレッジDB成長</h2>
+          <a href="/admin/knowledge" class="panel-link">ナレッジ →</a>
+        </div>
+        <div class="ops-list">
+          {knowledgeRows.map((row) => (
+            <div class={`ops-row ops-row--${row.tone}`}>
+              <span>{row.label}</span>
+              <strong>{row.value}</strong>
+              <small>{row.detail}</small>
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">代表稼働・ボトルネック</h2>
+          <a href="/admin/reports#task-deadlines" class="panel-link">期限を見る →</a>
+        </div>
+        <div class="ops-list">
+          {capacityRows.map((row) => (
+            <div class={`ops-row ops-row--${row.tone}`}>
+              <span>{row.label}</span>
+              <strong>{row.value}</strong>
+              <small>{row.detail}</small>
+            </div>
+          ))}
+        </div>
+      </article>
+    </section>
 
     <!-- KPI -->
     <section class="kpi-grid">
@@ -277,6 +580,176 @@ function statusBadge(s?: string | null) {
     border-radius: 8px;
     color: #E48A95;
     font-size: 0.85rem;
+  }
+
+  .command-panel,
+  .command-card,
+  .alert-item,
+  .ops-row {
+    border-radius: 8px;
+  }
+
+  .command-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 170px;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 24px;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+  }
+
+  .command-panel--bad { border-color: rgba(228, 138, 149, 0.52); }
+  .command-panel--warn { border-color: rgba(228, 138, 149, 0.38); }
+  .command-panel--ok { border-color: rgba(107, 133, 201, 0.42); }
+
+  .command-panel span,
+  .command-card span,
+  .ops-row span {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .command-panel h2 {
+    margin: 7px 0;
+    color: #fff;
+    font-size: 1.16rem;
+    letter-spacing: 0;
+  }
+
+  .command-panel p {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.86rem;
+  }
+
+  .command-panel > strong {
+    display: grid;
+    place-items: center;
+    min-height: 106px;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    background: var(--admin-surface-2);
+    font-size: 1.38rem;
+    text-align: center;
+  }
+
+  .command-panel > strong small {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .command-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .command-card {
+    min-height: 112px;
+    padding: 15px;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+  }
+
+  .command-card strong {
+    display: block;
+    margin: 10px 0 6px;
+    color: #fff;
+    font-size: 1.25rem;
+  }
+
+  .command-card small {
+    color: var(--admin-muted);
+    font-size: 0.74rem;
+  }
+
+  .command-card--bad,
+  .ops-row--bad,
+  .alert-item--critical { border-color: rgba(228, 138, 149, 0.56); }
+  .command-card--warn,
+  .ops-row--warn,
+  .alert-item--high { border-color: rgba(228, 138, 149, 0.38); }
+  .command-card--ok,
+  .ops-row--ok,
+  .alert-item--medium { border-color: rgba(107, 133, 201, 0.38); }
+  .command-card--low,
+  .ops-row--low,
+  .alert-item--low { border-color: rgba(148, 163, 184, 0.24); }
+
+  .ops-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.825fr) minmax(280px, 0.825fr);
+    gap: 14px;
+  }
+
+  .alert-inbox {
+    grid-row: span 2;
+  }
+
+  .alert-list,
+  .ops-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .alert-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 110px;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid var(--admin-border);
+    background: var(--admin-bg);
+  }
+
+  .alert-item strong {
+    color: #fff;
+    font-size: 0.9rem;
+  }
+
+  .alert-item p {
+    margin: 4px 0 0;
+    color: var(--admin-muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .alert-item small {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    text-align: right;
+  }
+
+  .ops-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 10px;
+    align-items: center;
+    padding: 10px 12px;
+    border: 1px solid var(--admin-border);
+    background: var(--admin-bg);
+  }
+
+  .ops-row strong {
+    color: #fff;
+    font-size: 0.92rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .ops-row small {
+    grid-column: 1 / -1;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
   }
 
   /* KPI */
@@ -494,10 +967,32 @@ function statusBadge(s?: string | null) {
   .badge-gray { background: rgba(148, 163, 184, 0.18); color: #b8c0cc; }
 
   @media (max-width: 1024px) {
+    .command-metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ops-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .alert-inbox {
+      grid-row: auto;
+    }
+
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     .stage-row { grid-template-columns: 100px 1fr 50px; gap: 8px; }
   }
   @media (max-width: 600px) {
+    .command-panel,
+    .command-metrics,
+    .alert-item {
+      grid-template-columns: 1fr;
+    }
+
+    .alert-item small {
+      text-align: left;
+    }
+
     .kpi-grid { grid-template-columns: 1fr; }
   }
 </style>
