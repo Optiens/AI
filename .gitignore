@@ -45,6 +45,9 @@ executive/ceo/decisions/
 # Claude Code local settings (contains API keys)
 .claude/settings.local.json
 
+# Codex local settings (contains MCP tokens)
+.codex/config.toml
+
 # MCP server config (contains tokens)
 .mcp.json
 .env*.local
