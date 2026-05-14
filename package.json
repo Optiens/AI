@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "create:slides-template": "node scripts/create-free-diagnosis-slides-template.mjs",
-    "create:slides-template:check": "node scripts/create-free-diagnosis-slides-template.mjs --check"
+    "create:slides-template:check": "node scripts/create-free-diagnosis-slides-template.mjs --check",
+    "update:paid-slides-template": "node scripts/update-paid-slides-template.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "^8.2.6",

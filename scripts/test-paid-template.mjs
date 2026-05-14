@@ -13,21 +13,27 @@ import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-const envPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.env');
-try {
-  const env = readFileSync(envPath, 'utf-8');
-  env.split(/\r?\n/).forEach(line => {
-    const m = line.match(/^([^#=]+?)=(.*)$/);
-    if (m) {
-      const k = m[1].trim();
-      let v = m[2].trim();
-      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
-      if (v) process.env[k] = v;
-    }
-  });
-} catch {}
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const TEMPLATE_ID = '1qsP-lL2yCRMVUdIQw4Y1ARlJ_e_rAqlV5Myfuf-83hI';
+loadEnv(resolve(__dirname, '../.env'));
+loadEnv(resolve(__dirname, '../.env.local'));
+
+function loadEnv(envPath) {
+  try {
+    const env = readFileSync(envPath, 'utf-8');
+    env.split(/\r?\n/).forEach(line => {
+      const m = line.match(/^([^#=]+?)=(.*)$/);
+      if (m) {
+        const k = m[1].trim();
+        let v = m[2].trim();
+        if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
+        if (v) process.env[k] = v;
+      }
+    });
+  } catch {}
+}
+
+const TEMPLATE_ID = '1DzM-D5sncQNFpvre0b785NdJK2MF4u4fta8o27SLe54';
 const OUTPUT_FOLDER_ID = '0AP-9nfOx7k3HUk9PVA';
 const SA_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 const SA_PRIVATE_KEY = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n');
@@ -67,22 +73,40 @@ async function getGoogleToken() {
 
 // ===== サンプルデータ =====
 const today = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
+
+function withDemoLink(overview, area) {
+  const demos = [
+    { label: '問い合わせ自動振り分けデモ', url: 'https://optiens.com/inquiry-routing', keywords: ['問い合わせ', '一次回答', 'FAQ', '顧客対応'] },
+    { label: '見積書ドラフト生成デモ', url: 'https://optiens.com/quote-generator', keywords: ['見積', '提案書', '見積書'] },
+    { label: '社内データ検索デモ', url: 'https://optiens.com/data-search', keywords: ['社内検索', 'RAG', 'マニュアル'] },
+    { label: '承認ワークフローデモ', url: 'https://optiens.com/approval-workflow', keywords: ['承認', '稟議'] },
+    { label: 'カスタム業務管理画面デモ', url: 'https://optiens.com/custom-management', keywords: ['管理画面', '業務管理', 'KPI'] },
+    { label: '口コミ監視・返信下書きデモ', url: 'https://optiens.com/review-monitor', keywords: ['口コミ', 'レビュー', 'SNS'] },
+    { label: '契約書・社内文書レビュー支援デモ', url: 'https://optiens.com/document-review', keywords: ['契約書', '文書レビュー'] },
+  ];
+  const haystack = `${area} ${overview}`;
+  const demo = demos.find((item) => item.keywords.some((keyword) => haystack.includes(keyword)));
+  return demo ? `${overview}\n関連デモ: ${demo.label}（${demo.url}）` : overview;
+}
+
 const SAMPLE = {
   // 表紙
   paid_customer_name: '合同会社Optiens（テスト）',
   paid_diagnosis_date: today,
 
-  // エグゼクティブサマリー（初期費用は MTG 後の個別見積で別途提示するためここでは出さない）
+  // エグゼクティブサマリー（有償版として概算導入費・月額費・期間まで提示する）
   paid_summary_value_yen: '186,000',
   paid_summary_hours: '124',
-  paid_summary_period: '3〜4週間',
+  paid_summary_initial_cost: '¥270,000〜',
+  paid_summary_monthly_cost: '¥18,000〜',
+  paid_summary_period: '4〜6週間',
   paid_initiative_1_title: '見積・提案書ドラフト生成 AI',
   paid_initiative_1_desc: 'ヒアリング情報からテンプレ準拠のドラフトを自動生成。承認は人。',
   paid_initiative_2_title: '問い合わせ一次回答 AI',
   paid_initiative_2_desc: 'FAQ・過去対応データから一次回答案を即生成。担当は確認・調整のみ。',
   paid_initiative_3_title: '議事録要約・レポート生成 AI',
   paid_initiative_3_desc: '会議録音から要点要約・アクション抽出。週次レポートも自動化。',
-  paid_executive_summary: '上記 3 施策により、月間 124 時間（月 ¥186,000 相当）の業務時間を圧縮可能です。AI 駆動開発で 3〜4 週間の短期実装。投資回収は約 3 ヶ月の試算です。',
+  paid_executive_summary: '上記 3 施策により、月間 124 時間（月 ¥186,000 相当）の業務時間を圧縮できる可能性があります。優先度Aの1業務MVPは ¥270,000〜360,000、2業務実装は ¥420,000〜560,000、実装期間は 4〜6 週間が目安です。',
 
   // 現状分析
   paid_current_analysis_left: '従業員1名の小規模体制ながら、AI支援・水耕栽培・小説出版の3事業を展開。Webサイト運用、フォーム経由の問い合わせ対応、提案書作成、見積作成が中心業務。Google Workspace・Notion・freeeを活用済で、デジタル基盤は整備済。AI活用は組織的に活用中。',
@@ -129,8 +153,8 @@ const SAMPLE = {
         overview: 'Web 会議の録音データを文字起こし→要約→アクションアイテム抽出まで自動化。会議終了から 5 分以内に整形済み議事録が共有される運用を実現。',
         flowBefore: '①会議実施\n②担当が手書きメモ\n③会議後に整形\n④Slack に投稿\n⑤ToDo を別途管理',
         flowAfter: '①会議実施（録音）\n②AI が文字起こし + 要約\n③アクション自動抽出\n④担当が 5 分確認\n⑤Slack + Tasks に自動連携',
-        architecture: '[Web会議録音 (Zoom/Meet)] → [文字起こし API (Whisper等)] → [AI API: 要約 + アクション抽出 (構造化出力)] → [Slack Webhook / Google Tasks API]',
-        prereq: '録音システム導入',
+        architecture: '[Web会議 (Zoom/Meet)] → [Circleback等: 文字起こし + 話者分離 + 議事録] → [Webhook] → [AI API: アクション抽出] → [Slack / Google Tasks]',
+        prereq: 'Circleback等の録音・議事録SaaS導入。独自UIが必要な場合のみ gpt-4o-transcribe を検討',
       },
       {
         area: '提案書ドラフト生成',
@@ -187,7 +211,7 @@ const SAMPLE = {
       [`paid_proposal_critical_${i+1}`, p.critical],
       [`paid_proposal_priority_${i+1}`, p.priority],
       [`paid_proposal_priority_basis_${i+1}`, p.priorityBasis],
-      [`paid_proposal_overview_${i+1}`, p.overview],
+      [`paid_proposal_overview_${i+1}`, withDemoLink(p.overview, p.area)],
       [`paid_proposal_flow_before_${i+1}`, p.flowBefore || ''],
       [`paid_proposal_flow_after_${i+1}`, p.flowAfter || ''],
       [`paid_proposal_architecture_${i+1}`, p.architecture || ''],
@@ -212,6 +236,8 @@ const SAMPLE = {
 
   // ROI 詳細（月額のみ。スケール時の累計試算は提示しない方針）
   paid_roi_total_yen: '186,000',
+  paid_roi_annual_yen: '2,232,000',
+  paid_roi_three_year_yen: '6,696,000',
   ...Object.fromEntries(
     [
       ['顧客対応の一次回答自動化', 10, '15,000'],
@@ -230,8 +256,14 @@ const SAMPLE = {
     ])
   ),
 
-  // ランニングコスト（月額）── 初期導入費用は MTG ヒアリング後に個別見積で別途提示
-  // API 件数・監視運用の中身は明示する（CEO指示 2026-05-08）
+  // 導入費用・ランニングコスト。正式見積は MTG で確定するが、有償版では概算レンジを提示する。
+  paid_cost_initial_range: '¥270,000 〜 560,000',
+  paid_cost_initial_breakdown:
+    '・1業務MVP実装: ¥270,000〜360,000\n' +
+    '・2業務実装: ¥420,000〜560,000\n' +
+    '・3業務/外部連携多め: ¥600,000〜800,000+\n' +
+    '・要件整理、実装、通知連携、検証、初回運用手順書を含む\n' +
+    '※ 正式見積は60分MTGで対象業務・連携先・データ状態を確認して確定',
   paid_cost_monthly_total: '¥18,000 〜 25,000',
   paid_cost_monthly_breakdown:
     '・データベース（Supabase Pro 等）: ¥3,000\n' +
@@ -243,32 +275,32 @@ const SAMPLE = {
 
   // 具体サービス比較（優先度A 3提案の実装スタック）
   // 推奨 A は中小事業者向けに最適化された構成
-  // 各セルは「サービス名 / 金額 / 特徴」を改行区切りで記載（2026-05時点の公開情報に基づく目安）
+  // 各セルは「候補 / コスト感 / 特徴」を改行区切りで記載。実納品では生成時点の公開情報で再確認する。
   ...Object.fromEntries(
     [
       // 1. データベース ＋ 認証
       [
-        'Supabase Pro\n$25/月（約 ¥3,750）\nPostgres + Auth + Storage 一括。pgvector で RAG 構築可。',
-        'Firebase（Blaze 従量制）\n無料〜従量制\nNoSQL ベース。スマホ・チャット型に強い。',
-        'AWS RDS + Cognito\n$50〜/月＋設計コスト\nフルカスタマイズ可。運用負荷大。',
+        'Supabase\nDB・認証・Storageを一括管理。小規模RAGにも展開しやすい。',
+        'NoSQL/軽量DB\nチャット型や単純な台帳向け。',
+        '既存クラウドDB\n社内基盤が決まっている場合に検討。',
       ],
       // 2. LLM API
       [
-        'Claude Haiku 4.5\n入力 $1 / 出力 $5（1M トークン）\n軽量・高速。月 5-10k リクエストで ¥1,500-3,000。日本語精度高い。',
-        'GPT-4o mini\n入力 $0.15 / 出力 $0.60（1M）\n価格最安。コーディング系も強い。OpenAI エコシステム。',
-        'Gemini 2.5 Flash\n入力 $0.075 / 出力 $0.30（1M）\nGoogle Workspace 統合。マルチモーダル対応。',
+        '軽量LLM API\n分類・定型回答など高頻度処理向け。',
+        '中堅LLM API\n要約・提案書下書きなど品質重視。',
+        '上位LLM API\n重要提案や複雑な判断補助向け。',
       ],
       // 3. 文字起こし API
       [
-        'OpenAI Whisper API\n$0.006/分（約 ¥1）\n高精度・日本語対応・実装容易。月 20 会議×45分なら約 ¥900。',
-        'AssemblyAI\n$0.37/時\n話者分離・要約・感情分析が一体型。多言語強い。',
-        'Google Speech-to-Text v2\n$0.024/分\nGoogle Workspace 統合。リアルタイム文字起こし対応。',
+        'Circleback等\n会議録・話者分離・要約・Webhook連携を優先。',
+        'gpt-4o-transcribe\n独自UIや自社録音処理を作る場合。',
+        'クラウド音声認識\n既存クラウド統合を優先する場合。',
       ],
       // 4. ホスティング ＋ サーバレス
       [
-        'Vercel Pro\n$20/月（約 ¥3,000）\nAstro/Next.js 親和性高。Edge Functions・即時デプロイ。',
-        'Cloudflare Workers\n無料〜従量制\n超低レイテンシ。グローバルエッジ展開。学習曲線あり。',
-        'AWS Lambda + API Gateway\n従量制\nフルカスタム可。運用知識必須。',
+        'Vercel/Supabase Edge\n小規模Webアプリと即時デプロイ向け。',
+        '軽量サーバレス\n低レイテンシAPI向け。',
+        '既存クラウド\n権限管理や社内統制が重い場合。',
       ],
     ].flatMap((row, i) => [
       [`paid_compare_${i+1}_a`, row[0]],
@@ -285,19 +317,19 @@ const SAMPLE = {
   paid_subsidy_search_date: today,
   // 3 件のカードスタイル表（v1.3 で 4 行 → 3 行構成に変更）
   paid_subsidy_name_1: '小規模事業者持続化補助金（一般型）',
-  paid_subsidy_period_1: '2026/4/1 〜 2026/6/30',
-  paid_subsidy_amount_1: '50 万円',
+  paid_subsidy_period_1: '生成時点で確認',
+  paid_subsidy_amount_1: '上限は公募要領確認',
   paid_subsidy_rate_1: '2/3',
   paid_subsidy_fit_1: '高',
   paid_subsidy_name_2: '事業再構築補助金',
-  paid_subsidy_period_2: '2026 Q3 予定',
-  paid_subsidy_amount_2: '1,500 万円',
-  paid_subsidy_rate_2: '1/2',
+  paid_subsidy_period_2: '生成時点で確認',
+  paid_subsidy_amount_2: '公募要領確認',
+  paid_subsidy_rate_2: '公募要領確認',
   paid_subsidy_fit_2: '中',
   paid_subsidy_name_3: '人材開発支援助成金（人への投資促進コース）',
-  paid_subsidy_period_3: '通年（随時）',
-  paid_subsidy_amount_3: '年 1,000 万円',
-  paid_subsidy_rate_3: '最大 75%',
+  paid_subsidy_period_3: '生成時点で確認',
+  paid_subsidy_amount_3: '制度により変動',
+  paid_subsidy_rate_3: '制度により変動',
   paid_subsidy_fit_3: '中',
 
   // リスク
@@ -305,20 +337,20 @@ const SAMPLE = {
   // 機密情報の取扱が高度に求められる場合はローカル LLM 運用を選択肢として提示
   paid_risk_name_1: '情報漏洩',
   paid_risk_impact_1: '高',
-  paid_risk_likelihood_1: '中',
-  paid_risk_mitigation_1: 'API 学習除外契約／監査ログ／権限管理。機密度が高い場合はローカル LLM 運用も検討',
+  paid_risk_likelihood_1: '重点管理',
+  paid_risk_mitigation_1: 'API 学習除外契約／監査ログ／権限管理。機密度が高い場合はローカル LLM 運用も比較',
   paid_risk_name_2: 'AI 依存（人的スキル低下）',
   paid_risk_impact_2: '中',
-  paid_risk_likelihood_2: '中',
-  paid_risk_mitigation_2: '定期スキル維持トレーニング・月次の手動運用テスト',
+  paid_risk_likelihood_2: '運用で管理',
+  paid_risk_mitigation_2: '承認点を重要業務に限定し、社内処理は自動化。月次で利用状況と手戻りを確認',
   paid_risk_name_3: '規制変更',
   paid_risk_impact_3: '低',
-  paid_risk_likelihood_3: '中',
+  paid_risk_likelihood_3: '月次確認',
   paid_risk_mitigation_3: 'AI 事業者ガイドラインの定期チェック・運用への反映',
   paid_risk_name_4: '出力品質のばらつき',
   paid_risk_impact_4: '中',
-  paid_risk_likelihood_4: '中',
-  paid_risk_mitigation_4: 'バリデーション層・人間レビューフロー・サンプル監査',
+  paid_risk_likelihood_4: '初期対策で低減',
+  paid_risk_mitigation_4: '構造化出力検証・禁止表現チェック・未置換プレースホルダー検知で送付前に自動停止',
 
   // コンプライアンス
   // AI事業者ガイドライン整合性は v1.4 で削除（/security ページに統合）
@@ -327,13 +359,13 @@ const SAMPLE = {
   paid_user_concern_quote:
     '「AIで作った文章をそのまま顧客に送って大丈夫でしょうか。誤情報や失礼な表現が混じった場合の責任が気になります。あと、月額のランニングコストがどれくらいに収まるかも知りたいです。」',
   paid_user_concern_answer:
-    '結論から申し上げると、AI 出力をそのまま外部に出す運用は推奨せず、御社の業務リスクに応じて 2 段の制御を入れます。\n' +
+    '結論から申し上げると、AI 出力をそのまま外部に出す運用は推奨しません。御社の業務リスクに応じて 2 段の制御を入れます。\n' +
     '\n' +
-    '【1】文章の品質・責任面: 顧客向けの一次返信は AI が下書き → 担当者が 1 クリック承認、というハーネス（前ページ「リスク対策」参照）で運用します。誤情報や失礼な表現は承認段階でフィルタされ、最終責任は人間に残ります。これにより「AI に出力を任せたから事故が起きた」という事態を構造的に防げます。\n' +
+    '【1】文章の品質・責任面: 顧客向けの一次返信は AI が下書き → 担当者が承認、という流れで運用します。誤情報や失礼な表現は承認段階で確認し、外部送信の最終判断は担当者が行います。\n' +
     '\n' +
-    '【2】月額ランニングコスト: 御社の想定利用量（顧客対応・SNS下書き・社内問合せ対応）から試算すると、AI API 費用は <strong>月額 5,000〜15,000 円</strong> 程度、Supabase 等のクラウド基盤は <strong>月額 4,000〜7,000 円</strong> 程度、合計で <strong>月額 1〜2 万円のレンジに収まる見込み</strong>です（提案の「ランニングコスト試算」スライド参照）。\n' +
+    '【2】費用感: 優先度Aの1業務MVPは 27〜36 万円、2業務実装は 42〜56 万円、月額運用費は 1〜2 万円程度が目安です。御社の想定利用量（顧客対応・SNS下書き・社内問合せ対応）から、AI API 費用は月額 5,000〜15,000 円程度、クラウド基盤は月額 4,000〜7,000 円程度に収まる見込みです（提案の「費用試算」スライド参照）。\n' +
     '\n' +
-    '機密情報の取扱が懸念される場合は、ローカル LLM 運用（GPU 設備または GPU クラウドレンタル）への切り替えで API 費用ゼロにする選択肢もご相談いただけます。',
+    '機密情報の取扱が懸念される場合は、ローカル LLM 運用（GPU 設備または GPU クラウドレンタル）も比較対象にし、セキュリティ・費用・運用負荷を含めて判断します。',
 };
 
 // ===== 実行 =====

@@ -1,85 +1,62 @@
 /**
- * 有償版レポート表紙用プレミアム画像
+ * 有償版レポート表紙用カバー画像
  *
  * デザイン方針:
- * - 抽象幾何 / エディトリアルデザイン（McKinsey / HBR 系）
- * - Optiens ブランドカラー（ディープラピス + 桜）
+ * - Webサイト準拠の Optiens ブランドカラーに統一
  * - 人物・顔・ロゴ・文字なし
- * - 静謐で知的な印象
+ * - AI 生成ではなく、再現性のある SVG → PNG 生成
  *
  * 出力: tmp/optiens-paid-cover.png (1024x1024)
  */
-import OpenAI from 'openai';
-import { writeFileSync, readFileSync } from 'fs';
+import sharp from 'sharp';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-
-const envPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.env');
-try {
-  const envContent = readFileSync(envPath, 'utf-8');
-  envContent.split(/\r?\n/).forEach(line => {
-    const m = line.match(/^([^#=]+?)=(.*)$/);
-    if (m) {
-      const k = m[1].trim();
-      let v = m[2].trim();
-      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
-      if (v) process.env[k] = v;
-    }
-  });
-} catch {}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, '../tmp/optiens-paid-cover.png');
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const svg = `
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="1024" fill="#FAFCFB"/>
+  <rect x="0" y="0" width="1024" height="1024" fill="#FAFCFB"/>
 
-const prompt = `An abstract editorial design illustration for a premium business intelligence report cover.
+  <g opacity="0.18" stroke="#DDE7E4" stroke-width="2" fill="none">
+    <circle cx="678" cy="278" r="242"/>
+    <circle cx="678" cy="278" r="154"/>
+    <circle cx="212" cy="736" r="270"/>
+    <path d="M88 226H938"/>
+    <path d="M108 804H914"/>
+    <path d="M762 64V958"/>
+  </g>
 
-STYLE:
-- Sophisticated, minimal, McKinsey/Harvard Business Review aesthetic
-- Architectural composition with geometric precision
-- Editorial design quality, like a premium financial publication
+  <g fill="none" stroke-linecap="round">
+    <path d="M264 774C416 662 490 532 486 382C482 262 548 178 662 130" stroke="#1F3A93" stroke-width="42"/>
+    <path d="M476 622C590 562 660 482 686 382C708 298 764 238 856 198" stroke="#6B85C9" stroke-width="24"/>
+    <path d="M252 774C394 734 512 746 606 810" stroke="#E48A95" stroke-width="16"/>
+  </g>
 
-COMPOSITION:
-- Abstract geometric shapes: thin lines, minimal forms, intersecting circles or arcs
-- Layered architectural elements suggesting "structure", "analysis", "depth"
-- Asymmetric balance with strong negative space
-- Clean, refined, NO clutter
+  <g fill="#1F3A93">
+    <rect x="104" y="676" width="176" height="176" rx="0" opacity="0.95"/>
+    <rect x="736" y="144" width="116" height="116" rx="0" opacity="0.92"/>
+  </g>
 
-COLOR PALETTE (strict):
-- Background: pure off-white (#FAFAFA) or very light cream
-- Primary: deep lapis lazuli blue (#1F3A93) - dominant
-- Accent: cherry blossom pink (#E48A95) - sparse, precise
-- Subtle: light gray (#E5E7EB) for secondary lines
-- NO other colors
+  <g fill="#6B85C9">
+    <rect x="296" y="596" width="128" height="128" rx="0" opacity="0.78"/>
+    <rect x="822" y="286" width="72" height="72" rx="0" opacity="0.84"/>
+  </g>
 
-MOOD:
-- Quiet sophistication, not loud or flashy
-- Professional, premium, restrained
-- Suggests: depth, analysis, careful thought, expertise
-- Like the cover of a high-end consulting white paper
+  <g fill="#E48A95">
+    <circle cx="640" cy="812" r="22"/>
+    <circle cx="864" cy="188" r="14"/>
+    <rect x="214" y="812" width="46" height="46" rx="0"/>
+  </g>
 
-STRICT EXCLUSIONS:
-- NO people, NO faces, NO hands, NO bodies
-- NO text, NO letters, NO numbers, NO words
-- NO logos, NO icons, NO ChatGPT/AI imagery
-- NO photorealism, NO stock-photo style
-- NO 3D effects, NO drop shadows, NO gradients except subtle
-- NO bright/saturated colors beyond the brand palette
+  <g stroke="#1F3A93" stroke-width="3" opacity="0.42" fill="none">
+    <path d="M88 852L936 126"/>
+    <path d="M104 674L640 812"/>
+    <path d="M736 144L864 188"/>
+  </g>
+</svg>`;
 
-The image should feel like it could be on the cover of a premium consulting report, evoking quality and expertise through restraint and refinement.
-`;
-
-console.log('生成中: optiens-paid-cover.png');
-
-const response = await client.images.generate({
-  model: 'gpt-image-2',
-  prompt,
-  size: '1024x1024',
-  quality: 'high',
-  n: 1,
-});
-
-const b64 = response.data[0].b64_json;
-writeFileSync(OUT_PATH, Buffer.from(b64, 'base64'));
+await sharp(Buffer.from(svg)).png().toFile(OUT_PATH);
 console.log(`✓ 保存完了: ${OUT_PATH}`);

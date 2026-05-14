@@ -2,7 +2,7 @@
  * 入金自動照合エンドポイント（freee API 連携・会社名ファジーマッチ）
  *
  * 動作:
- * - Vercel Cron などから定期実行（推奨: 毎時）
+ * - Vercel Cron などから定期実行（本番: 毎日 09:00 JST）
  * - freee API で過去N日の入金取引を取得
  * - Supabase の `pending_payment` 状態の申込と照合（金額一致 + 会社名ファジーマッチ）
  * - マッチした申込のステータスを `paid` に更新
@@ -23,6 +23,11 @@
 import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
+import { invokePaidReportFunction } from '../../lib/paid-report'
+import {
+  buildPaidDiagnosisReceiptText,
+  buildPaidDiagnosisReceiptHtml,
+} from '../../lib/paid-billing'
 
 const CRON_SECRET = import.meta.env.CRON_SECRET
 const RESEND_API_KEY = import.meta.env.RESEND_API_KEY
@@ -176,7 +181,11 @@ function matchByCompanyName(txnDescription: string, companyName: string): boolea
 export const POST: APIRoute = async ({ request }) => {
   // ---- Cron認証 ----
   const authHeader = request.headers.get('authorization') || ''
-  if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
+  if (!CRON_SECRET) {
+    console.error('[payment-check] CRON_SECRET is not configured')
+    return json({ error: 'CRON_SECRET not configured' }, 500)
+  }
+  if (authHeader !== `Bearer ${CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 })
   }
 
@@ -222,6 +231,7 @@ export const POST: APIRoute = async ({ request }) => {
     if (candidates.length === 0) continue
     // 最も古い未使用取引を選ぶ
     const txn = candidates.sort((x, y) => x.date.localeCompare(y.date))[0]
+    if (!txn) continue
     usedTxnIds.add(txn.id)
     matched.push({ app, txn })
   }
@@ -266,12 +276,22 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
+    const reportGeneration = await invokePaidReportFunction(
+      SUPABASE_URL,
+      SUPABASE_SERVICE_KEY,
+      { id: m.app.id },
+    )
+    if (!reportGeneration.ok) {
+      console.error('[payment-check] paid report generation trigger failed:', reportGeneration)
+    }
+
     updates.push({
       application_id: m.app.application_id,
       company_name: m.app.company_name,
       txn_id: m.txn.id,
       amount: m.txn.amount,
       txn_description: m.txn.description,
+      report_generation: reportGeneration,
     })
   }
 
@@ -288,6 +308,10 @@ export const POST: APIRoute = async ({ request }) => {
 export const GET: APIRoute = (ctx) => POST(ctx)
 
 function buildPaymentConfirmedEmail(app: PendingApplication): string {
+  const receiptText = buildPaidDiagnosisReceiptText({
+    customerName: app.company_name,
+    applicationId: app.application_id,
+  })
   return `${app.company_name} ${app.person_name} 様
 
 合同会社Optiensです。
@@ -299,10 +323,12 @@ function buildPaymentConfirmedEmail(app: PendingApplication): string {
 
 これより詳細レポートの作成プロセスに入ります。
 5営業日以内に下記をお届けします。
-- 詳細レポート（PDF）
+- 詳細レポート（Google Slides URL）
 - 60分オンラインMTGの日程調整リンク
 
-レポート作成中、追加でヒアリングが必要な場合は別途ご連絡いたします。
+${receiptText}
+
+入力いただいた情報をもとに自動でレポートを生成します。生成に失敗した場合のみ、別途ご連絡いたします。
 
 合同会社Optiens
 〒407-0301 山梨県北杜市高根町清里3545番地2483
@@ -313,22 +339,27 @@ https://optiens.com
 function buildPaymentConfirmedEmailHtml(app: PendingApplication): string {
   const safeCompany = escapeHtml(app.company_name)
   const safePerson = escapeHtml(app.person_name)
+  const receiptHtml = buildPaidDiagnosisReceiptHtml({
+    customerName: app.company_name,
+    applicationId: app.application_id,
+  })
   return `<div style="font-family:'Noto Sans JP',sans-serif;line-height:1.8;color:#333;max-width:560px;">
 <p>${safeCompany} ${safePerson} 様</p>
 <p>合同会社Optiensです。<br/>【詳細版】AI活用診断のお振込を確認いたしました。ありがとうございます。</p>
 
-<table style="border-collapse:collapse;width:100%;margin:16px 0;background:#D1FAE5;border:1px solid #6EE7B7;border-radius:8px;">
-  <tr><td style="padding:8px 14px;font-weight:bold;width:140px;">申込番号</td><td style="padding:8px 14px;font-family:monospace;color:#065F46;font-weight:bold;">${escapeHtml(app.application_id)}</td></tr>
+<table style="border-collapse:collapse;width:100%;margin:16px 0;background:#EEF2FF;border:1px solid #6B85C9;border-radius:8px;">
+  <tr><td style="padding:8px 14px;font-weight:bold;width:140px;">申込番号</td><td style="padding:8px 14px;font-family:monospace;color:#1F3A93;font-weight:bold;">${escapeHtml(app.application_id)}</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;">ご請求金額</td><td style="padding:8px 14px;">¥${app.amount_jpy.toLocaleString()}（税込）</td></tr>
-  <tr><td style="padding:8px 14px;font-weight:bold;">ステータス</td><td style="padding:8px 14px;color:#065F46;font-weight:bold;">✅ お振込確認済み</td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;">ステータス</td><td style="padding:8px 14px;color:#1F3A93;font-weight:bold;">✅ お振込確認済み</td></tr>
 </table>
 
 <p>これより詳細レポートの作成プロセスに入ります。<br/>5営業日以内に下記をお届けします。</p>
 <ul style="margin:0 0 16px;padding-left:20px;">
-  <li>詳細レポート（PDF）</li>
+  <li>詳細レポート（Google Slides URL）</li>
   <li>60分オンラインMTGの日程調整リンク</li>
 </ul>
-<p style="font-size:13px;color:#64748b;">レポート作成中、追加でヒアリングが必要な場合は別途ご連絡いたします。</p>
+${receiptHtml}
+<p style="font-size:13px;color:#64748b;">入力いただいた情報をもとに自動でレポートを生成します。生成に失敗した場合のみ、別途ご連絡いたします。</p>
 
 <p style="margin-top:24px;font-size:12px;color:#64748b;">
 合同会社Optiens<br/>
