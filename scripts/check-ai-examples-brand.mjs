@@ -10,12 +10,18 @@ const checks = [
       'class="ax-selector"',
       'class="ax-detail"',
       'class="ax-demo-safety-note',
+      'class="ax-implementation-notes',
+      'class="ax-basis-note',
       'class="ax-industry-actions',
+      'class="ax-adjacent-industries',
       'data-cat="common"',
       'data-cat="industry"',
       'data-cat="role"',
       'data-cat-group="role"',
       'const roleDemos',
+      'const nearbyIndustries',
+      '外部AI API・第三者送信なし',
+      'AI API費用は発生しません',
     ],
     forbidden: [
       {
@@ -29,6 +35,10 @@ const checks = [
       {
         label: 'local brand variable override',
         pattern: /--brand\s*:/,
+      },
+      {
+        label: 'inaccurate no-API wording on mixed demo page',
+        pattern: /このページ上ではAPI通信・外部送信なし|公開デモはサンプルデータで動作し、このページ上ではAPI通信や外部送信は発生しません/,
       },
     ],
   },

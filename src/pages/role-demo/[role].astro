@@ -292,6 +292,7 @@ export function getStaticPaths() {
 
 const { demo } = Astro.props as { demo: RoleDemo };
 const initialScenario = demo.scenarios[0];
+const diagnosisHref = `/free-diagnosis?lead_source=role-demo&lead_source_detail=${encodeURIComponent(demo.title)}`;
 ---
 
 <Layout
@@ -314,7 +315,7 @@ const initialScenario = demo.scenarios[0];
         <div class="rd-hero-card" aria-label="デモの前提">
           <i class={`fa-solid ${demo.icon}`}></i>
           <strong>サンプルデータで動く公開デモ</strong>
-          <p>このページ上ではAPI通信や外部送信は発生しません。実案件では、利用するデータと業務リスクに合わせてAPI利用、権限、確認フローを設計します。</p>
+          <p>このページ上ではAPI通信や外部送信は発生しません。公開デモでAI API費用は発生しません。実案件では、利用するデータと業務リスクに合わせてAPI利用、権限、確認フローを設計します。</p>
         </div>
       </div>
     </section>
@@ -421,7 +422,7 @@ const initialScenario = demo.scenarios[0];
             <p>御社の業務で同じ画面が必要かは、業務量、既存ツール、扱う情報の機密性を見て判断します。無料診断で、どのロールから始めるべきかを整理できます。</p>
             <div class="rd-actions">
               <a href={`/ai-examples?cat=role#${demo.backHash}`} class="btn-secondary">ロール別一覧に戻る</a>
-              <a href="/free-diagnosis" class="btn-primary">無料診断を受ける</a>
+              <a href={diagnosisHref} class="btn-primary">無料診断を受ける</a>
             </div>
           </article>
         </div>

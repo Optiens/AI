@@ -11,6 +11,12 @@ type CommonCase = {
   desc: string;
   tags: string[];
   self: string;
+  implementation: {
+    dailyFlow: string;
+    requiredData: string;
+    humanCheck: string;
+    firstBuild: string;
+  };
   demo?: { label: string; href: string; note?: string };
 };
 
@@ -21,6 +27,7 @@ type Industry = {
   shortTitle: string;
   summary: string;
   metric: string;
+  basis: string;
   href: string;
   relatedDemos: { label: string; href: string }[];
   demo?: { label: string; href: string; note?: string };
@@ -34,9 +41,16 @@ type RoleDemo = {
   shortTitle: string;
   summary: string;
   metric: string;
+  basis: string;
   href: string;
   cta: string;
   note: string;
+};
+
+type NearbyIndustry = {
+  title: string;
+  summary: string;
+  demos: { label: string; href: string }[];
 };
 
 const commonCases: CommonCase[] = [
@@ -49,6 +63,12 @@ const commonCases: CommonCase[] = [
     desc: 'Webフォーム・メール・LINE・SNSなど、複数の窓口に届く問い合わせをAIが読み取り、内容分類、優先度判定、推奨対応者、一次返信案までまとめます。夜間や休日の取りこぼしを減らし、緊急度が高いものだけを担当者へ通知できます。完全自動返信ではなく、送信前に人が確認する設計なので、顧客対応の品質も保ちやすい仕組みです。',
     tags: ['宿泊業', 'EC', '士業', 'サービス業', 'BtoB'],
     self: '問い合わせ・診断申込・補助金情報の確認を、内容別に整理して次アクションへ回す運用を行っています。',
+    implementation: {
+      dailyFlow: '朝・昼・終業前に新着問い合わせを確認し、緊急度順に担当者へ回します。',
+      requiredData: '問い合わせ本文、顧客種別、担当者ルール、返信テンプレート',
+      humanCheck: '送信前の文面、顧客名、約束する期限',
+      firstBuild: '分類ルール、通知先、一次返信の下書きテンプレート',
+    },
     demo: { label: '問い合わせ自動振り分けデモを試す', href: '/inquiry-routing' },
   },
   {
@@ -60,6 +80,12 @@ const commonCases: CommonCase[] = [
     desc: '顧客名・案件概要・金額・納期・特記事項を入力すると、AIが見積書の下書きを生成します。御社専用版では、過去案件、標準価格表、社内テンプレート、承認ワークフローまで連携し、営業担当がゼロから文面を作る時間を削減できます。金額・条件・送付可否は人が最終確認する前提です。',
     tags: ['工務店', '制作会社', '士業', '導入支援', 'BtoB'],
     self: '提案書・見積条件・診断レポートの雛形を、案件情報に合わせて生成する運用を進めています。',
+    implementation: {
+      dailyFlow: '案件情報を入力し、金額・納期・特記事項を確認してから見積書の初稿を出します。',
+      requiredData: '標準価格表、過去見積、見積テンプレート、承認条件',
+      humanCheck: '金額、納期、支払条件、対象外作業',
+      firstBuild: '見積テンプレート、内訳ルール、承認前チェック項目',
+    },
     demo: { label: '見積書ドラフト生成デモを試す', href: '/quote-generator' },
   },
   {
@@ -71,6 +97,12 @@ const commonCases: CommonCase[] = [
     desc: '売上・顧客・問い合わせ履歴などの数値データと、規程・マニュアル・連絡網などの社内文書に、自然な日本語で質問できます。回答には該当データや引用元を併せて表示するため、AIの回答を確認しながら使えます。新人教育、経営判断の数字確認、社内問い合わせ削減に向いた実用度の高い自動化です。',
     tags: ['全業種', '管理部門', '営業', '新人教育', '経営者'],
     self: '水耕栽培の収穫データ・電力消費データ、社内ドキュメント検索の運用検証を進めています。',
+    implementation: {
+      dailyFlow: '担当者が質問し、回答の根拠データや引用元を見ながら判断材料を確認します。',
+      requiredData: '売上表、顧客台帳、規程、マニュアル、よくある質問',
+      humanCheck: '数字の集計条件、最新版の文書、対外利用する回答',
+      firstBuild: '検索対象、閲覧権限、回答に出す引用元のルール',
+    },
     demo: { label: 'データ検索＋社内ドキュメント検索デモを試す', href: '/data-search' },
   },
   {
@@ -82,6 +114,12 @@ const commonCases: CommonCase[] = [
     desc: '経費精算・休暇申請・稟議・発注承認など、社内の承認業務を一元管理する仕組みです。申請者は専用画面から申請を提出し、承認者は自分宛の案件だけを確認・承認・却下します。金額や申請種類による承認ルート切替、承認後の会計・人事・スプレッドシート連携にも拡張できます。',
     tags: ['全業種', '管理部門', '建設業', '製造業', '複数拠点'],
     self: '稟議・経費・発注の承認を、Supabase + AI 駆動 UI で自動化する構成を運用しています。',
+    implementation: {
+      dailyFlow: '申請者が入力し、承認者は金額・期限・添付資料を確認して承認または差し戻します。',
+      requiredData: '申請項目、承認者、金額基準、添付書類、通知先',
+      humanCheck: '承認・却下の最終操作、例外判断、会計や人事への反映',
+      firstBuild: '申請フォーム、承認ルート、差し戻し理由のテンプレート',
+    },
     demo: { label: '承認ワークフローのデモを試す', href: '/approval-workflow' },
   },
   {
@@ -93,6 +131,12 @@ const commonCases: CommonCase[] = [
     desc: '汎用SaaSの「項目が多すぎて使われない」「複数サービスを行き来して二重入力」を避け、御社の業務フローに合わせた専用画面を構築します。経営者、営業パートナー、現場担当で表示項目を切り替え、必要な情報だけを扱えるようにします。',
     tags: ['小規模事業者', '営業組織', '外注先管理', '保守運用', '全業種'],
     self: 'CRM・コンテンツ運用・小説推敲ツールなど、用途ごとに専用画面を作って社内運用しています。',
+    implementation: {
+      dailyFlow: '担当者が案件・顧客・作業状況を更新し、経営者は必要な指標だけを確認します。',
+      requiredData: '顧客項目、案件ステータス、担当者、期限、既存ツールの項目',
+      humanCheck: '入力責任者、表示権限、更新漏れの確認',
+      firstBuild: '最低限の画面、一覧項目、ステータス遷移、権限設計',
+    },
     demo: { label: 'カスタム業務管理画面のデモを試す', href: '/custom-management' },
   },
   {
@@ -104,6 +148,12 @@ const commonCases: CommonCase[] = [
     desc: 'Googleマップ、食べログ、SNSなどの新着口コミを定期的に確認し、低評価や対応が必要な投稿を見つけます。AIが内容を分類し、店舗のトーンに合わせた返信下書きと改善ポイントを提示します。公開返信は店舗責任者が確認するため、炎上リスクを抑えながら対応速度を上げられます。',
     tags: ['飲食店', '宿泊業', '観光事業', '店舗運営'],
     self: '外部情報の定期モニタリングと要約通知を、社内の情報収集業務で活用しています。',
+    implementation: {
+      dailyFlow: '新着口コミを確認し、低評価や返信待ちを優先表示して、返信下書きを責任者が確認します。',
+      requiredData: '口コミ本文、店舗トーン、返信方針、エスカレーション条件',
+      humanCheck: '公開返信の文面、謝罪表現、個別対応の要否',
+      firstBuild: '監視対象、通知条件、返信テンプレート、責任者確認フロー',
+    },
     demo: { label: '口コミ監視＋返信下書きデモを試す', href: '/review-monitor' },
   },
   {
@@ -115,6 +165,12 @@ const commonCases: CommonCase[] = [
     desc: '契約書、料金改定案内、社内規程変更通知などを読み、業務上の影響、修正方針、確認先、修正文案まで整理します。御社専用版では、社内テンプレート、禁止表現、責任範囲、期限、金額、承認ルートなどの確認観点を組み込めます。法的判断や最終提出は専門家・責任者が確認する前提で、レビューの抜け漏れを減らします。',
     tags: ['士業', '管理部門', '営業', '経営者'],
     self: '公開文書・診断レポート・提案資料のレビュー観点をAIで整理し、人間が最終確認する運用を行っています。',
+    implementation: {
+      dailyFlow: '対象ファイルを選び、行ごとの指摘、修正理由、確認先を見ながら責任者が反映判断します。',
+      requiredData: '契約書、社内規程、顧客説明文、禁止表現、承認ルート',
+      humanCheck: '法的判断、対外提出、責任範囲や金額の変更',
+      firstBuild: 'レビュー観点、指摘レベル、差し戻し基準、最終確認者',
+    },
     demo: { label: '契約書・社内文書レビュー支援デモを試す', href: '/document-review' },
   },
 ];
@@ -127,6 +183,7 @@ const industries: Industry[] = [
     shortTitle: '士業',
     summary: '期限管理・書類作成・顧客対応',
     metric: '月30時間削減',
+    basis: 'モデルケース: 月40件の書類確認・顧客連絡で、1件あたり約45分短縮。',
     href: '/service/sample-legal',
     relatedDemos: [
       { label: '文書レビュー', href: '/document-review' },
@@ -141,6 +198,7 @@ const industries: Industry[] = [
     shortTitle: 'ペンション・宿泊',
     summary: '予約対応・口コミ返信・多言語対応',
     metric: '月25時間削減',
+    basis: 'モデルケース: 予約・口コミ・案内返信を月50件処理し、1件あたり約30分短縮。',
     href: '/service/sample-pension',
     relatedDemos: [
       { label: '問い合わせ振り分け', href: '/inquiry-routing' },
@@ -154,7 +212,8 @@ const industries: Industry[] = [
     title: 'カフェ＆レストラン',
     shortTitle: 'カフェ・レストラン',
     summary: 'SNS投稿・口コミ対応・LINE配信',
-    metric: '月18時間削減＋売上増',
+    metric: '月18時間削減＋機会損失の低減',
+    basis: 'モデルケース: 口コミ・SNS・LINE対応を月45件処理し、1件あたり約24分短縮。',
     href: '/service/sample-restaurant',
     relatedDemos: [
       { label: '口コミ監視', href: '/review-monitor' },
@@ -170,6 +229,7 @@ const industries: Industry[] = [
     shortTitle: 'EC・ネットショップ',
     summary: '商品登録・受注対応・問い合わせ分類',
     metric: '月25時間削減',
+    basis: 'モデルケース: 商品登録・問い合わせ・受注確認を月50件処理し、1件あたり約30分短縮。',
     href: '/service/sample-ec',
     relatedDemos: [
       { label: '問い合わせ振り分け', href: '/inquiry-routing' },
@@ -184,6 +244,7 @@ const industries: Industry[] = [
     shortTitle: '工務店・建設',
     summary: '見積書作成・報告書効率化・承認管理',
     metric: '月35時間削減',
+    basis: 'モデルケース: 見積・報告書・承認確認を月35件処理し、1件あたり約60分短縮。',
     href: '/service/sample-construction',
     relatedDemos: [
       { label: '見積書ドラフト', href: '/quote-generator' },
@@ -198,6 +259,7 @@ const industries: Industry[] = [
     shortTitle: 'ワイナリー',
     summary: '醸造記録・在庫管理・卸先提案書',
     metric: '月30時間削減',
+    basis: 'モデルケース: 記録確認・在庫整理・提案書作成を月40件処理し、1件あたり約45分短縮。',
     href: '/service/sample-winery',
     relatedDemos: [
       { label: '業務管理画面', href: '/custom-management' },
@@ -216,6 +278,7 @@ const roleDemos: RoleDemo[] = [
     shortTitle: '経営者・代表者向け',
     summary: 'KPI、稼働状況、重要アラートを朝の短時間で確認',
     metric: '事業状況把握 5時間 → 30分',
+    basis: '例: 週1回5時間の集計・確認を、日次30分の確認画面に集約。',
     href: '/role-demo/executive',
     cta: '経営者向けデモを見る',
     note: '売上見込、未対応リスク、承認待ち、稼働状況を朝の確認画面としてまとめます。',
@@ -228,6 +291,7 @@ const roleDemos: RoleDemo[] = [
     shortTitle: '役員・取締役向け',
     summary: '会議前に論点、判断材料、未確認リスクを整理',
     metric: '会議準備 3時間 → 20分',
+    basis: '例: 会議資料3時間分の論点整理を、事前確認20分に圧縮。',
     href: '/role-demo/board',
     cta: '役員向けデモを見る',
     note: '議題、意思決定事項、数字の前提、確認先を会議前に揃えるデモです。',
@@ -240,6 +304,7 @@ const roleDemos: RoleDemo[] = [
     shortTitle: '管理職・承認者向け',
     summary: 'チームの詰まり、1on1準備、承認待ちを一画面で確認',
     metric: 'マネジメント工数 月15時間削減',
+    basis: '例: 週4回の進捗確認・承認確認で、1回あたり約55分短縮。',
     href: '/role-demo/manager',
     cta: '管理職向けデモを見る',
     note: 'メンバー別の状況、次に確認すべきこと、承認待ちを管理職向けに整理します。',
@@ -252,6 +317,7 @@ const roleDemos: RoleDemo[] = [
     shortTitle: '一般社員・担当者向け',
     summary: '今日やること、返信下書き、確認待ちを業務単位で整理',
     metric: '定型業務 月20時間削減',
+    basis: '例: 1日あたり約60分の定型確認・下書き作成を20営業日で試算。',
     href: '/role-demo/staff',
     cta: '担当者向けデモを見る',
     note: '日々の問い合わせ、文書作成、確認依頼を担当者の画面に合わせて整理します。',
@@ -264,9 +330,58 @@ const roleDemos: RoleDemo[] = [
     shortTitle: 'バックオフィス向け',
     summary: '請求、経費、勤怠、社内問い合わせを月次締めの流れで整理',
     metric: '月次締め作業 50% 削減',
+    basis: '例: 月次締めの確認・差し戻し作業を、チェックリスト化で半減する前提。',
     href: '/role-demo/backoffice',
     cta: 'バックオフィス向けデモを見る',
     note: '処理漏れ、確認先、差し戻し理由を月次締めの作業順に確認できます。',
+  },
+];
+
+const nearbyIndustries: NearbyIndustry[] = [
+  {
+    title: '小売・卸売',
+    summary: '在庫、受発注、取引先問い合わせ、商品説明の整備に近いデモを確認できます。',
+    demos: [
+      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
+      { label: '社内検索', href: '/data-search' },
+      { label: '業務管理画面', href: '/custom-management' },
+    ],
+  },
+  {
+    title: '製造業',
+    summary: '作業手順、点検記録、承認、見積条件の確認に近いデモを確認できます。',
+    demos: [
+      { label: '承認ワークフロー', href: '/approval-workflow' },
+      { label: '社内検索', href: '/data-search' },
+      { label: '文書レビュー', href: '/document-review' },
+    ],
+  },
+  {
+    title: '不動産管理',
+    summary: '入居者問い合わせ、修繕見積、契約関連文書の確認に近いデモを確認できます。',
+    demos: [
+      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
+      { label: '文書レビュー', href: '/document-review' },
+      { label: '見積書ドラフト', href: '/quote-generator' },
+    ],
+  },
+  {
+    title: '観光施設',
+    summary: '予約問い合わせ、口コミ対応、案内文の整備に近いデモを確認できます。',
+    demos: [
+      { label: '口コミ監視', href: '/review-monitor' },
+      { label: '問い合わせ振り分け', href: '/inquiry-routing' },
+      { label: '社内検索', href: '/data-search' },
+    ],
+  },
+  {
+    title: '就労支援・福祉事業所',
+    summary: '日々の記録、請求前確認、社内文書の更新に近いデモを確認できます。',
+    demos: [
+      { label: '業務管理画面', href: '/custom-management' },
+      { label: '文書レビュー', href: '/document-review' },
+      { label: '社内検索', href: '/data-search' },
+    ],
   },
 ];
 
@@ -290,7 +405,7 @@ const roleDemos: RoleDemo[] = [
           </p>
           <div class="ax-page-badges" aria-label="公開デモの前提">
             <span><i class="fa-solid fa-database"></i>サンプルデータで動作</span>
-            <span><i class="fa-solid fa-shield-halved"></i>このページ上ではAPI通信・外部送信なし</span>
+            <span><i class="fa-solid fa-shield-halved"></i>外部AI API・第三者送信なし</span>
             <span><i class="fa-solid fa-route"></i>導入判断の情報まで確認</span>
           </div>
         </div>
@@ -397,9 +512,30 @@ const roleDemos: RoleDemo[] = [
                   <i class="fa-solid fa-flask"></i>
                   <p><strong>弊社での運用</strong>: {c.self}</p>
                 </div>
+                <div class="ax-implementation-notes" aria-label={`${c.title}の実案件化で確認すること`}>
+                  <span class="ax-implementation-label">実案件化すると確認すること</span>
+                  <dl class="ax-implementation-list">
+                    <div>
+                      <dt>1日の流れ</dt>
+                      <dd>{c.implementation.dailyFlow}</dd>
+                    </div>
+                    <div>
+                      <dt>必要なデータ</dt>
+                      <dd>{c.implementation.requiredData}</dd>
+                    </div>
+                    <div>
+                      <dt>人が確認する箇所</dt>
+                      <dd>{c.implementation.humanCheck}</dd>
+                    </div>
+                    <div>
+                      <dt>初回導入で作るもの</dt>
+                      <dd>{c.implementation.firstBuild}</dd>
+                    </div>
+                  </dl>
+                </div>
                 <p class="ax-demo-safety-note">
                   <i class="fa-solid fa-lock"></i>
-                  <span>公開デモはサンプルデータで動作し、このページ上ではAPI通信や外部送信は発生しません。</span>
+                  <span>公開デモはサンプルデータで動作します。一部デモは同一サイト内のデモAPIでテンプレート応答を返しますが、外部AI APIや第三者送信は発生しません。</span>
                 </p>
                 {c.demo ? (
                   <>
@@ -428,6 +564,10 @@ const roleDemos: RoleDemo[] = [
                 <div class="ax-detail-metric">
                   <span class="ax-metric-label">想定削減時間</span>
                   <span class="ax-metric-value">{i.metric}</span>
+                  <p class="ax-basis-note">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>{i.basis}</span>
+                  </p>
                 </div>
                 <div class="ax-related-demos" aria-label={`${i.shortTitle}で試しやすいデモ`}>
                   <span class="ax-related-label">この業種で試しやすいデモ</span>
@@ -443,7 +583,7 @@ const roleDemos: RoleDemo[] = [
                 </div>
                 <p class="ax-demo-safety-note">
                   <i class="fa-solid fa-lock"></i>
-                  <span>実機デモはサンプルデータのみで確認できます。業種別資料では、課題整理と導入順の例を確認できます。</span>
+                  <span>関連する実機デモはサンプルデータで確認できます。一部デモは同一サイト内のデモAPIでテンプレート応答を返しますが、外部AI APIや第三者送信は発生しません。</span>
                 </p>
                 <div class="ax-industry-actions">
                   {i.relatedDemos[0] && (
@@ -480,10 +620,14 @@ const roleDemos: RoleDemo[] = [
                 <div class="ax-detail-metric">
                   <span class="ax-metric-label">想定効果</span>
                   <span class="ax-metric-value">{r.metric}</span>
+                  <p class="ax-basis-note">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>{r.basis}</span>
+                  </p>
                 </div>
                 <p class="ax-demo-safety-note">
                   <i class="fa-solid fa-lock"></i>
-                  <span>ロール別デモはサンプルデータで動作し、このページ上ではAPI通信や外部送信は発生しません。</span>
+                  <span>ロール別デモはブラウザ内のサンプル表示で動作し、外部AI APIや第三者送信は発生しません。</span>
                 </p>
                 <a href={r.href} class="btn-primary ax-detail-cta">
                   <i class="fa-solid fa-circle-play"></i>
@@ -498,6 +642,30 @@ const roleDemos: RoleDemo[] = [
             ))}
           </div>
         </div>
+
+        <section class="ax-adjacent-industries reveal" aria-labelledby="ax-adjacent-title">
+          <div class="ax-adjacent-head">
+            <span>近い業種から探す</span>
+            <h2 id="ax-adjacent-title">掲載6業種以外でも、近いデモから確認できます</h2>
+            <p>業種別資料をまだ用意していない業種でも、業務の構造が近いデモを組み合わせて導入イメージを確認できます。</p>
+          </div>
+          <div class="ax-adjacent-grid">
+            {nearbyIndustries.map((industry) => (
+              <article>
+                <h3>{industry.title}</h3>
+                <p>{industry.summary}</p>
+                <div class="ax-adjacent-links">
+                  {industry.demos.map((demo) => (
+                    <a href={demo.href}>
+                      {demo.label}
+                      <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <p class="ax-bridge-note reveal">
           掲載デモはすべて、入力・判定・出力・人間の確認ポイントを確認できるものに絞っています。業種別・ロール別の入り口からも、実際に触れるデモへ進めます。サービス内容は <a href="/service">AI支援ページ</a> をご確認ください。
@@ -530,8 +698,8 @@ const roleDemos: RoleDemo[] = [
           </article>
           <article class="reveal">
             <i class="fa-solid fa-plug-circle-bolt"></i>
-            <h3>API利用</h3>
-            <p>公開デモはサンプルデータで動作します。実案件ではAI APIや既存ツール連携の有無を業務ごとに設計します。</p>
+            <h3>公開デモのAPI費用</h3>
+            <p>公開デモでAI API費用は発生しません。一部は同一サイト内のデモAPIでサンプル応答を返しますが、外部AI APIや第三者送信は行いません。繰り返し試されてもOpenAI等の従量課金にはつながりません。</p>
           </article>
           <article class="reveal">
             <i class="fa-solid fa-shield-halved"></i>
@@ -547,7 +715,7 @@ const roleDemos: RoleDemo[] = [
         <div class="ax-decision-links reveal">
           <a href="/service">サービス内容を見る</a>
           <a href="/security">情報セキュリティ方針を見る</a>
-          <a href="/free-diagnosis">無料診断へ進む</a>
+          <a href="/free-diagnosis?lead_source=ai-examples&lead_source_detail=AI活用サンプル一覧">無料診断へ進む</a>
         </div>
       </div>
     </section>
@@ -560,7 +728,7 @@ const roleDemos: RoleDemo[] = [
           無料活用診断レポートで数値とともにご提案します。
         </p>
         <div class="cta-buttons reveal">
-          <a href="/free-diagnosis" class="btn-primary">無料活用診断を受ける</a>
+          <a href="/free-diagnosis?lead_source=ai-examples&lead_source_detail=AI活用サンプル一覧" class="btn-primary">無料活用診断を受ける</a>
           <a href="/service" class="btn-secondary">サービス内容を見る</a>
         </div>
       </div>
@@ -1101,6 +1269,41 @@ const roleDemos: RoleDemo[] = [
   .ax-detail-self strong {
     color: var(--heading);
   }
+  .ax-implementation-notes {
+    margin: 0 0 clamp(18px, 2.8vw, 26px);
+    padding: 18px 20px;
+    border: 1px solid rgba(31, 58, 147, .14);
+    border-radius: 12px;
+    background: rgba(31, 58, 147, .03);
+  }
+  .ax-implementation-label {
+    display: block;
+    color: var(--heading);
+    font-size: .86rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .ax-implementation-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 18px;
+    margin: 0;
+  }
+  .ax-implementation-list div {
+    min-width: 0;
+  }
+  .ax-implementation-list dt {
+    color: var(--brand);
+    font-size: .76rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .ax-implementation-list dd {
+    color: var(--text);
+    font-size: .84rem;
+    line-height: 1.7;
+    margin: 0;
+  }
   .ax-detail-metric {
     display: flex;
     flex-direction: column;
@@ -1122,6 +1325,20 @@ const roleDemos: RoleDemo[] = [
     font-size: clamp(1.1rem, 2vw, 1.3rem);
     font-weight: 700;
     color: var(--heading);
+  }
+  .ax-basis-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--muted);
+    font-size: .82rem;
+    line-height: 1.65;
+    margin: 6px 0 0;
+  }
+  .ax-basis-note i {
+    color: var(--brand);
+    margin-top: 3px;
+    flex-shrink: 0;
   }
   .ax-related-demos {
     margin: 0 0 clamp(20px, 3vw, 28px);
@@ -1230,6 +1447,87 @@ const roleDemos: RoleDemo[] = [
     color: rgba(31, 58, 147, .6);
     margin-top: 3px;
     flex-shrink: 0;
+  }
+
+  .ax-adjacent-industries {
+    margin-top: clamp(38px, 5vw, 56px);
+    padding: clamp(24px, 4vw, 34px);
+    border: 1px solid rgba(31, 58, 147, .12);
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, rgba(31, 58, 147, .035) 100%);
+    box-shadow: 0 10px 28px rgba(31, 58, 147, .05);
+  }
+  .ax-adjacent-head {
+    max-width: 760px;
+    margin-bottom: 20px;
+  }
+  .ax-adjacent-head span {
+    color: var(--brand);
+    font-size: .78rem;
+    font-weight: 700;
+  }
+  .ax-adjacent-head h2 {
+    color: var(--heading);
+    font-size: clamp(1.2rem, 2.3vw, 1.55rem);
+    line-height: 1.45;
+    margin: 6px 0 8px;
+  }
+  .ax-adjacent-head p {
+    color: var(--muted);
+    font-size: .92rem;
+    line-height: 1.8;
+    margin: 0;
+  }
+  .ax-adjacent-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .ax-adjacent-grid article {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid rgba(31, 58, 147, .1);
+    border-radius: 12px;
+    background: #ffffff;
+  }
+  .ax-adjacent-grid h3 {
+    color: var(--heading);
+    font-size: .96rem;
+    line-height: 1.5;
+    margin: 0 0 8px;
+  }
+  .ax-adjacent-grid p {
+    color: var(--muted);
+    font-size: .82rem;
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+  .ax-adjacent-links {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .ax-adjacent-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 34px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: rgba(31, 58, 147, .05);
+    color: var(--brand);
+    font-size: .78rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+  .ax-adjacent-links a:hover {
+    background: rgba(31, 58, 147, .1);
+  }
+  .ax-adjacent-links i {
+    flex-shrink: 0;
+    font-size: .72rem;
   }
 
   /* Bridge note */
@@ -1368,9 +1666,17 @@ const roleDemos: RoleDemo[] = [
     color: #fff;
   }
 
+  @media (max-width: 1100px) {
+    .ax-adjacent-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   @media (max-width: 600px) {
     .ax-choice-guide,
     .ax-related-links,
+    .ax-implementation-list,
+    .ax-adjacent-grid,
     .ax-decision-grid {
       grid-template-columns: 1fr;
     }
