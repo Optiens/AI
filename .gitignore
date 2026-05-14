@@ -29,14 +29,17 @@ pnpm-debug.log*
 .idea/
 
 .vercel
+supabase/.temp/
 
 # 生成されたレポートPDF
 executive/ai-consulting/reports/*.pdf
 
 # 社内機密ドキュメント（財務計画・投資家資料など）
 executive/finance/report/
+executive/finance/bank-account/
 executive/secretary/diary/
 executive/legal-ip/registration/
+executive/legal-ip/social-insurance/
 executive/ceo/decisions/
 
 # Claude Code worktrees

@@ -214,7 +214,7 @@ GOOGLE_SERVICE_ACCOUNT_PROJECT_ID=<<JSONファイル内の project_id>>
   "type": "service_account",
   "project_id": "optiens-slides-automation-xxxxxx",  ← GOOGLE_SERVICE_ACCOUNT_PROJECT_ID
   "private_key_id": "...",
-  "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",  ← GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
+  "private_key": "<JSONファイル内の private_key の値>",  ← GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
   "client_email": "optiens-slides-automation@xxx.iam.gserviceaccount.com",  ← GOOGLE_SERVICE_ACCOUNT_EMAIL
   ...
 }

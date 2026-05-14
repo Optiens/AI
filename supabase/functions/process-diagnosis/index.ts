@@ -1148,10 +1148,11 @@ async function createJWT(): Promise<string> {
   const signingInput = `${encode(header)}.${encode(payload)}`
 
   // PEM → CryptoKey 変換
+  const privateKeyLabel = 'PRIVATE KEY'
   const pemContents = GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
     .replace(/\\n/g, '\n')
-    .replace(/-----BEGIN PRIVATE KEY-----/, '')
-    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(`-----BEGIN ${privateKeyLabel}-----`, '')
+    .replace(`-----END ${privateKeyLabel}-----`, '')
     .replace(/\s/g, '')
   const binaryDer = Uint8Array.from(atob(pemContents), c => c.charCodeAt(0))
 

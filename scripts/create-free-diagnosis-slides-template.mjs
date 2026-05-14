@@ -936,7 +936,7 @@ Auth:
     GOOGLE_SERVICE_ACCOUNT_KEY_FILE=./optiens-slides-automation.json
   or:
     GOOGLE_SERVICE_ACCOUNT_EMAIL=...
-    GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n"
+    GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY="<service-account-private-key-with-escaped-newlines>"
 
 Sharing:
   When GOOGLE_SLIDES_TEMPLATE_ID is set, the script checks and patches that existing template.
