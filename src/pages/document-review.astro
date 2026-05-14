@@ -44,9 +44,46 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
 
+      <section class="file-methods" aria-label="ファイル指定方法">
+        <div class="file-methods-copy">
+          <h2>ファイル指定は3通りに対応できます</h2>
+          <p>
+            実案件では、御社の運用に合わせて「アップロード」「本文貼り付け」「共有フォルダ連携」から選べます。
+            このデモではアップロード操作の流れが分かるよう、ローカルファイル選択でサンプルレビューへ切り替えます。
+          </p>
+        </div>
+        <div class="method-grid">
+          <article>
+            <span>01</span>
+            <strong>ファイルアップロード</strong>
+            <p>Word、PDF、テキスト、Markdownなどを画面から指定します。</p>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>本文貼り付け</strong>
+            <p>契約書、社内通知、顧客メール本文をフォームへ貼り付けます。</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>共有フォルダ連携</strong>
+            <p>クラウドストレージや社内共有フォルダから対象文書を読み取ります。</p>
+          </article>
+        </div>
+        <p class="local-only-note">
+          公開デモではAPI通信は発生しません。選択したファイルは外部送信せず、ブラウザ内でファイル名を判定してサンプルレビューを表示します。
+        </p>
+      </section>
+
       <section class="control-panel" aria-label="文書選択とレビュー条件">
+        <label class="upload-box" for="demo-file-input">
+          <span class="upload-kicker">デモ用アップロード</span>
+          <strong>ファイルを選んでレビュー対象を切り替える</strong>
+          <small id="upload-status">契約書、料金改定案内、社内規程変更通知のサンプルへ切り替わります。ファイルは送信されません。</small>
+          <input id="demo-file-input" type="file" accept=".txt,.md,.doc,.docx,.pdf,.rtf" />
+        </label>
+
         <label class="select-label" for="document-select">
-          <span>レビュー対象</span>
+          <span>またはサンプルを選択</span>
           <select id="document-select"></select>
         </label>
 
@@ -117,7 +154,9 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <p class="demo-note">
-        このデモはレビュー支援のサンプルです。契約書の最終判断や法的助言が必要な場合は、弁護士・社労士などの専門家確認と組み合わせて運用します。
+        このデモはレビュー支援のサンプルです。公開デモ上のファイル選択ではAPI利用や外部送信は行いません。
+        実案件でAIレビューを実行する場合は、ファイル抽出とAIレビュー処理にAPIを利用する構成になります。
+        契約書の最終判断や法的助言が必要な場合は、弁護士・社労士などの専門家確認と組み合わせて運用します。
       </p>
     </section>
   </main>
@@ -480,6 +519,8 @@ import Layout from '../layouts/Layout.astro';
   ];
 
   const documentSelect = document.getElementById('document-select') as HTMLSelectElement;
+  const demoFileInput = document.getElementById('demo-file-input') as HTMLInputElement;
+  const uploadStatus = document.getElementById('upload-status')!;
   const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-btn'));
   const editorBody = document.getElementById('editor-body')!;
 
@@ -510,6 +551,19 @@ import Layout from '../layouts/Layout.astro';
 
   documentSelect.addEventListener('change', () => {
     currentDocument = SAMPLE_DOCUMENTS.find((doc) => doc.id === documentSelect.value) || SAMPLE_DOCUMENTS[0];
+    uploadStatus.textContent = 'サンプル文書を選択中です。実案件ではファイルアップロード、本文貼り付け、共有フォルダ連携から指定できます。';
+    render(currentDocument);
+  });
+
+  demoFileInput.addEventListener('change', () => {
+    const file = demoFileInput.files?.[0];
+    if (!file) return;
+
+    currentDocument = inferDocumentFromFile(file);
+    currentFilter = 'all';
+    documentSelect.value = currentDocument.id;
+    filterButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.filter === 'all'));
+    uploadStatus.textContent = `${file.name} をブラウザ内で選択しました。デモでは外部送信せず、近いサンプルレビューを表示しています。`;
     render(currentDocument);
   });
 
@@ -525,6 +579,25 @@ import Layout from '../layouts/Layout.astro';
     if (currentFilter === 'all') return true;
     if (currentFilter === 'high') return note.severity === 'high';
     return note.category === currentFilter;
+  }
+
+  function inferDocumentFromFile(file: File) {
+    const name = file.name.toLowerCase();
+    const normalized = file.name;
+
+    if (/料金|改定|price|revision|customer|notice|案内/.test(normalized) || /price|revision|customer|notice/.test(name)) {
+      return SAMPLE_DOCUMENTS.find((doc) => doc.id === 'price-revision-notice') || SAMPLE_DOCUMENTS[0];
+    }
+
+    if (/規程|就業|リモート|remote|work|rule|社内|通知/.test(normalized) || /remote|work|rule|internal/.test(name)) {
+      return SAMPLE_DOCUMENTS.find((doc) => doc.id === 'work-rule-notice') || SAMPLE_DOCUMENTS[0];
+    }
+
+    if (/契約|委託|contract|agreement|outsourcing/.test(normalized) || /contract|agreement|outsourcing/.test(name)) {
+      return SAMPLE_DOCUMENTS.find((doc) => doc.id === 'outsourcing-contract') || SAMPLE_DOCUMENTS[0];
+    }
+
+    return currentDocument;
   }
 
   function render(doc: SampleDocument) {
@@ -764,6 +837,7 @@ import Layout from '../layouts/Layout.astro';
     margin: 6px 0 0;
   }
 
+  .file-methods,
   .control-panel,
   .document-summary,
   .review-points,
@@ -775,13 +849,112 @@ import Layout from '../layouts/Layout.astro';
     box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
   }
 
+  .file-methods {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 18px;
+    align-items: start;
+    margin-bottom: 14px;
+    padding: 18px 20px;
+    border-radius: 12px;
+  }
+
+  .file-methods h2 {
+    color: var(--review-heading);
+    font-size: 1.12rem;
+    margin: 0 0 10px;
+  }
+
+  .file-methods p {
+    color: #475569;
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .method-grid article {
+    min-height: 132px;
+    padding: 14px;
+    border: 1px solid rgba(31, 58, 147, 0.14);
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .method-grid span {
+    color: var(--sakura, #E48A95);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .method-grid strong {
+    display: block;
+    color: var(--review-heading);
+    margin: 6px 0;
+  }
+
+  .method-grid p {
+    color: #64748b;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  .local-only-note {
+    grid-column: 1 / -1;
+    padding: 10px 12px;
+    border-left: 3px solid var(--brand);
+    border-radius: 0 8px 8px 0;
+    background: rgba(31, 58, 147, 0.06);
+    font-size: 0.84rem;
+  }
+
   .control-panel {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) minmax(260px, 360px);
     align-items: end;
-    justify-content: space-between;
     gap: 18px;
     padding: 16px;
     border-radius: 12px 12px 0 0;
+  }
+
+  .upload-box {
+    display: grid;
+    gap: 6px;
+    min-height: 120px;
+    padding: 14px;
+    border: 1.5px dashed rgba(31, 58, 147, 0.35);
+    border-radius: 10px;
+    background: rgba(31, 58, 147, 0.04);
+    cursor: pointer;
+  }
+
+  .upload-box:hover {
+    background: rgba(31, 58, 147, 0.08);
+  }
+
+  .upload-kicker {
+    color: var(--brand);
+    font-size: 0.74rem;
+    font-weight: 800;
+  }
+
+  .upload-box strong {
+    color: var(--review-heading);
+    font-size: 0.96rem;
+  }
+
+  .upload-box small {
+    color: #64748b;
+    line-height: 1.55;
+  }
+
+  .upload-box input {
+    color: #475569;
+    font-size: 0.82rem;
   }
 
   .select-label {
@@ -806,8 +979,9 @@ import Layout from '../layouts/Layout.astro';
   .filter-group {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 8px;
+    grid-column: 1 / -1;
   }
 
   .filter-btn {
@@ -1112,6 +1286,7 @@ import Layout from '../layouts/Layout.astro';
 
   @media (max-width: 920px) {
     .workbench-head,
+    .file-methods,
     .document-summary {
       grid-template-columns: 1fr;
     }
@@ -1121,6 +1296,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .process-strip,
+    .method-grid,
     .doc-profile dl,
     .review-points ul,
     .next-actions ul {
@@ -1128,8 +1304,8 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .control-panel {
+      grid-template-columns: 1fr;
       align-items: stretch;
-      flex-direction: column;
     }
 
     .filter-group {
@@ -1160,6 +1336,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .process-step,
+    .file-methods,
     .control-panel,
     .document-summary,
     .review-points,
