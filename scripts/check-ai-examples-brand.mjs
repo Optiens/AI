@@ -5,9 +5,12 @@ const checks = [
     file: 'src/pages/ai-examples.astro',
     required: [
       'class="ax-tabs',
+      'class="ax-page-intro',
       'class="ax-explorer-grid',
       'class="ax-selector"',
       'class="ax-detail"',
+      'class="ax-demo-safety-note',
+      'class="ax-industry-actions',
       'data-cat="common"',
       'data-cat="industry"',
       'data-cat="role"',
@@ -22,6 +25,26 @@ const checks = [
       {
         label: 'full replacement demo layout from the 2026-05 regression',
         pattern: /\bdemo-(main|hero|grid|card|policy)\b/,
+      },
+      {
+        label: 'local brand variable override',
+        pattern: /--brand\s*:/,
+      },
+    ],
+  },
+  {
+    file: 'src/pages/role-demo/[role].astro',
+    required: [
+      'class="rd-controls"',
+      'id="control-priority"',
+      'id="control-approval"',
+      'id="control-scope"',
+      'このページ上ではAPI通信や外部送信は発生しません',
+    ],
+    forbidden: [
+      {
+        label: 'legacy green/red palette',
+        pattern: /#2e574c|#5ea89a|#ea4335/i,
       },
       {
         label: 'local brand variable override',

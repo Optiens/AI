@@ -349,6 +349,47 @@ const initialScenario = demo.scenarios[0];
             ))}
           </div>
 
+          <div class="rd-controls" aria-label="デモ条件の切り替え">
+            <div class="rd-controls-head">
+              <h3>条件を切り替えて確認</h3>
+              <p>表示優先度、人の確認範囲、参照データを変えたときの見え方を確認できます。切り替えはブラウザ内のサンプル表示だけで動作します。</p>
+            </div>
+            <div class="rd-control-groups">
+              <div class="rd-control-group">
+                <span>表示優先度</span>
+                <button type="button" class="rd-control-btn active" data-control="priority" data-value="通常" data-description="期限順と影響度順を組み合わせて表示します。">通常</button>
+                <button type="button" class="rd-control-btn" data-control="priority" data-value="高" data-description="本日中に判断が必要な項目を上に寄せて表示します。">高</button>
+              </div>
+              <div class="rd-control-group">
+                <span>人の確認</span>
+                <button type="button" class="rd-control-btn active" data-control="approval" data-value="下書きまで" data-description="AIは整理と下書きまで行い、送信や承認は人が確認します。">下書きまで</button>
+                <button type="button" class="rd-control-btn" data-control="approval" data-value="承認必須" data-description="金額、契約、顧客連絡に関わる項目は承認待ちとして止めます。">承認必須</button>
+              </div>
+              <div class="rd-control-group">
+                <span>参照データ</span>
+                <button type="button" class="rd-control-btn active" data-control="scope" data-value="自分の範囲" data-description="自分が担当する案件、承認、問い合わせを中心に表示します。">自分の範囲</button>
+                <button type="button" class="rd-control-btn" data-control="scope" data-value="チーム全体" data-description="チーム全体の詰まりや未対応を横断して表示します。">チーム全体</button>
+              </div>
+            </div>
+            <div class="rd-control-summary" aria-live="polite">
+              <article>
+                <span>表示優先度</span>
+                <strong id="control-priority">通常</strong>
+                <p id="control-priority-desc">期限順と影響度順を組み合わせて表示します。</p>
+              </article>
+              <article>
+                <span>人の確認</span>
+                <strong id="control-approval">下書きまで</strong>
+                <p id="control-approval-desc">AIは整理と下書きまで行い、送信や承認は人が確認します。</p>
+              </article>
+              <article>
+                <span>参照データ</span>
+                <strong id="control-scope">自分の範囲</strong>
+                <p id="control-scope-desc">自分が担当する案件、承認、問い合わせを中心に表示します。</p>
+              </article>
+            </div>
+          </div>
+
           <div class="rd-item-list">
             <h3>AIが整理した確認項目</h3>
             <ul id="scenario-items">
@@ -398,6 +439,7 @@ const initialScenario = demo.scenarios[0];
   const output = document.getElementById('scenario-output');
   const items = document.getElementById('scenario-items');
   const human = document.getElementById('scenario-human');
+  const controlButtons = document.querySelectorAll('.rd-control-btn');
 
   function renderScenario(id) {
     const scenario = scenarios.find((item) => item.id === id) || scenarios[0];
@@ -414,6 +456,23 @@ const initialScenario = demo.scenarios[0];
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => renderScenario(button.dataset.scenario));
+  });
+
+  function updateControl(button) {
+    const control = button.dataset.control;
+    if (!control) return;
+    const value = document.getElementById(`control-${control}`);
+    const description = document.getElementById(`control-${control}-desc`);
+    if (!value || !description) return;
+    document.querySelectorAll(`.rd-control-btn[data-control="${control}"]`).forEach((item) => {
+      item.classList.toggle('active', item === button);
+    });
+    value.textContent = button.dataset.value || button.textContent?.trim() || '';
+    description.textContent = button.dataset.description || '';
+  }
+
+  controlButtons.forEach((button) => {
+    button.addEventListener('click', () => updateControl(button));
   });
 })();
 </script>
@@ -591,6 +650,95 @@ const initialScenario = demo.scenarios[0];
     color: var(--heading);
     font-size: 1.2rem;
   }
+  .rd-controls {
+    margin: 0 0 24px;
+    padding: 18px;
+    border: 1px solid rgba(31, 58, 147, .12);
+    border-radius: 16px;
+    background: rgba(31, 58, 147, .03);
+  }
+  .rd-controls-head {
+    margin-bottom: 14px;
+  }
+  .rd-controls-head h3 {
+    color: var(--heading);
+    font-size: 1rem;
+    margin: 0 0 6px;
+  }
+  .rd-controls-head p {
+    color: var(--muted);
+    font-size: .84rem;
+    line-height: 1.75;
+    margin: 0;
+  }
+  .rd-control-groups {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .rd-control-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-content: flex-start;
+    padding: 12px;
+    border: 1px solid rgba(31, 58, 147, .1);
+    border-radius: 12px;
+    background: #ffffff;
+  }
+  .rd-control-group span {
+    flex-basis: 100%;
+    color: var(--heading);
+    font-size: .8rem;
+    font-weight: 800;
+  }
+  .rd-control-btn {
+    min-height: 34px;
+    padding: 7px 11px;
+    border: 1px solid rgba(31, 58, 147, .18);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--brand);
+    font-size: .8rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .rd-control-btn.active {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #ffffff;
+  }
+  .rd-control-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .rd-control-summary article {
+    padding: 12px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid rgba(31, 58, 147, .1);
+  }
+  .rd-control-summary span {
+    display: block;
+    color: var(--muted);
+    font-size: .72rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .rd-control-summary strong {
+    display: block;
+    color: var(--heading);
+    font-size: .96rem;
+    margin-bottom: 5px;
+  }
+  .rd-control-summary p {
+    color: var(--muted);
+    font-size: .78rem;
+    line-height: 1.6;
+    margin: 0;
+  }
   .rd-item-list {
     padding: 20px;
     border: 1px solid var(--border);
@@ -694,7 +842,9 @@ const initialScenario = demo.scenarios[0];
     }
   }
   @media (max-width: 620px) {
-    .rd-output-grid {
+    .rd-output-grid,
+    .rd-control-groups,
+    .rd-control-summary {
       grid-template-columns: 1fr;
     }
   }

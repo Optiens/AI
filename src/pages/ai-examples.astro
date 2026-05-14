@@ -278,9 +278,23 @@ const roleDemos: RoleDemo[] = [
   canonical="https://optiens.com/ai-examples"
 >
   <main>
-    <!-- 事例エクスプローラ（ヒーローは削除し直接表示） -->
+    <!-- 事例エクスプローラ -->
     <section class="ax-explorer light-section">
       <div class="container">
+        <div class="ax-page-intro reveal">
+          <p class="ax-page-kicker">AI業務自動化デモ</p>
+          <h1>業務・業種・役割から、触れるAIデモを選べます</h1>
+          <p>
+            問い合わせ対応、見積書作成、社内検索、承認、文書レビューなど、
+            中小企業の現場で検討しやすいAI活用例をサンプルデータで確認できます。
+          </p>
+          <div class="ax-page-badges" aria-label="公開デモの前提">
+            <span><i class="fa-solid fa-database"></i>サンプルデータで動作</span>
+            <span><i class="fa-solid fa-shield-halved"></i>このページ上ではAPI通信・外部送信なし</span>
+            <span><i class="fa-solid fa-route"></i>導入判断の情報まで確認</span>
+          </div>
+        </div>
+
         <!-- カテゴリタブ -->
         <div class="ax-tabs reveal" role="tablist" aria-label="事例カテゴリ">
           <button class="ax-tab active" data-cat="common" role="tab" aria-selected="true">
@@ -383,6 +397,10 @@ const roleDemos: RoleDemo[] = [
                   <i class="fa-solid fa-flask"></i>
                   <p><strong>弊社での運用</strong>: {c.self}</p>
                 </div>
+                <p class="ax-demo-safety-note">
+                  <i class="fa-solid fa-lock"></i>
+                  <span>公開デモはサンプルデータで動作し、このページ上ではAPI通信や外部送信は発生しません。</span>
+                </p>
                 {c.demo ? (
                   <>
                     <a href={c.demo.href} class="btn-primary ax-detail-cta">
@@ -414,29 +432,37 @@ const roleDemos: RoleDemo[] = [
                 <div class="ax-related-demos" aria-label={`${i.shortTitle}で試しやすいデモ`}>
                   <span class="ax-related-label">この業種で試しやすいデモ</span>
                   <div class="ax-related-links">
-                    {i.relatedDemos.map((demo) => (
-                      <a href={demo.href}>{demo.label}</a>
+                    {i.relatedDemos.map((demo, index) => (
+                      <a class={`ax-related-demo-link ${index === 0 ? 'ax-related-demo-link--primary' : ''}`} href={demo.href}>
+                        <span>{index === 0 ? 'まず試す' : '関連デモ'}</span>
+                        <strong>{demo.label}</strong>
+                        <i class="fa-solid fa-arrow-right"></i>
+                      </a>
                     ))}
                   </div>
                 </div>
-                <a href={i.href} class="btn-primary ax-detail-cta">
-                  業種別デモを見る
-                  <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                {i.demo && (
-                  <>
-                    <a href={i.demo.href} class="btn-secondary ax-detail-cta ax-detail-cta--demo">
+                <p class="ax-demo-safety-note">
+                  <i class="fa-solid fa-lock"></i>
+                  <span>実機デモはサンプルデータのみで確認できます。業種別資料では、課題整理と導入順の例を確認できます。</span>
+                </p>
+                <div class="ax-industry-actions">
+                  {i.relatedDemos[0] && (
+                    <a href={i.relatedDemos[0].href} class="btn-primary ax-detail-cta">
                       <i class="fa-solid fa-circle-play"></i>
-                      {i.demo.label}
+                      {i.shortTitle}向けの実機デモを試す
                       <i class="fa-solid fa-arrow-right"></i>
                     </a>
-                    {i.demo.note && (
-                      <p class="ax-detail-demo-note">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <span>{i.demo.note}</span>
-                      </p>
-                    )}
-                  </>
+                  )}
+                  <a href={i.href} class="btn-secondary ax-detail-cta">
+                    業種別資料を見る
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                </div>
+                {i.demo?.note && (
+                  <p class="ax-detail-demo-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{i.demo.note}</span>
+                  </p>
                 )}
               </article>
             ))}
@@ -455,6 +481,10 @@ const roleDemos: RoleDemo[] = [
                   <span class="ax-metric-label">想定効果</span>
                   <span class="ax-metric-value">{r.metric}</span>
                 </div>
+                <p class="ax-demo-safety-note">
+                  <i class="fa-solid fa-lock"></i>
+                  <span>ロール別デモはサンプルデータで動作し、このページ上ではAPI通信や外部送信は発生しません。</span>
+                </p>
                 <a href={r.href} class="btn-primary ax-detail-cta">
                   <i class="fa-solid fa-circle-play"></i>
                   {r.cta}
@@ -640,6 +670,50 @@ const roleDemos: RoleDemo[] = [
   .ax-explorer {
     background: #ffffff;
     padding: clamp(48px, 8vw, 80px) 0;
+  }
+
+  .ax-page-intro {
+    max-width: 860px;
+    margin: 0 auto clamp(28px, 5vw, 42px);
+    text-align: center;
+  }
+  .ax-page-kicker {
+    color: var(--brand);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .14em;
+    margin: 0 0 10px;
+  }
+  .ax-page-intro h1 {
+    color: var(--heading);
+    font-size: clamp(1.65rem, 4vw, 2.35rem);
+    line-height: 1.35;
+    margin: 0 0 14px;
+  }
+  .ax-page-intro p {
+    color: var(--muted);
+    line-height: 1.9;
+    margin: 0;
+  }
+  .ax-page-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .ax-page-badges span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 7px 12px;
+    border: 1px solid rgba(31, 58, 147, .16);
+    border-radius: 999px;
+    background: rgba(31, 58, 147, .035);
+    color: var(--brand);
+    font-size: .82rem;
+    font-weight: 700;
   }
 
   /* ===== Category Tabs ===== */
@@ -1064,25 +1138,68 @@ const roleDemos: RoleDemo[] = [
     margin-bottom: 10px;
   }
   .ax-related-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
   }
-  .ax-related-links a {
+  .ax-related-demo-link {
     display: inline-flex;
-    align-items: center;
-    min-height: 34px;
-    padding: 7px 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 76px;
+    padding: 12px;
     border: 1px solid rgba(31, 58, 147, .22);
-    border-radius: 999px;
+    border-radius: 12px;
     color: var(--brand);
     background: #ffffff;
-    font-size: .82rem;
-    font-weight: 700;
     text-decoration: none;
   }
-  .ax-related-links a:hover {
+  .ax-related-demo-link:hover {
     background: rgba(31, 58, 147, .07);
+  }
+  .ax-related-demo-link span {
+    display: block;
+    color: var(--muted);
+    font-size: .72rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .ax-related-demo-link strong {
+    color: var(--heading);
+    font-size: .9rem;
+    line-height: 1.4;
+  }
+  .ax-related-demo-link i {
+    margin-top: 4px;
+    font-size: .78rem;
+  }
+  .ax-related-demo-link--primary {
+    border-color: rgba(31, 58, 147, .34);
+    background: linear-gradient(180deg, rgba(31, 58, 147, .08) 0%, #ffffff 100%);
+  }
+  .ax-demo-safety-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding: 11px 14px;
+    border: 1px solid rgba(31, 58, 147, .12);
+    border-radius: 10px;
+    background: rgba(31, 58, 147, .035);
+    color: var(--muted);
+    font-size: .82rem;
+    line-height: 1.7;
+  }
+  .ax-demo-safety-note i {
+    color: var(--brand);
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .ax-industry-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   .ax-detail-cta {
     display: inline-flex !important;
@@ -1253,8 +1370,15 @@ const roleDemos: RoleDemo[] = [
 
   @media (max-width: 600px) {
     .ax-choice-guide,
+    .ax-related-links,
     .ax-decision-grid {
       grid-template-columns: 1fr;
+    }
+    .ax-page-intro {
+      text-align: left;
+    }
+    .ax-page-badges {
+      justify-content: flex-start;
     }
     .ax-tabs {
       gap: 4px;
