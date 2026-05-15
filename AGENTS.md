@@ -113,6 +113,7 @@
 
 - Optiensに有益な情報を抽出し、記録してCEOへ報告する
 - SEOまたはブランディングに寄与する内容は、確認待ちで止めずにブログ記事化する
+- 記事化する場合は、必ず `.agents/skills/deidentify-transcript-source/SKILL.md` を実行し、元動画・元投稿が特定されないように構成・例・言い回し・固有要素を再構成する
 - 記事化する場合は、Google Vertex AI の Imagen Ultra 最新安定版でアイキャッチ画像を同セッション内に生成する。2026-05-15時点の公式モデルIDは `imagen-4.0-ultra-generate-001`
 - 記事本文・frontmatter・画像作成後に、必ず作成後ファクトチェックを実施し、`executive/data/YYYYMMDD_<slug>_factcheck.md` に記録する
 - 記事、画像、ファクトチェック記録を同じコミットに含め、原則として push まで実施する
