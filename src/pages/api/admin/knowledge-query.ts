@@ -4,6 +4,7 @@ import { makeToken, COOKIE_NAME, getAdminPassword } from '../../../middleware'
 import {
   buildKnowledgeContextFromDocs,
   knowledgeDocs,
+  mergeKnowledgeDocs,
   searchKnowledgeDocs,
 } from '../../../lib/optiens-knowledge'
 import {
@@ -80,7 +81,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (!question) return json({ error: 'question is required' }, 400)
 
   const { entries } = await listKnowledgeEntries()
-  const docs = [...knowledgeDocs, ...entries.map(dbKnowledgeEntryToDoc)]
+  const docs = mergeKnowledgeDocs(knowledgeDocs, entries.map(dbKnowledgeEntryToDoc))
   const matches = searchKnowledgeDocs(docs, question, 5)
   const sources = matches.map(({ doc }) => ({
     id: doc.id,

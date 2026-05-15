@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import AdminLayout from '../../layouts/AdminLayout.astro';
-import { knowledgeDocs } from '../../lib/optiens-knowledge';
+import { knowledgeDocs, mergeKnowledgeDocs } from '../../lib/optiens-knowledge';
 import { dbKnowledgeEntryToDoc, listKnowledgeEntries } from '../../lib/admin-ops';
 
 const posts = (await getCollection('blog'))
@@ -31,7 +31,7 @@ const categoryRows = Object.entries(
 const latestPosts = posts.slice(0, 12);
 const { entries: editableKnowledgeEntries, error: editableKnowledgeError } = await listKnowledgeEntries();
 const editableKnowledgeDocs = editableKnowledgeEntries.map(dbKnowledgeEntryToDoc);
-const allKnowledgeDocs = [...knowledgeDocs, ...editableKnowledgeDocs];
+const allKnowledgeDocs = mergeKnowledgeDocs(knowledgeDocs, editableKnowledgeDocs);
 
 const knowledgeSources = [
   {

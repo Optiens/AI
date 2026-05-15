@@ -116,6 +116,25 @@ export const knowledgeDocs: KnowledgeDoc[] = [
     ].join('\n'),
   },
   {
+    id: 'term-master-ai-support',
+    title: 'AI支援事業の用語マスタ',
+    category: 'brand',
+    owner: 'COO / CMO',
+    updatedAt: '2026-05-15',
+    visibility: 'internal',
+    maturity: 'operational',
+    summary: '現行ホームページ基準のサービス名、診断プラン、詳細レポート、面談、添付対応、禁止表現の正本。',
+    tags: ['用語マスタ', '表記統一', '詳細レポート', 'AI活用診断', 'MTGなし'],
+    body: [
+      '正本は executive/ai-consulting/用語マスタ.md。公開表現は現行ホームページ、サービスページ、AI活用診断ページを優先する。',
+      '事業全体の公開サービス名は「AI業務自動化・AIエージェント導入支援」。AXはAI Transformationの意味で、業務プロセスをAIが理解できる形に再設計する取り組みとして説明する。',
+      'AI活用診断は、簡易版AI活用診断（0円）と詳細版AI活用診断（¥5,500税込）に分ける。詳細版の納品物名は「詳細レポート」。',
+      '詳細版AI活用診断には60分MTGを含めない。レポート内容の解説や導入支援前の相談が必要な場合は、AI活用レビュー面談または導入支援相談として別導線で案内する。',
+      '現行フォームの直接アップロード対応はJPG、PNG、GIF、WebPの画像と公開URL読取。PDF、Excel、Wordを現行フォームで直接添付できるとは書かない。',
+      '診断レポートの標準納品形式はGoogle Slides URL。PDF納品、詳細レポートに面談が含まれる表現、申込停止中に見える表現、成果保証、旧事業方針に該当する表現は禁止する。',
+    ].join('\n'),
+  },
+  {
     id: 'hydroponics-kpi',
     title: '水耕栽培H1/H2判定',
     category: 'hydroponics',
@@ -198,6 +217,15 @@ export const knowledgeDocs: KnowledgeDoc[] = [
     ].join('\n'),
   },
 ]
+
+export function mergeKnowledgeDocs(
+  baseDocs: KnowledgeDoc[],
+  overlayDocs: KnowledgeDoc[],
+) {
+  return Array.from(
+    new Map([...baseDocs, ...overlayDocs].map((doc) => [doc.id, doc])).values(),
+  )
+}
 
 function tokenize(input: string) {
   return input
