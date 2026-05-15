@@ -152,7 +152,7 @@ export function buildSpotTicketPaymentConfirmedEmail(input: SpotTicketPaymentEma
 ━━━━━━━━━━━━━━━━━━━━━━
 
 下記ページから、チケット番号と依頼内容を入力して利用申請を行ってください。
-https://optiens.com/spot-ticket#redeem
+https://optiens.com/spot-ticket-redeem
 
 ${receiptText}
 
@@ -185,7 +185,7 @@ export function buildSpotTicketPaymentConfirmedEmailHtml(input: SpotTicketPaymen
 </table>
 
 <p>下記ページから、チケット番号と依頼内容を入力して利用申請を行ってください。</p>
-<p><a href="https://optiens.com/spot-ticket#redeem" style="display:inline-block;padding:12px 18px;background:#1F3A93;color:#fff;border-radius:999px;text-decoration:none;font-weight:bold;">利用申請フォームを開く</a></p>
+<p><a href="https://optiens.com/spot-ticket-redeem" style="display:inline-block;padding:12px 18px;background:#1F3A93;color:#fff;border-radius:999px;text-decoration:none;font-weight:bold;">利用申請フォームを開く</a></p>
 ${receiptHtml}
 <p style="font-size:13px;color:#64748b;">事前合意のないチケット消化は行いません。依頼内容が大きい場合は個別見積へ切り替える場合があります。</p>
 

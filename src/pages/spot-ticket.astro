@@ -20,7 +20,7 @@ import Layout from '../layouts/Layout.astro';
         </p>
         <div class="spot-hero-actions">
           <a href="#purchase" class="btn-primary">チケットを購入する</a>
-          <a href="#redeem" class="btn-secondary">チケット番号で依頼する</a>
+          <a href="/spot-ticket-redeem" class="btn-secondary">チケット番号で依頼する</a>
         </div>
       </div>
     </section>
@@ -30,7 +30,8 @@ import Layout from '../layouts/Layout.astro';
         <div class="spot-summary">
           <article class="spot-summary-item">
             <span>1枚</span>
-            <h2>¥30,000（税抜）</h2>
+            <h2>¥33,000（税込）</h2>
+            <p class="spot-price-sub">税抜¥30,000 / 消費税¥3,000</p>
             <p>保守契約なしで使える事前購入型チケットです。時間カウントではなく、依頼内容の重さで消化枚数を決めます。</p>
           </article>
           <article class="spot-summary-item">
@@ -140,9 +141,9 @@ import Layout from '../layouts/Layout.astro';
                 購入希望枚数 <span>*</span>
                 <select name="ticket_count" required>
                   <option value="">選択してください</option>
-                  <option value="1">1枚</option>
-                  <option value="2">2枚</option>
-                  <option value="3">3枚</option>
+                  <option value="1">1枚（¥33,000税込）</option>
+                  <option value="2">2枚（¥66,000税込）</option>
+                  <option value="3">3枚（¥99,000税込）</option>
                   <option value="4plus">4枚以上（個別確認）</option>
                 </select>
               </label>
@@ -171,69 +172,15 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <section class="spot-form-section spot-form-section--redeem light-section" id="redeem">
+    <section class="spot-redeem-section light-section" id="redeem">
       <div class="container">
-        <div class="spot-form-layout spot-form-layout--reverse">
-          <div class="spot-form-copy">
+        <div class="spot-redeem-card">
+          <div>
             <p class="spot-eyebrow">Redeem</p>
             <h2>チケット番号で依頼する</h2>
-            <p>発行済みのチケット番号と依頼内容を入力してください。番号と内容を確認し、日程候補または次の確認事項をご連絡します。</p>
+            <p>発行済みのチケット番号をお持ちの方は、専用ページで依頼内容を送信してください。番号と内容を確認し、日程候補または次の確認事項をご連絡します。</p>
           </div>
-          <form action="/api/spot-ticket" method="POST" class="spot-form">
-            <input type="hidden" name="mode" value="redeem">
-            <div class="hp-field" aria-hidden="true">
-              <label for="redeem_website">ウェブサイト</label>
-              <input type="text" id="redeem_website" name="website" tabindex="-1" autocomplete="off">
-            </div>
-
-            <label>
-              チケット番号 <span>*</span>
-              <input type="text" name="ticket_number" required placeholder="例: ST-20260515-ABCD">
-            </label>
-            <div class="form-row">
-              <label>
-                会社・団体名 <span>*</span>
-                <input type="text" name="company_name" required>
-              </label>
-              <label>
-                お名前 <span>*</span>
-                <input type="text" name="person_name" required>
-              </label>
-            </div>
-            <div class="form-row">
-              <label>
-                メールアドレス <span>*</span>
-                <input type="email" name="email" required>
-              </label>
-              <label>
-                電話番号
-                <input type="tel" name="phone">
-              </label>
-            </div>
-            <label>
-              希望サービス
-              <select name="service_type">
-                <option value="review">AI活用レビュー面談</option>
-                <option value="requirements">有償要件定義</option>
-                <option value="small_build">簡易実装・軽微な自動化</option>
-                <option value="undecided">未定・相談したい</option>
-              </select>
-            </label>
-            <label>
-              依頼内容 <span>*</span>
-              <textarea name="request_detail" rows="7" required placeholder="現状の業務、困っていること、期待する成果、利用中のツール、資料URLなどを入力してください。"></textarea>
-            </label>
-            <label>
-              希望日程
-              <textarea name="preferred_schedule" rows="3" placeholder="例: 平日14時以降、来週火曜・木曜の午前など"></textarea>
-            </label>
-            <label>
-              補足
-              <textarea name="notes" rows="4" placeholder="守秘上の注意点、事前に見てほしいURL、その他の補足など"></textarea>
-            </label>
-            <p class="spot-form-note">事前合意のないチケット消化は行いません。内容確認後、必要枚数や個別見積への切り替えが必要な場合は先にお伝えします。</p>
-            <button type="submit" class="btn-primary">利用申請を送信</button>
-          </form>
+          <a href="/spot-ticket-redeem" class="btn-primary">利用申請フォームを開く</a>
         </div>
       </div>
     </section>
@@ -366,6 +313,12 @@ import Layout from '../layouts/Layout.astro';
   .spot-use-grid {
     margin-top: 24px;
   }
+  .spot-price-sub {
+    margin-top: -4px;
+    color: var(--muted) !important;
+    font-size: .82rem;
+    line-height: 1.6 !important;
+  }
   .spot-ticket-count {
     margin: 0 0 10px;
   }
@@ -434,6 +387,33 @@ import Layout from '../layouts/Layout.astro';
   }
   .spot-form-section--redeem {
     background: var(--surface-2);
+  }
+  .spot-redeem-section {
+    padding: clamp(48px, 7vw, 80px) 0;
+    background: var(--surface-2);
+  }
+  .spot-redeem-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: clamp(24px, 4vw, 36px);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+  }
+  .spot-redeem-card h2 {
+    margin: 0 0 10px;
+    color: var(--heading);
+    font-size: 1.9rem;
+  }
+  .spot-redeem-card p {
+    margin: 0;
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .spot-redeem-card .btn-primary {
+    flex: none;
   }
   .spot-form-layout {
     display: grid;
@@ -511,9 +491,17 @@ import Layout from '../layouts/Layout.astro';
     .spot-summary,
     .spot-use-grid,
     .spot-flow ol,
+    .spot-redeem-card,
     .spot-form-layout,
     .spot-form-layout--reverse {
       grid-template-columns: 1fr;
+    }
+    .spot-redeem-card {
+      display: grid;
+      align-items: start;
+    }
+    .spot-redeem-card h2 {
+      font-size: 1.45rem;
     }
     .spot-form-copy {
       position: static;

@@ -22,3 +22,9 @@
   - 画像: `public/images/blog/20260516-ai-governance-context-management.webp`
   - ファクトチェック: `executive/data/20260516_ai-governance-context-management_factcheck.md`
   - 元ネタ: 2026-05-16 CEO共有の文字起こし
+
+- ✅ AIはチャット窓から業務画面へ：ポインター・音声入力・安全設計の実務ポイント
+  - 記事: `src/content/blog/20260516-ai-interface-shift-pointer-voice-security.md`
+  - 画像: `public/images/blog/20260516-ai-interface-shift-pointer-voice-security.webp`
+  - ファクトチェック: `executive/data/20260516_ai-interface-shift-pointer-voice-security_factcheck.md`
+  - 元ネタ: 2026-05-16 CEO共有の文字起こし（AIポインター / AI安全性・音声入力・サイバー防御）
