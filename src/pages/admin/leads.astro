@@ -25,6 +25,9 @@ type Lead = {
   status?: string | null;
   amount_jpy?: number | null;
   paid_at?: string | null;
+  is_referral_free?: boolean | null;
+  referral_from?: string | null;
+  referral_free_at?: string | null;
   verified_at?: string | null;
   sent_at?: string | null;
   report_sent_at?: string | null;
@@ -93,7 +96,7 @@ const statusOptions = statusConfigs.map((s) => ({ id: s.id, label: s.label }));
 const lanes = [
   { id: 'intake', label: '受付・認証', note: 'フォーム送信から診断開始まで', statuses: ['new', 'pending_verification'] },
   { id: 'automation', label: '自動生成・例外', note: '無料診断の処理状況', statuses: ['verified', 'processing', 'completed', 'quota_retry_pending', 'manual_review', 'limit_exceeded'] },
-  { id: 'sales', label: '有償化・商談', note: '詳細版、MTG、提案化', statuses: ['pending_payment', 'paid', 'report_created', 'report_sent', 'sent', 'mtg_scheduled', 'paid_report'] },
+  { id: 'sales', label: '有償化・商談', note: '詳細版、個別相談、提案化', statuses: ['pending_payment', 'paid', 'report_created', 'report_sent', 'sent', 'mtg_scheduled', 'paid_report'] },
   { id: 'delivery', label: '導入・保守', note: '導入案件と継続契約', statuses: ['implementation', 'maintenance'] },
   { id: 'closed', label: '終了・対象外', note: '追わないリード', statuses: ['cancelled', 'rejected'] },
 ];
@@ -594,230 +597,32 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
 
   {error && <div class="admin-error">{error}</div>}
 
-  <section class="ops-hero">
-    <div class="ops-hero__main">
-      <span class="eyebrow">Optiens Operating Board</span>
-      <h2>今日見るべきリードと、次に動かす数字</h2>
-      <p>無料診断の自動生成、有償レポート、導入支援、保守契約までを同じ画面で追います。</p>
-    </div>
-    <div class="ops-hero__goal">
-      <span class="goal-label">Phase A1 有償案件</span>
-      <strong>{leads.filter(isRevenueConfirmed).length}/1</strong>
-      <div class="goal-bar"><span style={`width: ${phaseA1PaidProgress}%`}></span></div>
-    </div>
-  </section>
-
-  <section class="kpi-grid" aria-label="主要KPI">
-    <article class="kpi-card kpi-card--attention">
-      <span class="kpi-label">要対応</span>
-      <strong>{actionableCount}<span>件</span></strong>
-      <small>{criticalCount}件は今日確認</small>
-    </article>
-    <article class="kpi-card">
-      <span class="kpi-label">直近流入</span>
-      <strong>{last7d}<span>件</span></strong>
-      <small>30日合計 {last30d}件</small>
-    </article>
-    <article class="kpi-card">
-      <span class="kpi-label">有償接点</span>
-      <strong>{paidOpportunityCount}<span>件</span></strong>
-      <small>入金待ち ¥{yen.format(pendingRevenue)}</small>
-    </article>
-    <article class="kpi-card">
-      <span class="kpi-label">入金済売上</span>
-      <strong>¥{yen.format(confirmedRevenue)}</strong>
-      <small>詳細版・有償対応の入金確認済</small>
-    </article>
-    <article class="kpi-card">
-      <span class="kpi-label">導入・保守</span>
-      <strong>{implementationCount}<span>件</span></strong>
-      <small>導入支援/保守契約フェーズ</small>
-    </article>
-    <article class="kpi-card">
-      <span class="kpi-label">無料診断 月次枠</span>
-      <strong>{monthlyVerified}<span>/{freeQuotaLimit}</span></strong>
-      <div class="mini-progress"><span style={`width: ${freeQuotaPct}%`}></span></div>
-    </article>
-  </section>
-
-  <div class="dashboard-grid">
-    <section class="panel panel--wide">
-      <div class="panel-head">
-        <div>
-          <span class="section-kicker">Next Actions</span>
-          <h3>今日の対応キュー</h3>
-        </div>
-        <span class="panel-count">{actionRows.length}件表示</span>
-      </div>
-      {actionRows.length === 0 ? (
-        <p class="empty-state">緊急対応が必要なリードはありません。</p>
-      ) : (
-        <div class="action-list">
-          {actionRows.map(({ lead, action, score }) => {
-            const status = getStatus(lead.status);
-            return (
-              <a href={`/admin/leads/${lead.id}`} class={`action-item action-item--${action.urgency}`}>
-                <div class="action-rank">{action.due}</div>
-                <div class="action-body">
-                  <div class="action-title">
-                    <strong>{action.label}</strong>
-                    <span class="status-pill" style={`--pill:${status.color}`}>{status.shortLabel}</span>
-                    <span class="priority-pill">優先度 {priorityLabel(score)}</span>
-                  </div>
-                  <p>{lead.company_name || '企業名未設定'} / {lead.person_name || '担当者未設定'}</p>
-                  <small>{action.detail}</small>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-              </a>
-            );
-          })}
-        </div>
-      )}
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <span class="section-kicker">Trend</span>
-          <h3>14日流入</h3>
-        </div>
-      </div>
-      <div class="trend-bars" aria-label="過去14日の申込数">
-        {recentTrend.map((row) => (
-          <div class="trend-col" title={`${row.label}: ${row.count}件`}>
-            <span style={`height: ${Math.max(8, (row.count / maxTrendCount) * 100)}%`}></span>
-            <small>{row.count}</small>
-          </div>
-        ))}
-      </div>
-      <div class="trend-labels">
-        <span>{recentTrend[0]?.label}</span>
-        <span>{recentTrend[recentTrend.length - 1]?.label}</span>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <span class="section-kicker">Funnel</span>
-          <h3>事業化ファネル</h3>
-        </div>
-      </div>
-      <ul class="bar-list">
-        {funnelSteps.map((step) => (
-          <li>
-            <span>{step.label}</span>
-            <b>{step.count}</b>
-            <i style={`width: ${(step.count / maxFunnelCount) * 100}%; background:${step.color}`}></i>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <span class="section-kicker">Industries</span>
-          <h3>業種別流入</h3>
-        </div>
-      </div>
-      {industryRows.length === 0 ? (
-        <p class="empty-state">業種データがありません。</p>
-      ) : (
-        <ul class="bar-list">
-          {industryRows.map((row) => (
-            <li>
-              <span>{row.label}</span>
-              <b>{row.count}</b>
-              <i style={`width: ${(row.count / maxIndustryCount) * 100}%; background:#6B85C9`}></i>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <span class="section-kicker">Lead Source</span>
-          <h3>申し込みのきっかけ</h3>
-        </div>
-      </div>
-      {leadSourceRows.length === 0 ? (
-        <p class="empty-state">きっかけデータがありません。</p>
-      ) : (
-        <ul class="bar-list">
-          {leadSourceRows.map((row) => (
-            <li>
-              <span>{row.label}</span>
-              <b>{row.count}</b>
-              <i style={`width: ${(row.count / maxLeadSourceCount) * 100}%; background:#E48A95`}></i>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  </div>
-
-  <section class="panel pipeline-panel">
-    <div class="panel-head">
+  <section class="list-view-shell">
+    <div class="list-view-header">
       <div>
-        <span class="section-kicker">Pipeline</span>
-        <h3>運用フェーズ</h3>
+        <span class="object-label">Leads</span>
+        <h2><i class="fas fa-table-list"></i> リード一覧</h2>
+        <p>Salesforceのリストビューのように、リードを検索・絞り込み・一覧確認する画面です。行をクリックすると顧客詳細を開きます。</p>
       </div>
-      <span class="panel-count">ステータス別の滞留を確認</span>
-    </div>
-
-    <div class="lane-grid">
-      {laneRows.map((lane) => (
-        <article class="lane">
-          <header>
-            <div>
-              <strong>{lane.label}</strong>
-              <small>{lane.note}</small>
-            </div>
-            <span>{lane.count}</span>
-          </header>
-          <div class="lane-body">
-            {lane.leads.slice(0, 6).map((lead) => {
-              const status = getStatus(lead.status);
-              const action = nextActionFor(lead);
-              return (
-                <a href={`/admin/leads/${lead.id}`} class="lead-mini">
-                  <div>
-                    <strong>{lead.company_name || '企業名未設定'}</strong>
-                    <span>{timeAgo(lead.updated_at || lead.created_at)}</span>
-                  </div>
-                  <p>{action.label}</p>
-                  <span class="status-pill" style={`--pill:${status.color}`}>{status.shortLabel}</span>
-                </a>
-              );
-            })}
-            {lane.leads.length === 0 && <p class="lane-empty">該当なし</p>}
-            {lane.leads.length > 6 && <p class="lane-more">他 {lane.leads.length - 6}件</p>}
-          </div>
-        </article>
-      ))}
-    </div>
-
-    <div class="status-distribution">
-      {statusRows.filter((row) => row.count > 0).map((row) => (
-        <div class="status-row">
-          <span class="status-pill" style={`--pill:${row.color}`}>{row.shortLabel}</span>
-          <i><b style={`width:${(row.count / maxStatusCount) * 100}%; background:${row.color}`}></b></i>
-          <strong>{row.count}</strong>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <section class="panel table-panel">
-    <div class="panel-head panel-head--table">
-      <div>
-        <span class="section-kicker">Lead Table</span>
-        <h3>リード一覧</h3>
+      <div class="list-view-actions">
+        <a class="ghost-btn" href="/admin/reports"><i class="fas fa-chart-simple"></i> レポートで確認</a>
+        <a class="ghost-btn" href="/admin/funnel"><i class="fas fa-filter-circle-dollar"></i> 営業ファネル</a>
       </div>
-      <span class="panel-count"><span id="visible-count">{total}</span> / {total}件</span>
+    </div>
+
+    <div class="list-view-summary" aria-label="リストビュー概要">
+      <span><b>{total}</b> 全リード</span>
+      <span><b>{last7d}</b> 直近7日</span>
+      <span><b>{paidOpportunityCount}</b> 有償接点</span>
+      <span><b>{leads.filter((lead) => Boolean(lead.is_referral_free)).length}</b> 紹介無料</span>
+    </div>
+
+    <div class="list-view-tabs" role="group" aria-label="リストビュー">
+      <button class="quick-filter active" type="button" data-filter="all">すべてのリード</button>
+      <button class="quick-filter" type="button" data-filter="action">要確認</button>
+      <button class="quick-filter" type="button" data-filter="ai-error">AIエラー</button>
+      <button class="quick-filter" type="button" data-filter="paid">有償・入金</button>
+      <button class="quick-filter" type="button" data-filter="delivered">納品済み</button>
     </div>
 
     <div class="lead-toolbar">
@@ -834,27 +639,27 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
         <option value="free">簡易版</option>
         <option value="paid">詳細版</option>
       </select>
-      <div class="quick-filters" role="group" aria-label="クイックフィルタ">
-        <button class="quick-filter active" type="button" data-filter="all">全件</button>
-        <button class="quick-filter" type="button" data-filter="action">要対応</button>
-        <button class="quick-filter" type="button" data-filter="ai-error">AIエラー</button>
-        <button class="quick-filter" type="button" data-filter="paid">有償</button>
-        <button class="quick-filter" type="button" data-filter="delivered">納品済</button>
-      </div>
+    </div>
+
+    <div class="list-view-meta">
+      <span><span id="visible-count">{total}</span>件を表示中</span>
+      <span>今日見るべきリード・運用フェーズ・次に動かす数字は <a href="/admin/reports">レポート</a> に集約</span>
     </div>
 
     <div class="table-wrap">
       <table class="leads-table">
         <thead>
           <tr>
-            <th>対応</th>
+            <th class="select-col"></th>
             <th>企業</th>
+            <th>担当者</th>
             <th>状態</th>
             <th>プラン</th>
-            <th>優先度</th>
+            <th>紹介無料</th>
+            <th>流入元</th>
             <th>申込日</th>
             <th>金額</th>
-            <th>詳細</th>
+            <th class="open-col"></th>
           </tr>
         </thead>
         <tbody id="lead-table-body">
@@ -886,31 +691,33 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
                 data-ai-error={hasAiIssue(lead) ? 'true' : 'false'}
                 data-paid={isPaidOpportunity(lead) ? 'true' : 'false'}
                 data-delivered={delivered ? 'true' : 'false'}
+                tabindex="0"
               >
-                <td>
-                  <strong class={`urgency urgency--${action.urgency}`}>{action.label}</strong>
-                  <small>{action.due}</small>
-                  {lead.last_error && <small class="error-snippet">AI: {truncate(lead.last_error, 70)}</small>}
-                </td>
+                <td class="select-col"><span class="row-dot" aria-hidden="true"></span></td>
                 <td class="td-company">
-                  <strong>{lead.company_name || '企業名未設定'}</strong>
-                  <span>{lead.person_name || '担当者未設定'} / {industryLabels[lead.industry || ''] || '業種未設定'}</span>
-                  {lead.lead_source && <span>きっかけ: {leadSourceLabels[lead.lead_source] || lead.lead_source}</span>}
+                  <a href={`/admin/leads/${lead.id}`}>{lead.company_name || '企業名未設定'}</a>
+                  <span>{industryLabels[lead.industry || ''] || '業種未設定'}</span>
                   <em>{lead.application_id || '申込番号なし'}</em>
+                </td>
+                <td>
+                  <strong>{lead.person_name || '担当者未設定'}</strong>
+                  <small>{lead.email || 'メール未設定'}</small>
                 </td>
                 <td><span class="status-pill" style={`--pill:${status.color}`}>{status.label}</span></td>
                 <td><span class={`plan-pill plan-pill--${lead.plan === 'paid' ? 'paid' : 'free'}`}>{planLabel(lead.plan)}</span></td>
                 <td>
-                  <span class={`score-pill score-pill--${priorityLabel(score)}`}>{priorityLabel(score)}</span>
-                  <small>{score}/100</small>
+                  <span class={`boolean-pill ${lead.is_referral_free ? 'boolean-pill--true' : 'boolean-pill--false'}`}>
+                    {lead.is_referral_free ? 'True' : 'False'}
+                  </span>
                 </td>
+                <td>{lead.lead_source ? (leadSourceLabels[lead.lead_source] || lead.lead_source) : '未回答'}</td>
                 <td>{formatDate(lead.created_at)}</td>
                 <td>¥{yen.format(lead.amount_jpy || 0)}</td>
-                <td><a class="row-link" href={`/admin/leads/${lead.id}`}>開く</a></td>
+                <td class="open-col"><i class="fas fa-chevron-right"></i></td>
               </tr>
             );
           })}
-          {leads.length === 0 && <tr><td colspan="8" class="td-empty">リードがありません</td></tr>}
+          {leads.length === 0 && <tr><td colspan="10" class="td-empty">リードがありません</td></tr>}
         </tbody>
       </table>
     </div>
@@ -1006,6 +813,12 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
         if (event.target.closest('a, button, input, select')) return;
         window.location.href = row.dataset.href;
       });
+      row.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (event.target.closest('a, button, input, select')) return;
+        event.preventDefault();
+        window.location.href = row.dataset.href;
+      });
     });
 
     applyFilters();
@@ -1051,6 +864,105 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     color: var(--admin-danger);
     font-size: 0.88rem;
     margin-bottom: 20px;
+  }
+
+  .list-view-shell {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .list-view-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--admin-border);
+    background: linear-gradient(180deg, rgba(107, 133, 201, 0.10), transparent);
+  }
+
+  .object-label {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .list-view-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0 6px;
+    color: #fff;
+    font-size: 1.25rem;
+    letter-spacing: 0;
+  }
+
+  .list-view-header p {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.86rem;
+  }
+
+  .list-view-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .list-view-actions a {
+    text-decoration: none;
+  }
+
+  .list-view-summary,
+  .list-view-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    padding: 10px 20px;
+    color: var(--admin-muted);
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--admin-border);
+  }
+
+  .list-view-summary b {
+    margin-right: 4px;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .list-view-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 12px 20px 0;
+    overflow-x: auto;
+  }
+
+  .list-view-tabs .quick-filter {
+    border: 1px solid var(--admin-border);
+    background: var(--admin-bg);
+  }
+
+  .list-view-tabs .quick-filter.active {
+    border-color: rgba(107, 133, 201, 0.52);
+    background: var(--admin-surface-2);
+  }
+
+  .list-view-meta {
+    justify-content: space-between;
+    padding-top: 0;
+  }
+
+  .list-view-meta a {
+    color: var(--admin-accent-soft);
+    text-decoration: none;
+    font-weight: 700;
   }
 
   .ops-hero {
@@ -1541,10 +1453,10 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
 
   .lead-toolbar {
     display: grid;
-    grid-template-columns: minmax(240px, 1fr) 190px 150px auto;
+    grid-template-columns: minmax(240px, 1fr) 190px 150px;
     gap: 10px;
     align-items: center;
-    margin-bottom: 14px;
+    padding: 12px 20px;
   }
 
   .search-box {
@@ -1620,7 +1532,7 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
   .leads-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 1040px;
+    min-width: 1120px;
     font-size: 0.84rem;
   }
 
@@ -1644,10 +1556,31 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
 
   .lead-row {
     cursor: pointer;
+    outline: none;
   }
 
-  .lead-row:hover td {
+  .lead-row:hover td,
+  .lead-row:focus td {
     background: rgba(107, 133, 201, 0.045);
+  }
+
+  .select-col,
+  .open-col {
+    width: 38px;
+    text-align: center;
+  }
+
+  .open-col {
+    color: var(--admin-muted);
+  }
+
+  .row-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--admin-secondary);
+    box-shadow: 0 0 0 3px rgba(107, 133, 201, 0.14);
   }
 
   .lead-row[hidden] {
@@ -1661,9 +1594,17 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
     display: block;
   }
 
-  .td-company strong {
+  .td-company strong,
+  .td-company a {
+    display: block;
     color: #fff;
     font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .td-company a:hover {
+    color: var(--admin-accent-soft);
   }
 
   .td-company span,
@@ -1705,6 +1646,29 @@ const safeExportJson = JSON.stringify(exportRows).replace(/</g, '\\u003c');
 
   .row-link:hover {
     text-decoration: underline;
+  }
+
+  .boolean-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    border: 1px solid transparent;
+  }
+
+  .boolean-pill--true {
+    color: var(--admin-accent-soft);
+    background: rgba(228, 138, 149, 0.16);
+    border-color: rgba(228, 138, 149, 0.32);
+  }
+
+  .boolean-pill--false {
+    color: var(--admin-muted);
+    background: rgba(148, 163, 184, 0.12);
+    border-color: rgba(148, 163, 184, 0.22);
   }
 
   .td-empty {

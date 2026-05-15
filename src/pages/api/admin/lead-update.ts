@@ -11,9 +11,10 @@
  *
  * 対応アクション:
  *   - action: "update_fields" — 任意フィールドを編集
- *   - action: "mark_referral_free" — 紹介経由・無料化（status=paid, amount=0, 顧客メール送信）
+ *   - action: "mark_referral_free" — 紹介経由・無料化（status=paid, amount=0, is_referral_free=true, 顧客メール送信）
  *   - action: "mark_paid" — お振込確認済みに変更（顧客メール送信）
  *   - action: "mark_report_sent" — レポート送付済みに変更
+ *   - action: "mark_cancelled" — キャンセルに変更（メールなし）
  *   - action: "change_status" — ステータスのみ変更（メールなし）
  */
 
@@ -144,10 +145,15 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (action === 'mark_referral_free') {
     const referralFrom = String(body?.referral_from || '').trim()
+    const now = new Date().toISOString()
     const updates: Record<string, any> = {
       status: 'paid',
+      plan: 'paid',
       amount_jpy: 0,
-      paid_at: new Date().toISOString(),
+      paid_at: now,
+      is_referral_free: true,
+      referral_from: referralFrom || null,
+      referral_free_at: now,
       voucher_note: referralFrom ? `紹介経由・無料化（紹介元: ${referralFrom}）` : '紹介経由・無料化',
     }
     const { error: updErr } = await supabase
@@ -180,6 +186,31 @@ export const POST: APIRoute = async ({ request }) => {
       request,
     })
     return json({ ok: true, action: 'mark_referral_free' })
+  }
+
+  if (action === 'mark_cancelled') {
+    const reason = String(body?.reason || '').trim()
+    const updates: Record<string, any> = {
+      status: 'cancelled',
+    }
+    if (reason) {
+      updates.admin_notes = [lead.admin_notes, `キャンセル: ${reason}`].filter(Boolean).join('\n')
+    }
+    const { error: updErr } = await supabase
+      .from('diagnosis_leads').update(updates).eq('id', id)
+    if (updErr) {
+      console.error('[lead-update] mark_cancelled error:', updErr)
+      return json({ error: 'Update failed' }, 500)
+    }
+    await logAdminAudit({
+      action: 'diagnosis_leads.mark_cancelled',
+      target_table: 'diagnosis_leads',
+      target_id: id,
+      summary: `リード ${lead.application_id || id} をキャンセルに変更`,
+      metadata: { before_status: lead.status, reason },
+      request,
+    })
+    return json({ ok: true, action: 'mark_cancelled' })
   }
 
   if (action === 'mark_paid') {

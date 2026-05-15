@@ -229,14 +229,20 @@ const recentIssueRows = [
     created_at: lead.updated_at || lead.created_at,
   })),
 ].sort((a, b) => parseTime(b.created_at) - parseTime(a.created_at)).slice(0, 10);
+
+const reportAreaOptions = Array.from(new Set(adminReports.map((report) => report.area)))
+  .map((area) => ({ area, label: reportAreaLabel(area) }));
+const liveReports = adminReports.filter((report) => report.status === 'live').length;
+const nextReports = adminReports.filter((report) => report.status === 'next').length;
+const plannedReports = adminReports.filter((report) => report.status === 'planned').length;
 ---
 
-<AdminLayout title="今日の対応" active="reports">
+<AdminLayout title="レポート" active="reports">
   <section class="hero-panel">
     <div>
-      <span>Today Report</span>
-      <h2>レポートは、必要な対応を見逃さないために増やしていく</h2>
-      <p>今日の対応を最上位に置きつつ、営業、API、期限、ナレッジ、会計、水耕KPIなど、見るべき切り口を追加できる形にします。</p>
+      <span>Report Home</span>
+      <h2>必要な対応と判断材料を、レポートで確認する</h2>
+      <p>今日の対応、営業ファネル、AI/API、期限、会計、ナレッジをSalesforceのレポート一覧のように増やしていく管理画面です。</p>
     </div>
     <strong class={alertReady ? 'hero-ok' : 'hero-warn'}>{alertReady ? 'READY' : 'SETUP'}<small>{alertReady ? '日次メール設定済み' : '環境変数の確認が必要'}</small></strong>
   </section>
@@ -256,6 +262,74 @@ const recentIssueRows = [
         <small>{row.detail}</small>
       </article>
     ))}
+  </section>
+
+  <section class="panel report-library" id="report-library">
+    <div class="panel-head">
+      <div>
+        <span>Report Library</span>
+        <h3>レポート一覧</h3>
+      </div>
+      <div class="report-counts">
+        <b>{liveReports} 稼働中</b>
+        <b>{nextReports} 次に実装</b>
+        <b>{plannedReports} 計画中</b>
+      </div>
+    </div>
+    <div class="report-toolbar">
+      <label class="report-search">
+        <i class="fas fa-search"></i>
+        <input id="report-search" type="search" placeholder="レポート名、判断内容、確認項目で検索" />
+      </label>
+      <select id="report-area-filter" aria-label="領域">
+        <option value="all">すべての領域</option>
+        {reportAreaOptions.map((row) => <option value={row.area}>{row.label}</option>)}
+      </select>
+      <select id="report-status-filter" aria-label="ステータス">
+        <option value="all">すべての状態</option>
+        <option value="live">稼働中</option>
+        <option value="next">次に実装</option>
+        <option value="planned">計画中</option>
+      </select>
+    </div>
+    <div class="report-table-wrap">
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>レポート名</th>
+            <th>領域</th>
+            <th>状態</th>
+            <th>判断すること</th>
+            <th>頻度</th>
+            <th>責任</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {adminReports.map((report) => (
+            <tr
+              class={`report-row ${report.href ? '' : 'report-row--disabled'}`}
+              data-href={report.href || ''}
+              data-area={report.area}
+              data-status={report.status}
+              data-search={`${report.title} ${report.purpose} ${report.decision} ${report.source} ${report.checks.join(' ')}`.toLowerCase()}
+              tabindex={report.href ? 0 : undefined}
+            >
+              <td>
+                <strong>{report.title}</strong>
+                <small>{report.purpose}</small>
+              </td>
+              <td>{reportAreaLabel(report.area)}</td>
+              <td><span class={`state state--${reportStatusTone(report.status)}`}>{reportStatusLabel(report.status)}</span></td>
+              <td>{report.decision}</td>
+              <td>{report.cadence}</td>
+              <td>{report.owner}</td>
+              <td>{report.href ? <i class="fas fa-chevron-right"></i> : <span class="muted">未接続</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <section class="panel today-panel" id="today-actions">
@@ -402,6 +476,10 @@ const recentIssueRows = [
     const sendBtn = document.getElementById('send-daily-alert');
     const healthBtn = document.getElementById('run-health-check');
     const buttons = [sendBtn, healthBtn].filter(Boolean);
+    const reportRows = Array.from(document.querySelectorAll('.report-row'));
+    const reportSearch = document.getElementById('report-search');
+    const reportAreaFilter = document.getElementById('report-area-filter');
+    const reportStatusFilter = document.getElementById('report-status-filter');
 
     async function run(url, label) {
       if (!result) return;
@@ -428,6 +506,35 @@ const recentIssueRows = [
 
     sendBtn?.addEventListener('click', () => run('/api/admin/daily-ops-email', '日次メール'));
     healthBtn?.addEventListener('click', () => run('/api/admin/ops-health-check', 'ヘルスチェック'));
+
+    function applyReportFilters() {
+      const q = (reportSearch?.value || '').trim().toLowerCase();
+      const area = reportAreaFilter?.value || 'all';
+      const status = reportStatusFilter?.value || 'all';
+      reportRows.forEach((row) => {
+        const ok = (!q || (row.dataset.search || '').includes(q))
+          && (area === 'all' || row.dataset.area === area)
+          && (status === 'all' || row.dataset.status === status);
+        row.hidden = !ok;
+      });
+    }
+
+    reportSearch?.addEventListener('input', applyReportFilters);
+    reportAreaFilter?.addEventListener('change', applyReportFilters);
+    reportStatusFilter?.addEventListener('change', applyReportFilters);
+    reportRows.forEach((row) => {
+      row.addEventListener('click', (event) => {
+        if (event.target.closest('a, button, input, select')) return;
+        if (row.dataset.href) window.location.href = row.dataset.href;
+      });
+      row.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (!row.dataset.href || event.target.closest('a, button, input, select')) return;
+        event.preventDefault();
+        window.location.href = row.dataset.href;
+      });
+    });
+    applyReportFilters();
   })();
 </script>
 
@@ -608,6 +715,128 @@ const recentIssueRows = [
   .ghost-btn:disabled {
     cursor: wait;
     opacity: 0.68;
+  }
+
+  .report-counts {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .report-counts b {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 0 9px;
+    border-radius: 999px;
+    color: var(--admin-muted);
+    background: rgba(148, 163, 184, 0.12);
+    font-size: 0.72rem;
+  }
+
+  .report-toolbar {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) 180px 160px;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .report-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 38px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-bg);
+    color: var(--admin-muted);
+  }
+
+  .report-search input,
+  .report-toolbar select {
+    width: 100%;
+    min-height: 38px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font: inherit;
+    font-size: 0.84rem;
+  }
+
+  .report-search input {
+    min-height: auto;
+    border: none;
+    background: transparent;
+    outline: none;
+  }
+
+  .report-toolbar select {
+    padding: 0 10px;
+  }
+
+  .report-table-wrap {
+    overflow-x: auto;
+  }
+
+  .report-table {
+    width: 100%;
+    min-width: 1080px;
+    border-collapse: collapse;
+    font-size: 0.83rem;
+  }
+
+  .report-table th,
+  .report-table td {
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--admin-border);
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .report-table th {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .report-row {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .report-row--disabled {
+    cursor: default;
+  }
+
+  .report-row[hidden] {
+    display: none;
+  }
+
+  .report-row:hover td,
+  .report-row:focus td {
+    background: rgba(107, 133, 201, 0.045);
+  }
+
+  .report-row strong,
+  .report-row small {
+    display: block;
+  }
+
+  .report-row strong {
+    color: #fff;
+    font-size: 0.9rem;
+  }
+
+  .report-row small,
+  .muted {
+    margin-top: 3px;
+    color: var(--admin-muted);
+    font-size: 0.74rem;
   }
 
   .alert-grid {
@@ -860,6 +1089,7 @@ const recentIssueRows = [
     .kpi-grid,
     .alert-grid,
     .report-card-grid,
+    .report-toolbar,
     .issue-row {
       grid-template-columns: 1fr;
     }
