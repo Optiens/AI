@@ -8,6 +8,8 @@
 - `src/pages/maintenance.astro`
 - `src/pages/spot-ticket.astro`
 - `src/pages/spot-ticket-success.astro`
+- `src/pages/contact.astro`
+- `src/pages/api/contact.ts`
 - `src/pages/api/spot-ticket.ts`
 - `src/pages/api/spot-ticket-payment-notify.ts`
 - `src/pages/api/payment-check.ts`
@@ -33,6 +35,7 @@
 | 簡易実装・軽微な自動化対応は3枚から | OK | CEO指示および社内定義と照合。1業務・1フロー・既存ツール前提の範囲に限定 |
 | 購入後にチケット番号を発行し、番号で利用申請する導線 | OK | CEO方針として採用。1〜3枚は購入申込後に振込先案内・請求情報・振込完了通知URLを自動送信し、freee入金照合後にチケット番号を自動発行する実装へ更新 |
 | freee入金照合 | OK | 既存の詳細版AI活用診断の `payment-check` / `payment-notify` と同じ freee wallet transaction 取得・金額一致・会社名ファジーマッチ方針をスポット相談チケットへ横展開 |
+| 急ぎの入金確認導線 | OK | `vercel.json` の `/api/payment-check` Cron は `0 0 * * *`（JST 9:00）で1日1回。顧客クリックの振込完了通知URLと、問い合わせフォーム `topic=spot-ticket-urgent-payment` を併記し、即時保証ではなく確認依頼の入口として記載 |
 | Stripe連携 | 保留 | 現時点ではStripeパッケージ、Stripe APIキー、Webhook署名シークレット、決済商品設定が未確認のため公開実装しない。銀行振込 + freee照合を先行 |
 | 相談・要件整理カードのリンク先 | OK | `/contact` 直行から `/spot-ticket` へ変更し、購入・利用申請を顧客が選べる導線に修正 |
 | 4ステップ内の相談・要件整理画像 | OK | 写真調の `banner-consultation.webp` から、既存3カードと同系統のイラスト調 `step-02-consultation.webp` へ変更 |
@@ -42,6 +45,7 @@
 ## 公開文で避ける表現
 
 - 「購入直後にチケット番号を発行」など、入金前に発行されるように見える表現
+- 「急ぎなら即時発行」など、銀行・freee反映前のチケット番号発行を保証する表現
 - 「必ず導入支援に進める」「どんな自動化でも3枚で対応」など、提供範囲を超える表現
 - 「1回3万円」など、スポット相談チケットの単位と混ざる表現
 
@@ -58,6 +62,8 @@
 - `executive/ai-consulting/スポットチケット_商品設計書_v1.0.md`
 - `src/pages/service.astro`
 - `src/pages/spot-ticket.astro`
+- `src/pages/contact.astro`
 - `src/pages/api/spot-ticket-payment-notify.ts`
+- `vercel.json`
 - `src/lib/spot-ticket-billing.ts`
 - Supabase Changelog: https://supabase.com/changelog?tags=database

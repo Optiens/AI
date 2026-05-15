@@ -56,6 +56,7 @@ import Layout from '../layouts/Layout.astro';
             <option value="">選択してください</option>
             <option value="free-diagnosis-waitlist">【簡易版】AI活用診断の無料枠案内を受け取りたい</option>
             <option value="consult-ticket">AI活用レビュー面談・有償要件定義を相談したい</option>
+            <option value="spot-ticket-urgent-payment">スポット相談チケットの入金確認を急ぎたい</option>
             <option value="ai-consult">AI支援事業について</option>
             <option value="press">取材・メディア掲載</option>
             <option value="partner">業務提携・パートナーシップ</option>
@@ -112,6 +113,12 @@ import Layout from '../layouts/Layout.astro';
       subject: '詳細診断・AI活用レビュー面談の相談',
       message: '詳細診断またはAI活用レビュー面談の案内を希望します。',
       note: '詳細診断・AI活用レビュー面談のご相談として受付します。'
+    },
+    'spot-ticket-urgent-payment': {
+      type: 'spot-ticket-urgent-payment',
+      subject: 'スポット相談チケットの入金確認について',
+      message: 'スポット相談チケットの入金確認について、早めの確認を希望します。\n\n申込番号:\n振込人名義:\n振込日時:\n振込金額:\n補足:',
+      note: 'スポット相談チケットの入金確認に関するお問い合わせとして受付します。申込番号・振込人名義・振込日時が分かると確認がスムーズです。'
     }
   };
   const preset = presets[topic || ''];

@@ -41,7 +41,7 @@ import Layout from '../layouts/Layout.astro';
           <article class="spot-summary-item">
             <span>運用</span>
             <h2>入金確認後に番号を自動発行</h2>
-            <p>購入申込後に振込先案内をメール送付し、freee照合後にチケット番号を発行します。依頼時は番号と内容をフォームに入力してください。</p>
+            <p>購入申込後に振込先案内をメール送付し、freee照合後にチケット番号を発行します。急ぎの場合は、振込完了通知URLまたはお問い合わせフォームから申込番号をお知らせください。</p>
           </article>
         </div>
 
@@ -79,7 +79,7 @@ import Layout from '../layouts/Layout.astro';
             <li>
               <span>03</span>
               <strong>チケット番号発行</strong>
-              <p>freeeで入金照合できたら、利用申請に使うチケット番号を自動発行します。</p>
+              <p>freeeで入金照合できたら、利用申請に使うチケット番号を自動発行します。通常の自動確認は毎朝9時にも行います。</p>
             </li>
             <li>
               <span>04</span>
@@ -87,6 +87,15 @@ import Layout from '../layouts/Layout.astro';
               <p>チケット番号と依頼内容を入力し、面談または作業に進みます。</p>
             </li>
           </ol>
+        </div>
+
+        <div class="spot-urgent-note">
+          <strong>急ぎで入金確認を進めたい場合</strong>
+          <p>
+            お振込後、通知URLで確認できない場合や早めにチケット番号が必要な場合は、
+            <a href="/contact?topic=spot-ticket-urgent-payment">お問い合わせフォーム</a>
+            から申込番号・振込人名義・振込日時をお知らせください。反映状況を確認します。
+          </p>
         </div>
       </div>
     </section>
@@ -97,7 +106,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="spot-form-copy">
             <p class="spot-eyebrow">Purchase</p>
             <h2>スポット相談チケットを購入する</h2>
-            <p>まずは購入枚数と想定用途をお送りください。1〜3枚は自動返信メールで振込先案内をお送りします。4枚以上は個別確認です。</p>
+            <p>まずは購入枚数と想定用途をお送りください。1〜3枚は自動返信メールで振込先案内をお送りします。4枚以上は個別確認です。お急ぎの場合は、振込後に通知URLまたはお問い合わせフォームからお知らせください。</p>
           </div>
           <form action="/api/spot-ticket" method="POST" class="spot-form">
             <input type="hidden" name="mode" value="purchase">
@@ -155,7 +164,7 @@ import Layout from '../layouts/Layout.astro';
               相談したい内容・購入前に伝えておきたいこと
               <textarea name="notes" rows="5" placeholder="例: 詳細レポートを見たうえで、どの業務から始めるべきか相談したい。"></textarea>
             </label>
-            <p class="spot-form-note">1〜3枚の購入申込後は、自動返信メールに振込先・請求情報・振込完了通知URLを記載します。入金確認後にチケット番号を発行します。</p>
+            <p class="spot-form-note">1〜3枚の購入申込後は、自動返信メールに振込先・請求情報・振込完了通知URLを記載します。入金確認後にチケット番号を発行します。急ぎの場合は、振込後に申込番号・振込人名義・振込日時を添えてお問い合わせください。</p>
             <button type="submit" class="btn-primary">購入申込を送信</button>
           </form>
         </div>
@@ -396,6 +405,28 @@ import Layout from '../layouts/Layout.astro';
   .spot-flow li p {
     margin: 0;
     font-size: .9rem;
+  }
+  .spot-urgent-note {
+    margin-top: 22px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--brand);
+    border-radius: 6px;
+    background: rgba(31, 58, 147, .06);
+  }
+  .spot-urgent-note strong {
+    display: block;
+    color: var(--heading);
+    margin-bottom: 6px;
+  }
+  .spot-urgent-note p {
+    margin: 0;
+    color: var(--text);
+    line-height: 1.8;
+    font-size: .92rem;
+  }
+  .spot-urgent-note a {
+    color: var(--brand);
+    font-weight: 800;
   }
   .spot-form-section {
     padding: clamp(64px, 8vw, 100px) 0;

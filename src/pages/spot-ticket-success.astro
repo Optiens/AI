@@ -7,7 +7,7 @@ const title = mode === 'redeem'
   : '購入申込を受け付けました';
 const message = mode === 'redeem'
   ? 'チケット番号と依頼内容を確認し、日程候補または次の確認事項をご連絡します。'
-  : '1〜3枚の購入申込には、振込先・請求情報・振込完了通知URLを記載した自動返信メールをお送りします。入金確認後にチケット番号を発行します。';
+  : '1〜3枚の購入申込には、振込先・請求情報・振込完了通知URLを記載した自動返信メールをお送りします。入金確認後にチケット番号を発行します。急ぎの場合は、振込後に申込番号・振込人名義・振込日時を添えてお問い合わせください。';
 ---
 
 <Layout
@@ -23,6 +23,9 @@ const message = mode === 'redeem'
         <p>{message}</p>
         <div class="spot-success-actions">
           <a href="/spot-ticket" class="btn-primary">スポット相談チケットへ戻る</a>
+          {mode === 'purchase' && (
+            <a href="/contact?topic=spot-ticket-urgent-payment" class="btn-secondary">急ぎの入金確認を相談</a>
+          )}
           <a href="/service" class="btn-secondary">サービスを見る</a>
         </div>
       </div>
