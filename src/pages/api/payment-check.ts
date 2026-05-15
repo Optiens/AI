@@ -202,7 +202,7 @@ export const POST: APIRoute = async ({ request }) => {
             from: MAIL_FROM,
             to: MAIL_TO,
             subject: `【入金確認】${m.app.application_id} ${m.app.company_name} → レポート作成へ`,
-            text: `申込番号: ${m.app.application_id}\n企業: ${m.app.company_name}\n担当: ${m.app.person_name}\nメール: ${m.app.email}\n金額: ¥${m.app.amount_jpy.toLocaleString()}\nfreee取引ID: ${m.txn.id}\nfreee摘要: ${m.txn.description || ''}\n\n5営業日以内に詳細レポート＋MTG日程調整リンクを作成・送付してください。\n編集: ${import.meta.env.SITE_URL || 'https://optiens.com'}/admin/leads/${m.app.id}`,
+            text: `申込番号: ${m.app.application_id}\n企業: ${m.app.company_name}\n担当: ${m.app.person_name}\nメール: ${m.app.email}\n金額: ¥${m.app.amount_jpy.toLocaleString()}\nfreee取引ID: ${m.txn.id}\nfreee摘要: ${m.txn.description || ''}\n\n5営業日以内に詳細レポートを作成・送付してください。\n編集: ${import.meta.env.SITE_URL || 'https://optiens.com'}/admin/leads/${m.app.id}`,
           })
         } catch (e) {
           console.error('[payment-check] CEO notify error:', e)
@@ -256,9 +256,7 @@ function buildPaymentConfirmedEmail(app: PendingApplication): string {
 ご請求金額: ¥${app.amount_jpy.toLocaleString()}（税込）
 
 これより詳細レポートの作成プロセスに入ります。
-5営業日以内に下記をお届けします。
-- 詳細レポート（Google Slides URL）
-- 60分オンラインMTGの日程調整リンク
+5営業日以内に詳細レポート（Google Slides URL）をお届けします。
 
 ${receiptText}
 
@@ -287,11 +285,7 @@ function buildPaymentConfirmedEmailHtml(app: PendingApplication): string {
   <tr><td style="padding:8px 14px;font-weight:bold;">ステータス</td><td style="padding:8px 14px;color:#1F3A93;font-weight:bold;">✅ お振込確認済み</td></tr>
 </table>
 
-<p>これより詳細レポートの作成プロセスに入ります。<br/>5営業日以内に下記をお届けします。</p>
-<ul style="margin:0 0 16px;padding-left:20px;">
-  <li>詳細レポート（Google Slides URL）</li>
-  <li>60分オンラインMTGの日程調整リンク</li>
-</ul>
+<p>これより詳細レポートの作成プロセスに入ります。<br/>5営業日以内に詳細レポート（Google Slides URL）をお届けします。</p>
 ${receiptHtml}
 <p style="font-size:13px;color:#64748b;">入力いただいた情報をもとに自動でレポートを生成します。生成に失敗した場合のみ、別途ご連絡いたします。</p>
 

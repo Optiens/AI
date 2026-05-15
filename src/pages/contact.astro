@@ -55,7 +55,7 @@ import Layout from '../layouts/Layout.astro';
           <select id="inquiry_type" name="inquiry_type">
             <option value="">選択してください</option>
             <option value="free-diagnosis-waitlist">【簡易版】AI活用診断の無料枠案内を受け取りたい</option>
-            <option value="consult-ticket">相談チケットの案内を受け取りたい</option>
+            <option value="consult-ticket">AI活用レビュー面談を相談したい</option>
             <option value="ai-consult">AI支援事業について</option>
             <option value="press">取材・メディア掲載</option>
             <option value="partner">業務提携・パートナーシップ</option>
@@ -103,15 +103,15 @@ import Layout from '../layouts/Layout.astro';
     },
     'consult-ticket': {
       type: 'consult-ticket',
-      subject: '相談チケットの案内希望',
-      message: '30万円未満の相談・小規模なAI活用相談について、相談チケットの内容を知りたいです。',
-      note: '相談チケットの案内希望として受付します。'
+      subject: 'AI活用レビュー面談の相談',
+      message: '30万円未満の相談・小規模なAI活用相談について、AI活用レビュー面談の内容を知りたいです。',
+      note: 'AI活用レビュー面談のご相談として受付します。'
     },
     'detail-diagnosis': {
       type: 'consult-ticket',
-      subject: '詳細診断・相談チケットの案内希望',
-      message: '詳細診断または相談チケットの案内を希望します。',
-      note: '詳細診断・相談チケットの案内希望として受付します。'
+      subject: '詳細診断・AI活用レビュー面談の相談',
+      message: '詳細診断またはAI活用レビュー面談の案内を希望します。',
+      note: '詳細診断・AI活用レビュー面談のご相談として受付します。'
     }
   };
   const preset = presets[topic || ''];

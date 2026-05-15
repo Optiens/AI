@@ -399,7 +399,7 @@ const canMarkReportSent = isPaidLead && ['report_created', 'report_sent', 'sent'
         }
         const labels = {
           mark_paid: 'お振込確認済みに変更し、お客様に確認メールを送信します。よろしいですか？',
-          generate_paid_report: '有償レポートを生成し、お客様にGoogle Slides URLと60分MTG案内メールを送信します。よろしいですか？',
+          generate_paid_report: '有償レポートを生成し、お客様にGoogle Slides URLを送信します。よろしいですか？',
           mark_report_sent: 'レポート送付済みに変更します。よろしいですか？',
         };
         if (!confirm(labels[action] || '実行しますか？')) return;

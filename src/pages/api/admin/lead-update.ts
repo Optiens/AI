@@ -285,13 +285,13 @@ function buildReferralFreeEmail(lead: any, referralFrom: string): string {
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ■ 申込番号: ${lead.application_id}
-■ ご利用プラン: 詳細レポート + 60分オンラインMTG
+■ ご利用プラン: 詳細レポート
 ■ ご請求金額: ¥0（紹介経由・無料化）
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ━━━ この後の流れ ━━━
 1. 5営業日以内に詳細レポート（Google Slides URL）をメールでお届け
-2. 同じメールで60分オンラインMTGの日程調整リンクをご案内
+2. 個別相談をご希望の場合は、別途AI活用レビュー面談をご案内
 
 入力いただいた情報をもとに自動でレポートを生成します。生成に失敗した場合のみ、別途ご連絡いたします。
 
@@ -312,14 +312,14 @@ function buildReferralFreeEmailHtml(lead: any, referralFrom: string): string {
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#EEF2FF;border:1px solid #6B85C9;border-radius:8px;">
   <tr><td style="padding:8px 14px;font-weight:bold;width:140px;background:#E8ECFB;">申込番号</td><td style="padding:8px 14px;font-family:monospace;color:#1F3A93;font-weight:bold;">${escapeHtml(lead.application_id || '')}</td></tr>
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#E8ECFB;">プラン</td><td style="padding:8px 14px;">詳細レポート + 60分オンラインMTG</td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;background:#E8ECFB;">プラン</td><td style="padding:8px 14px;">詳細レポート</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#E8ECFB;">ご請求金額</td><td style="padding:8px 14px;color:#1F3A93;font-weight:bold;">¥0（紹介経由・無料化）</td></tr>
 </table>
 
 <h3 style="margin:24px 0 8px;font-size:14px;color:#0f172a;">この後の流れ</h3>
 <ol style="margin:0 0 16px;padding-left:20px;font-size:14px;">
   <li>5営業日以内に<strong>詳細レポート（Google Slides URL）</strong>をメールでお届け</li>
-  <li>同じメールで<strong>60分オンラインMTGの日程調整リンク</strong>をご案内</li>
+  <li>個別相談をご希望の場合は、別途<strong>AI活用レビュー面談</strong>をご案内</li>
 </ol>
 
 <p style="margin-top:24px;font-size:12px;color:#64748b;">
@@ -345,9 +345,7 @@ function buildPaymentConfirmedEmail(lead: any): string {
 ご請求金額: ¥${(lead.amount_jpy || 5500).toLocaleString()}（税込）
 
 これより詳細レポートの作成プロセスに入ります。
-5営業日以内に下記をお届けします。
-- 詳細レポート（Google Slides URL）
-- 60分オンラインMTGの日程調整リンク
+5営業日以内に詳細レポート（Google Slides URL）をお届けします。
 
 ${receiptText}
 
@@ -371,7 +369,7 @@ function buildPaymentConfirmedEmailHtml(lead: any): string {
   <tr><td style="padding:8px 14px;font-weight:bold;">ご請求金額</td><td style="padding:8px 14px;">¥${(lead.amount_jpy || 5500).toLocaleString()}（税込）</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;">ステータス</td><td style="padding:8px 14px;color:#1F3A93;font-weight:bold;">✅ お振込確認済み</td></tr>
 </table>
-<p>これより詳細レポートの作成プロセスに入ります。<br/>5営業日以内に詳細レポート＋60分MTG日程調整リンクをお届けします。</p>
+<p>これより詳細レポートの作成プロセスに入ります。<br/>5営業日以内に詳細レポート（Google Slides URL）をお届けします。</p>
 ${receiptHtml}
 <p style="margin-top:24px;font-size:12px;color:#64748b;">
 合同会社Optiens<br/>

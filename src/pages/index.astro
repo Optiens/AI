@@ -81,6 +81,9 @@ const homeSchema = [
         <h2 class="home-section-heading home-section-heading--center">
           AXで業務を再設計しませんか？
         </h2>
+        <p class="home-ax-core-copy">
+          中小企業の問い合わせ対応・見積作成・社内検索を、AIで自動化します。
+        </p>
         <p class="home-ax-note">
           <strong>AX</strong>（AI Transformation）— 業務プロセスを AI が理解できる形に再設計し、人と AI が協働する仕組みへ移行する取り組み。DX の次のフェーズとして注目されています。
         </p>
@@ -109,7 +112,7 @@ const homeSchema = [
           <div class="home-why-item">
             <span class="home-why-num">02</span>
             <h3>高額なSaaSではなく、自社専用の仕組みを持てる</h3>
-            <p>AIエージェントは登場したばかりで、大企業もまだ手探りです。鍵は<strong>AI駆動開発</strong> — 月数十万円の既製SaaSに頼らず、<strong>自社専用システム</strong>を低コストで持てる時代になりました。むしろ大企業より、意思決定が速い中小企業の方が先に動けます。</p>
+            <p>AIエージェントは登場したばかりで、大企業もまだ手探りです。鍵は<strong>AI駆動開発</strong> — 月数十万円の既製SaaSに頼らず、<strong>自社専用システム</strong>を低コストで持てる時代になりました。</p>
           </div>
           <div class="home-why-item">
             <span class="home-why-num">03</span>
@@ -250,6 +253,16 @@ const homeSchema = [
   letter-spacing: .01em;
 }
 
+.home-ax-core-copy {
+  text-align: center;
+  font-size: clamp(17px, 2.1vw, 22px);
+  line-height: 1.65;
+  color: var(--home-heading);
+  font-weight: 800;
+  margin: -20px auto clamp(18px, 3vw, 24px);
+  max-width: 760px;
+}
+
 .home-ax-note {
   text-align: center;
   /* 最終行がポツンと残らないようブラウザに行末バランス調整を任せる
@@ -258,7 +271,7 @@ const homeSchema = [
   font-size: clamp(12px, 1.2vw, 13px);
   line-height: 1.85;
   color: var(--muted, #64748b);
-  margin: -16px auto clamp(28px, 4vw, 36px);
+  margin: 0 auto clamp(28px, 4vw, 36px);
   max-width: 640px;
   letter-spacing: .01em;
   /* 単語境界を意識した日本語折り返し（句読点が行頭に来るのを抑制） */

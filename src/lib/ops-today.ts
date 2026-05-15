@@ -227,7 +227,7 @@ export function buildTodayActions(input: {
         id: `lead-report-send-${lead.id}`,
         category: 'report',
         title: leadTitle(lead),
-        detail: '詳細レポートとMTG日程調整リンクを送付してください。',
+        detail: '詳細レポートのGoogle Slides URLを送付してください。',
         owner: 'CEO',
         due: '今日',
         tone: 'high',
@@ -243,7 +243,7 @@ export function buildTodayActions(input: {
         id: `lead-mtg-follow-${lead.id}`,
         category: 'sales',
         title: leadTitle(lead),
-        detail: '詳細レポート送付後のMTG化フォロー対象です。',
+        detail: '詳細レポート送付後のレビュー面談・導入支援フォロー対象です。',
         owner: 'CEO',
         due: '今週',
         tone: 'medium',
@@ -258,4 +258,3 @@ export function buildTodayActions(input: {
     .sort((a, b) => b.score - a.score)
     .slice(0, 16)
 }
-

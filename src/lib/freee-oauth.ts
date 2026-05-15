@@ -220,11 +220,29 @@ export async function getFreeeAccessToken(options: FreeeOAuthOptions): Promise<s
     }
 
     const latest = await loadStoredRefreshToken(options.supabase)
-    if (!latest.token || latest.token === refreshToken) {
+    const envRefreshToken = options.envRefreshToken?.trim()
+    if (latest.token && latest.token !== refreshToken) {
+      try {
+        return await exchangeAndPersistRefreshToken(options, latest.token, latest.value)
+      } catch (latestError) {
+        if (
+          !(latestError instanceof FreeeTokenRefreshError) ||
+          !envRefreshToken ||
+          envRefreshToken === refreshToken ||
+          envRefreshToken === latest.token
+        ) {
+          throw latestError
+        }
+
+        return await exchangeAndPersistRefreshToken(options, envRefreshToken, latest.value)
+      }
+    }
+
+    if (!envRefreshToken || envRefreshToken === refreshToken) {
       throw error
     }
 
-    return await exchangeAndPersistRefreshToken(options, latest.token, latest.value)
+    return await exchangeAndPersistRefreshToken(options, envRefreshToken, latest.value)
   }
 }
 

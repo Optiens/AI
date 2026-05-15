@@ -7,7 +7,7 @@ export const INVOICE_REGISTRATION_NUMBER = 'T9090003003025'
 const COMPANY_NAME = '合同会社Optiens'
 const COMPANY_ADDRESS = '〒407-0301 山梨県北杜市高根町清里3545番地2483'
 const COMPANY_EMAIL = 'info@optiens.com'
-const SERVICE_NAME = '【詳細版】AI活用診断（詳細レポート + 60分オンラインMTG）'
+const SERVICE_NAME = '【詳細版】AI活用診断（詳細レポート）'
 
 type BillingInput = {
   customerName: string

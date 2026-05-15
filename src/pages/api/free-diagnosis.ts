@@ -185,7 +185,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
       if (monthlyCount >= MONTHLY_DIAGNOSIS_LIMIT) {
         await logSubmission(supabase, { ip, email, userAgent, result: 'rate_limited' })
         return json({
-          error: '今月の【簡易版】AI活用診断 枠は終了しました（毎月1日にリセット）。お急ぎの場合は相談チケットまたは【詳細版】AI活用診断をご相談ください。',
+          error: '今月の【簡易版】AI活用診断 枠は終了しました（毎月1日にリセット）。お急ぎの場合はAI活用レビュー面談または【詳細版】AI活用診断をご相談ください。',
         }, 429)
       }
     }
@@ -512,7 +512,7 @@ function buildPaidCustomerEmail(companyName: string, personName: string, appId: 
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ■ 申込番号: ${appId}
-■ ご利用プラン: 詳細診断資料 ＋ 60分オンラインMTG
+■ ご利用プラン: 詳細診断資料
 ■ ご請求金額: ${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}（税込）
 ━━━━━━━━━━━━━━━━━━━━━━
 
@@ -539,7 +539,7 @@ ${invoiceText}
    ${notifyUrl}
    （クリックを忘れた場合も、毎朝9時に自動で入金確認しますのでご安心ください）
 3. 入金確認後「入金を確認しました」メールを自動送信
-4. 5営業日以内に詳細診断資料 + 60分MTG日程調整リンクをお届け
+4. 5営業日以内に詳細診断資料の Google Slides リンクをお届け
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ※ 領収書・適格請求書（インボイス）の発行に対応しています
@@ -573,7 +573,7 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#1F3A93;font-weight:bold;">${appId}</td></tr>
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">詳細診断資料 + 60分オンラインMTG</td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">詳細診断資料</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">ご請求金額</td><td style="padding:8px 14px;"><strong>${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}（税込）</strong></td></tr>
 </table>
 
@@ -604,7 +604,7 @@ ${invoiceHtml}
     <span style="font-size:12px;color:#64748b;">クリックを忘れた場合も、毎朝9時に自動で入金確認します</span>
   </li>
   <li>入金確認後「入金を確認しました」メールを自動送信</li>
-  <li>5営業日以内に<strong>詳細診断資料 + 60分MTG日程調整リンク</strong>をお届け</li>
+  <li>5営業日以内に<strong>詳細診断資料の Google Slides リンク</strong>をお届け</li>
 </ol>
 
 <p style="margin:24px 0 0;padding-top:16px;border-top:1px solid #E2E8F0;font-size:12px;color:#64748b;">

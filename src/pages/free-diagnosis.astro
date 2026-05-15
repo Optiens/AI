@@ -34,7 +34,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <p class="diag-paid-coming-soon__title">【詳細版】AI活用診断は、現在準備中です。</p>
             <p class="diag-paid-coming-soon__desc">
               内容の最終調整を行っております。公開までもうしばらくお待ちください。<br/>
-              公開案内や相談チケットの案内をご希望の場合は、
+              公開案内やAI活用レビュー面談のご相談をご希望の場合は、
               <a href="/contact">お問い合わせフォーム</a>からご連絡ください。
             </p>
           </div>
@@ -52,7 +52,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         </div>
         <p class="diag-sub" data-plan-show="paid" hidden>
           御社の業務量・データ状態・IT環境を確認し、<br/>
-          <strong>60分のオンラインMTG</strong>で導入可否と次の進め方を整理します。
+          導入可否・優先順位・次の進め方を詳細レポートで整理します。
         </p>
 
         <!-- 無料版のお約束 -->
@@ -67,7 +67,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-handshake-simple" aria-hidden="true"></i>
-            <p>30万円未満のご相談は<strong>相談チケット</strong>、導入支援は<strong>30万円以上</strong>を目安に切り分けます。</p>
+            <p>30万円未満のご相談は<strong>AI活用レビュー面談</strong>、導入支援は<strong>30万円以上</strong>を目安に切り分けます。</p>
           </div>
         </div>
 
@@ -75,11 +75,11 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         <div class="diag-promise" data-plan-show="paid" hidden>
           <div class="diag-promise-item">
             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            <p><strong>詳細診断</strong>。御社の状況に合わせて、導入可否・実施範囲・ざっくり費用帯・相談チケット/導入支援の切り分けを整理します。</p>
+            <p><strong>詳細診断</strong>。御社の状況に合わせて、導入可否・実施範囲・ざっくり費用帯・AI活用レビュー面談/導入支援の切り分けを整理します。</p>
           </div>
           <div class="diag-promise-item">
-            <i class="fa-solid fa-comments" aria-hidden="true"></i>
-            <p><strong>60分のオンラインMTG</strong>を含みます。レポート内容の質疑応答・次の判断のすり合わせを行います。</p>
+            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+            <p>レポート作成から納品までを<strong>自動化</strong>し、必要に応じて次の相談先をご案内します。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
@@ -134,8 +134,8 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           </div>
           <div class="step">
             <span class="step-badge">STEP 4</span>
-            <span class="step-title">レポート + MTG</span>
-            <span class="step-desc">詳細診断資料と 60 分オンライン MTG の日程調整リンクをメールでお届け</span>
+            <span class="step-title">レポート納品</span>
+            <span class="step-desc">詳細診断資料の Google Slides リンクをメールでお届け</span>
           </div>
         </div>
 
@@ -272,13 +272,13 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
               <label for="budget_range">検討している進め方・予算感</label>
               <select id="budget_range" name="budget_range">
                 <option value="">選択してください</option>
-                <option value="under-30">30万円未満（相談チケットで小さく相談したい）</option>
+                <option value="under-30">30万円未満（AI活用レビュー面談で小さく相談したい）</option>
                 <option value="30-60">30〜60万円（1業務から導入検討）</option>
                 <option value="60-100">60〜100万円（1〜2業務の導入検討）</option>
                 <option value="100-plus">100万円以上（複数業務・経営課題として検討）</option>
                 <option value="undecided">まだ分からない・費用帯から相談したい</option>
               </select>
-              <p class="field-hint">無料版では正式見積ではなく、相談チケット・導入支援・月額保守のどの進め方が近いかをざっくり整理します。</p>
+              <p class="field-hint">無料版では正式見積ではなく、AI活用レビュー面談・導入支援・月額保守のどの進め方が近いかをざっくり整理します。</p>
             </div>
             <div class="field">
               <p class="field-label">AI導入で感じている課題（複数可）</p>
@@ -491,7 +491,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
               <li>このフォーム送信時に<strong>申込番号</strong>を自動採番し、振込先口座と併せて<strong>確認メールを即時お送り</strong>します。</li>
               <li>メール記載の銀行口座へ<strong>銀行振込</strong>（お振込期限：申込から7日以内）。<strong>振込人名義はご入力いただいた会社名のみでOK</strong>です（特別な番号併記は不要）。</li>
               <li>入金が<strong>自動検知</strong>され（通常1営業日以内）、「入金を確認しました」メールが自動送信されます。</li>
-              <li>入金確認後 <strong>5営業日以内に詳細診断資料＋60分MTG日程調整リンク</strong>をお届けします。</li>
+              <li>入金確認後 <strong>5営業日以内に詳細診断資料の Google Slides リンク</strong>をお届けします。</li>
             </ol>
             <p class="payment-note-foot">※ お振込手数料はお客様ご負担となります。<br />※ 領収書・適格請求書（インボイス）の発行に対応しています。<br />※ 納品前のキャンセル、または納品後7日以内に内容不備・ご不満の申し出がある場合は返金に応じます。<br />※ 導入支援契約に進まれた場合、本費用 ¥5,500（税込）は<strong>初期費用に全額充当</strong>します。</p>
           </div>
@@ -523,10 +523,10 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           <div class="diag-limit-block" id="diag-limit-block" hidden>
             <h3>今月の【簡易版】AI活用診断枠は終了しました</h3>
             <p>多くの方にご利用いただきありがとうございます。<br/>毎月1日にリセットされますので、来月以降に再度お申し込みください。</p>
-            <p>お急ぎの場合は<strong>相談チケット</strong>または<strong>詳細診断</strong>をご案内できます。30万円未満の小さなご相談は相談チケットで対応します。</p>
+            <p>お急ぎの場合は<strong>AI活用レビュー面談</strong>または<strong>詳細診断</strong>をご案内できます。30万円未満の小さなご相談はAI活用レビュー面談で対応します。</p>
             <div class="diag-limit-actions">
               <a class="btn-primary" href="/contact?topic=free-diagnosis-waitlist">無料枠の案内を受け取る</a>
-              <a class="btn-secondary" href="/contact?topic=consult-ticket">相談チケットを問い合わせる</a>
+              <a class="btn-secondary" href="/contact?topic=consult-ticket">AI活用レビュー面談を問い合わせる</a>
             </div>
           </div>
 

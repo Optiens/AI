@@ -356,7 +356,7 @@ function nextActionFor(lead: Lead): NextAction {
   if (status === 'report_created') {
     return {
       label: 'レポート送付',
-      detail: 'PDF と MTG 日程調整リンクを送付',
+      detail: 'Google Slides URLを送付',
       urgency: 'high',
       due: '今日',
       score: 82,
@@ -364,8 +364,8 @@ function nextActionFor(lead: Lead): NextAction {
   }
   if (status === 'sent' || status === 'report_sent') {
     return {
-      label: createdDays >= 2 ? 'MTG日程フォロー' : 'MTG日程待ち',
-      detail: '日程確定後、導入支援の仮説を準備',
+      label: createdDays >= 2 ? 'レビュー面談フォロー' : '納品後フォロー',
+      detail: '必要に応じてAI活用レビュー面談や導入支援の仮説を準備',
       urgency: createdDays >= 2 ? 'medium' : 'low',
       due: createdDays >= 2 ? '今日〜明日' : '待機',
       score: createdDays >= 2 ? 62 : 36,
@@ -376,7 +376,7 @@ function nextActionFor(lead: Lead): NextAction {
       label: '商談準備',
       detail: '課題、ROI、次回提案の叩き台を整理',
       urgency: 'medium',
-      due: 'MTG前',
+      due: '面談前',
       score: 68,
     };
   }

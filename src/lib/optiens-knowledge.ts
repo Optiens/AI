@@ -37,11 +37,11 @@ export const knowledgeDocs: KnowledgeDoc[] = [
     updatedAt: '2026-05-14',
     visibility: 'demo-safe',
     maturity: 'operational',
-    summary: '無料診断から詳細レポート、MTG、導入支援へ進めるための標準フロー。',
+    summary: '無料診断から詳細レポート、AI活用レビュー面談、導入支援へ進めるための標準フロー。',
     tags: ['無料診断', '詳細レポート', '導入支援', '営業'],
     body: [
       '入口は無料診断フォーム。AIで一次診断レポートを作成し、顧客に具体的な業務改善の方向性を示す。',
-      '詳細レポート+60分MTGは税込5,500円の有償確認枠として扱う。単体利益よりも、導入支援に進むべきかの見極めが目的。',
+      '詳細レポートは税込5,500円の自動有償レポートとして扱う。人が入る相談はAI活用レビュー面談に分け、導入支援に進むべきかを見極める。',
       '導入支援は個別見積。対象業務、連携先、データ状態、運用担当者を確認してから提案する。',
       '保守は月額契約として、改善、障害対応、運用定着を支える。',
     ].join('\n'),
@@ -112,7 +112,7 @@ export const knowledgeDocs: KnowledgeDoc[] = [
       'verifiedまたはprocessingが長く残る場合はAI生成の停滞を疑う。',
       'manual_review、limit_exceeded、quota_retry_pendingは当日確認する。',
       'pending_paymentは入金確認を行い、3日以上残る場合はリマインドを検討する。',
-      'paidは詳細レポート作成へ進める。report_createdは送付し、report_sentまたはsentはMTG化をフォローする。',
+      'paidは詳細レポート作成へ進める。report_createdは送付し、report_sentまたはsentは必要に応じてAI活用レビュー面談や導入支援化をフォローする。',
     ].join('\n'),
   },
   {

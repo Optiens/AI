@@ -16,6 +16,10 @@ import Layout from '../layouts/Layout.astro';
           市販SaaSの「項目が多すぎて使われない」「複数サービスの行き来で二重入力」を解消する、<strong>御社専用設計</strong>の業務管理画面のデモです。<br class="pc-only">
           ロール別ビュー（経営者／営業パートナー／現場）を切り替えながら、リード→案件→納品→保守の流れを 1 画面で追えるイメージをご確認ください。
         </p>
+        <div class="cm-demo-notice" role="note" aria-label="デモデータに関する注意">
+          <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+          <p>このデモ内の会社名・案件名・金額・日付・KPI はすべて架空のサンプルデータです。実在の顧客情報やOptiensの実績データではありません。</p>
+        </div>
       </div>
     </section>
 
@@ -1065,6 +1069,28 @@ import Layout from '../layouts/Layout.astro';
     margin: 0;
   }
   .cm-lede strong { color: var(--brand); }
+  .cm-demo-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 22px 0 0;
+    padding: 14px 16px;
+    border: 1px solid rgba(31, 58, 147, .22);
+    border-left: 5px solid var(--brand);
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #1e2f66;
+  }
+  .cm-demo-notice i {
+    color: var(--brand);
+    margin-top: 4px;
+  }
+  .cm-demo-notice p {
+    margin: 0;
+    font-size: .95rem;
+    line-height: 1.7;
+    font-weight: 700;
+  }
   .pc-only { display: none; }
   @media (min-width: 768px) { .pc-only { display: inline; } }
 
