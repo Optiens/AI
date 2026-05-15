@@ -1,11 +1,9 @@
 /**
- * ブログ記事の公開判定ヘルパー
+ * Blog publishing helpers.
  *
- * 公開条件:
- * - draft: true でないこと（未指定は公開扱い）
- * - 公開日（date フロントマター）が今日以前であること（未来日は非公開）
- *
- * Astro の Content Collection の post.data を受け取り、boolean を返す。
+ * Dates in frontmatter are authored as Japan business dates. Vercel builds run
+ * in UTC, so comparing `YYYY-MM-DD` with the server-local date can hide posts
+ * during the first several hours of a Japan-time publish day.
  */
 type PostLike = {
   data: {
@@ -14,19 +12,40 @@ type PostLike = {
   };
 };
 
+const tokyoDateFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+function tokyoDateKey(date: Date): string {
+  const parts = tokyoDateFormatter.formatToParts(date);
+  const year = parts.find((p) => p.type === 'year')?.value;
+  const month = parts.find((p) => p.type === 'month')?.value;
+  const day = parts.find((p) => p.type === 'day')?.value;
+  return `${year}-${month}-${day}`;
+}
+
+function normalizePostDateKey(value: string): string | null {
+  const dateOnly = value.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+  if (dateOnly) {
+    const [, year, month, day] = dateOnly;
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return tokyoDateKey(parsed);
+}
+
 export function isPublished(post: PostLike, now: Date = new Date()): boolean {
   if (post.data.draft === true) return false;
 
-  // 日付パース（YYYY-MM-DD or YYYY/MM/DD）
-  const d = new Date(post.data.date);
-  if (Number.isNaN(d.getTime())) return false;
+  const postDateKey = normalizePostDateKey(post.data.date);
+  if (!postDateKey) return false;
 
-  // 比較は日付単位（時刻を 23:59:59 に丸めて当日中も含める）
-  const endOfPostDay = new Date(d);
-  endOfPostDay.setHours(23, 59, 59, 999);
-
-  return endOfPostDay.getTime() <= now.getTime() ||
-    d.toDateString() === now.toDateString();
+  return postDateKey <= tokyoDateKey(now);
 }
 
 export function filterPublishedPosts<T extends PostLike>(posts: T[], now: Date = new Date()): T[] {
