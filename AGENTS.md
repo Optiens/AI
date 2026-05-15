@@ -107,6 +107,17 @@
 - 「必ず」「確定」「誰でもすぐ」「完全に」「外部共有されない」「無制限」などの強い表現は、根拠がない限り避ける
 - 確認できない主張は、公開しない・削除する・条件付き表現に弱める・CEOに確認する、のいずれかで処理する
 
+## 文字起こし投入時の必須フロー
+
+動画・対談・ウェビナー等の文字起こしが投入されたら、必ず `.agents/skills/process-transcript/SKILL.md` を実行する。
+
+- Optiensに有益な情報を抽出し、記録してCEOへ報告する
+- SEOまたはブランディングに寄与する内容は、確認待ちで止めずにブログ記事化する
+- 記事化する場合は、Google Vertex AI の Imagen Ultra 最新安定版でアイキャッチ画像を同セッション内に生成する。2026-05-15時点の公式モデルIDは `imagen-4.0-ultra-generate-001`
+- 記事本文・frontmatter・画像作成後に、必ず作成後ファクトチェックを実施し、`executive/data/YYYYMMDD_<slug>_factcheck.md` に記録する
+- 記事、画像、ファクトチェック記録を同じコミットに含め、原則として push まで実施する
+- CEOが「報告だけ」「記事化しない」と明示した場合のみ、ブログ作成を止めてよい
+
 ## 小説推敲ツール
 - URL: `https://optiens.com/novel-review`（スマホからアクセス可）
 - 小説ソース: `c:/workspace/optiens-novel/projects/` → `public/novels/` にsync
