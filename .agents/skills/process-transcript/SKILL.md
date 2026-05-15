@@ -122,11 +122,12 @@ type: reference | feedback | project
 
 ## Step 4: ブログ記事化（CEO の承認後 or Auto モードでは自走）
 
-### 4-1. write-blog-article スキルを呼び出す
+### 4-1. fact-check-content → write-blog-article の順で呼び出す
 
-記事化候補ごとに、`.Codex/skills/write-blog-article/SKILL.md` の手順に従って記事を書く。
+記事化候補ごとに、先に `.agents/skills/fact-check-content/SKILL.md` を必ず実行し、その後 `.agents/skills/write-blog-article/SKILL.md` の手順に従って記事を書く。
 特に以下を遵守:
-- ファクトチェック必須化（`feedback_blog-factcheck-mandatory.md` 参照）
+- 文字起こしを事実源として扱わない。固有名詞、製品名、日付、提供範囲、数値、料金、機能名は一次情報で確認する
+- 新規記事・ニュース解説・外部サービス解説では `executive/data/YYYYMMDD_<slug>_factcheck.md` にファクトチェック記録を残す
 - `src/content/blog/_project-status.md` の禁止表現リストを確認
 - カテゴリは `AI / business / technology / agriculture / welfare / social / announcement` のいずれか
 - 数値・固有名詞は出典明記または範囲表現
