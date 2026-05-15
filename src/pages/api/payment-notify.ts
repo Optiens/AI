@@ -19,6 +19,7 @@ import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 import { verifyPaymentToken } from '../../lib/payment-token'
 import { invokePaidReportFunction } from '../../lib/paid-report'
+import { fetchFreeeIncomingTxns, type FreeeWalletTxn } from '../../lib/freee-oauth'
 import {
   buildPaidDiagnosisReceiptText,
   buildPaidDiagnosisReceiptHtml,
@@ -35,11 +36,6 @@ const FREEE_CLIENT_ID = import.meta.env.FREEE_CLIENT_ID
 const FREEE_CLIENT_SECRET = import.meta.env.FREEE_CLIENT_SECRET
 const FREEE_REFRESH_TOKEN = import.meta.env.FREEE_REFRESH_TOKEN
 const FREEE_COMPANY_ID = Number(import.meta.env.FREEE_COMPANY_ID || 12562850)
-const FREEE_API_BASE = 'https://api.freee.co.jp'
-const FREEE_TOKEN_URL = 'https://accounts.secure.freee.co.jp/public_api/token'
-
-let cachedAccessToken: string | null = null
-let cachedTokenExpiresAt = 0
 
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null
 const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
@@ -49,73 +45,11 @@ const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
 const escapeHtml = (s: string) =>
   s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
 
-interface FreeeWalletTxn {
-  id: number
-  amount: number
-  description?: string
-  date: string
-  entry_side: 'income' | 'expense'
-}
-
 function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
   })
-}
-
-async function getFreeeAccessToken(): Promise<string> {
-  if (cachedAccessToken && Date.now() < cachedTokenExpiresAt - 60_000) {
-    return cachedAccessToken
-  }
-  if (!FREEE_CLIENT_ID || !FREEE_CLIENT_SECRET || !FREEE_REFRESH_TOKEN) {
-    throw new Error('FREEE_CLIENT_ID / FREEE_CLIENT_SECRET / FREEE_REFRESH_TOKEN が未設定')
-  }
-  const body = new URLSearchParams({
-    grant_type: 'refresh_token',
-    client_id: FREEE_CLIENT_ID,
-    client_secret: FREEE_CLIENT_SECRET,
-    refresh_token: FREEE_REFRESH_TOKEN,
-  })
-  const res = await fetch(FREEE_TOKEN_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: body.toString(),
-  })
-  if (!res.ok) {
-    const t = await res.text().catch(() => '')
-    throw new Error(`freee token refresh failed (${res.status}): ${t.slice(0, 200)}`)
-  }
-  const data: any = await res.json()
-  cachedAccessToken = data.access_token
-  cachedTokenExpiresAt = Date.now() + (data.expires_in || 3600) * 1000
-  if (data.refresh_token && data.refresh_token !== FREEE_REFRESH_TOKEN) {
-    console.warn('[payment-notify] freee returned a new refresh_token:', data.refresh_token.slice(0, 12) + '...')
-  }
-  return cachedAccessToken!
-}
-
-async function fetchFreeeIncomingTxns(daysBack: number): Promise<FreeeWalletTxn[]> {
-  const token = await getFreeeAccessToken()
-  const since = new Date(Date.now() - daysBack * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
-  const params = new URLSearchParams({
-    company_id: String(FREEE_COMPANY_ID),
-    entry_side: 'income',
-    start_date: since,
-    limit: '100',
-  })
-  const res = await fetch(`${FREEE_API_BASE}/api/1/wallet_txns?${params.toString()}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'X-Api-Version': '2020-06-15',
-    },
-  })
-  if (!res.ok) {
-    const t = await res.text().catch(() => '')
-    throw new Error(`freee wallet_txns failed (${res.status}): ${t.slice(0, 200)}`)
-  }
-  const data: any = await res.json()
-  return (data.wallet_txns || []) as FreeeWalletTxn[]
 }
 
 function normalizeName(s: string): string {
@@ -188,7 +122,15 @@ export const POST: APIRoute = async ({ request }) => {
   // freee 取引取得（過去14日）
   let txns: FreeeWalletTxn[] = []
   try {
-    txns = await fetchFreeeIncomingTxns(14)
+    txns = await fetchFreeeIncomingTxns({
+      supabase,
+      clientId: FREEE_CLIENT_ID,
+      clientSecret: FREEE_CLIENT_SECRET,
+      envRefreshToken: FREEE_REFRESH_TOKEN,
+      companyId: FREEE_COMPANY_ID,
+      daysBack: 14,
+      source: 'payment-notify',
+    })
   } catch (e: any) {
     console.error('[payment-notify] freee API error:', e)
     return json({

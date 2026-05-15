@@ -24,6 +24,7 @@ import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 import { invokePaidReportFunction } from '../../lib/paid-report'
+import { fetchFreeeIncomingTxns, type FreeeWalletTxn } from '../../lib/freee-oauth'
 import {
   buildPaidDiagnosisReceiptText,
   buildPaidDiagnosisReceiptHtml,
@@ -41,12 +42,6 @@ const FREEE_CLIENT_ID = import.meta.env.FREEE_CLIENT_ID
 const FREEE_CLIENT_SECRET = import.meta.env.FREEE_CLIENT_SECRET
 const FREEE_REFRESH_TOKEN = import.meta.env.FREEE_REFRESH_TOKEN
 const FREEE_COMPANY_ID = Number(import.meta.env.FREEE_COMPANY_ID || 12562850)
-const FREEE_API_BASE = 'https://api.freee.co.jp'
-const FREEE_TOKEN_URL = 'https://accounts.secure.freee.co.jp/public_api/token'
-
-// freee アクセストークンキャッシュ（プロセス内・1時間有効）
-let cachedAccessToken: string | null = null
-let cachedTokenExpiresAt = 0
 
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null
 const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
@@ -66,80 +61,11 @@ interface PendingApplication {
   created_at?: string
 }
 
-interface FreeeWalletTxn {
-  id: number
-  amount: number
-  description?: string
-  date: string
-  entry_side: 'income' | 'expense'
-}
-
 function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
   })
-}
-
-/**
- * freee OAuth: refresh_token から access_token を取得
- */
-async function getFreeeAccessToken(): Promise<string> {
-  if (cachedAccessToken && Date.now() < cachedTokenExpiresAt - 60_000) {
-    return cachedAccessToken
-  }
-  if (!FREEE_CLIENT_ID || !FREEE_CLIENT_SECRET || !FREEE_REFRESH_TOKEN) {
-    throw new Error('FREEE_CLIENT_ID / FREEE_CLIENT_SECRET / FREEE_REFRESH_TOKEN が未設定')
-  }
-  const body = new URLSearchParams({
-    grant_type: 'refresh_token',
-    client_id: FREEE_CLIENT_ID,
-    client_secret: FREEE_CLIENT_SECRET,
-    refresh_token: FREEE_REFRESH_TOKEN,
-  })
-  const res = await fetch(FREEE_TOKEN_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: body.toString(),
-  })
-  if (!res.ok) {
-    const t = await res.text().catch(() => '')
-    throw new Error(`freee token refresh failed (${res.status}): ${t.slice(0, 200)}`)
-  }
-  const data: any = await res.json()
-  cachedAccessToken = data.access_token
-  cachedTokenExpiresAt = Date.now() + (data.expires_in || 3600) * 1000
-  // ⚠️ refresh_token はワンタイムなので、新しい refresh_token を出力（運用者は環境変数を更新する必要あり）
-  if (data.refresh_token && data.refresh_token !== FREEE_REFRESH_TOKEN) {
-    console.warn('[payment-check] freee returned a new refresh_token. Update FREEE_REFRESH_TOKEN env var:', data.refresh_token.slice(0, 12) + '...')
-  }
-  return cachedAccessToken!
-}
-
-/**
- * freee API: 過去N日の入金取引を取得
- */
-async function fetchFreeeIncomingTxns(daysBack: number): Promise<FreeeWalletTxn[]> {
-  const token = await getFreeeAccessToken()
-  const since = new Date(Date.now() - daysBack * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
-  const params = new URLSearchParams({
-    company_id: String(FREEE_COMPANY_ID),
-    entry_side: 'income',
-    start_date: since,
-    limit: '100',
-  })
-  const res = await fetch(`${FREEE_API_BASE}/api/1/wallet_txns?${params.toString()}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'X-Api-Version': '2020-06-15',
-    },
-  })
-  if (!res.ok) {
-    const t = await res.text().catch(() => '')
-    throw new Error(`freee wallet_txns failed (${res.status}): ${t.slice(0, 200)}`)
-  }
-  const data: any = await res.json()
-  return (data.wallet_txns || []) as FreeeWalletTxn[]
 }
 
 /**
@@ -212,7 +138,15 @@ export const POST: APIRoute = async ({ request }) => {
   // ---- freee から最近の取引を取得 ----
   let txns: FreeeWalletTxn[] = []
   try {
-    txns = await fetchFreeeIncomingTxns(14) // 過去14日
+    txns = await fetchFreeeIncomingTxns({
+      supabase,
+      clientId: FREEE_CLIENT_ID,
+      clientSecret: FREEE_CLIENT_SECRET,
+      envRefreshToken: FREEE_REFRESH_TOKEN,
+      companyId: FREEE_COMPANY_ID,
+      daysBack: 14,
+      source: 'payment-check',
+    }) // 過去14日
   } catch (e: any) {
     console.error('[payment-check] freee API error:', e)
     return json({ error: 'freee API failed', detail: e?.message || String(e) }, 500)
