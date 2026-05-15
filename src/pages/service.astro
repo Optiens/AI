@@ -8,10 +8,10 @@ import Layout from '../layouts/Layout.astro';
   canonical="https://optiens.com/service"
 >
   <main>
-    <!-- 3ステップ伴走フロー -->
+    <!-- 4ステップ伴走フロー -->
     <section class="ac-section light-section ac-service-section ac-service-section--top">
       <div class="container">
-        <h1 class="step-flow-title reveal">3 ステップで伴走します</h1>
+        <h1 class="step-flow-title reveal">4 ステップで伴走します</h1>
 
         <div class="step-flow reveal-stagger">
           <a href="/free-diagnosis" class="step-card">
@@ -23,8 +23,17 @@ import Layout from '../layouts/Layout.astro';
             <p class="step-desc">業務に AI が効く領域を見極める</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
-          <a href="/implementation" class="step-card">
+          <a href="/contact?topic=consult-ticket" class="step-card">
             <span class="step-badge">STEP 2</span>
+            <span class="step-illust" aria-hidden="true">
+              <img src="/images/service/banner-consultation.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
+            </span>
+            <h3 class="step-name">相談・要件整理</h3>
+            <p class="step-desc">レビュー面談や有償要件定義で次の一手を決める</p>
+            <span class="step-link">相談する <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="/implementation" class="step-card">
+            <span class="step-badge">STEP 3</span>
             <span class="step-illust" aria-hidden="true">
               <img src="/images/service/step-02-implementation.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
             </span>
@@ -33,7 +42,7 @@ import Layout from '../layouts/Layout.astro';
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
           <a href="/maintenance" class="step-card">
-            <span class="step-badge">STEP 3</span>
+            <span class="step-badge">STEP 4</span>
             <span class="step-illust" aria-hidden="true">
               <img src="/images/service/step-03-maintenance.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
             </span>
@@ -41,6 +50,36 @@ import Layout from '../layouts/Layout.astro';
             <p class="step-desc">月額制で継続的に改善</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
+        </div>
+
+        <div class="extra-menu reveal">
+          <h2 class="extra-menu-title">相談・要件整理・小規模作業の入口</h2>
+          <div class="extra-menu-grid">
+            <article class="extra-menu-card">
+              <div class="extra-menu-head">
+                <span class="extra-menu-badge">REVIEW</span>
+                <h4>AI活用レビュー面談</h4>
+              </div>
+              <p class="extra-menu-price">¥30,000<span class="price-unit"> / 1回・税抜</span></p>
+              <p class="extra-menu-desc">診断結果の解説、優先業務の絞り込み、対応可否、概算費用帯、次アクションを整理します。費用は導入支援へ充当せず、次工程への情報引き継ぎとして活用します。</p>
+            </article>
+            <article class="extra-menu-card">
+              <div class="extra-menu-head">
+                <span class="extra-menu-badge">SCOPE</span>
+                <h4>有償要件定義</h4>
+              </div>
+              <p class="extra-menu-price">¥30,000<span class="price-unit"> / 1回・税抜</span></p>
+              <p class="extra-menu-desc">導入支援前に、対象業務・実装範囲・前提条件・概算見積を整理します。導入支援の成約時は、この費用を初期費用へ充当します。</p>
+            </article>
+            <article class="extra-menu-card">
+              <div class="extra-menu-head">
+                <span class="extra-menu-badge">SMALL BUILD</span>
+                <h4>簡易実装・軽微な自動化</h4>
+              </div>
+              <p class="extra-menu-price">3枚から<span class="price-unit"> / 内容に応じて提示</span></p>
+              <p class="extra-menu-desc">1業務・1フロー・既存ツール前提の設定や簡易実装に限って対応します。4枚以上、外部API連携、本番運用、認証、個人情報が絡む場合は個別見積です。</p>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -71,14 +110,17 @@ import Layout from '../layouts/Layout.astro';
           <article class="strength-card reveal" data-num="03">
             <span class="strength-card-num">03</span>
             <h3>自分たちで使い、改善してきた運用知見</h3>
-            <p>Optiens 自身が、<strong>AI エージェントを組み込んだ仕組み</strong>で日々の経営を回しています。社内 CRM・コンテンツ運用・IoT 水耕栽培の管理基盤まで、全て自社で運用中。ご提案は<strong>机上の設計ではなく、実装と運用の実践知</strong>です。</p>
+            <p>Optiens 自身が、<strong>AI エージェントを組み込んだ仕組み</strong>で日々の経営を回しています。社内 CRM・コンテンツ運用・管理ダッシュボードまで、全て自社で運用中。ご提案は<strong>机上の設計ではなく、実装と運用の実践知</strong>です。</p>
           </article>
 
           <!-- 4. AI駆動開発 + 準委任契約（旧04+旧06統合） -->
           <article class="strength-card reveal" data-num="04">
             <span class="strength-card-num">04</span>
-            <h3>AI駆動開発と準委任契約で、短期実装と柔軟性を両立</h3>
-            <p>Codex や Claude Code といった<strong>コーディングエージェント</strong>を全面活用し、従来の業務システム開発で半年〜1 年かかる規模のシステムを<strong>2〜4 ヶ月で本番投入</strong>します（要件範囲に応じて変動）。さらに<strong>準委任契約</strong>を基本とし、走り始めてから見えてきた要件変更・優先度入れ替えにも<strong>追加見積なしで対応</strong>。「最初に決めた仕様を完成させる」ではなく、<strong>「最終的に最も役立つ仕組みに辿り着く」</strong>開発スタイルです。</p>
+            <h3>AI駆動開発と準委任契約で、短期立ち上げと柔軟性を両立</h3>
+            <p>Optiensでは、AIエージェントを活用して、設計・実装・レビュー・ドキュメント作成を短いサイクルで進めます。</p>
+            <p>まずは2〜4ヶ月を目安に、現場で試せる初期版・MVP・社内運用版を構築し、実際の利用状況を見ながら改善していきます。</p>
+            <p>契約は準委任を基本とし、契約稼働枠の範囲内で、要件変更や優先度の入れ替えにも柔軟に対応します。</p>
+            <p>「最初に決めた仕様をそのまま作る」のではなく、「実際に使われる仕組みに近づける」ことを重視します。</p>
           </article>
 
           <!-- 5. ローカルLLM運用にも対応 -->
@@ -106,18 +148,15 @@ import Layout from '../layouts/Layout.astro';
             </div>
             <div class="strength-wide-stats">
               <a href="/ai-examples?cat=common" class="wide-stat-link">
-                <span class="wide-stat-num">7</span>
                 <span class="wide-stat-label">業務自動化デモ（実機操作可）</span>
                 <span class="wide-stat-sub">問い合わせ／見積書／社内検索／承認WF／業務管理／口コミ監視／文書レビュー</span>
               </a>
               <a href="/ai-examples?cat=industry" class="wide-stat-link">
-                <span class="wide-stat-num">6</span>
                 <span class="wide-stat-label">業種別 活用シナリオ</span>
                 <span class="wide-stat-sub">士業／宿泊／飲食／EC／建設／ワイナリー</span>
               </a>
               <a href="/free-diagnosis" class="wide-stat-link">
-                <span class="wide-stat-num">0円</span>
-                <span class="wide-stat-label">無料AI診断</span>
+                <span class="wide-stat-label">AI活用診断簡易版（無料）</span>
                 <span class="wide-stat-sub">御社で効果が出やすいデモと導入順を個別に整理</span>
               </a>
             </div>
@@ -133,7 +172,7 @@ import Layout from '../layouts/Layout.astro';
         <h2 class="reveal">御社の業務に当てはめて診断しませんか？</h2>
         <div class="cta-buttons reveal">
           <a href="/ai-examples" class="btn-secondary">活用事例を見る</a>
-          <a href="/free-diagnosis" class="btn-primary">無料AI診断を受ける</a>
+          <a href="/free-diagnosis" class="btn-primary">AI活用診断簡易版を受ける</a>
         </div>
       </div>
     </section>
@@ -229,7 +268,7 @@ import Layout from '../layouts/Layout.astro';
     margin-bottom: 40px;
   }
 
-  /* ===== モダン3ステップフロー ===== */
+  /* ===== モダン4ステップフロー ===== */
   .step-flow-eyebrow {
     text-align: center;
     font-family: 'Inter', sans-serif;
@@ -811,6 +850,9 @@ import Layout from '../layouts/Layout.astro';
     position: relative;
     z-index: 1;
   }
+  .strength-card p + p {
+    margin-top: 12px;
+  }
   .strength-card p strong { color: var(--heading); }
   .strength-card p small {
     display: inline;
@@ -862,28 +904,10 @@ import Layout from '../layouts/Layout.astro';
     border-color: rgba(31, 58, 147, 0.30);
     box-shadow: 0 10px 24px -16px rgba(31, 58, 147, 0.40);
   }
-  .wide-stat-num {
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(2rem, 3.5vw, 2.6rem);
-    font-weight: 800;
-    color: #1F3A93;
-    line-height: 1;
-    display: inline-flex;
-    align-items: baseline;
-    gap: 8px;
-  }
-  .wide-stat-pending {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #94A3B8;
-    letter-spacing: 0.02em;
-  }
   .wide-stat-label {
     font-size: 0.92rem;
     font-weight: 700;
     color: var(--heading);
-    margin-top: 4px;
   }
   .wide-stat-sub {
     font-size: 0.74rem;
@@ -941,7 +965,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .extra-menu-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
   .extra-menu-card {
