@@ -5,8 +5,8 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 ---
 
 <Layout
-  title="【簡易版】AI活用診断 | 中小企業・小規模事業者向け一次診断 | Optiens"
-  description="かんたんなフォーム入力で、御社の事業のどこに AI が効くか、月間効果額とざっくり費用帯を含む簡易レポートを無料でお届け（Google Slides リンクをメール送付）。全国オンライン対応・契約不要・配信停止いつでも可能。"
+  title="AI活用診断 | 簡易版・詳細版 | 中小企業・小規模事業者向け | Optiens"
+  description="フォーム入力で、御社の事業のどこに AI が効くかを診断。簡易版は無料レポート、詳細版は導入可否・優先順位・費用前提を整理した詳細レポートを Google Slides でお届けします。全国オンライン対応。"
   canonical="https://optiens.com/free-diagnosis"
 >
   <main>
@@ -20,24 +20,10 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <span class="plan-switch-name">【簡易版】</span>
             <span class="plan-switch-price">0円</span>
           </button>
-          <button type="button" class="plan-switch-btn is-coming-soon" data-plan="paid" role="tab" aria-selected="false" aria-disabled="true">
-            <span class="plan-switch-badge">準備中</span>
+          <button type="button" class="plan-switch-btn" data-plan="paid" role="tab" aria-selected="false">
             <span class="plan-switch-name">【詳細版】</span>
             <span class="plan-switch-price">¥5,500 税込</span>
           </button>
-        </div>
-
-        <!-- 詳細版 準備中アナウンス -->
-        <div class="diag-paid-coming-soon" id="diag-paid-coming-soon" hidden>
-          <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
-          <div>
-            <p class="diag-paid-coming-soon__title">【詳細版】AI活用診断は、現在準備中です。</p>
-            <p class="diag-paid-coming-soon__desc">
-              内容の最終調整を行っております。公開までもうしばらくお待ちください。<br/>
-              公開案内やAI活用レビュー面談のご相談をご希望の場合は、
-              <a href="/contact">お問い合わせフォーム</a>からご連絡ください。
-            </p>
-          </div>
         </div>
 
         <p class="diag-sub" data-plan-show="free">
@@ -75,7 +61,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         <div class="diag-promise" data-plan-show="paid" hidden>
           <div class="diag-promise-item">
             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            <p><strong>詳細診断</strong>。御社の状況に合わせて、導入可否・実施範囲・ざっくり費用帯・AI活用レビュー面談/導入支援の切り分けを整理します。</p>
+            <p><strong>詳細レポート</strong>。御社の状況に合わせて、導入可否・実施範囲・ざっくり費用帯・AI活用レビュー面談/導入支援の切り分けを整理します。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-robot" aria-hidden="true"></i>
@@ -130,12 +116,12 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           <div class="step">
             <span class="step-badge">STEP 3</span>
             <span class="step-title">業務分析・提案作成</span>
-            <span class="step-desc">入金確認後、5 営業日以内に詳細診断資料を作成</span>
+            <span class="step-desc">入金確認後、5 営業日以内に詳細レポートを作成</span>
           </div>
           <div class="step">
             <span class="step-badge">STEP 4</span>
             <span class="step-title">レポート納品</span>
-            <span class="step-desc">詳細診断資料の Google Slides リンクをメールでお届け</span>
+            <span class="step-desc">詳細レポートの Google Slides リンクをメールでお届け</span>
           </div>
         </div>
 
@@ -425,15 +411,15 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <div class="field" data-plan-show="paid" hidden>
               <label for="free_text">その他、気になっていること</label>
               <textarea id="free_text" name="free_text" rows="3" placeholder="「AIで作った文章をそのまま使って大丈夫？」「月額いくらくらいかかる？」など"></textarea>
-              <p class="field-hint"><small>※ 詳細診断では <strong>1 ページの専用セクション</strong> でこのご質問・ご関心事に個別回答します。</small></p>
+              <p class="field-hint"><small>※ 詳細レポートでは <strong>1 ページの専用セクション</strong> でこのご質問・ご関心事に個別回答します。</small></p>
             </div>
           </fieldset>
 
           <fieldset class="extra-fieldset" data-plan-show="paid" hidden>
-            <legend>詳細診断向けの追加情報（任意）</legend>
+            <legend>詳細レポート向けの追加情報（任意）</legend>
             <div class="detail-hint">
               <i class="fa-solid fa-stars"></i>
-              <p>以下は<strong>詳細診断をご希望の場合に役立つ情報</strong>です。記入が多いほど、ROI試算や提案の精度が向上します。すべて任意です。</p>
+              <p>以下は<strong>詳細レポートをご希望の場合に役立つ情報</strong>です。記入が多いほど、ROI試算や提案の精度が向上します。すべて任意です。</p>
             </div>
             <div class="field-row">
               <div class="field">
@@ -491,7 +477,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
               <li>このフォーム送信時に<strong>申込番号</strong>を自動採番し、振込先口座と併せて<strong>確認メールを即時お送り</strong>します。</li>
               <li>メール記載の銀行口座へ<strong>銀行振込</strong>（お振込期限：申込から7日以内）。<strong>振込人名義はご入力いただいた会社名のみでOK</strong>です（特別な番号併記は不要）。</li>
               <li>入金が<strong>自動検知</strong>され（通常1営業日以内）、「入金を確認しました」メールが自動送信されます。</li>
-              <li>入金確認後 <strong>5営業日以内に詳細診断資料の Google Slides リンク</strong>をお届けします。</li>
+              <li>入金確認後 <strong>5営業日以内に詳細レポートの Google Slides リンク</strong>をお届けします。</li>
             </ol>
             <p class="payment-note-foot">※ お振込手数料はお客様ご負担となります。<br />※ 領収書・適格請求書（インボイス）の発行に対応しています。<br />※ 納品前のキャンセル、または納品後7日以内に内容不備・ご不満の申し出がある場合は返金に応じます。<br />※ 導入支援契約に進まれた場合、本費用 ¥5,500（税込）は<strong>初期費用に全額充当</strong>します。</p>
           </div>
@@ -521,18 +507,16 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 
           <!-- 月次上限到達時の代替案内（JSで切替） -->
           <div class="diag-limit-block" id="diag-limit-block" hidden>
-            <h3>今月の【簡易版】AI活用診断枠は終了しました</h3>
-            <p>多くの方にご利用いただきありがとうございます。<br/>毎月1日にリセットされますので、来月以降に再度お申し込みください。</p>
-            <p>お急ぎの場合は<strong>AI活用レビュー面談</strong>または<strong>詳細診断</strong>をご案内できます。30万円未満の小さなご相談はAI活用レビュー面談で対応します。</p>
+            <h3>現在混み合っています</h3>
+            <p>現在、【簡易版】AI活用診断の受付が混み合っています。<br/>個別相談をご希望の方はこちらからお問い合わせください。</p>
             <div class="diag-limit-actions">
-              <a class="btn-primary" href="/contact?topic=free-diagnosis-waitlist">無料枠の案内を受け取る</a>
-              <a class="btn-secondary" href="/contact?topic=consult-ticket">AI活用レビュー面談を問い合わせる</a>
+              <a class="btn-primary" href="/spot-ticket">スポット相談チケットを見る</a>
             </div>
           </div>
 
           <button type="submit" class="btn-primary diag-submit" id="diag-submit">
             <span data-plan-show="free">AI活用診断を受ける（無料）</span>
-            <span data-plan-show="paid" hidden>詳細診断を申し込む（¥5,500 税込）</span>
+            <span data-plan-show="paid" hidden>詳細レポートを申し込む（¥5,500 税込）</span>
           </button>
         </form>
       </div>
@@ -680,21 +664,6 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 
       e.preventDefault();
 
-      // 詳細版は準備中（プレビュー時のみ送信可）
-      var planFieldEl = document.getElementById('plan-field');
-      var planVal = planFieldEl && planFieldEl.value === 'paid' ? 'paid' : 'free';
-      var previewOk = (function() {
-        try { return sessionStorage.getItem('optiens_paid_preview') === '1'; } catch (e) { return false; }
-      })();
-      if (planVal === 'paid' && !previewOk) {
-        showToast('【詳細版】AI活用診断は現在準備中です。【簡易版】（無料）からお申し込みください。', {
-          title: '【詳細版】は準備中です',
-        });
-        var paidComingSoon = document.getElementById('diag-paid-coming-soon');
-        if (paidComingSoon) paidComingSoon.hidden = false;
-        return;
-      }
-
       hideToast();
 
       const originalLabel = submitBtn ? submitBtn.innerHTML : '';
@@ -709,11 +678,6 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       try {
         const formData = new FormData(form);
         var submitUrl = form.action || '/api/free-diagnosis';
-        if (planVal === 'paid' && previewOk) {
-          var u = new URL(submitUrl, window.location.origin);
-          u.searchParams.set('preview', 'paid');
-          submitUrl = u.toString();
-        }
         const res = await fetch(submitUrl, {
           method: 'POST',
           body: formData,
@@ -842,14 +806,14 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             if (limitBlock) limitBlock.hidden = false;
             if (submitBtn) submitBtn.style.display = 'none';
           }
-          quotaText.textContent = '今月の【簡易版】AI活用診断枠は終了しました（毎月1日にリセット）';
+          quotaText.textContent = '現在混み合っています。個別相談をご希望の方はこちら';
           quotaWrap.classList.add('is-empty');
         } else if (remaining <= 5) {
           // 残りわずか
-          quotaText.textContent = '今月の【簡易版】AI活用診断は残り ' + remaining + ' 件です（毎月1日にリセット）';
+          quotaText.textContent = '今月の【簡易版】AI活用診断は残り ' + remaining + ' 件です';
           quotaWrap.classList.add('is-warn');
         } else {
-          quotaText.textContent = '今月の【簡易版】AI活用診断は受付中です（毎月1日にリセット）';
+          quotaText.textContent = '今月の【簡易版】AI活用診断は受付中です';
         }
         quotaWrap.hidden = false;
       })
@@ -876,52 +840,13 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       document.body.setAttribute('data-plan', plan);
     }
 
-    // 詳細版プレビュー判定: ?preview=paid または sessionStorage.optiens_paid_preview=1
-    var paidPreviewEnabled = (function() {
-      try {
-        var q = new URLSearchParams(window.location.search);
-        if (q.get('preview') === 'paid') {
-          sessionStorage.setItem('optiens_paid_preview', '1');
-          return true;
-        }
-        return sessionStorage.getItem('optiens_paid_preview') === '1';
-      } catch (e) {
-        return false;
-      }
-    })();
-
-    var paidComingSoon = document.getElementById('diag-paid-coming-soon');
-
     planButtons.forEach(function(btn) {
       btn.addEventListener('click', function() {
         var plan = btn.getAttribute('data-plan');
         if (!plan) return;
-        if (plan === 'paid' && !paidPreviewEnabled) {
-          // 準備中アナウンスを表示（実際の切替は行わない）
-          if (paidComingSoon) {
-            paidComingSoon.hidden = false;
-            paidComingSoon.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          return;
-        }
-        if (paidComingSoon) paidComingSoon.hidden = true;
         applyPlan(plan);
       });
     });
-
-    // プレビューモードでは coming-soon バッジを「PREVIEW」に変える
-    if (paidPreviewEnabled) {
-      var paidBtnEl = document.querySelector('.plan-switch-btn[data-plan="paid"]');
-      if (paidBtnEl) {
-        paidBtnEl.classList.remove('is-coming-soon');
-        paidBtnEl.removeAttribute('aria-disabled');
-        var badge = paidBtnEl.querySelector('.plan-switch-badge');
-        if (badge) {
-          badge.textContent = 'PREVIEW';
-          badge.classList.add('plan-switch-badge--preview');
-        }
-      }
-    }
 
     applyPlan('free');
   })();
@@ -985,6 +910,34 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       extractStatus.textContent = text;
       extractStatus.className = 'extract-status ' + (kind || 'info');
       extractStatus.hidden = false;
+    }
+
+    function getTurnstileToken() {
+      var tokenField = document.querySelector('[name="cf-turnstile-response"]');
+      return tokenField && tokenField.value ? String(tokenField.value) : '';
+    }
+
+    function hasTurnstileWidget() {
+      return !!document.querySelector('.cf-turnstile');
+    }
+
+    function resetTurnstileWidget() {
+      if (window.turnstile && typeof window.turnstile.reset === 'function') {
+        try { window.turnstile.reset(); } catch {}
+      }
+    }
+
+    function requireTurnstileToken() {
+      if (!hasTurnstileWidget()) return '';
+      var token = getTurnstileToken();
+      if (token) return token;
+
+      setStatus('AIで読み取る前に、スパム対策の確認を完了してください。', 'error');
+      var turnstileWrap = document.querySelector('.turnstile-wrap');
+      if (turnstileWrap && typeof turnstileWrap.scrollIntoView === 'function') {
+        turnstileWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return null;
     }
 
     var FIELD_LABELS = {
@@ -1079,7 +1032,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
       setIf('business_description', fields.business_description);
       setIf('daily_tasks', fields.daily_tasks);
       setIf('current_tools', fields.current_tools);
-      // 詳細診断向け追加項目
+      // 詳細レポート向け追加項目
       setIf('business_age', fields.business_age);
       setIf('service_area', fields.service_area);
       setIf('target_customer', fields.target_customer);
@@ -1107,6 +1060,10 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     }
 
     function postExtract(payload, btn, runningMsg) {
+      var turnstileToken = requireTurnstileToken();
+      if (turnstileToken === null) return;
+      if (turnstileToken) payload.turnstileToken = turnstileToken;
+
       btn.disabled = true;
       setStatus(runningMsg, 'info');
       fetch('/api/file-extract', {
@@ -1121,11 +1078,13 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           } else {
             applyFields(data);
           }
+          resetTurnstileWidget();
           btn.disabled = false;
         })
         .catch(function(err) {
           console.error('[file-extract] fetch error:', err);
           setStatus('通信エラーが発生しました。時間をおいて再度お試しください。', 'error');
+          resetTurnstileWidget();
           btn.disabled = false;
         });
     }
@@ -1401,75 +1360,10 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     opacity: .85;
     letter-spacing: .04em;
   }
-  /* 準備中バッジ */
+  /* プランボタン補助 */
   .plan-switch-btn {
     position: relative;
   }
-  .plan-switch-badge {
-    position: absolute;
-    top: -8px;
-    right: 8px;
-    background: #f59e0b;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 999px;
-    letter-spacing: .04em;
-    box-shadow: 0 2px 6px rgba(245, 158, 11, .3);
-    pointer-events: none;
-  }
-  .plan-switch-badge--preview {
-    background: #10b981;
-    box-shadow: 0 2px 6px rgba(16, 185, 129, .3);
-  }
-  .plan-switch-btn.is-coming-soon {
-    opacity: .65;
-    cursor: not-allowed;
-  }
-  .plan-switch-btn.is-coming-soon:hover {
-    background: rgba(245, 158, 11, .08);
-    color: var(--muted, #64748b);
-  }
-
-  /* 詳細版 準備中アナウンス */
-  .diag-paid-coming-soon {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    max-width: 720px;
-    margin: 0 auto 28px;
-    padding: 18px 22px;
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    border-left: 4px solid #f59e0b;
-    border-radius: 10px;
-    text-align: left;
-    color: #78350f;
-  }
-  .diag-paid-coming-soon i {
-    flex: 0 0 24px;
-    font-size: 22px;
-    color: #d97706;
-    padding-top: 2px;
-  }
-  .diag-paid-coming-soon__title {
-    margin: 0 0 6px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #92400e;
-  }
-  .diag-paid-coming-soon__desc {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.7;
-    color: #78350f;
-  }
-  .diag-paid-coming-soon__desc a {
-    color: #b45309;
-    text-decoration: underline;
-  }
-
   @media (max-width: 480px) {
     .plan-switcher {
       flex-direction: column;
@@ -1990,7 +1884,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     word-break: break-all;
   }
 
-  /* ===== 詳細診断向け追加項目（任意） ===== */
+  /* ===== 詳細レポート向け追加項目（任意） ===== */
   .extra-fieldset {
     border: 1px solid var(--border);
     background: linear-gradient(180deg, #ffffff 0%, rgba(31, 58, 147, .025) 100%);
@@ -2223,7 +2117,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     cursor: not-allowed;
   }
 
-  /* ===== 次のステップ：詳細診断 vs 直接導入支援 ===== */
+  /* ===== 次のステップ：詳細レポート vs 直接導入支援 ===== */
   .diag-next-section {
     padding: clamp(56px, 8vw, 80px) 0;
     background: var(--surface-2, #0c1424);

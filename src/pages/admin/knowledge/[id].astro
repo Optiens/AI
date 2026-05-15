@@ -1,0 +1,491 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import {
+  knowledgeCategoryLabels,
+  knowledgeDocs,
+  knowledgeMaturityLabels,
+  knowledgeVisibilityLabels,
+  mergeKnowledgeDocs,
+  renderKnowledgeMarkdown,
+} from '../../../lib/optiens-knowledge';
+import { dbKnowledgeEntryToDoc, listKnowledgeEntries } from '../../../lib/admin-ops';
+
+const rawId = Astro.params.id || '';
+const id = decodeURIComponent(rawId);
+const { entries, error } = await listKnowledgeEntries();
+const docs = mergeKnowledgeDocs(knowledgeDocs, entries.map(dbKnowledgeEntryToDoc));
+const doc = docs.find((item) => item.id === id);
+const relatedDocs = doc
+  ? docs
+      .filter((item) => item.id !== doc.id && (item.category === doc.category || item.tags.some((tag) => doc.tags.includes(tag))))
+      .slice(0, 5)
+  : [];
+
+function detailHref(value: string) {
+  return `/admin/knowledge/${encodeURIComponent(value)}`;
+}
+---
+
+<AdminLayout title={doc ? `ナレッジ詳細：${doc.title}` : 'ナレッジ詳細'} active="knowledge">
+  {!doc ? (
+    <section class="panel not-found">
+      <span>Knowledge Detail</span>
+      <h2>ナレッジが見つかりません</h2>
+      <p>{error || `指定されたID「${id}」のナレッジは登録されていません。`}</p>
+      <a href="/admin/knowledge">ナレッジ一覧へ戻る</a>
+    </section>
+  ) : (
+    <>
+      <section class="detail-hero">
+        <div>
+          <a class="back-link" href="/admin/knowledge"><i class="fas fa-arrow-left"></i> ナレッジ一覧</a>
+          <span>Knowledge Detail</span>
+          <h2>{doc.title}</h2>
+          <p>{doc.summary}</p>
+        </div>
+        <div class="hero-actions">
+          <a href="/admin/knowledge-gaps"><i class="fas fa-circle-question"></i> 不足キュー</a>
+          <a href="/admin/reports#report-library"><i class="fas fa-chart-simple"></i> レポート</a>
+        </div>
+      </section>
+
+      <div class="detail-layout">
+        <main class="content-panel">
+          <div class="viewer-head">
+            <div>
+              <span>HTML Viewer</span>
+              <h3>本文</h3>
+            </div>
+            <small>Markdown本文をHTML表示に変換しています。</small>
+          </div>
+          <article class="knowledge-view" set:html={renderKnowledgeMarkdown(doc.body)} />
+        </main>
+
+        <aside class="side-panel">
+          <section class="meta-card">
+            <span>Profile</span>
+            <dl>
+              <div>
+                <dt>カテゴリ</dt>
+                <dd>{knowledgeCategoryLabels[doc.category]}</dd>
+              </div>
+              <div>
+                <dt>責任者</dt>
+                <dd>{doc.owner}</dd>
+              </div>
+              <div>
+                <dt>更新日</dt>
+                <dd>{doc.updatedAt}</dd>
+              </div>
+              <div>
+                <dt>公開区分</dt>
+                <dd>{knowledgeVisibilityLabels[doc.visibility]}</dd>
+              </div>
+              <div>
+                <dt>成熟度</dt>
+                <dd>{knowledgeMaturityLabels[doc.maturity]}</dd>
+              </div>
+            </dl>
+            <div class="tag-list">
+              {doc.tags.map((tag) => <span>{tag}</span>)}
+            </div>
+          </section>
+
+          <section class="meta-card ai-card">
+            <span>Ask Codex</span>
+            <h3>このナレッジをAIに修正依頼</h3>
+            <textarea
+              id="knowledge-edit-instruction"
+              rows="5"
+              data-doc-id={doc.id}
+              data-doc-title={doc.title}
+              data-doc-category={doc.category}
+              placeholder="例: 返金条件を追記し、納品後フォローを箇条書きで整理して。"
+            ></textarea>
+            <button type="button" id="knowledge-edit-button"><i class="fas fa-wand-magic-sparkles"></i> AI依頼を作る</button>
+            <div class="prompt-box" id="knowledge-edit-result">依頼文がここに表示されます。</div>
+          </section>
+
+          {relatedDocs.length > 0 && (
+            <section class="meta-card">
+              <span>Related</span>
+              <h3>関連ナレッジ</h3>
+              <div class="related-list">
+                {relatedDocs.map((item) => (
+                  <a href={detailHref(item.id)}>
+                    <strong>{item.title}</strong>
+                    <small>{knowledgeCategoryLabels[item.category]} / {item.updatedAt}</small>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+        </aside>
+      </div>
+    </>
+  )}
+</AdminLayout>
+
+<script is:inline>
+  (function() {
+    const input = document.getElementById('knowledge-edit-instruction');
+    const button = document.getElementById('knowledge-edit-button');
+    const result = document.getElementById('knowledge-edit-result');
+
+    function buildPrompt(text) {
+      return [
+        'Codexへ依頼:',
+        'C:\\workspace\\Optiens の社内ナレッジを更新してください。',
+        '',
+        `対象ID: ${input?.dataset.docId || ''}`,
+        `対象タイトル: ${input?.dataset.docTitle || ''}`,
+        `カテゴリ: ${input?.dataset.docCategory || ''}`,
+        '',
+        `変更依頼: ${text}`,
+        '',
+        '要件:',
+        '- この詳細ページでHTML表示したときに読みやすい構成にする',
+        '- タイトル、要約、タグも必要なら更新する',
+        '- Optiensの禁止事項に反する記述を追加しない',
+        '- 管理画面関連の差分だけ検証し、コミット・プッシュする',
+      ].join('\n');
+    }
+
+    button?.addEventListener('click', async () => {
+      if (!input || !result || !button) return;
+      const text = input.value.trim();
+      if (!text) {
+        result.textContent = 'AIに依頼したい修正内容を入力してください。';
+        return;
+      }
+      const prompt = buildPrompt(text);
+      button.disabled = true;
+      result.textContent = '不足キューへ登録しています...';
+      try {
+        const res = await fetch('/api/admin/knowledge-gaps', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'create',
+            question: `ナレッジ修正依頼: ${input.dataset.docTitle || input.dataset.docId}: ${text}`,
+            suggested_category: input.dataset.docCategory || 'operations',
+            priority: 'medium',
+            source: 'knowledge_detail_instruction',
+            linked_knowledge_id: input.dataset.docId || '',
+            answer_excerpt: prompt,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
+        result.textContent = `${data.duplicate ? '既に不足キューに登録済みです。' : '不足キューへ登録しました。'}\n\n${prompt}`;
+      } catch (error) {
+        result.textContent = `${error instanceof Error ? error.message : '登録に失敗しました。'}\n\n${prompt}`;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .panel,
+  .detail-hero,
+  .content-panel,
+  .side-panel,
+  .meta-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+  }
+
+  .detail-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: start;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  .back-link,
+  .hero-actions a,
+  .not-found a,
+  .related-list a {
+    color: var(--admin-secondary);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .detail-hero span,
+  .viewer-head span,
+  .meta-card > span,
+  .not-found span {
+    display: block;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .detail-hero h2,
+  .viewer-head h3,
+  .meta-card h3,
+  .not-found h2 {
+    color: #fff;
+    letter-spacing: 0;
+  }
+
+  .detail-hero h2 {
+    margin: 8px 0;
+    font-size: 1.35rem;
+  }
+
+  .detail-hero p,
+  .viewer-head small,
+  .prompt-box,
+  .not-found p,
+  .related-list small {
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .hero-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-surface-2);
+    color: var(--admin-muted);
+  }
+
+  .detail-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 18px;
+  }
+
+  .content-panel,
+  .meta-card,
+  .not-found {
+    padding: 18px;
+  }
+
+  .side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .viewer-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--admin-border);
+  }
+
+  .viewer-head h3,
+  .meta-card h3 {
+    margin: 3px 0 0;
+    font-size: 1rem;
+  }
+
+  .knowledge-view {
+    color: var(--admin-text);
+    line-height: 1.82;
+    font-size: 0.94rem;
+  }
+
+  .knowledge-view :global(h2),
+  .knowledge-view :global(h3),
+  .knowledge-view :global(h4),
+  .knowledge-view :global(h5) {
+    margin: 1.55em 0 0.55em;
+    color: #fff;
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
+
+  .knowledge-view :global(h2) {
+    padding-bottom: 0.35em;
+    border-bottom: 1px solid var(--admin-border);
+    font-size: 1.25rem;
+  }
+
+  .knowledge-view :global(h3) {
+    font-size: 1.08rem;
+  }
+
+  .knowledge-view :global(p) {
+    margin: 0 0 1em;
+  }
+
+  .knowledge-view :global(ul),
+  .knowledge-view :global(ol) {
+    display: grid;
+    gap: 8px;
+    margin: 0 0 1.1em 1.2em;
+    padding: 0;
+  }
+
+  .knowledge-view :global(li) {
+    padding-left: 0.15em;
+  }
+
+  .knowledge-view :global(code) {
+    padding: 0.12em 0.34em;
+    border: 1px solid var(--admin-border);
+    border-radius: 5px;
+    background: var(--admin-bg);
+    color: var(--admin-accent-soft);
+    font-size: 0.88em;
+  }
+
+  .knowledge-view :global(pre) {
+    overflow-x: auto;
+    padding: 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  dl {
+    display: grid;
+    gap: 9px;
+    margin: 12px 0;
+  }
+
+  dl div {
+    display: grid;
+    grid-template-columns: 86px minmax(0, 1fr);
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  dt {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  dd {
+    margin: 0;
+    color: #fff;
+    font-size: 0.84rem;
+  }
+
+  .tag-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .tag-list span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: rgba(107, 133, 201, 0.16);
+    color: var(--admin-accent-soft);
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    margin: 12px 0 8px;
+    padding: 12px;
+    resize: vertical;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font: inherit;
+  }
+
+  button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    min-height: 38px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-primary);
+    color: #fff;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: wait;
+    opacity: 0.68;
+  }
+
+  .prompt-box {
+    min-height: 80px;
+    margin-top: 10px;
+    padding: 12px;
+    white-space: pre-wrap;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .related-list {
+    display: grid;
+    gap: 9px;
+    margin-top: 12px;
+  }
+
+  .related-list a {
+    display: block;
+    padding: 10px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: inherit;
+  }
+
+  .related-list strong,
+  .related-list small {
+    display: block;
+  }
+
+  .related-list strong {
+    color: #fff;
+    font-size: 0.84rem;
+  }
+
+  @media (max-width: 980px) {
+    .detail-hero,
+    .detail-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-actions {
+      justify-content: flex-start;
+    }
+  }
+</style>

@@ -23,14 +23,14 @@ import Layout from '../layouts/Layout.astro';
             <p class="step-desc">業務に AI が効く領域を見極める</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
-          <a href="/contact?topic=consult-ticket" class="step-card">
+          <a href="/spot-ticket" class="step-card">
             <span class="step-badge">STEP 2</span>
             <span class="step-illust" aria-hidden="true">
-              <img src="/images/service/banner-consultation.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
+              <img src="/images/service/step-02-consultation.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
             </span>
             <h3 class="step-name">相談・要件整理</h3>
             <p class="step-desc">レビュー面談や有償要件定義で次の一手を決める</p>
-            <span class="step-link">相談する <i class="fa-solid fa-arrow-right"></i></span>
+            <span class="step-link">チケットを見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
           <a href="/implementation" class="step-card">
             <span class="step-badge">STEP 3</span>
@@ -53,14 +53,15 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <div class="extra-menu reveal">
-          <h2 class="extra-menu-title">相談・要件整理・小規模作業の入口</h2>
+          <h2 class="extra-menu-title">スポット相談チケットで始める相談・要件整理・小規模作業</h2>
+          <p class="extra-menu-lead">スポット相談チケットは、保守契約なしで使える事前購入型のチケットです。1枚 ¥30,000（税抜）を基準に、依頼内容の重さで消化枚数を決めます。</p>
           <div class="extra-menu-grid">
             <article class="extra-menu-card">
               <div class="extra-menu-head">
                 <span class="extra-menu-badge">REVIEW</span>
                 <h4>AI活用レビュー面談</h4>
               </div>
-              <p class="extra-menu-price">¥30,000<span class="price-unit"> / 1回・税抜</span></p>
+              <p class="extra-menu-price">1枚<span class="price-unit"> / スポット相談チケット</span></p>
               <p class="extra-menu-desc">診断結果の解説、優先業務の絞り込み、対応可否、概算費用帯、次アクションを整理します。費用は導入支援へ充当せず、次工程への情報引き継ぎとして活用します。</p>
             </article>
             <article class="extra-menu-card">
@@ -68,7 +69,7 @@ import Layout from '../layouts/Layout.astro';
                 <span class="extra-menu-badge">SCOPE</span>
                 <h4>有償要件定義</h4>
               </div>
-              <p class="extra-menu-price">¥30,000<span class="price-unit"> / 1回・税抜</span></p>
+              <p class="extra-menu-price">1枚<span class="price-unit"> / スポット相談チケット</span></p>
               <p class="extra-menu-desc">導入支援前に、対象業務・実装範囲・前提条件・概算見積を整理します。導入支援の成約時は、この費用を初期費用へ充当します。</p>
             </article>
             <article class="extra-menu-card">
@@ -79,6 +80,9 @@ import Layout from '../layouts/Layout.astro';
               <p class="extra-menu-price">3枚から<span class="price-unit"> / 内容に応じて提示</span></p>
               <p class="extra-menu-desc">1業務・1フロー・既存ツール前提の設定や簡易実装に限って対応します。4枚以上、外部API連携、本番運用、認証、個人情報が絡む場合は個別見積です。</p>
             </article>
+          </div>
+          <div class="extra-menu-actions">
+            <a href="/spot-ticket" class="btn-primary">スポット相談チケットを見る</a>
           </div>
         </div>
       </div>
@@ -960,8 +964,16 @@ import Layout from '../layouts/Layout.astro';
     text-align: center;
     font-size: 1rem;
     color: var(--heading);
-    margin: 0 0 24px;
+    margin: 0 0 12px;
     letter-spacing: .05em;
+  }
+  .extra-menu-lead {
+    max-width: 780px;
+    margin: 0 auto 24px;
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.8;
+    text-align: center;
   }
   .extra-menu-grid {
     display: grid;
@@ -1008,6 +1020,11 @@ import Layout from '../layouts/Layout.astro';
     line-height: 1.75;
     color: var(--text);
     margin: 0;
+  }
+  .extra-menu-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
   }
   .extra-menu-desc strong { color: var(--heading); }
   @media (max-width: 768px) {

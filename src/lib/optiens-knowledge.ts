@@ -11,6 +11,27 @@ export type KnowledgeDoc = {
   tags: string[]
 }
 
+export const knowledgeCategoryLabels: Record<KnowledgeDoc['category'], string> = {
+  business: '事業',
+  sales: '営業',
+  operations: '運用',
+  ai: 'AI/API',
+  hydroponics: '水耕栽培',
+  brand: 'ブランド',
+  governance: 'ガバナンス',
+}
+
+export const knowledgeVisibilityLabels: Record<KnowledgeDoc['visibility'], string> = {
+  internal: '社内限定',
+  'demo-safe': 'デモ可',
+}
+
+export const knowledgeMaturityLabels: Record<KnowledgeDoc['maturity'], string> = {
+  seed: '追加中',
+  operational: '運用中',
+  'demo-ready': 'デモ準備済み',
+}
+
 export const knowledgeDocs: KnowledgeDoc[] = [
   {
     id: 'business-overview',
@@ -225,6 +246,115 @@ export function mergeKnowledgeDocs(
   return Array.from(
     new Map([...baseDocs, ...overlayDocs].map((doc) => [doc.id, doc])).values(),
   )
+}
+
+function escapeHtml(input: string) {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function renderInlineMarkdown(input: string) {
+  return escapeHtml(input)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+}
+
+export function renderKnowledgeMarkdown(input: string) {
+  const lines = input.replace(/\r\n/g, '\n').split('\n')
+  const html: string[] = []
+  let paragraph: string[] = []
+  let listType: 'ul' | 'ol' | null = null
+  let inCode = false
+  let codeLines: string[] = []
+
+  function flushParagraph() {
+    if (!paragraph.length) return
+    html.push(`<p>${paragraph.map(renderInlineMarkdown).join('<br />')}</p>`)
+    paragraph = []
+  }
+
+  function closeList() {
+    if (!listType) return
+    html.push(`</${listType}>`)
+    listType = null
+  }
+
+  function openList(type: 'ul' | 'ol') {
+    if (listType === type) return
+    closeList()
+    html.push(`<${type}>`)
+    listType = type
+  }
+
+  for (const rawLine of lines) {
+    const line = rawLine.trimEnd()
+    const trimmed = line.trim()
+
+    if (trimmed.startsWith('```')) {
+      flushParagraph()
+      closeList()
+      if (inCode) {
+        html.push(`<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`)
+        codeLines = []
+        inCode = false
+      } else {
+        inCode = true
+      }
+      continue
+    }
+
+    if (inCode) {
+      codeLines.push(rawLine)
+      continue
+    }
+
+    if (!trimmed) {
+      flushParagraph()
+      closeList()
+      continue
+    }
+
+    const heading = trimmed.match(/^(#{1,4})\s+(.+)$/)
+    if (heading) {
+      flushParagraph()
+      closeList()
+      const marks = heading[1] || '#'
+      const text = heading[2] || ''
+      const level = Math.min(marks.length + 1, 5)
+      html.push(`<h${level}>${renderInlineMarkdown(text)}</h${level}>`)
+      continue
+    }
+
+    const unordered = trimmed.match(/^[-*]\s+(.+)$/)
+    if (unordered) {
+      flushParagraph()
+      openList('ul')
+      html.push(`<li>${renderInlineMarkdown(unordered[1] || '')}</li>`)
+      continue
+    }
+
+    const ordered = trimmed.match(/^\d+[.)]\s+(.+)$/)
+    if (ordered) {
+      flushParagraph()
+      openList('ol')
+      html.push(`<li>${renderInlineMarkdown(ordered[1] || '')}</li>`)
+      continue
+    }
+
+    closeList()
+    paragraph.push(trimmed)
+  }
+
+  if (inCode) {
+    html.push(`<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`)
+  }
+  flushParagraph()
+  closeList()
+  return html.join('\n')
 }
 
 function tokenize(input: string) {

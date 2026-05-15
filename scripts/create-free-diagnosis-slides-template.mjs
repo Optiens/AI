@@ -385,7 +385,7 @@ function slide10(requests) {
     bold: true,
     color: COLORS.lapisDark,
   });
-  text(requests, s, 'next_items', '✓ アーキテクチャ図\n✓ 具体的な自動化提案 5〜7件\n✓ 導入支援の費用見積\n✓ 60分オンラインMTG', 108, 188, 360, 84, {
+  text(requests, s, 'next_items', '✓ アーキテクチャ図\n✓ 具体的な自動化提案 5〜7件\n✓ 導入支援の費用見積\n✓ 必要時の個別相談導線', 108, 188, 360, 84, {
     size: 15,
     color: COLORS.text,
   });

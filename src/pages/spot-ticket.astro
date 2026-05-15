@@ -1,0 +1,505 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="スポット相談チケット | AI活用レビュー面談・有償要件定義 | Optiens"
+  description="Optiensのスポット相談チケット。AI活用レビュー面談、有償要件定義、簡易実装・軽微な自動化対応を、事前購入型のチケットで申し込めます。"
+  canonical="https://optiens.com/spot-ticket"
+>
+  <main class="spot-page">
+    <section class="spot-hero">
+      <img src="/images/service/step-02-consultation.webp" alt="" class="spot-hero-bg" loading="eager" decoding="async" width="1024" height="1024" />
+      <div class="spot-hero-overlay"></div>
+      <div class="container spot-hero-inner">
+        <p class="spot-eyebrow">Spot Consultation Ticket</p>
+        <h1>スポット相談チケット</h1>
+        <p class="spot-hero-copy">
+          AI活用レビュー面談、有償要件定義、小規模な自動化相談を、事前購入型のチケットで受け付けます。
+          購入後に発行されるチケット番号を使って、依頼内容をフォームから申請できます。
+        </p>
+        <div class="spot-hero-actions">
+          <a href="#purchase" class="btn-primary">チケットを購入する</a>
+          <a href="#redeem" class="btn-secondary">チケット番号で依頼する</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="spot-section light-section">
+      <div class="container">
+        <div class="spot-summary">
+          <article class="spot-summary-item">
+            <span>1枚</span>
+            <h2>¥30,000（税抜）</h2>
+            <p>保守契約なしで使える事前購入型チケットです。時間カウントではなく、依頼内容の重さで消化枚数を決めます。</p>
+          </article>
+          <article class="spot-summary-item">
+            <span>使い道</span>
+            <h2>相談・要件整理・小規模作業</h2>
+            <p>レビュー面談と有償要件定義は1枚、簡易実装・軽微な自動化対応は3枚からが目安です。</p>
+          </article>
+          <article class="spot-summary-item">
+            <span>運用</span>
+            <h2>購入後に番号を発行</h2>
+            <p>入金確認後にチケット番号を発行します。依頼時は番号と内容をフォームに入力してください。</p>
+          </article>
+        </div>
+
+        <div class="spot-use-grid">
+          <article class="spot-use-card">
+            <h3>AI活用レビュー面談</h3>
+            <p class="spot-ticket-count">スポット相談チケット 1枚</p>
+            <p>診断結果の解説、優先業務の絞り込み、対応可否、概算費用帯、次アクションを整理します。導入支援費への充当は行わず、次工程への情報引き継ぎとして使います。</p>
+          </article>
+          <article class="spot-use-card">
+            <h3>有償要件定義</h3>
+            <p class="spot-ticket-count">スポット相談チケット 1枚</p>
+            <p>導入支援前に、対象業務・実装範囲・前提条件・概算見積を整理します。導入支援の成約時は、この費用を初期費用へ充当します。</p>
+          </article>
+          <article class="spot-use-card">
+            <h3>簡易実装・軽微な自動化</h3>
+            <p class="spot-ticket-count">スポット相談チケット 3枚から</p>
+            <p>1業務・1フロー・既存ツール前提の設定や簡易実装に限って対応します。外部API連携、本番運用、認証、個人情報が絡む場合は個別見積です。</p>
+          </article>
+        </div>
+
+        <div class="spot-flow">
+          <h2>購入から利用まで</h2>
+          <ol>
+            <li>
+              <span>01</span>
+              <strong>購入申込</strong>
+              <p>購入枚数と想定用途をフォームに入力します。</p>
+            </li>
+            <li>
+              <span>02</span>
+              <strong>請求・入金</strong>
+              <p>内容確認後に請求・お支払い案内をお送りします。</p>
+            </li>
+            <li>
+              <span>03</span>
+              <strong>チケット番号発行</strong>
+              <p>入金確認後、利用申請に使うチケット番号を発行します。</p>
+            </li>
+            <li>
+              <span>04</span>
+              <strong>利用申請</strong>
+              <p>チケット番号と依頼内容を入力し、面談または作業に進みます。</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="spot-form-section light-section" id="purchase">
+      <div class="container">
+        <div class="spot-form-layout">
+          <div class="spot-form-copy">
+            <p class="spot-eyebrow">Purchase</p>
+            <h2>スポット相談チケットを購入する</h2>
+            <p>まずは購入枚数と想定用途をお送りください。内容を確認し、請求・お支払い案内をお送りします。</p>
+          </div>
+          <form action="/api/spot-ticket" method="POST" class="spot-form">
+            <input type="hidden" name="mode" value="purchase">
+            <div class="hp-field" aria-hidden="true">
+              <label for="purchase_website">ウェブサイト</label>
+              <input type="text" id="purchase_website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-row">
+              <label>
+                会社・団体名 <span>*</span>
+                <input type="text" name="company_name" required placeholder="例: 株式会社〇〇">
+              </label>
+              <label>
+                お名前 <span>*</span>
+                <input type="text" name="person_name" required placeholder="例: 山田 太郎">
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                メールアドレス <span>*</span>
+                <input type="email" name="email" required placeholder="example@company.com">
+              </label>
+              <label>
+                電話番号
+                <input type="tel" name="phone" placeholder="例: 090-1234-5678">
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                購入希望枚数 <span>*</span>
+                <select name="ticket_count" required>
+                  <option value="">選択してください</option>
+                  <option value="1">1枚</option>
+                  <option value="2">2枚</option>
+                  <option value="3">3枚</option>
+                  <option value="4plus">4枚以上（個別確認）</option>
+                </select>
+              </label>
+              <label>
+                想定用途
+                <select name="service_type">
+                  <option value="undecided">未定・相談したい</option>
+                  <option value="review">AI活用レビュー面談</option>
+                  <option value="requirements">有償要件定義</option>
+                  <option value="small_build">簡易実装・軽微な自動化</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              請求書宛名
+              <input type="text" name="invoice_name" placeholder="会社名と同じ場合は空欄でOK">
+            </label>
+            <label>
+              相談したい内容・購入前に伝えておきたいこと
+              <textarea name="notes" rows="5" placeholder="例: 詳細レポートを見たうえで、どの業務から始めるべきか相談したい。"></textarea>
+            </label>
+            <p class="spot-form-note">送信後、内容確認のうえ請求・お支払い案内をお送りします。入金確認後にチケット番号を発行します。</p>
+            <button type="submit" class="btn-primary">購入申込を送信</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="spot-form-section spot-form-section--redeem light-section" id="redeem">
+      <div class="container">
+        <div class="spot-form-layout spot-form-layout--reverse">
+          <div class="spot-form-copy">
+            <p class="spot-eyebrow">Redeem</p>
+            <h2>チケット番号で依頼する</h2>
+            <p>発行済みのチケット番号と依頼内容を入力してください。番号と内容を確認し、日程候補または次の確認事項をご連絡します。</p>
+          </div>
+          <form action="/api/spot-ticket" method="POST" class="spot-form">
+            <input type="hidden" name="mode" value="redeem">
+            <div class="hp-field" aria-hidden="true">
+              <label for="redeem_website">ウェブサイト</label>
+              <input type="text" id="redeem_website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <label>
+              チケット番号 <span>*</span>
+              <input type="text" name="ticket_number" required placeholder="例: ST-20260515-ABCD">
+            </label>
+            <div class="form-row">
+              <label>
+                会社・団体名 <span>*</span>
+                <input type="text" name="company_name" required>
+              </label>
+              <label>
+                お名前 <span>*</span>
+                <input type="text" name="person_name" required>
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                メールアドレス <span>*</span>
+                <input type="email" name="email" required>
+              </label>
+              <label>
+                電話番号
+                <input type="tel" name="phone">
+              </label>
+            </div>
+            <label>
+              希望サービス
+              <select name="service_type">
+                <option value="review">AI活用レビュー面談</option>
+                <option value="requirements">有償要件定義</option>
+                <option value="small_build">簡易実装・軽微な自動化</option>
+                <option value="undecided">未定・相談したい</option>
+              </select>
+            </label>
+            <label>
+              依頼内容 <span>*</span>
+              <textarea name="request_detail" rows="7" required placeholder="現状の業務、困っていること、期待する成果、利用中のツール、資料URLなどを入力してください。"></textarea>
+            </label>
+            <label>
+              希望日程
+              <textarea name="preferred_schedule" rows="3" placeholder="例: 平日14時以降、来週火曜・木曜の午前など"></textarea>
+            </label>
+            <label>
+              補足
+              <textarea name="notes" rows="4" placeholder="守秘上の注意点、事前に見てほしいURL、その他の補足など"></textarea>
+            </label>
+            <p class="spot-form-note">事前合意のないチケット消化は行いません。内容確認後、必要枚数や個別見積への切り替えが必要な場合は先にお伝えします。</p>
+            <button type="submit" class="btn-primary">利用申請を送信</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .spot-page {
+    --surface: #FFFFFF;
+    --surface-2: #F9FAFB;
+    --surface-card: #FFFFFF;
+    --heading: #111827;
+    --text: #374151;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    --border-hover: #D1D5DB;
+    background: var(--surface);
+  }
+  .spot-hero {
+    position: relative;
+    min-height: 68vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    color: var(--heading);
+    background: #fff;
+  }
+  .spot-hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 68% center;
+    opacity: .38;
+  }
+  .spot-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.88) 48%, rgba(255,255,255,.52) 100%),
+      linear-gradient(180deg, rgba(31,58,147,.06), rgba(228,138,149,.06));
+  }
+  .spot-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: clamp(120px, 14vw, 168px) 0 clamp(72px, 9vw, 112px);
+  }
+  .spot-eyebrow {
+    margin: 0 0 12px;
+    color: var(--brand);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .spot-hero h1 {
+    margin: 0 0 18px;
+    color: var(--heading);
+    font-size: clamp(2.2rem, 5.8vw, 4.8rem);
+    line-height: 1.1;
+    letter-spacing: 0;
+  }
+  .spot-hero-copy {
+    max-width: 700px;
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1rem, 2vw, 1.18rem);
+    line-height: 1.9;
+  }
+  .spot-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+  }
+  .spot-hero-actions .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 14px 30px;
+    border: 1px solid var(--border-hover);
+    border-radius: 999px;
+    color: var(--brand);
+    background: rgba(255, 255, 255, .86);
+    font-size: clamp(14px, 1.6vw, 15px);
+    font-weight: 700;
+    letter-spacing: .04em;
+    box-shadow: 0 10px 24px rgba(31, 58, 147, .12);
+  }
+  .spot-section {
+    padding: clamp(64px, 8vw, 100px) 0;
+  }
+  .spot-summary,
+  .spot-use-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .spot-summary-item,
+  .spot-use-card {
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+  }
+  .spot-summary-item span,
+  .spot-ticket-count {
+    color: var(--brand);
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+  }
+  .spot-summary-item h2,
+  .spot-use-card h3 {
+    margin: 10px 0 12px;
+    color: var(--heading);
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.45;
+  }
+  .spot-summary-item p,
+  .spot-use-card p,
+  .spot-flow p,
+  .spot-form-copy p,
+  .spot-form-note {
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .spot-use-grid {
+    margin-top: 24px;
+  }
+  .spot-ticket-count {
+    margin: 0 0 10px;
+  }
+  .spot-flow {
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+  .spot-flow h2 {
+    margin: 0 0 20px;
+    color: var(--heading);
+    text-align: center;
+  }
+  .spot-flow ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .spot-flow li {
+    padding: 22px;
+    border-top: 3px solid var(--brand);
+    background: rgba(31, 58, 147, .045);
+    border-radius: 8px;
+  }
+  .spot-flow li span {
+    display: block;
+    color: var(--brand);
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .spot-flow li strong {
+    display: block;
+    color: var(--heading);
+    margin-bottom: 8px;
+  }
+  .spot-flow li p {
+    margin: 0;
+    font-size: .9rem;
+  }
+  .spot-form-section {
+    padding: clamp(64px, 8vw, 100px) 0;
+    background: #fff;
+  }
+  .spot-form-section--redeem {
+    background: var(--surface-2);
+  }
+  .spot-form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 5vw, 56px);
+    align-items: start;
+  }
+  .spot-form-layout--reverse {
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  }
+  .spot-form-copy {
+    position: sticky;
+    top: 96px;
+  }
+  .spot-form-copy h2 {
+    margin: 0 0 14px;
+    color: var(--heading);
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    letter-spacing: 0;
+  }
+  .spot-form {
+    display: grid;
+    gap: 18px;
+    padding: clamp(24px, 4vw, 36px);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-card);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .spot-form label {
+    display: grid;
+    gap: 8px;
+    color: var(--heading);
+    font-size: .9rem;
+    font-weight: 700;
+  }
+  .spot-form label span {
+    color: var(--sakura);
+  }
+  .spot-form input,
+  .spot-form select,
+  .spot-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+  }
+  .spot-form input:focus,
+  .spot-form select:focus,
+  .spot-form textarea:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(31, 58, 147, .15);
+  }
+  .spot-form textarea {
+    resize: vertical;
+  }
+  .spot-form-note {
+    margin: 0;
+    font-size: .86rem;
+    color: var(--muted);
+  }
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+  }
+  @media (max-width: 900px) {
+    .spot-summary,
+    .spot-use-grid,
+    .spot-flow ol,
+    .spot-form-layout,
+    .spot-form-layout--reverse {
+      grid-template-columns: 1fr;
+    }
+    .spot-form-copy {
+      position: static;
+    }
+  }
+  @media (max-width: 600px) {
+    .spot-hero {
+      min-height: auto;
+    }
+    .spot-hero-actions .btn-primary,
+    .spot-hero-actions .btn-secondary,
+    .spot-form button {
+      width: 100%;
+      justify-content: center;
+    }
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

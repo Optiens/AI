@@ -111,7 +111,7 @@ const priorityLabels = {
           </select>
           <input name="linked_knowledge_id" placeholder="関連ナレッジID" value={gap.linked_knowledge_id || ''} />
           <button type="submit"><i class="fas fa-check"></i> 更新</button>
-          <a href={`/admin/knowledge?draft=${encodeURIComponent(gap.question)}`}>ナレッジを書く</a>
+          <a href={`/admin/knowledge?draft=${encodeURIComponent(gap.question)}`}>AIに依頼</a>
         </form>
       </article>
     ))}

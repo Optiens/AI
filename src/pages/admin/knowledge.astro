@@ -1,14 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
 import AdminLayout from '../../layouts/AdminLayout.astro';
-import { knowledgeDocs, mergeKnowledgeDocs } from '../../lib/optiens-knowledge';
+import {
+  knowledgeCategoryLabels,
+  knowledgeDocs,
+  knowledgeMaturityLabels,
+  knowledgeVisibilityLabels,
+  mergeKnowledgeDocs,
+} from '../../lib/optiens-knowledge';
 import { dbKnowledgeEntryToDoc, listKnowledgeEntries } from '../../lib/admin-ops';
 
 const posts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
   .sort((a, b) => String(b.data.date).localeCompare(String(a.data.date)));
 
-const categoryLabels: Record<string, string> = {
+const publicCategoryLabels: Record<string, string> = {
   AI: 'AI支援',
   business: '経営',
   technology: '技術',
@@ -18,20 +24,22 @@ const categoryLabels: Record<string, string> = {
   announcement: 'お知らせ',
 };
 
-const categoryRows = Object.entries(
-  posts.reduce<Record<string, number>>((acc, post) => {
-    const key = post.data.category || 'unknown';
-    acc[key] = (acc[key] || 0) + 1;
-    return acc;
-  }, {})
-)
-  .map(([id, count]) => ({ id, label: categoryLabels[id] || id, count }))
-  .sort((a, b) => b.count - a.count);
-
-const latestPosts = posts.slice(0, 12);
+const latestPosts = posts.slice(0, 8);
 const { entries: editableKnowledgeEntries, error: editableKnowledgeError } = await listKnowledgeEntries();
 const editableKnowledgeDocs = editableKnowledgeEntries.map(dbKnowledgeEntryToDoc);
-const allKnowledgeDocs = mergeKnowledgeDocs(knowledgeDocs, editableKnowledgeDocs);
+const allKnowledgeDocs = mergeKnowledgeDocs(knowledgeDocs, editableKnowledgeDocs)
+  .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)) || a.title.localeCompare(b.title, 'ja'));
+
+const draftInstruction = Astro.url.searchParams.get('draft') || '';
+const demoSafeCount = allKnowledgeDocs.filter((doc) => doc.visibility === 'demo-safe').length;
+const demoReadyCount = allKnowledgeDocs.filter((doc) => doc.maturity === 'demo-ready').length;
+const operationalCount = allKnowledgeDocs.filter((doc) => doc.maturity === 'operational').length;
+const categoryRows = Object.entries(
+  allKnowledgeDocs.reduce<Record<string, number>>((acc, doc) => {
+    acc[doc.category] = (acc[doc.category] || 0) + 1;
+    return acc;
+  }, {})
+).map(([category, count]) => ({ category, count })).sort((a, b) => b.count - a.count);
 
 const knowledgeSources = [
   {
@@ -71,32 +79,8 @@ const knowledgeSources = [
   },
 ];
 
-const buildItems = [
-  '質問して答えが不足した内容は、SOPまたはナレッジ本文へ追記する',
-  '顧客別の提案・MTGメモ・次回アクションは、リード詳細から紐づける',
-  '価格、ターゲット、禁止方針、Phase移行条件は決定ログとして残す',
-  'プロンプト、メール、Slides、提案書テンプレはバージョンと変更理由を管理する',
-  'ナレッジごとに責任者、最終更新日、次回見直し日を持たせる',
-];
-
-const categoryDocRows = Object.entries(
-  allKnowledgeDocs.reduce<Record<string, number>>((acc, doc) => {
-    acc[doc.category] = (acc[doc.category] || 0) + 1;
-    return acc;
-  }, {})
-).map(([category, count]) => ({ category, count })).sort((a, b) => b.count - a.count);
-
-const demoSafeCount = allKnowledgeDocs.filter((doc) => doc.visibility === 'demo-safe').length;
-const demoReadyCount = allKnowledgeDocs.filter((doc) => doc.maturity === 'demo-ready').length;
-
-function visibilityLabel(value: string) {
-  return value === 'demo-safe' ? 'デモ可' : '社内限定';
-}
-
-function maturityLabel(value: string) {
-  if (value === 'demo-ready') return 'デモ準備済み';
-  if (value === 'operational') return '運用中';
-  return '追加中';
+function detailHref(id: string) {
+  return `/admin/knowledge/${encodeURIComponent(id)}`;
 }
 ---
 
@@ -104,8 +88,8 @@ function maturityLabel(value: string) {
   <section class="hero-panel">
     <div>
       <span>Optiens Knowledge Base</span>
-      <h2>人が入った時に、Optiensの仕事を質問できる社内ナレッジにする</h2>
-      <p>事業方針、営業SOP、AI/API運用、毎朝の確認、水耕栽培KPI、禁止表現を同じ棚に置き、質問欄から回答できる形にします。</p>
+      <h2>タイトルで探し、詳細ページでHTMLとして読む社内ナレッジ</h2>
+      <p>人間はリストビューとHTMLビューで確認し、追加・編集はAIへの指示としてキュー化します。</p>
     </div>
     <strong>{allKnowledgeDocs.length}<small>社内ナレッジ</small></strong>
   </section>
@@ -131,164 +115,137 @@ function maturityLabel(value: string) {
       </label>
       <div class="ask-actions">
         <button type="button" id="knowledge-ask-button"><i class="fas fa-message"></i> 質問する</button>
-        <small>回答は社内ナレッジを根拠に生成します。不足が出た内容はナレッジ化候補です。</small>
+        <small>回答は社内ナレッジを根拠に生成します。不足があれば不足キューへ自動登録されます。</small>
       </div>
     </div>
     <div class="answer-box" id="knowledge-answer">まだ質問していません。</div>
   </section>
 
-  <section class="panel">
+  <section class="panel instruction-panel">
     <div class="panel-head">
       <div>
-        <span>Internal DB</span>
-        <h3>Optiens標準業務ナレッジ</h3>
+        <span>Ask Codex</span>
+        <h3>ナレッジ追加・編集をAIに依頼する</h3>
+      </div>
+      <a href="/admin/knowledge-gaps" class="panel-link">不足キューへ</a>
+    </div>
+    <div class="instruction-grid">
+      <label class="instruction-main">
+        <span>AIへの依頼内容</span>
+        <textarea id="knowledge-instruction" rows="5" placeholder="例: 有償診断の返金条件と、手動復旧SOPへのリンクをナレッジに追加して。">{draftInstruction}</textarea>
+      </label>
+      <div class="instruction-options">
+        <label>
+          <span>カテゴリ候補</span>
+          <select id="knowledge-instruction-category">
+            <option value="operations">運用</option>
+            <option value="sales">営業</option>
+            <option value="ai">AI/API</option>
+            <option value="brand">ブランド</option>
+            <option value="business">事業</option>
+            <option value="governance">ガバナンス</option>
+            <option value="hydroponics">水耕栽培</option>
+          </select>
+        </label>
+        <label>
+          <span>優先度</span>
+          <select id="knowledge-instruction-priority">
+            <option value="medium">中</option>
+            <option value="high">高</option>
+            <option value="low">低</option>
+          </select>
+        </label>
+        <button type="button" id="knowledge-instruction-button"><i class="fas fa-wand-magic-sparkles"></i> AI依頼を作る</button>
       </div>
     </div>
-    <div class="knowledge-stats">
-      <div>
-        <b>{allKnowledgeDocs.length}</b>
-        <span>登録ナレッジ</span>
-      </div>
-      <div>
-        <b>{demoSafeCount}</b>
-        <span>デモ公開候補</span>
-      </div>
-      <div>
-        <b>{demoReadyCount}</b>
-        <span>デモ準備済み</span>
-      </div>
-    </div>
-    <div class="doc-grid">
-      {allKnowledgeDocs.map((doc) => (
-        <article class="doc-card">
-          <div class="doc-badges">
-            <span>{doc.category}</span>
-            <span class={doc.visibility === 'demo-safe' ? 'badge-ok' : 'badge-warn'}>{visibilityLabel(doc.visibility)}</span>
-          </div>
-          <strong>{doc.title}</strong>
-          <p>{doc.summary}</p>
-          <small>{doc.owner} / {doc.updatedAt} / {maturityLabel(doc.maturity)}</small>
-        </article>
-      ))}
+    <div class="prompt-box" id="knowledge-instruction-result">
+      ここにCodexへ渡す依頼文と、不足キューへの登録結果が表示されます。
     </div>
   </section>
 
-  <section class="panel edit-panel">
-    <div class="panel-head">
+  <section class="list-view-shell">
+    <div class="list-view-header">
       <div>
-        <span>Editable DB</span>
-        <h3>ナレッジを追加・編集する</h3>
+        <span class="object-label">Knowledge</span>
+        <h2><i class="fas fa-table-list"></i> ナレッジ一覧</h2>
+        <p>タイトルをクリックすると、人間が読みやすいHTMLビューで詳細を確認できます。</p>
       </div>
-      <a href="/admin/audit" class="panel-link">監査ログへ</a>
+      <div class="list-view-actions">
+        <a class="ghost-btn" href="/admin/knowledge-gaps"><i class="fas fa-circle-question"></i> 不足キュー</a>
+        <a class="ghost-btn" href="/admin/reports#report-library"><i class="fas fa-chart-simple"></i> レポート</a>
+      </div>
     </div>
-    <form class="knowledge-form" id="knowledge-entry-form">
-      <input type="hidden" name="id" id="knowledge-entry-id" />
-      <label>
-        <span>タイトル</span>
-        <input name="title" id="knowledge-entry-title" required />
-      </label>
-      <label>
-        <span>カテゴリ</span>
-        <select name="category" id="knowledge-entry-category">
-          <option value="business">business</option>
-          <option value="sales">sales</option>
-          <option value="operations" selected>operations</option>
-          <option value="ai">ai</option>
-          <option value="hydroponics">hydroponics</option>
-          <option value="brand">brand</option>
-          <option value="governance">governance</option>
-        </select>
-      </label>
-      <label>
-        <span>責任者</span>
-        <input name="owner" id="knowledge-entry-owner" value="COO" />
-      </label>
-      <label>
-        <span>公開区分</span>
-        <select name="visibility" id="knowledge-entry-visibility">
-          <option value="internal">internal</option>
-          <option value="demo-safe">demo-safe</option>
-        </select>
-      </label>
-      <label>
-        <span>成熟度</span>
-        <select name="maturity" id="knowledge-entry-maturity">
-          <option value="seed">seed</option>
-          <option value="operational">operational</option>
-          <option value="demo-ready">demo-ready</option>
-        </select>
-      </label>
-      <label>
-        <span>タグ</span>
-        <input name="tags" id="knowledge-entry-tags" placeholder="SOP, 営業, 引き継ぎ" />
-      </label>
-      <label class="field-wide">
-        <span>要約</span>
-        <textarea name="summary" id="knowledge-entry-summary" rows="3" required></textarea>
-      </label>
-      <label class="field-wide">
-        <span>本文</span>
-        <textarea name="body" id="knowledge-entry-body" rows="7" required></textarea>
-      </label>
-      <div class="form-actions">
-        <button type="submit" id="knowledge-entry-save"><i class="fas fa-floppy-disk"></i> 保存する</button>
-        <button type="button" id="knowledge-entry-reset" class="ghost-button">新規入力に戻す</button>
-        <small id="knowledge-entry-result">保存すると監査ログにも記録されます。</small>
-      </div>
-    </form>
 
-    <div class="editable-list">
-      {editableKnowledgeEntries.length === 0 ? (
-        <p class="empty-state">DB管理ナレッジはまだありません。上のフォームから追加できます。</p>
-      ) : (
-        editableKnowledgeEntries.map((entry) => (
-          <article class="editable-row">
-            <div>
-              <strong>{entry.title}</strong>
-              <p>{entry.summary}</p>
-              <small>{entry.category} / {entry.visibility} / {entry.maturity}</small>
-            </div>
-            <button
-              type="button"
-              class="edit-knowledge-button"
-              data-id={entry.id}
-              data-title={entry.title}
-              data-category={entry.category}
-              data-owner={entry.owner}
-              data-visibility={entry.visibility}
-              data-maturity={entry.maturity}
-              data-summary={entry.summary}
-              data-body={entry.body}
-              data-tags={(entry.tags || []).join(', ')}
+    <div class="list-view-summary" aria-label="ナレッジ概要">
+      <span><b>{allKnowledgeDocs.length}</b> 登録ナレッジ</span>
+      <span><b>{operationalCount}</b> 運用中</span>
+      <span><b>{demoSafeCount}</b> デモ公開候補</span>
+      <span><b>{demoReadyCount}</b> デモ準備済み</span>
+    </div>
+
+    <div class="lead-toolbar">
+      <label class="search-box">
+        <i class="fas fa-search"></i>
+        <input id="knowledge-search" type="search" placeholder="タイトル、要約、タグで検索" />
+      </label>
+      <select id="knowledge-category-filter" aria-label="カテゴリ">
+        <option value="all">すべてのカテゴリ</option>
+        {Object.entries(knowledgeCategoryLabels).map(([id, label]) => <option value={id}>{label}</option>)}
+      </select>
+      <select id="knowledge-maturity-filter" aria-label="成熟度">
+        <option value="all">すべての成熟度</option>
+        {Object.entries(knowledgeMaturityLabels).map(([id, label]) => <option value={id}>{label}</option>)}
+      </select>
+    </div>
+
+    <div class="list-view-meta">
+      <span><span id="visible-count">{allKnowledgeDocs.length}</span>件を表示中</span>
+      <span>追加・編集はフォームではなく、上のAI依頼欄から不足キュー化します。</span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="knowledge-table">
+        <thead>
+          <tr>
+            <th class="select-col"></th>
+            <th>タイトル</th>
+            <th>カテゴリ</th>
+            <th>状態</th>
+            <th>責任者</th>
+            <th>更新日</th>
+            <th>タグ</th>
+            <th class="open-col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {allKnowledgeDocs.map((doc) => (
+            <tr
+              class="knowledge-row"
+              data-href={detailHref(doc.id)}
+              data-category={doc.category}
+              data-maturity={doc.maturity}
+              data-search={`${doc.title} ${doc.summary} ${doc.tags.join(' ')}`.toLowerCase()}
+              tabindex="0"
             >
-              編集
-            </button>
-          </article>
-        ))
-      )}
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-head">
-      <div>
-        <span>Sales Demo</span>
-        <h3>販売デモ化の方針</h3>
-      </div>
-    </div>
-    <div class="demo-roadmap">
-      <article>
-        <strong>1. 社内で使う</strong>
-        <p>毎日の質問、引き継ぎ、手順確認に使い、不足した回答をナレッジ化します。</p>
-      </article>
-      <article>
-        <strong>2. 公開可能な形へ分離する</strong>
-        <p>顧客情報、APIキー、未公開財務、内部メモを除き、業務SOPと判断基準だけをデモ候補にします。</p>
-      </article>
-      <article>
-        <strong>3. 主力販売ツールにする</strong>
-        <p>「質問すると会社の標準回答が返る」体験を、属人化解消・新人教育・問い合わせ対応の提案に使います。</p>
-      </article>
+              <td class="select-col"><span class="row-dot" aria-hidden="true"></span></td>
+              <td class="td-title">
+                <a href={detailHref(doc.id)}>{doc.title}</a>
+                <span>{doc.summary}</span>
+              </td>
+              <td>{knowledgeCategoryLabels[doc.category]}</td>
+              <td>
+                <span class={`state-pill state-pill--${doc.maturity}`}>{knowledgeMaturityLabels[doc.maturity]}</span>
+                <small>{knowledgeVisibilityLabels[doc.visibility]}</small>
+              </td>
+              <td>{doc.owner}</td>
+              <td>{doc.updatedAt}</td>
+              <td class="tag-cell">{doc.tags.slice(0, 3).map((tag) => <span>{tag}</span>)}</td>
+              <td class="open-col"><i class="fas fa-chevron-right"></i></td>
+            </tr>
+          ))}
+          {allKnowledgeDocs.length === 0 && <tr><td colspan="8" class="td-empty">ナレッジがありません</td></tr>}
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -319,13 +276,13 @@ function maturityLabel(value: string) {
       <div class="panel-head">
         <div>
           <span>Categories</span>
-          <h3>公開ナレッジ分類</h3>
+          <h3>社内ナレッジ分類</h3>
         </div>
       </div>
       <ul class="bar-list">
-        {categoryDocRows.map((row) => (
+        {categoryRows.map((row) => (
           <li>
-            <span>{row.category}</span>
+            <span>{knowledgeCategoryLabels[row.category as keyof typeof knowledgeCategoryLabels] || row.category}</span>
             <b>{row.count}</b>
           </li>
         ))}
@@ -336,17 +293,23 @@ function maturityLabel(value: string) {
   <section class="panel">
     <div class="panel-head">
       <div>
-        <span>Next Build</span>
-        <h3>実装すべきナレッジ機能</h3>
+        <span>Sales Demo</span>
+        <h3>販売デモ化の方針</h3>
       </div>
     </div>
-    <div class="build-list">
-      {buildItems.map((item, index) => (
-        <div class="build-item">
-          <b>{index + 1}</b>
-          <p>{item}</p>
-        </div>
-      ))}
+    <div class="demo-roadmap">
+      <article>
+        <strong>1. 社内で使う</strong>
+        <p>毎日の質問、引き継ぎ、手順確認に使い、不足した回答をAI依頼として蓄積します。</p>
+      </article>
+      <article>
+        <strong>2. 公開可能な形へ分離する</strong>
+        <p>顧客情報、APIキー、未公開財務、内部メモを除き、業務SOPと判断基準だけをデモ候補にします。</p>
+      </article>
+      <article>
+        <strong>3. 主力販売ツールにする</strong>
+        <p>「質問すると会社の標準回答が返る」体験を、属人化解消・新人教育・問い合わせ対応の提案に使います。</p>
+      </article>
     </div>
   </section>
 
@@ -361,7 +324,7 @@ function maturityLabel(value: string) {
     <div class="post-grid">
       {latestPosts.map((post) => (
         <a class="post-card" href={`/blog/${post.slug}`}>
-          <span>{categoryLabels[post.data.category] || post.data.category}</span>
+          <span>{publicCategoryLabels[post.data.category] || post.data.category}</span>
           <strong>{post.data.title}</strong>
           <p>{post.data.excerpt}</p>
           <small>{post.data.date}</small>
@@ -404,99 +367,109 @@ function maturityLabel(value: string) {
       }
     });
 
-    const entryForm = document.getElementById('knowledge-entry-form');
-    const entryResult = document.getElementById('knowledge-entry-result');
-    const entrySave = document.getElementById('knowledge-entry-save');
-    const entryReset = document.getElementById('knowledge-entry-reset');
-    const fields = {
-      id: document.getElementById('knowledge-entry-id'),
-      title: document.getElementById('knowledge-entry-title'),
-      category: document.getElementById('knowledge-entry-category'),
-      owner: document.getElementById('knowledge-entry-owner'),
-      visibility: document.getElementById('knowledge-entry-visibility'),
-      maturity: document.getElementById('knowledge-entry-maturity'),
-      tags: document.getElementById('knowledge-entry-tags'),
-      summary: document.getElementById('knowledge-entry-summary'),
-      body: document.getElementById('knowledge-entry-body'),
-    };
+    const instruction = document.getElementById('knowledge-instruction');
+    const instructionCategory = document.getElementById('knowledge-instruction-category');
+    const instructionPriority = document.getElementById('knowledge-instruction-priority');
+    const instructionButton = document.getElementById('knowledge-instruction-button');
+    const instructionResult = document.getElementById('knowledge-instruction-result');
 
-    function setField(name, value) {
-      if (fields[name]) fields[name].value = value || '';
+    function buildCodexPrompt(text, category) {
+      return [
+        'Codexへ依頼:',
+        'C:\\workspace\\Optiens の社内ナレッジを更新してください。',
+        '',
+        `依頼内容: ${text}`,
+        `カテゴリ候補: ${category}`,
+        '',
+        '要件:',
+        '- ナレッジ一覧でタイトルだけ見ても内容が分かるように整理する',
+        '- 詳細ページのHTMLビューで読みやすいよう、見出し、箇条書き、短い段落で構成する',
+        '- 必要に応じて src/lib/optiens-knowledge.ts または knowledge_entries 用 migration を更新する',
+        '- Optiensの禁止事項に反する記述を追加しない',
+        '- 型チェックとビルドを確認し、管理画面関連の差分だけコミット・プッシュする',
+      ].join('\n');
     }
 
-    const draftQuestion = new URLSearchParams(window.location.search).get('draft');
-    if (draftQuestion) {
-      const title = draftQuestion.length > 52 ? `${draftQuestion.slice(0, 52)}...` : draftQuestion;
-      setField('title', title);
-      setField('category', 'operations');
-      setField('owner', 'COO');
-      setField('visibility', 'internal');
-      setField('maturity', 'seed');
-      setField('tags', 'ナレッジ不足, 業務手順');
-      setField('summary', `未整備の質問: ${draftQuestion}`);
-      setField('body', `## 質問\n${draftQuestion}\n\n## 現時点の回答\n\n## 業務手順\n\n## デモ公開時の注意\n`);
-      entryResult.textContent = '不足キューから下書きを作成しました。内容を整えて保存してください。';
-      entryForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    document.querySelectorAll('.edit-knowledge-button').forEach((editButton) => {
-      editButton.addEventListener('click', () => {
-        setField('id', editButton.dataset.id);
-        setField('title', editButton.dataset.title);
-        setField('category', editButton.dataset.category);
-        setField('owner', editButton.dataset.owner);
-        setField('visibility', editButton.dataset.visibility);
-        setField('maturity', editButton.dataset.maturity);
-        setField('summary', editButton.dataset.summary);
-        setField('body', editButton.dataset.body);
-        setField('tags', editButton.dataset.tags);
-        entryResult.textContent = '既存ナレッジを編集中です。';
-        entryForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
-
-    entryReset?.addEventListener('click', () => {
-      entryForm?.reset();
-      setField('id', '');
-      entryResult.textContent = '新規入力に戻しました。';
-    });
-
-    entryForm?.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (!entryForm || !entrySave || !entryResult) return;
-      const formData = new FormData(entryForm);
-      const payload = {};
-      for (const [key, value] of formData.entries()) {
-        payload[key] = value;
+    instructionButton?.addEventListener('click', async () => {
+      if (!instruction || !instructionResult || !instructionButton) return;
+      const text = instruction.value.trim();
+      if (!text) {
+        instructionResult.textContent = 'AIに依頼したい内容を入力してください。';
+        return;
       }
+      const category = instructionCategory?.value || 'operations';
+      const priority = instructionPriority?.value || 'medium';
+      const prompt = buildCodexPrompt(text, category);
 
-      entrySave.disabled = true;
-      entryResult.textContent = '保存中...';
+      instructionButton.disabled = true;
+      instructionResult.textContent = '不足キューへ登録しています...';
       try {
-        const res = await fetch('/api/admin/knowledge-docs', {
-          method: payload.id ? 'PUT' : 'POST',
+        const res = await fetch('/api/admin/knowledge-gaps', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          body: JSON.stringify({
+            action: 'create',
+            question: `ナレッジ追加・編集依頼: ${text}`,
+            suggested_category: category,
+            priority,
+            source: 'knowledge_instruction',
+            answer_excerpt: prompt,
+          }),
         });
         const data = await res.json().catch(() => ({}));
-        if (!res.ok || data.ok === false) {
-          throw new Error(data.error || `HTTP ${res.status}`);
-        }
-        entryResult.textContent = '保存しました。画面を更新します...';
-        window.location.reload();
+        if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
+        instructionResult.textContent = `${data.duplicate ? '既に不足キューに登録済みです。' : '不足キューへ登録しました。'}\n\n${prompt}`;
       } catch (error) {
-        entryResult.textContent = error instanceof Error ? error.message : '保存に失敗しました。';
+        instructionResult.textContent = `${error instanceof Error ? error.message : '登録に失敗しました。'}\n\n${prompt}`;
       } finally {
-        entrySave.disabled = false;
+        instructionButton.disabled = false;
       }
     });
+
+    const rows = Array.from(document.querySelectorAll('.knowledge-row'));
+    const search = document.getElementById('knowledge-search');
+    const categoryFilter = document.getElementById('knowledge-category-filter');
+    const maturityFilter = document.getElementById('knowledge-maturity-filter');
+    const visibleCount = document.getElementById('visible-count');
+
+    function applyFilters() {
+      const q = (search?.value || '').trim().toLowerCase();
+      const category = categoryFilter?.value || 'all';
+      const maturity = maturityFilter?.value || 'all';
+      let count = 0;
+      rows.forEach((row) => {
+        const ok = (!q || (row.dataset.search || '').includes(q))
+          && (category === 'all' || row.dataset.category === category)
+          && (maturity === 'all' || row.dataset.maturity === maturity);
+        row.hidden = !ok;
+        if (ok) count++;
+      });
+      if (visibleCount) visibleCount.textContent = String(count);
+    }
+
+    search?.addEventListener('input', applyFilters);
+    categoryFilter?.addEventListener('change', applyFilters);
+    maturityFilter?.addEventListener('change', applyFilters);
+    rows.forEach((row) => {
+      row.addEventListener('click', (event) => {
+        if (event.target.closest('a, button, input, select')) return;
+        if (row.dataset.href) window.location.href = row.dataset.href;
+      });
+      row.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (!row.dataset.href || event.target.closest('a, button, input, select')) return;
+        event.preventDefault();
+        window.location.href = row.dataset.href;
+      });
+    });
+    applyFilters();
   })();
 </script>
 
 <style>
   .hero-panel,
   .panel,
-  .doc-card {
+  .list-view-shell {
     background: var(--admin-surface);
     border: 1px solid var(--admin-border);
     border-radius: 8px;
@@ -512,16 +485,18 @@ function maturityLabel(value: string) {
   }
 
   .hero-panel span,
-  .panel-head span {
+  .panel-head span,
+  .object-label {
     color: var(--admin-muted);
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .hero-panel h2,
-  .panel-head h3 {
+  .panel-head h3,
+  .list-view-header h2 {
     color: #fff;
     letter-spacing: 0;
   }
@@ -531,299 +506,19 @@ function maturityLabel(value: string) {
     font-size: 1.2rem;
   }
 
-  .hero-panel p {
-    margin: 0;
-    color: var(--admin-muted);
-    font-size: 0.9rem;
-  }
-
-  .ask-panel {
-    margin-bottom: 18px;
-  }
-
-  .ask-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 220px;
-    gap: 14px;
-    align-items: end;
-  }
-
-  .ask-grid label span {
-    display: block;
-    margin-bottom: 6px;
-    color: var(--admin-muted);
-    font-size: 0.78rem;
-    font-weight: 700;
-  }
-
-  .ask-grid textarea {
-    width: 100%;
-    resize: vertical;
-    min-height: 110px;
-    padding: 12px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-bg);
-    color: var(--admin-text);
-    font: inherit;
-  }
-
-  .ask-actions {
-    display: grid;
-    gap: 8px;
-  }
-
-  .ask-actions button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 40px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-primary);
-    color: #fff;
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  .ask-actions button:disabled {
-    cursor: wait;
-    opacity: 0.68;
-  }
-
+  .hero-panel p,
+  .list-view-header p,
   .ask-actions small,
   .answer-box,
-  .doc-card p,
-  .doc-card small {
+  .prompt-box,
+  .source-row p,
+  .source-row small,
+  .source-row em,
+  .post-card p,
+  .post-card small,
+  .list-view-meta {
     color: var(--admin-muted);
     font-size: 0.82rem;
-  }
-
-  .answer-box {
-    margin-top: 14px;
-    padding: 14px;
-    min-height: 92px;
-    white-space: pre-wrap;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-bg);
-  }
-
-  .alert-box {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 18px;
-    padding: 12px;
-    border: 1px solid rgba(228, 138, 149, 0.36);
-    border-radius: 8px;
-    background: rgba(228, 138, 149, 0.1);
-    color: var(--admin-accent-soft);
-    font-size: 0.84rem;
-  }
-
-  .knowledge-form {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .knowledge-form label {
-    display: grid;
-    gap: 7px;
-  }
-
-  .knowledge-form label span {
-    color: var(--admin-muted);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .knowledge-form input,
-  .knowledge-form select,
-  .knowledge-form textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-bg);
-    color: var(--admin-text);
-    font: inherit;
-  }
-
-  .knowledge-form textarea {
-    resize: vertical;
-  }
-
-  .field-wide,
-  .form-actions {
-    grid-column: 1 / -1;
-  }
-
-  .form-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .form-actions button,
-  .editable-row button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    min-height: 36px;
-    padding: 0 13px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-primary);
-    color: #fff;
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  .form-actions button:disabled {
-    cursor: wait;
-    opacity: 0.68;
-  }
-
-  .form-actions .ghost-button,
-  .editable-row button {
-    background: var(--admin-surface-2);
-    color: var(--admin-muted);
-  }
-
-  .form-actions small,
-  .editable-row p,
-  .editable-row small,
-  .empty-state {
-    color: var(--admin-muted);
-    font-size: 0.8rem;
-  }
-
-  .editable-list {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
-
-  .editable-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 78px;
-    gap: 12px;
-    align-items: center;
-    padding: 12px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-bg);
-  }
-
-  .editable-row strong {
-    color: #fff;
-  }
-
-  .editable-row p {
-    margin: 4px 0;
-  }
-
-  .knowledge-stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-
-  .knowledge-stats div {
-    padding: 12px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-bg);
-  }
-
-  .knowledge-stats b {
-    display: block;
-    color: #fff;
-    font-size: 1.35rem;
-  }
-
-  .knowledge-stats span {
-    color: var(--admin-muted);
-    font-size: 0.76rem;
-  }
-
-  .doc-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .doc-card {
-    padding: 14px;
-  }
-
-  .doc-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .doc-card span {
-    display: inline-flex;
-    min-height: 22px;
-    align-items: center;
-    padding: 0 7px;
-    border-radius: 999px;
-    background: rgba(107, 133, 201, 0.16);
-    color: var(--admin-accent-soft);
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .doc-card span.badge-warn {
-    background: rgba(228, 138, 149, 0.16);
-  }
-
-  .doc-card span.badge-ok {
-    background: rgba(107, 133, 201, 0.22);
-  }
-
-  .doc-card strong {
-    display: block;
-    margin: 8px 0 6px;
-    color: #fff;
-  }
-
-  .demo-roadmap {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .demo-roadmap article {
-    padding: 14px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-bg);
-  }
-
-  .demo-roadmap strong {
-    color: #fff;
-  }
-
-  .demo-roadmap p {
-    margin: 7px 0 0;
-    color: var(--admin-muted);
-    font-size: 0.84rem;
   }
 
   .hero-panel strong {
@@ -842,11 +537,17 @@ function maturityLabel(value: string) {
     font-size: 0.72rem;
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
-    gap: 18px;
+  .alert-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
     margin-bottom: 18px;
+    padding: 12px;
+    border: 1px solid rgba(228, 138, 149, 0.36);
+    border-radius: 8px;
+    background: rgba(228, 138, 149, 0.1);
+    color: var(--admin-accent-soft);
+    font-size: 0.84rem;
   }
 
   .panel {
@@ -854,7 +555,8 @@ function maturityLabel(value: string) {
     margin-bottom: 18px;
   }
 
-  .panel-head {
+  .panel-head,
+  .list-view-header {
     display: flex;
     justify-content: space-between;
     gap: 12px;
@@ -867,15 +569,288 @@ function maturityLabel(value: string) {
     font-size: 1rem;
   }
 
-  .panel-link {
+  .panel-link,
+  .list-view-actions a {
     color: var(--admin-secondary);
     text-decoration: none;
     font-size: 0.8rem;
-    font-weight: 700;
+    font-weight: 800;
+  }
+
+  .ask-grid,
+  .instruction-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 230px;
+    gap: 14px;
+    align-items: end;
+  }
+
+  label span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--admin-muted);
+    font-size: 0.76rem;
+    font-weight: 800;
+  }
+
+  textarea,
+  input,
+  select {
+    width: 100%;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font: inherit;
+  }
+
+  textarea {
+    min-height: 110px;
+    padding: 12px;
+    resize: vertical;
+  }
+
+  input,
+  select {
+    min-height: 38px;
+    padding: 0 10px;
+  }
+
+  .ask-actions,
+  .instruction-options {
+    display: grid;
+    gap: 8px;
+  }
+
+  button,
+  .ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-primary);
+    color: #fff;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: wait;
+    opacity: 0.68;
+  }
+
+  .ghost-btn {
+    background: var(--admin-surface-2);
+    color: var(--admin-muted);
+  }
+
+  .answer-box,
+  .prompt-box {
+    margin-top: 14px;
+    padding: 14px;
+    min-height: 92px;
+    white-space: pre-wrap;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+  }
+
+  .list-view-shell {
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+
+  .list-view-header {
+    margin: 0;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--admin-border);
+    background: linear-gradient(180deg, rgba(107, 133, 201, 0.10), transparent);
+  }
+
+  .list-view-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0 6px;
+    font-size: 1.18rem;
+  }
+
+  .list-view-actions,
+  .list-view-summary,
+  .list-view-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .list-view-summary,
+  .list-view-meta {
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--admin-border);
+    color: var(--admin-muted);
+    font-size: 0.8rem;
+  }
+
+  .list-view-summary b {
+    margin-right: 4px;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .lead-toolbar {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) 190px 170px;
+    gap: 10px;
+    padding: 12px 20px;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 38px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg);
+    color: var(--admin-muted);
+  }
+
+  .search-box input {
+    min-height: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    outline: none;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  .knowledge-table {
+    width: 100%;
+    min-width: 1080px;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+  }
+
+  .knowledge-table th,
+  .knowledge-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--admin-border);
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .knowledge-table th {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .knowledge-row {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .knowledge-row:hover td,
+  .knowledge-row:focus td {
+    background: rgba(107, 133, 201, 0.045);
+  }
+
+  .knowledge-row[hidden] {
+    display: none;
+  }
+
+  .select-col,
+  .open-col {
+    width: 38px;
+    text-align: center;
+  }
+
+  .row-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--admin-secondary);
+    box-shadow: 0 0 0 3px rgba(107, 133, 201, 0.14);
+  }
+
+  .td-title a {
+    display: block;
+    color: #fff;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .td-title a:hover {
+    color: var(--admin-accent-soft);
+  }
+
+  .td-title span,
+  .knowledge-table small {
+    display: block;
+    margin-top: 4px;
+    color: var(--admin-muted);
+    font-size: 0.76rem;
+  }
+
+  .state-pill,
+  .tag-cell span,
+  .source-row span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+    color: var(--admin-accent-soft);
+    background: rgba(107, 133, 201, 0.16);
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
+  .state-pill--seed {
+    background: rgba(148, 163, 184, 0.14);
+    color: var(--admin-muted);
+  }
+
+  .state-pill--demo-ready {
+    background: rgba(228, 138, 149, 0.18);
+  }
+
+  .tag-cell {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .td-empty {
+    padding: 40px 12px !important;
+    text-align: center;
+    color: var(--admin-muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
+    gap: 18px;
+    margin-bottom: 18px;
   }
 
   .source-list,
-  .build-list {
+  .bar-list {
     display: flex;
     flex-direction: column;
     gap: 9px;
@@ -893,32 +868,13 @@ function maturityLabel(value: string) {
   }
 
   .source-row strong,
-  .post-card strong {
+  .post-card strong,
+  .demo-roadmap strong {
     color: #fff;
-  }
-
-  .source-row p,
-  .source-row small,
-  .source-row em,
-  .post-card p,
-  .post-card small {
-    color: var(--admin-muted);
-    font-size: 0.74rem;
   }
 
   .source-row p {
     margin: 4px 0 0;
-  }
-
-  .source-row span {
-    display: inline-flex;
-    justify-content: center;
-    padding: 3px 8px;
-    border-radius: 999px;
-    color: var(--admin-accent-soft);
-    background: rgba(107, 133, 201, 0.18);
-    font-size: 0.7rem;
-    font-weight: 700;
   }
 
   .source-row em {
@@ -928,9 +884,6 @@ function maturityLabel(value: string) {
 
   .bar-list {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
     margin: 0;
     padding: 0;
   }
@@ -950,31 +903,24 @@ function maturityLabel(value: string) {
     color: #fff;
   }
 
-  .build-item {
+  .demo-roadmap {
     display: grid;
-    grid-template-columns: 34px minmax(0, 1fr);
-    gap: 10px;
-    align-items: start;
-    padding: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .demo-roadmap article,
+  .post-card {
+    padding: 14px;
     border: 1px solid var(--admin-border);
     border-radius: 8px;
     background: var(--admin-bg);
   }
 
-  .build-item b {
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 7px;
-    background: #1F3A93;
-    color: #fff;
-  }
-
-  .build-item p {
-    margin: 0;
-    color: var(--admin-text);
-    font-size: 0.86rem;
+  .demo-roadmap p {
+    margin: 7px 0 0;
+    color: var(--admin-muted);
+    font-size: 0.84rem;
   }
 
   .post-grid {
@@ -985,11 +931,7 @@ function maturityLabel(value: string) {
 
   .post-card {
     display: block;
-    min-height: 180px;
-    padding: 14px;
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    background: var(--admin-bg);
+    min-height: 170px;
     color: inherit;
     text-decoration: none;
   }
@@ -1001,7 +943,7 @@ function maturityLabel(value: string) {
   .post-card span {
     color: var(--admin-secondary);
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: 800;
   }
 
   .post-card strong {
@@ -1010,37 +952,17 @@ function maturityLabel(value: string) {
     font-size: 0.9rem;
   }
 
-  .post-card p {
-    margin: 0 0 10px;
-  }
-
-  @media (max-width: 920px) {
+  @media (max-width: 980px) {
     .hero-panel,
     .grid,
     .ask-grid,
-    .knowledge-form {
-      grid-template-columns: 1fr;
-    }
-
-    .doc-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
+    .instruction-grid,
+    .lead-toolbar,
     .demo-roadmap {
       grid-template-columns: 1fr;
     }
 
     .source-row {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .doc-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .knowledge-stats {
       grid-template-columns: 1fr;
     }
   }

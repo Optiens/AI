@@ -33,10 +33,6 @@ const SITE_URL = (Deno.env.get("SITE_URL") || "https://optiens.com").replace(
   /\/$/,
   "",
 );
-const MTG_BOOKING_URL =
-  Deno.env.get("PAID_MTG_BOOKING_URL") ||
-  Deno.env.get("GOOGLE_CALENDAR_BOOKING_URL") ||
-  "";
 const OPENAI_MODEL =
   Deno.env.get("PAID_DIAGNOSIS_MODEL") ||
   Deno.env.get("OPENAI_MODEL") ||
@@ -64,7 +60,7 @@ const DEFAULT_INITIAL_COST_BREAKDOWN = [
   "・2業務実装: ¥420,000〜560,000",
   "・3業務/外部連携多め: ¥600,000〜800,000+",
   "・要件整理、実装、通知連携、検証、初回運用手順書を含む",
-  "※ 正式見積は60分MTGで対象業務・連携先・データ状態を確認して確定",
+  "※ 正式見積は導入支援のご相談時に対象業務・連携先・データ状態を確認して確定",
 ].join("\n");
 
 const DEMO_LINKS = [
@@ -292,7 +288,7 @@ async function generatePaidReport(lead: any) {
 
 function buildPaidReportPrompt(lead: any): string {
   return `
-以下の申込情報をもとに、有償版「詳細AI活用診断レポート + 60分オンラインMTG」用の詳細レポートJSONを作成してください。
+以下の申込情報をもとに、有償版「詳細AI活用診断レポート」用の詳細レポートJSONを作成してください。
 
 有償版の品質基準:
 - 汎用的なAI紹介ではなく、この会社の業務・規模・利用中ツールに合わせた提案にする。
@@ -742,12 +738,6 @@ function buildReplacements(lead: any, report: any): Record<string, string> {
 }
 
 async function sendPaidReportEmail(lead: any, slidesUrl: string) {
-  const bookingText = MTG_BOOKING_URL
-    ? `60分オンラインMTGの日程調整はこちらからお願いいたします。\n${MTG_BOOKING_URL}`
-    : "60分オンラインMTGの日程は、このメールへのご返信で候補日時を2〜3つお知らせください。";
-  const bookingHtml = MTG_BOOKING_URL
-    ? `<p style="margin:20px 0;"><a href="${escapeAttr(MTG_BOOKING_URL)}" style="display:inline-block;padding:10px 18px;background:#E48A95;color:#fff;text-decoration:none;border-radius:6px;font-weight:700;">60分MTGの日程を調整する</a></p>`
-    : "<p>60分オンラインMTGの日程は、このメールへのご返信で候補日時を2〜3つお知らせください。</p>";
   const appId = lead.application_id || lead.id;
   const text = `${lead.company_name || ""} ${lead.person_name || ""} 様
 
@@ -757,13 +747,11 @@ async function sendPaidReportEmail(lead: any, slidesUrl: string) {
 ■ レポートURL
 ${slidesUrl}
 
-${bookingText}
-
 ■ 申込番号
 ${appId}
 
 レポートは Google Slides でご覧いただけます。
-内容をご確認のうえ、MTGでは優先順位・実装可否・概算費用の前提を一緒に整理します。
+内容をご確認のうえ、追加で相談が必要な場合は、AI活用レビュー面談または導入支援のご相談として別途ご案内します。
 
 合同会社Optiens
 ${SITE_URL}
@@ -776,11 +764,10 @@ ${SITE_URL}
   <a href="${escapeAttr(slidesUrl)}" style="display:inline-block;padding:12px 22px;background:#1F3A93;color:#fff;text-decoration:none;border-radius:6px;font-weight:700;">詳細レポートを開く</a>
 </p>
 <p style="font-size:13px;color:#5c667a;">レポートは Google Slides URL でお届けしています。スマートフォン・PCのブラウザでご覧いただけます。</p>
-${bookingHtml}
 <table style="border-collapse:collapse;width:100%;margin:20px 0;border:1px solid #d9deea;">
   <tr><td style="padding:8px 12px;background:#eef2ff;font-weight:700;width:120px;">申込番号</td><td style="padding:8px 12px;font-family:monospace;">${escapeHtml(appId)}</td></tr>
 </table>
-<p>MTGでは、優先順位・実装可否・概算費用の前提を一緒に整理します。</p>
+<p>追加で相談が必要な場合は、AI活用レビュー面談または導入支援のご相談として別途ご案内します。</p>
 <hr style="border:none;border-top:1px solid #d9deea;margin:28px 0;"/>
 <p style="font-size:12px;color:#7c8496;">合同会社Optiens<br/><a href="${SITE_URL}">${SITE_URL}</a></p>
 </div>`;

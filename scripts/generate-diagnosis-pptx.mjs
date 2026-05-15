@@ -207,7 +207,7 @@ function addTitle(slide, text, y = 1.3) {
     });
   }
 
-  addFooterNote(slide, '具体的な導入可否・手順・連携先は、詳細診断で確認してからご提案します');
+  addFooterNote(slide, '具体的な導入可否・手順・連携先は、詳細レポートまたは個別相談で確認してからご提案します');
 }
 
 // =================================================
@@ -301,7 +301,7 @@ function addTitle(slide, text, y = 1.3) {
     fontSize: 11, color: COLORS.textMuted, fontFace: FONT_JP, valign: 'top',
   });
 
-  addFooterNote(slide, '※ 簡易版では方向性のみを提示します。実施範囲は詳細診断または個別相談で確認します');
+  addFooterNote(slide, '※ 簡易版では方向性のみを提示します。実施範囲は詳細レポートまたは個別相談で確認します');
 }
 
 // =================================================
@@ -421,7 +421,7 @@ function addTitle(slide, text, y = 1.3) {
     fontSize: 11, color: COLORS.lapisDark, fontFace: FONT_JP, bold: true, valign: 'middle',
   });
 
-  addFooterNote(slide, '※ 簡易版の効果額は一次試算です。導入判断・正式見積は、詳細診断または個別相談で確認します');
+  addFooterNote(slide, '※ 簡易版の効果額は一次試算です。導入判断・正式見積は、詳細レポートまたは個別相談で確認します');
 }
 
 // =================================================
@@ -497,7 +497,7 @@ function addTitle(slide, text, y = 1.3) {
   });
 
   // タイトル
-  slide.addText('詳細診断 + 60分MTG（¥5,500税込）', {
+  slide.addText('詳細レポート（¥5,500税込）', {
     x: 1.0, y: 2.75, w: W - 2.0, h: 0.7,
     fontSize: 32, color: COLORS.white, fontFace: FONT_JP, bold: true, align: 'center',
   });
@@ -520,7 +520,7 @@ function addTitle(slide, text, y = 1.3) {
     '費用前提の整理',
     'PoC 実施の要否確認',
     '導入支援に進むかの判断',
-    '60分オンラインMTG',
+    '必要時の個別相談導線',
     '質問・不安点の整理',
   ];
   const colItemsCount = 6;
@@ -535,7 +535,7 @@ function addTitle(slide, text, y = 1.3) {
     });
   });
 
-  addFooterNote(slide, '※ 詳細診断は単体で稼ぐ商品ではなく、導入支援に進む前の確認枠です。本費用は導入支援の初期費用に全額充当します');
+  addFooterNote(slide, '※ 詳細レポートは単体で稼ぐ商品ではなく、導入支援に進む前の確認枠です。本費用は導入支援の初期費用に全額充当します');
 }
 
 // =================================================
@@ -584,7 +584,7 @@ function addTitle(slide, text, y = 1.3) {
     [
       { text: '本レポートは、AIによる自動入力・自動分析・スライド自動生成のデモを兼ねています。\n', options: { fontSize: 14, bold: true, color: COLORS.text } },
       { text: '同じ考え方で、御社の問い合わせ・見積・報告書・社内資料作成にも自動化を組み込めます。\n\n', options: { fontSize: 14, color: COLORS.text } },
-      { text: '導入可否・実施範囲・費用は、詳細診断または個別相談で確認します。', options: { fontSize: 13, color: COLORS.textMuted } },
+      { text: '導入可否・実施範囲・費用は、詳細レポートまたは個別相談で確認します。', options: { fontSize: 13, color: COLORS.textMuted } },
     ],
     {
       x: 2.3, y: 4.25, w: W - 4.6, h: 1.3,

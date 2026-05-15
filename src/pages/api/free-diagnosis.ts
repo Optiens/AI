@@ -17,7 +17,7 @@ import {
   formatYen,
 } from '../../lib/paid-billing'
 
-const MONTHLY_DIAGNOSIS_LIMIT = 30  // 【簡易版】AI活用診断 の月次上限
+const MONTHLY_DIAGNOSIS_LIMIT = 50  // 【簡易版】AI活用診断 の月次上限
 const RATE_LIMIT_PER_HOUR = parsePositiveInt(import.meta.env.DIAGNOSIS_RATE_LIMIT_PER_HOUR, 3)
 const RATE_LIMIT_PER_DAY = parsePositiveInt(import.meta.env.DIAGNOSIS_RATE_LIMIT_PER_DAY, 10)
 
@@ -117,7 +117,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
     const leadSourceDetail = clamp(String(form.get('lead_source_detail') || '').replace(/\r\n/g, ' ').trim(), 300)
     const entryReferrer = clamp(sanitize(String(form.get('entry_referrer') || '')), 1000)
 
-    // ---- 詳細診断向け追加項目（任意） ----
+    // ---- 詳細版向け追加項目（任意） ----
     const budgetRange = sanitize(String(form.get('budget_range') || ''))
     const businessAge = clamp(String(form.get('business_age') || '').trim(), 200)
     const serviceArea = clamp(String(form.get('service_area') || '').trim(), 200)
@@ -130,20 +130,6 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
     const planRaw = sanitize(String(form.get('plan') || 'free'))
     const marketingOptOut = form.get('marketing_opt_out') === '1'
     const plan: 'free' | 'paid' = planRaw === 'paid' ? 'paid' : 'free'
-
-    // ---- 詳細版（paid）は現在準備中のため、申し込みを停止 ----
-    // プレビュー（CEO検証）は X-Optiens-Preview: paid ヘッダー、または ?preview=paid クエリで通過可
-    if (plan === 'paid') {
-      const url = new URL(request.url)
-      const previewHeader = request.headers.get('x-optiens-preview')
-      const previewQuery = url.searchParams.get('preview')
-      const previewOk = previewHeader === 'paid' || previewQuery === 'paid'
-      if (!previewOk) {
-        return json({
-          error: '【詳細版】AI活用診断は現在準備中です。公開までもうしばらくお待ちください。お急ぎの場合は【簡易版】（無料）からお申し込みください。',
-        }, 503)
-      }
-    }
 
     // ---- 申込番号の自動採番（8桁ランダム英数字・一意性保証） ----
     const applicationId = await generateUniqueApplicationId()
@@ -185,7 +171,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
       if (monthlyCount >= MONTHLY_DIAGNOSIS_LIMIT) {
         await logSubmission(supabase, { ip, email, userAgent, result: 'rate_limited' })
         return json({
-          error: '今月の【簡易版】AI活用診断 枠は終了しました（毎月1日にリセット）。お急ぎの場合はAI活用レビュー面談または【詳細版】AI活用診断をご相談ください。',
+          error: '現在混み合っています。個別相談をご希望の方はこちらからお問い合わせください。',
         }, 429)
       }
     }
@@ -266,7 +252,7 @@ export const POST: APIRoute = async ({ request, redirect, clientAddress }) => {
         entry_referrer: entryReferrer || null,
         // 想定予算
         budget_range: budgetRange || null,
-        // 詳細診断向け追加項目
+        // 詳細版向け追加項目
         business_age: businessAge || null,
         service_area: serviceArea || null,
         target_customer: targetCustomer || null,
@@ -512,7 +498,7 @@ function buildPaidCustomerEmail(companyName: string, personName: string, appId: 
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ■ 申込番号: ${appId}
-■ ご利用プラン: 詳細診断資料
+■ ご利用プラン: 詳細レポート
 ■ ご請求金額: ${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}（税込）
 ━━━━━━━━━━━━━━━━━━━━━━
 
@@ -539,7 +525,7 @@ ${invoiceText}
    ${notifyUrl}
    （クリックを忘れた場合も、毎朝9時に自動で入金確認しますのでご安心ください）
 3. 入金確認後「入金を確認しました」メールを自動送信
-4. 5営業日以内に詳細診断資料の Google Slides リンクをお届け
+4. 5営業日以内に詳細レポートの Google Slides リンクをお届け
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ※ 領収書・適格請求書（インボイス）の発行に対応しています
@@ -573,7 +559,7 @@ function buildPaidCustomerEmailHtml(companyName: string, personName: string, app
 
 <table style="border-collapse:collapse;width:100%;margin:16px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">申込番号</td><td style="padding:8px 14px;font-family:monospace;font-size:1.1em;color:#1F3A93;font-weight:bold;">${appId}</td></tr>
-  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">詳細診断資料</td></tr>
+  <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">プラン</td><td style="padding:8px 14px;">詳細レポート</td></tr>
   <tr><td style="padding:8px 14px;font-weight:bold;background:#EEF2FF;">ご請求金額</td><td style="padding:8px 14px;"><strong>${formatYen(PAID_DIAGNOSIS_TOTAL_JPY)}（税込）</strong></td></tr>
 </table>
 
@@ -604,7 +590,7 @@ ${invoiceHtml}
     <span style="font-size:12px;color:#64748b;">クリックを忘れた場合も、毎朝9時に自動で入金確認します</span>
   </li>
   <li>入金確認後「入金を確認しました」メールを自動送信</li>
-  <li>5営業日以内に<strong>詳細診断資料の Google Slides リンク</strong>をお届け</li>
+  <li>5営業日以内に<strong>詳細レポートの Google Slides リンク</strong>をお届け</li>
 </ol>
 
 <p style="margin:24px 0 0;padding-top:16px;border-top:1px solid #E2E8F0;font-size:12px;color:#64748b;">

@@ -3,13 +3,13 @@
  * フォームページから GET 呼び出し → 残り N 件を表示
  *
  * 公開数（ユーザー側に見せる数値）= verified_count（=実需）
- * 月次上限は MONTHLY_DIAGNOSIS_LIMIT（30件）
+ * 月次上限は MONTHLY_DIAGNOSIS_LIMIT（50件）
  */
 import type { APIRoute } from 'astro'
 import { createClient } from '@supabase/supabase-js'
 import { getMonthlyVerifiedCount } from '../../lib/diagnosis-rate-limit'
 
-const MONTHLY_DIAGNOSIS_LIMIT = 30
+const MONTHLY_DIAGNOSIS_LIMIT = 50
 
 const SUPABASE_URL = import.meta.env.SUPABASE_URL
 const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_ROLE_KEY

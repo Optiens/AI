@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro'
 import { supabase } from '../../lib/supabase'
+import { verifyTurnstile } from '../../lib/turnstile'
 
 const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY
 // gpt-4o は Vision 対応・日本語精度の高いコスパ良モデル
@@ -13,6 +14,7 @@ const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT_PER_HOUR = 10
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
 const RATE_LIMIT_ERROR_MESSAGE = '時間内の利用制限に達しました。少し時間をおいてから再度お試しください。'
+const TURNSTILE_ERROR_MESSAGE = 'スパム対策の確認に失敗しました。チェックを完了してから再度お試しください。'
 
 function checkRateLimit(ip: string) {
   const now = Date.now()
@@ -551,13 +553,27 @@ function json(payload: any, status = 200) {
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
     const ip = clientAddress || 'unknown'
+    const body = await request.json().catch(() => null)
+    if (!body) return json({ error: 'リクエスト形式が正しくありません。' }, 400)
+
+    const turnstileToken = String(body.turnstileToken || body['cf-turnstile-response'] || '').trim()
+    const tsResult = await verifyTurnstile(turnstileToken, ip)
+    if (!tsResult.success) {
+      await logAiApiEvent({
+        provider: 'cloudflare',
+        operation: 'turnstile.siteverify',
+        status: 'error',
+        error_type: 'turnstile',
+        error_message: tsResult.errorCodes?.join(',') || 'verification-failed',
+        metadata: { error_codes: tsResult.errorCodes || [] },
+      }).catch(() => {})
+      return json({ error: TURNSTILE_ERROR_MESSAGE }, 400)
+    }
+
     const rl = checkRateLimit(ip)
     if (!rl.ok) {
       return json({ error: RATE_LIMIT_ERROR_MESSAGE }, 429)
     }
-
-    const body = await request.json().catch(() => null)
-    if (!body) return json({ error: 'リクエスト形式が正しくありません。' }, 400)
 
     const url = String(body.url || '').trim()
     const fileBase64 = String(body.fileBase64 || '').trim()
