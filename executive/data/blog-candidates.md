@@ -16,3 +16,9 @@
   - 画像: `public/images/blog/20260515-dx-fieldwork-profit.webp`
   - ファクトチェック: `executive/data/20260515_dx-fieldwork-profit_factcheck.md`
   - 元ネタ: 2026-05-15 CEO共有の文字起こし
+
+- ✅ シャドーAIを増やさない社内AI活用ルール：Copilot・Gemini時代のコンテキスト管理
+  - 記事: `src/content/blog/20260516-ai-governance-context-management.md`
+  - 画像: `public/images/blog/20260516-ai-governance-context-management.webp`
+  - ファクトチェック: `executive/data/20260516_ai-governance-context-management_factcheck.md`
+  - 元ネタ: 2026-05-16 CEO共有の文字起こし

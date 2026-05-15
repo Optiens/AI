@@ -1,0 +1,320 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { verifyPaymentToken } from '../lib/payment-token';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = import.meta.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase =
+  SUPABASE_URL && SUPABASE_SERVICE_KEY
+    ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    : null;
+
+const orderId = (Astro.url.searchParams.get('id') || '').trim();
+const token = (Astro.url.searchParams.get('t') || '').trim();
+
+let pageState: 'invalid' | 'not_found' | 'ready' | 'already_paid' = 'invalid';
+let amount = 0;
+let ticketCount = 0;
+let ticketNumber = '';
+let paidAt = '';
+
+if (orderId && token && verifyPaymentToken(orderId, token)) {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('spot_ticket_orders')
+      .select('amount_jpy, ticket_count, status, paid_at, ticket_number')
+      .eq('order_id', orderId)
+      .maybeSingle();
+    if (error || !data) {
+      pageState = 'not_found';
+    } else if (['paid', 'ticket_issued', 'redeemed'].includes(data.status)) {
+      pageState = 'already_paid';
+      amount = data.amount_jpy || 0;
+      ticketCount = data.ticket_count || 0;
+      ticketNumber = data.ticket_number || '';
+      paidAt = data.paid_at || '';
+    } else {
+      pageState = 'ready';
+      amount = data.amount_jpy || 0;
+      ticketCount = data.ticket_count || 0;
+    }
+  } else {
+    pageState = 'ready';
+  }
+}
+
+const formattedPaidAt = paidAt
+  ? new Date(paidAt).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })
+  : '';
+---
+
+<Layout
+  title="スポット相談チケット 振込完了通知 | Optiens"
+  description="スポット相談チケットのお振込完了通知ページ。"
+  noindex={true}
+>
+  <main class="pn-main">
+    <section class="pn-section">
+      <div class="container">
+        <div class="pn-card">
+          {pageState === 'invalid' && (
+            <>
+              <div class="pn-icon pn-icon--error" aria-hidden="true">
+                <i class="fa-solid fa-circle-xmark"></i>
+              </div>
+              <h1>リンクが無効です</h1>
+              <p class="pn-text">
+                URL が正しくないか、有効期限が切れています。<br/>
+                購入申込時の確認メールに記載されたリンクから再度アクセスしてください。
+              </p>
+            </>
+          )}
+
+          {pageState === 'not_found' && (
+            <>
+              <div class="pn-icon pn-icon--error" aria-hidden="true">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+              <h1>該当する申込が見つかりません</h1>
+              <p class="pn-text">申込番号 <strong>{orderId}</strong> は登録されていない可能性があります。</p>
+            </>
+          )}
+
+          {pageState === 'already_paid' && (
+            <>
+              <div class="pn-icon pn-icon--success" aria-hidden="true">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+              <h1>すでにお振込確認済みです</h1>
+              <div class="pn-info-card">
+                <p class="pn-info-row"><span>申込番号</span><strong>{orderId}</strong></p>
+                <p class="pn-info-row"><span>枚数</span><strong>{ticketCount}枚</strong></p>
+                <p class="pn-info-row"><span>ご請求金額</span><strong>¥{amount.toLocaleString()}（税込）</strong></p>
+                {ticketNumber && (
+                  <p class="pn-info-row"><span>チケット番号</span><strong>{ticketNumber}</strong></p>
+                )}
+                {formattedPaidAt && (
+                  <p class="pn-info-row"><span>確認日時</span><strong>{formattedPaidAt}</strong></p>
+                )}
+              </div>
+              <p class="pn-text">
+                チケット番号が発行済みの場合は、購入時のメールをご確認ください。<br/>
+                利用申請は <a href="/spot-ticket#redeem">スポット相談チケットページ</a> から行えます。
+              </p>
+            </>
+          )}
+
+          {pageState === 'ready' && (
+            <>
+              <div class="pn-icon" aria-hidden="true">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <h1>振込完了の通知</h1>
+              <div class="pn-info-card">
+                <p class="pn-info-row"><span>申込番号</span><strong>{orderId}</strong></p>
+                <p class="pn-info-row"><span>枚数</span><strong>{ticketCount}枚</strong></p>
+                <p class="pn-info-row"><span>ご請求金額</span><strong>¥{amount.toLocaleString()}（税込）</strong></p>
+              </div>
+              <p class="pn-text">
+                お振込が完了しましたら、下のボタンを押してください。<br/>
+                入金が確認できた場合、チケット番号を自動発行してメールでお送りします。
+              </p>
+              <button id="pn-notify-btn" class="pn-btn" data-id={orderId} data-token={token}>
+                <span class="pn-btn-label"><i class="fa-solid fa-paper-plane"></i> 振込完了を通知する</span>
+              </button>
+              <p class="pn-help">
+                ※ 銀行→freee の取引反映には数分〜数時間かかる場合があります。<br/>
+                ※ ボタンを押し忘れても、毎朝9時に自動で入金確認します。
+              </p>
+              <div id="pn-result" class="pn-result" hidden></div>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script is:inline>
+    (function () {
+      const btn = document.getElementById('pn-notify-btn');
+      const result = document.getElementById('pn-result');
+      if (!btn || !result) return;
+
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const t = btn.dataset.token;
+        if (!id || !t) return;
+
+        btn.disabled = true;
+        const labelEl = btn.querySelector('.pn-btn-label');
+        const originalLabel = labelEl ? labelEl.innerHTML : '';
+        if (labelEl) labelEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 確認中…';
+
+        try {
+          const res = await fetch('/api/spot-ticket-payment-notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, t }),
+          });
+          const data = await res.json();
+          showResult(data.status, data.message);
+
+          if (data.status === 'paid' || data.status === 'already_paid') {
+            btn.style.display = 'none';
+          } else {
+            btn.disabled = false;
+            if (labelEl) labelEl.innerHTML = originalLabel;
+          }
+        } catch (e) {
+          console.error(e);
+          showResult('error', '通信エラーが発生しました。しばらくしてからもう一度お試しください。');
+          btn.disabled = false;
+          if (labelEl) labelEl.innerHTML = originalLabel;
+        }
+      });
+
+      function showResult(status, message) {
+        result.hidden = false;
+        result.className = 'pn-result';
+        if (status === 'paid' || status === 'already_paid') {
+          result.classList.add('pn-result--success');
+          result.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + escapeText(message);
+        } else if (status === 'pending') {
+          result.classList.add('pn-result--pending');
+          result.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> ' + escapeText(message);
+        } else {
+          result.classList.add('pn-result--error');
+          result.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + escapeText(message);
+        }
+      }
+
+      function escapeText(s) {
+        const div = document.createElement('div');
+        div.textContent = s || '';
+        return div.innerHTML;
+      }
+    })();
+  </script>
+</Layout>
+
+<style>
+  .pn-main {
+    background: #f8fafc;
+    min-height: calc(100vh - 200px);
+    padding: clamp(40px, 6vw, 80px) 0;
+  }
+  .pn-section .container {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  .pn-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: clamp(28px, 5vw, 48px);
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+    text-align: center;
+  }
+  .pn-icon {
+    font-size: 48px;
+    color: #5b7fff;
+    margin-bottom: 18px;
+  }
+  .pn-icon--success { color: #10b981; }
+  .pn-icon--error { color: #ef4444; }
+  .pn-card h1 {
+    font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 18px;
+  }
+  .pn-text {
+    color: #475569;
+    line-height: 1.8;
+    margin: 0 0 22px;
+    font-size: 0.95rem;
+  }
+  .pn-text a {
+    color: #1F3A93;
+    font-weight: 700;
+  }
+  .pn-info-card {
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 0 0 22px;
+    text-align: left;
+  }
+  .pn-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    margin: 0;
+    font-size: 0.92rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .pn-info-row:last-child { border-bottom: 0; }
+  .pn-info-row span { color: #64748b; }
+  .pn-info-row strong {
+    color: #0f172a;
+    font-family: 'SF Mono', 'Consolas', monospace;
+    overflow-wrap: anywhere;
+  }
+  .pn-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1F3A93 0%, #5b7fff 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: 0;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(31, 58, 147, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+  .pn-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(31, 58, 147, 0.32);
+  }
+  .pn-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  .pn-help {
+    margin-top: 16px;
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+  .pn-result {
+    margin-top: 22px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    text-align: left;
+  }
+  .pn-result--success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+  }
+  .pn-result--pending {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+  }
+  .pn-result--error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+  }
+  .pn-result i { margin-right: 6px; }
+</style>

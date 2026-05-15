@@ -40,8 +40,8 @@ import Layout from '../layouts/Layout.astro';
           </article>
           <article class="spot-summary-item">
             <span>運用</span>
-            <h2>購入後に番号を発行</h2>
-            <p>入金確認後にチケット番号を発行します。依頼時は番号と内容をフォームに入力してください。</p>
+            <h2>入金確認後に番号を自動発行</h2>
+            <p>購入申込後に振込先案内をメール送付し、freee照合後にチケット番号を発行します。依頼時は番号と内容をフォームに入力してください。</p>
           </article>
         </div>
 
@@ -73,13 +73,13 @@ import Layout from '../layouts/Layout.astro';
             </li>
             <li>
               <span>02</span>
-              <strong>請求・入金</strong>
-              <p>内容確認後に請求・お支払い案内をお送りします。</p>
+              <strong>振込先案内</strong>
+              <p>1〜3枚は自動返信メールで請求情報・振込先・通知URLをお送りします。</p>
             </li>
             <li>
               <span>03</span>
               <strong>チケット番号発行</strong>
-              <p>入金確認後、利用申請に使うチケット番号を発行します。</p>
+              <p>freeeで入金照合できたら、利用申請に使うチケット番号を自動発行します。</p>
             </li>
             <li>
               <span>04</span>
@@ -97,7 +97,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="spot-form-copy">
             <p class="spot-eyebrow">Purchase</p>
             <h2>スポット相談チケットを購入する</h2>
-            <p>まずは購入枚数と想定用途をお送りください。内容を確認し、請求・お支払い案内をお送りします。</p>
+            <p>まずは購入枚数と想定用途をお送りください。1〜3枚は自動返信メールで振込先案内をお送りします。4枚以上は個別確認です。</p>
           </div>
           <form action="/api/spot-ticket" method="POST" class="spot-form">
             <input type="hidden" name="mode" value="purchase">
@@ -155,7 +155,7 @@ import Layout from '../layouts/Layout.astro';
               相談したい内容・購入前に伝えておきたいこと
               <textarea name="notes" rows="5" placeholder="例: 詳細レポートを見たうえで、どの業務から始めるべきか相談したい。"></textarea>
             </label>
-            <p class="spot-form-note">送信後、内容確認のうえ請求・お支払い案内をお送りします。入金確認後にチケット番号を発行します。</p>
+            <p class="spot-form-note">1〜3枚の購入申込後は、自動返信メールに振込先・請求情報・振込完了通知URLを記載します。入金確認後にチケット番号を発行します。</p>
             <button type="submit" class="btn-primary">購入申込を送信</button>
           </form>
         </div>

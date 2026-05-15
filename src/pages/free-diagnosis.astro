@@ -40,6 +40,10 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           御社の業務量・データ状態・IT環境を確認し、<br/>
           導入可否・優先順位・次の進め方を詳細レポートで整理します。
         </p>
+        <div class="diag-limit-note" data-plan-show="paid" hidden>
+          <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+          <p><strong>資料読取の上限：</strong>1申込につき画像1点または公開URL1件までです。画像は最大5MB、URLは本文最大約6,000字を抜粋します。追加資料がある場合は、要点をフォームにご記入ください。</p>
+        </div>
 
         <!-- 無料版のお約束 -->
         <div class="diag-promise" data-plan-show="free">
@@ -142,12 +146,12 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             <legend>業務資料・自社サイトから自動入力（任意）</legend>
             <div class="upload-hint">
               <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
-              <p>名刺・会社案内・業務報告書などのアップロード、または自社の会社案内ページのURL貼り付けで、AIが内容を読み取って下のフォームを自動入力します。<strong>抽出結果に「ご担当者名は手動でご記入ください」等の確認メッセージが出る場合があります</strong>ので、内容をご確認のうえ修正・追記してください。</p>
+              <p>名刺・会社案内・業務報告書などの画像、または自社の会社案内ページURLから、AIが内容を読み取って下のフォームを自動入力します。<strong>自動読取は1回の申込につき画像1点またはURL1件まで</strong>です。抽出結果に確認メッセージが出る場合がありますので、内容をご確認のうえ修正・追記してください。</p>
             </div>
 
             <div class="upload-tabs" role="tablist">
               <button type="button" class="upload-tab is-active" data-mode="file" role="tab" aria-selected="true">
-                <i class="fa-solid fa-paperclip" aria-hidden="true"></i> ファイル添付
+                <i class="fa-solid fa-paperclip" aria-hidden="true"></i> 画像1点
               </button>
               <button type="button" class="upload-tab" data-mode="url" role="tab" aria-selected="false">
                 <i class="fa-solid fa-link" aria-hidden="true"></i> URLを貼り付け
@@ -155,7 +159,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             </div>
 
             <div class="upload-mode-panel" data-panel="file">
-              <p class="upload-mode-note"><small>対応形式: JPG / PNG / GIF / WebP（最大5MB）／ 名刺・会社案内・スクリーンショット等の画像</small></p>
+              <p class="upload-mode-note"><small>対応形式: JPG / PNG / GIF / WebP（1点・最大5MB・低解像度読取）／ 名刺・会社案内・スクリーンショット等の画像</small></p>
               <div class="upload-controls">
                 <label for="file-upload" class="upload-file-label">
                   <i class="fa-solid fa-paperclip" aria-hidden="true"></i>
@@ -169,7 +173,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
             </div>
 
             <div class="upload-mode-panel" data-panel="url" hidden>
-              <p class="upload-mode-note"><small>会社案内ページなど、公開されているURLを指定してください（JavaScriptで描画されるサイトはご利用いただけない場合があります）</small></p>
+              <p class="upload-mode-note"><small>会社案内ページなど、公開URLを1件指定してください。本文は最大約6,000字を抜粋します（JavaScriptで描画されるサイトはご利用いただけない場合があります）</small></p>
               <div class="upload-controls upload-controls--url">
                 <input type="url" id="url-input" class="upload-url-input" placeholder="https://example.co.jp/company" />
                 <button type="button" id="extract-url-btn" class="upload-btn">
@@ -903,6 +907,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     var extractStatus = document.getElementById('extract-status');
     var tabs = document.querySelectorAll('.upload-tab');
     var panels = document.querySelectorAll('.upload-mode-panel');
+    var extractUsed = false;
 
     if (!extractStatus) return;
 
@@ -1060,6 +1065,10 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
     }
 
     function postExtract(payload, btn, runningMsg) {
+      if (extractUsed) {
+        setStatus('自動読取は1回の申込につき画像1点またはURL1件までです。追加資料がある場合は、要点をフォームの自由記述に追記してください。', 'error');
+        return;
+      }
       var turnstileToken = requireTurnstileToken();
       if (turnstileToken === null) return;
       if (turnstileToken) payload.turnstileToken = turnstileToken;
@@ -1076,6 +1085,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           if (data.error) {
             setStatus(data.error, 'error');
           } else {
+            extractUsed = true;
             applyFields(data);
           }
           resetTurnstileWidget();
@@ -1507,6 +1517,33 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
   }
   .diag-sub strong {
     color: var(--heading, #0f172a);
+    font-weight: 700;
+  }
+  .diag-limit-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 760px;
+    margin: 18px auto 0;
+    padding: 12px 16px;
+    text-align: left;
+    background: rgba(228, 138, 149, .12);
+    border: 1px solid rgba(228, 138, 149, .35);
+    border-radius: 8px;
+    color: var(--text);
+  }
+  .diag-limit-note i {
+    color: var(--sakura, #E48A95);
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .diag-limit-note p {
+    margin: 0;
+    font-size: .85rem;
+    line-height: 1.65;
+  }
+  .diag-limit-note strong {
+    color: var(--heading);
     font-weight: 700;
   }
 

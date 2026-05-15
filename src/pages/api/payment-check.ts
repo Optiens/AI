@@ -29,6 +29,11 @@ import {
   buildPaidDiagnosisReceiptText,
   buildPaidDiagnosisReceiptHtml,
 } from '../../lib/paid-billing'
+import {
+  buildSpotTicketNumber,
+  buildSpotTicketPaymentConfirmedEmail,
+  buildSpotTicketPaymentConfirmedEmailHtml,
+} from '../../lib/spot-ticket-billing'
 
 const CRON_SECRET = import.meta.env.CRON_SECRET
 const RESEND_API_KEY = import.meta.env.RESEND_API_KEY
@@ -57,6 +62,17 @@ interface PendingApplication {
   company_name: string
   person_name: string
   email: string
+  amount_jpy: number
+  created_at?: string
+}
+
+interface PendingSpotTicketOrder {
+  id: number | string
+  order_id: string
+  company_name: string
+  person_name: string
+  email: string
+  ticket_count: number
   amount_jpy: number
   created_at?: string
 }
@@ -131,8 +147,25 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: 'Failed to query pending applications' }, 500)
   }
 
-  if (!pending || pending.length === 0) {
-    return json({ status: 'ok', message: 'No pending applications', matched_count: 0 })
+  const { data: spotPending, error: spotQueryError } = await supabase
+    .from('spot_ticket_orders')
+    .select('id, order_id, company_name, person_name, email, ticket_count, amount_jpy, created_at')
+    .eq('status', 'pending_payment')
+    .gt('amount_jpy', 0)
+
+  if (spotQueryError) {
+    console.error('[payment-check] Spot ticket query error:', spotQueryError)
+    return json({ error: 'Failed to query pending spot ticket orders' }, 500)
+  }
+
+  if ((!pending || pending.length === 0) && (!spotPending || spotPending.length === 0)) {
+    return json({
+      status: 'ok',
+      message: 'No pending applications',
+      matched_count: 0,
+      paid_diagnosis: { pending_count: 0, matched_count: 0 },
+      spot_ticket: { pending_count: 0, matched_count: 0 },
+    })
   }
 
   // ---- freee から最近の取引を取得 ----
@@ -155,7 +188,7 @@ export const POST: APIRoute = async ({ request }) => {
   // ---- 照合 ----
   const matched: { app: PendingApplication; txn: FreeeWalletTxn }[] = []
   const usedTxnIds = new Set<number>()
-  for (const app of (pending as PendingApplication[])) {
+  for (const app of ((pending || []) as PendingApplication[])) {
     const candidates = txns.filter(
       (t) =>
         !usedTxnIds.has(t.id) &&
@@ -168,6 +201,21 @@ export const POST: APIRoute = async ({ request }) => {
     if (!txn) continue
     usedTxnIds.add(txn.id)
     matched.push({ app, txn })
+  }
+
+  const spotMatched: { order: PendingSpotTicketOrder; txn: FreeeWalletTxn }[] = []
+  for (const order of ((spotPending || []) as PendingSpotTicketOrder[])) {
+    const candidates = txns.filter(
+      (t) =>
+        !usedTxnIds.has(t.id) &&
+        t.amount === order.amount_jpy &&
+        matchByCompanyName(t.description || '', order.company_name)
+    )
+    if (candidates.length === 0) continue
+    const txn = candidates.sort((x, y) => x.date.localeCompare(y.date))[0]
+    if (!txn) continue
+    usedTxnIds.add(txn.id)
+    spotMatched.push({ order, txn })
   }
 
   // ---- マッチした申込を paid に更新 + 通知 ----
@@ -229,12 +277,92 @@ export const POST: APIRoute = async ({ request }) => {
     })
   }
 
+  const spotUpdates: any[] = []
+  for (const m of spotMatched) {
+    const now = new Date()
+    const ticketNumber = buildSpotTicketNumber(m.order.order_id, now)
+    const { error: updateError } = await supabase
+      .from('spot_ticket_orders')
+      .update({
+        status: 'ticket_issued',
+        paid_at: now.toISOString(),
+        freee_txn_id: m.txn.id,
+        ticket_number: ticketNumber,
+        ticket_issued_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      })
+      .eq('id', m.order.id)
+    if (updateError) {
+      console.error('[payment-check] Spot ticket update error for', m.order.order_id, updateError)
+      continue
+    }
+
+    if (resend && m.order.email) {
+      try {
+        await resend.emails.send({
+          from: MAIL_FROM,
+          to: m.order.email,
+          subject: `【Optiens】スポット相談チケット番号を発行しました（${ticketNumber}）`,
+          text: buildSpotTicketPaymentConfirmedEmail({
+            companyName: m.order.company_name,
+            personName: m.order.person_name,
+            orderId: m.order.order_id,
+            ticketCount: m.order.ticket_count,
+            amountJpy: m.order.amount_jpy,
+            ticketNumber,
+          }),
+          html: buildSpotTicketPaymentConfirmedEmailHtml({
+            companyName: m.order.company_name,
+            personName: m.order.person_name,
+            orderId: m.order.order_id,
+            ticketCount: m.order.ticket_count,
+            amountJpy: m.order.amount_jpy,
+            ticketNumber,
+          }),
+        })
+      } catch (e) {
+        console.error('[payment-check] Spot ticket customer email error:', e)
+      }
+      if (MAIL_TO) {
+        try {
+          await resend.emails.send({
+            from: MAIL_FROM,
+            to: MAIL_TO,
+            subject: `【チケット発行】${ticketNumber} ${m.order.company_name}`,
+            text: `スポット相談チケットの入金を確認し、チケット番号を発行しました。\n\n申込番号: ${m.order.order_id}\nチケット番号: ${ticketNumber}\n企業: ${m.order.company_name}\n担当: ${m.order.person_name}\nメール: ${m.order.email}\n枚数: ${m.order.ticket_count}枚\n金額: ¥${m.order.amount_jpy.toLocaleString()}（税込）\nfreee取引ID: ${m.txn.id}\nfreee摘要: ${m.txn.description || ''}\n\n利用申請が届いたら、チケット番号と依頼内容を確認してください。`,
+          })
+        } catch (e) {
+          console.error('[payment-check] Spot ticket CEO notify error:', e)
+        }
+      }
+    }
+
+    spotUpdates.push({
+      order_id: m.order.order_id,
+      company_name: m.order.company_name,
+      ticket_number: ticketNumber,
+      txn_id: m.txn.id,
+      amount: m.txn.amount,
+      txn_description: m.txn.description,
+    })
+  }
+
   return json({
     status: 'ok',
-    pending_count: pending.length,
+    pending_count: (pending?.length || 0) + (spotPending?.length || 0),
     txn_count: txns.length,
-    matched_count: matched.length,
+    matched_count: matched.length + spotMatched.length,
     updates,
+    paid_diagnosis: {
+      pending_count: pending?.length || 0,
+      matched_count: matched.length,
+      updates,
+    },
+    spot_ticket: {
+      pending_count: spotPending?.length || 0,
+      matched_count: spotMatched.length,
+      updates: spotUpdates,
+    },
   })
 }
 

@@ -11,10 +11,20 @@ const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
 const OPENAI_CONTEXT_WINDOW_TOKENS = Number(import.meta.env.OPENAI_CONTEXT_WINDOW_TOKENS || '0') || null
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT_PER_HOUR = 10
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
 const RATE_LIMIT_ERROR_MESSAGE = '時間内の利用制限に達しました。少し時間をおいてから再度お試しください。'
 const TURNSTILE_ERROR_MESSAGE = 'スパム対策の確認に失敗しました。チェックを完了してから再度お試しください。'
+
+function positiveInt(value: unknown, fallback: number) {
+  const parsed = Number(value)
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback
+}
+
+const RATE_LIMIT_PER_HOUR = positiveInt(import.meta.env.FILE_EXTRACT_RATE_LIMIT_PER_HOUR, 3)
+const MAX_FILE_SIZE_MB = positiveInt(import.meta.env.FILE_EXTRACT_MAX_FILE_MB, 5)
+const MAX_URL_BYTES_KB = positiveInt(import.meta.env.FILE_EXTRACT_MAX_URL_KB, 512)
+const MAX_URL_TEXT_CHARS = positiveInt(import.meta.env.FILE_EXTRACT_MAX_URL_TEXT_CHARS, 6000)
+const OPENAI_MAX_OUTPUT_TOKENS = positiveInt(import.meta.env.FILE_EXTRACT_MAX_OUTPUT_TOKENS, 1000)
 
 function checkRateLimit(ip: string) {
   const now = Date.now()
@@ -83,8 +93,8 @@ interface ExtractResult {
 }
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024 // 5MB
-const MAX_URL_BYTES = 1 * 1024 * 1024 // 1MB
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
+const MAX_URL_BYTES = MAX_URL_BYTES_KB * 1024
 const URL_FETCH_TIMEOUT_MS = 10_000
 
 function truncateText(value: unknown, max = 1000) {
@@ -286,7 +296,7 @@ async function fetchUrlText(url: string): Promise<string> {
 
   const contentLength = res.headers.get('content-length')
   if (contentLength && Number(contentLength) > MAX_URL_BYTES) {
-    throw new Error(`ページサイズが大きすぎます（上限 ${Math.round(MAX_URL_BYTES / 1024 / 1024)}MB）。`)
+    throw new Error(`ページサイズが大きすぎます（上限 ${MAX_URL_BYTES_KB}KB）。`)
   }
 
   const reader = res.body?.getReader()
@@ -332,8 +342,7 @@ async function fetchUrlText(url: string): Promise<string> {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
   text = text.replace(/\s+/g, ' ').trim()
-  const MAX_TEXT_CHARS = 20000
-  if (text.length > MAX_TEXT_CHARS) text = text.slice(0, MAX_TEXT_CHARS)
+  if (text.length > MAX_URL_TEXT_CHARS) text = text.slice(0, MAX_URL_TEXT_CHARS)
   if (!text) {
     throw new Error('ページから本文テキストを取得できませんでした。サーバー側でJavaScriptで描画されるサイトはご利用いただけません。')
   }
@@ -361,7 +370,7 @@ async function callOpenAIWithFile(input: FileInput): Promise<ExtractResult> {
   const dataUrl = `data:${input.mediaType};base64,${input.fileBase64}`
   const userMessage = [
     { type: 'text', text: '添付の書類からAI活用診断フォームに必要な情報を抽出し、指定のJSON形式で返してください。' },
-    { type: 'image_url', image_url: { url: dataUrl } },
+    { type: 'image_url', image_url: { url: dataUrl, detail: 'low' } },
   ]
   const result = await callOpenAI(userMessage, 'file')
   result.source_type = 'file'
@@ -423,7 +432,7 @@ async function callOpenAI(userContent: any[], sourceType: 'file' | 'url'): Promi
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userContent },
       ],
-      max_tokens: 1500,
+      max_tokens: OPENAI_MAX_OUTPUT_TOKENS,
       temperature: 0.1,
       response_format: { type: 'json_object' },
     }),
@@ -596,7 +605,18 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       return json({ error: 'ファイルまたはURLを指定してください。' }, 400)
     }
 
-    return json({ ...result, remaining: rl.remaining })
+    return json({
+      ...result,
+      remaining: rl.remaining,
+      limits: {
+        source_count: '1申込につき画像1点またはURL1件',
+        max_file_mb: MAX_FILE_SIZE_MB,
+        max_url_kb: MAX_URL_BYTES_KB,
+        max_url_text_chars: MAX_URL_TEXT_CHARS,
+        rate_limit_per_hour: RATE_LIMIT_PER_HOUR,
+        max_output_tokens: OPENAI_MAX_OUTPUT_TOKENS,
+      },
+    })
   } catch (e: any) {
     console.error('[file-extract] error:', e)
     return json({ error: e?.message || '予期しないエラーが発生しました。' }, 500)
