@@ -28,3 +28,9 @@
   - 画像: `public/images/blog/20260516-ai-interface-shift-pointer-voice-security.webp`
   - ファクトチェック: `executive/data/20260516_ai-interface-shift-pointer-voice-security_factcheck.md`
   - 元ネタ: 2026-05-16 CEO共有の文字起こし（AIポインター / AI安全性・音声入力・サイバー防御）
+
+- ✅ AIコーディングで技術的負債を増やさない：リファクタリング判断の5基準
+  - 記事: `src/content/blog/20260516-ai-coding-refactor-technical-debt.md`
+  - 画像: `public/images/blog/20260516-ai-coding-refactor-technical-debt.webp`
+  - ファクトチェック: `executive/data/20260516_ai-coding-refactor-technical-debt_factcheck.md`
+  - 元ネタ: 2026-05-16 CEO共有の文字起こし（AIコーディング / リファクタリング / 技術的負債）
