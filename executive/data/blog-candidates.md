@@ -34,3 +34,9 @@
   - 画像: `public/images/blog/20260516-ai-coding-refactor-technical-debt.webp`
   - ファクトチェック: `executive/data/20260516_ai-coding-refactor-technical-debt_factcheck.md`
   - 元ネタ: 2026-05-16 CEO共有の文字起こし（AIコーディング / リファクタリング / 技術的負債）
+
+- ✅ 小さなAIアプリのDB選定：Cloudflare D1・Turso・SQLiteを使う前に見るべき5条件
+  - 記事: `src/content/blog/20260516-cheap-database-d1-turso-sqlite.md`
+  - 画像: `public/images/blog/20260516-cheap-database-d1-turso-sqlite.webp`
+  - ファクトチェック: `executive/data/20260516_cheap-database-d1-turso-sqlite_factcheck.md`
+  - 元ネタ: 2026-05-16 CEO共有の文字起こし（格安DB / Cloudflare D1 / Turso / SQLite）
