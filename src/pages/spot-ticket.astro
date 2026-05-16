@@ -19,7 +19,7 @@ import Layout from '../layouts/Layout.astro';
           購入後に発行されるチケット番号を使って、依頼内容をフォームから申請できます。
         </p>
         <div class="spot-hero-actions">
-          <a href="#purchase" class="btn-primary">チケットを購入する</a>
+          <a href="/spot-ticket-purchase" class="btn-primary">チケットを購入する</a>
           <a href="/spot-ticket-redeem" class="btn-secondary">チケット番号で依頼する</a>
         </div>
       </div>
@@ -101,80 +101,22 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <section class="spot-form-section light-section" id="purchase">
+    <section class="spot-action-section light-section" id="purchase">
       <div class="container">
-        <div class="spot-form-layout">
-          <div class="spot-form-copy">
+        <div class="spot-action-card">
+          <div>
             <p class="spot-eyebrow">Purchase</p>
             <h2>スポット相談チケットを購入する</h2>
-            <p>まずは購入枚数と想定用途をお送りください。1〜3枚は自動返信メールで振込先案内をお送りします。4枚以上は個別確認です。お急ぎの場合は、振込後に通知URLまたはお問い合わせフォームからお知らせください。</p>
+            <p>購入申込は専用ページで受け付けます。購入枚数・想定用途・請求書宛名を入力すると、1〜3枚は自動返信メールで振込先案内をお送りします。</p>
           </div>
-          <form action="/api/spot-ticket" method="POST" class="spot-form">
-            <input type="hidden" name="mode" value="purchase">
-            <div class="hp-field" aria-hidden="true">
-              <label for="purchase_website">ウェブサイト</label>
-              <input type="text" id="purchase_website" name="website" tabindex="-1" autocomplete="off">
-            </div>
-
-            <div class="form-row">
-              <label>
-                会社・団体名 <span>*</span>
-                <input type="text" name="company_name" required placeholder="例: 株式会社〇〇">
-              </label>
-              <label>
-                お名前 <span>*</span>
-                <input type="text" name="person_name" required placeholder="例: 山田 太郎">
-              </label>
-            </div>
-            <div class="form-row">
-              <label>
-                メールアドレス <span>*</span>
-                <input type="email" name="email" required placeholder="example@company.com">
-              </label>
-              <label>
-                電話番号
-                <input type="tel" name="phone" placeholder="例: 090-1234-5678">
-              </label>
-            </div>
-            <div class="form-row">
-              <label>
-                購入希望枚数 <span>*</span>
-                <select name="ticket_count" required>
-                  <option value="">選択してください</option>
-                  <option value="1">1枚（¥33,000税込）</option>
-                  <option value="2">2枚（¥66,000税込）</option>
-                  <option value="3">3枚（¥99,000税込）</option>
-                  <option value="4plus">4枚以上（個別確認）</option>
-                </select>
-              </label>
-              <label>
-                想定用途
-                <select name="service_type">
-                  <option value="undecided">未定・相談したい</option>
-                  <option value="review">AI活用レビュー面談</option>
-                  <option value="requirements">有償要件定義</option>
-                  <option value="small_build">簡易実装・軽微な自動化</option>
-                </select>
-              </label>
-            </div>
-            <label>
-              請求書宛名
-              <input type="text" name="invoice_name" placeholder="会社名と同じ場合は空欄でOK">
-            </label>
-            <label>
-              相談したい内容・購入前に伝えておきたいこと
-              <textarea name="notes" rows="5" placeholder="例: 詳細レポートを見たうえで、どの業務から始めるべきか相談したい。"></textarea>
-            </label>
-            <p class="spot-form-note">1〜3枚の購入申込後は、自動返信メールに振込先・請求情報・振込完了通知URLを記載します。入金確認後にチケット番号を発行します。急ぎの場合は、振込後に申込番号・振込人名義・振込日時を添えてお問い合わせください。</p>
-            <button type="submit" class="btn-primary">購入申込を送信</button>
-          </form>
+          <a href="/spot-ticket-purchase" class="btn-primary">購入申込フォームを開く</a>
         </div>
       </div>
     </section>
 
-    <section class="spot-redeem-section light-section" id="redeem">
+    <section class="spot-action-section light-section" id="redeem">
       <div class="container">
-        <div class="spot-redeem-card">
+        <div class="spot-action-card">
           <div>
             <p class="spot-eyebrow">Redeem</p>
             <h2>チケット番号で依頼する</h2>
@@ -304,9 +246,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .spot-summary-item p,
   .spot-use-card p,
-  .spot-flow p,
-  .spot-form-copy p,
-  .spot-form-note {
+  .spot-flow p {
     color: var(--text);
     line-height: 1.8;
   }
@@ -381,18 +321,11 @@ import Layout from '../layouts/Layout.astro';
     color: var(--brand);
     font-weight: 800;
   }
-  .spot-form-section {
-    padding: clamp(64px, 8vw, 100px) 0;
-    background: #fff;
-  }
-  .spot-form-section--redeem {
-    background: var(--surface-2);
-  }
-  .spot-redeem-section {
+  .spot-action-section {
     padding: clamp(48px, 7vw, 80px) 0;
     background: var(--surface-2);
   }
-  .spot-redeem-card {
+  .spot-action-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -402,109 +335,32 @@ import Layout from '../layouts/Layout.astro';
     border-radius: 8px;
     background: #fff;
   }
-  .spot-redeem-card h2 {
+  .spot-action-card h2 {
     margin: 0 0 10px;
     color: var(--heading);
     font-size: 1.9rem;
   }
-  .spot-redeem-card p {
+  .spot-action-card p {
     margin: 0;
     color: var(--text);
     line-height: 1.8;
   }
-  .spot-redeem-card .btn-primary {
+  .spot-action-card .btn-primary {
     flex: none;
-  }
-  .spot-form-layout {
-    display: grid;
-    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
-    gap: clamp(28px, 5vw, 56px);
-    align-items: start;
-  }
-  .spot-form-layout--reverse {
-    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
-  }
-  .spot-form-copy {
-    position: sticky;
-    top: 96px;
-  }
-  .spot-form-copy h2 {
-    margin: 0 0 14px;
-    color: var(--heading);
-    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-    letter-spacing: 0;
-  }
-  .spot-form {
-    display: grid;
-    gap: 18px;
-    padding: clamp(24px, 4vw, 36px);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--surface-card);
-  }
-  .form-row {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-  .spot-form label {
-    display: grid;
-    gap: 8px;
-    color: var(--heading);
-    font-size: .9rem;
-    font-weight: 700;
-  }
-  .spot-form label span {
-    color: var(--sakura);
-  }
-  .spot-form input,
-  .spot-form select,
-  .spot-form textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--surface);
-    color: var(--text);
-    font: inherit;
-  }
-  .spot-form input:focus,
-  .spot-form select:focus,
-  .spot-form textarea:focus {
-    outline: none;
-    border-color: var(--brand);
-    box-shadow: 0 0 0 3px rgba(31, 58, 147, .15);
-  }
-  .spot-form textarea {
-    resize: vertical;
-  }
-  .spot-form-note {
-    margin: 0;
-    font-size: .86rem;
-    color: var(--muted);
-  }
-  .hp-field {
-    position: absolute;
-    left: -9999px;
   }
   @media (max-width: 900px) {
     .spot-summary,
     .spot-use-grid,
     .spot-flow ol,
-    .spot-redeem-card,
-    .spot-form-layout,
-    .spot-form-layout--reverse {
+    .spot-action-card {
       grid-template-columns: 1fr;
     }
-    .spot-redeem-card {
+    .spot-action-card {
       display: grid;
       align-items: start;
     }
-    .spot-redeem-card h2 {
+    .spot-action-card h2 {
       font-size: 1.45rem;
-    }
-    .spot-form-copy {
-      position: static;
     }
   }
   @media (max-width: 600px) {
@@ -512,13 +368,9 @@ import Layout from '../layouts/Layout.astro';
       min-height: auto;
     }
     .spot-hero-actions .btn-primary,
-    .spot-hero-actions .btn-secondary,
-    .spot-form button {
+    .spot-hero-actions .btn-secondary {
       width: 100%;
       justify-content: center;
-    }
-    .form-row {
-      grid-template-columns: 1fr;
     }
   }
 </style>

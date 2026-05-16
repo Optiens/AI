@@ -1,0 +1,255 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="スポット相談チケット 購入申込 | Optiens"
+  description="Optiensのスポット相談チケット購入申込ページ。AI活用レビュー面談・有償要件定義・小規模作業に使えるチケットを申し込めます。"
+  canonical="https://optiens.com/spot-ticket-purchase"
+>
+  <main class="purchase-page">
+    <section class="purchase-hero light-section">
+      <div class="container">
+        <p class="purchase-eyebrow">Purchase Ticket</p>
+        <h1>スポット相談チケットを購入する</h1>
+        <p>
+          購入枚数と想定用途をお送りください。1〜3枚は自動返信メールで振込先・請求情報・振込完了通知URLをお送りします。
+          4枚以上は内容を確認して個別にご案内します。
+        </p>
+      </div>
+    </section>
+
+    <section class="purchase-form-section light-section">
+      <div class="container">
+        <div class="purchase-layout">
+          <aside class="purchase-side">
+            <h2>購入前の確認</h2>
+            <p>スポット相談チケットは1枚¥33,000（税込、税抜¥30,000）です。時間カウントではなく、依頼内容の重さで消化枚数を決めます。</p>
+            <p>AI活用レビュー面談と有償要件定義は1枚、簡易実装・軽微な自動化対応は3枚からが目安です。</p>
+            <p>入金確認後にチケット番号を発行します。発行済みの番号で依頼する場合は、利用申請フォームへ進んでください。</p>
+            <div class="purchase-side-actions">
+              <a href="/spot-ticket" class="purchase-secondary-link">チケット説明へ戻る</a>
+              <a href="/spot-ticket-redeem" class="purchase-secondary-link">利用申請フォームへ</a>
+            </div>
+          </aside>
+
+          <form action="/api/spot-ticket" method="POST" class="purchase-form">
+            <input type="hidden" name="mode" value="purchase">
+            <div class="hp-field" aria-hidden="true">
+              <label for="purchase_website">ウェブサイト</label>
+              <input type="text" id="purchase_website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-row">
+              <label>
+                会社・団体名 <span>*</span>
+                <input type="text" name="company_name" required placeholder="例: 株式会社〇〇">
+              </label>
+              <label>
+                お名前 <span>*</span>
+                <input type="text" name="person_name" required placeholder="例: 山田 太郎">
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                メールアドレス <span>*</span>
+                <input type="email" name="email" required placeholder="example@company.com">
+              </label>
+              <label>
+                電話番号
+                <input type="tel" name="phone" placeholder="例: 090-1234-5678">
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                購入希望枚数 <span>*</span>
+                <select name="ticket_count" required>
+                  <option value="">選択してください</option>
+                  <option value="1">1枚（¥33,000税込）</option>
+                  <option value="2">2枚（¥66,000税込）</option>
+                  <option value="3">3枚（¥99,000税込）</option>
+                  <option value="4plus">4枚以上（個別確認）</option>
+                </select>
+              </label>
+              <label>
+                想定用途
+                <select name="service_type">
+                  <option value="undecided">未定・相談したい</option>
+                  <option value="review">AI活用レビュー面談</option>
+                  <option value="requirements">有償要件定義</option>
+                  <option value="small_build">簡易実装・軽微な自動化</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              請求書宛名
+              <input type="text" name="invoice_name" placeholder="会社名と同じ場合は空欄でOK">
+            </label>
+            <label>
+              相談したい内容・購入前に伝えておきたいこと
+              <textarea name="notes" rows="5" placeholder="例: 詳細レポートを見たうえで、どの業務から始めるべきか相談したい。"></textarea>
+            </label>
+            <p class="purchase-form-note">1〜3枚の購入申込後は、自動返信メールに振込先・請求情報・振込完了通知URLを記載します。入金確認後にチケット番号を発行します。急ぎの場合は、振込後に申込番号・振込人名義・振込日時を添えてお問い合わせください。</p>
+            <button type="submit" class="btn-primary">購入申込を送信</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .purchase-page {
+    --surface: #FFFFFF;
+    --surface-2: #F9FAFB;
+    --heading: #111827;
+    --text: #374151;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    background: var(--surface);
+  }
+  .purchase-hero {
+    padding: clamp(112px, 13vw, 156px) 0 clamp(48px, 7vw, 72px);
+    background:
+      linear-gradient(135deg, rgba(31, 58, 147, .06), rgba(228, 138, 149, .06)),
+      #fff;
+  }
+  .purchase-eyebrow {
+    margin: 0 0 12px;
+    color: var(--brand);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .purchase-hero h1 {
+    margin: 0 0 16px;
+    color: var(--heading);
+    font-size: 3.4rem;
+    line-height: 1.15;
+  }
+  .purchase-hero p {
+    max-width: 760px;
+    margin: 0;
+    color: var(--text);
+    font-size: 1.1rem;
+    line-height: 1.9;
+  }
+  .purchase-form-section {
+    padding: clamp(56px, 8vw, 92px) 0;
+    background: var(--surface-2);
+  }
+  .purchase-layout {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 5vw, 56px);
+    align-items: start;
+  }
+  .purchase-side {
+    position: sticky;
+    top: 96px;
+  }
+  .purchase-side h2 {
+    margin: 0 0 14px;
+    color: var(--heading);
+    font-size: 2rem;
+  }
+  .purchase-side p {
+    color: var(--text);
+    line-height: 1.85;
+  }
+  .purchase-side-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .purchase-secondary-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--brand);
+    background: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .purchase-form {
+    display: grid;
+    gap: 18px;
+    padding: clamp(24px, 4vw, 36px);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .purchase-form label {
+    display: grid;
+    gap: 8px;
+    color: var(--heading);
+    font-size: .9rem;
+    font-weight: 700;
+  }
+  .purchase-form label span {
+    color: var(--sakura);
+  }
+  .purchase-form input,
+  .purchase-form select,
+  .purchase-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+  }
+  .purchase-form input:focus,
+  .purchase-form select:focus,
+  .purchase-form textarea:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(31, 58, 147, .15);
+  }
+  .purchase-form textarea {
+    resize: vertical;
+  }
+  .purchase-form-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: .86rem;
+    line-height: 1.8;
+  }
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+  }
+  @media (max-width: 900px) {
+    .purchase-layout,
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+    .purchase-hero h1 {
+      font-size: 2.4rem;
+    }
+    .purchase-side h2 {
+      font-size: 1.55rem;
+    }
+    .purchase-side {
+      position: static;
+    }
+  }
+  @media (max-width: 600px) {
+    .purchase-form button,
+    .purchase-secondary-link {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
