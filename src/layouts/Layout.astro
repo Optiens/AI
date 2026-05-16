@@ -7,7 +7,10 @@ export interface Props {
   title: string;
   description?: string;
   canonical?: string;                 // 例: https://optiens.com/solutions
+  ogTitle?: string;                   // SNSカード向けに短くしたい場合
+  ogDescription?: string;             // SNSカード向けに短くしたい場合
   ogImage?: string;                   // 例: https://optiens.com/ogp.png (public 推奨)
+  ogImageAlt?: string;
   noindex?: boolean;                  // true のとき robots を noindex に
   structuredData?: Record<string, any> | Array<Record<string, any>>;  // ページ固有のJSON-LD
 }
@@ -19,10 +22,19 @@ const {
   title,
   description = '合同会社Optiens（オプティエンス）はAIエージェントによる業務自動化で、中小企業・小規模事業者の業務効率化を全国オンライン対応でサポートします。',
   canonical,
+  ogTitle = title,
+  ogDescription = description,
   ogImage = DEFAULT_OG,
+  ogImageAlt = 'Optiens — AI業務自動化・AIエージェント導入支援',
   noindex = false,
   structuredData,
 } = Astro.props;
+
+const ogImageType = ogImage.endsWith('.webp')
+  ? 'image/webp'
+  : ogImage.endsWith('.jpg') || ogImage.endsWith('.jpeg')
+    ? 'image/jpeg'
+    : 'image/png';
 
 // 全ページ共通の Organization スキーマ
 const orgSchema = {
@@ -110,17 +122,22 @@ if (structuredData) {
 
     {/* OGP / Twitter */}
     <meta property="og:site_name" content="Optiens" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
     {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content="Optiens — Make AI native to your business." />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content={ogImageType} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ja_JP" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     {/* JSON-LD: 構造化データ（Organization + LocalBusiness + ページ固有） */}
     <script type="application/ld+json" set:html={JSON.stringify(allSchemas)} />
