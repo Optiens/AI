@@ -29,3 +29,8 @@
 - `src/layouts/Layout.astro`
 - `src/pages/index.astro`
 - `public/images/og-home-firstview-20260516.png`
+
+## 追加対応（2026-05-16）
+- LINEのリンクプレビューはURL単位でキャッシュされるため、`https://optiens.com/` の既存キャッシュは即時に更新されない可能性がある。
+- `?v=...` 付きURLで確認した場合も、`og:url` が常に `https://optiens.com/` だと同一URL扱いになりやすいため、HOMEのみクエリ付きアクセス時は `og:url` もクエリ付きURLにする。
+- `canonical` は引き続き `https://optiens.com/` のままとし、SEO上の正規URLは変更しない。

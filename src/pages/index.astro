@@ -16,6 +16,9 @@ const fmtDate = (d: string) => {
   const date = new Date(d);
   return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
 };
+const homeOgUrl = Astro.url.search
+  ? `https://optiens.com/${Astro.url.search}`
+  : 'https://optiens.com/';
 
 // HOME 専用 JSON-LD: WebSite + サービス
 const homeSchema = [
@@ -49,6 +52,7 @@ const homeSchema = [
   title="Optiens | 中小企業のAI業務自動化・AIエージェント導入支援（全国オンライン対応）"
   description="合同会社OptiensはAIエージェントによる業務自動化を、AI活用診断から導入・保守まで一貫提供。全国オンライン対応で、中小企業・小規模事業者の業務効率化を支援します。"
   canonical="https://optiens.com/"
+  ogUrl={homeOgUrl}
   ogTitle="Optiens | 中小企業のAI業務自動化"
   ogDescription="AI活用診断から導入・保守まで。CRM・問い合わせ・見積・営業事務の自動化を支援します。"
   ogImage="https://optiens.com/images/og-home-firstview-20260516.png"

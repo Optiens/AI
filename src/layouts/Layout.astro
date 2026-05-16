@@ -7,6 +7,7 @@ export interface Props {
   title: string;
   description?: string;
   canonical?: string;                 // 例: https://optiens.com/solutions
+  ogUrl?: string;                     // SNSカード向けURL。未指定時はcanonicalを使用
   ogTitle?: string;                   // SNSカード向けに短くしたい場合
   ogDescription?: string;             // SNSカード向けに短くしたい場合
   ogImage?: string;                   // 例: https://optiens.com/ogp.png (public 推奨)
@@ -22,6 +23,7 @@ const {
   title,
   description = '合同会社Optiens（オプティエンス）はAIエージェントによる業務自動化で、中小企業・小規模事業者の業務効率化を全国オンライン対応でサポートします。',
   canonical,
+  ogUrl = canonical,
   ogTitle = title,
   ogDescription = description,
   ogImage = DEFAULT_OG,
@@ -124,7 +126,7 @@ if (structuredData) {
     <meta property="og:site_name" content="Optiens" />
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={ogDescription} />
-    {canonical && <meta property="og:url" content={canonical} />}
+    {ogUrl && <meta property="og:url" content={ogUrl} />}
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:secure_url" content={ogImage} />
     <meta property="og:image:width" content="1200" />
