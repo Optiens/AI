@@ -40,3 +40,9 @@
   - 画像: `public/images/blog/20260516-cheap-database-d1-turso-sqlite.webp`
   - ファクトチェック: `executive/data/20260516_cheap-database-d1-turso-sqlite_factcheck.md`
   - 元ネタ: 2026-05-16 CEO共有の文字起こし（格安DB / Cloudflare D1 / Turso / SQLite）
+
+- ✅ 圏論は実務に役立つのか：AI時代のプログラマーが抽象化を学ぶ意味
+  - 記事: `src/content/blog/20260517-category-theory-abstraction-programmers.md`
+  - 画像: `public/images/blog/20260517-category-theory-abstraction-programmers.webp`
+  - ファクトチェック: `executive/data/20260517_category-theory-abstraction-programmers_factcheck.md`
+  - 元ネタ: 2026-05-17 CEO共有の文字起こし（圏論 / 抽象化 / プログラマー向け入門）
