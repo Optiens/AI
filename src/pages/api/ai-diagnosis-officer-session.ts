@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro'
 import { createClient } from '@supabase/supabase-js'
 import { verifyAiDiagnosisReviewToken } from '../../lib/ai-diagnosis-review'
+import { getRuntimeEnv, isRuntimeDev, isRuntimeProd } from '../../lib/runtime-env'
 
 const OPENAI_REALTIME_CALLS_URL = 'https://api.openai.com/v1/realtime/calls'
 const DEFAULT_REALTIME_MODEL = 'gpt-realtime'
@@ -10,8 +11,8 @@ const RATE_LIMIT_PER_HOUR = 6
 const MAX_SDP_LENGTH = 128_000
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const SUPABASE_URL = import.meta.env.SUPABASE_URL
-const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_ROLE_KEY
+const SUPABASE_URL = getRuntimeEnv('SUPABASE_URL')
+const SUPABASE_SERVICE_KEY = getRuntimeEnv('SUPABASE_SERVICE_ROLE_KEY')
 const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
   ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
   : null
@@ -52,16 +53,16 @@ function checkRateLimit(ip: string) {
 }
 
 function isFeatureEnabled() {
-  return import.meta.env.DEV || import.meta.env.AI_DIAGNOSIS_OFFICER_ENABLED === 'true'
+  return isRuntimeDev() || getRuntimeEnv('AI_DIAGNOSIS_OFFICER_ENABLED') === 'true'
 }
 
 function isPublicDemoAllowed() {
-  return import.meta.env.AI_DIAGNOSIS_OFFICER_PUBLIC_DEMO === 'true'
+  return getRuntimeEnv('AI_DIAGNOSIS_OFFICER_PUBLIC_DEMO') === 'true'
 }
 
 function accessCodeIsValid(input: string | null) {
-  const expected = String(import.meta.env.AI_DIAGNOSIS_OFFICER_ACCESS_CODE || '').trim()
-  if (!expected) return !import.meta.env.PROD || isPublicDemoAllowed()
+  const expected = String(getRuntimeEnv('AI_DIAGNOSIS_OFFICER_ACCESS_CODE') || '').trim()
+  if (!expected) return !isRuntimeProd() || isPublicDemoAllowed()
   return String(input || '').trim() === expected
 }
 
@@ -91,8 +92,8 @@ function buildReviewContextInstructions(context: ReviewContext | null) {
 }
 
 function buildSessionConfig(reviewContext: ReviewContext | null) {
-  const model = String(import.meta.env.OPENAI_REALTIME_MODEL || DEFAULT_REALTIME_MODEL)
-  const voice = String(import.meta.env.OPENAI_REALTIME_VOICE || DEFAULT_REALTIME_VOICE)
+  const model = String(getRuntimeEnv('OPENAI_REALTIME_MODEL') || DEFAULT_REALTIME_MODEL)
+  const voice = String(getRuntimeEnv('OPENAI_REALTIME_VOICE') || DEFAULT_REALTIME_VOICE)
 
   return {
     type: 'realtime',
@@ -222,12 +223,12 @@ async function createSafetyIdentifier(ip: string) {
 }
 
 export const GET: APIRoute = async () => {
-  const accessCode = String(import.meta.env.AI_DIAGNOSIS_OFFICER_ACCESS_CODE || '').trim()
+  const accessCode = String(getRuntimeEnv('AI_DIAGNOSIS_OFFICER_ACCESS_CODE') || '').trim()
   return json({
-    enabled: isFeatureEnabled() && Boolean(import.meta.env.OPENAI_API_KEY),
-    requires_access_code: import.meta.env.PROD && Boolean(accessCode) && !isPublicDemoAllowed(),
+    enabled: isFeatureEnabled() && Boolean(getRuntimeEnv('OPENAI_API_KEY')),
+    requires_access_code: isRuntimeProd() && Boolean(accessCode) && !isPublicDemoAllowed(),
     public_demo_allowed: isPublicDemoAllowed(),
-    model: String(import.meta.env.OPENAI_REALTIME_MODEL || DEFAULT_REALTIME_MODEL),
+    model: String(getRuntimeEnv('OPENAI_REALTIME_MODEL') || DEFAULT_REALTIME_MODEL),
   })
 }
 
@@ -239,7 +240,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       }, 503)
     }
 
-    const apiKey = import.meta.env.OPENAI_API_KEY
+    const apiKey = getRuntimeEnv('OPENAI_API_KEY')
     if (!apiKey) {
       return json({
         error: 'OpenAI API キーがサーバーに設定されていません。',

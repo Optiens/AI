@@ -4,18 +4,19 @@ import { createClient } from '@supabase/supabase-js'
 import { generatePaymentToken } from '../../lib/payment-token'
 import { buildAiDiagnosisReviewUrl } from '../../lib/ai-diagnosis-review'
 import { formatYen } from '../../lib/paid-billing'
+import { getRuntimeEnv, getSiteUrl } from '../../lib/runtime-env'
 import {
   buildSpotTicketInvoiceText,
   spotTicketAmount,
 } from '../../lib/spot-ticket-billing'
 
-const RESEND_API_KEY = import.meta.env.RESEND_API_KEY
-const MAIL_TO = import.meta.env.CONTACT_TO ?? import.meta.env.GMAIL_USER
-const MAIL_FROM = import.meta.env.CONTACT_FROM ?? 'no-reply@optiens.com'
-const SITE_URL = (import.meta.env.SITE_URL || 'https://optiens.com').replace(/\/$/, '')
+const RESEND_API_KEY = getRuntimeEnv('RESEND_API_KEY')
+const MAIL_TO = getRuntimeEnv('CONTACT_TO') ?? getRuntimeEnv('GMAIL_USER')
+const MAIL_FROM = getRuntimeEnv('CONTACT_FROM') ?? 'no-reply@optiens.com'
+const SITE_URL = getSiteUrl()
 
-const SUPABASE_URL = import.meta.env.SUPABASE_URL
-const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_ROLE_KEY
+const SUPABASE_URL = getRuntimeEnv('SUPABASE_URL')
+const SUPABASE_SERVICE_KEY = getRuntimeEnv('SUPABASE_SERVICE_ROLE_KEY')
 
 if (!RESEND_API_KEY || !MAIL_TO) {
   console.warn('[spot-ticket] Missing envs: RESEND_API_KEY / GMAIL_USER')

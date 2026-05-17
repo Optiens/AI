@@ -2,12 +2,13 @@ import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 import { verifyAiDiagnosisReviewToken } from '../../lib/ai-diagnosis-review'
+import { getRuntimeEnv } from '../../lib/runtime-env'
 
-const RESEND_API_KEY = import.meta.env.RESEND_API_KEY
-const MAIL_TO = import.meta.env.CONTACT_TO ?? import.meta.env.GMAIL_USER
-const MAIL_FROM = import.meta.env.CONTACT_FROM ?? 'no-reply@optiens.com'
-const SUPABASE_URL = import.meta.env.SUPABASE_URL
-const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_ROLE_KEY
+const RESEND_API_KEY = getRuntimeEnv('RESEND_API_KEY')
+const MAIL_TO = getRuntimeEnv('CONTACT_TO') ?? getRuntimeEnv('GMAIL_USER')
+const MAIL_FROM = getRuntimeEnv('CONTACT_FROM') ?? 'no-reply@optiens.com'
+const SUPABASE_URL = getRuntimeEnv('SUPABASE_URL')
+const SUPABASE_SERVICE_KEY = getRuntimeEnv('SUPABASE_SERVICE_ROLE_KEY')
 
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null
 const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY

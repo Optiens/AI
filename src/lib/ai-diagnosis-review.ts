@@ -1,16 +1,17 @@
 import crypto from 'node:crypto'
-
-const REVIEW_SECRET =
-  import.meta.env.AI_DIAGNOSIS_OFFICER_REVIEW_SECRET ||
-  import.meta.env.AI_DIAGNOSIS_OFFICER_ACCESS_CODE ||
-  import.meta.env.PAYMENT_NOTIFY_SECRET
+import { getRuntimeEnv } from './runtime-env'
 
 function getReviewSecret(): string {
-  if (!REVIEW_SECRET) {
+  const reviewSecret =
+    getRuntimeEnv('AI_DIAGNOSIS_OFFICER_REVIEW_SECRET') ||
+    getRuntimeEnv('AI_DIAGNOSIS_OFFICER_ACCESS_CODE') ||
+    getRuntimeEnv('PAYMENT_NOTIFY_SECRET')
+
+  if (!reviewSecret) {
     console.warn('[ai-diagnosis-review] Review secret is not set; using development fallback.')
     return 'dev-only-ai-diagnosis-review-secret'
   }
-  return REVIEW_SECRET
+  return reviewSecret
 }
 
 function normalizeTicketNumber(ticketNumber: string): string {
