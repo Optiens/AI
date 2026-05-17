@@ -8,6 +8,7 @@
     "build": "node scripts/sync-novels.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check:blog-service-claims": "node scripts/check-blog-service-claims.mjs",
     "create:slides-template": "node scripts/create-free-diagnosis-slides-template.mjs",
     "create:slides-template:check": "node scripts/create-free-diagnosis-slides-template.mjs --check",
     "update:paid-slides-template": "node scripts/update-paid-slides-template.mjs"

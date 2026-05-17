@@ -151,4 +151,4 @@ image: '/images/blog/20260508-divide-thinking-1oku-breakthrough.webp'
 
 ---
 
-御社の事業を 5 原則で見直してみませんか。Optiens の[無料 AI 活用診断](/free-diagnosis)では、業務効率化と並行して、売上設計の割算思考も含めてご提案します。
+AI活用をどこから始めるべきか迷っている場合は、まず [AI活用診断簡易版（無料）](/free-diagnosis) で、業種・規模に合った活用方向性と効果の目安をご確認ください。より具体的に整理したい場合は、[詳細版AI活用診断（¥5,500税込・MTGなし）](/free-diagnosis?paid=1) で、構成案、優先順位、費用前提を整理してお届けします。

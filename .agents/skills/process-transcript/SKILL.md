@@ -195,6 +195,15 @@ node scripts/generate-blog-imagen.mjs "英語プロンプト" "public/images/blo
 - 出典URLとファクトチェック記録の存在
 - 文字起こし由来の未確認断定が残っていないこと
 - deidentify-transcript-source の公開前チェックリストを満たしていること
+- AI活用診断・詳細レポート・導入支援・スポット相談の記述が `executive/ai-consulting/blog-service-claim-rules.md` と一致していること
+
+公開前にサービス範囲表現チェックも必ず実行する:
+
+```bash
+npm run check:blog-service-claims
+```
+
+エラーが出た記事は公開・コミットしない。警告が残る場合は、本文を修正するか、正本に基づいて許容する理由をファクトチェック記録に残す。
 
 ### 4-3. ブログ候補リストへの追記
 
