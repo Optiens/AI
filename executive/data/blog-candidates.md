@@ -46,3 +46,9 @@
   - 画像: `public/images/blog/20260517-category-theory-abstraction-programmers.webp`
   - ファクトチェック: `executive/data/20260517_category-theory-abstraction-programmers_factcheck.md`
   - 元ネタ: 2026-05-17 CEO共有の文字起こし（圏論 / 抽象化 / プログラマー向け入門）
+
+- ✅ AIデザイン時代の分業ルール：エンジニアがUIに踏み込む前に決めること
+  - 記事: `src/content/blog/20260517-ai-design-collaboration-rules.md`
+  - 画像: `public/images/blog/20260517-ai-design-collaboration-rules.webp`
+  - ファクトチェック: `executive/data/20260517_ai-design-collaboration-rules_factcheck.md`
+  - 元ネタ: 2026-05-17 CEO共有の文字起こし（AIデザイン / デザインシステム / 職能間協働）
