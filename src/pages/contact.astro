@@ -55,7 +55,7 @@ import Layout from '../layouts/Layout.astro';
           <select id="inquiry_type" name="inquiry_type">
             <option value="">選択してください</option>
             <option value="free-diagnosis-waitlist">【簡易版】AI活用診断の無料枠案内を受け取りたい</option>
-            <option value="consult-ticket">AI診断官レビュー・有償要件定義を相談したい</option>
+            <option value="consult-ticket">単発AI相談・有償要件定義を相談したい</option>
             <option value="spot-ticket-urgent-payment">スポット相談チケットの入金確認を急ぎたい</option>
             <option value="ai-consult">AI支援事業について</option>
             <option value="press">取材・メディア掲載</option>
@@ -104,15 +104,15 @@ import Layout from '../layouts/Layout.astro';
     },
     'consult-ticket': {
       type: 'consult-ticket',
-      subject: 'AI診断官レビュー・有償要件定義の相談',
-      message: 'AI診断官レビューまたは有償要件定義について相談したいです。',
-      note: 'AI診断官レビュー・有償要件定義のご相談として受付します。'
+      subject: '単発AI相談・有償要件定義の相談',
+      message: '単発AI相談または有償要件定義について相談したいです。',
+      note: '単発AI相談・有償要件定義のご相談として受付します。'
     },
     'detail-diagnosis': {
       type: 'consult-ticket',
-      subject: '詳細診断・AI診断官レビューの相談',
-      message: '詳細診断またはAI診断官レビューの案内を希望します。',
-      note: '詳細診断・AI診断官レビューのご相談として受付します。'
+      subject: '詳細診断・AI診断官βの相談',
+      message: '詳細診断またはAI診断官βの案内を希望します。',
+      note: '詳細診断・AI診断官βのご相談として受付します。'
     },
     'spot-ticket-urgent-payment': {
       type: 'spot-ticket-urgent-payment',

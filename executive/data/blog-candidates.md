@@ -52,3 +52,20 @@
   - 画像: `public/images/blog/20260517-ai-design-collaboration-rules.webp`
   - ファクトチェック: `executive/data/20260517_ai-design-collaboration-rules_factcheck.md`
   - 元ネタ: 2026-05-17 CEO共有の文字起こし（AIデザイン / デザインシステム / 職能間協働）
+
+## 未記事化候補
+
+- AI研修はツール講座で終わらせない。中小企業で定着させる6ヶ月設計
+  - 参考メモ: `executive/research/data/20260516_FUSION_AI案内資料_競合知見.md`
+  - 元ネタ: 2026-05-16 CEO共有PDF（FUSION AI案内資料）
+  - 注意: 公開時は元資料を直接引用せず、一般論として再構成し、ファクトチェックを行う。
+
+- AI導入で最初につまずくのは操作ではなく環境設定と質問先である
+  - 参考メモ: `executive/research/data/20260516_FUSION_AI案内資料_競合知見.md`
+  - 元ネタ: 2026-05-16 CEO共有PDF（FUSION AI案内資料）
+  - 注意: 公開時はOptiensの導入支援・保守範囲と整合させる。
+
+- 中小企業のAI活用は「最新ツールを追う」より「使わない判断」が大事
+  - 参考メモ: `executive/research/data/20260516_FUSION_AI案内資料_競合知見.md`
+  - 元ネタ: 2026-05-16 CEO共有PDF（FUSION AI案内資料）
+  - 注意: 現在性のあるAIツール名・価格・提供条件は公開前に一次情報で確認する。

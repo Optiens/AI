@@ -44,7 +44,7 @@ export const POST: APIRoute = async ({ request }) => {
     const diagnosisMemo = clamp(String(body.diagnosis_memo || '').trim(), 8000)
 
     if (!ticketNumber || !verifyAiDiagnosisReviewToken(ticketNumber, token)) {
-      return json({ error: 'AI診断官レビューURLの確認に失敗しました。' }, 403)
+      return json({ error: 'AI診断官βレビューURLの確認に失敗しました。' }, 403)
     }
     if (!diagnosisMemo) {
       return json({ error: '送信する診断メモがありません。' }, 400)
@@ -63,14 +63,14 @@ export const POST: APIRoute = async ({ request }) => {
       return json({ error: 'チケット番号に紐づくレビュー申請が見つかりません。' }, 404)
     }
     if (data.redeem_service_type !== 'review' || data.status !== 'redeemed') {
-      return json({ error: 'AI診断官レビューとして受付済みのチケットではありません。' }, 400)
+      return json({ error: 'AI診断官βレビューとして受付済みのチケットではありません。' }, 400)
     }
 
     const submittedAt = new Date().toISOString()
     const existingNotes = String(data.redeem_notes || '').trim()
     const appendedNotes = [
       existingNotes,
-      `--- AI診断官レビュー診断メモ ${submittedAt} ---`,
+      `--- AI診断官βレビュー診断メモ ${submittedAt} ---`,
       diagnosisMemo,
     ].filter(Boolean).join('\n\n')
 
@@ -92,7 +92,7 @@ export const POST: APIRoute = async ({ request }) => {
       const personName = String(data.redeem_person_name || data.person_name || '')
       const email = String(data.redeem_email || data.email || '')
       const text = [
-        'AI診断官レビューの診断メモが送信されました。',
+        'AI診断官βレビューの診断メモが送信されました。',
         '',
         `チケット番号: ${ticketNumber}`,
         `会社・団体名: ${companyName}`,
@@ -109,7 +109,7 @@ export const POST: APIRoute = async ({ request }) => {
         from: MAIL_FROM,
         to: MAIL_TO,
         replyTo: email || undefined,
-        subject: `【AI診断官レビュー 診断メモ】${ticketNumber} ${companyName}`,
+        subject: `【AI診断官βレビュー 診断メモ】${ticketNumber} ${companyName}`,
         text,
         html: `<pre style="white-space:pre-wrap;font-family:system-ui,sans-serif;">${escapeHtml(text)}</pre>`,
       })

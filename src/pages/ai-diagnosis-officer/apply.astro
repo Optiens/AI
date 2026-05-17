@@ -3,27 +3,27 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout
-  title="AI診断官レビュー申請 | Optiens"
-  description="発行済みのスポット相談チケット番号を使って、AI診断官レビューの事前情報を送信できます。"
+  title="AI診断官βレビュー申請 | Optiens"
+  description="発行済みのスポット相談チケット番号を使って、AI診断官βレビューの事前情報を送信できます。"
   canonical="https://optiens.com/ai-diagnosis-officer/apply"
 >
   <main class="ado-apply-page">
     <section class="ado-apply-hero light-section">
       <div class="container ado-apply-hero-grid">
         <div>
-          <p class="ado-apply-eyebrow">AI Diagnosis Officer Review</p>
-          <h1>AI診断官レビューを申請する</h1>
+          <p class="ado-apply-eyebrow">AI Diagnosis Officer beta</p>
+          <h1>AI診断官βレビューを申請する</h1>
           <p>
             発行済みのスポット相談チケット番号と、AI診断官に把握させたい前提を入力してください。
-            チケット番号を確認できた場合、本番レビューURLをメールでお送りします。
+            チケット番号を確認できた場合、β版レビューURLをメールでお送りします。音声が不安定な環境ではテキストモードを利用できます。
           </p>
         </div>
-        <aside class="ado-apply-hero-card" aria-label="AI診断官レビューの流れ">
+        <aside class="ado-apply-hero-card" aria-label="AI診断官βレビューの流れ">
           <span>Flow</span>
           <ol>
             <li>チケット番号と事前情報を送信</li>
             <li>申請内容をAI診断官の初期文脈へ反映</li>
-            <li>本番レビューURLから音声ヒアリングを開始</li>
+            <li>本番レビューURLから音声またはテキストでヒアリングを開始</li>
             <li>会話後に診断メモを生成・送信</li>
           </ol>
         </aside>
@@ -36,14 +36,14 @@ import Layout from '../../layouts/Layout.astro';
           <aside class="ado-apply-side">
             <h2>申請前の確認</h2>
             <p>
-              このフォームは、スポット相談チケットをAI診断官レビューに使う場合の専用申請です。
-              チケット購入だけでは本番レビューは開始されません。
+              このフォームは、AI診断官βレビューに事前情報を渡すための専用申請です。
+              チケット購入だけではレビューは開始されません。
             </p>
             <p>
-              購入前に動きを確認したい場合は、公開デモを先にお試しください。デモでは機密情報や個人情報は入力しないでください。
+              購入前に動きを確認したい場合は、公開デモを先にお試しください。デモでは機密情報や個人情報は入力しないでください。音声モードは静かな環境向けで、声の選択は現在できません。
             </p>
             <div class="ado-apply-side-actions">
-              <a href="/ai-diagnosis-officer" class="ado-apply-secondary-link">音声デモを開く</a>
+              <a href="/ai-diagnosis-officer" class="ado-apply-secondary-link">AI診断官βデモを開く</a>
               <a href="/spot-ticket-purchase" class="ado-apply-secondary-link">チケットを購入する</a>
             </div>
           </aside>
@@ -114,10 +114,10 @@ import Layout from '../../layouts/Layout.astro';
             </label>
 
             <p class="ado-apply-form-note">
-              送信後、チケット番号を確認できた場合はAI診断官レビューの本番URLをメールでお送りします。
+              送信後、チケット番号を確認できた場合はAI診断官βレビューURLをメールでお送りします。
               会話後は文字起こしではなく、診断メモとしてAI化候補・制約条件・次アクションを整理します。
             </p>
-            <button type="submit" class="btn-primary">AI診断官レビューを申請する</button>
+            <button type="submit" class="btn-primary">AI診断官βレビューを申請する</button>
           </form>
         </div>
       </div>

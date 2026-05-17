@@ -243,7 +243,7 @@ export function buildTodayActions(input: {
         id: `lead-mtg-follow-${lead.id}`,
         category: 'sales',
         title: leadTitle(lead),
-        detail: '詳細レポート送付後のAI診断官レビュー・導入支援フォロー対象です。',
+        detail: '詳細レポート送付後のAI診断官β・スポット相談・導入支援フォロー対象です。',
         owner: 'CEO',
         due: '今週',
         tone: 'medium',

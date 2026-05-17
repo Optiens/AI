@@ -49,7 +49,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
     const inquiryLabels: Record<string, string> = {
       'free-diagnosis-waitlist': '【簡易版】AI活用診断の無料枠案内',
-      'consult-ticket': 'AI診断官レビュー・有償要件定義の相談',
+      'consult-ticket': '単発AI相談・有償要件定義の相談',
       'spot-ticket-urgent-payment': 'スポット相談チケットの入金確認',
       'ai-consult': 'AI支援事業について',
       'press': '取材・メディア掲載',

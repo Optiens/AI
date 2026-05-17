@@ -3,8 +3,8 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="スポット相談チケット | AI診断官レビュー・有償要件定義 | Optiens"
-  description="Optiensのスポット相談チケット。AI診断官レビュー、有償要件定義、簡易実装・軽微な自動化対応を、事前購入型のチケットで申し込めます。"
+  title="スポット相談チケット | 単発AI相談・有償要件定義 | Optiens"
+  description="Optiensのスポット相談チケット。単発AI相談、有償要件定義、簡易実装・軽微な自動化対応を、事前購入型のチケットで申し込めます。AI診断官β版は購入前デモと詳細版の補足ヒアリングとして提供します。"
   canonical="https://optiens.com/spot-ticket"
 >
   <main class="spot-page">
@@ -15,13 +15,13 @@ import Layout from '../layouts/Layout.astro';
         <p class="spot-eyebrow">Spot Consultation Ticket</p>
         <h1>スポット相談チケット</h1>
         <p class="spot-hero-copy">
-          AI診断官レビュー、有償要件定義、小規模な自動化相談を、事前購入型のチケットで受け付けます。
-          AI診断官レビューは専用申請フォーム、その他の依頼は通常フォームから申請できます。
+          単発AI相談、有償要件定義、小規模な自動化相談を、事前購入型のチケットで受け付けます。
+          AI診断官β版は、購入前デモと詳細版AI活用診断の補足ヒアリングとして提供します。
         </p>
         <div class="spot-hero-actions">
           <a href="/spot-ticket-purchase" class="btn-primary">チケットを購入する</a>
-          <a href="/ai-diagnosis-officer/apply" class="btn-secondary">AI診断官レビューを申請する</a>
-          <a href="/ai-diagnosis-officer" class="btn-secondary">音声デモを体験する</a>
+          <a href="/spot-ticket-redeem" class="btn-secondary">チケット番号で依頼する</a>
+          <a href="/ai-diagnosis-officer" class="btn-secondary">AI診断官βを体験する</a>
         </div>
       </div>
     </section>
@@ -38,7 +38,7 @@ import Layout from '../layouts/Layout.astro';
           <article class="spot-summary-item">
             <span>使い道</span>
             <h2>相談・要件整理・小規模作業</h2>
-            <p>AI診断官レビューと有償要件定義は1枚、簡易実装・軽微な自動化対応は3枚からが目安です。</p>
+            <p>単発AI相談は1枚、有償要件定義は2枚、簡易実装・軽微な自動化対応は3枚からが目安です。</p>
           </article>
           <article class="spot-summary-item">
             <span>運用</span>
@@ -49,13 +49,13 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="spot-use-grid">
           <article class="spot-use-card">
-            <h3>AI診断官レビュー</h3>
+            <h3>単発AI相談</h3>
             <p class="spot-ticket-count">スポット相談チケット 1枚</p>
-            <p>音声AI診断官が、申請フォームの事前情報と診断レポートの参照情報を前提に、業務量・頻度・例外処理・利用中ツールを聞き取り、診断メモへ整理します。導入支援費への充当は行わず、次工程への情報引き継ぎとして使います。</p>
+            <p>詳細レポートやAI診断官βの診断メモを前提に、60分を目安に代表が相談を受けます。導入支援費への充当は行わず、次工程へ進むべきかを見極める入口として扱います。</p>
           </article>
           <article class="spot-use-card">
             <h3>有償要件定義</h3>
-            <p class="spot-ticket-count">スポット相談チケット 1枚</p>
+            <p class="spot-ticket-count">スポット相談チケット 2枚</p>
             <p>導入支援前に、対象業務・実装範囲・前提条件・概算見積を整理します。導入支援の成約時は、この費用を初期費用へ充当します。</p>
           </article>
           <article class="spot-use-card">
@@ -68,10 +68,10 @@ import Layout from '../layouts/Layout.astro';
         <div class="spot-diagnostic-diff">
           <div class="spot-diagnostic-head">
             <p class="spot-eyebrow">Designed Diagnosis</p>
-            <h2>汎用AI音声相談との違い</h2>
+            <h2>AI診断官βは、詳細版の価値を高める入口です</h2>
             <p>
               AIに話しかけて助言を得るだけでは、相談者の慣れや質問の粒度に品質が左右されます。
-              AI診断官レビューでは、Optiensの導入支援で使う観点に沿って、会話を診断材料へ変換します。
+              AI診断官βでは、Optiensの導入支援で使う観点に沿って、会話を診断材料へ変換します。
             </p>
           </div>
           <div class="spot-diff-grid">
@@ -93,12 +93,11 @@ import Layout from '../layouts/Layout.astro';
             <article>
               <span>04</span>
               <h3>次工程接続</h3>
-              <p>導入支援や有償要件定義に進む場合、重複ヒアリングを減らし、提案精度を上げる引き継ぎ情報として使います。</p>
+              <p>詳細版AI活用診断、有償要件定義、導入支援に進む場合、重複ヒアリングを減らし、提案精度を上げる引き継ぎ情報として使います。</p>
             </article>
           </div>
           <div class="spot-demo-link">
-            <a href="/ai-diagnosis-officer" class="btn-primary">AI診断官レビューの音声デモを開く</a>
-            <a href="/ai-diagnosis-officer/apply" class="btn-secondary">チケット番号でレビューを申請する</a>
+            <a href="/ai-diagnosis-officer" class="btn-primary">AI診断官βデモを開く</a>
           </div>
         </div>
 
@@ -123,7 +122,7 @@ import Layout from '../layouts/Layout.astro';
             <li>
               <span>04</span>
               <strong>利用申請</strong>
-              <p>AI診断官レビューは専用申請フォームに、その他の要件整理・作業は通常の利用申請フォームに入力します。</p>
+              <p>単発AI相談、有償要件定義、小規模作業は通常の利用申請フォームに入力します。</p>
             </li>
           </ol>
         </div>
@@ -158,11 +157,11 @@ import Layout from '../layouts/Layout.astro';
           <div>
             <p class="spot-eyebrow">Redeem</p>
             <h2>チケット番号で依頼する</h2>
-            <p>AI診断官レビューは、事前情報をAIの初期文脈へ入れるため専用申請フォームを使います。有償要件定義や小規模作業は通常の利用申請フォームから依頼できます。</p>
+            <p>単発AI相談、有償要件定義、小規模作業は通常の利用申請フォームから依頼できます。AI診断官βは購入前デモまたは詳細版の補足ヒアリングとして利用します。</p>
           </div>
           <div class="spot-action-buttons">
-            <a href="/ai-diagnosis-officer/apply" class="btn-primary">AI診断官レビューを申請する</a>
-            <a href="/spot-ticket-redeem" class="btn-secondary">通常の利用申請フォーム</a>
+            <a href="/spot-ticket-redeem" class="btn-primary">利用申請フォームを開く</a>
+            <a href="/ai-diagnosis-officer" class="btn-secondary">AI診断官βを体験する</a>
           </div>
         </div>
       </div>

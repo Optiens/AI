@@ -322,7 +322,7 @@ function buildReferralFreeEmail(lead: any, referralFrom: string): string {
 
 ━━━ この後の流れ ━━━
 1. 5営業日以内に詳細レポート（Google Slides URL）をメールでお届け
-2. 追加レビューをご希望の場合は、別途AI診断官レビューをご案内
+2. 追加ヒアリングが必要な場合は、AI診断官βまたはスポット相談チケットをご案内
 
 入力いただいた情報をもとに自動でレポートを生成します。生成に失敗した場合のみ、別途ご連絡いたします。
 
@@ -350,7 +350,7 @@ function buildReferralFreeEmailHtml(lead: any, referralFrom: string): string {
 <h3 style="margin:24px 0 8px;font-size:14px;color:#0f172a;">この後の流れ</h3>
 <ol style="margin:0 0 16px;padding-left:20px;font-size:14px;">
   <li>5営業日以内に<strong>詳細レポート（Google Slides URL）</strong>をメールでお届け</li>
-  <li>追加レビューをご希望の場合は、別途<strong>AI診断官レビュー</strong>をご案内</li>
+  <li>追加ヒアリングが必要な場合は、<strong>AI診断官βまたはスポット相談チケット</strong>をご案内</li>
 </ol>
 
 <p style="margin-top:24px;font-size:12px;color:#64748b;">

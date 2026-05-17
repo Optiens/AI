@@ -70,13 +70,13 @@ function buildReviewContextInstructions(context: ReviewContext | null) {
   if (!context) {
     return [
       'これは購入前の公開デモです。短時間で体験できるよう、質問は3〜5問に絞ってください。',
-      '正式なAI診断官レビューではなく、診断メモもデモ用の簡易版であることを必要に応じて伝えてください。',
-      '顧客が本番レビューを希望する場合は、スポット相談チケット購入後にAI診断官レビュー申請フォームへ進む流れを案内してください。',
+      '正式な見積や契約条件ではなく、診断メモもデモ用の簡易版であることを必要に応じて伝えてください。',
+      '顧客が追加相談を希望する場合は、詳細版AI活用診断またはスポット相談チケットへ進む流れを案内してください。',
     ].join('\n')
   }
 
   return [
-    'これはスポット相談チケット利用申請後の本番AI診断官レビューです。',
+    'これはスポット相談チケット利用申請後のAI診断官βレビューです。',
     '顧客はすでに申請フォームを送信済みです。以下の事前情報を把握した状態で開始し、重複質問を減らしてください。',
     `チケット番号: ${context.ticketNumber}`,
     `会社・団体名: ${context.companyName}`,
@@ -104,6 +104,8 @@ function buildSessionConfig(reviewContext: ReviewContext | null) {
       '会話は日本語で行い、1回に1つだけ質問してください。回答が長い場合は短く要約して確認し、次の質問へ進んでください。',
       '聞き取る順番は、業種・提供サービス、困っている業務、業務量と頻度、例外処理、判断基準、利用中ツール、データの形式、人が最終判断すべき範囲、次に試したいことです。',
       '個人情報、秘密情報、APIキー、パスワード、顧客名簿の詳細などは入力しないよう促してください。',
+      '声の種類、男性/女性音声、音色の切り替えを求められた場合は、会話中には切り替えできないこと、現在のβ版では声の選択機能を提供していないことを正直に伝えてください。できたように装わないでください。',
+      '周囲の雑音や別の人の声の可能性が高い入力には反応しすぎず、業務相談に関係する回答が明確に聞こえた場合だけ次の質問へ進んでください。',
       '十分に聞き取れたら、AI化候補、AI化しない方がよい業務、制約条件、次アクションを短く整理してください。',
       '売り込み口調ではなく、落ち着いた診断官として話してください。断定しすぎず、必要に応じて追加確認が必要と伝えてください。',
       buildReviewContextInstructions(reviewContext),
@@ -116,11 +118,11 @@ function buildSessionConfig(reviewContext: ReviewContext | null) {
         },
         turn_detection: {
           type: 'server_vad',
-          threshold: 0.55,
+          threshold: 0.75,
           prefix_padding_ms: 300,
-          silence_duration_ms: 650,
+          silence_duration_ms: 950,
           create_response: true,
-          interrupt_response: true,
+          interrupt_response: false,
         },
       },
       output: {
@@ -179,7 +181,7 @@ async function loadReviewContext(request: Request): Promise<ReviewContext | null
   const ticketNumber = String(request.headers.get('x-diagnosis-ticket-number') || '').trim().toUpperCase()
   const token = String(request.headers.get('x-diagnosis-review-token') || '').trim()
   if (!ticketNumber || !verifyAiDiagnosisReviewToken(ticketNumber, token)) {
-    throw new Error('AI診断官レビューURLの確認に失敗しました。申請受付メールのURLから開き直してください。')
+    throw new Error('AI診断官βレビューURLの確認に失敗しました。申請受付メールのURLから開き直してください。')
   }
 
   const { data, error } = await supabase
@@ -189,10 +191,10 @@ async function loadReviewContext(request: Request): Promise<ReviewContext | null
     .maybeSingle()
 
   if (error || !data) {
-    throw new Error('チケット番号に紐づくAI診断官レビュー申請が見つかりません。')
+    throw new Error('チケット番号に紐づくAI診断官βレビュー申請が見つかりません。')
   }
   if (data.redeem_service_type !== 'review' || data.status !== 'redeemed') {
-    throw new Error('このURLはAI診断官レビューとして受付済みのチケットでのみ利用できます。')
+    throw new Error('このURLはAI診断官βレビューとして受付済みのチケットでのみ利用できます。')
   }
 
   const requestDetail = String(data.request_detail || '')
@@ -236,7 +238,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
     if (!isFeatureEnabled()) {
       return json({
-        error: 'AI診断官レビューの音声デモは現在有効化されていません。',
+        error: 'AI診断官βの音声デモは現在有効化されていません。',
       }, 503)
     }
 
@@ -252,7 +254,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       reviewContext = await loadReviewContext(request)
     } catch (error: any) {
       return json({
-        error: error?.message || 'AI診断官レビューURLの確認に失敗しました。',
+        error: error?.message || 'AI診断官βレビューURLの確認に失敗しました。',
       }, 403)
     }
 

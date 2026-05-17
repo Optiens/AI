@@ -151,7 +151,7 @@ async function checkSupabase(): Promise<HealthCheckRow[]> {
     message: migrationError ? migrationError.message : 'ai_api_events 適用済み',
   })
 
-  const adminTables = ['admin_audit_logs', 'customers', 'customer_projects', 'admin_alert_rules', 'admin_alert_events', 'knowledge_gaps']
+  const adminTables = ['admin_audit_logs', 'customers', 'customer_projects', 'admin_alert_rules', 'admin_alert_events', 'knowledge_gaps', 'ai_diagnosis_officer_sessions']
   for (const table of adminTables) {
     const tableStartedAt = Date.now()
     const { error: tableError } = await supabase!

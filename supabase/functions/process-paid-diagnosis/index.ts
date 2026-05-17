@@ -751,7 +751,7 @@ ${slidesUrl}
 ${appId}
 
 レポートは Google Slides でご覧いただけます。
-内容をご確認のうえ、追加で相談が必要な場合は、AI活用レビュー面談または導入支援のご相談として別途ご案内します。
+内容をご確認のうえ、追加ヒアリングが必要な場合は、AI診断官βまたはスポット相談チケット、導入支援のご相談として別途ご案内します。
 
 合同会社Optiens
 ${SITE_URL}
@@ -767,7 +767,7 @@ ${SITE_URL}
 <table style="border-collapse:collapse;width:100%;margin:20px 0;border:1px solid #d9deea;">
   <tr><td style="padding:8px 12px;background:#eef2ff;font-weight:700;width:120px;">申込番号</td><td style="padding:8px 12px;font-family:monospace;">${escapeHtml(appId)}</td></tr>
 </table>
-<p>追加で相談が必要な場合は、AI活用レビュー面談または導入支援のご相談として別途ご案内します。</p>
+<p>追加ヒアリングが必要な場合は、AI診断官βまたはスポット相談チケット、導入支援のご相談として別途ご案内します。</p>
 <hr style="border:none;border-top:1px solid #d9deea;margin:28px 0;"/>
 <p style="font-size:12px;color:#7c8496;">合同会社Optiens<br/><a href="${SITE_URL}">${SITE_URL}</a></p>
 </div>`;

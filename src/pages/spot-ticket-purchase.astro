@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout
   title="スポット相談チケット 購入申込 | Optiens"
-  description="Optiensのスポット相談チケット購入申込ページ。AI診断官レビュー・有償要件定義・小規模作業に使えるチケットを申し込めます。"
+  description="Optiensのスポット相談チケット購入申込ページ。単発AI相談・有償要件定義・小規模作業に使えるチケットを申し込めます。"
   canonical="https://optiens.com/spot-ticket-purchase"
 >
   <main class="purchase-page">
@@ -25,8 +25,8 @@ import Layout from '../layouts/Layout.astro';
           <aside class="purchase-side">
             <h2>購入前の確認</h2>
             <p>スポット相談チケットは1枚¥33,000（税込、税抜¥30,000）です。時間カウントではなく、依頼内容の重さで消化枚数を決めます。</p>
-            <p>AI診断官レビューと有償要件定義は1枚、簡易実装・軽微な自動化対応は3枚からが目安です。</p>
-            <p>AI診断官レビューを検討中の場合は、購入前に音声デモを確認できます。入金確認後にチケット番号を発行し、レビュー利用時は専用申請フォームから事前情報を送信します。</p>
+            <p>単発AI相談は1枚、有償要件定義は2枚、簡易実装・軽微な自動化対応は3枚からが目安です。</p>
+            <p>AI診断官β版は、購入前デモと詳細版AI活用診断の補足ヒアリングとして提供します。音声が不安定な場合はテキストモードを利用できます。</p>
             <div class="purchase-side-actions">
               <a href="/spot-ticket" class="purchase-secondary-link">チケット説明へ戻る</a>
               <a href="/ai-diagnosis-officer" class="purchase-secondary-link">音声デモへ</a>
@@ -76,8 +76,8 @@ import Layout from '../layouts/Layout.astro';
                 想定用途
                 <select name="service_type">
                   <option value="undecided">未定・相談したい</option>
-                  <option value="review">AI診断官レビュー</option>
-                  <option value="requirements">有償要件定義</option>
+                  <option value="consultation">単発AI相談（60分目安・1枚）</option>
+                  <option value="requirements">有償要件定義（2枚）</option>
                   <option value="small_build">簡易実装・軽微な自動化</option>
                 </select>
               </label>
@@ -88,7 +88,7 @@ import Layout from '../layouts/Layout.astro';
             </label>
             <label>
               相談したい内容・購入前に伝えておきたいこと
-              <textarea name="notes" rows="5" placeholder="例: 詳細レポートを見たうえで、どの業務から始めるべきかAI診断官レビューで整理したい。"></textarea>
+              <textarea name="notes" rows="5" placeholder="例: 詳細レポートを見たうえで、どの業務から始めるべきか60分の単発相談で整理したい。"></textarea>
             </label>
             <p class="purchase-form-note">1〜3枚の購入申込後は、自動返信メールに振込先・請求情報・振込完了通知URLを記載します。入金確認後にチケット番号を発行します。急ぎの場合は、振込後に申込番号・振込人名義・振込日時を添えてお問い合わせください。</p>
             <button type="submit" class="btn-primary">購入申込を送信</button>

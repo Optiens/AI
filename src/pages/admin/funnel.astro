@@ -157,7 +157,7 @@ const funnelSteps = [
   { id: 'free_report', label: '無料診断処理', count: leads.filter(isFreeReportDone).length, detail: '認証・AI処理以降', leads: leads.filter(isFreeReportDone) },
   { id: 'paid_intent', label: '詳細版申込', count: leads.filter(isPaidIntent).length, detail: '有償意向・入金待ち含む', leads: leads.filter(isPaidIntent) },
   { id: 'paid', label: '入金済', count: paidConfirmedLeads.length, detail: '売上確定', leads: paidConfirmedLeads },
-  { id: 'report_sent', label: '詳細レポート送付', count: leads.filter(isReportSent).length, detail: 'AI診断官レビュー・提案化の前段', leads: leads.filter(isReportSent) },
+  { id: 'report_sent', label: '詳細レポート送付', count: leads.filter(isReportSent).length, detail: 'AI診断官β・スポット相談・提案化の前段', leads: leads.filter(isReportSent) },
   { id: 'mtg', label: '面談/提案', count: leads.filter(isMtgOrLater).length, detail: '導入支援候補', leads: leads.filter(isMtgOrLater) },
   { id: 'delivery', label: '導入/保守', count: leads.filter(isDelivery).length, detail: '継続収益候補', leads: leads.filter(isDelivery) },
 ];

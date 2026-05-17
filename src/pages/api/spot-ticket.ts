@@ -43,7 +43,8 @@ const escapeHtml = (value: string) =>
     .replaceAll("'", '&#39;')
 
 const serviceLabels: Record<string, string> = {
-  review: 'AI診断官レビュー',
+  review: 'AI診断官βレビュー',
+  consultation: '単発AI相談（60分目安）',
   requirements: '有償要件定義',
   small_build: '簡易実装・軽微な自動化',
   undecided: '未定・相談したい',
@@ -110,6 +111,12 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     if (mode === 'purchase' && ticketCount !== '4plus' && !ticketCountValues[ticketCount]) {
       return json({ error: '購入枚数が正しくありません。' }, 400)
     }
+    if (mode === 'purchase' && serviceType === 'requirements' && ticketCount !== '4plus' && (ticketCountValues[ticketCount] || 0) < 2) {
+      return json({ error: '有償要件定義はスポット相談チケット2枚から受け付けます。' }, 400)
+    }
+    if (mode === 'purchase' && serviceType === 'small_build' && ticketCount !== '4plus' && (ticketCountValues[ticketCount] || 0) < 3) {
+      return json({ error: '簡易実装・軽微な自動化はスポット相談チケット3枚から受け付けます。' }, 400)
+    }
     if (mode === 'redeem' && (!ticketNumber || !requestDetail)) {
       return json({ error: 'チケット番号と依頼内容を入力してください。' }, 400)
     }
@@ -162,6 +169,10 @@ export const POST: APIRoute = async ({ request, redirect }) => {
         return json({ error: '入力されたチケット番号が見つかりません。番号をご確認ください。' }, 400)
       } else if (!['ticket_issued', 'redeemed'].includes(order.status)) {
         return json({ error: 'このチケット番号はまだ利用申請できる状態ではありません。' }, 400)
+      } else if (serviceType === 'requirements' && Number(order.ticket_count || 0) < 2) {
+        return json({ error: '有償要件定義にはスポット相談チケット2枚が必要です。購入枚数をご確認ください。' }, 400)
+      } else if (serviceType === 'small_build' && Number(order.ticket_count || 0) < 3) {
+        return json({ error: '簡易実装・軽微な自動化にはスポット相談チケット3枚以上が必要です。購入枚数をご確認ください。' }, 400)
       } else {
         if (isAiDiagnosisReviewRedeem) {
           reviewUrl = buildAiDiagnosisReviewUrl(SITE_URL, ticketNumber)
@@ -293,7 +304,7 @@ function buildAiDiagnosisReviewRequestDetail(input: {
   currentTools: string
 }): string {
   return [
-    '【AI診断官レビュー申請】',
+    '【AI診断官βレビュー申請】',
     '',
     '今回聞きたいこと:',
     input.requestDetail || '未入力',
@@ -317,9 +328,9 @@ function buildAiDiagnosisReviewRedeemCustomerText(input: {
   return `${input.personName} 様
 
 合同会社Optiensです。
-AI診断官レビューの申請を受け付け、チケット番号を確認しました。
+AI診断官βレビューの申請を受け付け、チケット番号を確認しました。
 
-下記URLから、本番のAI診断官レビューを開始してください。
+下記URLから、AI診断官βレビューを開始してください。
 ${input.reviewUrl}
 
 ━━━ 実施前のお願い ━━━

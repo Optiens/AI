@@ -8,31 +8,31 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
 ---
 
 <Layout
-  title={`${isReviewMode ? 'AI診断官レビュー 本番URL' : 'AI診断官レビュー 音声デモ'} | Optiens`}
+  title={`${isReviewMode ? 'AI診断官βレビュー 本番URL' : 'AI診断官β 音声・テキストデモ'} | Optiens`}
   description={isReviewMode
-    ? 'チケット利用申請後に案内されたAI診断官レビューの本番音声ページです。'
-    : 'OptiensのAI診断官レビューを音声で体験できる公開デモページ。AI音声エージェントが業務量・頻度・例外処理・利用中ツールを聞き取り、診断材料として整理します。'}
+    ? 'チケット利用申請後に案内されたAI診断官β版の本番レビューURLです。音声またはテキストで追加情報を整理できます。'
+    : 'OptiensのAI診断官β版を音声またはテキストで体験できる公開デモページ。AIが業務量・頻度・例外処理・利用中ツールを聞き取り、診断材料として整理します。'}
   canonical="https://optiens.com/ai-diagnosis-officer"
 >
   <main class="ado-page">
     <section class="ado-hero light-section">
       <div class="container ado-hero-grid">
         <div class="ado-hero-copy">
-          <p class="ado-eyebrow">AI Diagnosis Officer</p>
-          <h1>{isReviewMode ? 'AI診断官レビューを開始する' : 'AI診断官レビューを、音声で体験する'}</h1>
+          <p class="ado-eyebrow">AI Diagnosis Officer beta</p>
+          <h1>{isReviewMode ? 'AI診断官βレビューを開始する' : 'AI診断官βを、まず体験する'}</h1>
           <p>
             {isReviewMode
-              ? '申請フォームで送信いただいた内容を前提に、AI診断官が追加確認を行い、文字起こしではなく診断メモへ整理します。'
-              : '汎用AIに自由相談するのではなく、AI診断官が業務量・頻度・例外処理・利用中ツールを順に聞き取り、詳細レポートや導入支援へ引き継げる診断材料へ整理します。'}
+              ? '申請フォームで送信いただいた内容を前提に、AI診断官が追加確認を行い、文字起こしではなく診断メモへ整理します。周囲がうるさい場合はテキストモードへ切り替えられます。'
+              : '汎用AIに自由相談するのではなく、AI診断官が業務量・頻度・例外処理・利用中ツールを順に聞き取り、詳細レポートの価値を高める診断材料へ整理します。'}
           </p>
           <div class="ado-hero-actions">
-            <a href="#voice-demo" class="ado-btn ado-btn--primary">{isReviewMode ? '本番レビューを開始する' : '音声デモを開始する'}</a>
+            <a href="#voice-demo" class="ado-btn ado-btn--primary">{isReviewMode ? 'βレビューを開始する' : 'デモを開始する'}</a>
             <a href={isReviewMode ? '/ai-diagnosis-officer/apply' : '/spot-ticket'} class="ado-btn ado-btn--ghost">
               {isReviewMode ? '申請フォームを見る' : 'チケットを見る'}
             </a>
           </div>
         </div>
-        <div class="ado-hero-panel" aria-label="AI診断官レビューの進行イメージ">
+        <div class="ado-hero-panel" aria-label="AI診断官βの進行イメージ">
           <div class="ado-orbit" aria-hidden="true">
             <span></span>
             <span></span>
@@ -62,19 +62,24 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
         <div class="ado-console">
           <div class="ado-console-head">
             <div>
-              <p class="ado-eyebrow">Voice Demo</p>
-              <h2>音声AI診断官</h2>
+              <p class="ado-eyebrow">Beta Demo</p>
+              <h2>AI診断官 β版</h2>
             </div>
             <span class="ado-status" id="ado-status">待機中</span>
           </div>
 
           <div class="ado-notice">
-            <strong>{isReviewMode ? '本番レビューとしてAI音声で応答します' : '公開デモとしてAI音声で応答します'}</strong>
+            <strong>{isReviewMode ? 'β版レビューとしてAIが応答します' : 'β版公開デモとしてAIが応答します'}</strong>
             <p>
               {isReviewMode
-                ? '申請内容をAI診断官の初期文脈に入れて開始します。機密情報、個人情報、APIキー、顧客名簿の詳細は話さないでください。正式な見積・契約条件はこの場では確定しません。'
-                : 'このデモでは、AI生成音声が再生されます。機密情報、個人情報、APIキー、顧客名簿の詳細は話さないでください。正式な見積・契約条件はこの場では確定しません。'}
+                ? '申請内容をAI診断官の初期文脈に入れて開始します。音声モードは静かな環境で利用してください。声の選択は現在できません。機密情報、個人情報、APIキー、顧客名簿の詳細は話さないでください。正式な見積・契約条件はこの場では確定しません。'
+                : 'このデモでは、AI生成音声またはテキスト応答を体験できます。音声モードは静かな環境で利用してください。声の選択は現在できません。機密情報、個人情報、APIキー、顧客名簿の詳細は話さないでください。正式な見積・契約条件はこの場では確定しません。'}
             </p>
+          </div>
+
+          <div class="ado-mode-switch" role="tablist" aria-label="利用モード">
+            <button type="button" class="ado-mode-button is-active" data-mode="voice" aria-selected="true">音声モード β</button>
+            <button type="button" class="ado-mode-button" data-mode="text" aria-selected="false">テキストモード</button>
           </div>
 
           {isReviewMode ? (
@@ -93,10 +98,19 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
           <input id="ado-review-ticket" type="hidden" value={reviewTicketNumber} />
           <input id="ado-review-token" type="hidden" value={reviewToken} />
 
-          <div class="ado-controls">
+          <div class="ado-text-panel" id="ado-text-panel" hidden>
+            <form class="ado-text-form" id="ado-text-form">
+              <label for="ado-text-input">テキストで相談する</label>
+              <textarea id="ado-text-input" rows="4" placeholder="例: 詳細レポートを読んだうえで、どの業務からAI化すべきか相談したいです。"></textarea>
+              <button type="submit" class="ado-btn ado-btn--primary" id="ado-text-send">送信</button>
+            </form>
+            <p class="ado-text-note">騒がしい場所、マイクが不安定な端末、正確に残したい内容はテキストモードを利用してください。</p>
+          </div>
+
+          <div class="ado-controls" id="ado-voice-controls">
             <button type="button" class="ado-round-action ado-round-action--start" id="ado-start">
               <span aria-hidden="true">▶</span>
-              <strong>開始</strong>
+              <strong>音声開始</strong>
             </button>
             <button type="button" class="ado-round-action" id="ado-summary" disabled>
               <span aria-hidden="true">▣</span>
@@ -113,6 +127,8 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
               <strong>終了</strong>
             </button>
           </div>
+
+          <p class="ado-cost" id="ado-cost">セッション原価: 実測待ち</p>
 
           <div class="ado-meter" aria-hidden="true">
             <span></span>
@@ -139,7 +155,7 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
           </article>
 
           <article class="ado-check-card">
-            <h3>{isReviewMode ? 'レビュー後の成果物' : '通常の音声相談との差分'}</h3>
+            <h3>{isReviewMode ? 'レビュー後の成果物' : '通常のAI相談との差分'}</h3>
             <p>
               {isReviewMode
                 ? '会話後に生成する診断メモをOptiensへ送信できます。文字起こしではなく、次工程で使える判断材料として整理します。'
@@ -193,6 +209,13 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
   const sessionModeInput = document.getElementById('ado-session-mode');
   const reviewTicketInput = document.getElementById('ado-review-ticket');
   const reviewTokenInput = document.getElementById('ado-review-token');
+  const modeButtons = Array.from(document.querySelectorAll('.ado-mode-button'));
+  const textPanel = document.getElementById('ado-text-panel');
+  const voiceControls = document.getElementById('ado-voice-controls');
+  const textForm = document.getElementById('ado-text-form');
+  const textInput = document.getElementById('ado-text-input');
+  const textSendButton = document.getElementById('ado-text-send');
+  const costBox = document.getElementById('ado-cost');
 
   let peerConnection = null;
   let dataChannel = null;
@@ -202,6 +225,13 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
   let summaryBuffer = '';
   let summaryMode = false;
   let transcriptStarted = false;
+  let activeMode = 'voice';
+  let sessionCostJpy = 0;
+  let sessionCostUsd = 0;
+  let textMessages = [];
+  const displayedResponseIds = new Set();
+  const sessionStartedAt = new Date().toISOString();
+  const clientSessionId = (globalThis.crypto?.randomUUID?.() || `ado-${Date.now()}-${Math.random().toString(36).slice(2)}`).replace(/[^a-zA-Z0-9_-]/g, '');
 
   const setStatus = (text, tone = '') => {
     statusBadge.textContent = text;
@@ -211,6 +241,19 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
   const setError = (message) => {
     errorBox.hidden = !message;
     errorBox.textContent = message || '';
+  };
+
+  const updateCost = (cost) => {
+    if (!cost) return;
+    const usd = Number(cost.estimated_cost_usd || 0);
+    const jpy = cost.estimated_cost_jpy;
+    if (Number.isFinite(usd)) sessionCostUsd += usd;
+    if (Number.isFinite(Number(jpy))) sessionCostJpy += Number(jpy);
+    if (sessionCostJpy > 0) {
+      costBox.textContent = `セッション原価: 約¥${Math.round(sessionCostJpy).toLocaleString('ja-JP')}`;
+    } else if (sessionCostUsd > 0) {
+      costBox.textContent = `セッション原価: 約$${sessionCostUsd.toFixed(4)}`;
+    }
   };
 
   const resetPlaceholder = () => {
@@ -272,6 +315,30 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
     return true;
   };
 
+  const setMicrophoneEnabled = (enabled) => {
+    if (!localStream) return;
+    for (const track of localStream.getAudioTracks()) {
+      track.enabled = Boolean(enabled);
+    }
+  };
+
+  const setMode = async (mode) => {
+    if (mode !== 'voice' && mode !== 'text') return;
+    if (mode === activeMode) return;
+    if (peerConnection) await disconnect();
+    activeMode = mode;
+    modeButtons.forEach((button) => {
+      const selected = button.dataset.mode === mode;
+      button.classList.toggle('is-active', selected);
+      button.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+    textPanel.hidden = mode !== 'text';
+    voiceControls.hidden = mode !== 'voice';
+    summaryButton.disabled = mode === 'voice' ? !dataChannel || dataChannel.readyState !== 'open' : textMessages.length === 0;
+    setStatus(mode === 'voice' ? '待機中' : 'テキスト待機中', '');
+    setError('');
+  };
+
   const requestOpening = () => {
     const isReviewSession = sessionModeInput?.value === 'review';
     sendEvent({
@@ -285,6 +352,10 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
   };
 
   const requestSummary = () => {
+    if (activeMode === 'text') {
+      requestTextSummary();
+      return;
+    }
     summaryMode = true;
     summaryBuffer = '';
     renderSummary('', true);
@@ -297,7 +368,7 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
           {
             type: 'input_text',
             text: [
-              'ここまでの会話を、OptiensのAI診断官レビュー用の診断メモとして整理してください。',
+              'ここまでの会話を、OptiensのAI診断官β用の診断メモとして整理してください。',
               '音声ではなくテキストだけで返してください。',
               '形式:',
               '1. 業務概要',
@@ -321,6 +392,90 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
     }
   };
 
+  const callTextOfficer = async ({ summary = false, userText = '' } = {}) => {
+    if (summary && textMessages.length === 0) {
+      setError('診断メモを生成するための会話がまだありません。');
+      return;
+    }
+    const clean = String(userText || '').trim();
+    if (!summary && !clean) return;
+    setError('');
+    setStatus(summary ? '診断メモ生成中' : 'テキスト応答中', 'thinking');
+    if (textSendButton) textSendButton.disabled = true;
+    summaryButton.disabled = true;
+
+    if (!summary) {
+      addTranscript('user', clean);
+      textMessages.push({ role: 'user', content: clean });
+    } else {
+      renderSummary('', true);
+    }
+
+    try {
+      const response = await fetch('/api/ai-diagnosis-officer-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: clientSessionId,
+          mode: sessionModeInput?.value || 'demo',
+          ticket_number: reviewTicketInput?.value || '',
+          token: reviewTokenInput?.value || '',
+          messages: textMessages,
+          summary,
+        }),
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(payload?.error || 'テキスト応答を生成できませんでした。');
+      }
+      if (summary) {
+        summaryBuffer = payload.reply || '';
+        renderSummary(summaryBuffer);
+      } else {
+        const reply = payload.reply || '';
+        addTranscript('assistant', reply);
+        textMessages.push({ role: 'assistant', content: reply });
+      }
+      updateCost(payload.cost);
+      setStatus('テキスト待機中', 'live');
+    } catch (error) {
+      setError(error?.message || 'テキスト応答を生成できませんでした。');
+      setStatus('エラー', 'error');
+    } finally {
+      if (textSendButton) textSendButton.disabled = false;
+      summaryButton.disabled = textMessages.length === 0;
+    }
+  };
+
+  const requestTextSummary = () => {
+    callTextOfficer({ summary: true });
+  };
+
+  const recordRealtimeUsage = async (event) => {
+    const usage = event?.response?.usage;
+    if (!usage) return;
+    try {
+      const response = await fetch('/api/ai-diagnosis-officer-usage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify({
+          session_id: clientSessionId,
+          started_at: sessionStartedAt,
+          mode: sessionModeInput?.value || 'demo',
+          ticket_number: reviewTicketInput?.value || '',
+          response_id: event?.response?.id || event?.response_id || '',
+          model: event?.response?.model || '',
+          usage,
+        }),
+      });
+      const payload = await response.json().catch(() => null);
+      if (payload?.cost) updateCost(payload.cost);
+    } catch (error) {
+      console.warn('[ai-diagnosis-officer] usage log skipped', error);
+    }
+  };
+
   const handleRealtimeEvent = (event) => {
     if (event.type === 'error') {
       setError(event.error?.message || '音声セッションでエラーが発生しました。');
@@ -339,11 +494,17 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
       addTranscript('user', event.transcript);
       return;
     }
+    if (event.type === 'response.created') {
+      setMicrophoneEnabled(false);
+      setStatus('AI応答中', 'thinking');
+      return;
+    }
     if (event.type === 'response.output_audio_transcript.delta') {
       assistantBuffer += event.delta || '';
       return;
     }
     if (event.type === 'response.output_audio_transcript.done') {
+      if (event.response_id) displayedResponseIds.add(event.response_id);
       addTranscript('assistant', event.transcript || assistantBuffer);
       assistantBuffer = '';
       setStatus('接続中', 'live');
@@ -364,12 +525,15 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
       return;
     }
     if (event.type === 'response.done') {
+      recordRealtimeUsage(event);
+      setMicrophoneEnabled(true);
+      const responseId = event?.response?.id || event?.response_id || '';
       const text = parseResponseDoneText(event);
       if (summaryMode && text) {
         summaryBuffer = text;
         renderSummary(summaryBuffer);
         summaryMode = false;
-      } else if (!summaryMode && text && !assistantBuffer) {
+      } else if (!summaryMode && text && !assistantBuffer && !displayedResponseIds.has(responseId)) {
         addTranscript('assistant', text);
       }
       setStatus('接続中', 'live');
@@ -470,17 +634,28 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
     remoteAudio = null;
     assistantBuffer = '';
     summaryMode = false;
-    startButton.disabled = false;
+    startButton.disabled = activeMode !== 'voice';
     stopButton.disabled = true;
-    summaryButton.disabled = true;
+    summaryButton.disabled = activeMode === 'text' ? textMessages.length === 0 : true;
     setStatus('待機中', '');
   };
 
   startButton?.addEventListener('click', connect);
   stopButton?.addEventListener('click', disconnect);
   summaryButton?.addEventListener('click', requestSummary);
+  modeButtons.forEach((button) => {
+    button.addEventListener('click', () => setMode(button.dataset.mode || 'voice'));
+  });
+  textForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const text = textInput?.value || '';
+    if (textInput) textInput.value = '';
+    callTextOfficer({ userText: text });
+  });
   clearLogButton?.addEventListener('click', () => {
     transcriptStarted = false;
+    textMessages = [];
+    summaryButton.disabled = activeMode === 'text';
     resetPlaceholder();
   });
   copySummaryButton?.addEventListener('click', async () => {
@@ -806,6 +981,79 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
     line-height: 1.7;
   }
 
+  .ado-mode-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0 0 20px;
+    padding: 6px;
+    border: 1px solid var(--ado-border);
+    border-radius: 999px;
+    background: #F8FAFC;
+  }
+
+  .ado-mode-button {
+    min-height: 40px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ado-muted);
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .ado-mode-button.is-active {
+    background: #fff;
+    color: var(--ado-brand);
+    box-shadow: 0 8px 20px -16px rgba(31, 58, 147, 0.45);
+  }
+
+  .ado-text-panel {
+    margin: 20px 0;
+    padding: 16px;
+    border: 1px solid var(--ado-border);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .ado-text-form {
+    display: grid;
+    gap: 10px;
+  }
+
+  .ado-text-form label {
+    color: var(--ado-heading);
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .ado-text-form textarea {
+    width: 100%;
+    min-height: 116px;
+    padding: 12px;
+    border: 1px solid var(--ado-border);
+    border-radius: 8px;
+    color: var(--ado-text);
+    font: inherit;
+    resize: vertical;
+  }
+
+  .ado-text-form textarea:focus {
+    outline: none;
+    border-color: var(--ado-brand);
+    box-shadow: 0 0 0 3px rgba(31, 58, 147, 0.12);
+  }
+
+  .ado-text-note,
+  .ado-cost {
+    margin: 10px 0 0;
+    color: var(--ado-muted);
+    font-size: 0.84rem;
+    line-height: 1.7;
+  }
+
   .ado-round-action {
     display: inline-flex;
     align-items: center;
@@ -885,6 +1133,10 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
     color: #991B1B;
     font-size: 0.92rem;
     line-height: 1.7;
+  }
+
+  [hidden] {
+    display: none !important;
   }
 
   .ado-side {
@@ -1019,6 +1271,11 @@ const reviewToken = Astro.url.searchParams.get('t') || '';
     .ado-round-action {
       width: 100%;
       justify-content: center;
+    }
+
+    .ado-mode-switch {
+      grid-template-columns: 1fr;
+      border-radius: 12px;
     }
 
     .ado-console-head,
