@@ -3,15 +3,45 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="導入支援 | Optiens"
-  description="業務を自動でこなすAIの仕組みを、設計から構築・納品まで対応。御社の業務に合わせた自動化システムをお渡しします。"
+  title="導入支援 | AIエージェント業務自動化 | Optiens"
+  description="AIエージェントによる業務自動化を、要件整理から初期版・MVP・社内運用版の構築、運用改善まで支援します。導入前の相談はスポット相談チケットで受け付けます。"
 >
   <main>
     <!-- ヒーロー -->
     <section class="impl-hero light-section">
       <div class="container text-center" style="position:relative;z-index:1;">
         <h1>導入支援</h1>
-        <p class="hero-sub">業務を自動でこなすAIの仕組みを、<br/>設計から構築・納品まで対応します。</p>
+        <p class="hero-sub">既製SaaSで足りるものは活かし、合わない部分だけを補う。<br/>AIエージェントによる業務自動化を、要件整理から初期版・MVP・社内運用版の構築、改善まで支援します。</p>
+      </div>
+    </section>
+
+    <!-- 導入前の入口 -->
+    <section class="impl-section light-section impl-section--alt">
+      <div class="container">
+        <h2 class="section-title reveal">導入前の入口</h2>
+        <div class="impl-entry-grid reveal">
+          <article class="impl-entry-card">
+            <p class="impl-entry-label">診断後の相談</p>
+            <h3>AI診断官レビュー</h3>
+            <p class="impl-entry-ticket">スポット相談チケット 1枚</p>
+            <p>診断結果の解説、優先業務の絞り込み、対応可否、概算費用帯、次アクションを整理します。導入支援費へは充当せず、次工程への情報引き継ぎとして活用します。</p>
+            <a href="/spot-ticket" class="impl-entry-link">チケットを見る <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="impl-entry-card">
+            <p class="impl-entry-label">導入前のスコーピング</p>
+            <h3>導入前スコープ整理</h3>
+            <p class="impl-entry-ticket">スポット相談チケット 1枚</p>
+            <p>導入支援を具体検討する方向けに、対象業務・実装範囲・前提条件・概算見積を整理します。社内・契約上は有償要件定義として扱い、導入支援の成約時は、この費用を初期費用へ充当します。</p>
+            <a href="/spot-ticket" class="impl-entry-link">チケットを見る <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="impl-entry-card">
+            <p class="impl-entry-label">小さな作業</p>
+            <h3>簡易実装・軽微な自動化</h3>
+            <p class="impl-entry-ticket">スポット相談チケット 3枚から</p>
+            <p>既存ツール前提の設定・簡易実装・軽微な自動化はチケットで受け付けます。外部API連携、本番運用、認証、個人情報、継続保守が絡む場合は個別見積です。</p>
+            <a href="/spot-ticket" class="impl-entry-link">チケットを見る <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -22,23 +52,23 @@ import Layout from '../layouts/Layout.astro';
         <div class="impl-flow reveal">
           <div class="impl-step">
             <span class="impl-step-num">1</span>
-            <h3>ヒアリング</h3>
-            <p>業務内容や課題をお聞きし、自動化の範囲と優先順位を整理します。</p>
+            <h3>相談・要件整理</h3>
+            <p>AI活用診断、AI診断官レビュー、導入前スコープ整理をもとに、残すSaaS、つなぐSaaS、AIで置き換える作業と優先順位を整理します。</p>
           </div>
           <div class="impl-step">
             <span class="impl-step-num">2</span>
-            <h3>設計</h3>
-            <p>自動化ワークフローの構成を設計し、費用と期間をお見積もりします。</p>
+            <h3>範囲確定・契約</h3>
+            <p>対象業務、含む範囲、含まない範囲、費用、契約稼働枠を確認し、準委任契約を基本に進めます。</p>
           </div>
           <div class="impl-step">
             <span class="impl-step-num">3</span>
-            <h3>構築</h3>
-            <p>設計をもとにAIエージェントを構築します。</p>
+            <h3>初期版・MVP構築</h3>
+            <p>2〜4ヶ月を目安に、現場で試せる初期版・MVP・社内運用版を短いサイクルで構築します。</p>
           </div>
           <div class="impl-step">
             <span class="impl-step-num">4</span>
-            <h3>納品・動作確認</h3>
-            <p>お客様と一緒に動作確認を行い、操作手順を共有します。</p>
+            <h3>運用・改善</h3>
+            <p>実際の利用状況を見ながら改善し、必要に応じて保守チケットで継続的に調整します。</p>
           </div>
         </div>
       </div>
@@ -51,9 +81,11 @@ import Layout from '../layouts/Layout.astro';
         <div class="impl-includes reveal">
           <ul>
             <li><i class="fa-solid fa-check"></i>自動化ワークフローの設計・構築</li>
-            <li><i class="fa-solid fa-check"></i>自動化システム一式の納品</li>
+            <li><i class="fa-solid fa-check"></i>既存SaaSを残す・つなぐ・減らす判断の整理</li>
+            <li><i class="fa-solid fa-check"></i>初期版・MVP・社内運用版の構築</li>
             <li><i class="fa-solid fa-check"></i>操作手順の共有</li>
             <li><i class="fa-solid fa-check"></i>セットアップ支援・初期動作確認</li>
+            <li><i class="fa-solid fa-check"></i>要件変更や優先度入れ替えへの柔軟な対応</li>
             <li><i class="fa-solid fa-check"></i>ランニングコストを抑えた運用設計</li>
             <li><i class="fa-solid fa-check"></i>納品後3ヶ月間、当社の設計・実装起因の不具合を無償修正</li>
           </ul>
@@ -66,9 +98,11 @@ import Layout from '../layouts/Layout.astro';
       <div class="container">
         <h2 class="section-title reveal">費用について</h2>
         <div class="impl-price-card reveal">
-          <p>金額は自動化する業務の範囲や複雑さに応じて、個別にお見積もりいたします。</p>
-          <p>詳細レポート（¥5,500・税込）では、想定されるアーキテクチャと <strong>月額ランニングコストのレンジ</strong> をご提示します。<strong>初期導入費用</strong>は、診断結果と業務内容を確認したうえで、対応可否・概算費用・着手可能時期を個別にご案内します。</p>
-          <p>実装支援は品質確保のため、新規受付枠を限定しています。短納期案件、大規模な既存システム連携、高度なセキュリティ要件を含む案件は、設計フェーズからの対応または個別見積となります。</p>
+          <p>導入支援は、対象業務・連携先・データ状態・運用体制を確認したうえで個別にお見積もりします。外部API連携、認証、個人情報、本番運用、継続保守が絡む案件は、スポットチケットではなく導入支援として範囲を切ってご提案します。</p>
+          <p>詳細版AI活用診断（¥5,500・税込）では、想定されるアーキテクチャと <strong>月額ランニングコストのレンジ</strong> をご提示します。初期導入費用は、診断結果と業務内容を確認したうえで、対応可否・概算費用・着手可能時期を個別にご案内します。</p>
+          <p>AI診断官レビューは、診断後の追加レビューとしてスポット相談チケット1枚で実施します。音声AI診断官が業務量・頻度・例外処理・利用中ツールを聞き取り、費用は導入支援へ充当せず、次工程への情報引き継ぎとして使います。</p>
+          <p>導入前スコープ整理（社内・契約上の有償要件定義）は、導入支援前のスコーピングとしてスポット相談チケット1枚で実施します。導入支援の成約時は、この費用を初期費用へ充当します。</p>
+          <p>簡易実装・軽微な自動化は、スポット相談チケット3枚から受け付けます。ただし、4枚以上になりそうなものや責任範囲が広いものは、個別見積へ切り替えます。</p>
         </div>
       </div>
     </section>
@@ -84,15 +118,19 @@ import Layout from '../layouts/Layout.astro';
           </details>
           <details class="impl-faq-item">
             <summary>「SaaS」「シングルテナント構成」など、サイトに出てくる用語が分かりません。</summary>
-            <p><strong>SaaS</strong><small>(Software as a Service / サース)</small>とは、複数の利用企業が同じ画面・同じ機能を共有して使うクラウド型の業務システムです。月額のライセンス料を払い続ける契約形態で、汎用的に作られているため画面構成や項目は他社と共通になります。<br /><br />弊社が構築するのは<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>の業務システムです。御社の業務動線に合わせて画面と処理フローを一から設計し、納品後は御社の資産として残ります。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースを提供するクラウド基盤)</small>に保管され、CSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。<br /><br />既製のSaaSが業務にぴったり合う場合は、そのまま使う方が合理的です。「合わない部分が積み重なってきた」と感じる業務に対して、専用構成をご提案しています。</p>
+            <p><strong>SaaS</strong><small>(Software as a Service / サース)</small>とは、複数の利用企業が同じ画面・同じ機能を共有して使うクラウド型の業務システムです。月額のライセンス料を払い続ける契約形態で、汎用的に作られているため画面構成や項目は他社と共通になります。<br /><br />弊社が構築するのは<strong>シングルテナント構成</strong><small>(御社専用の環境で動作する構成)</small>の業務システムです。御社の業務動線に合わせて画面と処理フローを一から設計し、納品後は御社の資産として残ります。データは御社名義で契約する<strong>BaaS</strong><small>(Backend as a Service：認証・データベースを提供するクラウド基盤)</small>に保管され、CSVエクスポートやデータベースのダンプ<small>(全データの一括取り出し)</small>でいつでも持ち出せます。<br /><br />既製のSaaSが業務に合っている場合や、正本管理・権限管理・監査のために必要な場合は、そのまま使う方が合理的です。一方で、費用に見合わず手作業で補っているSaaSは、解約・縮小・連携・専用化まで含めて見直します。「残す・つなぐ・減らす・AIで置き換える」を整理したうえで、必要な部分だけ専用構成をご提案しています。</p>
           </details>
           <details class="impl-faq-item">
             <summary>セキュリティは大丈夫ですか？</summary>
             <p>AIエージェントはAPI経由で動作します。当社が標準利用するAI APIでは、入力データがモデル学習に利用されない設定・契約条件を確認したうえで利用します。業務データは必要最小限の範囲で処理し、送信先・保存期間・取り扱いは事前にご説明します。当社はIPA「SECURITY ACTION」を宣言し、情報セキュリティ対策に取り組んでいます。</p>
           </details>
           <details class="impl-faq-item">
+            <summary>AI診断官レビューと導入前スコープ整理は何が違いますか？</summary>
+            <p>AI診断官レビューは、診断結果をもとに「どこから着手すべきか」を整理するAIレビューです。導入前スコープ整理は、導入支援を具体的に検討する前提で、対象業務・実装範囲・概算見積を整理するスコーピングです。導入支援の初期費用へ充当するのは、導入前スコープ整理のスポット相談チケット1枚分のみです。</p>
+          </details>
+          <details class="impl-faq-item">
             <summary>どれくらいの期間で導入できますか？</summary>
-            <p>業務範囲によりますが、シンプルな自動化フロー1本であれば<strong>2〜4週間</strong>、複数業務にまたがる仕組みでも<strong>1〜2ヶ月</strong>が目安です。詳細レポート（¥5,500・税込）の中で、御社の業務に合わせた具体的なスケジュールをご提示します。</p>
+            <p>スポット相談チケットで扱う軽微な設定・簡易実装は、内容に応じて短い期間で対応します。本番運用を前提にした導入支援では、まずは<strong>2〜4ヶ月</strong>を目安に、現場で試せる初期版・MVP・社内運用版を構築し、実際の利用状況を見ながら改善します。具体的なスケジュールは、導入前スコープ整理または導入支援の見積時に整理します。</p>
           </details>
         </div>
       </div>
@@ -101,10 +139,11 @@ import Layout from '../layouts/Layout.astro';
     <!-- CTA -->
     <section class="impl-cta light-section">
       <div class="container text-center">
-        <h2 class="reveal">まずはご相談ください</h2>
-        <p class="reveal">「こういう業務を自動化したい」「費用感を知りたい」など、お気軽にどうぞ。</p>
+        <h2 class="reveal">入口を選んで、無理なく進めましょう</h2>
+        <p class="reveal">まだ整理できていない場合はAI活用診断から。診断後の相談や導入前の要件整理は、スポット相談チケットで受け付けています。</p>
         <div class="impl-cta-buttons reveal">
           <a href="/free-diagnosis" class="btn-primary">AI活用診断を受ける（無料）</a>
+          <a href="/spot-ticket" class="btn-secondary">スポット相談チケットを見る</a>
           <a href="/contact" class="btn-secondary">お問い合わせ</a>
         </div>
       </div>
@@ -144,6 +183,58 @@ import Layout from '../layouts/Layout.astro';
   .impl-section--alt {
     background: var(--surface-2);
   }
+
+  /* 導入前の入口 */
+  .impl-entry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .impl-entry-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .impl-entry-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--glow);
+  }
+  .impl-entry-label {
+    display: inline-block;
+    margin: 0 0 12px;
+    color: var(--brand);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .impl-entry-card h3 {
+    margin: 0 0 10px;
+    color: var(--heading);
+    font-size: 1.05rem;
+  }
+  .impl-entry-ticket {
+    margin: 0 0 14px;
+    color: var(--brand);
+    font-size: .88rem;
+    font-weight: 700;
+  }
+  .impl-entry-card p:not(.impl-entry-label):not(.impl-entry-ticket) {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.75;
+  }
+  .impl-entry-link {
+    color: var(--brand);
+    font-size: .88rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .impl-entry-link:hover { text-decoration: underline; }
 
   /* 導入の流れ */
   .impl-flow {
@@ -256,6 +347,10 @@ import Layout from '../layouts/Layout.astro';
   }
 
   @media (max-width: 768px) {
+    .impl-entry-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
     .impl-flow {
       grid-template-columns: 1fr 1fr;
       gap: 16px;

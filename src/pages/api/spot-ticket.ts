@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 import { generatePaymentToken } from '../../lib/payment-token'
+import { buildAiDiagnosisReviewUrl } from '../../lib/ai-diagnosis-review'
 import { formatYen } from '../../lib/paid-billing'
 import {
   buildSpotTicketInvoiceText,
@@ -41,7 +42,7 @@ const escapeHtml = (value: string) =>
     .replaceAll("'", '&#39;')
 
 const serviceLabels: Record<string, string> = {
-  review: 'AI活用レビュー面談',
+  review: 'AI診断官レビュー',
   requirements: '有償要件定義',
   small_build: '簡易実装・軽微な自動化',
   undecided: '未定・相談したい',
@@ -80,9 +81,21 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const ticketCountLabel = ticketCountLabels[ticketCount] ?? (ticketCount || '未選択')
     const ticketNumber = clamp(sanitizeLine(String(form.get('ticket_number') || '')), 80)
     const preferredSchedule = clamp(String(form.get('preferred_schedule') || '').trim(), 1000)
-    const requestDetail = clamp(String(form.get('request_detail') || '').trim(), 5000)
+    const requestDetailRaw = clamp(String(form.get('request_detail') || '').trim(), 5000)
+    const businessOverview = clamp(String(form.get('business_overview') || '').trim(), 2000)
+    const diagnosisReference = clamp(String(form.get('diagnosis_reference') || '').trim(), 1000)
+    const currentTools = clamp(String(form.get('current_tools') || '').trim(), 1500)
     const invoiceName = clamp(sanitizeLine(String(form.get('invoice_name') || '')), 160)
     const notes = clamp(String(form.get('notes') || '').trim(), 3000)
+    const isAiDiagnosisReviewRedeem = mode === 'redeem' && serviceType === 'review'
+    const requestDetail = isAiDiagnosisReviewRedeem
+      ? buildAiDiagnosisReviewRequestDetail({
+          requestDetail: requestDetailRaw,
+          businessOverview,
+          diagnosisReference,
+          currentTools,
+        })
+      : requestDetailRaw
 
     if (!companyName || !personName || !email) {
       return json({ error: '会社名・お名前・メールアドレスを入力してください。' }, 400)
@@ -106,6 +119,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const purchaseAmount = purchaseCount > 0 ? spotTicketAmount(purchaseCount).total : 0
     let orderId = ''
     let notifyUrl = ''
+    let reviewUrl = ''
 
     if (mode === 'purchase') {
       orderId = await generateUniqueSpotTicketOrderId()
@@ -131,7 +145,9 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       } else {
         console.warn('[spot-ticket] Supabase not configured, skipping order persistence')
       }
-    } else if (supabase) {
+    } else if (!supabase) {
+      return json({ error: 'チケット確認に必要な設定が未完了です。' }, 500)
+    } else {
       const { data: order, error: orderLookupError } = await supabase
         .from('spot_ticket_orders')
         .select('id, order_id, ticket_number, status, ticket_count, company_name, email')
@@ -140,11 +156,15 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
       if (orderLookupError) {
         console.error('[spot-ticket] ticket lookup error:', orderLookupError)
+        return json({ error: 'チケット番号の確認に失敗しました。時間をおいて再度お試しください。' }, 500)
       } else if (!order) {
         return json({ error: '入力されたチケット番号が見つかりません。番号をご確認ください。' }, 400)
       } else if (!['ticket_issued', 'redeemed'].includes(order.status)) {
         return json({ error: 'このチケット番号はまだ利用申請できる状態ではありません。' }, 400)
       } else {
+        if (isAiDiagnosisReviewRedeem) {
+          reviewUrl = buildAiDiagnosisReviewUrl(SITE_URL, ticketNumber)
+        }
         const { error: redeemError } = await supabase
           .from('spot_ticket_orders')
           .update({
@@ -163,6 +183,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
           .eq('id', order.id)
         if (redeemError) {
           console.error('[spot-ticket] redeem update error:', redeemError)
+          return json({ error: '利用申請の登録に失敗しました。時間をおいて再度お試しください。' }, 500)
         }
       }
     }
@@ -231,6 +252,12 @@ export const POST: APIRoute = async ({ request, redirect }) => {
           notifyUrl,
           isQuoteRequired,
         })
+      : isAiDiagnosisReviewRedeem && reviewUrl
+        ? buildAiDiagnosisReviewRedeemCustomerText({
+            personName,
+            ticketNumber,
+            reviewUrl,
+          })
       : [
           `${personName} 様`,
           '',
@@ -251,11 +278,60 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       html: `<pre style="white-space:pre-wrap;font-family:system-ui,sans-serif;">${escapeHtml(customerText)}</pre>`,
     })
 
-    return redirect(`/spot-ticket-success?mode=${mode}`)
+    return redirect(`/spot-ticket-success?mode=${mode}${isAiDiagnosisReviewRedeem ? '&service=review' : ''}`)
   } catch (error: any) {
     console.error('[spot-ticket] error:', error?.message ?? String(error))
     return json({ error: '送信に失敗しました。' }, 500)
   }
+}
+
+function buildAiDiagnosisReviewRequestDetail(input: {
+  requestDetail: string
+  businessOverview: string
+  diagnosisReference: string
+  currentTools: string
+}): string {
+  return [
+    '【AI診断官レビュー申請】',
+    '',
+    '今回聞きたいこと:',
+    input.requestDetail || '未入力',
+    '',
+    '業務概要:',
+    input.businessOverview || '未入力',
+    '',
+    '簡易版/詳細版AI活用診断の申込番号・メール・参照情報:',
+    input.diagnosisReference || '未入力',
+    '',
+    '利用中ツール・データ:',
+    input.currentTools || '未入力',
+  ].join('\n')
+}
+
+function buildAiDiagnosisReviewRedeemCustomerText(input: {
+  personName: string
+  ticketNumber: string
+  reviewUrl: string
+}): string {
+  return `${input.personName} 様
+
+合同会社Optiensです。
+AI診断官レビューの申請を受け付け、チケット番号を確認しました。
+
+下記URLから、本番のAI診断官レビューを開始してください。
+${input.reviewUrl}
+
+━━━ 実施前のお願い ━━━
+・このURLは申請内容とチケット番号に紐づいています。
+・AI診断官は、申請フォームに入力いただいた内容と、取得できる範囲の簡易版/詳細版AI活用診断の入力情報を前提にヒアリングします。
+・機密情報、個人情報、APIキー、顧客名簿の詳細は音声で話さないでください。
+・会話後は、文字起こしではなく「診断メモ」としてAI化候補、制約条件、次アクションを整理します。
+
+チケット番号: ${input.ticketNumber}
+
+合同会社Optiens
+https://optiens.com
+`
 }
 
 function buildPurchaseCustomerText(input: {

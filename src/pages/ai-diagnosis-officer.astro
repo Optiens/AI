@@ -1,0 +1,1030 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const sessionMode = Astro.url.searchParams.get('mode') === 'review' ? 'review' : 'demo';
+const isReviewMode = sessionMode === 'review';
+const reviewTicketNumber = Astro.url.searchParams.get('ticket') || '';
+const reviewToken = Astro.url.searchParams.get('t') || '';
+---
+
+<Layout
+  title={`${isReviewMode ? 'AI診断官レビュー 本番URL' : 'AI診断官レビュー 音声デモ'} | Optiens`}
+  description={isReviewMode
+    ? 'チケット利用申請後に案内されたAI診断官レビューの本番音声ページです。'
+    : 'OptiensのAI診断官レビューを音声で体験できる公開デモページ。AI音声エージェントが業務量・頻度・例外処理・利用中ツールを聞き取り、診断材料として整理します。'}
+  canonical="https://optiens.com/ai-diagnosis-officer"
+>
+  <main class="ado-page">
+    <section class="ado-hero light-section">
+      <div class="container ado-hero-grid">
+        <div class="ado-hero-copy">
+          <p class="ado-eyebrow">AI Diagnosis Officer</p>
+          <h1>{isReviewMode ? 'AI診断官レビューを開始する' : 'AI診断官レビューを、音声で体験する'}</h1>
+          <p>
+            {isReviewMode
+              ? '申請フォームで送信いただいた内容を前提に、AI診断官が追加確認を行い、文字起こしではなく診断メモへ整理します。'
+              : '汎用AIに自由相談するのではなく、AI診断官が業務量・頻度・例外処理・利用中ツールを順に聞き取り、詳細レポートや導入支援へ引き継げる診断材料へ整理します。'}
+          </p>
+          <div class="ado-hero-actions">
+            <a href="#voice-demo" class="ado-btn ado-btn--primary">{isReviewMode ? '本番レビューを開始する' : '音声デモを開始する'}</a>
+            <a href={isReviewMode ? '/ai-diagnosis-officer/apply' : '/spot-ticket'} class="ado-btn ado-btn--ghost">
+              {isReviewMode ? '申請フォームを見る' : 'チケットを見る'}
+            </a>
+          </div>
+        </div>
+        <div class="ado-hero-panel" aria-label="AI診断官レビューの進行イメージ">
+          <div class="ado-orbit" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="ado-panel-card">
+            <span>01</span>
+            <strong>聞き取り</strong>
+            <p>業務量、頻度、例外、利用中ツールを順に確認</p>
+          </div>
+          <div class="ado-panel-card">
+            <span>02</span>
+            <strong>構造化</strong>
+            <p>AI化候補、制約条件、リスクに整理</p>
+          </div>
+          <div class="ado-panel-card">
+            <span>03</span>
+            <strong>次工程接続</strong>
+            <p>レポートや導入支援で使える判断材料に変換</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ado-demo-section light-section" id="voice-demo">
+      <div class="container ado-demo-grid">
+        <div class="ado-console">
+          <div class="ado-console-head">
+            <div>
+              <p class="ado-eyebrow">Voice Demo</p>
+              <h2>音声AI診断官</h2>
+            </div>
+            <span class="ado-status" id="ado-status">待機中</span>
+          </div>
+
+          <div class="ado-notice">
+            <strong>{isReviewMode ? '本番レビューとしてAI音声で応答します' : '公開デモとしてAI音声で応答します'}</strong>
+            <p>
+              {isReviewMode
+                ? '申請内容をAI診断官の初期文脈に入れて開始します。機密情報、個人情報、APIキー、顧客名簿の詳細は話さないでください。正式な見積・契約条件はこの場では確定しません。'
+                : 'このデモでは、AI生成音声が再生されます。機密情報、個人情報、APIキー、顧客名簿の詳細は話さないでください。正式な見積・契約条件はこの場では確定しません。'}
+            </p>
+          </div>
+
+          {isReviewMode ? (
+            <div class="ado-review-ticket">
+              <span>Review ticket</span>
+              <strong>{reviewTicketNumber || 'チケット番号未指定'}</strong>
+            </div>
+          ) : (
+            <div class="ado-demo-note">
+              <span>公開デモ</span>
+              <p>購入前に動きを確認できます。本番レビューはチケット利用申請後の専用URLから実施します。</p>
+            </div>
+          )}
+          <input id="ado-access-code" type="hidden" value="" />
+          <input id="ado-session-mode" type="hidden" value={sessionMode} />
+          <input id="ado-review-ticket" type="hidden" value={reviewTicketNumber} />
+          <input id="ado-review-token" type="hidden" value={reviewToken} />
+
+          <div class="ado-controls">
+            <button type="button" class="ado-round-action ado-round-action--start" id="ado-start">
+              <span aria-hidden="true">▶</span>
+              <strong>開始</strong>
+            </button>
+            <button type="button" class="ado-round-action" id="ado-summary" disabled>
+              <span aria-hidden="true">▣</span>
+              <strong>診断メモ生成</strong>
+            </button>
+            {isReviewMode && (
+              <button type="button" class="ado-round-action" id="ado-send-summary" disabled>
+                <span aria-hidden="true">↑</span>
+                <strong>メモ送信</strong>
+              </button>
+            )}
+            <button type="button" class="ado-round-action ado-round-action--stop" id="ado-stop" disabled>
+              <span aria-hidden="true">■</span>
+              <strong>終了</strong>
+            </button>
+          </div>
+
+          <div class="ado-meter" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <p class="ado-error" id="ado-error" hidden></p>
+        </div>
+
+        <div class="ado-side">
+          <article class="ado-check-card">
+            <h3>聞き取り項目</h3>
+            <ul>
+              <li>業種・提供サービス</li>
+              <li>困っている業務</li>
+              <li>業務量・頻度</li>
+              <li>例外処理・判断基準</li>
+              <li>利用中ツール・データ形式</li>
+              <li>人が最終判断すべき範囲</li>
+            </ul>
+          </article>
+
+          <article class="ado-check-card">
+            <h3>{isReviewMode ? 'レビュー後の成果物' : '通常の音声相談との差分'}</h3>
+            <p>
+              {isReviewMode
+                ? '会話後に生成する診断メモをOptiensへ送信できます。文字起こしではなく、次工程で使える判断材料として整理します。'
+                : '会話をその場の助言で終わらせず、後続の詳細レポート・有償要件定義・導入支援で使える材料へ変換することを重視します。'}
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ado-output-section light-section">
+  <div class="container ado-output-grid">
+        <article class="ado-output-card">
+          <div class="ado-output-head">
+            <h2>聞き取り確認ログ</h2>
+            <button type="button" class="ado-mini-btn" id="ado-clear-log">消去</button>
+          </div>
+          <div class="ado-transcript" id="ado-transcript">
+            <p class="ado-placeholder">開始すると、聞き取り中の確認内容がここに表示されます。正式な成果物は右側の診断メモです。</p>
+          </div>
+        </article>
+
+        <article class="ado-output-card">
+          <div class="ado-output-head">
+            <h2>診断メモ</h2>
+            <button type="button" class="ado-mini-btn" id="ado-copy-summary" disabled>コピー</button>
+          </div>
+          <div class="ado-summary" id="ado-summary-output">
+            <p class="ado-placeholder">
+              会話後に「診断メモ生成」を押すと、AI化候補、制約条件、次アクションをテキストで整理します。
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  const startButton = document.getElementById('ado-start');
+  const stopButton = document.getElementById('ado-stop');
+  const summaryButton = document.getElementById('ado-summary');
+  const statusBadge = document.getElementById('ado-status');
+  const errorBox = document.getElementById('ado-error');
+  const transcriptBox = document.getElementById('ado-transcript');
+  const summaryBox = document.getElementById('ado-summary-output');
+  const clearLogButton = document.getElementById('ado-clear-log');
+  const copySummaryButton = document.getElementById('ado-copy-summary');
+  const sendSummaryButton = document.getElementById('ado-send-summary');
+  const accessCodeInput = document.getElementById('ado-access-code');
+  const sessionModeInput = document.getElementById('ado-session-mode');
+  const reviewTicketInput = document.getElementById('ado-review-ticket');
+  const reviewTokenInput = document.getElementById('ado-review-token');
+
+  let peerConnection = null;
+  let dataChannel = null;
+  let localStream = null;
+  let remoteAudio = null;
+  let assistantBuffer = '';
+  let summaryBuffer = '';
+  let summaryMode = false;
+  let transcriptStarted = false;
+
+  const setStatus = (text, tone = '') => {
+    statusBadge.textContent = text;
+    statusBadge.dataset.tone = tone;
+  };
+
+  const setError = (message) => {
+    errorBox.hidden = !message;
+    errorBox.textContent = message || '';
+  };
+
+  const resetPlaceholder = () => {
+    if (!transcriptStarted) {
+      transcriptBox.innerHTML = '<p class="ado-placeholder">開始すると、聞き取り中の確認内容がここに表示されます。正式な成果物は右側の診断メモです。</p>';
+    }
+  };
+
+  const addTranscript = (role, text) => {
+    const clean = String(text || '').trim();
+    if (!clean) return;
+    if (!transcriptStarted) {
+      transcriptBox.innerHTML = '';
+      transcriptStarted = true;
+    }
+    const item = document.createElement('div');
+    item.className = `ado-message ado-message--${role}`;
+    item.innerHTML = `<span>${role === 'user' ? 'あなた' : 'AI診断官'}</span><p></p>`;
+    item.querySelector('p').textContent = clean;
+    transcriptBox.appendChild(item);
+    transcriptBox.scrollTop = transcriptBox.scrollHeight;
+  };
+
+  const renderSummary = (text, loading = false) => {
+    const clean = String(text || '').trim();
+    if (!clean && loading) {
+      summaryBox.innerHTML = '<p class="ado-placeholder">診断メモを生成しています...</p>';
+      copySummaryButton.disabled = true;
+      if (sendSummaryButton) sendSummaryButton.disabled = true;
+      return;
+    }
+    if (!clean) {
+      summaryBox.innerHTML = '<p class="ado-placeholder">会話後に「診断メモ生成」を押すと、AI化候補、制約条件、次アクションをテキストで整理します。</p>';
+      copySummaryButton.disabled = true;
+      if (sendSummaryButton) sendSummaryButton.disabled = true;
+      return;
+    }
+    summaryBox.innerHTML = `<pre></pre>`;
+    summaryBox.querySelector('pre').textContent = clean;
+    copySummaryButton.disabled = false;
+    if (sendSummaryButton) sendSummaryButton.disabled = false;
+  };
+
+  const parseResponseDoneText = (event) => {
+    const parts = [];
+    const outputs = event?.response?.output || [];
+    for (const output of outputs) {
+      for (const content of output.content || []) {
+        if (content?.type === 'audio' && content.transcript) parts.push(content.transcript);
+        if ((content?.type === 'text' || content?.type === 'output_text') && content.text) parts.push(content.text);
+      }
+    }
+    return parts.join('\n').trim();
+  };
+
+  const sendEvent = (event) => {
+    if (!dataChannel || dataChannel.readyState !== 'open') return false;
+    dataChannel.send(JSON.stringify(event));
+    return true;
+  };
+
+  const requestOpening = () => {
+    const isReviewSession = sessionModeInput?.value === 'review';
+    sendEvent({
+      type: 'response.create',
+      response: {
+        instructions: isReviewSession
+          ? 'まず日本語で「私はOptiensのAI診断官です。AI生成音声で応答します」と短く伝え、申請内容を確認済みであること、機密情報を話さないでほしいことを伝えてから、申請内容を踏まえて最初に追加確認すべき質問を1つだけ聞いてください。'
+          : 'まず日本語で「私はOptiensのAI診断官です。AI生成音声で応答します」と短く伝え、これは購入前の公開デモであること、機密情報を話さないよう注意したうえで、業種と提供サービスを1つ目の質問として聞いてください。',
+      },
+    });
+  };
+
+  const requestSummary = () => {
+    summaryMode = true;
+    summaryBuffer = '';
+    renderSummary('', true);
+    const ok = sendEvent({
+      type: 'conversation.item.create',
+      item: {
+        type: 'message',
+        role: 'user',
+        content: [
+          {
+            type: 'input_text',
+            text: [
+              'ここまでの会話を、OptiensのAI診断官レビュー用の診断メモとして整理してください。',
+              '音声ではなくテキストだけで返してください。',
+              '形式:',
+              '1. 業務概要',
+              '2. AI化候補',
+              '3. AI化しない方がよい/人が判断すべき範囲',
+              '4. 制約条件・確認不足',
+              '5. 次アクション',
+              '未確認の内容は「未確認」と明記し、断定しないでください。',
+            ].join('\n'),
+          },
+        ],
+      },
+    });
+    if (ok) {
+      sendEvent({
+        type: 'response.create',
+        response: {
+          output_modalities: ['text'],
+        },
+      });
+    }
+  };
+
+  const handleRealtimeEvent = (event) => {
+    if (event.type === 'error') {
+      setError(event.error?.message || '音声セッションでエラーが発生しました。');
+      setStatus('エラー', 'error');
+      return;
+    }
+    if (event.type === 'input_audio_buffer.speech_started') {
+      setStatus('聞き取り中', 'live');
+      return;
+    }
+    if (event.type === 'input_audio_buffer.speech_stopped') {
+      setStatus('整理中', 'thinking');
+      return;
+    }
+    if (event.type === 'conversation.item.input_audio_transcription.completed') {
+      addTranscript('user', event.transcript);
+      return;
+    }
+    if (event.type === 'response.output_audio_transcript.delta') {
+      assistantBuffer += event.delta || '';
+      return;
+    }
+    if (event.type === 'response.output_audio_transcript.done') {
+      addTranscript('assistant', event.transcript || assistantBuffer);
+      assistantBuffer = '';
+      setStatus('接続中', 'live');
+      return;
+    }
+    if (event.type === 'response.output_text.delta') {
+      if (summaryMode) {
+        summaryBuffer += event.delta || '';
+        renderSummary(summaryBuffer, true);
+      }
+      return;
+    }
+    if (event.type === 'response.output_text.done') {
+      if (summaryMode) {
+        summaryBuffer = event.text || summaryBuffer;
+        renderSummary(summaryBuffer);
+      }
+      return;
+    }
+    if (event.type === 'response.done') {
+      const text = parseResponseDoneText(event);
+      if (summaryMode && text) {
+        summaryBuffer = text;
+        renderSummary(summaryBuffer);
+        summaryMode = false;
+      } else if (!summaryMode && text && !assistantBuffer) {
+        addTranscript('assistant', text);
+      }
+      setStatus('接続中', 'live');
+    }
+  };
+
+  const connect = async () => {
+    setError('');
+    setStatus('マイク確認中', 'thinking');
+    startButton.disabled = true;
+
+    try {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error('このブラウザではマイク入力を利用できません。');
+      }
+
+      peerConnection = new RTCPeerConnection();
+      remoteAudio = document.createElement('audio');
+      remoteAudio.autoplay = true;
+      remoteAudio.playsInline = true;
+      remoteAudio.style.display = 'none';
+      document.body.appendChild(remoteAudio);
+
+      peerConnection.ontrack = (event) => {
+        remoteAudio.srcObject = event.streams[0];
+      };
+
+      localStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+      for (const track of localStream.getTracks()) {
+        peerConnection.addTrack(track, localStream);
+      }
+
+      dataChannel = peerConnection.createDataChannel('oai-events');
+      dataChannel.onopen = () => {
+        setStatus('接続中', 'live');
+        stopButton.disabled = false;
+        summaryButton.disabled = false;
+        requestOpening();
+      };
+      dataChannel.onmessage = (message) => {
+        try {
+          handleRealtimeEvent(JSON.parse(message.data));
+        } catch (error) {
+          console.warn('[ai-diagnosis-officer] event parse failed', error);
+        }
+      };
+      dataChannel.onclose = () => setStatus('終了', '');
+
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+      setStatus('接続中', 'thinking');
+
+      const response = await fetch('/api/ai-diagnosis-officer-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/sdp',
+          'X-Diagnosis-Access-Code': accessCodeInput?.value?.trim() || '',
+          'X-Diagnosis-Session-Mode': sessionModeInput?.value || 'demo',
+          'X-Diagnosis-Ticket-Number': reviewTicketInput?.value || '',
+          'X-Diagnosis-Review-Token': reviewTokenInput?.value || '',
+        },
+        body: offer.sdp,
+      });
+
+      if (!response.ok) {
+        const message = await response.json().catch(() => null);
+        throw new Error(message?.error || '音声セッションを開始できませんでした。');
+      }
+
+      await peerConnection.setRemoteDescription({
+        type: 'answer',
+        sdp: await response.text(),
+      });
+    } catch (error) {
+      await disconnect();
+      startButton.disabled = false;
+      setStatus('待機中', '');
+      setError(error?.message || '音声セッションを開始できませんでした。');
+    }
+  };
+
+  const disconnect = async () => {
+    if (dataChannel && dataChannel.readyState === 'open') dataChannel.close();
+    if (peerConnection) peerConnection.close();
+    if (localStream) {
+      for (const track of localStream.getTracks()) track.stop();
+    }
+    if (remoteAudio) remoteAudio.remove();
+    peerConnection = null;
+    dataChannel = null;
+    localStream = null;
+    remoteAudio = null;
+    assistantBuffer = '';
+    summaryMode = false;
+    startButton.disabled = false;
+    stopButton.disabled = true;
+    summaryButton.disabled = true;
+    setStatus('待機中', '');
+  };
+
+  startButton?.addEventListener('click', connect);
+  stopButton?.addEventListener('click', disconnect);
+  summaryButton?.addEventListener('click', requestSummary);
+  clearLogButton?.addEventListener('click', () => {
+    transcriptStarted = false;
+    resetPlaceholder();
+  });
+  copySummaryButton?.addEventListener('click', async () => {
+    const text = summaryBuffer.trim();
+    if (!text) return;
+    await navigator.clipboard?.writeText(text);
+    copySummaryButton.textContent = 'コピー済み';
+    setTimeout(() => {
+      copySummaryButton.textContent = 'コピー';
+    }, 1600);
+  });
+  sendSummaryButton?.addEventListener('click', async () => {
+    const text = summaryBuffer.trim();
+    if (!text) return;
+    sendSummaryButton.disabled = true;
+    setError('');
+    try {
+      const response = await fetch('/api/ai-diagnosis-officer-note', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ticket_number: reviewTicketInput?.value || '',
+          token: reviewTokenInput?.value || '',
+          diagnosis_memo: text,
+        }),
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(payload?.error || '診断メモを送信できませんでした。');
+      }
+      sendSummaryButton.textContent = '送信済み';
+    } catch (error) {
+      setError(error?.message || '診断メモを送信できませんでした。');
+      sendSummaryButton.disabled = false;
+    }
+  });
+  window.addEventListener('beforeunload', () => {
+    if (peerConnection) peerConnection.close();
+    if (localStream) {
+      for (const track of localStream.getTracks()) track.stop();
+    }
+  });
+</script>
+
+<style>
+  .ado-page {
+    --ado-heading: #111827;
+    --ado-text: #374151;
+    --ado-muted: #6B7280;
+    --ado-border: rgba(31, 58, 147, 0.14);
+    --ado-surface: #FFFFFF;
+    --ado-surface-2: #F8FAFC;
+    --ado-brand: var(--brand, #1F3A93);
+    --ado-brand-2: var(--brand-2, #6B85C9);
+    --ado-sakura: var(--sakura, #E48A95);
+  }
+
+  .ado-page .container {
+    width: min(1120px, 100% - 2rem);
+    margin-inline: auto;
+  }
+
+  .ado-hero {
+    padding: clamp(72px, 10vw, 120px) 0 clamp(48px, 8vw, 84px);
+    background:
+      linear-gradient(135deg, rgba(31, 58, 147, 0.07) 0%, rgba(255, 255, 255, 0.88) 48%, rgba(228, 138, 149, 0.12) 100%),
+      #fff;
+  }
+
+  .ado-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.86fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+
+  .ado-eyebrow {
+    margin: 0 0 12px;
+    color: var(--ado-brand);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ado-hero h1 {
+    margin: 0;
+    color: var(--ado-heading);
+    font-size: clamp(2.35rem, 6vw, 4.9rem);
+    font-weight: 900;
+    line-height: 1.08;
+  }
+
+  .ado-hero-copy > p:not(.ado-eyebrow) {
+    max-width: 680px;
+    margin: 24px 0 0;
+    color: var(--ado-text);
+    font-size: clamp(1rem, 1.7vw, 1.12rem);
+    line-height: 2;
+  }
+
+  .ado-hero-actions,
+  .ado-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    margin-top: 30px;
+  }
+
+  .ado-btn,
+  .ado-round-action,
+  .ado-mini-btn {
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .ado-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 22px;
+    border-radius: 999px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .ado-btn--primary {
+    background: var(--ado-brand);
+    color: #fff;
+    box-shadow: 0 18px 32px -22px rgba(31, 58, 147, 0.7);
+  }
+
+  .ado-btn--ghost {
+    border: 1px solid var(--ado-border);
+    background: #fff;
+    color: var(--ado-brand);
+  }
+
+  .ado-hero-panel {
+    position: relative;
+    display: grid;
+    gap: 16px;
+    min-height: 420px;
+    padding: clamp(22px, 3vw, 30px);
+    border: 1px solid var(--ado-border);
+    border-radius: 28px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.76);
+    box-shadow: 0 28px 80px -48px rgba(31, 58, 147, 0.45);
+  }
+
+  .ado-orbit {
+    position: absolute;
+    inset: 18px;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .ado-orbit span {
+    position: absolute;
+    border: 1px solid rgba(31, 58, 147, 0.13);
+    border-radius: 999px;
+  }
+
+  .ado-orbit span:nth-child(1) { inset: 22px; }
+  .ado-orbit span:nth-child(2) { inset: 70px 28px; border-color: rgba(228, 138, 149, 0.18); }
+  .ado-orbit span:nth-child(3) { inset: 120px 54px; }
+
+  .ado-panel-card {
+    position: relative;
+    align-self: center;
+    padding: 20px;
+    border: 1px solid rgba(31, 58, 147, 0.13);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(12px);
+  }
+
+  .ado-panel-card span {
+    color: var(--ado-sakura);
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .ado-panel-card strong {
+    display: block;
+    margin-top: 8px;
+    color: var(--ado-heading);
+    font-size: 1.06rem;
+  }
+
+  .ado-panel-card p {
+    margin: 8px 0 0;
+    color: var(--ado-text);
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+
+  .ado-demo-section,
+  .ado-output-section {
+    padding: clamp(52px, 8vw, 86px) 0;
+    background: var(--ado-surface-2);
+  }
+
+  .ado-output-section {
+    background: #fff;
+  }
+
+  .ado-demo-grid,
+  .ado-output-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.8fr);
+    gap: clamp(20px, 4vw, 34px);
+  }
+
+  .ado-console,
+  .ado-check-card,
+  .ado-output-card {
+    border: 1px solid var(--ado-border);
+    border-radius: 20px;
+    background: var(--ado-surface);
+    box-shadow: 0 18px 50px -42px rgba(31, 58, 147, 0.4);
+  }
+
+  .ado-console {
+    padding: clamp(22px, 3.4vw, 34px);
+  }
+
+  .ado-console-head,
+  .ado-output-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .ado-console h2,
+  .ado-output-card h2 {
+    margin: 0;
+    color: var(--ado-heading);
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+  }
+
+  .ado-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: #EEF2FF;
+    color: var(--ado-brand);
+    font-size: 0.82rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .ado-status[data-tone="live"] {
+    background: #ECFDF5;
+    color: #047857;
+  }
+
+  .ado-status[data-tone="thinking"] {
+    background: #FFF7ED;
+    color: #B45309;
+  }
+
+  .ado-status[data-tone="error"] {
+    background: #FEF2F2;
+    color: #B91C1C;
+  }
+
+  .ado-notice {
+    margin: 24px 0 20px;
+    padding: 16px 18px;
+    border: 1px solid rgba(228, 138, 149, 0.24);
+    border-radius: 14px;
+    background: rgba(255, 206, 208, 0.18);
+  }
+
+  .ado-notice strong {
+    color: var(--ado-heading);
+  }
+
+  .ado-notice p {
+    margin: 6px 0 0;
+    color: var(--ado-text);
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  .ado-review-ticket,
+  .ado-demo-note {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border: 1px solid var(--ado-border);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .ado-review-ticket span,
+  .ado-demo-note span {
+    color: var(--ado-brand);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .ado-review-ticket strong {
+    color: var(--ado-heading);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .ado-demo-note p {
+    margin: 0;
+    color: var(--ado-text);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .ado-round-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ado-heading);
+    border: 1px solid var(--ado-border);
+    font-weight: 800;
+  }
+
+  .ado-round-action span {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: rgba(31, 58, 147, 0.08);
+    color: var(--ado-brand);
+    font-size: 0.78rem;
+  }
+
+  .ado-round-action--start {
+    background: var(--ado-brand);
+    color: #fff;
+  }
+
+  .ado-round-action--start span {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+  }
+
+  .ado-round-action--stop {
+    color: #991B1B;
+  }
+
+  .ado-round-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.48;
+  }
+
+  .ado-meter {
+    display: flex;
+    align-items: end;
+    gap: 6px;
+    height: 34px;
+    margin-top: 24px;
+  }
+
+  .ado-meter span {
+    display: block;
+    width: 9px;
+    height: 12px;
+    border-radius: 99px;
+    background: var(--ado-brand-2);
+    opacity: 0.42;
+    animation: ado-meter 1.3s ease-in-out infinite;
+  }
+
+  .ado-meter span:nth-child(2) { animation-delay: 0.12s; }
+  .ado-meter span:nth-child(3) { animation-delay: 0.24s; }
+  .ado-meter span:nth-child(4) { animation-delay: 0.36s; }
+  .ado-meter span:nth-child(5) { animation-delay: 0.48s; }
+
+  @keyframes ado-meter {
+    0%, 100% { height: 10px; opacity: 0.32; }
+    50% { height: 30px; opacity: 0.8; }
+  }
+
+  .ado-error {
+    margin: 18px 0 0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #FEF2F2;
+    color: #991B1B;
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  .ado-side {
+    display: grid;
+    gap: 18px;
+  }
+
+  .ado-check-card {
+    padding: 24px;
+  }
+
+  .ado-check-card h3 {
+    margin: 0 0 14px;
+    color: var(--ado-heading);
+    font-size: 1.12rem;
+  }
+
+  .ado-check-card ul {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ado-check-card li,
+  .ado-check-card p {
+    margin: 0;
+    color: var(--ado-text);
+    font-size: 0.94rem;
+    line-height: 1.75;
+  }
+
+  .ado-check-card li::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 9px;
+    border-radius: 999px;
+    background: var(--ado-sakura);
+    transform: translateY(-1px);
+  }
+
+  .ado-output-card {
+    min-height: 420px;
+    padding: clamp(20px, 3vw, 28px);
+  }
+
+  .ado-mini-btn {
+    min-height: 36px;
+    padding: 0 13px;
+    border: 1px solid var(--ado-border);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ado-brand);
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .ado-mini-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .ado-transcript,
+  .ado-summary {
+    margin-top: 18px;
+    max-height: 520px;
+    overflow: auto;
+  }
+
+  .ado-placeholder {
+    margin: 0;
+    color: var(--ado-muted);
+    line-height: 1.8;
+  }
+
+  .ado-message {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #F8FAFC;
+  }
+
+  .ado-message--assistant {
+    background: rgba(31, 58, 147, 0.06);
+  }
+
+  .ado-message span {
+    color: var(--ado-brand);
+    font-size: 0.76rem;
+    font-weight: 900;
+  }
+
+  .ado-message p {
+    margin: 0;
+    color: var(--ado-text);
+    line-height: 1.75;
+  }
+
+  .ado-summary pre {
+    margin: 0;
+    white-space: pre-wrap;
+    color: var(--ado-text);
+    font: inherit;
+    line-height: 1.82;
+  }
+
+  @media (max-width: 900px) {
+    .ado-hero-grid,
+    .ado-demo-grid,
+    .ado-output-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ado-hero-panel {
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .ado-controls,
+    .ado-hero-actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .ado-btn,
+    .ado-round-action {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .ado-console-head,
+    .ado-output-head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

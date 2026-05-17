@@ -268,7 +268,7 @@ const deliveryRows = [
   { label: 'AI診断生成停滞', value: `${leads.filter(l => ['verified', 'processing'].includes(l.status || '') && ageHours(l.updated_at || l.created_at) >= aiProcessingSlaHours).length}件`, detail: `${aiProcessingSlaHours}時間以上更新なし`, tone: 'warn' },
   { label: '詳細レポート作成待ち', value: `${leads.filter(l => l.status === 'paid').length}件`, detail: '入金確認済', tone: leads.some(l => l.status === 'paid') ? 'warn' : 'ok' },
   { label: 'レポート送付待ち', value: `${leads.filter(l => l.status === 'report_created').length}件`, detail: 'Slides URL納品', tone: leads.some(l => l.status === 'report_created') ? 'warn' : 'ok' },
-  { label: 'レビュー面談フォロー', value: `${followupBacklog.length}件`, detail: '送付済リード', tone: followupBacklog.length ? 'low' : 'ok' },
+  { label: 'AI診断官レビューフォロー', value: `${followupBacklog.length}件`, detail: '送付済リード', tone: followupBacklog.length ? 'low' : 'ok' },
 ];
 
 const financeRows = [

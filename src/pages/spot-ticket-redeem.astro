@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout
   title="スポット相談チケット 利用申請 | Optiens"
-  description="発行済みのスポット相談チケット番号を使って、AI活用レビュー面談・有償要件定義・小規模作業の依頼内容を送信できます。"
+  description="発行済みのスポット相談チケット番号を使って、AI診断官レビュー・有償要件定義・小規模作業の依頼内容を送信できます。"
   canonical="https://optiens.com/spot-ticket-redeem"
 >
   <main class="redeem-page">
@@ -14,7 +14,7 @@ import Layout from '../layouts/Layout.astro';
         <h1>チケット番号で依頼する</h1>
         <p>
           発行済みのスポット相談チケット番号と依頼内容を入力してください。
-          内容を確認し、日程候補または次の確認事項をご連絡します。
+          AI診断官レビューは、申請内容をAIの初期文脈へ入れるため専用フォームからお申し込みください。
         </p>
       </div>
     </section>
@@ -26,7 +26,11 @@ import Layout from '../layouts/Layout.astro';
             <h2>利用前の確認</h2>
             <p>事前合意のないチケット消化は行いません。内容確認後、必要枚数や個別見積への切り替えが必要な場合は先にお伝えします。</p>
             <p>まだチケット番号が発行されていない場合は、購入申込または振込完了メールをご確認ください。</p>
-            <a href="/spot-ticket-purchase" class="redeem-secondary-link">チケット購入ページへ</a>
+            <p>AI診断官レビューの場合は、通常の利用申請ではなく専用フォームで、聞きたいこと・診断レポートの参照情報・利用中ツールを先に送信してください。</p>
+            <div class="redeem-side-actions">
+              <a href="/ai-diagnosis-officer/apply" class="redeem-secondary-link">AI診断官レビュー申請へ</a>
+              <a href="/spot-ticket-purchase" class="redeem-secondary-link">チケット購入ページへ</a>
+            </div>
           </aside>
 
           <form action="/api/spot-ticket" method="POST" class="redeem-form">
@@ -63,10 +67,10 @@ import Layout from '../layouts/Layout.astro';
             <label>
               希望サービス
               <select name="service_type">
-                <option value="review">AI活用レビュー面談</option>
+                <option value="undecided">未定・相談したい</option>
                 <option value="requirements">有償要件定義</option>
                 <option value="small_build">簡易実装・軽微な自動化</option>
-                <option value="undecided">未定・相談したい</option>
+                <option value="review">AI診断官レビュー（専用フォーム推奨）</option>
               </select>
             </label>
             <label>
@@ -81,7 +85,7 @@ import Layout from '../layouts/Layout.astro';
               補足
               <textarea name="notes" rows="4" placeholder="守秘上の注意点、事前に見てほしいURL、その他の補足など"></textarea>
             </label>
-            <p class="redeem-form-note">送信後、チケット番号と依頼内容を確認してご連絡します。依頼内容が大きい場合は、チケット消化ではなく個別見積をご案内することがあります。</p>
+            <p class="redeem-form-note">送信後、チケット番号と依頼内容を確認してご連絡します。AI診断官レビューを選ぶ場合は、専用申請フォームの方が事前情報を正しく引き継げます。</p>
             <button type="submit" class="btn-primary">利用申請を送信</button>
           </form>
         </div>
@@ -149,6 +153,12 @@ import Layout from '../layouts/Layout.astro';
   .redeem-side p {
     color: var(--text);
     line-height: 1.85;
+  }
+  .redeem-side-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
   }
   .redeem-secondary-link {
     display: inline-flex;

@@ -72,8 +72,25 @@ const commonCases: CommonCase[] = [
     demo: { label: '問い合わせ自動振り分けデモを試す', href: '/inquiry-routing' },
   },
   {
-    id: 'case-quote',
+    id: 'case-ai-diagnosis-officer',
     num: '02',
+    icon: 'fa-headset',
+    title: 'AI診断官レビュー',
+    summary: '音声AIが業務を聞き取り、診断メモへ構造化',
+    desc: '購入前の公開デモとして、音声AI診断官が業務量、頻度、例外処理、利用中ツールを順に聞き取り、AI化候補や制約条件を診断メモへ整理する流れを体験できます。本番レビューでは、スポット相談チケット利用申請で入力した内容を前提にヒアリングを行い、詳細レポートや導入支援へ引き継げる判断材料に変換します。',
+    tags: ['全業種', '経営者', '導入前相談', '業務整理', '音声AI'],
+    self: 'Optiens自身の診断導線として、フォーム申請、チケット番号確認、音声ヒアリング、診断メモ化までを一連の業務フローとして実装しています。',
+    implementation: {
+      dailyFlow: '購入前は公開デモで体験し、本番はチケット利用申請後の専用URLから音声レビューを行います。',
+      requiredData: 'チケット番号、申請フォームの事前情報、簡易版/詳細版AI活用診断の参照情報',
+      humanCheck: '正式見積、契約条件、導入支援に進むかどうかの最終判断',
+      firstBuild: '公開デモ、レビュー申請フォーム、署名付き本番URL、診断メモ送信',
+    },
+    demo: { label: 'AI診断官レビュー音声デモを試す', href: '/ai-diagnosis-officer', note: '公開デモではAI生成音声が再生されます。機密情報、個人情報、APIキーは入力しないでください。' },
+  },
+  {
+    id: 'case-quote',
+    num: '03',
     icon: 'fa-file-signature',
     title: '見積書ドラフト自動生成',
     summary: '案件情報から、見積書の初稿をその場で作成',
@@ -90,7 +107,7 @@ const commonCases: CommonCase[] = [
   },
   {
     id: 'case-search',
-    num: '03',
+    num: '04',
     icon: 'fa-magnifying-glass-chart',
     title: '社内データ・社内ドキュメント検索',
     summary: '「先月の売上は？」「経費精算は？」に根拠付きで回答',
@@ -107,7 +124,7 @@ const commonCases: CommonCase[] = [
   },
   {
     id: 'case-approval',
-    num: '04',
+    num: '05',
     icon: 'fa-clipboard-check',
     title: '承認ワークフロー',
     summary: '申請者と承認者で画面が切り替わる承認フロー',
@@ -124,7 +141,7 @@ const commonCases: CommonCase[] = [
   },
   {
     id: 'case-management',
-    num: '05',
+    num: '06',
     icon: 'fa-table-columns',
     title: 'カスタム業務管理画面',
     summary: 'リードから納品・保守まで、御社専用画面で一元管理',
@@ -141,7 +158,7 @@ const commonCases: CommonCase[] = [
   },
   {
     id: 'case-review',
-    num: '06',
+    num: '07',
     icon: 'fa-star-half-stroke',
     title: '口コミ監視・返信下書き',
     summary: '新着口コミを監視し、低評価アラートと返信案を生成',
@@ -158,7 +175,7 @@ const commonCases: CommonCase[] = [
   },
   {
     id: 'case-document',
-    num: '07',
+    num: '08',
     icon: 'fa-file-circle-check',
     title: '契約書・社内文書レビュー支援',
     summary: '契約条件・社内運用・顧客説明の抜け漏れを確認',
@@ -719,7 +736,7 @@ const nearbyIndustries: NearbyIndustry[] = [
         </section>
 
         <p class="ax-bridge-note reveal">
-          掲載デモはすべて、入力・判定・出力・人間の確認ポイントを確認できるものに絞っています。業種別・ロール別の入り口からも、実際に触れるデモへ進めます。サービス内容は <a href="/service">AI支援ページ</a> をご確認ください。
+          掲載デモは、単機能の紹介ではなく、既存SaaS・スプレッドシート・メール・手作業のうち、どこを残し、どこをつなぎ、どこをAIで置き換えるかを検討するためのサンプルです。業種別・ロール別の入り口からも、実際に触れるデモへ進めます。サービス内容は <a href="/service">AI支援ページ</a> をご確認ください。
         </p>
       </div>
     </section>
@@ -729,13 +746,13 @@ const nearbyIndustries: NearbyIndustry[] = [
       <div class="container">
         <div class="ax-decision-head reveal">
           <h2>導入判断に必要な情報</h2>
-          <p>デモで動きを確認したあと、実際に検討する際に見られるポイントをまとめています。削減時間はモデルケースであり、実際の効果は無料診断で業務量を確認して算出します。</p>
+          <p>デモで動きを確認したあと、実際に検討する際に見られるポイントをまとめています。削減余地、自動化候補、回収期間の目安は、診断で業務量と既存ツールを確認して整理します。</p>
         </div>
         <div class="ax-decision-grid">
           <article class="reveal">
             <i class="fa-solid fa-yen-sign"></i>
             <h3>費用感</h3>
-            <p>簡易診断は0円、詳細診断は¥5,500税込です。導入支援は対象業務と既存環境を見て個別に見積もります。</p>
+            <p>AI活用診断簡易版は無料、詳細診断は¥5,500税込です。導入支援は、残すSaaS・つなぐSaaS・専用化する範囲を見て個別に見積もります。</p>
           </article>
           <article class="reveal">
             <i class="fa-solid fa-calendar-check"></i>
@@ -760,7 +777,7 @@ const nearbyIndustries: NearbyIndustry[] = [
           <article class="reveal">
             <i class="fa-solid fa-route"></i>
             <h3>次の進め方</h3>
-            <p>まず無料診断で効果が出やすい業務と導入順を整理し、必要に応じて詳細レポートや導入支援へ進みます。</p>
+            <p>まず無料診断で効果が出やすい業務、残すSaaS、つなぐSaaS、AI化候補を整理し、必要に応じて詳細レポートや導入支援へ進みます。</p>
           </article>
         </div>
         <div class="ax-decision-links reveal">
@@ -773,13 +790,13 @@ const nearbyIndustries: NearbyIndustry[] = [
 
     <section class="ax-cta-section">
       <div class="container text-center">
-        <h2 class="reveal">御社で使うなら、どのデモから着手すべきかを診断します</h2>
+        <h2 class="reveal">御社で使うなら、どの業務から着手すべきかを診断します</h2>
         <p class="reveal">
-          上記のデモのうち、どれが御社で効きやすいか。<br />
-          無料活用診断レポートで数値とともにご提案します。
+          既存SaaSや手作業を見たうえで、どこを残し、どこをAI化すべきか。<br />
+          AI活用診断簡易版のレポートで数値とともにご提案します。
         </p>
         <div class="cta-buttons reveal">
-          <a href="/free-diagnosis?lead_source=ai-examples&lead_source_detail=AI活用サンプル一覧" class="btn-primary">無料活用診断を受ける</a>
+          <a href="/free-diagnosis?lead_source=ai-examples&lead_source_detail=AI活用サンプル一覧" class="btn-primary">AI活用診断簡易版を受ける</a>
           <a href="/service" class="btn-secondary">サービス内容を見る</a>
         </div>
       </div>

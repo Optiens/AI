@@ -367,8 +367,8 @@ function nextActionFor(lead: Lead): NextAction {
   }
   if (status === 'sent' || status === 'report_sent') {
     return {
-      label: createdDays >= 2 ? 'レビュー面談フォロー' : '納品後フォロー',
-      detail: '必要に応じてAI活用レビュー面談や導入支援の仮説を準備',
+      label: createdDays >= 2 ? 'AI診断官レビューフォロー' : '納品後フォロー',
+      detail: '必要に応じてAI診断官レビューや導入支援の仮説を準備',
       urgency: createdDays >= 2 ? 'medium' : 'low',
       due: createdDays >= 2 ? '今日〜明日' : '待機',
       score: createdDays >= 2 ? 62 : 36,

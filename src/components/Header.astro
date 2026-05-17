@@ -8,6 +8,7 @@
   <nav class="desktop-nav">
     <ul>
       <li><a href="/service">サービス</a></li>
+      <li><a href="/spot-ticket">相談チケット</a></li>
       <li><a href="/ai-examples">活用事例</a></li>
       <li class="has-dropdown">
         <span class="nav-trigger nav-trigger--label">私たちについて <span class="nav-caret" aria-hidden="true">▾</span></span>
@@ -28,6 +29,7 @@
   <nav id="sidebar-menu" class="sidebar-menu" aria-label="モバイルメニュー">
     <ul>
       <li><a href="/service">サービス</a></li>
+      <li><a href="/spot-ticket">相談チケット</a></li>
       <li><a href="/ai-examples">活用事例</a></li>
       <li class="mobile-group">
         <p class="mobile-group-label">私たちについて</p>
@@ -102,7 +104,7 @@
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 36px;
+    gap: clamp(18px, 2.4vw, 32px);
   }
   .desktop-nav a {
     color: #475569;

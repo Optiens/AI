@@ -6,7 +6,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 
 <Layout
   title="AI活用診断 | 簡易版・詳細版 | 中小企業・小規模事業者向け | Optiens"
-  description="フォーム入力で、御社の事業のどこに AI が効くかを診断。簡易版は無料レポート、詳細版は導入可否・優先順位・費用前提を整理した詳細レポートを Google Slides でお届けします。全国オンライン対応。"
+  description="フォーム入力で、御社の事業のどこに AI が効くかを診断。既存SaaS・スプレッドシート・メール・手作業を整理し、簡易版は無料レポート、詳細版は導入可否・優先順位・費用前提を整理した詳細レポートを Google Slides でお届けします。全国オンライン対応。"
   canonical="https://optiens.com/free-diagnosis"
 >
   <main>
@@ -28,6 +28,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
 
         <p class="diag-sub" data-plan-show="free">
           月間効果額・ざっくり費用帯・最初に見るべき業務がわかります。<br/>
+          既存SaaS・スプレッドシート・メール・手作業から、残す・つなぐ・減らす・AI化する候補を整理します。<br/>
           URLや資料からの自動入力、AI分析、Google Slides自動生成までを体験できます。
         </p>
 
@@ -38,7 +39,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         </div>
         <p class="diag-sub" data-plan-show="paid" hidden>
           御社の業務量・データ状態・IT環境を確認し、<br/>
-          導入可否・優先順位・次の進め方を詳細レポートで整理します。
+          導入可否・優先順位・回収期間の目安・次の進め方を詳細レポートで整理します。
         </p>
         <div class="diag-limit-note" data-plan-show="paid" hidden>
           <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
@@ -53,11 +54,11 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-list-check" aria-hidden="true"></i>
-            <p>御社の業種・業務から、効果が出やすい<strong>業務最適化ポイントを 3 つ</strong>ご提示します（AIを使う案／使わない案を組み合わせて）。</p>
+            <p>御社の業種・業務から、効果が出やすい<strong>業務最適化ポイントを 3 つ</strong>ご提示します。残すSaaS・つなぐSaaS・減らせるSaaS・AIで置き換える作業候補も整理します。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-handshake-simple" aria-hidden="true"></i>
-            <p>30万円未満のご相談は<strong>AI活用レビュー面談</strong>、導入支援は<strong>30万円以上</strong>を目安に切り分けます。</p>
+            <p>30万円未満のご相談は<strong>AI診断官レビュー</strong>、導入支援は<strong>30万円以上</strong>を目安に切り分けます。</p>
           </div>
         </div>
 
@@ -65,7 +66,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
         <div class="diag-promise" data-plan-show="paid" hidden>
           <div class="diag-promise-item">
             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            <p><strong>詳細レポート</strong>。御社の状況に合わせて、導入可否・実施範囲・ざっくり費用帯・AI活用レビュー面談/導入支援の切り分けを整理します。</p>
+            <p><strong>詳細レポート</strong>。御社の状況に合わせて、導入可否・実施範囲・削減余地・回収期間の目安・AI診断官レビュー/導入支援の切り分けを整理します。</p>
           </div>
           <div class="diag-promise-item">
             <i class="fa-solid fa-robot" aria-hidden="true"></i>
@@ -262,13 +263,13 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || import.m
               <label for="budget_range">検討している進め方・予算感</label>
               <select id="budget_range" name="budget_range">
                 <option value="">選択してください</option>
-                <option value="under-30">30万円未満（AI活用レビュー面談で小さく相談したい）</option>
+                <option value="under-30">30万円未満（AI診断官レビューで小さく相談したい）</option>
                 <option value="30-60">30〜60万円（1業務から導入検討）</option>
                 <option value="60-100">60〜100万円（1〜2業務の導入検討）</option>
                 <option value="100-plus">100万円以上（複数業務・経営課題として検討）</option>
                 <option value="undecided">まだ分からない・費用帯から相談したい</option>
               </select>
-              <p class="field-hint">無料版では正式見積ではなく、AI活用レビュー面談・導入支援・月額保守のどの進め方が近いかをざっくり整理します。</p>
+              <p class="field-hint">無料版では正式見積ではなく、AI診断官レビュー・導入支援・月額保守のどの進め方が近いかをざっくり整理します。</p>
             </div>
             <div class="field">
               <p class="field-label">AI導入で感じている課題（複数可）</p>

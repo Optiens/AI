@@ -1,0 +1,302 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="AI診断官レビュー申請 | Optiens"
+  description="発行済みのスポット相談チケット番号を使って、AI診断官レビューの事前情報を送信できます。"
+  canonical="https://optiens.com/ai-diagnosis-officer/apply"
+>
+  <main class="ado-apply-page">
+    <section class="ado-apply-hero light-section">
+      <div class="container ado-apply-hero-grid">
+        <div>
+          <p class="ado-apply-eyebrow">AI Diagnosis Officer Review</p>
+          <h1>AI診断官レビューを申請する</h1>
+          <p>
+            発行済みのスポット相談チケット番号と、AI診断官に把握させたい前提を入力してください。
+            チケット番号を確認できた場合、本番レビューURLをメールでお送りします。
+          </p>
+        </div>
+        <aside class="ado-apply-hero-card" aria-label="AI診断官レビューの流れ">
+          <span>Flow</span>
+          <ol>
+            <li>チケット番号と事前情報を送信</li>
+            <li>申請内容をAI診断官の初期文脈へ反映</li>
+            <li>本番レビューURLから音声ヒアリングを開始</li>
+            <li>会話後に診断メモを生成・送信</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="ado-apply-form-section light-section">
+      <div class="container">
+        <div class="ado-apply-layout">
+          <aside class="ado-apply-side">
+            <h2>申請前の確認</h2>
+            <p>
+              このフォームは、スポット相談チケットをAI診断官レビューに使う場合の専用申請です。
+              チケット購入だけでは本番レビューは開始されません。
+            </p>
+            <p>
+              購入前に動きを確認したい場合は、公開デモを先にお試しください。デモでは機密情報や個人情報は入力しないでください。
+            </p>
+            <div class="ado-apply-side-actions">
+              <a href="/ai-diagnosis-officer" class="ado-apply-secondary-link">音声デモを開く</a>
+              <a href="/spot-ticket-purchase" class="ado-apply-secondary-link">チケットを購入する</a>
+            </div>
+          </aside>
+
+          <form action="/api/spot-ticket" method="POST" class="ado-apply-form">
+            <input type="hidden" name="mode" value="redeem">
+            <input type="hidden" name="service_type" value="review">
+            <div class="hp-field" aria-hidden="true">
+              <label for="apply_website">ウェブサイト</label>
+              <input type="text" id="apply_website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <label>
+              チケット番号 <span>*</span>
+              <input type="text" name="ticket_number" required placeholder="例: ST-20260516-ABCD1234">
+            </label>
+
+            <div class="form-row">
+              <label>
+                会社・団体名 <span>*</span>
+                <input type="text" name="company_name" required>
+              </label>
+              <label>
+                お名前 <span>*</span>
+                <input type="text" name="person_name" required>
+              </label>
+            </div>
+
+            <div class="form-row">
+              <label>
+                メールアドレス <span>*</span>
+                <input type="email" name="email" required>
+              </label>
+              <label>
+                電話番号
+                <input type="tel" name="phone">
+              </label>
+            </div>
+
+            <label>
+              今回AI診断官に聞きたいこと <span>*</span>
+              <textarea name="request_detail" rows="5" required placeholder="例: 詳細レポートを読んだが、どの業務から始めるべきか判断したい。予約対応と在庫管理のどちらを先にAI化すべきか整理したい。"></textarea>
+            </label>
+
+            <label>
+              業務概要
+              <textarea name="business_overview" rows="5" placeholder="事業内容、主な顧客、日々の業務、現在困っている流れを簡単に入力してください。"></textarea>
+            </label>
+
+            <label>
+              簡易版/詳細版AI活用診断の申込番号・参照情報
+              <textarea name="diagnosis_reference" rows="3" placeholder="例: 申込番号、診断時のメールアドレス、レポートURL、または診断で回答した内容の要約"></textarea>
+            </label>
+
+            <label>
+              利用中ツール・データ
+              <textarea name="current_tools" rows="4" placeholder="例: Googleスプレッドシート、freee、予約システム、LINE公式、メール、紙台帳など。機密情報やAPIキーは入力しないでください。"></textarea>
+            </label>
+
+            <label>
+              希望日程・実施条件
+              <textarea name="preferred_schedule" rows="3" placeholder="音声レビューを実施しやすい時間帯、PC/スマホの利用予定、注意点など"></textarea>
+            </label>
+
+            <label>
+              補足・AIに扱わせたくない情報
+              <textarea name="notes" rows="4" placeholder="守秘上の注意点、触れてほしくない情報、事前に避けたい話題など。個人情報や秘密情報そのものは入力しないでください。"></textarea>
+            </label>
+
+            <p class="ado-apply-form-note">
+              送信後、チケット番号を確認できた場合はAI診断官レビューの本番URLをメールでお送りします。
+              会話後は文字起こしではなく、診断メモとしてAI化候補・制約条件・次アクションを整理します。
+            </p>
+            <button type="submit" class="btn-primary">AI診断官レビューを申請する</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .ado-apply-page {
+    --surface: #FFFFFF;
+    --surface-2: #F9FAFB;
+    --heading: #111827;
+    --text: #374151;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    background: var(--surface);
+  }
+  .ado-apply-hero {
+    padding: clamp(112px, 13vw, 156px) 0 clamp(48px, 7vw, 72px);
+    background:
+      linear-gradient(135deg, rgba(31, 58, 147, .07), rgba(228, 138, 149, .07)),
+      #fff;
+  }
+  .ado-apply-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+  .ado-apply-eyebrow {
+    margin: 0 0 12px;
+    color: var(--brand);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .ado-apply-hero h1 {
+    margin: 0 0 16px;
+    color: var(--heading);
+    font-size: clamp(2.35rem, 6vw, 4.6rem);
+    line-height: 1.08;
+  }
+  .ado-apply-hero p {
+    max-width: 760px;
+    margin: 0;
+    color: var(--text);
+    font-size: 1.08rem;
+    line-height: 1.9;
+  }
+  .ado-apply-hero-card {
+    padding: 26px;
+    border: 1px solid rgba(31, 58, 147, .18);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .88);
+    box-shadow: 0 18px 54px rgba(31, 58, 147, .08);
+  }
+  .ado-apply-hero-card span {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--sakura);
+    font-weight: 800;
+  }
+  .ado-apply-hero-card ol {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding-left: 1.2em;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .ado-apply-form-section {
+    padding: clamp(56px, 8vw, 92px) 0;
+    background: var(--surface-2);
+  }
+  .ado-apply-layout {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 5vw, 56px);
+    align-items: start;
+  }
+  .ado-apply-side {
+    position: sticky;
+    top: 96px;
+  }
+  .ado-apply-side h2 {
+    margin: 0 0 14px;
+    color: var(--heading);
+    font-size: 2rem;
+  }
+  .ado-apply-side p {
+    color: var(--text);
+    line-height: 1.85;
+  }
+  .ado-apply-side-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .ado-apply-secondary-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--brand);
+    background: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .ado-apply-form {
+    display: grid;
+    gap: 18px;
+    padding: clamp(24px, 4vw, 36px);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .ado-apply-form label {
+    display: grid;
+    gap: 8px;
+    color: var(--heading);
+    font-size: .9rem;
+    font-weight: 700;
+  }
+  .ado-apply-form label span {
+    color: var(--sakura);
+  }
+  .ado-apply-form input,
+  .ado-apply-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+  }
+  .ado-apply-form input:focus,
+  .ado-apply-form textarea:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(31, 58, 147, .15);
+  }
+  .ado-apply-form textarea {
+    resize: vertical;
+  }
+  .ado-apply-form-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: .86rem;
+    line-height: 1.8;
+  }
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+  }
+  @media (max-width: 900px) {
+    .ado-apply-hero-grid,
+    .ado-apply-layout,
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+    .ado-apply-side {
+      position: static;
+    }
+  }
+  @media (max-width: 600px) {
+    .ado-apply-form button,
+    .ado-apply-secondary-link {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

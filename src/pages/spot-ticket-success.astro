@@ -2,11 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 
 const mode = Astro.url.searchParams.get('mode') === 'redeem' ? 'redeem' : 'purchase';
+const service = Astro.url.searchParams.get('service') || '';
+const isReviewRedeem = mode === 'redeem' && service === 'review';
 const title = mode === 'redeem'
-  ? '利用申請を受け付けました'
+  ? isReviewRedeem
+    ? 'AI診断官レビュー申請を受け付けました'
+    : '利用申請を受け付けました'
   : '購入申込を受け付けました';
 const message = mode === 'redeem'
-  ? 'チケット番号と依頼内容を確認し、日程候補または次の確認事項をご連絡します。'
+  ? isReviewRedeem
+    ? 'チケット番号を確認できた場合は、受付メールにAI診断官レビューの本番URLを記載しています。メールをご確認ください。'
+    : 'チケット番号と依頼内容を確認し、日程候補または次の確認事項をご連絡します。'
   : '1〜3枚の購入申込には、振込先・請求情報・振込完了通知URLを記載した自動返信メールをお送りします。入金確認後にチケット番号を発行します。急ぎの場合は、振込後に申込番号・振込人名義・振込日時を添えてお問い合わせください。';
 ---
 
@@ -23,6 +29,9 @@ const message = mode === 'redeem'
         <p>{message}</p>
         <div class="spot-success-actions">
           <a href="/spot-ticket" class="btn-primary">スポット相談チケットへ戻る</a>
+          {isReviewRedeem && (
+            <a href="/ai-diagnosis-officer" class="btn-secondary">音声デモを見る</a>
+          )}
           {mode === 'purchase' && (
             <a href="/contact?topic=spot-ticket-urgent-payment" class="btn-secondary">急ぎの入金確認を相談</a>
           )}

@@ -3,8 +3,8 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="スポット相談チケット | AI活用レビュー面談・有償要件定義 | Optiens"
-  description="Optiensのスポット相談チケット。AI活用レビュー面談、有償要件定義、簡易実装・軽微な自動化対応を、事前購入型のチケットで申し込めます。"
+  title="スポット相談チケット | AI診断官レビュー・有償要件定義 | Optiens"
+  description="Optiensのスポット相談チケット。AI診断官レビュー、有償要件定義、簡易実装・軽微な自動化対応を、事前購入型のチケットで申し込めます。"
   canonical="https://optiens.com/spot-ticket"
 >
   <main class="spot-page">
@@ -15,12 +15,13 @@ import Layout from '../layouts/Layout.astro';
         <p class="spot-eyebrow">Spot Consultation Ticket</p>
         <h1>スポット相談チケット</h1>
         <p class="spot-hero-copy">
-          AI活用レビュー面談、有償要件定義、小規模な自動化相談を、事前購入型のチケットで受け付けます。
-          購入後に発行されるチケット番号を使って、依頼内容をフォームから申請できます。
+          AI診断官レビュー、有償要件定義、小規模な自動化相談を、事前購入型のチケットで受け付けます。
+          AI診断官レビューは専用申請フォーム、その他の依頼は通常フォームから申請できます。
         </p>
         <div class="spot-hero-actions">
           <a href="/spot-ticket-purchase" class="btn-primary">チケットを購入する</a>
-          <a href="/spot-ticket-redeem" class="btn-secondary">チケット番号で依頼する</a>
+          <a href="/ai-diagnosis-officer/apply" class="btn-secondary">AI診断官レビューを申請する</a>
+          <a href="/ai-diagnosis-officer" class="btn-secondary">音声デモを体験する</a>
         </div>
       </div>
     </section>
@@ -37,7 +38,7 @@ import Layout from '../layouts/Layout.astro';
           <article class="spot-summary-item">
             <span>使い道</span>
             <h2>相談・要件整理・小規模作業</h2>
-            <p>レビュー面談と有償要件定義は1枚、簡易実装・軽微な自動化対応は3枚からが目安です。</p>
+            <p>AI診断官レビューと有償要件定義は1枚、簡易実装・軽微な自動化対応は3枚からが目安です。</p>
           </article>
           <article class="spot-summary-item">
             <span>運用</span>
@@ -48,9 +49,9 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="spot-use-grid">
           <article class="spot-use-card">
-            <h3>AI活用レビュー面談</h3>
+            <h3>AI診断官レビュー</h3>
             <p class="spot-ticket-count">スポット相談チケット 1枚</p>
-            <p>診断結果の解説、優先業務の絞り込み、対応可否、概算費用帯、次アクションを整理します。導入支援費への充当は行わず、次工程への情報引き継ぎとして使います。</p>
+            <p>音声AI診断官が、申請フォームの事前情報と診断レポートの参照情報を前提に、業務量・頻度・例外処理・利用中ツールを聞き取り、診断メモへ整理します。導入支援費への充当は行わず、次工程への情報引き継ぎとして使います。</p>
           </article>
           <article class="spot-use-card">
             <h3>有償要件定義</h3>
@@ -62,6 +63,43 @@ import Layout from '../layouts/Layout.astro';
             <p class="spot-ticket-count">スポット相談チケット 3枚から</p>
             <p>1業務・1フロー・既存ツール前提の設定や簡易実装に限って対応します。外部API連携、本番運用、認証、個人情報が絡む場合は個別見積です。</p>
           </article>
+        </div>
+
+        <div class="spot-diagnostic-diff">
+          <div class="spot-diagnostic-head">
+            <p class="spot-eyebrow">Designed Diagnosis</p>
+            <h2>汎用AI音声相談との違い</h2>
+            <p>
+              AIに話しかけて助言を得るだけでは、相談者の慣れや質問の粒度に品質が左右されます。
+              AI診断官レビューでは、Optiensの導入支援で使う観点に沿って、会話を診断材料へ変換します。
+            </p>
+          </div>
+          <div class="spot-diff-grid">
+            <article>
+              <span>01</span>
+              <h3>質問設計</h3>
+              <p>業務量、頻度、例外、担当者、利用中ツール、判断基準を順番に確認し、思いつき相談で終わらせません。</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>構造化</h3>
+              <p>会話内容を、AI化候補、AI化しない方がよい業務、制約条件、リスクに分けて整理します。</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>成果物化</h3>
+              <p>その場の回答だけで終わらず、詳細レポートや次アクションの判断材料として残せる形にします。</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>次工程接続</h3>
+              <p>導入支援や有償要件定義に進む場合、重複ヒアリングを減らし、提案精度を上げる引き継ぎ情報として使います。</p>
+            </article>
+          </div>
+          <div class="spot-demo-link">
+            <a href="/ai-diagnosis-officer" class="btn-primary">AI診断官レビューの音声デモを開く</a>
+            <a href="/ai-diagnosis-officer/apply" class="btn-secondary">チケット番号でレビューを申請する</a>
+          </div>
         </div>
 
         <div class="spot-flow">
@@ -85,7 +123,7 @@ import Layout from '../layouts/Layout.astro';
             <li>
               <span>04</span>
               <strong>利用申請</strong>
-              <p>チケット番号と依頼内容を入力し、面談または作業に進みます。</p>
+              <p>AI診断官レビューは専用申請フォームに、その他の要件整理・作業は通常の利用申請フォームに入力します。</p>
             </li>
           </ol>
         </div>
@@ -120,9 +158,12 @@ import Layout from '../layouts/Layout.astro';
           <div>
             <p class="spot-eyebrow">Redeem</p>
             <h2>チケット番号で依頼する</h2>
-            <p>発行済みのチケット番号をお持ちの方は、専用ページで依頼内容を送信してください。番号と内容を確認し、日程候補または次の確認事項をご連絡します。</p>
+            <p>AI診断官レビューは、事前情報をAIの初期文脈へ入れるため専用申請フォームを使います。有償要件定義や小規模作業は通常の利用申請フォームから依頼できます。</p>
           </div>
-          <a href="/spot-ticket-redeem" class="btn-primary">利用申請フォームを開く</a>
+          <div class="spot-action-buttons">
+            <a href="/ai-diagnosis-officer/apply" class="btn-primary">AI診断官レビューを申請する</a>
+            <a href="/spot-ticket-redeem" class="btn-secondary">通常の利用申請フォーム</a>
+          </div>
         </div>
       </div>
     </section>
@@ -253,6 +294,64 @@ import Layout from '../layouts/Layout.astro';
   .spot-use-grid {
     margin-top: 24px;
   }
+  .spot-diagnostic-diff {
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .spot-diagnostic-head {
+    max-width: 820px;
+  }
+  .spot-diagnostic-head h2 {
+    margin: 0 0 12px;
+    color: var(--heading);
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
+    line-height: 1.35;
+  }
+  .spot-diagnostic-head p {
+    margin: 0;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+  .spot-diff-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 24px;
+  }
+  .spot-diff-grid article {
+    min-height: 230px;
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+  }
+  .spot-diff-grid span {
+    color: var(--sakura);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+  }
+  .spot-diff-grid h3 {
+    margin: 10px 0 10px;
+    color: var(--heading);
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+  .spot-diff-grid p {
+    margin: 0;
+    color: var(--text);
+    font-size: .9rem;
+    line-height: 1.8;
+  }
+  .spot-demo-link {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 28px;
+  }
   .spot-price-sub {
     margin-top: -4px;
     color: var(--muted) !important;
@@ -348,9 +447,33 @@ import Layout from '../layouts/Layout.astro';
   .spot-action-card .btn-primary {
     flex: none;
   }
+  .spot-action-buttons {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+  .spot-action-buttons .btn-secondary,
+  .spot-demo-link .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 14px 26px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--brand);
+    background: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-decoration: none;
+  }
   @media (max-width: 900px) {
     .spot-summary,
     .spot-use-grid,
+    .spot-diff-grid,
     .spot-flow ol,
     .spot-action-card {
       grid-template-columns: 1fr;
@@ -362,13 +485,18 @@ import Layout from '../layouts/Layout.astro';
     .spot-action-card h2 {
       font-size: 1.45rem;
     }
+    .spot-action-buttons {
+      justify-content: stretch;
+    }
   }
   @media (max-width: 600px) {
     .spot-hero {
       min-height: auto;
     }
     .spot-hero-actions .btn-primary,
-    .spot-hero-actions .btn-secondary {
+    .spot-hero-actions .btn-secondary,
+    .spot-action-buttons a,
+    .spot-demo-link a {
       width: 100%;
       justify-content: center;
     }

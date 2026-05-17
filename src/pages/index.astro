@@ -16,6 +16,7 @@ const fmtDate = (d: string) => {
   const date = new Date(d);
   return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
 };
+const blogHref = (id: string) => `/blog/${id.replace(/\.md$/, '')}`;
 const homeOgUrl = Astro.url.search
   ? `https://optiens.com/${Astro.url.search}`
   : 'https://optiens.com/';
@@ -117,14 +118,26 @@ const homeSchema = [
           小さな相談はスポット相談チケット、大きな導入は個別見積、導入後の継続改善は保守チケット。入口を軽くしつつ、責任範囲が広い案件は無理にチケットへ押し込みません。
         </p>
 
+        <div class="home-diagnostic-strip">
+          <div>
+            <span class="home-diagnostic-label">AI Diagnosis Officer</span>
+            <h3>AI診断官レビューで、音声相談を診断材料に変える</h3>
+          </div>
+            <p>
+              音声AI診断官が、業務量・頻度・例外処理・利用中ツールを順に聞き取り、優先業務、対応可否、概算費用帯、次アクションへ整理します。
+            購入前に公開デモを確認でき、本番レビューでは事前申請内容を読ませた状態で診断メモへまとめます。
+            </p>
+          <a href="/ai-diagnosis-officer" class="home-diagnostic-link">音声デモを開く <span aria-hidden="true">→</span></a>
+        </div>
+
         <div class="home-ticket-grid">
           <article class="home-ticket-card home-ticket-card--spot">
             <span class="home-ticket-label">Spot Consultation Ticket</span>
             <h3>スポット相談チケット</h3>
             <p class="home-ticket-price">¥33,000<span> / 1枚・税込</span></p>
-            <p class="home-ticket-copy">1枚で診断後の相談または導入支援前の要件整理を行います。購入後はチケット番号で利用申請できます。</p>
+            <p class="home-ticket-copy">1枚でAI診断官レビューまたは導入支援前の要件整理を行います。AI診断官レビューは専用申請フォームで事前情報を渡してから開始します。</p>
             <ul>
-              <li><strong>レビュー面談</strong> 診断結果と優先順位を整理</li>
+              <li><strong>AI診断官レビュー</strong> 質問設計・構造化・成果物化まで整理</li>
               <li><strong>有償要件定義</strong> 導入支援成約時に初期費用へ充当</li>
               <li><strong>3枚から</strong> 簡易実装・軽微な自動化対応</li>
             </ul>
@@ -207,7 +220,7 @@ const homeSchema = [
           </div>
           <div class="home-blog-list">
             {latestPosts.map((post) => (
-              <a href={`/blog/${post.id}`} class="home-blog-row">
+              <a href={blogHref(post.id)} class="home-blog-row">
                 <div class="home-blog-meta">
                   <time class="home-blog-date">{fmtDate(post.data.date)}</time>
                 </div>
@@ -504,11 +517,59 @@ const homeSchema = [
 }
 .home-ticket-lead {
   max-width: 760px;
-  margin: -18px auto clamp(32px, 5vw, 48px);
+  margin: -18px auto clamp(24px, 4vw, 34px);
   color: var(--home-text);
   font-size: clamp(14px, 1.6vw, 16px);
   line-height: 1.9;
   text-align: center;
+}
+.home-diagnostic-strip {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.4fr);
+  gap: clamp(18px, 3vw, 34px);
+  align-items: center;
+  margin: 0 0 clamp(28px, 4.5vw, 44px);
+  padding: clamp(22px, 3.2vw, 32px);
+  border: 1px solid rgba(31, 58, 147, 0.16);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(31, 58, 147, 0.07) 0%, rgba(255, 255, 255, 0.9) 58%, rgba(228, 138, 149, 0.1) 100%),
+    #ffffff;
+  box-shadow: 0 18px 46px -36px rgba(31, 58, 147, 0.34);
+}
+.home-diagnostic-label {
+  display: inline-flex;
+  color: var(--home-brand);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.home-diagnostic-strip h3 {
+  margin: 10px 0 0;
+  color: var(--home-heading);
+  font-size: clamp(1.28rem, 2.4vw, 1.8rem);
+  line-height: 1.45;
+}
+.home-diagnostic-strip p {
+  margin: 0;
+  color: var(--home-text);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+.home-diagnostic-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-top: 16px;
+  color: var(--home-brand);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+.home-diagnostic-link:hover {
+  color: var(--home-brand-2);
 }
 .home-ticket-grid {
   display: grid;
@@ -602,6 +663,9 @@ const homeSchema = [
   color: var(--home-brand-2);
 }
 @media (max-width: 900px) {
+  .home-diagnostic-strip {
+    grid-template-columns: 1fr;
+  }
   .home-ticket-grid {
     grid-template-columns: 1fr;
     max-width: 620px;

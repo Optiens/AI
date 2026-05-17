@@ -20,7 +20,7 @@ import Layout from '../layouts/Layout.astro';
               <img src="/images/service/step-01-diagnosis.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
             </span>
             <h3 class="step-name">AI活用診断</h3>
-            <p class="step-desc">業務に AI が効く領域を見極める</p>
+            <p class="step-desc">業務と既存ツールを整理し、AI が効く領域を見極める</p>
             <span class="step-link">詳しく見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
           <a href="/spot-ticket" class="step-card">
@@ -29,7 +29,7 @@ import Layout from '../layouts/Layout.astro';
               <img src="/images/service/step-02-consultation.webp" alt="" loading="lazy" decoding="async" width="96" height="96" />
             </span>
             <h3 class="step-name">相談・要件整理</h3>
-            <p class="step-desc">レビュー面談や有償要件定義で次の一手を決める</p>
+            <p class="step-desc">AI診断官レビューや導入前スコープ整理で次の一手を決める</p>
             <span class="step-link">チケットを見る <i class="fa-solid fa-arrow-right"></i></span>
           </a>
           <a href="/implementation" class="step-card">
@@ -53,24 +53,24 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <div class="extra-menu reveal">
-          <h2 class="extra-menu-title">スポット相談チケットで始める相談・要件整理・小規模作業</h2>
+          <h2 class="extra-menu-title">スポット相談チケットで始めるAI診断官レビュー・要件整理・小規模作業</h2>
           <p class="extra-menu-lead">スポット相談チケットは、保守契約なしで使える事前購入型のチケットです。1枚 ¥33,000（税込・税抜¥30,000）を基準に、依頼内容の重さで消化枚数を決めます。</p>
           <div class="extra-menu-grid">
             <article class="extra-menu-card">
               <div class="extra-menu-head">
-                <span class="extra-menu-badge">REVIEW</span>
-                <h4>AI活用レビュー面談</h4>
+                <span class="extra-menu-badge">AI REVIEW</span>
+                <h4>AI診断官レビュー</h4>
               </div>
               <p class="extra-menu-price">1枚<span class="price-unit"> / スポット相談チケット</span></p>
-              <p class="extra-menu-desc">診断結果の解説、優先業務の絞り込み、対応可否、概算費用帯、次アクションを整理します。費用は導入支援へ充当せず、次工程への情報引き継ぎとして活用します。</p>
+              <p class="extra-menu-desc">購入前に音声デモを確認できます。本番レビューでは、専用申請フォームの内容や診断レポートの参照情報を前提に、業務量・頻度・例外・利用中ツールを聞き取り、文字起こしではなく診断メモに整理します。費用は導入支援へ充当せず、次工程への情報引き継ぎとして活用します。</p>
             </article>
             <article class="extra-menu-card">
               <div class="extra-menu-head">
                 <span class="extra-menu-badge">SCOPE</span>
-                <h4>有償要件定義</h4>
+                <h4>導入前スコープ整理</h4>
               </div>
               <p class="extra-menu-price">1枚<span class="price-unit"> / スポット相談チケット</span></p>
-              <p class="extra-menu-desc">導入支援前に、対象業務・実装範囲・前提条件・概算見積を整理します。導入支援の成約時は、この費用を初期費用へ充当します。</p>
+              <p class="extra-menu-desc">導入支援前に、対象業務・実装範囲・前提条件・概算見積を整理します。社内・契約上は有償要件定義として扱い、導入支援の成約時はこの費用を初期費用へ充当します。</p>
             </article>
             <article class="extra-menu-card">
               <div class="extra-menu-head">
@@ -83,7 +83,35 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <div class="extra-menu-actions">
             <a href="/spot-ticket" class="btn-primary">スポット相談チケットを見る</a>
+            <a href="/ai-diagnosis-officer" class="btn-secondary">AI診断官レビューを体験する</a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SaaS棚卸し帯 -->
+    <section class="ac-section light-section saas-fit-section">
+      <div class="container">
+        <div class="saas-fit-inner reveal">
+          <p class="saas-fit-eyebrow">SaaS / AI FIT CHECK</p>
+          <h2>SaaSを増やす前に、業務の流れを整理しませんか。</h2>
+          <p>
+            Optiensは、既存SaaS・スプレッドシート・メール・手作業を横断して、
+            <strong>残すべきSaaS、つなぐべきSaaS、減らせるSaaS、AIで置き換えるべき作業</strong>を整理します。
+          </p>
+          <p>
+            高額なSaaSでも、業務の正本・権限管理・監査に必要なら残します。
+            一方で、費用に見合わず手作業で補っているものは、解約・縮小・連携・専用化まで含めて見直します。
+          </p>
+          <p>
+            既製SaaSで足りるものは無理に作らず、SaaSでは合わない部分だけをAIエージェントと軽量な業務システムで補います。
+          </p>
+          <div class="saas-fit-actions" aria-label="診断で整理する観点">
+            <span>削減余地を見立てる</span>
+            <span>自動化候補を整理する</span>
+            <span>回収期間の目安を出す</span>
+          </div>
+          <p class="saas-fit-note">特に、CRM・問い合わせ・見積・営業事務・顧客管理の整理と自動化を得意としています。</p>
         </div>
       </div>
     </section>
@@ -99,22 +127,22 @@ import Layout from '../layouts/Layout.astro';
           <article class="strength-card reveal" data-num="01">
             <span class="strength-card-num">01</span>
             <h3>エンタープライズの設計思想を、御社の規模で</h3>
-            <p>代表は大手向けCRM（<strong>Salesforce</strong>）で<strong>10年以上</strong>、業務動線の設計と運用改善に携わってきました。その知見を<strong>御社の規模・予算・人員に合わせて</strong>再設計します。汎用<strong>SaaS</strong>では合わない業務にも、<strong>御社専用の仕組み</strong>を一から組み上げ、<strong>過不足のない、ちょうどいい形</strong>でお届けします。</p>
+            <p>代表は大手向けCRM（<strong>Salesforce</strong>）で<strong>10年以上</strong>、業務動線の設計と運用改善に携わってきました。その知見を、<strong>御社の規模・予算・人員に合わせて軽量化</strong>して適用します。既製<strong>SaaS</strong>で十分な部分は活かし、合わない業務動線だけを<strong>御社専用の仕組み</strong>として設計します。</p>
           </article>
 
-          <!-- 2. ライセンス料不要・御社の資産 -->
+          <!-- 2. 利用人数課金に依存しない構成 -->
           <article class="strength-card reveal" data-num="02">
             <span class="strength-card-num">02</span>
-            <h3>ライセンス料不要、御社の資産として残る</h3>
-            <p>利用人数に応じた<strong>ライセンス料は発生しません</strong>。データも御社名義のクラウドに保管され、いつでも持ち出せます。SaaS の月額が積み上がらない、<strong>使うほどお得になる</strong>形です。</p>
-            <p class="strength-card-note"><small>※ ご利用には <strong>AI API 利用料・クラウドサービス利用料</strong>（規模により月数千円〜）が実費でかかります。利用量に応じた従量制のため、利用が少ない月は費用も抑えられます。</small></p>
+            <h3>利用人数課金に依存しない、御社専用の構成</h3>
+            <p>既製SaaSのような<strong>利用人数ごとのライセンス課金に依存しない構成</strong>を基本とします。データは御社名義のクラウド環境に保管し、CSV出力やデータベースのエクスポートにも対応できるよう設計します。</p>
+            <p class="strength-card-note"><small>※ ご利用には <strong>AI API 利用料・クラウドサービス利用料・保守費用</strong>が、利用量や構成に応じて発生します。</small></p>
           </article>
 
           <!-- 3. 自分たちで使い、改善してきた運用知見 -->
           <article class="strength-card reveal" data-num="03">
             <span class="strength-card-num">03</span>
             <h3>自分たちで使い、改善してきた運用知見</h3>
-            <p>Optiens 自身が、<strong>AI エージェントを組み込んだ仕組み</strong>で日々の経営を回しています。社内 CRM・コンテンツ運用・管理ダッシュボードまで、全て自社で運用中。ご提案は<strong>机上の設計ではなく、実装と運用の実践知</strong>です。</p>
+            <p>Optiens 自身も、<strong>AI活用診断、AI診断官レビュー、レポート生成、申込・入金確認フロー、社内 CRM、コンテンツ運用、管理ダッシュボード</strong>などを自社で運用しています。ご提案は机上の理想論ではなく、<strong>自社で作り、使い、改善してきた実装と運用の知見</strong>に基づいています。</p>
           </article>
 
           <!-- 4. AI駆動開発 + 準委任契約（旧04+旧06統合） -->
@@ -124,15 +152,16 @@ import Layout from '../layouts/Layout.astro';
             <p>Optiensでは、AIエージェントを活用して、設計・実装・レビュー・ドキュメント作成を短いサイクルで進めます。</p>
             <p>まずは2〜4ヶ月を目安に、現場で試せる初期版・MVP・社内運用版を構築し、実際の利用状況を見ながら改善していきます。</p>
             <p>契約は準委任を基本とし、契約稼働枠の範囲内で、要件変更や優先度の入れ替えにも柔軟に対応します。</p>
+            <p>契約稼働枠とは、契約内で確保する作業・相談・改善の対応枠です。枠を超える追加開発は、翌月以降または個別見積で対応します。</p>
             <p>「最初に決めた仕様をそのまま作る」のではなく、「実際に使われる仕組みに近づける」ことを重視します。</p>
           </article>
 
           <!-- 5. ローカルLLM運用にも対応 -->
           <article class="strength-card reveal" data-num="05">
             <span class="strength-card-num">05</span>
-            <h3>機密情報はローカルLLMで安全に運用</h3>
-            <p>顧客情報・社内文書など外部 API に出したくないデータは、<strong>オンプレ／社内 GPU サーバー、または GPU クラウドサーバー（レンタル）</strong>を活用したローカル LLM 運用にも対応します。海外 API への送信に懸念のある事業者向けに、<strong>用途ごとに API 利用とローカル運用を使い分け</strong>られる構成を設計します。</p>
-            <p class="strength-card-note"><small>※ ローカル LLM 運用には追加で費用が発生します。<strong>自社設備</strong>の場合は GPU 搭載 PC・サーバー購入で 30 万円〜200 万円程度、<strong>GPU クラウドレンタル</strong>の場合は利用規模に応じて月額数万円〜。要件と利用量に応じて最適な構成をご提案します。</small></p>
+            <h3>機密度に応じて、AI APIとローカルLLMを使い分け</h3>
+            <p>顧客情報・社内文書など、外部 API への送信に慎重なデータについては、<strong>AI API に渡す範囲を限定した構成</strong>や、オンプレ／社内 GPU サーバー／GPU クラウドを活用したローカル LLM 構成も検討します。</p>
+            <p class="strength-card-note"><small>※ ローカル LLM には費用・精度・保守性のトレードオフがあります。<strong>自社設備</strong>の場合は GPU 搭載 PC・サーバー購入で 30 万円〜200 万円程度、<strong>GPU クラウドレンタル</strong>の場合は利用規模に応じて月額数万円〜。用途、機密度、運用体制に応じて現実的に続けられる構成を設計します。</small></p>
           </article>
 
           <!-- 6. 「いなくても動く」が前提の関係（新規） -->
@@ -140,7 +169,7 @@ import Layout from '../layouts/Layout.astro';
             <span class="strength-card-num">06</span>
             <h3>「いなくても動く」が前提の関係</h3>
             <p>業務動線設計書・ソースコード・運用マニュアル・AI プロンプト ── <strong>全て御社に納品</strong>し、属人化させず、暗黙知を作らない設計を前提とします。月次レビューや改善は継続的に行いますが、<strong>Optiens 抜きでも仕組みが動き続ける</strong>ことを最初から前提に構築します。</p>
-            <p>顧問税理士・顧問弁護士のように、<strong>「いなくても会社は動くが、いた方が良い」</strong>関係を目指します。契約には引き継ぎ手順を明記し、別体制への切り替えにも対応できる仕組みです。</p>
+            <p>納品物には、<strong>ソースコード、構成図、環境変数一覧、操作マニュアル、業務フロー図、プロンプト設計、保守引き継ぎメモ</strong>などを含めます。顧問税理士・顧問弁護士のように、<strong>「いなくても会社は動くが、いた方が良い」</strong>関係を目指します。</p>
           </article>
 
           <!-- 7. 実証アセット（横長バナーカード） -->
@@ -148,12 +177,12 @@ import Layout from '../layouts/Layout.astro';
             <div class="strength-wide-head">
               <span class="strength-card-num">07</span>
               <h3>資料ではなく、実物で確かめてから決められる</h3>
-              <p>問い合わせ対応・見積書作成・社内検索・承認ワークフローなど、実際に操作できる業務自動化デモを Web 上で公開しています。ご相談前から「自分の業務ならどう動くか」を確認できます。</p>
+              <p>問い合わせ対応・見積書作成・社内検索・承認ワークフローなど、実際に操作できる業務自動化デモを Web 上で公開しています。まずは代表デモを触ることで、「自分の業務ならどう動くか」を相談前に確認できます。</p>
             </div>
             <div class="strength-wide-stats">
               <a href="/ai-examples?cat=common" class="wide-stat-link">
-                <span class="wide-stat-label">業務自動化デモ（実機操作可）</span>
-                <span class="wide-stat-sub">問い合わせ／見積書／社内検索／承認WF／業務管理／口コミ監視／文書レビュー</span>
+                <span class="wide-stat-label">まず見てほしい代表デモ</span>
+                <span class="wide-stat-sub">問い合わせ対応／見積書ドラフト作成／社内検索（サンプルデータで操作可）</span>
               </a>
               <a href="/ai-examples?cat=industry" class="wide-stat-link">
                 <span class="wide-stat-label">業種別 活用シナリオ</span>
@@ -270,6 +299,66 @@ import Layout from '../layouts/Layout.astro';
     color: var(--muted);
     font-size: 0.95rem;
     margin-bottom: 40px;
+  }
+
+  /* SaaS棚卸し帯 */
+  .saas-fit-section {
+    padding: clamp(48px, 7vw, 76px) 0;
+    background: #f8fafc;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .saas-fit-inner {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .saas-fit-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: .74rem;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+  }
+  .saas-fit-inner h2 {
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    color: var(--heading);
+    line-height: 1.45;
+    margin: 0 0 18px;
+    letter-spacing: 0;
+  }
+  .saas-fit-inner p {
+    color: var(--text);
+    line-height: 1.9;
+    margin: 0 0 14px;
+  }
+  .saas-fit-inner strong {
+    color: var(--heading);
+  }
+  .saas-fit-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 16px;
+  }
+  .saas-fit-actions span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(31, 58, 147, .16);
+    background: #ffffff;
+    color: var(--brand);
+    font-size: .86rem;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+  .saas-fit-inner .saas-fit-note {
+    font-size: .9rem;
+    color: var(--muted);
+    margin-bottom: 0;
   }
 
   /* ===== モダン4ステップフロー ===== */
@@ -1023,6 +1112,8 @@ import Layout from '../layouts/Layout.astro';
   }
   .extra-menu-actions {
     display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
     justify-content: center;
     margin-top: 28px;
   }
